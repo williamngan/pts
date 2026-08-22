@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Types.ts",
-      143,
+      144,
       12
     ]
   ],
   "kind": "Typealias",
-  "comment": "Typescript type: DelaunayMesh represents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.",
+  "comment": "Typescript type: DelaunayMesh represents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.\nNote the unusual shape: it is an array indexed by point index, where each entry is a dictionary keyed by `\"min-max\"` neighbor-pair strings. This mirrors the mesh cache built by [`Delaunay.mesh`](#link) and is kept as-is for compatibility.",
   "constructor": [],
   "accessors": [],
   "methods": [],

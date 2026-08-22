@@ -7,6 +7,11 @@
     "rootDir": "src",
     "noEmit": true,
     "strict": true,
+    // Do NOT add "verbatimModuleSyntax": tsdown/oxc reads this file, and with
+    // that flag on, type-only imports written in value form stop being elided
+    // from the bundle — rolldown then emits lazy __esm wrappers (+6.5KB) and
+    // can hard-error on type re-exports. `import type` hygiene is enforced by
+    // eslint (@typescript-eslint/consistent-type-imports) instead.
     "skipLibCheck": true,
     "removeComments": true,
     // load-bearing if target ever moves to ES2022+: Pt extends Float32Array

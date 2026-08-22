@@ -139,6 +139,7 @@ export type DelaunayShape = {
 
 /**
  * Typescript type: DelaunayMesh represents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.
+ * Note the unusual shape: it is an array indexed by point index, where each entry is a dictionary keyed by `"min-max"` neighbor-pair strings. This mirrors the mesh cache built by [`Delaunay.mesh`](#link) and is kept as-is for compatibility.
  */
 export type DelaunayMesh = { [key: string]: DelaunayShape }[];
 

@@ -13839,7 +13839,7 @@ type AnimateCallbackFn =  Fn(time:number, frameTime:number, currentSpace:Space);
 <a id="types-canvaspatternrepetition"></a>
 ### `CanvasPatternRepetition`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:255`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L255)
+**Kind:** Typealias · **Source:** [`src/Types.ts:256`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L256)
 
 Typescript type: CanvasPatternRepetition represents the string options to specify pattern repetition
 
@@ -13872,7 +13872,7 @@ type ColorType = rgb | hsl | hsb | lab | lch | luv | xyz | oklab | oklch;
 <a id="types-defaultformstyle"></a>
 ### `DefaultFormStyle`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:243`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L243)
+**Kind:** Typealias · **Source:** [`src/Types.ts:244`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L244)
 
 Typescript type: DefaultFormStyle represents a default object for visual styles such as fill, stroke, line width, and others.
 
@@ -13883,9 +13883,10 @@ type DefaultFormStyle = { fillStyle:string | CanvasGradient | CanvasPattern, glo
 <a id="types-delaunaymesh"></a>
 ### `DelaunayMesh`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:143`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L143)
+**Kind:** Typealias · **Source:** [`src/Types.ts:144`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L144)
 
 Typescript type: DelaunayMesh represents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.
+Note the unusual shape: it is an array indexed by point index, where each entry is a dictionary keyed by `"min-max"` neighbor-pair strings. This mirrors the mesh cache built by [`Delaunay.mesh`](#create-delaunay-mesh) and is kept as-is for compatibility.
 
 ```ts
 type DelaunayMesh = [];
@@ -13905,7 +13906,7 @@ type DelaunayShape = { circle:Group, i:number, j:number, k:number, triangle:Grou
 <a id="types-domformcontext"></a>
 ### `DOMFormContext`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:148`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L148)
+**Kind:** Typealias · **Source:** [`src/Types.ts:149`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L149)
 
 Typescript type: DOMFormContext represents the current context for an DOMForm.
 
@@ -13927,7 +13928,7 @@ type GroupLike = Group | Pt[];
 <a id="types-intersectcontext"></a>
 ### `IntersectContext`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:160`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L160)
+**Kind:** Typealias · **Source:** [`src/Types.ts:161`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L161)
 
 Typescript type: IntersectContext represents a type of an object that store the intersection info.
 
@@ -13938,7 +13939,7 @@ type IntersectContext = { dist:number, edge:Group, normal:Pt, other:unknown, ver
 <a id="types-isoundanalyzer"></a>
 ### `ISoundAnalyzer`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:229`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L229)
+**Kind:** Typealias · **Source:** [`src/Types.ts:230`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L230)
 
 Typescript type: ISoundAnalyzer represents an object that stores the AnalyzerNode properties
 
@@ -13949,7 +13950,7 @@ type ISoundAnalyzer = { data:Uint8Array, node:AnalyserNode, size:number };
 <a id="types-itempolistener"></a>
 ### `ITempoListener`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:202`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L202)
+**Kind:** Typealias · **Source:** [`src/Types.ts:203`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L203)
 
 Typescript type: ITempoListener represents a listener created by Tempo class
 
@@ -13960,7 +13961,7 @@ type ITempoListener = { beats:number | number[], continuous:boolean, count:numbe
 <a id="types-itempoprogressfn"></a>
 ### `ITempoProgressFn`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:192`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L192)
+**Kind:** Typealias · **Source:** [`src/Types.ts:193`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L193)
 
 Typescript type: a callback function type used in `tempo.every(...).progress( fn )`
 
@@ -13971,7 +13972,7 @@ type ITempoProgressFn =  Fn(count:number, t:number, ms:number, start:boolean);
 <a id="types-itemporesponses"></a>
 ### `ITempoResponses`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:217`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L217)
+**Kind:** Typealias · **Source:** [`src/Types.ts:218`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L218)
 
 Typescript type: the return type of `tempo.every(...)`
 
@@ -13982,7 +13983,7 @@ type ITempoResponses = { progress: Fn(fn:ITempoProgressFn, offset:number, name:s
 <a id="types-itempostartfn"></a>
 ### `ITempoStartFn`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:187`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L187)
+**Kind:** Typealias · **Source:** [`src/Types.ts:188`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L188)
 
 Typescript type: a callback function type used in `tempo.every(...).start( fn )`
 
@@ -14028,7 +14029,7 @@ type PtLikeIterable = GroupLike | PtLike[] | Iterable;
 <a id="types-renderingcontext2d"></a>
 ### `RenderingContext2D`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:258`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L258)
+**Kind:** Typealias · **Source:** [`src/Types.ts:259`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L259)
 
 ```ts
 type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
@@ -14037,7 +14038,7 @@ type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingCon
 <a id="types-soundtype"></a>
 ### `SoundType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:238`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L238)
+**Kind:** Typealias · **Source:** [`src/Types.ts:239`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L239)
 
 Typescript type: SoundType represents a type of sound input. It corresponds to Sound.type property.
 
@@ -14092,7 +14093,7 @@ type UIActionEvent = MouseEvent | TouchEvent | PointerEvent | KeyboardEvent;
 <a id="types-uihandler"></a>
 ### `UIHandler`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:172`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L172)
+**Kind:** Typealias · **Source:** [`src/Types.ts:173`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L173)
 
 Typescript type: UIHandler represents a callback function to handle UI actions.
 
@@ -14103,7 +14104,7 @@ type UIHandler =  Fn(target:UI, pt:PtLike, type:UIPointerAction | string & , evt
 <a id="types-warningtype"></a>
 ### `WarningType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:182`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L182)
+**Kind:** Typealias · **Source:** [`src/Types.ts:183`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L183)
 
 Typescript type: WarningType specifies a level of warning for [`Util.warnLevel`](#util-util-static-warn-level).
 

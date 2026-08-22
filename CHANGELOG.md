@@ -1,0 +1,171 @@
+# Changelog
+
+## 1.0.0 (unreleased)
+
+Pts 1.0 is a full modernization of the library: the toolchain, the type
+system, and every core module were reviewed line by line, with roughly
+sixty verified bugs fixed and each fix pinned by a test. The public API
+is intentionally familiar — most sketches written for 0.12 run
+unchanged — but corrected behavior, stricter types, and a handful of
+deprecations make this a major release. The detailed findings for every
+review pass live in the `plans/` directory.
+
+### Highlights
+
+- Modern toolchain: pnpm, tsdown (rolldown/oxc) builds, vitest 4 with
+  node, browser (Playwright), and visual-regression projects — 514
+  tests including type-level pins, plus benchmark suites with recorded
+  baselines for node and Chromium.
+- TypeScript 6 with `strict: true` across the codebase, and an honest
+  public type surface (see the TypeScript section below).
+- Large performance gains in hot paths, with a benchmark A/B gate
+  against the previous build for every change.
+- New Oklab/Oklch color modes, modernized UI and Space event APIs, and
+  a documented renderer contract for building custom renderers.
+
+### Breaking changes — runtime behavior
+
+These are places where the old result was a defect. Code that relied on
+the buggy output will see different (correct) values:
+
+- `Pt.equals` no longer reports a shorter Pt or a NaN dimension as
+  equal; NaN never equals NaN (IEEE semantics).
+- `Pt.angleBetween` returns a normalized signed angle in [−π, π)
+  instead of raw differences that jumped at the 0°/360° wrap.
+- `Group.split`, `Group.segments`, and `Group.lines` (and
+  `Polygon.lines`, `Polygon.midpoints`) return real `Group` instances
+  instead of plain arrays cast as Group — array-style access is
+  unchanged, and Group methods now actually work on the results.
+- `Group.forEachPt` on an empty Group is a silent no-op instead of a
+  `TypeError`.
+- `Bound.update()` recomputes from the existing corner Pts in place; it
+  no longer replaces them with fresh Pt instances.
+- Perlin noise (`Create.noise2D`, `noisePts`) is fixed — the old
+  gradient hash skipped the permutation table, producing exact
+  period-12 repetition. Same API and seeding, different (correct)
+  values. `Noise.seed` now covers the full table, and `noisePts` no
+  longer scrambles non-square grids.
+- `Num.randomRange(a, b)` with `a > b` no longer shifts the range;
+  `Range` handles all-negative data correctly.
+- Color conversions were overhauled: 8 defects fixed including
+  normalized-flag handling across RGB/HSL/HSB/XYZ/LAB/LCH/LUV, 8-digit
+  hex alpha, and negative hue. Core CIE math was verified against
+  reference values; results differ only where the old code was wrong.
+- Canvas/SVG rendering fixes: `paragraphBox` no longer crops one line
+  early, `imageData` rect no longer double-offsets, `SVGSpace.removeAll`
+  no longer wipes its own mount element, and the SVG reconciler removes
+  stale attributes between frames.
+- Physics: `Body.linkAll` no longer creates duplicate and self links on
+  odd-sized bodies.
+- Space: `play(t)` no longer stacks parallel animation-frame chains;
+  first-frame and resume no longer produce a frame-time spike; touch
+  `preventDefault` paths work as documented.
+- UI: removing a handler no longer invalidates other handlers' ids;
+  hover-leave delivers the current pointer position; built-in button
+  and dragger behavior can no longer be destroyed by `off(type)`.
+- Seeded randomness is **not** a breaking change: `Num.seed` sequences
+  are bit-identical to 0.12 (pinned by golden-value tests), while
+  seeding got ~60% faster.
+
+### Breaking changes — TypeScript types (compile-time only)
+
+The emitted JavaScript for the type-system modernization is
+byte-identical to the previous build; these affect only TypeScript
+consumers, who may see new compile errors that reflect what the runtime
+always did:
+
+- Functions that could always return `undefined` now say so. Affected:
+  `Line.slope`, `Line.intercept`, `Line.perpendicularFromPt`,
+  `Line.intersectRay2D`, `Line.intersectLine2D`,
+  `Line.intersectLineWithRay2D`, `Line.crop`,
+  `Rectangle.intersectRay2D`, `Polygon.intersectPolygon2D`,
+  `Polygon.bisector`, `Triangle.incircle`, `Triangle.circumcircle`,
+  `Triangle.incenter`, `Triangle.orthocenter`, `Triangle.circumcenter`,
+  `Circle.fromTriangle`, `Img.getForm`, `Range.calc`, and
+  `SVGForm.lineElement` / `SVGForm.rectElement` / `HTMLForm.rect`.
+  Migration: narrow the result (`if (pt) …`) or assert (`pt!`) where
+  your inputs guarantee a hit.
+- `Bound.x` / `Bound.y` / `Bound.z` are `number | undefined` (undefined
+  for missing dimensions, as at runtime).
+- New exported type `UIActionEvent` =
+  `MouseEvent | TouchEvent | PointerEvent | KeyboardEvent`.
+  `UIHandler`'s `evt` parameter and `IPlayer.action` use it — keyboard
+  events always flowed through this path. A handler that declares a
+  narrower `evt: MouseEvent` parameter no longer type-checks; accept
+  the union (or omit the parameter types) instead. `UIHandler`'s `type`
+  parameter is now autocompleted via `UIPointerAction` while still
+  accepting custom strings.
+- `IntersectContext.other` is `unknown` (was `any`) — narrow before
+  member access.
+- `DefaultFormStyle.lineJoin` / `lineCap` use the DOM's
+  `CanvasLineJoin` / `CanvasLineCap` literal types.
+- `AnimateCallbackFn`'s third parameter is typed `Space` (was `any`);
+  `IPlayer.resize` accepts `Event | null`; `MultiTouchElement` uses
+  DOM-typed listener signatures; `DOMFormContext.group` is honestly
+  nullable and `style` is a `Record`.
+- `UIButton.onHover` returns `(number | undefined)[]` — an id is
+  undefined when the corresponding handler was not provided.
+
+### Deprecated
+
+- `HTMLSpace` / `HTMLForm` — deprecated, removal in a future major.
+  Use `SVGSpace` / `SVGForm`, which share the complete `CanvasForm`
+  drawing API. `DOMSpace` remains public as the subclassing point.
+- `Img.loadAsync` — use `Img.load`, which now returns a Promise.
+- `Img.cleanup` — use `Img.dispose`.
+- `SVGForm.updateScope` / `SVGForm.scope` — no longer needed; elements
+  are reconciled automatically each frame.
+- `Typography.fontSizeToBox` initial-box argument — it never affected
+  the result; use `fontSizeToBox(ratio, byHeight)`.
+- `Util.randomInt` — use `Num.randomRange`.
+
+### New
+
+- **Color**: Oklab and Oklch modes (`Color.oklab(...)`,
+  `Color.oklch(...)`), with constants verified against published
+  reference values.
+- **Space**: `space.track(ui)` / `space.untrack(ui)` forward all
+  pointer, touch, and keyboard actions to UI elements without
+  hand-writing an `action` player; robust mount/unmount lifecycle
+  (idempotent `dispose`, no leaked listeners) that survives React
+  StrictMode double-mounting; SSR-safe imports are checked in CI.
+- **UI**: `UI.registerShape(name, fn)` for custom hit tests; built-in
+  `line` / `polyline` hit-testing with a `lineThreshold` state;
+  `on(type, fn, { once, signal })`; `getState` / `setState`; typed
+  action constants (`UIPointerActions`, `UIPointerAction`).
+- **Rendering**: the renderer contract (context surface + frame
+  lifecycle) is documented, with `SVGContext2D` as the reference
+  implementation for building custom renderers.
+- **Types**: `UIActionEvent`; type-level regression tests
+  (`expectTypeOf`) run with the test suite.
+
+### Performance
+
+Highlights from the benchmark gates (5-round A/B against the prior
+build; full numbers in `plans/*.md`):
+
+- `Polygon.hasIntersectPoint` −97%, Curve step generation −90%
+- `Bound.x/y/z` reads −92%, `Group.insert` −87% (and stack-safe for
+  very large inserts), `Group.segments`/`lines` −45%
+- Space pointer dispatch −84%, `UI.track` −67%
+- `Mat.zipSlice`-based ops −72%, `Create.noisePts` −65%,
+  `Create.distributeRandom` −30%, `Num.seed` −60%
+- Perlin noise: lag-12 autocorrelation 0.95 → 0.009 (quality fix)
+
+### Internal / tooling
+
+- Build: tsdown with ESM + CJS + browser IIFE outputs, byte-exact
+  artifact size budgets, and public-export smoke checks in CI.
+- Tests: vitest 4 with browser (Chromium) and visual-regression
+  projects; 514 tests. Benchmarks: node + Chromium suites with
+  recorded baselines and an A/B mode against any git ref.
+- TypeScript 6.0.3, `strict: true`, `import type` hygiene enforced via
+  eslint (`consistent-type-imports`) — deliberately not via
+  `verbatimModuleSyntax`, which the bundler also reads and which
+  changes the emitted bundle (see note in `tsconfig.json`).
+- Docs generator no longer emits unstable numeric ids, so regenerated
+  docs diff minimally.
+
+## 0.12.x and earlier
+
+See the [release notes on GitHub](https://github.com/williamngan/pts/releases).
