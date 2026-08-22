@@ -1,9 +1,9 @@
-import { CanvasForm, CanvasSpace } from "./Canvas";
-import { Bound, Pt } from "./Pt";
+import { CanvasForm, type CanvasSpace } from "./Canvas";
+import { type Bound, Pt } from "./Pt";
 import { Mat } from "./LinearAlgebra";
-import { PtLike, CanvasPatternRepetition } from "./Types";
+import { type PtLike, type CanvasPatternRepetition } from "./Types";
 import { Util } from "./Util";
-import { RenderingContext2D } from "./Types";
+import { type RenderingContext2D } from "./Types";
 
 /**
  * Options for creating an [`Img`](#link).
@@ -23,19 +23,19 @@ export type ImgOptions = {
  * Img provides convenient functions to support image operations on HTML Canvas and [`CanvasSpace`](#link). Combine this with other Pts functions to experiment with visual forms that integrate bitmaps and vector graphics.
  */
 export class Img {
-  protected _img: HTMLImageElement;
-  protected _data: ImageData;
-  protected _cv: HTMLCanvasElement;
-  protected _ctx: RenderingContext2D;
+  protected _img!: HTMLImageElement;
+  protected _data!: ImageData;
+  protected _cv!: HTMLCanvasElement;
+  protected _ctx!: RenderingContext2D;
   protected _scale: number = 1;
 
   protected _loaded: boolean = false;
   protected _editable: boolean;
 
-  protected _space: CanvasSpace;
-  protected _patternCtx: RenderingContext2D; // lazy fallback when no space is set
-  protected _objectUrl: string; // tracked for revocation on dispose
-  private _pendingLoadReject: (err: Error) => void = null; // newer loads supersede pending ones
+  protected _space: CanvasSpace | undefined;
+  protected _patternCtx!: RenderingContext2D; // lazy fallback when no space is set
+  protected _objectUrl!: string | null; // tracked for revocation on dispose
+  private _pendingLoadReject: ((err: Error) => void) | null = null; // newer loads supersede pending ones
   protected _dataDirty: boolean = false; // ImageData refreshes lazily on first read
 
   /**
@@ -262,7 +262,7 @@ export class Img {
     this._cv.width = width * cms[0];
     this._cv.height = height * cms[1];
     // the whole point of an editable Img is repeated readback
-    this._ctx = this._cv.getContext("2d", { willReadFrequently: true });
+    this._ctx = this._cv.getContext("2d", { willReadFrequently: true })!;
     // resizing resets the context state; forget any cached style values so a
     // CanvasForm from getForm() re-applies its styles
     CanvasForm.resetStyleCache(this._ctx);
@@ -296,14 +296,16 @@ export class Img {
   ): CanvasPattern {
     // any 2D context can create a pattern; fall back to an internal one so a
     // CanvasSpace reference is optional
-    let ctx: RenderingContext2D = this._space ? this._space.ctx : undefined;
+    let ctx: RenderingContext2D | undefined = this._space
+      ? this._space.ctx
+      : undefined;
     if (!ctx) {
       if (!this._patternCtx) {
-        this._patternCtx = document.createElement("canvas").getContext("2d");
+        this._patternCtx = document.createElement("canvas").getContext("2d")!;
       }
       ctx = this._patternCtx;
     }
-    return ctx.createPattern(dynamic ? this._cv : this._img, reptition);
+    return ctx.createPattern(dynamic ? this._cv : this._img, reptition)!;
   }
 
   /**
@@ -322,7 +324,7 @@ export class Img {
       source.width = this._cv.width / this._scale;
       source.height = this._cv.height / this._scale;
       source
-        .getContext("2d")
+        .getContext("2d")!
         .drawImage(
           this._cv,
           0,
@@ -480,7 +482,7 @@ export class Img {
       const snap = document.createElement("canvas");
       snap.width = this._cv.width;
       snap.height = this._cv.height;
-      snap.getContext("2d").drawImage(this._cv, 0, 0);
+      snap.getContext("2d")!.drawImage(this._cv, 0, 0);
       source = snap;
     }
     this._drawToScale(s, source);
@@ -530,11 +532,11 @@ export class Img {
     }
     if (this._cv) this._cv.remove();
     if (this._img) this._img.remove();
-    this._cv = null;
-    this._ctx = null;
-    this._patternCtx = null;
-    this._img = null;
-    this._data = null;
+    this._cv = null!;
+    this._ctx = null!;
+    this._patternCtx = null!;
+    this._img = null!;
+    this._data = null!;
     this._loaded = false;
     return this;
   }
@@ -593,9 +595,9 @@ export class Img {
       let cv = document.createElement("canvas") as HTMLCanvasElement;
       cv.width = data.width;
       cv.height = data.height;
-      cv.getContext("2d").putImageData(data, 0, 0);
+      cv.getContext("2d")!.putImageData(data, 0, 0);
       cv.toBlob((blob) => {
-        resolve(blob);
+        resolve(blob!);
         cv.remove();
       });
     });
@@ -613,14 +615,14 @@ export class Img {
    */
   toBlob(): Promise<Blob> {
     return new Promise((resolve) => {
-      this._cv.toBlob((blob) => resolve(blob));
+      this._cv.toBlob((blob) => resolve(blob!));
     });
   }
 
   /**
    * Get a CanvasForm for drawing on the internal canvas if this Img is editable
    */
-  getForm(): CanvasForm {
+  getForm(): CanvasForm | undefined {
     if (!this._editable) {
       Util.warn("Cannot get a CanvasForm because this Img is not editable");
     }

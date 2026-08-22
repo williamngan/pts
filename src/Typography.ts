@@ -2,7 +2,7 @@
 
 import { Pt, Bound } from "./Pt";
 import { Util } from "./Util";
-import { PtLikeIterable, TextMeasure } from "./Types";
+import { type PtLikeIterable, type TextMeasure } from "./Types";
 
 /**
  * Typography provides helper functions to support typographic layouts. For a concrete example, see [a demo here](../demo/index.html?name=canvasform.textBox) that uses the [`CanvasForm.textBox`](#link) function.

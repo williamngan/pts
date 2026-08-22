@@ -46,12 +46,12 @@ describe("Line", () => {
 
   it("projects points and calculates distance including degenerate lines", () => {
     const horizontal = line([0, 0], [10, 0]);
-    expect(values(Line.perpendicularFromPt(horizontal, [3, 4]))).toEqual([
+    expect(values(Line.perpendicularFromPt(horizontal, [3, 4])!)).toEqual([
       3, 0,
     ]);
-    expect(values(Line.perpendicularFromPt(horizontal, [3, 4], true))).toEqual([
-      0, -4,
-    ]);
+    expect(values(Line.perpendicularFromPt(horizontal, [3, 4], true)!)).toEqual(
+      [0, -4],
+    );
     expect(Line.distanceFromPt(horizontal, [3, 4])).toBe(4);
     const pointLine = line([1, 1], [1, 1]);
     expect(Line.perpendicularFromPt(pointLine, [4, 5])).toBeUndefined();
@@ -60,10 +60,14 @@ describe("Line", () => {
 
   it("intersects rays through vertical, parallel, coincident, and crossing paths", () => {
     expect(
-      values(Line.intersectRay2D(line([0, 0], [0, 10]), line([-5, 5], [5, 5]))),
+      values(
+        Line.intersectRay2D(line([0, 0], [0, 10]), line([-5, 5], [5, 5]))!,
+      ),
     ).toEqual([0, 5]);
     expect(
-      values(Line.intersectRay2D(line([-5, 5], [5, 5]), line([0, 0], [0, 10]))),
+      values(
+        Line.intersectRay2D(line([-5, 5], [5, 5]), line([0, 0], [0, 10]))!,
+      ),
     ).toEqual([0, 5]);
     expect(
       Line.intersectRay2D(line([0, 0], [0, 10]), line([2, 0], [2, 10])),
@@ -72,11 +76,13 @@ describe("Line", () => {
       Line.intersectRay2D(line([0, 0], [10, 10]), line([0, 1], [10, 11])),
     ).toBeUndefined();
     expect(
-      values(Line.intersectRay2D(line([0, 0], [10, 10]), line([2, 2], [8, 8]))),
+      values(
+        Line.intersectRay2D(line([0, 0], [10, 10]), line([2, 2], [8, 8]))!,
+      ),
     ).toEqual([0, 0]);
     expect(
       values(
-        Line.intersectRay2D(line([0, 0], [10, 10]), line([0, 10], [10, 0])),
+        Line.intersectRay2D(line([0, 0], [10, 10]), line([0, 10], [10, 0]))!,
       ),
     ).toEqual([5, 5]);
   });
@@ -84,11 +90,11 @@ describe("Line", () => {
   it("limits intersections to segments or one segment plus a ray", () => {
     const crossingA = line([0, 0], [10, 10]);
     const crossingB = line([0, 10], [10, 0]);
-    expect(values(Line.intersectLine2D(crossingA, crossingB))).toEqual([5, 5]);
+    expect(values(Line.intersectLine2D(crossingA, crossingB)!)).toEqual([5, 5]);
     expect(
       Line.intersectLine2D(line([0, 0], [1, 1]), crossingB),
     ).toBeUndefined();
-    expect(values(Line.intersectLineWithRay2D(crossingA, crossingB))).toEqual([
+    expect(values(Line.intersectLineWithRay2D(crossingA, crossingB)!)).toEqual([
       5, 5,
     ]);
     expect(
@@ -137,8 +143,8 @@ describe("Line", () => {
       [6, 6],
     ]);
     const horizontal = line([0, 0], [10, 0]);
-    expect(values(Line.crop(horizontal, [2, 3], 0, true))).toEqual([3, 0]);
-    expect(values(Line.crop(line([0, 0], [0, 10]), [2, 3]))).toEqual([0, 3]);
+    expect(values(Line.crop(horizontal, [2, 3], 0, true)!)).toEqual([3, 0]);
+    expect(values(Line.crop(line([0, 0], [0, 10]), [2, 3])!)).toEqual([0, 3]);
     expect(Line.crop(horizontal, [4, 4], 0, false)).toBeTruthy();
     expect(Line.crop(line([0, 0], [1, 10]), [4, 4], 1, false)).toBeTruthy();
     expect(Line.marker(horizontal, [2, 3], "arrow", true)).toHaveLength(3);
@@ -342,11 +348,11 @@ describe("Triangle", () => {
   });
 
   it("calculates centers and inscribed/circumscribed circles", () => {
-    expect(values(Triangle.orthocenter(triangle))).toEqual([0, 0]);
+    expect(values(Triangle.orthocenter(triangle)!)).toEqual([0, 0]);
     expect(Triangle.incenter(triangle)).toBeInstanceOf(Pt);
     expect(Triangle.incircle(triangle)).toHaveLength(2);
     expect(Triangle.incircle(triangle, new Pt(2, 2))).toHaveLength(2);
-    expect(values(Triangle.circumcenter(triangle))).toEqual([5, 5]);
+    expect(values(Triangle.circumcenter(triangle)!)).toEqual([5, 5]);
     expect(Triangle.circumcircle(triangle)).toHaveLength(2);
     expect(Triangle.circumcircle(triangle, new Pt(5, 5))).toHaveLength(2);
   });
@@ -739,15 +745,17 @@ describe("Geometry correctness pins", () => {
   it("keeps ray intersection contract on the parametric form", () => {
     // coincident lines return the first line's start point
     expect(
-      values(Line.intersectRay2D(line([3, 3], [10, 10]), line([2, 2], [8, 8]))),
+      values(
+        Line.intersectRay2D(line([3, 3], [10, 10]), line([2, 2], [8, 8]))!,
+      ),
     ).toEqual([3, 3]);
     // near-vertical stays finite and accurate
     const ix = Line.intersectRay2D(
       line([100, 0], [100.0001, 1000]),
       line([0, 500], [1000, 500]),
     );
-    expect(ix[0]).toBeCloseTo(100.00005, 3);
-    expect(ix[1]).toBeCloseTo(500, 6);
+    expect(ix![0]).toBeCloseTo(100.00005, 3);
+    expect(ix![1]).toBeCloseTo(500, 6);
   });
 
   it("keeps point-in-polygon results for hit testing", () => {

@@ -3,7 +3,7 @@
   "source": [
     [
       "src/UI.ts",
-      440,
+      452,
       13
     ]
   ],
@@ -15,7 +15,7 @@
       "source": [
         [
           "src/UI.ts",
-          450,
+          462,
           2
         ]
       ],
@@ -64,12 +64,12 @@
       "source": [
         [
           "src/UI.ts",
-          174,
+          180,
           6
         ],
         [
           "src/UI.ts",
-          177,
+          183,
           6
         ]
       ],
@@ -95,12 +95,12 @@
       "source": [
         [
           "src/UI.ts",
-          164,
+          170,
           6
         ],
         [
           "src/UI.ts",
-          167,
+          173,
           6
         ]
       ],
@@ -126,12 +126,12 @@
       "source": [
         [
           "src/UI.ts",
-          184,
+          190,
           6
         ],
         [
           "src/UI.ts",
-          187,
+          193,
           6
         ]
       ],
@@ -159,7 +159,7 @@
       "source": [
         [
           "src/UI.ts",
-          210,
+          216,
           2
         ]
       ],
@@ -188,7 +188,7 @@
       "source": [
         [
           "src/UI.ts",
-          333,
+          339,
           12
         ]
       ],
@@ -219,7 +219,7 @@
       "source": [
         [
           "src/UI.ts",
-          278,
+          284,
           2
         ]
       ],
@@ -247,7 +247,7 @@
             {
               "name": "evt",
               "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))",
-              "type": "MouseEvent",
+              "type": "UIActionEvent",
               "default": false
             }
           ],
@@ -260,7 +260,7 @@
       "source": [
         [
           "src/UI.ts",
-          262,
+          268,
           2
         ]
       ],
@@ -295,7 +295,7 @@
       "source": [
         [
           "src/UI.ts",
-          514,
+          526,
           2
         ]
       ],
@@ -324,7 +324,7 @@
       "source": [
         [
           "src/UI.ts",
-          532,
+          544,
           2
         ]
       ],
@@ -353,7 +353,7 @@
       "source": [
         [
           "src/UI.ts",
-          555,
+          567,
           2
         ]
       ],
@@ -388,7 +388,7 @@
       "source": [
         [
           "src/UI.ts",
-          231,
+          237,
           2
         ]
       ],
@@ -429,7 +429,7 @@
       "source": [
         [
           "src/UI.ts",
-          505,
+          517,
           2
         ]
       ],
@@ -458,7 +458,7 @@
       "source": [
         [
           "src/UI.ts",
-          523,
+          535,
           2
         ]
       ],
@@ -487,7 +487,7 @@
       "source": [
         [
           "src/UI.ts",
-          542,
+          554,
           2
         ]
       ],
@@ -497,7 +497,7 @@
       "signatures": [
         {
           "comment": "Add handlers for hover events. Remember this button will also need to be tracked for events via `UI.track`.",
-          "returns": "number[]",
+          "returns": "(number | undefined)[]",
           "returns_comment": "id numbers that refer to enter/leave handlers, for use in [`UIButton.offHover`](#link) or [`UI.off`](#link).",
           "parameters": [
             {
@@ -522,7 +522,7 @@
       "source": [
         [
           "src/UI.ts",
-          368,
+          374,
           2
         ]
       ],
@@ -551,7 +551,7 @@
       "source": [
         [
           "src/UI.ts",
-          219,
+          225,
           2
         ]
       ],
@@ -586,7 +586,7 @@
       "source": [
         [
           "src/UI.ts",
-          197,
+          203,
           2
         ]
       ],
@@ -621,7 +621,7 @@
       "source": [
         [
           "src/UI.ts",
-          375,
+          381,
           2
         ]
       ],
@@ -643,7 +643,7 @@
       "source": [
         [
           "src/UI.ts",
-          343,
+          349,
           12
         ]
       ],
@@ -674,7 +674,7 @@
       "source": [
         [
           "src/UI.ts",
-          137,
+          143,
           9
         ]
       ],
@@ -717,7 +717,7 @@
       "source": [
         [
           "src/UI.ts",
-          147,
+          153,
           9
         ]
       ],
@@ -760,7 +760,7 @@
       "source": [
         [
           "src/UI.ts",
-          127,
+          133,
           9
         ]
       ],
@@ -803,7 +803,7 @@
       "source": [
         [
           "src/UI.ts",
-          156,
+          162,
           9
         ]
       ],
@@ -846,7 +846,7 @@
       "source": [
         [
           "src/UI.ts",
-          117,
+          123,
           9
         ]
       ],
@@ -883,7 +883,7 @@
       "source": [
         [
           "src/UI.ts",
-          358,
+          364,
           9
         ]
       ],
@@ -919,7 +919,7 @@
             {
               "name": "evt",
               "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))",
-              "type": "MouseEvent",
+              "type": "UIActionEvent",
               "default": false
             }
           ],

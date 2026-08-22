@@ -78,7 +78,7 @@ describe("Util collection helpers", () => {
   it("flattens, combines, and zips collections", () => {
     const flatGroup = Util.flatten([[new Pt(1, 2)], [new Pt(3, 4)]]);
     expect(flatGroup).toBeInstanceOf(Group);
-    expect(flatGroup.map((point) => point.toArray())).toEqual([
+    expect(flatGroup.map((point: any) => point.toArray())).toEqual([
       [1, 2],
       [3, 4],
     ]);

@@ -120,6 +120,7 @@ Complete API reference for [Pts 0.12.9](https://ptsjs.org), generated from the s
   - [`TextMeasure`](#types-textmeasure)
   - [`TextVerticalAlign`](#types-textverticalalign)
   - [`TouchPointsKey`](#types-touchpointskey)
+  - [`UIActionEvent`](#types-uiactionevent)
   - [`UIHandler`](#types-uihandler)
   - [`WarningType`](#types-warningtype)
 
@@ -129,7 +130,7 @@ Complete API reference for [Pts 0.12.9](https://ptsjs.org), generated from the s
 <a id="canvas-canvasform"></a>
 ### `CanvasForm`
 
-**Kind:** Class · **Source:** [`src/Canvas.ts:545`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L545)
+**Kind:** Class · **Source:** [`src/Canvas.ts:548`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L548)
 
 **Extends:** `VisualForm`
 
@@ -927,7 +928,7 @@ Learn more about the concept of Space in [this guide](https://ptsjs.org/guide/Sp
 ##### Constructor
 
 ```ts
-new CanvasSpace(elem: string | Element, callback: Function): CanvasSpace
+new CanvasSpace(elem: string | Element, callback:  Fn(bound:Bound, elem:EventTarget)): CanvasSpace
 ```
 
 Create a CanvasSpace which represents a HTML Canvas Space
@@ -935,7 +936,7 @@ Create a CanvasSpace which represents a HTML Canvas Space
 **Parameters**
 
 - `elem` (`string | Element`) — Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<canvas>`, or a `<div>` container in which a new `<canvas>` will be created. If left empty, a `<div id="pt_container"><canvas id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
-- `callback` (`Function`) — an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a "ready" event will also be fired from the `<canvas>` element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener("ready")`
+- `callback` (` Fn(bound:Bound, elem:EventTarget)`) — an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a "ready" event will also be fired from the `<canvas>` element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener("ready")`
 
 **Example**
 
@@ -1068,14 +1069,14 @@ Clear the canvas with its background color. Overrides Space's `clear` function.
 ##### `clearOffscreen`
 
 ```ts
-clearOffscreen(bg: string): this
+clearOffscreen(bg: string | null): this
 ```
 
 Similiar to `clear()` but clear the offscreen canvas instead
 
 **Parameters**
 
-- `bg` (`string`) — Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
+- `bg` (`string | null`) — Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
 
 <a id="canvas-canvasspace-dispose"></a>
 ##### `dispose`
@@ -1141,7 +1142,7 @@ let rec = space.recorder(true); rec.start(); setTimeout( () => rec.stop(), 5000)
 *overrides `MultiTouchSpace.resize`*
 
 ```ts
-resize(b: Bound, evt: Event): this
+resize(b: Bound, evt: Event | null): this
 ```
 
 This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound ,evt)` callback in your player objects.
@@ -1149,7 +1150,7 @@ This overrides Space's `resize` function. It's used as a callback function for w
 **Parameters**
 
 - `b` (`Bound`) — a Bound object to resize to
-- `evt` (`Event`) — Optionally pass a resize event
+- `evt` (`Event | null`) — Optionally pass a resize event
 
 **See also:** Space.add
 
@@ -2390,14 +2391,14 @@ Generate a 2D Perlin noise value.
 ##### `seed`
 
 ```ts
-seed(s: any): Noise
+seed(s: number): Noise
 ```
 
 Specify a seed for this Noise.
 
 **Parameters**
 
-- `s` (`any`) — seed value
+- `s` (`number`) — seed value
 
 <a id="create-noise-step"></a>
 ##### `step`
@@ -2462,7 +2463,7 @@ Dispose is idempotent, and a new Space can be mounted on the same element afterw
 ##### Constructor
 
 ```ts
-new DOMSpace(elem: string | Element, callback: Function): DOMSpace
+new DOMSpace(elem: string | Element, callback:  Fn(bound:Bound, elem:Element)): DOMSpace
 ```
 
 Create a DOMSpace for HTML DOM elements
@@ -2470,7 +2471,7 @@ Create a DOMSpace for HTML DOM elements
 **Parameters**
 
 - `elem` (`string | Element`) — Specify an element by its "id" attribute as string, or by the element object itself. Use css to customize its appearance if needed.
-- `callback` (`Function`) — an optional callback `function(boundingBox, spaceElement)` to be called when element is appended and ready. Alternatively, a "ready" event will also be fired from the element when it's appended, which can be traced with `spaceInstance.element.addEventListener("ready")`
+- `callback` (` Fn(bound:Bound, elem:Element)`) — an optional callback `function(boundingBox, spaceElement)` to be called when element is appended and ready. Alternatively, a "ready" event will also be fired from the element when it's appended, which can be traced with `spaceInstance.element.addEventListener("ready")`
 
 **Example**
 
@@ -2572,7 +2573,7 @@ Not implemented. See SVGSpace and HTMLSpace for implementation.
 *overrides `MultiTouchSpace.resize`*
 
 ```ts
-resize(b: Bound, evt: Event): this
+resize(b: Bound, evt: Event | null): this
 ```
 
 This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound, evt)` callback in your player objects (See [`Space.add`](#space-space-add) function).
@@ -2580,7 +2581,7 @@ This overrides Space's `resize` function. It's used as a callback function for w
 **Parameters**
 
 - `b` (`Bound`) — a Bound object to resize to
-- `evt` (`Event`) — Optionally pass a resize event
+- `evt` (`Event | null`) — Optionally pass a resize event
 
 <a id="dom-domspace-setup"></a>
 ##### `setup`
@@ -2620,14 +2621,14 @@ Add or update a style definition, and optionally update that style in the Elemen
 ##### `styles`
 
 ```ts
-styles(styles: object, update: boolean = false): this
+styles(styles: Record, update: boolean = false): this
 ```
 
 Add of update a list of style definitions, and optionally update those styles in the Element.
 
 **Parameters**
 
-- `styles` (`object`) — a key-value objects of style definitions
+- `styles` (`Record`) — a key-value objects of style definitions
 - `update` (`boolean`; default `false`) — a boolean to update the element's style immediately if set to `true`. Default is `false`.
 
 **Returns:** this
@@ -2655,14 +2656,14 @@ Helper function to create a DOM element.
 *static*
 
 ```ts
-static getInlineStyles(data: object): string
+static getInlineStyles(data: Record): string
 ```
 
 A static helper function to compose an inline style string from a object of styles.
 
 **Parameters**
 
-- `data` (`object`) — an object with key-value pairs
+- `data` (`Record`) — an object with key-value pairs
 
 **Example**
 
@@ -2676,7 +2677,7 @@ DOMSpace.getInlineStyles( {width: "100px", "font-size": "10px"} )
 *static*
 
 ```ts
-static setAttr(elem: Element, data: object): Element
+static setAttr(elem: Element, data: Record): Element
 ```
 
 A static helper function to add or update Element attributes.
@@ -2684,7 +2685,7 @@ A static helper function to add or update Element attributes.
 **Parameters**
 
 - `elem` (`Element`) — Element to update
-- `data` (`object`) — an object with key-value pairs
+- `data` (`Record`) — an object with key-value pairs
 
 **Returns:** this DOM element
 
@@ -2707,7 +2708,7 @@ id: string
 <a id="dom-htmlform"></a>
 ### `HTMLForm`
 
-**Kind:** Class · **Source:** [`src/Dom.ts:405`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L405)
+**Kind:** Class · **Source:** [`src/Dom.ts:408`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L408)
 
 **Extends:** `VisualForm`
 
@@ -3062,14 +3063,14 @@ form.stroke("#F90")`, `form.stroke("rgba(0,0,0,.5")`, `form.stroke(false)`, `for
 *protected*
 
 ```ts
-styleTo(k: any, v: any, unit: string = ""): void
+styleTo(k: string, v: any, unit: string = ""): void
 ```
 
 Usually not used directly. This updates a style in `_ctx` context or throw an Error if the style doesn't exist.
 
 **Parameters**
 
-- `k` (`any`) — style key
+- `k` (`string`) — style key
 - `v` (`any`) — style value
 - `unit` (`string`; default `""`) — Optional unit like 'px' to append to value
 
@@ -3128,14 +3129,14 @@ A static function to draw a circle.
 *static*
 
 ```ts
-static getID(ctx: any): string
+static getID(ctx: DOMFormContext): string
 ```
 
 A static function to generate an ID string based on a context object.
 
 **Parameters**
 
-- `ctx` (`any`) — a context object for an HTMLForm
+- `ctx` (`DOMFormContext`) — a context object for an HTMLForm
 
 <a id="dom-htmlform-static-point"></a>
 ##### `point`
@@ -3167,7 +3168,7 @@ HTMLForm.point( p )`, `HTMLForm.point( p, 10, "circle" )
 *static*
 
 ```ts
-static rect(ctx: DOMFormContext, pts: PtLikeIterable): Element
+static rect(ctx: DOMFormContext, pts: PtLikeIterable): Element | undefined
 ```
 
 A static function to draw a rectangle.
@@ -3232,7 +3233,7 @@ A static function to draw a square.
 *static*
 
 ```ts
-static style(elem: Element, styles: object): Element
+static style(elem: Element, styles: Record): Element
 ```
 
 A static function to help adding style object to an element. This put all styles into `style` attribute instead of individual attributes, so that the styles can be parsed by Adobe Illustrator.
@@ -3240,7 +3241,7 @@ A static function to help adding style object to an element. This put all styles
 **Parameters**
 
 - `elem` (`Element`) — A DOM element to add to
-- `styles` (`object`) — an object of style properties
+- `styles` (`Record`) — an object of style properties
 
 **Returns:** DOM element
 
@@ -3291,7 +3292,7 @@ A helper function to set the top and left position styling of text DOM context.
 <a id="dom-htmlspace"></a>
 ### `HTMLSpace`
 
-**Kind:** Class · **Source:** [`src/Dom.ts:334`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L334)
+**Kind:** Class · **Source:** [`src/Dom.ts:337`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L337)
 
 **Extends:** `DOMSpace`
 
@@ -3343,14 +3344,14 @@ element but never touches its container.
 *static*
 
 ```ts
-static htmlElement(parent: Element, name: string, id: string, autoClass: boolean = true): HTMLElement
+static htmlElement(parent: Element | null | undefined, name: string, id: string, autoClass: boolean = true): HTMLElement
 ```
 
 A static function to add a DOM element inside a node. Usually you don't need to use this directly. See methods in [`HTMLForm`](#dom-htmlform) instead.
 
 **Parameters**
 
-- `parent` (`Element`) — the parent element, or `null` to use current `<svg>` as parent.
+- `parent` (`Element | null | undefined`) — the parent element, or `null` to use current `<svg>` as parent.
 - `name` (`string`) — a string of element name,  such as `rect` or `circle`
 - `id` (`string`) — id attribute of the new element
 - `autoClass` (`boolean`; default `true`) — add a class based on the id (from char 0 to index of "-"). Default is true.
@@ -3367,7 +3368,7 @@ A static function to add a DOM element inside a node. Usually you don't need to 
 <a id="form-font"></a>
 ### `Font`
 
-**Kind:** Class · **Source:** [`src/Form.ts:262`](https://github.com/williamngan/pts/blob/master/src/Form.ts#L262)
+**Kind:** Class · **Source:** [`src/Form.ts:267`](https://github.com/williamngan/pts/blob/master/src/Form.ts#L267)
 
 Font class lets you create a specific font style with properties for its size and style. A font instance can be passed as parameter to set a form's font. For example, see [`CanvasForm.font`](#canvas-canvasform-font).
 
@@ -4033,7 +4034,7 @@ Apply filters such as blur and grayscale to the canvas image. The original image
 ##### `getForm`
 
 ```ts
-getForm(): CanvasForm
+getForm(): CanvasForm | undefined
 ```
 
 Get a CanvasForm for drawing on the internal canvas if this Img is editable
@@ -4326,7 +4327,7 @@ type ImgOptions = { crossOrigin:boolean, editable:boolean, pixelScale:number, sp
 <a id="linearalgebra-mat"></a>
 ### `Mat`
 
-**Kind:** Class · **Source:** [`src/LinearAlgebra.ts:210`](https://github.com/williamngan/pts/blob/master/src/LinearAlgebra.ts#L210)
+**Kind:** Class · **Source:** [`src/LinearAlgebra.ts:213`](https://github.com/williamngan/pts/blob/master/src/LinearAlgebra.ts#L213)
 
 Mat provides various static functions for matrix operations as well as a convenient way to chain a 3x3 transformation matrix. It's not fully optimized but good enough to use.
 
@@ -4841,7 +4842,7 @@ Magnitude of `a`.
 *static*
 
 ```ts
-static map(a: PtLike, fn:  Fn(n:number, index:number, arr:any)): PtLike
+static map(a: PtLike, fn:  Fn(n:number, index:number, arr:PtLike)): PtLike
 ```
 
 Given a mapping function, update `a`'s value in each dimension.
@@ -4849,7 +4850,7 @@ Given a mapping function, update `a`'s value in each dimension.
 **Parameters**
 
 - `a` (`PtLike`)
-- `fn` (` Fn(n:number, index:number, arr:any)`)
+- `fn` (` Fn(n:number, index:number, arr:PtLike)`)
 
 **Returns:** vector `a`
 
@@ -4859,7 +4860,7 @@ Given a mapping function, update `a`'s value in each dimension.
 *static*
 
 ```ts
-static max(a: PtLike): { index:any, value:any }
+static max(a: PtLike): { index:number, value:number }
 ```
 
 Find the max value within a vector's dimensions.
@@ -4876,7 +4877,7 @@ Find the max value within a vector's dimensions.
 *static*
 
 ```ts
-static min(a: PtLike): { index:any, value:any }
+static min(a: PtLike): { index:number, value:number }
 ```
 
 Find the min value within a vector's dimensions.
@@ -4961,7 +4962,7 @@ Add up all the dimensions' values and returns a scalar of the sum.
 *static*
 
 ```ts
-static unit(a: PtLike, magnitude: number = undefined): PtLike
+static unit(a: PtLike, magnitude: number | undefined = undefined): PtLike
 ```
 
 Unit vector of `a`. If magnitude of `a` is already known, pass it in the second paramter to optimize calculation.
@@ -4969,7 +4970,7 @@ Unit vector of `a`. If magnitude of `a` is already known, pass it in the second 
 **Parameters**
 
 - `a` (`PtLike`)
-- `magnitude` (`number`; default `undefined`)
+- `magnitude` (`number | undefined`; default `undefined`)
 
 <a id="module-num"></a>
 ## Module: `Num`
@@ -4977,7 +4978,7 @@ Unit vector of `a`. If magnitude of `a` is already known, pass it in the second 
 <a id="num-geom"></a>
 ### `Geom`
 
-**Kind:** Class · **Source:** [`src/Num.ts:192`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L192)
+**Kind:** Class · **Source:** [`src/Num.ts:202`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L202)
 
 Geom class provides static helper functions for basic geometric operations.
 
@@ -5278,7 +5279,7 @@ Check if a Pt is within the rectangular boundary defined by two Pts.
 <a id="num-num"></a>
 ### `Num`
 
-**Kind:** Class · **Source:** [`src/Num.ts:14`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L14)
+**Kind:** Class · **Source:** [`src/Num.ts:19`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L19)
 
 Num class provides static helper functions for basic numeric operations.
 
@@ -5440,8 +5441,9 @@ Normalize a value within a range.
 static random(): number
 ```
 
-Return a random number between 0 and 1 from a seed,
-if the seed is not defined it uses Math.random
+Return a random number between 0 and 1. If a seed was set via [`Num.seed`](#num-num-static-seed),
+draws come from the seeded generator with 32-bit resolution (exact multiples of 2^-32);
+otherwise it uses `Math.random`.
 
 **Returns:** a number between 0 and 1
 
@@ -5486,7 +5488,11 @@ Get a random number within a range.
 static seed(seed: string): void
 ```
 
-Seed the pseudorandom generator.
+Seed the pseudorandom generator for reproducible [`Num.random`](#num-num-static-random) sequences.
+The seed is hashed by its *effective* key: leading/trailing whitespace and embedded
+control characters are stripped first, so seeds differing only in those collide.
+An empty (or whitespace-only) seed yields a fixed default sequence. This generator
+is deterministic and statistically strong, but not cryptographically secure.
 
 **Parameters**
 
@@ -5540,7 +5546,7 @@ static generator: any
 <a id="num-range"></a>
 ### `Range`
 
-**Kind:** Class · **Source:** [`src/Num.ts:949`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L949)
+**Kind:** Class · **Source:** [`src/Num.ts:967`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L967)
 
 Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension.
 It also provides convenient functions such as mapping the Group to another range. This class may be useful for visualizing data in charts.
@@ -5609,7 +5615,7 @@ Add more Pts to this Range and recalculate its min and max values.
 ##### `calc`
 
 ```ts
-calc(): this
+calc(): Range | undefined
 ```
 
 Go through the group and find its min and max values. Usually you don't need to call this function directly.
@@ -5645,7 +5651,7 @@ Create a number of evenly spaced "ticks" that span this Range's min and max valu
 <a id="num-shaping"></a>
 ### `Shaping`
 
-**Kind:** Class · **Source:** [`src/Num.ts:557`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L557)
+**Kind:** Class · **Source:** [`src/Num.ts:575`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L575)
 
 Shaping provides shaping functions to interpolate a value. These are useful for easing and transitions.
 
@@ -6134,14 +6140,14 @@ Sinuous out, adapted from Robert Penner's [easing functions](http://robertpenner
 *static*
 
 ```ts
-static step(fn: Function, steps: number, t: number, c: number, args: any[]): any
+static step(fn:  Fn(t:number, c:number, args:any[]), steps: number, t: number, c: number, args: any[]): number
 ```
 
 Convert any shaping functions into a series of steps.
 
 **Parameters**
 
-- `fn` (`Function`) — the original shaping function
+- `fn` (` Fn(t:number, c:number, args:any[])`) — the original shaping function
 - `steps` (`number`) — the number of steps
 - `t` (`number`) — a value between 0 to 1
 - `c` (`number`) — the value to shape, default is 1
@@ -6153,7 +6159,7 @@ Convert any shaping functions into a series of steps.
 <a id="op-circle"></a>
 ### `Circle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:678`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L678)
+**Kind:** Class · **Source:** [`src/Op.ts:681`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L681)
 
 Circle class provides static functions to create and operate on circles. A circle is usually represented as a Group of 2 Pts, where the first Pt specifies the center, and the second Pt specifies the radius.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -6203,7 +6209,7 @@ Create a circle that either fits within, or encloses, a rectangle.
 *static*
 
 ```ts
-static fromTriangle(pts: PtIterable, enclose: boolean = false): Group
+static fromTriangle(pts: PtIterable, enclose: boolean = false): Group | undefined
 ```
 
 Create a circle that either fits within, or encloses, a triangle. Same as [`Triangle.circumcircle`](#op-triangle-static-circumcircle) or [`Triangle.incircle`](#op-triangle-static-incircle).
@@ -6342,7 +6348,7 @@ Check if a point is within a circle.
 <a id="op-curve"></a>
 ### `Curve`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1691`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1691)
+**Kind:** Class · **Source:** [`src/Op.ts:1700`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1700)
 
 Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -6585,7 +6591,7 @@ Check if three Pts are collinear, ie, on the same straight path.
 *static*
 
 ```ts
-static crop(line: PtIterable, size: PtLike, index: number = 0, cropAsCircle: boolean = true): Pt
+static crop(line: PtIterable, size: PtLike, index: number = 0, cropAsCircle: boolean = true): Pt | undefined
 ```
 
 Crop this line by a circle or rectangle at end points. This can be useful for creating arrows that connect to an object's edge.
@@ -6642,7 +6648,7 @@ Create a line that originates from an anchor point, given an angle and a magnitu
 *static*
 
 ```ts
-static intercept(p1: PtLike, p2: PtLike): { slope:number, xi:number, yi:number }
+static intercept(p1: PtLike, p2: PtLike): { slope:number, xi:number | undefined, yi:number } | undefined
 ```
 
 Calculate the slope and xy intercepts of a line.
@@ -6696,7 +6702,7 @@ Get two points of a ray that intersects with a point on a 2D grid.
 *static*
 
 ```ts
-static intersectLine2D(la: PtIterable, lb: PtIterable): Pt
+static intersectLine2D(la: PtIterable, lb: PtIterable): Pt | undefined
 ```
 
 Given two line segemnts, find their intersection point if any.
@@ -6731,7 +6737,7 @@ Find intersection points of 2 sets of lines. This checks all line segments in th
 *static*
 
 ```ts
-static intersectLineWithRay2D(line: PtIterable, ray: PtIterable): Pt
+static intersectLineWithRay2D(line: PtIterable, ray: PtIterable): Pt | undefined
 ```
 
 Given a line segemnt and a ray (infinite line), find their intersection point if any.
@@ -6749,7 +6755,7 @@ Given a line segemnt and a ray (infinite line), find their intersection point if
 *static*
 
 ```ts
-static intersectPolygon2D(lineOrRay: PtIterable, poly: PtIterable, sourceIsRay: boolean = false): Group
+static intersectPolygon2D(lineOrRay: PtIterable, poly: PtIterable, sourceIsRay: boolean = false): Group | undefined
 ```
 
 Given a line segemnt or a ray (infinite line), find its intersection point(s) with a polygon.
@@ -6766,7 +6772,7 @@ Given a line segemnt or a ray (infinite line), find its intersection point(s) wi
 *static*
 
 ```ts
-static intersectRay2D(la: PtIterable, lb: PtIterable): Pt
+static intersectRay2D(la: PtIterable, lb: PtIterable): Pt | undefined
 ```
 
 Given two lines as rays (infinite lines), find their intersection point if any.
@@ -6852,7 +6858,7 @@ Create an marker arrow or line, placed at an end point of this line.
 *static*
 
 ```ts
-static perpendicularFromPt(line: PtIterable, pt: PtLike, asProjection: boolean = false): Pt
+static perpendicularFromPt(line: PtIterable, pt: PtLike, asProjection: boolean = false): Pt | undefined
 ```
 
 Find a point on a line that is perpendicular (shortest distance) to a target point.
@@ -6889,7 +6895,7 @@ Given a 2D path and a point, find whether the point is on left or right side of 
 *static*
 
 ```ts
-static slope(p1: PtLike, p2: PtLike): number
+static slope(p1: PtLike, p2: PtLike): number | undefined
 ```
 
 Calculate the slope of a line.
@@ -6933,7 +6939,7 @@ Convert this line to a new rectangle representation.
 <a id="op-polygon"></a>
 ### `Polygon`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1053`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1053)
+**Kind:** Class · **Source:** [`src/Op.ts:1062`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1062)
 
 Polygon class provides static functions to create and operate on polygons. A polygon is usually represented as a Group of 3 or more Pts.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -6979,7 +6985,7 @@ Find the area of a simple (non-self-intersecting) polygon using the shoelace for
 *static*
 
 ```ts
-static bisector(poly: PtIterable, index: number): Pt
+static bisector(poly: PtIterable, index: number): Pt | undefined
 ```
 
 Get a bisector which is a line that split between two sides of a polygon equally.
@@ -7047,7 +7053,7 @@ Create a regular polygon.
 *static*
 
 ```ts
-static hasIntersectCircle(poly: PtIterable, circle: PtIterable): IntersectContext
+static hasIntersectCircle(poly: PtIterable, circle: PtIterable): IntersectContext | null
 ```
 
 Check if a convex polygon and a circle has intersections using Separating Axis Theorem.
@@ -7081,7 +7087,7 @@ Check if a Pt is inside a convex polygon.
 *static*
 
 ```ts
-static hasIntersectPolygon(poly1: PtIterable, poly2: PtIterable): IntersectContext
+static hasIntersectPolygon(poly1: PtIterable, poly2: PtIterable): IntersectContext | null
 ```
 
 Check if two convex polygons have intersections using Separating Axis Theorem.
@@ -7265,7 +7271,7 @@ Get a bounding box for each polygon group, as well as a union bounding-box for a
 <a id="op-rectangle"></a>
 ### `Rectangle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:420`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L420)
+**Kind:** Class · **Source:** [`src/Op.ts:423`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L423)
 
 Rectangle class provides static functions to create and operate on rectangles. A rectangle is usually represented as a Group of 2 Pts, marking the top-left and bottom-right corners of the rectangle.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -7549,7 +7555,7 @@ Check if a point is within a rectangle.
 <a id="op-triangle"></a>
 ### `Triangle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:898`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L898)
+**Kind:** Class · **Source:** [`src/Op.ts:904`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L904)
 
 Triangle class provides static functions to create and operate on trianges. A triange is a polygon represented as a Group of 3 Pts.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -7581,7 +7587,7 @@ Get a triangle's altitude, which is a line from a triangle's point to its opposi
 *static*
 
 ```ts
-static circumcenter(tri: PtIterable): Pt
+static circumcenter(tri: PtIterable): Pt | undefined
 ```
 
 Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side).
@@ -7598,7 +7604,7 @@ Get circumcenter, which is the intersection point of its 3 perpendicular bisecto
 *static*
 
 ```ts
-static circumcircle(tri: PtIterable, center: Pt): Group
+static circumcircle(tri: PtIterable, center: Pt): Group | undefined
 ```
 
 Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side).
@@ -7660,7 +7666,7 @@ Create a triangle from a rectangle. The triangle will be isosceles, with the bot
 *static*
 
 ```ts
-static incenter(tri: PtIterable): Pt
+static incenter(tri: PtIterable): Pt | undefined
 ```
 
 Get incenter, which is the center point of its inner circle, and also the intersection point of its 3 angle bisector lines (each of which cuts one of the 3 angles in half).
@@ -7677,7 +7683,7 @@ Get incenter, which is the center point of its inner circle, and also the inters
 *static*
 
 ```ts
-static incircle(tri: PtIterable, center: Pt): Group
+static incircle(tri: PtIterable, center: Pt): Group | undefined
 ```
 
 Get an interior circle, which is the largest circle completed enclosed by this triangle.
@@ -7728,7 +7734,7 @@ Given a point of the triangle, the opposite side is the side which the point doe
 *static*
 
 ```ts
-static orthocenter(tri: PtIterable): Pt
+static orthocenter(tri: PtIterable): Pt | undefined
 ```
 
 Get orthocenter, which is the intersection point of a triangle's 3 altitudes (the 3 lines that are perpendicular to its 3 opposite sides).
@@ -8259,7 +8265,7 @@ Add a particle or body to this world.
 ##### `body`
 
 ```ts
-body(id: string | number): Body
+body(id: string | number): Body | undefined
 ```
 
 Get a body in this world by index or string id.
@@ -8334,7 +8340,7 @@ here — they persist across the substeps of one update and are cleared when it 
 ##### `particle`
 
 ```ts
-particle(id: string | number): Particle
+particle(id: string | number): Particle | undefined
 ```
 
 Get a particle in this world by index or string id.
@@ -8445,7 +8451,7 @@ Static function to calculate edge constraints between 2 particles.
 <a id="play-sound"></a>
 ### `Sound`
 
-**Kind:** Class · **Source:** [`src/Play.ts:195`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L195)
+**Kind:** Class · **Source:** [`src/Play.ts:206`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L206)
 
 Sound class simplifies common tasks like audio inputs and visualizations using a subset of Web Audio API. It can be used with other audio libraries like tone.js, and extended to support additional web audio functions. See [the guide](https://ptsjs.org/guide/Sound-0800.html) to get started.
 
@@ -8905,7 +8911,7 @@ Analyzer if any
 <a id="play-tempo"></a>
 ### `Tempo`
 
-**Kind:** Class · **Source:** [`src/Play.ts:14`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L14)
+**Kind:** Class · **Source:** [`src/Play.ts:19`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L19)
 
 **Implements:** `IPlayer`
 
@@ -9077,7 +9083,7 @@ animateID: string
 <a id="pt-bound"></a>
 ### `Bound`
 
-**Kind:** Class · **Source:** [`src/Pt.ts:1046`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L1046)
+**Kind:** Class · **Source:** [`src/Pt.ts:1057`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L1057)
 
 **Extends:** `Group`
 
@@ -9190,7 +9196,7 @@ Width of this Bound
 ##### `x`
 
 ```ts
-get x(): number
+get x(): number | undefined
 ```
 
 First value of the Bound's top-left position
@@ -9199,7 +9205,7 @@ First value of the Bound's top-left position
 ##### `y`
 
 ```ts
-get y(): number
+get y(): number | undefined
 ```
 
 Second value of the Bound's top-left position
@@ -9208,7 +9214,7 @@ Second value of the Bound's top-left position
 ##### `z`
 
 ```ts
-get z(): number
+get z(): number | undefined
 ```
 
 Third value of the Bound's top-left position
@@ -9288,7 +9294,7 @@ Create a Bound from a Group or an array of Pts
 <a id="pt-group"></a>
 ### `Group`
 
-**Kind:** Class · **Source:** [`src/Pt.ts:563`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L563)
+**Kind:** Class · **Source:** [`src/Pt.ts:570`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L570)
 
 **Extends:** `Array`
 
@@ -9432,14 +9438,14 @@ Apply this group as a matrix and calculate matrix multiplication.
 ##### `$zip`
 
 ```ts
-$zip(defaultValue: number | boolean = undefined, useLongest: boolean = false): Group
+$zip(defaultValue: number | boolean | undefined = undefined, useLongest: boolean = false): Group
 ```
 
 Zip a group of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]].
 
 **Parameters**
 
-- `defaultValue` (`number | boolean`; default `undefined`) — a default value to fill if index out of bound. If not provided, it will throw an error instead.
+- `defaultValue` (`number | boolean | undefined`; default `undefined`) — a default value to fill if index out of bound. If not provided, it will throw an error instead.
 - `useLongest` (`boolean`; default `false`) — If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
 
 <a id="pt-group-add"></a>
@@ -9862,7 +9868,7 @@ Convert an Array/Iterable of Pt into a Group.
 <a id="pt-pt"></a>
 ### `Pt`
 
-**Kind:** Class · **Source:** [`src/Pt.ts:12`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L12)
+**Kind:** Class · **Source:** [`src/Pt.ts:18`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L18)
 
 **Extends:** `Float32Array`
 
@@ -10145,14 +10151,14 @@ Like [`Pt.to`](#pt-pt-to) but returns a new Pt.
 ##### `$unit`
 
 ```ts
-$unit(magnitude: number = undefined): Pt
+$unit(magnitude: number | undefined = undefined): Pt
 ```
 
 Get a new unit vector from this Pt.
 
 **Parameters**
 
-- `magnitude` (`number`; default `undefined`)
+- `magnitude` (`number | undefined`; default `undefined`)
 
 <a id="pt-pt-abs"></a>
 ##### `abs`
@@ -10528,14 +10534,14 @@ A string representation of this Pt. Eg, "Pt(1, 2, 3)".
 ##### `unit`
 
 ```ts
-unit(magnitude: number = undefined): Pt
+unit(magnitude: number | undefined = undefined): Pt
 ```
 
 Convert to a unit vector, which is a normalized vector whose magnitude equals to 1.
 
 **Parameters**
 
-- `magnitude` (`number`; default `undefined`) — Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.
+- `magnitude` (`number | undefined`; default `undefined`) — Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.
 
 <a id="pt-pt-static-make"></a>
 ##### `make`
@@ -11007,7 +11013,7 @@ You may also use [`Space.pause`](#space-space-pause) and [`resume`](#space-space
 *abstract*
 
 ```ts
-resize(b: Bound, evt: Event): this
+resize(b: Bound, evt: Event | null): this
 ```
 
 Resize the space. To be implemented in subclasses.
@@ -11015,7 +11021,7 @@ Resize the space. To be implemented in subclasses.
 **Parameters**
 
 - `b` (`Bound`) — a Bound representing the position and size of the space
-- `evt` (`Event`) — event
+- `evt` (`Event | null`) — event
 
 <a id="space-space-resume"></a>
 ##### `resume`
@@ -11144,7 +11150,7 @@ Number of paint calls since `beginFrame` — used to skip empty commits.
 ##### `group`
 
 ```ts
-get group(): SVGElement
+get group(): SVGElement | null
 ```
 
 The `<g>` element holding this context's rendered output.
@@ -11564,7 +11570,7 @@ textBaseline: string
 <a id="svg-svgform"></a>
 ### `SVGForm`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:932`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L932)
+**Kind:** Class · **Source:** [`src/Svg.ts:939`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L939)
 
 **Extends:** `CanvasForm`
 
@@ -11736,14 +11742,14 @@ A static function to draw a circle element.
 *static*
 
 ```ts
-static getID(ctx: any): string
+static getID(ctx: DOMFormContext): string
 ```
 
 A static function to generate an ID string based on a context object.
 
 **Parameters**
 
-- `ctx` (`any`) — a context object for an SVGForm
+- `ctx` (`DOMFormContext`) — a context object for an SVGForm
 
 <a id="svg-svgform-static-line-element"></a>
 ##### `lineElement`
@@ -11751,7 +11757,7 @@ A static function to generate an ID string based on a context object.
 *static*
 
 ```ts
-static lineElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement
+static lineElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement | undefined
 ```
 
 A static function to draw a line or polyline element.
@@ -11824,7 +11830,7 @@ A static function to draw a polygon element.
 *static*
 
 ```ts
-static rectElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement
+static rectElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement | undefined
 ```
 
 A static function to draw a rectangle element.
@@ -11872,7 +11878,7 @@ A static function to draw a square element.
 *static*
 
 ```ts
-static style(elem: SVGElement, styles: object): Element
+static style(elem: SVGElement, styles: Record): Element
 ```
 
 A static function to help adding style object to an element.
@@ -11881,7 +11887,7 @@ Note that this put all styles into `style` attribute instead of individual svg a
 **Parameters**
 
 - `elem` (`SVGElement`) — A DOM element to add to
-- `styles` (`object`) — an object of style properties
+- `styles` (`Record`) — an object of style properties
 
 **Returns:** this DOM element
 
@@ -11933,7 +11939,7 @@ canvas runs on SVG unchanged. Check out the [Space guide](https://ptsjs.org/guid
 *overrides `DOMSpace.__constructor`*
 
 ```ts
-new SVGSpace(elem: string | Element, callback: Function): SVGSpace
+new SVGSpace(elem: string | Element, callback:  Fn(bound:Bound, elem:Element)): SVGSpace
 ```
 
 Create a SVGSpace which represents a Space for SVG elements.
@@ -11941,7 +11947,7 @@ Create a SVGSpace which represents a Space for SVG elements.
 **Parameters**
 
 - `elem` (`string | Element`) — Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<svg>`, or a `<div>` container in which a new `<svg>` will be created. If left empty, a `<div id="pt_container"><svg id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
-- `callback` (`Function`) — an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a "ready" event will also be fired from the `<svg>` element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener("ready")`
+- `callback` (` Fn(bound:Bound, elem:Element)`) — an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a "ready" event will also be fired from the `<svg>` element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener("ready")`
 
 **Example**
 
@@ -12086,7 +12092,7 @@ rendering after items are re-added.
 *overrides `DOMSpace.resize`*
 
 ```ts
-resize(b: Bound, evt: Event): this
+resize(b: Bound, evt: Event | null): this
 ```
 
 This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly.
@@ -12095,7 +12101,7 @@ You can keep track of resize events with `resize: (bound ,evt)` callback in your
 **Parameters**
 
 - `b` (`Bound`) — a Bound object to resize to
-- `evt` (`Event`) — Optionally pass a resize event
+- `evt` (`Event | null`) — Optionally pass a resize event
 
 <a id="svg-svgspace-to-svg"></a>
 ##### `toSVG`
@@ -12116,14 +12122,14 @@ Serialize the current SVG output to a string.
 *static*
 
 ```ts
-static svgElement(parent: Element, name: string, id: string): SVGElement
+static svgElement(parent: Element | null | undefined, name: string, id: string): SVGElement
 ```
 
 A static function to add a svg element inside a node. Usually you don't need to call this directly. See methods in [`SVGForm`](#svg-svgform) instead.
 
 **Parameters**
 
-- `parent` (`Element`) — the parent element, or `null` to use current `<svg>` as parent.
+- `parent` (`Element | null | undefined`) — the parent element, or `null` to use current `<svg>` as parent.
 - `name` (`string`) — a string of element name,  such as `rect` or `circle`
 - `id` (`string`) — id attribute of the new element
 
@@ -12260,7 +12266,7 @@ Truncate text to fit width. The result is guaranteed to fit: the largest prefix 
 <a id="ui-ui"></a>
 ### `UI`
 
-**Kind:** Class · **Source:** [`src/UI.ts:76`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L76)
+**Kind:** Class · **Source:** [`src/UI.ts:82`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L82)
 
 **[Experimental]** An abstract class that represents an UI element. It wraps a [`Group`](#pt-group) and supports UI event handling.
 Extend this class to create custom UI elements.
@@ -12349,7 +12355,7 @@ Continue to keep track of an actions even if it's not within this UI. Useful for
 ##### `listen`
 
 ```ts
-listen(type: UIPointerAction | string & , p: PtLike, evt: MouseEvent): boolean
+listen(type: UIPointerAction | string & , p: PtLike, evt: UIActionEvent): boolean
 ```
 
 Listen for UI events and trigger action handlers.
@@ -12358,7 +12364,7 @@ Listen for UI events and trigger action handlers.
 
 - `type` (`UIPointerAction | string & `) — an action type. Can be one of UIPointerActions or a custom one.
 - `p` (`PtLike`) — a point to check
-- `evt` (`MouseEvent`) — a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))
+- `evt` (`UIActionEvent`) — a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))
 
 <a id="ui-ui-off"></a>
 ##### `off`
@@ -12547,7 +12553,7 @@ name can then be used when constructing a UI.
 *static*
 
 ```ts
-static track(uis: UI[], type: string, p: PtLike, evt: MouseEvent): void
+static track(uis: UI[], type: string, p: PtLike, evt: UIActionEvent): void
 ```
 
 A static function to listen for a list of UIs. See also [`UI.listen`](#ui-ui-listen).
@@ -12557,12 +12563,12 @@ A static function to listen for a list of UIs. See also [`UI.listen`](#ui-ui-lis
 - `uis` (`UI[]`) — an array of UI
 - `type` (`string`) — an action type. Can be one of `UIPointerActions` or a custom one.
 - `p` (`PtLike`) — a point to check
-- `evt` (`MouseEvent`) — a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))
+- `evt` (`UIActionEvent`) — a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))
 
 <a id="ui-uibutton"></a>
 ### `UIButton`
 
-**Kind:** Class · **Source:** [`src/UI.ts:440`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L440)
+**Kind:** Class · **Source:** [`src/UI.ts:452`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L452)
 
 **Extends:** `UI`
 
@@ -12670,7 +12676,7 @@ Add a new contextmenu handler. `contextmenu` is similar to right click, see the 
 ##### `onHover`
 
 ```ts
-onHover(enter: UIHandler, leave: UIHandler): number[]
+onHover(enter: UIHandler, leave: UIHandler): (number | undefined)[]
 ```
 
 Add handlers for hover events. Remember this button will also need to be tracked for events via `UI.track`.
@@ -12689,7 +12695,7 @@ Add handlers for hover events. Remember this button will also need to be tracked
 <a id="ui-uidragger"></a>
 ### `UIDragger`
 
-**Kind:** Class · **Source:** [`src/UI.ts:568`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L568)
+**Kind:** Class · **Source:** [`src/UI.ts:580`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L580)
 
 **Extends:** `UIButton`
 
@@ -12785,7 +12791,7 @@ Add a new drop handler. Remember this button will also need to be tracked for ev
 <a id="ui-uipointeraction"></a>
 ### `UIPointerAction`
 
-**Kind:** Typealias · **Source:** [`src/UI.ts:69`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L69)
+**Kind:** Typealias · **Source:** [`src/UI.ts:75`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L75)
 
 A known pointer, touch, or keyboard action dispatched by a Pts space.
 
@@ -12796,7 +12802,7 @@ type UIPointerAction = UIPointerActions[keyof UIPointerActions];
 <a id="ui-uishapetest"></a>
 ### `UIShapeTest`
 
-**Kind:** Typealias · **Source:** [`src/UI.ts:8`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L8)
+**Kind:** Typealias · **Source:** [`src/UI.ts:14`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L14)
 
 A hit-test function for a UI shape: given the UI's group, a point, and the UI's states, return whether the point is within the shape.
 
@@ -12807,7 +12813,7 @@ type UIShapeTest =  Fn(group:Group, pt:PtLike, states:);
 <a id="ui-uipointeractions"></a>
 ### `UIPointerActions`
 
-**Kind:** Objectliteral · **Source:** [`src/UI.ts:47`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L47)
+**Kind:** Objectliteral · **Source:** [`src/UI.ts:53`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L53)
 
 **[Experimental]** A set of string constants to represent different UI event types.
 
@@ -12978,7 +12984,7 @@ readonly up: up
 <a id="ui-uishape"></a>
 ### `UIShape`
 
-**Kind:** Objectliteral · **Source:** [`src/UI.ts:36`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L36)
+**Kind:** Objectliteral · **Source:** [`src/UI.ts:42`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L42)
 
 **[Experimental]** A set of string constatns to represent different UI types, for use in [`UI`](#ui-ui) instances.
 
@@ -13343,7 +13349,7 @@ Set a global warning level setting. If no parameter is passed, this will return 
 *static*
 
 ```ts
-static zip(arrays: any[][]): any[]
+static zip(arrays: any[][]): any[][]
 ```
 
 Zip arrays. eg, `[[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]`.
@@ -13619,7 +13625,7 @@ A string to indicate yz plane.
 <a id="uheprng-default"></a>
 ### `default`
 
-**Kind:** Function · **Source:** [`src/uheprng.ts:78`](https://github.com/williamngan/pts/blob/master/src/uheprng.ts#L78)
+**Kind:** Function · **Source:** [`src/uheprng.ts:93`](https://github.com/williamngan/pts/blob/master/src/uheprng.ts#L93)
 
 <a id="module-types"></a>
 ## Module: `Types`
@@ -13627,7 +13633,7 @@ A string to indicate yz plane.
 <a id="types-iplayer"></a>
 ### `IPlayer`
 
-**Kind:** Interface · **Source:** [`src/Types.ts:62`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L62)
+**Kind:** Interface · **Source:** [`src/Types.ts:68`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L68)
 
 Typescript interface: IPlayer is an interface that represents a "player" object that can be added into a Space.
 
@@ -13639,7 +13645,7 @@ Typescript interface: IPlayer is an interface that represents a "player" object 
 *optional*
 
 ```ts
-action?(type: string, px: number, py: number, evt: Event): void
+action?(type: string, px: number, py: number, evt: UIActionEvent): void
 ```
 
 **Parameters**
@@ -13647,7 +13653,7 @@ action?(type: string, px: number, py: number, evt: Event): void
 - `type` (`string`)
 - `px` (`number`)
 - `py` (`number`)
-- `evt` (`Event`)
+- `evt` (`UIActionEvent`)
 
 <a id="types-iplayer-resize"></a>
 ##### `resize`
@@ -13655,13 +13661,13 @@ action?(type: string, px: number, py: number, evt: Event): void
 *optional*
 
 ```ts
-resize?(bound: Bound, evt: Event): void
+resize?(bound: Bound, evt: Event | null): void
 ```
 
 **Parameters**
 
 - `bound` (`Bound`)
-- `evt` (`Event`)
+- `evt` (`Event | null`)
 
 <a id="types-iplayer-start"></a>
 ##### `start`
@@ -13745,14 +13751,14 @@ z?: number
 <a id="types-ispaceplayers"></a>
 ### `ISpacePlayers`
 
-**Kind:** Interface · **Source:** [`src/Types.ts:73`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L73)
+**Kind:** Interface · **Source:** [`src/Types.ts:79`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L79)
 
 Typescript interface: ISpacePlayers represents a map of IPlayer instances.
 
 <a id="types-itimer"></a>
 ### `ITimer`
 
-**Kind:** Interface · **Source:** [`src/Types.ts:80`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L80)
+**Kind:** Interface · **Source:** [`src/Types.ts:86`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L86)
 
 Typescript interface: ITimer represents a time-recording object.
 
@@ -13789,7 +13795,7 @@ prev: number
 <a id="types-multitouchelement"></a>
 ### `MultiTouchElement`
 
-**Kind:** Interface · **Source:** [`src/Types.ts:95`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L95)
+**Kind:** Interface · **Source:** [`src/Types.ts:101`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L101)
 
 Typescript interface: MultiTouchElement represents an element that can handle touch events.
 
@@ -13799,25 +13805,25 @@ Typescript interface: MultiTouchElement represents an element that can handle to
 ##### `addEventListener`
 
 ```ts
-addEventListener(evt: any, callback: Function): any
+addEventListener(evt: string, callback: EventListenerOrEventListenerObject): void
 ```
 
 **Parameters**
 
-- `evt` (`any`)
-- `callback` (`Function`)
+- `evt` (`string`)
+- `callback` (`EventListenerOrEventListenerObject`)
 
 <a id="types-multitouchelement-remove-event-listener"></a>
 ##### `removeEventListener`
 
 ```ts
-removeEventListener(evt: any, callback: Function): any
+removeEventListener(evt: string, callback: EventListenerOrEventListenerObject): void
 ```
 
 **Parameters**
 
-- `evt` (`any`)
-- `callback` (`Function`)
+- `evt` (`string`)
+- `callback` (`EventListenerOrEventListenerObject`)
 
 <a id="types-animatecallbackfn"></a>
 ### `AnimateCallbackFn`
@@ -13827,13 +13833,13 @@ removeEventListener(evt: any, callback: Function): any
 Typescript type: AnimateCallbackFn represents a callback function for animation. It accepts parameters to keep track of current time, current frame-time, and current space instance.
 
 ```ts
-type AnimateCallbackFn =  Fn(time:number, frameTime:number, currentSpace:any);
+type AnimateCallbackFn =  Fn(time:number, frameTime:number, currentSpace:Space);
 ```
 
 <a id="types-canvaspatternrepetition"></a>
 ### `CanvasPatternRepetition`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:243`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L243)
+**Kind:** Typealias · **Source:** [`src/Types.ts:255`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L255)
 
 Typescript type: CanvasPatternRepetition represents the string options to specify pattern repetition
 
@@ -13844,7 +13850,7 @@ type CanvasPatternRepetition = repeat | repeat-x | repeat-y | no-repeat;
 <a id="types-canvasspaceoptions"></a>
 ### `CanvasSpaceOptions`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:103`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L103)
+**Kind:** Typealias · **Source:** [`src/Types.ts:115`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L115)
 
 Typescript type: Setup options for CanvasSpace. See [`CanvasSpace.setup()`](#canvas-canvasspace-setup) function.
 
@@ -13855,7 +13861,7 @@ type CanvasSpaceOptions = { bgcolor:string, offscreen:boolean, pixelDensity:numb
 <a id="types-colortype"></a>
 ### `ColorType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:114`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L114)
+**Kind:** Typealias · **Source:** [`src/Types.ts:126`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L126)
 
 Typescript type: ColorType represents a defined set of string values such as "rgb" and "lab".
 
@@ -13866,18 +13872,18 @@ type ColorType = rgb | hsl | hsb | lab | lch | luv | xyz | oklab | oklch;
 <a id="types-defaultformstyle"></a>
 ### `DefaultFormStyle`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:231`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L231)
+**Kind:** Typealias · **Source:** [`src/Types.ts:243`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L243)
 
 Typescript type: DefaultFormStyle represents a default object for visual styles such as fill, stroke, line width, and others.
 
 ```ts
-type DefaultFormStyle = { fillStyle:string | CanvasGradient | CanvasPattern, globalAlpha:number, lineCap:string, lineJoin:string, lineWidth:number, strokeStyle:string | CanvasGradient | CanvasPattern };
+type DefaultFormStyle = { fillStyle:string | CanvasGradient | CanvasPattern, globalAlpha:number, lineCap:CanvasLineCap, lineJoin:CanvasLineJoin, lineWidth:number, strokeStyle:string | CanvasGradient | CanvasPattern };
 ```
 
 <a id="types-delaunaymesh"></a>
 ### `DelaunayMesh`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:131`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L131)
+**Kind:** Typealias · **Source:** [`src/Types.ts:143`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L143)
 
 Typescript type: DelaunayMesh represents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.
 
@@ -13888,7 +13894,7 @@ type DelaunayMesh = [];
 <a id="types-delaunayshape"></a>
 ### `DelaunayShape`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:120`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L120)
+**Kind:** Typealias · **Source:** [`src/Types.ts:132`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L132)
 
 Typescript type: DelaunayShape represents an object type that can store a Delaunay element. It has 3 indices (i, j, k) and two groups that represent a triangle and a circle.
 
@@ -13899,12 +13905,12 @@ type DelaunayShape = { circle:Group, i:number, j:number, k:number, triangle:Grou
 <a id="types-domformcontext"></a>
 ### `DOMFormContext`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:136`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L136)
+**Kind:** Typealias · **Source:** [`src/Types.ts:148`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L148)
 
 Typescript type: DOMFormContext represents the current context for an DOMForm.
 
 ```ts
-type DOMFormContext = { currentClass:string, currentID:string, group:Element, groupCount:number, groupID:string, style:object };
+type DOMFormContext = { currentClass:string, currentID:string, group:Element | null | undefined, groupCount:number, groupID:string, style:Record };
 ```
 
 <a id="types-grouplike"></a>
@@ -13921,18 +13927,18 @@ type GroupLike = Group | Pt[];
 <a id="types-intersectcontext"></a>
 ### `IntersectContext`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:148`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L148)
+**Kind:** Typealias · **Source:** [`src/Types.ts:160`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L160)
 
 Typescript type: IntersectContext represents a type of an object that store the intersection info.
 
 ```ts
-type IntersectContext = { dist:number, edge:Group, normal:Pt, other:any, vertex:Pt, which:number };
+type IntersectContext = { dist:number, edge:Group, normal:Pt, other:unknown, vertex:Pt, which:number };
 ```
 
 <a id="types-isoundanalyzer"></a>
 ### `ISoundAnalyzer`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:217`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L217)
+**Kind:** Typealias · **Source:** [`src/Types.ts:229`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L229)
 
 Typescript type: ISoundAnalyzer represents an object that stores the AnalyzerNode properties
 
@@ -13943,7 +13949,7 @@ type ISoundAnalyzer = { data:Uint8Array, node:AnalyserNode, size:number };
 <a id="types-itempolistener"></a>
 ### `ITempoListener`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:190`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L190)
+**Kind:** Typealias · **Source:** [`src/Types.ts:202`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L202)
 
 Typescript type: ITempoListener represents a listener created by Tempo class
 
@@ -13954,7 +13960,7 @@ type ITempoListener = { beats:number | number[], continuous:boolean, count:numbe
 <a id="types-itempoprogressfn"></a>
 ### `ITempoProgressFn`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:180`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L180)
+**Kind:** Typealias · **Source:** [`src/Types.ts:192`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L192)
 
 Typescript type: a callback function type used in `tempo.every(...).progress( fn )`
 
@@ -13965,7 +13971,7 @@ type ITempoProgressFn =  Fn(count:number, t:number, ms:number, start:boolean);
 <a id="types-itemporesponses"></a>
 ### `ITempoResponses`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:205`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L205)
+**Kind:** Typealias · **Source:** [`src/Types.ts:217`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L217)
 
 Typescript type: the return type of `tempo.every(...)`
 
@@ -13976,7 +13982,7 @@ type ITempoResponses = { progress: Fn(fn:ITempoProgressFn, offset:number, name:s
 <a id="types-itempostartfn"></a>
 ### `ITempoStartFn`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:175`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L175)
+**Kind:** Typealias · **Source:** [`src/Types.ts:187`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L187)
 
 Typescript type: a callback function type used in `tempo.every(...).start( fn )`
 
@@ -14022,7 +14028,7 @@ type PtLikeIterable = GroupLike | PtLike[] | Iterable;
 <a id="types-renderingcontext2d"></a>
 ### `RenderingContext2D`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:246`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L246)
+**Kind:** Typealias · **Source:** [`src/Types.ts:258`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L258)
 
 ```ts
 type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
@@ -14031,7 +14037,7 @@ type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingCon
 <a id="types-soundtype"></a>
 ### `SoundType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:226`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L226)
+**Kind:** Typealias · **Source:** [`src/Types.ts:238`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L238)
 
 Typescript type: SoundType represents a type of sound input. It corresponds to Sound.type property.
 
@@ -14064,7 +14070,7 @@ type TextVerticalAlign = top | start | middle | center | bottom | end;
 <a id="types-touchpointskey"></a>
 ### `TouchPointsKey`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:90`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L90)
+**Kind:** Typealias · **Source:** [`src/Types.ts:96`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L96)
 
 Typescript type: TouchPointsKey represents a set of acceptable string keys for defining touch action.
 
@@ -14072,21 +14078,32 @@ Typescript type: TouchPointsKey represents a set of acceptable string keys for d
 type TouchPointsKey = touches | changedTouches | targetTouches;
 ```
 
+<a id="types-uiactionevent"></a>
+### `UIActionEvent`
+
+**Kind:** Typealias · **Source:** [`src/Types.ts:62`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L62)
+
+Typescript type: UIActionEvent represents the DOM events a Space dispatches to players and UI handlers — pointer, mouse, touch, and keyboard.
+
+```ts
+type UIActionEvent = MouseEvent | TouchEvent | PointerEvent | KeyboardEvent;
+```
+
 <a id="types-uihandler"></a>
 ### `UIHandler`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:160`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L160)
+**Kind:** Typealias · **Source:** [`src/Types.ts:172`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L172)
 
 Typescript type: UIHandler represents a callback function to handle UI actions.
 
 ```ts
-type UIHandler =  Fn(target:UI, pt:PtLike, type:string, evt:MouseEvent);
+type UIHandler =  Fn(target:UI, pt:PtLike, type:UIPointerAction | string & , evt:UIActionEvent);
 ```
 
 <a id="types-warningtype"></a>
 ### `WarningType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:170`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L170)
+**Kind:** Typealias · **Source:** [`src/Types.ts:182`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L182)
 
 Typescript type: WarningType specifies a level of warning for [`Util.warnLevel`](#util-util-static-warn-level).
 

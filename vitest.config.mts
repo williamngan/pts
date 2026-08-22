@@ -32,6 +32,11 @@ export default defineConfig({
           mockReset: true,
           restoreMocks: true,
           unstubGlobals: true,
+          typecheck: {
+            enabled: true,
+            include: ["src/test/**/*.test-d.ts"],
+            tsconfig: "./tsconfig.json",
+          },
         },
       },
       {

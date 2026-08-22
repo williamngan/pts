@@ -2,7 +2,13 @@
 
 import { Pt, Group } from "./Pt";
 import { Rectangle, Circle, Polygon, Line } from "./Op";
-import { UIHandler, GroupLike, PtLike, PtLikeIterable } from "./Types";
+import {
+  type UIHandler,
+  type UIActionEvent,
+  type GroupLike,
+  type PtLike,
+  type PtLikeIterable,
+} from "./Types";
 
 /** A hit-test function for a UI shape: given the UI's group, a point, and the UI's states, return whether the point is within the shape. */
 export type UIShapeTest = (
@@ -79,10 +85,10 @@ export class UI {
 
   protected static _counter: number = 0;
   protected _id: string;
-  protected _actions: { [type: string]: UIHandler[] };
+  protected _actions: { [type: string]: (UIHandler | null)[] };
   // built-in machinery (UIButton hover, UIDragger drag) registers here, so
   // public `off(type)` cannot remove it along with user handlers
-  protected _sysActions: { [type: string]: UIHandler[] };
+  protected _sysActions: { [type: string]: (UIHandler | null)[] };
   protected _states: { [key: string]: any };
 
   protected _holds = new Map<number, string>();
@@ -278,7 +284,7 @@ export class UI {
   listen(
     type: UIPointerAction | (string & {}),
     p: PtLike,
-    evt: MouseEvent,
+    evt: UIActionEvent,
   ): boolean {
     let fired = false;
     const userActions = this._actions[type];
@@ -355,7 +361,7 @@ export class UI {
    * @param p a point to check
    * @param evt a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))
    */
-  static track(uis: UI[], type: string, p: PtLike, evt: MouseEvent): void {
+  static track(uis: UI[], type: string, p: PtLike, evt: UIActionEvent): void {
     for (let i = 0, len = uis.length; i < len; i++) {
       uis[i].listen(type, p, evt);
     }
@@ -391,15 +397,15 @@ export class UI {
    * Static function to trigger an array of UIHandlers
    */
   protected static _trigger(
-    fns: UIHandler[],
+    fns: (UIHandler | null)[],
     target: UI,
     pt: PtLike,
     type: string,
-    evt: MouseEvent,
+    evt: UIActionEvent,
   ) {
     if (fns) {
       for (let i = 0, len = fns.length; i < len; i++) {
-        if (fns[i]) fns[i](target, pt, type, evt);
+        if (fns[i]) fns[i]!(target, pt, type, evt);
       }
     }
   }
@@ -407,7 +413,10 @@ export class UI {
   /**
    * Static function to add a new handler to an array store of UIHandlers.
    */
-  protected static _addHandler(fns: UIHandler[], fn: UIHandler): number {
+  protected static _addHandler(
+    fns: (UIHandler | null)[],
+    fn: UIHandler,
+  ): number {
     if (!fn) return -1;
     // reuse a removed slot so ids stay stable and the array doesn't grow
     // unboundedly when handlers are added and removed repeatedly
@@ -425,7 +434,10 @@ export class UI {
    * Static function to remove an existing handler from an array store of UIHandlers.
    * The slot is nulled (not spliced) so other handlers' ids remain valid.
    */
-  protected static _removeHandler(fns: UIHandler[], index: number): boolean {
+  protected static _removeHandler(
+    fns: (UIHandler | null)[],
+    index: number,
+  ): boolean {
     if (index >= 0 && index < fns.length && fns[index]) {
       fns[index] = null;
       return true;
@@ -468,7 +480,7 @@ export class UIButton extends UI {
     // listen for move events and fire enter and leave events accordingly
     this._sysOn(
       UA.move,
-      (target: UI, pt: PtLike, type: string, evt: MouseEvent) => {
+      (target: UI, pt: PtLike, type: string, evt: UIActionEvent) => {
         let hover = this._within(pt);
 
         // hover on
@@ -482,7 +494,7 @@ export class UIButton extends UI {
           let _capID = this.hold(UA.move); // keep hold of second move
           this._hoverID = this._sysOn(
             UA.move,
-            (t: UI, p: PtLike, ty: string, e: MouseEvent) => {
+            (t: UI, p: PtLike, ty: string, e: UIActionEvent) => {
               if (!this._within(p) && !this.state("dragging")) {
                 this.state("hover", false);
                 // leave trigger, with the current position and event
@@ -539,8 +551,8 @@ export class UIButton extends UI {
    * @param leave an optional [`UIHandler`](#link) function to handle when pointer exits hover. Eg, `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`
    * @returns id numbers that refer to enter/leave handlers, for use in [`UIButton.offHover`](#link) or [`UI.off`](#link).
    */
-  onHover(enter?: UIHandler, leave?: UIHandler): number[] {
-    let ids = [undefined, undefined];
+  onHover(enter?: UIHandler, leave?: UIHandler): (number | undefined)[] {
+    let ids: (number | undefined)[] = [undefined, undefined];
     if (enter) ids[0] = this.on(UIPointerActions.enter, enter);
     if (leave) ids[1] = this.on(UIPointerActions.leave, leave);
     return ids;
@@ -601,7 +613,7 @@ export class UIDragger extends UIButton {
     // Handle pointer down and begin dragging
     this._sysOn(
       UA.down,
-      (target: UI, pt: PtLike, type: string, evt: MouseEvent) => {
+      (target: UI, pt: PtLike, type: string, evt: UIActionEvent) => {
         // begin listening for all events after dragging starts
         if (this._moveHoldID === -1) {
           this.state("dragging", true);
@@ -617,7 +629,7 @@ export class UIDragger extends UIButton {
         if (this._draggingID === -1) {
           this._draggingID = this._sysOn(
             UA.move,
-            (t: UI, p: PtLike, ty: string, e: MouseEvent) => {
+            (t: UI, p: PtLike, ty: string, e: UIActionEvent) => {
               if (this.state("dragging")) {
                 UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag, e);
                 this.state("moved", true);
@@ -629,7 +641,12 @@ export class UIDragger extends UIButton {
     );
 
     // Handle pointer drop or up and end dragging
-    const endDrag = (target: UI, pt: PtLike, type: string, evt: MouseEvent) => {
+    const endDrag = (
+      target: UI,
+      pt: PtLike,
+      type: string,
+      evt: UIActionEvent,
+    ) => {
       this.state("dragging", false);
       // remove move listener
       this._sysOff(UA.move, this._draggingID);

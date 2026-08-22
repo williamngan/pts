@@ -3,7 +3,7 @@
 import { Pt, Group } from "./Pt";
 import { Util } from "./Util";
 import { Num, Geom } from "./Num";
-import { PtLike, ColorType } from "./Types";
+import { type PtLike, type ColorType } from "./Types";
 
 /**
  * Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.
@@ -34,7 +34,7 @@ export class Color extends Pt {
    * Create a Color. Same as creating a Pt. Optionally you may use [`Color.from`](#link) to create a color.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
-  constructor(...args) {
+  constructor(...args: any[]) {
     super(...args);
   }
 
@@ -42,7 +42,7 @@ export class Color extends Pt {
    * Create a Color object with 4 default dimensional values (1,1,1,1).
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
-  static from(...args): Color {
+  static from(...args: any[]): Color {
     const p = [1, 1, 1, 1];
     const c = Util.getArgs(args);
     for (let i = 0, len = p.length; i < len; i++) {
@@ -58,7 +58,7 @@ export class Color extends Pt {
   static fromHex(hex: string): Color {
     if (hex[0] == "#") hex = hex.substr(1); // remove '#' if needed
     if (hex.length <= 4) {
-      const fn = (i) => hex[i] || "F";
+      const fn = (i: number) => hex[i] || "F";
       const shortAlpha = hex.length === 4 ? `${fn(3)}${fn(3)}` : ""; // #RGBA
       hex = `${fn(0)}${fn(0)}${fn(1)}${fn(1)}${fn(2)}${fn(2)}${shortAlpha}`;
     }
@@ -77,7 +77,7 @@ export class Color extends Pt {
    * Create RGB Color. RGB color ranges are (0...255, 0...255, 0...255) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
-  static rgb(...args): Color {
+  static rgb(...args: any[]): Color {
     return Color.from(...args).toMode("rgb");
   }
 
@@ -85,7 +85,7 @@ export class Color extends Pt {
    * Create HSL Color. HSL color ranges are (0...360, 0...1, 0...1) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
-  static hsl(...args): Color {
+  static hsl(...args: any[]): Color {
     return Color.from(...args).toMode("hsl");
   }
 
@@ -93,7 +93,7 @@ export class Color extends Pt {
    * Create HSB Color. HSB color ranges are (0...360, 0...1, 0...1) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
-  static hsb(...args): Color {
+  static hsb(...args: any[]): Color {
     return Color.from(...args).toMode("hsb");
   }
 
@@ -101,7 +101,7 @@ export class Color extends Pt {
    * Create LAB Color. LAB color ranges are (0...100, -128...127, -128...127) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
-  static lab(...args): Color {
+  static lab(...args: any[]): Color {
     return Color.from(...args).toMode("lab");
   }
 
@@ -109,7 +109,7 @@ export class Color extends Pt {
    * Create LCH Color. LCH color ranges are (0...100, 0...100, 0...360) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
-  static lch(...args): Color {
+  static lch(...args: any[]): Color {
     return Color.from(...args).toMode("lch");
   }
 
@@ -117,7 +117,7 @@ export class Color extends Pt {
    * Create LUV Color. LUV color ranges are (0...100, -134...220, -140...122) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
-  static luv(...args): Color {
+  static luv(...args: any[]): Color {
     return Color.from(...args).toMode("luv");
   }
 
@@ -125,7 +125,7 @@ export class Color extends Pt {
    * Create XYZ Color. XYZ color ranges are (0...100, 0...100, 0...100) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
-  static xyz(...args): Color {
+  static xyz(...args: any[]): Color {
     return Color.from(...args).toMode("xyz");
   }
 
@@ -133,7 +133,7 @@ export class Color extends Pt {
    * Create OKLAB Color. OKLAB color ranges are (0...1, -0.4...0.4, -0.4...0.4) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
-  static oklab(...args): Color {
+  static oklab(...args: any[]): Color {
     return Color.from(...args).toMode("oklab");
   }
 
@@ -141,7 +141,7 @@ export class Color extends Pt {
    * Create OKLCH Color. OKLCH color ranges are (0...1, 0...0.4, 0...360) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
-  static oklch(...args): Color {
+  static oklch(...args: any[]): Color {
     return Color.from(...args).toMode("oklch");
   }
 
@@ -224,8 +224,8 @@ export class Color extends Pt {
   toMode(mode: ColorType, convert: boolean = false): this {
     if (convert && mode !== this._mode) {
       const fname = this._mode.toUpperCase() + "to" + mode.toUpperCase();
-      if (Color[fname]) {
-        this.to(Color[fname](this, this._isNorm, this._isNorm));
+      if ((Color as any)[fname]) {
+        this.to((Color as any)[fname](this, this._isNorm, this._isNorm));
       } else {
         throw new Error("Cannot convert color with " + fname);
       }
@@ -487,7 +487,7 @@ export class Color extends Pt {
     const q = l <= 0.5 ? l * (1 + s) : l + s - l * s;
     const p = 2 * l - q;
 
-    const convert = (t) => {
+    const convert = (t: number) => {
       t = t < 0 ? t + 1 : t > 1 ? t - 1 : t;
       if (t * 6 < 1) {
         return p + (q - p) * t * 6;
@@ -771,7 +771,7 @@ export class Color extends Pt {
     // adjust for D65
     c.divide(Color.D65);
 
-    const fn = (n) => (n > eps ? Math.cbrt(n) : (kap * n + 16) / 116);
+    const fn = (n: number) => (n > eps ? Math.cbrt(n) : (kap * n + 16) / 116);
     const cy = fn(c[1]);
 
     const cc = Color.lab(

@@ -1,15 +1,15 @@
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 import { Space, MultiTouchSpace } from "./Space";
-import { Form, VisualForm, Font } from "./Form";
+import { type Form, VisualForm, Font } from "./Form";
 import { Util } from "./Util";
 import { Pt, Bound } from "./Pt";
 import {
-  PtLike,
-  GroupLike,
-  IPlayer,
-  DOMFormContext,
-  PtLikeIterable,
+  type PtLike,
+  type GroupLike,
+  type IPlayer,
+  type DOMFormContext,
+  type PtLikeIterable,
 } from "./Types";
 
 /**
@@ -50,10 +50,13 @@ export class DOMSpace extends MultiTouchSpace {
    * @param callback an optional callback `function(boundingBox, spaceElement)` to be called when element is appended and ready. Alternatively, a "ready" event will also be fired from the element when it's appended, which can be traced with `spaceInstance.element.addEventListener("ready")`
    * @example `new DOMSpace( "#myElementID" )`
    */
-  constructor(elem: string | Element, callback?: Function) {
+  constructor(
+    elem: string | Element,
+    callback?: (bound: Bound, elem: Element) => void,
+  ) {
     super();
 
-    let _selector: Element = null;
+    let _selector: Element | null = null;
     let _existed = false;
     this.id = "pts";
 
@@ -79,7 +82,7 @@ export class DOMSpace extends MultiTouchSpace {
       _existed = false;
     } else {
       this._canvas = _selector as HTMLElement;
-      this._container = _selector.parentElement;
+      this._container = _selector.parentElement!;
     }
 
     // no mutation observer, so we set a timeout for ready event
@@ -107,7 +110,7 @@ export class DOMSpace extends MultiTouchSpace {
    * Handle callbacks after element is mounted in DOM.
    * @param callback
    */
-  private _ready(callback: Function) {
+  private _ready(callback?: (bound: Bound, elem: Element) => void) {
     if (!this._container)
       throw new Error(`Cannot initiate #${this.id} element`);
 
@@ -150,7 +153,7 @@ export class DOMSpace extends MultiTouchSpace {
    * Not implemented. See SVGSpace and HTMLSpace for implementation.
    */
   getForm(): Form {
-    return null;
+    return null as unknown as Form;
   }
 
   /**
@@ -162,8 +165,8 @@ export class DOMSpace extends MultiTouchSpace {
     if (auto) {
       window.addEventListener("resize", this._resizeHandlerBound);
     } else {
-      delete this._css["width"];
-      delete this._css["height"];
+      delete (this._css as any)["width"];
+      delete (this._css as any)["height"];
       window.removeEventListener("resize", this._resizeHandlerBound);
     }
   }
@@ -176,7 +179,7 @@ export class DOMSpace extends MultiTouchSpace {
    * @param b a Bound object to resize to
    * @param evt Optionally pass a resize event
    */
-  resize(b: Bound, evt?: Event): this {
+  resize(b: Bound, evt?: Event | null): this {
     this.bound = b;
     this.styles({ width: `${b.width}px`, height: `${b.height}px` }, true);
 
@@ -194,7 +197,7 @@ export class DOMSpace extends MultiTouchSpace {
    * Window resize handling.
    * @param evt
    */
-  protected _resizeHandler(evt: Event) {
+  protected _resizeHandler(evt: Event | null) {
     let b = Bound.fromBoundingRect(this._container.getBoundingClientRect());
 
     if (this._autoResize) {
@@ -256,8 +259,8 @@ export class DOMSpace extends MultiTouchSpace {
    * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
    */
   style(key: string, val: string, update: boolean = false): this {
-    this._css[key] = val;
-    if (update) this._canvas.style[key] = val;
+    (this._css as any)[key] = val;
+    if (update) (this._canvas.style as any)[key] = val;
     return this;
   }
 
@@ -267,9 +270,9 @@ export class DOMSpace extends MultiTouchSpace {
    * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
    * @return this
    */
-  styles(styles: object, update: boolean = false): this {
+  styles(styles: Record<string, string>, update: boolean = false): this {
     for (let k in styles) {
-      if (styles.hasOwnProperty(k)) this.style(k, styles[k], update);
+      if (styles.hasOwnProperty(k)) this.style(k, (styles as any)[k], update);
     }
     return this;
   }
@@ -280,10 +283,10 @@ export class DOMSpace extends MultiTouchSpace {
    * @param data an object with key-value pairs
    * @returns this DOM element
    */
-  static setAttr(elem: Element, data: object): Element {
+  static setAttr(elem: Element, data: Record<string, any>): Element {
     for (let k in data) {
       if (data.hasOwnProperty(k)) {
-        elem.setAttribute(k, data[k]);
+        elem.setAttribute(k, (data as any)[k]);
       }
     }
     return elem;
@@ -295,11 +298,11 @@ export class DOMSpace extends MultiTouchSpace {
    * @param data an object with key-value pairs
    * @exmaple `DOMSpace.getInlineStyles( {width: "100px", "font-size": "10px"} )`
    */
-  static getInlineStyles(data: object): string {
+  static getInlineStyles(data: Record<string, any>): string {
     let str = "";
     for (let k in data) {
       if (data.hasOwnProperty(k)) {
-        if (data[k]) str += `${k}: ${data[k]}; `;
+        if ((data as any)[k]) str += `${k}: ${(data as any)[k]}; `;
       }
     }
     return str;
@@ -348,7 +351,7 @@ export class HTMLSpace extends DOMSpace {
    * @param autoClass add a class based on the id (from char 0 to index of "-"). Default is true.
    */
   static htmlElement(
-    parent: Element,
+    parent: Element | null | undefined,
     name: string,
     id?: string,
     autoClass: boolean = true,
@@ -358,14 +361,14 @@ export class HTMLSpace extends DOMSpace {
 
     // O(1) id lookup, then verify it's inside the parent so a same-id
     // element elsewhere in the document is never silently adopted
-    let elem: Element = document.getElementById(id);
+    let elem: Element | null = document.getElementById(id!);
     if (elem && !parent.contains(elem)) elem = null;
     if (!elem) {
       elem = document.createElement(name);
-      elem.setAttribute("id", id);
+      elem.setAttribute("id", id!);
 
       if (autoClass)
-        elem.setAttribute("class", id.substring(0, id.indexOf("-")));
+        elem.setAttribute("class", id!.substring(0, id!.indexOf("-")));
       parent.appendChild(elem);
     }
     return elem as HTMLElement;
@@ -379,7 +382,7 @@ export class HTMLSpace extends DOMSpace {
     let temp = this._container.querySelectorAll("." + HTMLForm.scopeID(player));
 
     temp.forEach((el: Element) => {
-      el.parentNode.removeChild(el);
+      el.parentNode!.removeChild(el);
     });
 
     return super.remove(player);
@@ -481,8 +484,8 @@ export class HTMLForm extends VisualForm {
    * @param v  style value
    * @param unit Optional unit like 'px' to append to value
    */
-  protected styleTo(k, v, unit: string = "") {
-    if (this._ctx.style[k] === undefined)
+  protected styleTo(k: string, v: any, unit: string = "") {
+    if ((this._ctx.style as any)[k] === undefined)
       throw new Error(`${k} style property doesn't exist`);
     this._ctx.style[k] = `${v}${unit}`;
   }
@@ -644,7 +647,7 @@ export class HTMLForm extends VisualForm {
    * A static function to generate an ID string based on a context object.
    * @param ctx a context object for an HTMLForm
    */
-  static getID(ctx): string {
+  static getID(ctx: DOMFormContext): string {
     return ctx.currentID || `p-${HTMLForm.domID++}`;
   }
 
@@ -663,7 +666,7 @@ export class HTMLForm extends VisualForm {
    * @example `HTMLForm.style(elem, {fill: "#f90", stroke: false})`
    * @returns DOM element
    */
-  static style(elem: Element, styles: object): Element {
+  static style(elem: Element, styles: Record<string, any>): Element {
     let st = [];
 
     if (!styles["filled"]) st.push("background: none");
@@ -822,7 +825,7 @@ export class HTMLForm extends VisualForm {
    * @param ctx a context object of HTMLForm
    * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.
    */
-  static rect(ctx: DOMFormContext, pts: PtLikeIterable): Element {
+  static rect(ctx: DOMFormContext, pts: PtLikeIterable): Element | undefined {
     let p = Util.iterToArray(pts);
     if (!Util.arrayCheck(p)) return;
 
@@ -879,7 +882,7 @@ export class HTMLForm extends VisualForm {
    * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
    * @param txt text
    */
-  log(txt): this {
+  log(txt: any): this {
     this.fill("#000").stroke("#fff", 0.5).text([10, 14], txt);
     return this;
   }

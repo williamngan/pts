@@ -44,7 +44,7 @@ function rasterize(svgMarkup: string): Promise<HTMLCanvasElement> {
       const canvas = document.createElement("canvas");
       canvas.width = W;
       canvas.height = H;
-      canvas.getContext("2d").drawImage(img, 0, 0, W, H);
+      canvas.getContext("2d")!.drawImage(img, 0, 0, W, H);
       URL.revokeObjectURL(url);
       resolve(canvas);
     };
@@ -92,7 +92,7 @@ describe("canvas-svg rendering parity", () => {
     scene(sForm);
     sForm.svgContext.commitFrame();
     const raster = await rasterize(sSpace.toSVG());
-    const svgData = raster.getContext("2d").getImageData(0, 0, W, H).data;
+    const svgData = raster.getContext("2d")!.getImageData(0, 0, W, H).data;
 
     // compare with a tolerance for antialiasing along edges
     let mismatched = 0;
@@ -162,7 +162,7 @@ describe("Space lifecycle", () => {
     expect(() => first.dispose().dispose()).not.toThrow(); // double dispose
 
     // managed elements are gone after dispose
-    const svg = host.querySelector("svg");
+    const svg = host.querySelector("svg")!;
     expect(svg.querySelectorAll("g.pts-svgform")).toHaveLength(0);
     expect(svg.querySelectorAll(".pts-svg-bg")).toHaveLength(0);
 

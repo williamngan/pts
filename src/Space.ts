@@ -1,14 +1,14 @@
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 import { Pt, Bound } from "./Pt";
-import { Form } from "./Form";
+import { type Form } from "./Form";
 import { UI, UIPointerActions as UIA } from "./UI";
 import {
-  ITimer,
-  ISpacePlayers,
-  IPlayer,
-  AnimateCallbackFn,
-  TouchPointsKey,
+  type ITimer,
+  type ISpacePlayers,
+  type IPlayer,
+  type AnimateCallbackFn,
+  type TouchPointsKey,
 } from "./Types";
 
 /**
@@ -27,8 +27,8 @@ export abstract class Space {
   private _animID: number = -1;
 
   private _pause: boolean = false;
-  private _refresh: boolean = undefined;
-  private _renderFunc: (context: any, self: Space) => null;
+  private _refresh: boolean | undefined = undefined;
+  private _renderFunc!: (context: any, self: Space) => null;
 
   protected _pointer: Pt = new Pt();
 
@@ -86,7 +86,7 @@ export abstract class Space {
    * @param player an IPlayer that has an `animateID` property
    */
   remove(player: IPlayer): this {
-    delete this.players[player.animateID];
+    delete this.players[player.animateID!];
     return this;
   }
 
@@ -307,7 +307,7 @@ export abstract class Space {
    * @param b a Bound representing the position and size of the space
    * @param evt event
    */
-  abstract resize(b: Bound, evt?: Event): this;
+  abstract resize(b: Bound, evt?: Event | null): this;
 
   /**
    * clear all contents in the space. To be implemented in subclasses.
@@ -333,25 +333,47 @@ export abstract class MultiTouchSpace extends Space {
   protected _hasTouch = false;
   protected _hasKeyboard = false;
 
-  private _mouseTarget: Element;
-  private _touchTarget: Element;
-  private _keyboardTarget: EventTarget;
+  private _mouseTarget: Element | undefined;
+  private _touchTarget: Element | undefined;
+  private _keyboardTarget: EventTarget | undefined;
   private _touchPassive = false;
 
-  private readonly _mouseDownBind = this._mouseDown.bind(this);
-  private readonly _mouseUpBind = this._mouseUp.bind(this);
-  private readonly _mouseOverBind = this._mouseOver.bind(this);
-  private readonly _mouseOutBind = this._mouseOut.bind(this);
-  private readonly _mouseMoveBind = this._mouseMove.bind(this);
-  private readonly _mouseClickBind = this._mouseClick.bind(this);
-  private readonly _contextMenuBind = this._contextMenu.bind(this);
-  private readonly _touchStartBind = this._touchStart.bind(this);
-  private readonly _touchMoveBind = this._touchMove.bind(this);
-  private readonly _keyDownBind = this._keyDown.bind(this);
-  private readonly _keyUpBind = this._keyUp.bind(this);
+  private readonly _mouseDownBind = this._mouseDown.bind(
+    this,
+  ) as unknown as EventListener;
+  private readonly _mouseUpBind = this._mouseUp.bind(
+    this,
+  ) as unknown as EventListener;
+  private readonly _mouseOverBind = this._mouseOver.bind(
+    this,
+  ) as unknown as EventListener;
+  private readonly _mouseOutBind = this._mouseOut.bind(
+    this,
+  ) as unknown as EventListener;
+  private readonly _mouseMoveBind = this._mouseMove.bind(
+    this,
+  ) as unknown as EventListener;
+  private readonly _mouseClickBind = this._mouseClick.bind(
+    this,
+  ) as unknown as EventListener;
+  private readonly _contextMenuBind = this._contextMenu.bind(
+    this,
+  ) as unknown as EventListener;
+  private readonly _touchStartBind = this._touchStart.bind(
+    this,
+  ) as unknown as EventListener;
+  private readonly _touchMoveBind = this._touchMove.bind(
+    this,
+  ) as unknown as EventListener;
+  private readonly _keyDownBind = this._keyDown.bind(
+    this,
+  ) as unknown as EventListener;
+  private readonly _keyUpBind = this._keyUp.bind(
+    this,
+  ) as unknown as EventListener;
 
   // accept subclasses that implements addEventListener, removeEventListener, dispatchEvent
-  protected _canvas: EventTarget;
+  protected _canvas!: EventTarget;
 
   /**
    * Get the mouse or touch pointer that stores the last action.
@@ -518,12 +540,12 @@ export abstract class MultiTouchSpace extends Space {
       this._keyboardTarget = target;
       this._hasKeyboard = true;
     } else if (this._hasKeyboard) {
-      this._keyboardTarget.removeEventListener(
+      this._keyboardTarget!.removeEventListener(
         "keydown",
         this._keyDownBind,
         {},
       );
-      this._keyboardTarget.removeEventListener("keyup", this._keyUpBind, {});
+      this._keyboardTarget!.removeEventListener("keyup", this._keyUpBind, {});
       this._keyboardTarget = undefined;
       this._hasKeyboard = false;
     }
@@ -539,7 +561,7 @@ export abstract class MultiTouchSpace extends Space {
   }
 
   private _trackedUIs: UI[] = [];
-  private _uiPlayer: IPlayer = null;
+  private _uiPlayer: IPlayer | null = null;
 
   /**
    * Track one or more [`UI`](#link) elements: every pointer, touch, and keyboard
@@ -593,7 +615,7 @@ export abstract class MultiTouchSpace extends Space {
     if (!evt || !evt[which]) return [];
     const ts = [];
     for (let i = 0; i < evt[which].length; i++) {
-      const t = evt[which].item(i);
+      const t = evt[which].item(i)!;
       ts.push(
         new Pt(t.pageX - this.bound.topLeft.x, t.pageY - this.bound.topLeft.y),
       );

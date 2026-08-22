@@ -6,10 +6,11 @@
     "moduleResolution": "Bundler",
     "rootDir": "src",
     "noEmit": true,
-    "noImplicitAny": false,
+    "strict": true,
     "skipLibCheck": true,
-    "downlevelIteration": true,
     "removeComments": true,
+    // load-bearing if target ever moves to ES2022+: Pt extends Float32Array
+    // relies on constructor-assignment (set) semantics for class fields
     "useDefineForClassFields": false
   },
   "include": ["src/**/*.ts"],

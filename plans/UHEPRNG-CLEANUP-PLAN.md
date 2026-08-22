@@ -118,4 +118,20 @@ Phase 1: pins above + record before numbers for the two bench cases.
 Phase 2: fixes, full check chain, filtered before/after + 5-round
 `--against HEAD` for util+num, baseline re-record, results appended.
 
-## Results (pending)
+## Results (2026-08-21)
+
+All fixes landed in `src/uheprng.ts` + doc notes in `src/Num.ts`. 57/57
+Num pins (golden sequences bit-identical before and after — the
+identity gate held), 507/507 overall, full check chain green.
+
+One deviation from the plan: `mash` is typed `(data?: string) =>
+number` with the reset path returning `0` instead of `undefined` — the
+reset path's return value is consumed nowhere (verified), and this
+keeps the newly typed `s: number[]` arithmetic clean without
+assertions. The reset-on-falsy contract itself is unchanged.
+
+Perf: seeding `Num.seed then draw` 70.75 µs → 28.54 µs (**−59.7%**,
+"faster" verdict in the 5-round `--against HEAD` gate); draw cost
+`Num.random (seeded)` unchanged (7.4 → 7.6 ns, within noise); 0 slower
+across util+num. Dist shrank slightly (dead startup fill removed);
+artifact budgets re-synced. Node baseline re-recorded post-fix.

@@ -101,7 +101,7 @@ describe("CanvasForm rendering pins", () => {
 
   it("keeps chaining through points() with empty input", () => {
     const { form } = makeForm();
-    expect(form.points(null, 5, "square")).toBe(form);
+    expect(form.points(null!, 5, "square")).toBe(form);
     expect(form.points([], 5, "square")).toBe(form);
   });
 

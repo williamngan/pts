@@ -3,7 +3,7 @@
 import type { CanvasSpace } from "./Canvas";
 import { Num } from "./Num";
 import { Group, Pt } from "./Pt";
-import { WarningType, PtLike, PtLikeIterable } from "./Types";
+import { type WarningType, type PtLike, type PtLikeIterable } from "./Types";
 
 /**
  * Various constant values for enumerations and calculations.
@@ -243,7 +243,7 @@ export class Util {
   static flatten(pts: any[], flattenAsGroup: boolean = true): any {
     // loop instead of concat.apply: spreading `pts` as arguments overflows
     // the JS argument-count limit for very large inputs
-    const arr = flattenAsGroup ? new Group() : [];
+    const arr: unknown[] = flattenAsGroup ? new Group() : [];
     for (let i = 0, len = pts.length; i < len; i++) {
       const p = pts[i];
       if (Array.isArray(p)) {
@@ -380,7 +380,9 @@ export class Util {
     space.element.toBlob(
       function (blob) {
         const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
+        // toBlob yields null on encoding failure; createObjectURL then throws
+        // a TypeError, same as it always has — kept, not silently swallowed
+        const url = URL.createObjectURL(blob!);
         link.href = url;
         link.download = `${filename}.${filetype}`;
         document.body.appendChild(link);

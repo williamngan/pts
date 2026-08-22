@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Num.ts",
-      557,
+      575,
       13
     ]
   ],
@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Num.ts",
-          775,
+          793,
           9
         ]
       ],
@@ -54,7 +54,7 @@
       "source": [
         [
           "src/Num.ts",
-          804,
+          822,
           9
         ]
       ],
@@ -91,7 +91,7 @@
       "source": [
         [
           "src/Num.ts",
-          784,
+          802,
           9
         ]
       ],
@@ -128,7 +128,7 @@
       "source": [
         [
           "src/Num.ts",
-          690,
+          708,
           9
         ]
       ],
@@ -165,7 +165,7 @@
       "source": [
         [
           "src/Num.ts",
-          709,
+          727,
           9
         ]
       ],
@@ -202,7 +202,7 @@
       "source": [
         [
           "src/Num.ts",
-          699,
+          717,
           9
         ]
       ],
@@ -239,7 +239,7 @@
       "source": [
         [
           "src/Num.ts",
-          920,
+          938,
           9
         ]
       ],
@@ -282,7 +282,7 @@
       "source": [
         [
           "src/Num.ts",
-          678,
+          696,
           9
         ]
       ],
@@ -319,7 +319,7 @@
       "source": [
         [
           "src/Num.ts",
-          879,
+          897,
           9
         ]
       ],
@@ -368,7 +368,7 @@
       "source": [
         [
           "src/Num.ts",
-          600,
+          618,
           9
         ]
       ],
@@ -405,7 +405,7 @@
       "source": [
         [
           "src/Num.ts",
-          619,
+          637,
           9
         ]
       ],
@@ -442,7 +442,7 @@
       "source": [
         [
           "src/Num.ts",
-          609,
+          627,
           9
         ]
       ],
@@ -479,7 +479,7 @@
       "source": [
         [
           "src/Num.ts",
-          722,
+          740,
           9
         ]
       ],
@@ -522,7 +522,7 @@
       "source": [
         [
           "src/Num.ts",
-          749,
+          767,
           9
         ]
       ],
@@ -565,7 +565,7 @@
       "source": [
         [
           "src/Num.ts",
-          736,
+          754,
           9
         ]
       ],
@@ -608,7 +608,7 @@
       "source": [
         [
           "src/Num.ts",
-          632,
+          650,
           9
         ]
       ],
@@ -651,7 +651,7 @@
       "source": [
         [
           "src/Num.ts",
-          642,
+          660,
           9
         ]
       ],
@@ -694,7 +694,7 @@
       "source": [
         [
           "src/Num.ts",
-          563,
+          581,
           9
         ]
       ],
@@ -731,7 +731,7 @@
       "source": [
         [
           "src/Num.ts",
-          827,
+          845,
           9
         ]
       ],
@@ -774,7 +774,7 @@
       "source": [
         [
           "src/Num.ts",
-          857,
+          875,
           9
         ]
       ],
@@ -817,7 +817,7 @@
       "source": [
         [
           "src/Num.ts",
-          572,
+          590,
           9
         ]
       ],
@@ -854,7 +854,7 @@
       "source": [
         [
           "src/Num.ts",
-          590,
+          608,
           9
         ]
       ],
@@ -891,7 +891,7 @@
       "source": [
         [
           "src/Num.ts",
-          581,
+          599,
           9
         ]
       ],
@@ -928,7 +928,7 @@
       "source": [
         [
           "src/Num.ts",
-          901,
+          919,
           9
         ]
       ],
@@ -971,7 +971,7 @@
       "source": [
         [
           "src/Num.ts",
-          843,
+          861,
           9
         ]
       ],
@@ -1014,7 +1014,7 @@
       "source": [
         [
           "src/Num.ts",
-          816,
+          834,
           9
         ]
       ],
@@ -1057,7 +1057,7 @@
       "source": [
         [
           "src/Num.ts",
-          651,
+          669,
           9
         ]
       ],
@@ -1094,7 +1094,7 @@
       "source": [
         [
           "src/Num.ts",
-          669,
+          687,
           9
         ]
       ],
@@ -1131,7 +1131,7 @@
       "source": [
         [
           "src/Num.ts",
-          660,
+          678,
           9
         ]
       ],
@@ -1168,7 +1168,7 @@
       "source": [
         [
           "src/Num.ts",
-          932,
+          950,
           9
         ]
       ],
@@ -1180,13 +1180,13 @@
       "signatures": [
         {
           "comment": "Convert any shaping functions into a series of steps.",
-          "returns": "any",
+          "returns": "number",
           "returns_comment": false,
           "parameters": [
             {
               "name": "fn",
               "comment": "the original shaping function",
-              "type": "Function",
+              "type": " Fn(t:number, c:number, args:any[])",
               "default": false
             },
             {

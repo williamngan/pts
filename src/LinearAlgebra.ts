@@ -2,7 +2,7 @@
 
 import { Pt, Group } from "./Pt";
 import { Line } from "./Op";
-import { PtLike, GroupLike } from "./Types";
+import { type PtLike, type GroupLike } from "./Types";
 
 /**
  * Vec provides various static functions for vector operations. It's not fully optimized but good enough to use.
@@ -111,7 +111,7 @@ export class Vec {
   /**
    * Unit vector of `a`. If magnitude of `a` is already known, pass it in the second paramter to optimize calculation.
    */
-  static unit(a: PtLike, magnitude: number = undefined): PtLike {
+  static unit(a: PtLike, magnitude: number | undefined = undefined): PtLike {
     const m = magnitude === undefined ? Vec.magnitude(a) : magnitude;
     if (m === 0) return a; // zero vector: values are already zeros
     return Vec.divide(a, m);
@@ -153,7 +153,7 @@ export class Vec {
    * Find the max value within a vector's dimensions.
    * @returns an object with `value` and `index` that specifies the max value and its corresponding dimension.
    */
-  static max(a: PtLike): { value; index } {
+  static max(a: PtLike): { value: number; index: number } {
     // -Infinity, not Number.MIN_VALUE (the smallest positive double), so
     // all-negative vectors report a correct maximum
     let m = -Infinity;
@@ -171,7 +171,7 @@ export class Vec {
    * Find the min value within a vector's dimensions.
    * @returns an object with `value` and `index` that specifies the min value and its corresponding dimension.
    */
-  static min(a: PtLike): { value; index } {
+  static min(a: PtLike): { value: number; index: number } {
     let m = Infinity;
     let index = 0;
     for (let i = 0, len = a.length; i < len; i++) {
@@ -196,7 +196,10 @@ export class Vec {
    * Given a mapping function, update `a`'s value in each dimension.
    * @returns vector `a`
    */
-  static map(a: PtLike, fn: (n: number, index: number, arr) => number): PtLike {
+  static map(
+    a: PtLike,
+    fn: (n: number, index: number, arr: PtLike) => number,
+  ): PtLike {
     for (let i = 0, len = a.length; i < len; i++) {
       a[i] = fn(a[i], i, a);
     }
@@ -208,7 +211,7 @@ export class Vec {
  * Mat provides various static functions for matrix operations as well as a convenient way to chain a 3x3 transformation matrix. It's not fully optimized but good enough to use.
  */
 export class Mat {
-  protected _33: GroupLike;
+  protected _33!: GroupLike;
 
   constructor() {
     this.reset();
@@ -374,12 +377,12 @@ export class Mat {
     index: number,
     defaultValue: number | boolean = false,
   ): Pt {
-    const z = [];
+    const z: number[] = [];
     for (let i = 0, len = g.length; i < len; i++) {
       if (g[i].length - 1 < index) {
         if (defaultValue === false)
           throw new Error(`Index ${index} is out of bounds`);
-        z.push(defaultValue);
+        z.push(defaultValue as number);
       } else {
         z.push(g[i][index]);
       }

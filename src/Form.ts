@@ -1,8 +1,8 @@
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
-import { Pt } from "./Pt";
+import { type Pt } from "./Pt";
 import { Util } from "./Util";
-import { PtLike, GroupLike } from "./Types";
+import { type PtLike, type GroupLike } from "./Types";
 
 /**
  * Form is an abstract class that represents a form that's used in a Space for expressions. Learn more about Space and Form in [this guide](../guide/Space-0500.html).
@@ -54,10 +54,15 @@ export abstract class VisualForm extends Form {
     return this._font;
   }
 
-  protected _multiple(groups: GroupLike[], shape: string, ...rest): this {
+  protected _multiple(
+    groups: GroupLike[],
+    shape: string,
+    ...rest: unknown[]
+  ): this {
     if (!groups) return this;
     for (let i = 0, len = groups.length; i < len; i++) {
-      this[shape](groups[i], ...rest);
+      // dynamic dispatch to the named shape method
+      (this as any)[shape](groups[i], ...rest);
     }
     return this;
   }

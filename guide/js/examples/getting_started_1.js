@@ -1,25 +1,26 @@
-// Source code licensed under Apache License 2.0. 
+// Source code licensed under Apache License 2.0.
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
-(function(){
+(function () {
   // Pts.namespace( this ); // add Pts into scope if needed
-  
-  var demoID = "getting_started_1"; 
-  
+
+  var demoID = "getting_started_1";
+
   // create Space and Form
-  var space = new CanvasSpace("#"+demoID).setup({ bgcolor: "#e2e6ef", retina: true, resize: true });
+  var space = new CanvasSpace("#" + demoID).setup({
+    bgcolor: "#e2e6ef",
+    retina: true,
+    resize: true,
+  });
   var form = space.getForm();
 
-
   // animation
-  space.add( () => form.point( space.pointer, 10 ) );
-  
-  
+  space.add(() => form.point(space.pointer, 10));
+
   // start
-  // Note that `playOnce(200)` will stop after 200ms. Use `play()` to run the animation loop continuously. 
+  // Note that `playOnce(200)` will stop after 200ms. Use `play()` to run the animation loop continuously.
   space.playOnce(200).bindMouse().bindTouch();
-  
+
   // For use in demo page only
   if (window.registerDemo) window.registerDemo(demoID, space);
-  
 })();

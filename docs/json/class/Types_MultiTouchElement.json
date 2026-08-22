@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Types.ts",
-      95,
+      101,
       17
     ]
   ],
@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Types.ts",
-          96,
+          102,
           2
         ]
       ],
@@ -27,19 +27,19 @@
       "signatures": [
         {
           "comment": "",
-          "returns": "any",
+          "returns": "void",
           "returns_comment": false,
           "parameters": [
             {
               "name": "evt",
               "comment": "",
-              "type": "any",
+              "type": "string",
               "default": false
             },
             {
               "name": "callback",
               "comment": "",
-              "type": "Function",
+              "type": "EventListenerOrEventListenerObject",
               "default": false
             }
           ],
@@ -52,7 +52,7 @@
       "source": [
         [
           "src/Types.ts",
-          97,
+          106,
           2
         ]
       ],
@@ -62,19 +62,19 @@
       "signatures": [
         {
           "comment": "",
-          "returns": "any",
+          "returns": "void",
           "returns_comment": false,
           "parameters": [
             {
               "name": "evt",
               "comment": "",
-              "type": "any",
+              "type": "string",
               "default": false
             },
             {
               "name": "callback",
               "comment": "",
-              "type": "Function",
+              "type": "EventListenerOrEventListenerObject",
               "default": false
             }
           ],

@@ -37,7 +37,7 @@
             {
               "name": "callback",
               "comment": "an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a \"ready\" event will also be fired from the `<canvas>` element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener(\"ready\")`",
-              "type": "Function",
+              "type": " Fn(bound:Bound, elem:EventTarget)",
               "default": false
             }
           ],
@@ -57,12 +57,12 @@
       "source": [
         [
           "src/Canvas.ts",
-          203,
+          206,
           6
         ],
         [
           "src/Canvas.ts",
-          220,
+          223,
           6
         ]
       ],
@@ -88,12 +88,12 @@
       "source": [
         [
           "src/Canvas.ts",
-          306,
+          309,
           6
         ],
         [
           "src/Canvas.ts",
-          309,
+          312,
           6
         ]
       ],
@@ -137,7 +137,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          374,
+          377,
           13
         ]
       ],
@@ -188,7 +188,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          352,
+          355,
           6
         ]
       ],
@@ -206,7 +206,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          323,
+          326,
           13
         ]
       ],
@@ -282,7 +282,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          337,
+          340,
           13
         ]
       ],
@@ -302,7 +302,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          330,
+          333,
           13
         ]
       ],
@@ -340,7 +340,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          359,
+          362,
           6
         ]
       ],
@@ -358,7 +358,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          316,
+          319,
           13
         ]
       ],
@@ -378,7 +378,7 @@
       "source": [
         [
           "src/Space.ts",
-          359,
+          381,
           13
         ]
       ],
@@ -398,7 +398,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          366,
+          369,
           6
         ]
       ],
@@ -483,7 +483,7 @@
       "source": [
         [
           "src/Space.ts",
-          372,
+          394,
           2
         ]
       ],
@@ -530,7 +530,7 @@
       "source": [
         [
           "src/Space.ts",
-          399,
+          421,
           2
         ]
       ],
@@ -571,7 +571,7 @@
       "source": [
         [
           "src/Space.ts",
-          508,
+          530,
           2
         ]
       ],
@@ -606,7 +606,7 @@
       "source": [
         [
           "src/Space.ts",
-          419,
+          441,
           2
         ]
       ],
@@ -646,7 +646,7 @@
       "source": [
         [
           "src/Space.ts",
-          459,
+          481,
           2
         ]
       ],
@@ -692,7 +692,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          382,
+          385,
           2
         ]
       ],
@@ -721,7 +721,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          424,
+          427,
           2
         ]
       ],
@@ -737,7 +737,7 @@
             {
               "name": "bg",
               "comment": "Optionally specify a custom background color in hex or rgba string, or \"transparent\". If not defined, it will use its `bgcolor` property as background color to clear the canvas.",
-              "type": "string",
+              "type": "string | null",
               "default": false
             }
           ],
@@ -750,7 +750,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          469,
+          472,
           2
         ]
       ],
@@ -772,7 +772,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          345,
+          348,
           9
         ]
       ],
@@ -888,7 +888,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          451,
+          454,
           12
         ]
       ],
@@ -948,7 +948,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          501,
+          504,
           2
         ]
       ],
@@ -1127,7 +1127,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          230,
+          233,
           2
         ]
       ],
@@ -1149,7 +1149,7 @@
             {
               "name": "evt",
               "comment": "Optionally pass a resize event",
-              "type": "Event",
+              "type": "Event | null",
               "default": false
             }
           ],
@@ -1189,7 +1189,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          171,
+          174,
           2
         ]
       ],
@@ -1252,7 +1252,7 @@
       "source": [
         [
           "src/Space.ts",
-          592,
+          614,
           2
         ]
       ],
@@ -1287,7 +1287,7 @@
       "source": [
         [
           "src/Space.ts",
-          552,
+          574,
           2
         ]
       ],
@@ -1316,7 +1316,7 @@
       "source": [
         [
           "src/Space.ts",
-          389,
+          411,
           2
         ]
       ],
@@ -1363,7 +1363,7 @@
       "source": [
         [
           "src/Space.ts",
-          405,
+          427,
           2
         ]
       ],
@@ -1404,7 +1404,7 @@
       "source": [
         [
           "src/Space.ts",
-          573,
+          595,
           2
         ]
       ],

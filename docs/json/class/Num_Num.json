@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Num.ts",
-      14,
+      19,
       13
     ]
   ],
@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Num.ts",
-          127,
+          132,
           9
         ]
       ],
@@ -48,7 +48,7 @@
       "source": [
         [
           "src/Num.ts",
-          54,
+          59,
           9
         ]
       ],
@@ -96,7 +96,7 @@
       "source": [
         [
           "src/Num.ts",
-          43,
+          48,
           9
         ]
       ],
@@ -139,7 +139,7 @@
       "source": [
         [
           "src/Num.ts",
-          138,
+          143,
           9
         ]
       ],
@@ -176,7 +176,7 @@
       "source": [
         [
           "src/Num.ts",
-          23,
+          28,
           9
         ]
       ],
@@ -219,7 +219,7 @@
       "source": [
         [
           "src/Num.ts",
-          33,
+          38,
           9
         ]
       ],
@@ -262,7 +262,7 @@
       "source": [
         [
           "src/Num.ts",
-          154,
+          159,
           9
         ]
       ],
@@ -317,7 +317,7 @@
       "source": [
         [
           "src/Num.ts",
-          102,
+          107,
           9
         ]
       ],
@@ -360,7 +360,7 @@
       "source": [
         [
           "src/Num.ts",
-          184,
+          194,
           9
         ]
       ],
@@ -371,7 +371,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Return a random number between 0 and 1 from a seed,\nif the seed is not defined it uses Math.random",
+          "comment": "Return a random number between 0 and 1. If a seed was set via [`Num.seed`](#link),\ndraws come from the seeded generator with 32-bit resolution (exact multiples of 2^-32);\notherwise it uses `Math.random`.",
           "returns": "number",
           "returns_comment": "a number between 0 and 1",
           "parameters": [],
@@ -384,7 +384,7 @@
       "source": [
         [
           "src/Num.ts",
-          86,
+          91,
           9
         ]
       ],
@@ -421,7 +421,7 @@
       "source": [
         [
           "src/Num.ts",
-          76,
+          81,
           9
         ]
       ],
@@ -458,7 +458,7 @@
       "source": [
         [
           "src/Num.ts",
-          175,
+          184,
           9
         ]
       ],
@@ -469,7 +469,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Seed the pseudorandom generator.",
+          "comment": "Seed the pseudorandom generator for reproducible [`Num.random`](#link) sequences.\nThe seed is hashed by its *effective* key: leading/trailing whitespace and embedded\ncontrol characters are stripped first, so seeds differing only in those collide.\nAn empty (or whitespace-only) seed yields a fixed default sequence. This generator\nis deterministic and statistically strong, but not cryptographically secure.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
@@ -489,7 +489,7 @@
       "source": [
         [
           "src/Num.ts",
-          113,
+          118,
           9
         ]
       ],
@@ -520,7 +520,7 @@
       "source": [
         [
           "src/Num.ts",
-          67,
+          72,
           9
         ]
       ],
@@ -566,7 +566,7 @@
       "source": [
         [
           "src/Num.ts",
-          15,
+          20,
           9
         ]
       ],

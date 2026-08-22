@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Svg.ts",
-      932,
+      939,
       13
     ]
   ],
@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Svg.ts",
-          964,
+          971,
           2
         ]
       ],
@@ -46,7 +46,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          664,
+          667,
           6
         ]
       ],
@@ -131,7 +131,7 @@
       "source": [
         [
           "src/Svg.ts",
-          981,
+          988,
           6
         ]
       ],
@@ -180,7 +180,7 @@
       "source": [
         [
           "src/Svg.ts",
-          988,
+          995,
           6
         ]
       ],
@@ -198,12 +198,12 @@
       "source": [
         [
           "src/Svg.ts",
-          953,
+          960,
           13
         ],
         [
           "src/Svg.ts",
-          956,
+          963,
           13
         ]
       ],
@@ -231,12 +231,12 @@
       "source": [
         [
           "src/Svg.ts",
-          947,
+          954,
           13
         ],
         [
           "src/Svg.ts",
-          950,
+          957,
           13
         ]
       ],
@@ -266,7 +266,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1582,
+          1588,
           2
         ]
       ],
@@ -301,7 +301,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          704,
+          707,
           2
         ]
       ],
@@ -335,7 +335,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          796,
+          799,
           2
         ]
       ],
@@ -381,7 +381,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1205,
+          1208,
           2
         ]
       ],
@@ -434,7 +434,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1105,
+          1108,
           2
         ]
       ],
@@ -463,7 +463,7 @@
       "source": [
         [
           "src/Form.ts",
-          162,
+          167,
           2
         ]
       ],
@@ -492,7 +492,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          879,
+          882,
           2
         ]
       ],
@@ -514,7 +514,7 @@
       "source": [
         [
           "src/Svg.ts",
-          998,
+          1005,
           2
         ]
       ],
@@ -548,7 +548,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          871,
+          874,
           2
         ]
       ],
@@ -577,7 +577,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          890,
+          893,
           2
         ]
       ],
@@ -617,7 +617,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1154,
+          1157,
           2
         ]
       ],
@@ -676,7 +676,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          715,
+          718,
           2
         ]
       ],
@@ -710,7 +710,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          730,
+          733,
           2
         ]
       ],
@@ -739,7 +739,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          921,
+          924,
           2
         ]
       ],
@@ -797,7 +797,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          950,
+          953,
           2
         ]
       ],
@@ -826,7 +826,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          970,
+          973,
           2
         ]
       ],
@@ -855,7 +855,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          820,
+          823,
           2
         ]
       ],
@@ -889,7 +889,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1397,
+          1400,
           2
         ]
       ],
@@ -930,7 +930,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1447,
+          1450,
           2
         ]
       ],
@@ -965,7 +965,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1288,
+          1291,
           2
         ]
       ],
@@ -994,7 +994,7 @@
       "source": [
         [
           "src/Form.ts",
-          200,
+          205,
           2
         ]
       ],
@@ -1023,7 +1023,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1599,
+          1605,
           2
         ]
       ],
@@ -1052,7 +1052,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1032,
+          1039,
           2
         ]
       ],
@@ -1079,7 +1079,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1511,
+          1514,
           2
         ]
       ],
@@ -1132,7 +1132,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1082,
+          1085,
           2
         ]
       ],
@@ -1178,7 +1178,7 @@
       "source": [
         [
           "src/Form.ts",
-          143,
+          148,
           2
         ]
       ],
@@ -1219,7 +1219,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1309,
+          1312,
           2
         ]
       ],
@@ -1248,7 +1248,7 @@
       "source": [
         [
           "src/Form.ts",
-          214,
+          219,
           2
         ]
       ],
@@ -1277,7 +1277,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1335,
+          1338,
           2
         ]
       ],
@@ -1306,7 +1306,7 @@
       "source": [
         [
           "src/Form.ts",
-          228,
+          233,
           2
         ]
       ],
@@ -1335,7 +1335,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          687,
+          690,
           2
         ]
       ],
@@ -1364,7 +1364,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1033,
+          1036,
           2
         ]
       ],
@@ -1386,7 +1386,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1023,
+          1030,
           2
         ]
       ],
@@ -1420,7 +1420,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1244,
+          1247,
           2
         ]
       ],
@@ -1455,7 +1455,7 @@
       "source": [
         [
           "src/Form.ts",
-          170,
+          175,
           2
         ]
       ],
@@ -1484,7 +1484,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          743,
+          746,
           2
         ]
       ],
@@ -1536,7 +1536,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          778,
+          781,
           2
         ]
       ],
@@ -1583,7 +1583,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1475,
+          1478,
           2
         ]
       ],
@@ -1624,7 +1624,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1488,
+          1491,
           2
         ]
       ],
@@ -1677,7 +1677,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1011,
+          1018,
           2
         ]
       ],
@@ -1717,7 +1717,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          673,
+          676,
           2
         ]
       ],
@@ -1752,7 +1752,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1184,
+          1187,
           9
         ]
       ],
@@ -1813,7 +1813,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1144,
+          1151,
           9
         ]
       ],
@@ -1874,7 +1874,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1094,
+          1097,
           9
         ]
       ],
@@ -1917,7 +1917,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1117,
+          1124,
           9
         ]
       ],
@@ -1960,7 +1960,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1122,
+          1125,
           9
         ]
       ],
@@ -2027,7 +2027,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1042,
+          1049,
           9
         ]
       ],
@@ -2045,7 +2045,7 @@
             {
               "name": "ctx",
               "comment": "a context object for an SVGForm",
-              "type": "any",
+              "type": "DOMFormContext",
               "default": false
             }
           ],
@@ -2058,7 +2058,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1348,
+          1351,
           9
         ]
       ],
@@ -2107,7 +2107,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1418,
+          1421,
           9
         ]
       ],
@@ -2150,7 +2150,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1255,
+          1258,
           9
         ]
       ],
@@ -2187,7 +2187,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1195,
+          1202,
           9
         ]
       ],
@@ -2199,7 +2199,7 @@
       "signatures": [
         {
           "comment": "A static function to draw a line or polyline element.",
-          "returns": "SVGElement",
+          "returns": "SVGElement | undefined",
           "returns_comment": false,
           "parameters": [
             {
@@ -2224,7 +2224,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1063,
+          1066,
           9
         ]
       ],
@@ -2278,7 +2278,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1098,
+          1105,
           9
         ]
       ],
@@ -2332,7 +2332,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1248,
+          1258,
           19
         ]
       ],
@@ -2364,7 +2364,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1299,
+          1302,
           9
         ]
       ],
@@ -2401,7 +2401,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1266,
+          1276,
           9
         ]
       ],
@@ -2438,7 +2438,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1320,
+          1323,
           9
         ]
       ],
@@ -2475,7 +2475,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1276,
+          1286,
           9
         ]
       ],
@@ -2487,7 +2487,7 @@
       "signatures": [
         {
           "comment": "A static function to draw a rectangle element.",
-          "returns": "SVGElement",
+          "returns": "SVGElement | undefined",
           "returns_comment": false,
           "parameters": [
             {
@@ -2512,7 +2512,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          580,
+          583,
           9
         ]
       ],
@@ -2543,7 +2543,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1050,
+          1057,
           9
         ]
       ],
@@ -2574,7 +2574,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1223,
+          1226,
           9
         ]
       ],
@@ -2617,7 +2617,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1177,
+          1184,
           9
         ]
       ],
@@ -2660,7 +2660,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1066,
+          1073,
           9
         ]
       ],
@@ -2684,7 +2684,7 @@
             {
               "name": "styles",
               "comment": "an object of style properties",
-              "type": "object",
+              "type": "Record",
               "default": false
             }
           ],
@@ -2702,7 +2702,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1459,
+          1462,
           9
         ]
       ],
@@ -2751,7 +2751,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1301,
+          1314,
           9
         ]
       ],

@@ -18,6 +18,6 @@
   "extends": [],
   "implements": [],
   "type_alias": [
-    " Fn(time:number, frameTime:number, currentSpace:any)"
+    " Fn(time:number, frameTime:number, currentSpace:Space)"
   ]
 }

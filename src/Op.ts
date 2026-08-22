@@ -5,16 +5,16 @@ import { Geom, Num } from "./Num";
 import { Pt, Group } from "./Pt";
 import { Mat } from "./LinearAlgebra";
 import {
-  PtLike,
-  GroupLike,
-  PtLikeIterable,
-  IntersectContext,
-  PtIterable,
+  type PtLike,
+  type GroupLike,
+  type PtLikeIterable,
+  type IntersectContext,
+  type PtIterable,
 } from "./Types";
 
-let _errorLength = (obj, param: number | string = "expected") =>
+let _errorLength = (obj: any, param: number | string = "expected") =>
   Util.warn("Group's length is less than " + param, obj);
-let _errorOutofBound = (obj, param: number | string = "") =>
+let _errorOutofBound = (obj: any, param: number | string = "") =>
   Util.warn(`Index ${param} is out of bound in Group`, obj);
 
 /**
@@ -41,7 +41,7 @@ export class Line {
    * @param p1 line's first end point
    * @param p2 line's second end point
    */
-  static slope(p1: PtLike, p2: PtLike): number {
+  static slope(p1: PtLike, p2: PtLike): number | undefined {
     return p2[0] - p1[0] === 0 ? undefined : (p2[1] - p1[1]) / (p2[0] - p1[0]);
   }
 
@@ -54,7 +54,7 @@ export class Line {
   static intercept(
     p1: PtLike,
     p2: PtLike,
-  ): { slope: number; xi: number; yi: number } {
+  ): { slope: number; xi: number | undefined; yi: number } | undefined {
     if (p2[0] - p1[0] === 0) {
       return undefined;
     } else {
@@ -129,7 +129,7 @@ export class Line {
     line: PtIterable,
     pt: PtLike,
     asProjection: boolean = false,
-  ): Pt {
+  ): Pt | undefined {
     let _line = Util.iterToArray(line);
     if (_line[0].equals(_line[1])) return undefined;
     let a = _line[0].$subtract(_line[1]);
@@ -162,7 +162,7 @@ export class Line {
    * @param lb a Group or an Iterable<Pt> with 2 Pts representing another ray
    * @returns an intersection Pt or undefined if no intersection
    */
-  static intersectRay2D(la: PtIterable, lb: PtIterable): Pt {
+  static intersectRay2D(la: PtIterable, lb: PtIterable): Pt | undefined {
     const _la = Util.iterToArray(la);
     const _lb = Util.iterToArray(lb);
 
@@ -197,7 +197,7 @@ export class Line {
    * @param lb a Group or an Iterable<Pt> with 2 Pt representing a line segment
    * @returns an intersection Pt or undefined if no intersection
    */
-  static intersectLine2D(la: PtIterable, lb: PtIterable): Pt {
+  static intersectLine2D(la: PtIterable, lb: PtIterable): Pt | undefined {
     let _la = Util.iterToArray(la);
     let _lb = Util.iterToArray(lb);
 
@@ -215,7 +215,10 @@ export class Line {
    * @param ray a Group of 2 Pts representing a ray
    * @returns an intersection Pt or undefined if no intersection
    */
-  static intersectLineWithRay2D(line: PtIterable, ray: PtIterable): Pt {
+  static intersectLineWithRay2D(
+    line: PtIterable,
+    ray: PtIterable,
+  ): Pt | undefined {
     let _line = Util.iterToArray(line);
     let _ray = Util.iterToArray(ray);
     let pt = Line.intersectRay2D(_line, _ray);
@@ -232,7 +235,7 @@ export class Line {
     lineOrRay: PtIterable,
     poly: PtIterable,
     sourceIsRay: boolean = false,
-  ): Group {
+  ): Group | undefined {
     let _lineOrRay = Util.iterToArray(lineOrRay);
     let _poly = Util.iterToArray(poly);
 
@@ -346,7 +349,7 @@ export class Line {
     size: PtLike,
     index: number = 0,
     cropAsCircle: boolean = true,
-  ): Pt {
+  ): Pt | undefined {
     let _line = Util.iterToArray(line);
     let tdx = index === 0 ? 1 : 0;
     let ls = _line[tdx].$subtract(_line[index]);
@@ -701,7 +704,10 @@ export class Circle {
    * @param enclose if `true`, the circle will enclose the triangle. Default is `false`, which will fit the circle inside the triangle.
    * @returns a Group that represents a circle
    */
-  static fromTriangle(pts: PtIterable, enclose: boolean = false): Group {
+  static fromTriangle(
+    pts: PtIterable,
+    enclose: boolean = false,
+  ): Group | undefined {
     if (enclose) {
       return Triangle.circumcircle(pts);
     } else {
@@ -965,7 +971,10 @@ export class Triangle {
     let _pts = Util.iterToArray(tri);
     let opp = Triangle.oppositeSide(_pts, index);
     if (opp.length > 1) {
-      return new Group(_pts[index], Line.perpendicularFromPt(opp, _pts[index]));
+      return new Group(
+        _pts[index],
+        Line.perpendicularFromPt(opp, _pts[index])!,
+      );
     } else {
       return new Group();
     }
@@ -976,7 +985,7 @@ export class Triangle {
    * @param tri a Group or an Iterable<Pt> representing a triangle
    * @returns the orthocenter as a Pt
    */
-  static orthocenter(tri: PtIterable): Pt {
+  static orthocenter(tri: PtIterable): Pt | undefined {
     let _pts = Util.iterToArray(tri);
     if (_pts.length < 3) return _errorLength(undefined, 3);
     let a = Triangle.altitude(_pts, 0);
@@ -989,11 +998,11 @@ export class Triangle {
    * @param tri a Group or an Iterable<Pt> representing a triangle
    * @returns the incenter as a Pt
    */
-  static incenter(tri: PtIterable): Pt {
+  static incenter(tri: PtIterable): Pt | undefined {
     let _pts = Util.iterToArray(tri);
     if (_pts.length < 3) return _errorLength(undefined, 3);
-    let a = Polygon.bisector(_pts, 0).add(_pts[0]);
-    let b = Polygon.bisector(_pts, 1).add(_pts[1]);
+    let a = Polygon.bisector(_pts, 0)!.add(_pts[0]);
+    let b = Polygon.bisector(_pts, 1)!.add(_pts[1]);
     return Line.intersectRay2D(new Group(_pts[0], a), new Group(_pts[1], b));
   }
 
@@ -1002,7 +1011,7 @@ export class Triangle {
    * @param tri a Group or an Iterable<Pt> representing a triangle
    * @param center Optional parameter if the incenter is already known. Otherwise, leave it empty and the incenter will be calculated
    */
-  static incircle(tri: PtIterable, center?: Pt): Group {
+  static incircle(tri: PtIterable, center?: Pt): Group | undefined {
     let _pts = Util.iterToArray(tri);
     let c = center ? center : Triangle.incenter(_pts);
     if (!c) return undefined; // degenerate (collinear) triangle
@@ -1017,7 +1026,7 @@ export class Triangle {
    * @param tri a Group or an Iterable<Pt> representing a triangle
    * @returns the circumcenter as a Pt
    */
-  static circumcenter(tri: PtIterable): Pt {
+  static circumcenter(tri: PtIterable): Pt | undefined {
     let _pts = Util.iterToArray(tri);
     let md = Triangle.medial(_pts);
     let a = [
@@ -1036,7 +1045,7 @@ export class Triangle {
    * @param tri a Group or an Iterable<Pt> representing a triangle
    * @param center Optional parameter if the circumcenter is already known. Otherwise, leave it empty and the circumcenter will be calculated
    */
-  static circumcircle(tri: PtIterable, center?: Pt): Group {
+  static circumcircle(tri: PtIterable, center?: Pt): Group | undefined {
     let _pts = Util.iterToArray(tri);
     let c = center ? center : Triangle.circumcenter(_pts);
     if (!c) return undefined; // degenerate (collinear) triangle
@@ -1181,7 +1190,7 @@ export class Polygon {
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
    * @returns a bisector direction Pt, the average of the two adjacent sides' unit vectors (not itself normalized)
    */
-  static bisector(poly: PtIterable, index: number): Pt {
+  static bisector(poly: PtIterable, index: number): Pt | undefined {
     let sides = Polygon.adjacentSides(poly, index, true);
     if (sides.length >= 2) {
       let a = sides[0][1].$subtract(sides[0][0]).unit();
@@ -1236,7 +1245,7 @@ export class Polygon {
     let _pts = Util.iterToArray(pts);
     if (_pts.length < 3) return _errorLength(new Group(), 3);
     // determinant
-    let det = (a, b) => a[0] * b[1] - a[1] * b[0];
+    let det = (a: PtLike, b: PtLike) => a[0] * b[1] - a[1] * b[0];
 
     let area = 0;
     for (let i = 0, len = _pts.length; i < len; i++) {
@@ -1265,7 +1274,7 @@ export class Polygon {
     }
 
     // check if is on left of ray a-b
-    let left = (a, b, c) => {
+    let left = (a: PtLike, b: PtLike, c: PtLike) => {
       return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]) > 0;
     };
 
@@ -1449,7 +1458,7 @@ export class Polygon {
   static hasIntersectCircle(
     poly: PtIterable,
     circle: PtIterable,
-  ): IntersectContext {
+  ): IntersectContext | null {
     let _poly = Util.iterToArray(poly);
     let _circle = Util.iterToArray(circle);
 
@@ -1474,7 +1483,7 @@ export class Polygon {
     }
 
     let minDist = Number.MAX_SAFE_INTEGER;
-    let minEdge: Group = null;
+    let minEdge: Group | null = null;
     let minAx = 0;
     let minAy = 0;
     let which = -1;
@@ -1506,7 +1515,7 @@ export class Polygon {
         // Fix edge case and make sure the circle is intersecting. To be improved.
         const edge = Polygon.lineAt(_poly, i);
         const check =
-          Rectangle.withinBound(edge, Line.perpendicularFromPt(edge, c)) ||
+          Rectangle.withinBound(edge, Line.perpendicularFromPt(edge, c)!) ||
           Circle.intersectLine2D(_circle, edge).length > 0;
 
         if (check) {
@@ -1546,7 +1555,7 @@ export class Polygon {
   static hasIntersectPolygon(
     poly1: PtIterable,
     poly2: PtIterable,
-  ): IntersectContext {
+  ): IntersectContext | null {
     // Reference: https://www.gamedev.net/articles/programming/math-and-physics/a-verlet-based-approach-for-2d-game-physics-r2714/
     let _poly1 = Util.iterToArray(poly1);
     let _poly2 = Util.iterToArray(poly2);
@@ -1631,7 +1640,7 @@ export class Polygon {
 
     // find vertex at smallest distance
     let smallest = Number.MAX_SAFE_INTEGER;
-    let vertex: Pt = null;
+    let vertex: Pt = null!;
     for (let i = 0, len = b1.length; i < len; i++) {
       const d = minAx * (b1[i][0] - c2[0]) + minAy * (b1[i][1] - c2[1]);
       if (d < smallest) {
@@ -1717,7 +1726,7 @@ export class Curve {
     let _pts = Util.iterToArray(pts);
 
     if (index > _pts.length - 1) return new Group();
-    let _index = (i) => (i < _pts.length - 1 ? i : _pts.length - 1);
+    let _index = (i: number) => (i < _pts.length - 1 ? i : _pts.length - 1);
 
     let p0 = _pts[index];
     index = copyStart ? index : index + 1;

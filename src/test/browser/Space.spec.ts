@@ -139,8 +139,8 @@ describe("MultiTouchSpace dispatch", () => {
       new PointerEvent("pointermove", { clientX: 60, clientY: 80 }),
     );
     const p = space.pointer;
-    expect(p.x).toBeCloseTo(60 - space.outerBound.x, 0);
-    expect(p.y).toBeCloseTo(80 - space.outerBound.y, 0);
+    expect(p.x).toBeCloseTo(60 - space.outerBound.x!, 0);
+    expect(p.y).toBeCloseTo(80 - space.outerBound.y!, 0);
     expect(p.id).toBe("move");
 
     // keyboard actions receive shift/alt flags as x/y

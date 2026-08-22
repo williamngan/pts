@@ -1,15 +1,21 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-	<title>Technical notes</title>
-	<link href="./assets/style.css" rel="stylesheet" type="text/css" />
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-</head>
+  <head>
+    <title>Technical notes</title>
+    <link href="./assets/style.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+  </head>
 
-<body>
-<div id="header">
-  <div id="pts"><a href="../">Pts<span>.</span></a>guides</div>
+  <body>
+    <div id="header">
+  <div id="pts">
+    <a href="../">Pts<span>.</span></a
+    >guides
+  </div>
   <div id="topmenu">
     <a href="../demo/index.html">demos</a>
     <a href="../study/index.html">studies</a>
@@ -17,8 +23,8 @@
     <a href="https://github.com/williamngan/pts">github</a>
   </div>
 </div>
-<a href="#menu" id="toc">&#x2261;</a>
-<div id="post"><h1>Technical notes</h1>
+    <a href="#menu" id="toc">&#x2261;</a>
+    <div id="post"><h1>Technical notes</h1>
 <h3>Working with React and other libraries</h3>
 <p>When using Pts as an <a href="https://www.npmjs.com/package/pts">npm package</a>, you can choose to import only a small part of Pts into your own project. Perhaps just a couple of Line functions are all you need:</p>
 <pre><code>import {Pt, Line} from &quot;pts&quot;
@@ -30,7 +36,7 @@
 <h3>Cloning Pt with <code>clone()</code> or <code>$...</code></h3>
 <p>Pt is a subclass of Float32Array, and Group is a subclass of Array that should only contain Pt in it.</p>
 <p>Since objects and arrays in javascript are passed by reference, remember to clone them if you are going to change their values. Functions starting with <code>$</code> such as <code>$add</code> means it will return a new Pt and keeping the original unchanged.</p>
-<pre><code>myGroup.push( space.center.clone() ); 
+<pre><code>myGroup.push( space.center.clone() );
 pt.$subtract( 10 ); // use $fn to get a new Pt
 </code></pre>
 <h3>Typescript notes</h3>
@@ -44,25 +50,44 @@ let p3 = p.map( (d) =&gt; d+1 ) as Pt; // type is now cast back to Pt
 <p>Show us what you have made with Pts too!</p>
 </div>
 
-<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>
-
-<div id="footer">Copyright &copy; 2017-current by <a href="https://twitter.com/williamngan">William Ngan</a> and contributors. Pts is an <a href="https://github.com/williamngan/pts">open source project</a> under Apache License 2.0.</div>
+    <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol> <div id="footer">
+  Copyright &copy; 2017-current by
+  <a href="https://twitter.com/williamngan">William Ngan</a> and contributors.
+  Pts is an
+  <a href="https://github.com/williamngan/pts">open source project</a> under
+  Apache License 2.0.
+</div>
 
 <script type="text/javascript" src="../dist/pts.min.js"></script>
 <script type="text/javascript" src="./js/guide.js"></script>
 <script src="./js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-104913373-1', 'auto');
-  ga('send', 'pageview');
-
+  hljs.initHighlightingOnLoad();
 </script>
 
-</body>
+<script>
+  (function (i, s, o, g, r, a, m) {
+    i["GoogleAnalyticsObject"] = r;
+    ((i[r] =
+      i[r] ||
+      function () {
+        (i[r].q = i[r].q || []).push(arguments);
+      }),
+      (i[r].l = 1 * new Date()));
+    ((a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]));
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m);
+  })(
+    window,
+    document,
+    "script",
+    "https://www.google-analytics.com/analytics.js",
+    "ga",
+  );
+
+  ga("create", "UA-104913373-1", "auto");
+  ga("send", "pageview");
+</script>
+  </body>
 </html>

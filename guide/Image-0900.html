@@ -1,15 +1,21 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-	<title>Image</title>
-	<link href="./assets/style.css" rel="stylesheet" type="text/css" />
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-</head>
+  <head>
+    <title>Image</title>
+    <link href="./assets/style.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+  </head>
 
-<body>
-<div id="header">
-  <div id="pts"><a href="../">Pts<span>.</span></a>guides</div>
+  <body>
+    <div id="header">
+  <div id="pts">
+    <a href="../">Pts<span>.</span></a
+    >guides
+  </div>
   <div id="topmenu">
     <a href="../demo/index.html">demos</a>
     <a href="../study/index.html">studies</a>
@@ -17,8 +23,8 @@
     <a href="https://github.com/williamngan/pts">github</a>
   </div>
 </div>
-<a href="#menu" id="toc">&#x2261;</a>
-<div id="post"><h1>Image</h1>
+    <a href="#menu" id="toc">&#x2261;</a>
+    <div id="post"><h1>Image</h1>
 <p>The standard API for working with images on canvas is rather laborious, and often takes the fun out of creative coding. In Pts, the <a href="#image-img"><code>Img</code></a> class simplifies the common use cases, from loading and displaying static images to generating dynamic textures, so that you can get started quickly. Let's take a look.</p>
 <h3>Loading and Displaying Images</h3>
 <p>We will start a minimalistic example: Load an image and display it on canvas. This can be done in 2 lines of code:</p>
@@ -74,12 +80,12 @@ imgForm.fill(&quot;#f00&quot;).rect( rect );
 </code></pre>
 <p>To display the edited image, use CanvasForm's <a href="https://ptsjs.org/docs/?p=Canvas_CanvasForm#function_image"><code>image</code></a> function but pass <code>img.canvas</code> (instead of <code>img</code> itself) in the parameter.</p>
 <pre><code>// draw internal image canvas
-form.image( img.canvas ); 
+form.image( img.canvas );
 </code></pre>
 <p>As we are only editing an internal canvas, the original image is unchanged until it's explicitly updated. Use <a href="#image-img"><code>sync</code></a>, which returns a Promise, to update the original image when needed: <code>await img.sync()</code>.</p>
 <p>You can also work at the pixel level: <a href="#image-img"><code>setPixel</code></a> writes a color into the cached pixel data, <a href="#image-img"><code>updatePixels</code></a> applies those changes onto the canvas, and <a href="#image-img"><code>loadPixels</code></a> refreshes the cache after you've drawn on the canvas directly. When you're done with an Img, call <a href="#image-img"><code>dispose</code></a> to release its resources.</p>
 <h3>Patterns</h3>
-<p>In a similar way, you can treat an image (or an image canvas) as a pattern to fill an area. One difference is that we'll get a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern">CanvasPattern</a> instance for use in  <code>form.fill(...)</code>, instead of an image for <code>form.image(...)</code>.</p>
+<p>In a similar way, you can treat an image (or an image canvas) as a pattern to fill an area. One difference is that we'll get a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern">CanvasPattern</a> instance for use in <code>form.fill(...)</code>, instead of an image for <code>form.image(...)</code>.</p>
 <pre><code>const pattern = await Img.loadPattern( &quot;tile.jpg&quot;, space );
 ...
 form.fill( pattern ).rect( rect );
@@ -106,7 +112,7 @@ pattern.setTransform( m );
 <p>CanvasForm's <a href="#canvas-canvasform"><code>image</code></a> drawing function can take either an Img instance or a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource">CanvasImageSource</a> which includes various kinds of image objects like HTML Image or Canvas.</p>
 </li>
 <li>
-<p>Typically, you can't load an image from another domain due to security concerns. But if the image server allows for it and you want to do it, you can set the <code>crossOrigin</code> parameter to <code>true</code> when creating an  <code>Img</code> instance. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image">More details here</a>.</p>
+<p>Typically, you can't load an image from another domain due to security concerns. But if the image server allows for it and you want to do it, you can set the <code>crossOrigin</code> parameter to <code>true</code> when creating an <code>Img</code> instance. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image">More details here</a>.</p>
 </li>
 </ul>
 <h3>Cheatsheet</h3>
@@ -121,7 +127,7 @@ let img = await Img.load(&quot;demo.png&quot;, { editable: true, pixelScale: spa
 let img = new Img( { editable: true, pixelScale: space.pixelScale } );
 await img.load(&quot;demo.png&quot;)
 
-// Display an image automatically when it's loaded 
+// Display an image automatically when it's loaded
 form.image( [0,0], img );
 
 // Load a pattern and use it as fill
@@ -151,7 +157,7 @@ let imgForm = new CanvasForm( img.ctx );
 imgForm.fill( &quot;#f00&quot; ).point( space.pointer, 20 );
 
 // Export as base64 string
-img.toBase64(); 
+img.toBase64();
 
 // Getting a DOMMatrix instance for pattern transforms
 const m = img.scaledMatrix.rotate2D(...).domMatrix;
@@ -161,25 +167,44 @@ form.fill( pattern ).rect( rect );
 </code></pre>
 </div>
 
-<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>
-
-<div id="footer">Copyright &copy; 2017-current by <a href="https://twitter.com/williamngan">William Ngan</a> and contributors. Pts is an <a href="https://github.com/williamngan/pts">open source project</a> under Apache License 2.0.</div>
+    <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol> <div id="footer">
+  Copyright &copy; 2017-current by
+  <a href="https://twitter.com/williamngan">William Ngan</a> and contributors.
+  Pts is an
+  <a href="https://github.com/williamngan/pts">open source project</a> under
+  Apache License 2.0.
+</div>
 
 <script type="text/javascript" src="../dist/pts.min.js"></script>
 <script type="text/javascript" src="./js/guide.js"></script>
 <script src="./js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-104913373-1', 'auto');
-  ga('send', 'pageview');
-
+  hljs.initHighlightingOnLoad();
 </script>
 
-</body>
+<script>
+  (function (i, s, o, g, r, a, m) {
+    i["GoogleAnalyticsObject"] = r;
+    ((i[r] =
+      i[r] ||
+      function () {
+        (i[r].q = i[r].q || []).push(arguments);
+      }),
+      (i[r].l = 1 * new Date()));
+    ((a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]));
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m);
+  })(
+    window,
+    document,
+    "script",
+    "https://www.google-analytics.com/analytics.js",
+    "ga",
+  );
+
+  ga("create", "UA-104913373-1", "auto");
+  ga("send", "pageview");
+</script>
+  </body>
 </html>

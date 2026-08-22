@@ -200,17 +200,15 @@ describe("Body", () => {
     const body = Body.fromGroup(Polygon.fromCenter([0, 0], 10, 6), 0.8);
     expect(body).toHaveLength(6);
     expect(body.every((point) => point instanceof Particle)).toBe(true);
-    expect(body.every((point: Particle) => point.body === body)).toBe(true);
+    expect(body.every((point: any) => point.body === body)).toBe(true);
     expect(body.mass).toBeGreaterThan(0);
-    expect(body.every((point: Particle) => point.mass === body.mass)).toBe(
-      true,
-    );
+    expect(body.every((point: any) => point.mass === body.mass)).toBe(true);
     expect(body.linksToLines().length).toBeGreaterThan(body.length);
     expect(() => body.link(-1, 0)).toThrow("index1");
     expect(() => body.link(0, 99)).toThrow("index1");
 
     body.mass = 4;
-    expect(body.every((point: Particle) => point.mass === 4)).toBe(true);
+    expect(body.every((point: any) => point.mass === 4)).toBe(true);
     expect(body.autoMass()).toBe(body);
     expect(body.link(0, 1, 0.5)).toBe(body);
     expect(() => body.processEdges()).not.toThrow();
@@ -320,13 +318,13 @@ describe("Substepped solver invariants", () => {
     world.add(square([50, 20], 8));
     for (let i = 0; i < 120; i++) world.update(16);
     for (let i = 0; i < world.particleCount; i++) {
-      const p = world.particle(i);
+      const p = world.particle(i)!;
       expect(p.x).toBeGreaterThanOrEqual(-0.01);
       expect(p.x).toBeLessThanOrEqual(100.01);
       expect(p.y).toBeGreaterThanOrEqual(-0.01);
       expect(p.y).toBeLessThanOrEqual(100.01);
     }
-    for (const vertex of world.body(0)) {
+    for (const vertex of world.body(0)!) {
       expect(vertex.x).toBeGreaterThanOrEqual(-0.01);
       expect(vertex.x).toBeLessThanOrEqual(100.01);
       expect(vertex.y).toBeGreaterThanOrEqual(-0.01);
@@ -403,7 +401,7 @@ describe("Substepped solver invariants", () => {
       b.update(16);
     }
     for (let i = 0; i < a.particleCount; i++) {
-      expect(Array.from(a.particle(i))).toEqual(Array.from(b.particle(i)));
+      expect(Array.from(a.particle(i)!)).toEqual(Array.from(b.particle(i)!));
     }
   });
 

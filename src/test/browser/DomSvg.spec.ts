@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { DOMSpace, HTMLForm, HTMLSpace } from "../../Dom";
+import type { DOMFormContext } from "../../Types";
 import { Font } from "../../Form";
 import { Bound, Group, Pt } from "../../Pt";
 import { SVGContext2D, SVGForm, SVGSpace } from "../../Svg";
@@ -109,7 +110,10 @@ describe("HTMLSpace and HTMLForm", () => {
     const { parent, element } = mount();
     const space = new HTMLSpace(element);
     const form = space.getForm() as HTMLForm;
-    const player = { animate: vi.fn(), animateID: undefined as string };
+    const player = {
+      animate: vi.fn(),
+      animateID: undefined as unknown as string,
+    };
     space.add(player);
     await ready(space);
 
@@ -150,7 +154,9 @@ describe("HTMLSpace and HTMLForm", () => {
     expect(warn).toHaveBeenCalledTimes(3);
 
     const scoped = HTMLForm.scopeID(player);
-    expect(HTMLForm.getID({ currentID: "chosen" })).toBe("chosen");
+    expect(HTMLForm.getID({ currentID: "chosen" } as DOMFormContext)).toBe(
+      "chosen",
+    );
     expect(scoped).toContain(player.animateID);
     expect(form.updateScope("manual", element)).toBeTypeOf("object");
     expect(form.nextID()).toBe("manual-2");
@@ -248,17 +254,17 @@ describe("SVGContext2D", () => {
     ctx.commitFrame();
 
     const defs = host.querySelector("defs");
-    const lin = defs.querySelector("linearGradient");
-    expect(lin.getAttribute("x2")).toBe("10");
-    expect(lin.getAttribute("gradientUnits")).toBe("userSpaceOnUse");
-    expect(lin.querySelectorAll("stop")).toHaveLength(2);
-    expect(host.querySelector("path").getAttribute("fill")).toBe(
+    const lin = defs!.querySelector("linearGradient");
+    expect(lin!.getAttribute("x2")).toBe("10");
+    expect(lin!.getAttribute("gradientUnits")).toBe("userSpaceOnUse");
+    expect(lin!.querySelectorAll("stop")).toHaveLength(2);
+    expect(host.querySelector("path")!.getAttribute("fill")).toBe(
       `url(#${grad.id})`,
     );
 
     // adding a stop after materialization re-renders the defs element
     grad.addColorStop(0.5, "#888");
-    expect(lin.querySelectorAll("stop")).toHaveLength(3);
+    expect(lin!.querySelectorAll("stop")).toHaveLength(3);
 
     const rad = ctx.createRadialGradient(1, 2, 3, 4, 5, 6);
     rad.addColorStop(0, "red");
@@ -269,9 +275,9 @@ describe("SVGContext2D", () => {
     ctx.lineTo(5, 5);
     ctx.stroke();
     ctx.commitFrame();
-    const radial = defs.querySelector("radialGradient");
-    expect(radial.getAttribute("cx")).toBe("4");
-    expect(radial.getAttribute("fr")).toBe("3");
+    const radial = defs!.querySelector("radialGradient");
+    expect(radial!.getAttribute("cx")).toBe("4");
+    expect(radial!.getAttribute("fr")).toBe("3");
   });
 
   it("reconciles pooled elements across frames: patch, replace, truncate", () => {
@@ -285,8 +291,8 @@ describe("SVGContext2D", () => {
     expect(ctx.drawCount).toBe(2);
     ctx.commitFrame();
     const group = ctx.group;
-    expect(group.children).toHaveLength(2);
-    const pooledPath = group.children[0];
+    expect(group!.children).toHaveLength(2);
+    const pooledPath = group!.children[0];
     expect(pooledPath.nodeName).toBe("path");
 
     // a same-shaped frame reuses pooled elements, patching only what changed
@@ -296,19 +302,19 @@ describe("SVGContext2D", () => {
     ctx.fill();
     ctx.fillText("bye", 1, 1);
     ctx.commitFrame();
-    expect(group.children[0]).toBe(pooledPath);
-    expect(group.children[1].textContent).toBe("bye");
+    expect(group!.children[0]).toBe(pooledPath);
+    expect(group!.children[1].textContent).toBe("bye");
 
     // a tag mismatch replaces the pooled element in place; shorter frames truncate
     ctx.beginFrame();
     ctx.fillText("only", 3, 3);
     ctx.commitFrame();
-    expect(group.children).toHaveLength(1);
-    expect(group.children[0].nodeName).toBe("text");
+    expect(group!.children).toHaveLength(1);
+    expect(group!.children[0].nodeName).toBe("text");
 
     ctx.beginFrame();
     ctx.commitFrame();
-    expect(group.children).toHaveLength(0);
+    expect(group!.children).toHaveLength(0);
 
     ctx.disposeDom();
     expect(ctx.group).toBeNull();
@@ -324,7 +330,7 @@ describe("SVGContext2D", () => {
     ctx.rect(0, 0, 10, 10);
     ctx.stroke();
     ctx.commitFrame();
-    const pooled = ctx.group.children[0];
+    const pooled = ctx.group!.children[0];
     expect(pooled.getAttribute("stroke-dasharray")).toBe("5 3");
     expect(pooled.getAttribute("stroke-dashoffset")).toBe("2");
     expect(pooled.getAttribute("mix-blend-mode")).toBe("multiply");
@@ -339,7 +345,7 @@ describe("SVGContext2D", () => {
     ctx.rect(0, 0, 10, 10);
     ctx.stroke();
     ctx.commitFrame();
-    expect(ctx.group.children[0]).toBe(pooled);
+    expect(ctx.group!.children[0]).toBe(pooled);
     expect(pooled.getAttribute("stroke-dasharray")).toBeNull();
     expect(pooled.getAttribute("stroke-dashoffset")).toBeNull();
     expect(pooled.getAttribute("mix-blend-mode")).toBeNull();
@@ -350,7 +356,7 @@ describe("SVGContext2D", () => {
     ctx.rect(0, 0, 10, 10);
     ctx.fill();
     ctx.commitFrame();
-    expect(ctx.group.children[0]).toBe(pooled);
+    expect(ctx.group!.children[0]).toBe(pooled);
     expect(pooled.getAttribute("stroke")).toBe("none");
     expect(pooled.getAttribute("stroke-width")).toBeNull();
     expect(pooled.getAttribute("stroke-linejoin")).toBeNull();
@@ -428,7 +434,7 @@ describe("SVGContext2D", () => {
     ctx.rect(4, 0, 2, 2);
     ctx.fill();
     ctx.commitFrame();
-    const paths = ctx.group.querySelectorAll("path");
+    const paths = ctx.group!.querySelectorAll("path");
     expect(paths[0].getAttribute("mix-blend-mode")).toBe("multiply");
     expect(paths[0].getAttribute("stroke-dasharray")).toBe("2 3");
     expect(paths[0].getAttribute("stroke-dashoffset")).toBe("1");
@@ -474,18 +480,18 @@ describe("SVGSpace frame lifecycle and export", () => {
       (space as unknown as { playItems: (time: number) => void }).playItems(t);
     play(1);
     const group = space.element.querySelector("g.pts-svgform");
-    expect(group.children.length).toBeGreaterThan(0);
+    expect(group!.children.length).toBeGreaterThan(0);
 
     // refresh(false): an empty frame keeps the previous scene
     space.refresh(false);
     draw = false;
     play(2);
-    expect(group.children.length).toBeGreaterThan(0);
+    expect(group!.children.length).toBeGreaterThan(0);
 
     // refresh(true): an empty frame clears it
     space.refresh(true);
     play(3);
-    expect(group.children).toHaveLength(0);
+    expect(group!.children).toHaveLength(0);
     space.dispose();
   });
 
@@ -512,7 +518,7 @@ describe("SVGSpace frame lifecycle and export", () => {
       [...shapes].map((s) => s.nodeName).filter((n) => n === "path"),
     ).toHaveLength(2);
     expect([...shapes].some((s) => s.nodeName === "text")).toBe(true);
-    expect(doc.querySelector("rect").getAttribute("fill")).toBe("none");
+    expect(doc.querySelector("rect")!.getAttribute("fill")).toBe("none");
     space.dispose();
   });
 });
@@ -555,27 +561,27 @@ describe("SVGForm legacy static helpers", () => {
       SVGForm.lineElement(next(), [
         [0, 0],
         [10, 10],
-      ]).nodeName,
+      ])!.nodeName,
     ).toBe("line");
     expect(
       SVGForm.lineElement(next(), [
         [0, 0],
         [10, 0],
         [10, 10],
-      ]).nodeName,
+      ])!.nodeName,
     ).toBe("polyline");
     expect(
       SVGForm.polygonElement(next(), [
         [0, 0],
         [10, 0],
         [5, 8],
-      ]).getAttribute("points"),
+      ])!.getAttribute("points"),
     ).toContain("0,0");
     expect(
       SVGForm.rectElement(next(), [
         [1, 2],
         [11, 22],
-      ]).getAttribute("width"),
+      ])!.getAttribute("width"),
     ).toBe("10");
     expect(SVGForm.textElement(next(), [3, 4], "hello").textContent).toBe(
       "hello",
@@ -648,14 +654,16 @@ describe("SVGSpace and SVGForm", () => {
     form.svgContext.commitFrame();
     const runGroup = space.element.querySelector("g.pts-svgform");
     expect(runGroup).not.toBeNull();
-    expect(runGroup.querySelectorAll("path").length).toBe(2);
-    expect(runGroup.querySelectorAll("text").length).toBe(2);
+    expect(runGroup!.querySelectorAll("path").length).toBe(2);
+    expect(runGroup!.querySelectorAll("text").length).toBe(2);
     expect(space.element.querySelector(".custom-svg")).not.toBeNull();
     form.fill(false).stroke(false).cls(false).font(new Font()).reset();
     expect(() => form.scope({ animate: vi.fn() })).toThrow(/not defined/);
     expect(form.updateScope("manual", space.element)).toBeTypeOf("object");
     expect(form.nextID()).toBe("manual-2");
-    expect(SVGForm.getID({ currentID: "picked" })).toBe("picked");
+    expect(SVGForm.getID({ currentID: "picked" } as DOMFormContext)).toBe(
+      "picked",
+    );
 
     form.scope(player);
     form.point([1, 1]);
@@ -686,7 +694,7 @@ describe("SVGSpace and SVGForm", () => {
     form.svgContext.commitFrame();
     const regrown = space.element.querySelector("g.pts-svgform");
     expect(regrown).not.toBeNull();
-    expect(regrown.querySelectorAll("path").length).toBe(1);
+    expect(regrown!.querySelectorAll("path").length).toBe(1);
   });
 
   it("covers SVG static helpers, invalid inputs, reuse, and style suppression", () => {

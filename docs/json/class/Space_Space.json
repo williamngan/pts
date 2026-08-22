@@ -558,7 +558,7 @@
             {
               "name": "evt",
               "comment": "event",
-              "type": "Event",
+              "type": "Event | null",
               "default": false
             }
           ],

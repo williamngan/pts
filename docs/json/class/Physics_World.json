@@ -358,7 +358,7 @@
       "signatures": [
         {
           "comment": "Get a body in this world by index or string id.",
-          "returns": "Body",
+          "returns": "Body | undefined",
           "returns_comment": "a Body, or undefined if not found",
           "parameters": [
             {
@@ -517,7 +517,7 @@
       "signatures": [
         {
           "comment": "Get a particle in this world by index or string id.",
-          "returns": "Particle",
+          "returns": "Particle | undefined",
           "returns_comment": "a Particle, or undefined if not found",
           "parameters": [
             {

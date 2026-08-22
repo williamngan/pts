@@ -341,22 +341,28 @@ describe("Color-space reference values", () => {
 describe("Color conversion flags", () => {
   const conversionNames = Object.getOwnPropertyNames(Color)
     .filter(
-      (key) => typeof Color[key] === "function" && /^[A-Z]+to[A-Z]+$/.test(key),
+      (key) =>
+        typeof (Color as any)[key] === "function" &&
+        /^[A-Z]+to[A-Z]+$/.test(key),
     )
     .sort();
 
   const sourceFor = (mode: string): Color => {
     const rgb = Color.rgb(64, 156, 180, 0.75);
     if (mode === "rgb") return rgb;
-    return Color[`RGBto${mode.toUpperCase()}`](rgb);
+    return (Color as any)[`RGBto${mode.toUpperCase()}`](rgb);
   };
 
   it.each(conversionNames)(
     "%s normalizedOutput maps the plain result through Color.ranges",
     (name) => {
       const source = sourceFor(name.split("to")[0].toLowerCase());
-      const plain: Color = Color[name](source.clone());
-      const normalized: Color = Color[name](source.clone(), false, true);
+      const plain: Color = (Color as any)[name](source.clone());
+      const normalized: Color = (Color as any)[name](
+        source.clone(),
+        false,
+        true,
+      );
       expect(normalized.normalized).toBe(true);
       expectColor(normalized, plain.clone().normalize(), 2);
     },
@@ -366,20 +372,20 @@ describe("Color conversion flags", () => {
     "%s normalizedInput accepts flagged and unflagged 0...1 values",
     (name) => {
       const source = sourceFor(name.split("to")[0].toLowerCase());
-      const expected: Color = Color[name](source.clone());
+      const expected: Color = (Color as any)[name](source.clone());
 
       const flagged = source.$normalize();
-      expectColor(Color[name](flagged, true), expected, 2);
+      expectColor((Color as any)[name](flagged, true), expected, 2);
 
       // The flag argument is authoritative even when the color was
       // constructed directly from 0...1 values and never flagged.
-      const unflagged = Color[source.mode](
+      const unflagged = (Color as any)[source.mode](
         flagged[0],
         flagged[1],
         flagged[2],
         source.alpha,
       );
-      expectColor(Color[name](unflagged, true), expected, 2);
+      expectColor((Color as any)[name](unflagged, true), expected, 2);
     },
   );
 

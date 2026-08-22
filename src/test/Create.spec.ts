@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { Create, Delaunay, Noise } from "../Create";
-import { DelaunayShape } from "../Types";
+import { type DelaunayShape } from "../Types";
 import { Num } from "../Num";
 import { Bound, Group, Pt } from "../Pt";
 
@@ -105,7 +105,7 @@ describe("Create point distributions", () => {
     );
     expect(points).toHaveLength(4);
     expect(points.every((point) => point instanceof Noise)).toBe(true);
-    expect(points.map((point: Noise) => point.noise2D())).toEqual([
+    expect(points.map((point: any) => point.noise2D())).toEqual([
       0, 0.007704000313133006, -0.1884160023498535, -0.18568443368551887,
     ]);
 

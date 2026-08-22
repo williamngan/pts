@@ -142,7 +142,7 @@ describe("Tempo", () => {
     tempo.every(1).progress(callback);
     tempo.animate(500, 16);
     expect(callback).toHaveBeenCalledOnce();
-    expect(tempo.resize(null)).toBeUndefined();
-    expect(tempo.action("move", 1, 2, null)).toBeUndefined();
+    expect(tempo.resize(null!)).toBeUndefined();
+    expect(tempo.action("move", 1, 2, null!)).toBeUndefined();
   });
 });

@@ -66,7 +66,7 @@
       "source": [
         [
           "src/Op.ts",
-          344,
+          347,
           9
         ]
       ],
@@ -78,7 +78,7 @@
       "signatures": [
         {
           "comment": "Crop this line by a circle or rectangle at end points. This can be useful for creating arrows that connect to an object's edge.",
-          "returns": "Pt",
+          "returns": "Pt | undefined",
           "returns_comment": "an intersecting point on the line that can be used for cropping.",
           "parameters": [
             {
@@ -212,7 +212,7 @@
       "signatures": [
         {
           "comment": "Calculate the slope and xy intercepts of a line.",
-          "returns": "{ slope:`number`, xi:`number`, yi:`number` }",
+          "returns": "{ slope:`number`, xi:`number | undefined`, yi:`number` } | undefined",
           "returns_comment": "an object with `slope`, `xi`, `yi` properties",
           "parameters": [
             {
@@ -237,7 +237,7 @@
       "source": [
         [
           "src/Op.ts",
-          295,
+          298,
           9
         ]
       ],
@@ -274,7 +274,7 @@
       "source": [
         [
           "src/Op.ts",
-          277,
+          280,
           9
         ]
       ],
@@ -323,7 +323,7 @@
       "signatures": [
         {
           "comment": "Given two line segemnts, find their intersection point if any.",
-          "returns": "Pt",
+          "returns": "Pt | undefined",
           "returns_comment": "an intersection Pt or undefined if no intersection",
           "parameters": [
             {
@@ -348,7 +348,7 @@
       "source": [
         [
           "src/Op.ts",
-          255,
+          258,
           9
         ]
       ],
@@ -403,7 +403,7 @@
       "signatures": [
         {
           "comment": "Given a line segemnt and a ray (infinite line), find their intersection point if any.",
-          "returns": "Pt",
+          "returns": "Pt | undefined",
           "returns_comment": "an intersection Pt or undefined if no intersection",
           "parameters": [
             {
@@ -428,7 +428,7 @@
       "source": [
         [
           "src/Op.ts",
-          231,
+          234,
           9
         ]
       ],
@@ -440,7 +440,7 @@
       "signatures": [
         {
           "comment": "Given a line segemnt or a ray (infinite line), find its intersection point(s) with a polygon.",
-          "returns": "Group",
+          "returns": "Group | undefined",
           "returns_comment": false,
           "parameters": [
             {
@@ -483,7 +483,7 @@
       "signatures": [
         {
           "comment": "Given two lines as rays (infinite lines), find their intersection point if any.",
-          "returns": "Pt",
+          "returns": "Pt | undefined",
           "returns_comment": "an intersection Pt or undefined if no intersection",
           "parameters": [
             {
@@ -508,7 +508,7 @@
       "source": [
         [
           "src/Op.ts",
-          314,
+          317,
           9
         ]
       ],
@@ -607,7 +607,7 @@
       "source": [
         [
           "src/Op.ts",
-          382,
+          385,
           9
         ]
       ],
@@ -668,7 +668,7 @@
       "signatures": [
         {
           "comment": "Find a point on a line that is perpendicular (shortest distance) to a target point.",
-          "returns": "Pt",
+          "returns": "Pt | undefined",
           "returns_comment": "a Pt on the line that is perpendicular to the target Pt, or a projection vector if `asProjection` is true.",
           "parameters": [
             {
@@ -748,7 +748,7 @@
       "signatures": [
         {
           "comment": "Calculate the slope of a line.",
-          "returns": "number",
+          "returns": "number | undefined",
           "returns_comment": false,
           "parameters": [
             {
@@ -773,7 +773,7 @@
       "source": [
         [
           "src/Op.ts",
-          327,
+          330,
           9
         ]
       ],
@@ -810,7 +810,7 @@
       "source": [
         [
           "src/Op.ts",
-          409,
+          412,
           9
         ]
       ],

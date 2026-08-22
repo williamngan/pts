@@ -88,7 +88,7 @@ describe("UI", () => {
     expect(ui.off(Action.move, hitID)).toBe(true);
     expect(ui.off(Action.all)).toBe(true);
     expect(ui.listen(Action.move, [2, 2], evt)).toBe(true);
-    expect(ui.on(Action.up, undefined)).toBe(-1);
+    expect(ui.on(Action.up, undefined!)).toBe(-1);
   });
 
   it("rejects points for unregistered shapes", () => {

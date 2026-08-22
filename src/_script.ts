@@ -17,6 +17,12 @@ import * as Play from "./Play";
 import * as Image from "./Image";
 import * as Types from "./Types";
 
+declare global {
+  // the browser bundle mounts the whole library on globalThis.Pts
+
+  var Pts: Record<string, any>;
+}
+
 globalThis.Pts = {
   ...Canvas,
   ...Create,

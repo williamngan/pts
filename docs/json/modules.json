@@ -114,6 +114,7 @@
     "TextMeasure",
     "TextVerticalAlign",
     "TouchPointsKey",
+    "UIActionEvent",
     "UIHandler",
     "WarningType"
   ]

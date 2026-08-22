@@ -8,15 +8,15 @@ import { Typography as Typo } from "./Typography";
 import { Rectangle } from "./Op";
 import { Img } from "./Image";
 import {
-  PtLike,
-  GroupLike,
-  RenderingContext2D,
-  DefaultFormStyle,
-  PtLikeIterable,
-  PtIterable,
-  CanvasSpaceOptions,
-  TextMeasure,
-  TextVerticalAlign,
+  type PtLike,
+  type GroupLike,
+  type RenderingContext2D,
+  type DefaultFormStyle,
+  type PtLikeIterable,
+  type PtIterable,
+  type CanvasSpaceOptions,
+  type TextMeasure,
+  type TextVerticalAlign,
 } from "./Types";
 
 /**
@@ -25,22 +25,22 @@ import {
  */
 export class CanvasSpace extends MultiTouchSpace {
   protected _canvas: HTMLCanvasElement;
-  protected _container: Element;
+  protected _container!: Element;
 
   protected _pixelScale = 1;
   protected _bgcolor = "#e1e9f0";
   protected _ctx: CanvasRenderingContext2D;
 
   protected _offscreen = false;
-  protected _offCanvas: HTMLCanvasElement;
-  protected _offCtx: RenderingContext2D;
+  protected _offCanvas!: HTMLCanvasElement;
+  protected _offCtx!: RenderingContext2D;
 
-  protected _resizeObserver: ResizeObserver;
+  protected _resizeObserver: ResizeObserver | undefined;
   protected _autoResize = true;
   protected _initialResize = false;
 
-  private _readyObserver: MutationObserver;
-  private _readyTimer: number;
+  private _readyObserver: MutationObserver | undefined;
+  private _readyTimer: number | undefined;
   private _disposed = false;
 
   /**
@@ -49,10 +49,13 @@ export class CanvasSpace extends MultiTouchSpace {
    * @param callback an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a "ready" event will also be fired from the `<canvas>` element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener("ready")`
    * @example `new CanvasSpace( "#myElementID" )`
    */
-  constructor(elem: string | Element, callback?: Function) {
+  constructor(
+    elem: string | Element,
+    callback?: (bound: Bound, elem: EventTarget) => void,
+  ) {
     super();
 
-    let _selector: Element = null;
+    let _selector: Element | null = null;
     let _existed = false;
     this.id = Util.uniqueId();
 
@@ -88,13 +91,13 @@ export class CanvasSpace extends MultiTouchSpace {
       // if selector is an existing canvas
     } else {
       this._canvas = _selector as HTMLCanvasElement;
-      this._container = _selector.parentElement;
+      this._container = _selector.parentElement!;
       this._autoResize = false;
       _existed = true;
     }
 
     // store canvas 2d rendering context
-    this._ctx = this._canvas.getContext("2d");
+    this._ctx = this._canvas.getContext("2d")!;
 
     // if we created the canvas, add it to the container and observe mutation for readiness
     if (!_existed) {
@@ -126,7 +129,7 @@ export class CanvasSpace extends MultiTouchSpace {
    * @param elem element tag name
    * @param id element id attribute
    */
-  protected _createElement(elem = "div", id) {
+  protected _createElement(elem = "div", id: string) {
     const d = document.createElement(elem);
     d.setAttribute("id", id);
     return d;
@@ -136,7 +139,7 @@ export class CanvasSpace extends MultiTouchSpace {
    * Handle callbacks after element is mounted in DOM
    * @param callback
    */
-  private _ready(callback: Function) {
+  private _ready(callback?: (bound: Bound, elem: EventTarget) => void) {
     if (this._disposed) return;
 
     this._readyTimer = undefined;
@@ -184,7 +187,7 @@ export class CanvasSpace extends MultiTouchSpace {
         "canvas",
         this.id + "_offscreen",
       ) as HTMLCanvasElement;
-      this._offCtx = this._offCanvas.getContext("2d");
+      this._offCtx = this._offCanvas.getContext("2d")!;
     } else {
       this._offscreen = false;
     }
@@ -227,7 +230,7 @@ export class CanvasSpace extends MultiTouchSpace {
    * @param evt Optionally pass a resize event
    * @see Space.add
    */
-  resize(b: Bound, evt?: Event): this {
+  resize(b: Bound, evt?: Event | null): this {
     this.bound = b;
 
     // The buffer needs whole device pixels, so round up to cover the bound.
@@ -284,7 +287,7 @@ export class CanvasSpace extends MultiTouchSpace {
    * Window resize handling
    * @param evt
    */
-  protected _resizeHandler(evt: Event) {
+  protected _resizeHandler(evt: Event | null) {
     const b =
       this._autoResize || this._initialResize
         ? this._container.getBoundingClientRect()
@@ -421,7 +424,7 @@ export class CanvasSpace extends MultiTouchSpace {
    * Similiar to `clear()` but clear the offscreen canvas instead
    * @param bg Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
    */
-  clearOffscreen(bg?: string): this {
+  clearOffscreen(bg?: string | null): this {
     if (this._offscreen) {
       const px = Math.ceil(this.pixelScale);
       if (bg) {
@@ -545,15 +548,15 @@ const _ctxStyleCache = new WeakMap<object, Record<string, unknown>>();
 export class CanvasForm<
   S extends MultiTouchSpace = CanvasSpace,
 > extends VisualForm {
-  protected _space: CanvasSpace;
-  protected _ctx: RenderingContext2D;
-  protected _estimateTextWidth: TextMeasure;
-  protected _estimateMode: "sample" | "char";
+  protected _space!: CanvasSpace;
+  protected _ctx!: RenderingContext2D;
+  protected _estimateTextWidth: TextMeasure | undefined;
+  protected _estimateMode: "sample" | "char" | undefined;
 
   // the shared cache object for this._ctx, revalidated only when the context
   // changes so the hot path avoids a WeakMap lookup per style write
-  private _styleCache: Record<string, unknown> = null;
-  private _styleCacheCtx: RenderingContext2D = null;
+  private _styleCache: Record<string, unknown> | null = null;
+  private _styleCacheCtx: RenderingContext2D | null = null;
 
   /** Get the style cache shared by all forms drawing on this context. */
   protected _cacheForCtx(): Record<string, unknown> {
@@ -566,7 +569,7 @@ export class CanvasForm<
       this._styleCache = cache;
       this._styleCacheCtx = this._ctx;
     }
-    return this._styleCache;
+    return this._styleCache!;
   }
 
   /**
@@ -595,7 +598,7 @@ export class CanvasForm<
     const cache = this._cacheForCtx();
     if (cache[key] !== value) {
       cache[key] = value;
-      this._ctx[key] = value;
+      (this._ctx as any)[key] = value;
     }
   }
 
@@ -624,7 +627,7 @@ export class CanvasForm<
     // allow for undefined context to support custom contexts via subclassing.
     if (!space) return this;
 
-    const _setup = (ctx) => {
+    const _setup = (ctx: RenderingContext2D) => {
       this._ctx = ctx;
       this._set("fillStyle", this._style.fillStyle);
       this._set("strokeStyle", this._style.strokeStyle);
@@ -1000,7 +1003,7 @@ export class CanvasForm<
     vertical: TextVerticalAlign,
     offset?: PtLike,
     center?: Pt,
-  ): Pt {
+  ): Pt | undefined {
     const _box = Util.iterToArray(box);
     if (!Util.arrayCheck(_box)) return;
 
@@ -1011,7 +1014,7 @@ export class CanvasForm<
       px = _box[1][0];
     } else if (
       this._ctx.textAlign == "center" ||
-      // @ts-ignore CanvasTextAlign omits the legacy "middle" value supported here.
+      // @ts-expect-error CanvasTextAlign omits the legacy "middle" value supported here.
       this._ctx.textAlign == "middle"
     ) {
       px = center[0];
@@ -1036,8 +1039,8 @@ export class CanvasForm<
     const cache = this._cacheForCtx();
     for (const k in this._style) {
       if (this._style.hasOwnProperty(k)) {
-        this._ctx[k] = this._style[k];
-        cache[k] = this._style[k];
+        (this._ctx as any)[k] = (this._style as any)[k];
+        cache[k] = (this._style as any)[k];
       }
     }
     // same default as a fresh VisualForm (14px sans-serif)
@@ -1067,9 +1070,9 @@ export class CanvasForm<
     shape: string = "square",
   ) {
     if (!p) return;
-    if (!CanvasForm[shape])
+    if (!(CanvasForm as any)[shape])
       throw new Error(`${shape} is not a static function of CanvasForm`);
-    CanvasForm[shape](ctx, p, radius);
+    (CanvasForm as any)[shape](ctx, p, radius);
   }
 
   /**
@@ -1379,11 +1382,11 @@ export class CanvasForm<
 
     if (img instanceof Img) {
       if (img.loaded) {
-        // @ts-ignore
+        // @ts-expect-error legacy DOM lib types omit these vendor/optional members
         ctx.drawImage(img.image, ...pos);
       }
     } else {
-      // @ts-ignore
+      // @ts-expect-error legacy DOM lib types omit these vendor/optional members
       ctx.drawImage(img, ...pos);
     }
   }
@@ -1492,11 +1495,11 @@ export class CanvasForm<
     tail: string = "",
     overrideBaseline: boolean = true,
   ): this {
-    // @ts-ignore
+    // @ts-expect-error legacy DOM lib types omit these vendor/optional members
     if (overrideBaseline) this._ctx.textBaseline = verticalAlign;
     const size = Rectangle.size(box);
     const t = this._textTruncate(txt, size[0], tail);
-    this.text(this._textAlign(box, verticalAlign), t[0]);
+    this.text(this._textAlign(box, verticalAlign)!, t[0]);
     return this;
   }
 
@@ -1546,7 +1549,7 @@ export class CanvasForm<
 
       // word wrap
       const consumedAll = t[1] === sub.length;
-      let dt = t[0].lastIndexOf(" ") + 1;
+      let dt: number | undefined = t[0].lastIndexOf(" ") + 1;
       if (dt <= 0 || consumedAll) dt = undefined;
       lines.push(dt === undefined ? t[0] : t[0].slice(0, dt));
 
@@ -1568,7 +1571,10 @@ export class CanvasForm<
 
     const center = Rectangle.center(lbox);
     for (let i = 0, len = lines.length; i < len; i++) {
-      this.text(this._textAlign(lbox, "top", [0, i * lstep], center), lines[i]);
+      this.text(
+        this._textAlign(lbox, "top", [0, i * lstep], center)!,
+        lines[i],
+      );
     }
 
     return this;
@@ -1583,9 +1589,9 @@ export class CanvasForm<
     alignment: CanvasTextAlign = "left",
     baseline: CanvasTextBaseline = "alphabetic",
   ) {
-    // @ts-ignore
+    // @ts-expect-error legacy DOM lib types omit these vendor/optional members
     if (baseline == "center") baseline = "middle";
-    // @ts-ignore
+    // @ts-expect-error legacy DOM lib types omit these vendor/optional members
     if (baseline == "baseline") baseline = "alphabetic";
     this._ctx.textAlign = alignment;
     this._ctx.textBaseline = baseline;
@@ -1596,7 +1602,7 @@ export class CanvasForm<
    * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
    * @param txt text
    */
-  log(txt): this {
+  log(txt: any): this {
     const w = this._ctx.measureText(txt).width + 20;
     this.stroke(false)
       .fill("rgba(0,0,0,.4)")

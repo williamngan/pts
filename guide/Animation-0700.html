@@ -1,15 +1,21 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-	<title>Animation</title>
-	<link href="./assets/style.css" rel="stylesheet" type="text/css" />
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-</head>
+  <head>
+    <title>Animation</title>
+    <link href="./assets/style.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+  </head>
 
-<body>
-<div id="header">
-  <div id="pts"><a href="../">Pts<span>.</span></a>guides</div>
+  <body>
+    <div id="header">
+  <div id="pts">
+    <a href="../">Pts<span>.</span></a
+    >guides
+  </div>
   <div id="topmenu">
     <a href="../demo/index.html">demos</a>
     <a href="../study/index.html">studies</a>
@@ -17,16 +23,16 @@
     <a href="https://github.com/williamngan/pts">github</a>
   </div>
 </div>
-<a href="#menu" id="toc">&#x2261;</a>
-<div id="post"><h1>Animation</h1>
+    <a href="#menu" id="toc">&#x2261;</a>
+    <div id="post"><h1>Animation</h1>
 <p><a href="#play-tempo"><code>Tempo</code></a> is a lightweight utility class which helps you create animation sequences intuitively. It's an alternative to many other great animation libraries (which you can use with Pts too).</p>
 <p>Typically, animation sequences are often implemented as a curated list of tweens in milliseconds. But what if we take the idea one level higher, and treat it like a dance? Like One-two-three, One-two-three...</p>
 <p>Let's start by counting the beats. Tempo is usually measured in beats-per-minute (bpm), so there are two ways to initiate a <a href="#play-tempo"><code>Tempo</code></a> instance: by setting a bpm, or specifying the duration of a beat in milliseconds.</p>
 <pre><code>// 120 beats-per-minute, or 500ms per beat
-let tempo = new Tempo( 120 ); 
+let tempo = new Tempo( 120 );
 
 // 500ms per beat, or 120 bpm
-let another = Tempo.fromBeat( 500 ); 
+let another = Tempo.fromBeat( 500 );
 </code></pre>
 <p>The essential function is <a href="#play-tempo"><code>every</code></a>, which counts the beats and triggers the callback functions you specified. It's like a smart metronome.</p>
 <pre><code>let everyTwo = tempo.every( 2 ); // count every 2 beats
@@ -39,7 +45,7 @@ everyTwo.start( (count) =&gt; ... )
 </code></pre>
 <p>The <code>progress</code> function lets you set a callback during the progress of every <em>n</em>-beats period. The second parameter <code>t</code> always start at 0 and ends at 1 in every period, so you can use it to interpolate values and tween properties.</p>
 <pre><code>// during every 10-beats period, do something
-everyTen.progress( (count, t, time, isStart) =&gt; ... ) 
+everyTen.progress( (count, t, time, isStart) =&gt; ... )
 </code></pre>
 <p>Let's look at an example. Here the tempo is set to 60 BPM (or 1 second per beat), and we design the behaviors so that:</p>
 <ul>
@@ -53,7 +59,7 @@ everyTen.progress( (count, t, time, isStart) =&gt; ... )
 <pre><code>everyTwo.progress( (count, t, time, isStart) =&gt; {
     let tt = Shaping.elasticOut( t );
     ...
-}) 
+})
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:tempo_shaping"></p>
 <p><strong>Stagger</strong>: You can offset a beat's timing by a small difference to create a &quot;stagger&quot; effect. Specify an offset time (in milliseconds) in the optional second parameter. A positive offset activates sooner, and a negative offset activates later.</p>
@@ -89,36 +95,55 @@ tempo = Tempo.fromBeat( 100 ); // one beat every 100ms
 <p>Count beats and trigger animation callbacks</p>
 <pre><code>let fiveBeats = tempo.every( 5 );
 
-fiveBeats.start( (count) =&gt; { 
+fiveBeats.start( (count) =&gt; {
   // do something at start of every period
   return count &gt; 5; // optionally return true to stop animating
 });
 
-fiveBeats.progress( (count, t, time, isStart) =&gt;  { 
+fiveBeats.progress( (count, t, time, isStart) =&gt;  {
   // do something during each period
 });
 </code></pre>
 </div>
 
-<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>
-
-<div id="footer">Copyright &copy; 2017-current by <a href="https://twitter.com/williamngan">William Ngan</a> and contributors. Pts is an <a href="https://github.com/williamngan/pts">open source project</a> under Apache License 2.0.</div>
+    <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol> <div id="footer">
+  Copyright &copy; 2017-current by
+  <a href="https://twitter.com/williamngan">William Ngan</a> and contributors.
+  Pts is an
+  <a href="https://github.com/williamngan/pts">open source project</a> under
+  Apache License 2.0.
+</div>
 
 <script type="text/javascript" src="../dist/pts.min.js"></script>
 <script type="text/javascript" src="./js/guide.js"></script>
 <script src="./js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-104913373-1', 'auto');
-  ga('send', 'pageview');
-
+  hljs.initHighlightingOnLoad();
 </script>
 
-</body>
+<script>
+  (function (i, s, o, g, r, a, m) {
+    i["GoogleAnalyticsObject"] = r;
+    ((i[r] =
+      i[r] ||
+      function () {
+        (i[r].q = i[r].q || []).push(arguments);
+      }),
+      (i[r].l = 1 * new Date()));
+    ((a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]));
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m);
+  })(
+    window,
+    document,
+    "script",
+    "https://www.google-analytics.com/analytics.js",
+    "ga",
+  );
+
+  ga("create", "UA-104913373-1", "auto");
+  ga("send", "pageview");
+</script>
+  </body>
 </html>

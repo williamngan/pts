@@ -3,14 +3,20 @@
 import { Util, Const } from "./Util";
 import { Geom, Num } from "./Num";
 import { Vec, Mat } from "./LinearAlgebra";
-import { IPt, GroupLike, PtLike, PtIterable, PtLikeIterable } from "./Types";
+import {
+  type IPt,
+  type GroupLike,
+  type PtLike,
+  type PtIterable,
+  type PtLikeIterable,
+} from "./Types";
 
 /**
  * Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.
  * See [Pt guide](../guide/Pt-0200.html) for details.
  */
 export class Pt extends Float32Array implements IPt, Iterable<number> {
-  protected _id: string;
+  protected _id!: string;
 
   /**
    * Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].
@@ -19,7 +25,8 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
   constructor(...args: Array<number | number[] | IPt | Float32Array>) {
-    let params;
+    // each branch below produces a valid Float32Array constructor argument
+    let params: any;
     const a0 = args[0];
     if (args.length === 1 && typeof a0 == "number") {
       params = a0; // init with the TypedArray's length. Needed this in order to make ".map", ".slice" etc work.
@@ -133,7 +140,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Update the values of this Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  to(...args): this {
+  to(...args: any[]): this {
     const p = Util.getPtLike(args);
     for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
       this[i] = p[i];
@@ -145,7 +152,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Like [`Pt.to`](#link) but returns a new Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  $to(...args): Pt {
+  $to(...args: any[]): Pt {
     return this.clone().to(...args);
   }
 
@@ -201,7 +208,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
   $take(axis: string | number[]): Pt {
     const p = [];
     for (let i = 0, len = axis.length; i < len; i++) {
-      p.push(this[axis[i]] || 0);
+      p.push((this as any)[axis[i]] || 0);
     }
     return new Pt(p);
   }
@@ -210,7 +217,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Concatenate this Pt with addition dimensional values and return as a new Pt.
    * @param args can be either a list of numbers, an array, a Pt,  or an object with {x,y,z,w} properties
    */
-  $concat(...args): Pt {
+  $concat(...args: any[]): Pt {
     return new Pt(this.toArray().concat(Util.getArgs(args)));
   }
 
@@ -218,7 +225,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Add scalar or vector values to this Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  add(...args): this {
+  add(...args: any[]): this {
     args.length === 1 && typeof args[0] == "number"
       ? Vec.add(this, args[0])
       : Vec.add(this, Util.getPtLike(args));
@@ -229,7 +236,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Like [`Pt.add`](#link), but returns result as a new Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  $add(...args): Pt {
+  $add(...args: any[]): Pt {
     return this.clone().add(...args);
   }
 
@@ -237,7 +244,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Subtract scalar or vector values from this Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  subtract(...args): this {
+  subtract(...args: any[]): this {
     args.length === 1 && typeof args[0] == "number"
       ? Vec.subtract(this, args[0])
       : Vec.subtract(this, Util.getPtLike(args));
@@ -248,7 +255,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Like [`Pt.subtract`](#link), but returns result as a new Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  $subtract(...args): Pt {
+  $subtract(...args: any[]): Pt {
     return this.clone().subtract(...args);
   }
 
@@ -256,7 +263,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Multiply scalar or vector values (as element-wise) with this Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  multiply(...args): this {
+  multiply(...args: any[]): this {
     args.length === 1 && typeof args[0] == "number"
       ? Vec.multiply(this, args[0])
       : Vec.multiply(this, Util.getPtLike(args));
@@ -267,7 +274,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Like [`Pt.multiply`](#link), but returns result as a new Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  $multiply(...args): Pt {
+  $multiply(...args: any[]): Pt {
     return this.clone().multiply(...args);
   }
 
@@ -275,7 +282,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Divide this Pt over scalar or vector values (as element-wise).
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  divide(...args): this {
+  divide(...args: any[]): this {
     args.length === 1 && typeof args[0] == "number"
       ? Vec.divide(this, args[0])
       : Vec.divide(this, Util.getPtLike(args));
@@ -286,7 +293,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Like [`Pt.divide`](#link), but returns result as a new Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  $divide(...args): Pt {
+  $divide(...args: any[]): Pt {
     return this.clone().divide(...args);
   }
 
@@ -308,7 +315,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Convert to a unit vector, which is a normalized vector whose magnitude equals to 1.
    * @param magnitude Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.
    */
-  unit(magnitude: number = undefined): Pt {
+  unit(magnitude: number | undefined = undefined): Pt {
     Vec.unit(this, magnitude);
     return this;
   }
@@ -316,7 +323,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
   /**
    * Get a new unit vector from this Pt.
    */
-  $unit(magnitude: number = undefined): Pt {
+  $unit(magnitude: number | undefined = undefined): Pt {
     return this.clone().unit(magnitude);
   }
 
@@ -324,7 +331,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Dot product of this Pt and another Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  dot(...args): number {
+  dot(...args: any[]): number {
     return Vec.dot(this, Util.getPtLike(args));
   }
 
@@ -332,7 +339,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * 2D Cross product of this Pt and another Pt. Return results as a new Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  $cross2D(...args): number {
+  $cross2D(...args: any[]): number {
     return Vec.cross2D(this, Util.getPtLike(args));
   }
 
@@ -340,7 +347,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * 3D Cross product of this Pt and another Pt. Return results as a new Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  $cross(...args): Pt {
+  $cross(...args: any[]): Pt {
     return Vec.cross(this, Util.getPtLike(args));
   }
 
@@ -349,7 +356,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param args the other Pt, as either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    * @returns the projection vector as a Pt
    */
-  $project(...args): Pt {
+  $project(...args: any[]): Pt {
     return this.$multiply(this.dot(...args) / this.magnitudeSq());
   }
 
@@ -357,7 +364,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Calculate the scalar projection of another Pt onto this Pt — the signed length of the other Pt's component along this Pt's direction. Note that this Pt must be non-zero.
    * @param args the other Pt, as either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  projectScalar(...args): number {
+  projectScalar(...args: any[]): number {
     return this.dot(...args) / this.magnitude();
   }
 
@@ -441,7 +448,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Get a new Pt that has the minimum dimensional values of this Pt and another Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  $min(...args): Pt {
+  $min(...args: any[]): Pt {
     const p = Util.getPtLike(args);
     const m = this.clone();
     for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
@@ -454,7 +461,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Get a new Pt that has the maximum dimensional values of this Pt and another Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  $max(...args): Pt {
+  $max(...args: any[]): Pt {
     const p = Util.getPtLike(args);
     const m = this.clone();
     for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
@@ -468,7 +475,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    */
   angle(axis: string | number[] = Const.xy): number {
-    return Math.atan2(this[axis[1]], this[axis[0]]);
+    return Math.atan2((this as any)[axis[1]], (this as any)[axis[0]]);
   }
 
   /**
@@ -561,7 +568,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
  * See [Group guide](../guide/Group-0300.html) for details.
  */
 export class Group extends Array<Pt> {
-  protected _id: string;
+  protected _id!: string;
 
   /**
    * Create a Group by passing an array of [`Pt`](#link). You may also create a Group using [`Group.fromArray`](#link) or [`Group.fromPtArray`](#link).
@@ -733,8 +740,9 @@ export class Group extends Array<Pt> {
    * @returns The items that are removed.
    */
   remove(index = 0, count: number = 1): Group {
-    const param = index < 0 ? [index * -1 - 1, count] : [index, count];
-    return Group.prototype.splice.apply(this, param);
+    const param: [number, number] =
+      index < 0 ? [index * -1 - 1, count] : [index, count];
+    return Group.prototype.splice.apply(this, param) as Group;
   }
 
   /**
@@ -838,7 +846,7 @@ export class Group extends Array<Pt> {
    * Move every Pt's position by a specific amount. Same as [`Group.add`](#link).
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  moveBy(...args): this {
+  moveBy(...args: any[]): this {
     return this.add(...args);
   }
 
@@ -846,7 +854,7 @@ export class Group extends Array<Pt> {
    * Move the first Pt in this group to a specific position, and move all the other Pts correspondingly.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  moveTo(...args): this {
+  moveTo(...args: any[]): this {
     const d = new Pt(...args).subtract(this[0]);
     this.moveBy(d);
     return this;
@@ -920,14 +928,14 @@ export class Group extends Array<Pt> {
    * @param ptFn string name of an existing Pt function. Note that the function must return Pt.
    * @param args arguments for the function specified in ptFn
    */
-  forEachPt(ptFn: string, ...args): this {
+  forEachPt(ptFn: string, ...args: any[]): this {
     if (this.length === 0) return this;
-    if (!this[0][ptFn]) {
+    if (!(this[0] as any)[ptFn]) {
       Util.warn(`${ptFn} is not a function of Pt`);
       return this;
     }
     for (let i = 0, len = this.length; i < len; i++) {
-      this[i] = this[i][ptFn](...args);
+      this[i] = (this[i] as any)[ptFn](...args);
     }
     return this;
   }
@@ -954,7 +962,7 @@ export class Group extends Array<Pt> {
    * Add scalar or vector values to this group's Pts.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  add(...args): this {
+  add(...args: any[]): this {
     return this._vecOp(Vec.add, args);
   }
 
@@ -962,7 +970,7 @@ export class Group extends Array<Pt> {
    * Subtract scalar or vector values from this group's Pts.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  subtract(...args): this {
+  subtract(...args: any[]): this {
     return this._vecOp(Vec.subtract, args);
   }
 
@@ -970,7 +978,7 @@ export class Group extends Array<Pt> {
    * Multiply scalar or vector values (as element-wise) with this group's Pts.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  multiply(...args): this {
+  multiply(...args: any[]): this {
     return this._vecOp(Vec.multiply, args);
   }
 
@@ -978,7 +986,7 @@ export class Group extends Array<Pt> {
    * Divide this group's Pts over scalar or vector values (as element-wise).
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  divide(...args): this {
+  divide(...args: any[]): this {
     return this._vecOp(Vec.divide, args);
   }
 
@@ -1020,7 +1028,10 @@ export class Group extends Array<Pt> {
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
    */
-  $zip(defaultValue: number | boolean = undefined, useLongest = false): Group {
+  $zip(
+    defaultValue: number | boolean | undefined = undefined,
+    useLongest = false,
+  ): Group {
     return Mat.zip(this, defaultValue, useLongest);
   }
 
@@ -1246,7 +1257,7 @@ export class Bound extends Group implements IPt {
   /**
    * First value of the Bound's top-left position
    */
-  get x(): number {
+  get x(): number | undefined {
     // direct read: going through the `topLeft` getter clones a Pt per access
     return this[0] ? this[0][0] : undefined;
   }
@@ -1254,14 +1265,14 @@ export class Bound extends Group implements IPt {
   /**
    * Second value of the Bound's top-left position
    */
-  get y(): number {
+  get y(): number | undefined {
     return this[0] ? this[0][1] : undefined;
   }
 
   /**
    * Third value of the Bound's top-left position
    */
-  get z(): number {
+  get z(): number | undefined {
     return this[0] ? this[0][2] : undefined;
   }
 

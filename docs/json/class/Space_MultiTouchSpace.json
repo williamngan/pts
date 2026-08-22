@@ -139,7 +139,7 @@
       "source": [
         [
           "src/Space.ts",
-          359,
+          381,
           13
         ]
       ],
@@ -226,7 +226,7 @@
       "source": [
         [
           "src/Space.ts",
-          372,
+          394,
           2
         ]
       ],
@@ -273,7 +273,7 @@
       "source": [
         [
           "src/Space.ts",
-          399,
+          421,
           2
         ]
       ],
@@ -314,7 +314,7 @@
       "source": [
         [
           "src/Space.ts",
-          508,
+          530,
           2
         ]
       ],
@@ -349,7 +349,7 @@
       "source": [
         [
           "src/Space.ts",
-          419,
+          441,
           2
         ]
       ],
@@ -389,7 +389,7 @@
       "source": [
         [
           "src/Space.ts",
-          459,
+          481,
           2
         ]
       ],
@@ -787,7 +787,7 @@
             {
               "name": "evt",
               "comment": "event",
-              "type": "Event",
+              "type": "Event | null",
               "default": false
             }
           ],
@@ -851,7 +851,7 @@
       "source": [
         [
           "src/Space.ts",
-          592,
+          614,
           2
         ]
       ],
@@ -886,7 +886,7 @@
       "source": [
         [
           "src/Space.ts",
-          552,
+          574,
           2
         ]
       ],
@@ -915,7 +915,7 @@
       "source": [
         [
           "src/Space.ts",
-          389,
+          411,
           2
         ]
       ],
@@ -962,7 +962,7 @@
       "source": [
         [
           "src/Space.ts",
-          405,
+          427,
           2
         ]
       ],
@@ -1003,7 +1003,7 @@
       "source": [
         [
           "src/Space.ts",
-          573,
+          595,
           2
         ]
       ],

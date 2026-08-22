@@ -300,7 +300,7 @@ describe("Shaping", () => {
   ];
 
   it.each(names)("%s returns finite shaped values", (name) => {
-    const fn = Shaping[name];
+    const fn = (Shaping as any)[name];
     expect(Number.isFinite(fn(0.25, 2))).toBe(true);
     expect(Number.isFinite(fn(0.75, 2))).toBe(true);
   });

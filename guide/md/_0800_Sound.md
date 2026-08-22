@@ -22,35 +22,39 @@ Here is the result. Click play button to start.
 
 ![js:sound_simple](./assets/bg.png)
 
-##### Music snippet from [*Space Travel Clichés*](https://soundcloud.com/mrgreenh/space-travel-cliches) by Mr Green H. 
+##### Music snippet from [_Space Travel Clichés_](https://soundcloud.com/mrgreenh/space-travel-cliches) by Mr Green H.
 
 How about something more elaborate? Let's try a silly and fun visualization.
 
 ![js:sound_visual](./assets/bg.png)
 
-##### Click play button and move your pointer around the character. Music snippet from [*Space Travel Clichés*](https://soundcloud.com/mrgreenh/space-travel-cliches) by Mr Green H. 
+##### Click play button and move your pointer around the character. Music snippet from [_Space Travel Clichés_](https://soundcloud.com/mrgreenh/space-travel-cliches) by Mr Green H.
 
 ### Input
 
 Let's get some sounds to begin! Do you want to load from a sound file, receive microphone input, or generate audio dynamically? Pts offers four handy static functions for these.
 
-1. Use [`Sound.load`](#play-sound) to load a sound file with an url or a specific `<audio>` element. The sound will play as soon as it has streamed enough data. You can check if the audio file is ready to play by accessing [`.playable`](#play-sound) property. 
+1. Use [`Sound.load`](#play-sound) to load a sound file with an url or a specific `<audio>` element. The sound will play as soon as it has streamed enough data. You can check if the audio file is ready to play by accessing [`.playable`](#play-sound) property.
+
 ```
 Sound.load( "/path/to/hello.mp3" ).then( s => sound = s );
 Sound.load( audioElem ).then( s => sound = s ); // load from <audio> element
 ```
 
 2. Use [`Sound.loadAsBuffer`](#play-sound) if you need support for Safari and iOS, since they currently don't provide sound data for <audio> element reliably. See discussion in Advanced section below.
+
 ```
 Sound.loadAsBuffer( "/path/to/hello.mp3" ).then( s => sound = s );
 ```
 
 3. Use [`Sound.generate`](#play-sound) to create a sound. You may also generate sounds using other libraries like Tone.js. Read more in Advanced section below.
+
 ```
 let sound = Sound.generate( "sine", 120 ); // sine oscillator at 120Hz
 ```
 
 4. Use [`Sound.input`](#play-sound) to get audio from default input device (usually microphone). This will return a Promise object which will resolve when the input device is ready, or reject if the device is unavailable or permission is denied.
+
 ```
 let sound;
 Sound.input().then( s => sound = s ).catch( err => ... ); // default input device
@@ -63,7 +67,6 @@ Here's a basic demo of getting audio from microphone:
 
 ##### You may first need to allow this page to access microphone, and then click the record button. We also make the recording stop when the pointer leave the demo area so that your microphone is not always on.
 
-
 You can then [`start`](#play-sound) and [`stop`](#play-sound) playing the sound like this:
 
 ```
@@ -74,7 +77,7 @@ sound.playing; // boolean to indicate if sound is playing
 sound.volume = 0.5; // change the volume (default is 1)
 ```
 
-##### Note that current browsers no longer support autoplay. Users will need to express intent to play the sound (eg, with a click). 
+##### Note that current browsers no longer support autoplay. Users will need to express intent to play the sound (eg, with a click).
 
 ### Analyze
 
@@ -92,7 +95,7 @@ To get the time domain data at current time step, call the [`timeDomain`](#play-
 
 ```
 // get an uint typed array of 128 values (corresponds to bin size above)
-let td = sound.timeDomain(); 
+let td = sound.timeDomain();
 ```
 
 Optionally, use the [`timeDomainTo`](#play-sound) function to map the data to another range, such as a rectangular area. You can then apply various Pts functions to transform and visualize waveforms in a few lines of code.
@@ -133,8 +136,8 @@ The following is a basic frequency-domain example for your reference.
 
 The interplay of sounds and shapes offer many possibilities indeed. Make good use of your imagination to create something beautiful, fun, and unexpected!
 
-
 ### Advanced
+
 Currently Safari and iOS can play streaming <audio> element, but don't reliably provide time and frequency domain data for it. Hopefully Safari will have a fix soon, but for now you can use [`AudioBuffer`](https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer) approach - it's a bit more clumsy but it works (see [`loadAsBuffer`](#play-sound)).
 
 ```
@@ -148,15 +151,15 @@ Sound.loadAsBuffer( "/path/to/hello.mp3" ).then( s => sound = s );
 sound.createBuffer();
 ```
 
-For custom use cases with other libraries, you can create an instance using  [`Sound.from`](#play-sound) static method. Here's an example using Tone.js:
+For custom use cases with other libraries, you can create an instance using [`Sound.from`](#play-sound) static method. Here's an example using Tone.js:
 
 ```
-let synth = new Tone.Synth(); 
+let synth = new Tone.Synth();
 let sound = Sound.from( synth, synth.context ); // create Pts Sound instance
 synth.toMaster(); // play using tone.js instead of Pts
 ```
 
-The following demo generates audio using [Tone.js](https://tonejs.github.io/) and then visualizes it with Pts: 
+The following demo generates audio using [Tone.js](https://tonejs.github.io/) and then visualizes it with Pts:
 
 [ ![screenshot](./assets/tone.png) ](./js/examples/tone.html)
 
@@ -174,7 +177,7 @@ Also note that calling [`start`](#play-sound) function will connect the AudioNod
 
 Web Audio covers a wide range of topics. Here are a few pointers for you to dive deeper:
 
-- [Web Audio API book](https://webaudioapi.com/book/) and [samples](https://webaudioapi.com/samples/) by Boris Smus 
+- [Web Audio API book](https://webaudioapi.com/book/) and [samples](https://webaudioapi.com/samples/) by Boris Smus
 - [tone.js](https://tonejs.github.io/) is a framework for creating interactive music in the browser
 - [tonal.js](https://github.com/danigb/tonal) is a functional music theory library for javascript
 - [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) on Web Audio API
@@ -182,6 +185,7 @@ Web Audio covers a wide range of topics. Here are a few pointers for you to dive
 ### Cheatsheet
 
 Creating and playing a [`Sound`](#play-sound) instance
+
 ```
 Sound.load( "path/file.mp3" ).then( d => s = d ); // from file
 Sound.loadAsBuffer( "path/file.mp3" ).then( d => s = d ); // using AudioBuffer instead
@@ -195,6 +199,7 @@ s.toggle();
 ```
 
 Getting time domain and frequency domain data
+
 ```
 s.analyze( 256 ); // Create analyzer with 256 bins
 
@@ -205,4 +210,3 @@ s.freqDomain();
 s.freqDomainTo( [10, 5] ); // map to a 10x5 area
 g = s.freqDomainTo( area, position, trim, g ); // reuse a Group across frames
 ```
-

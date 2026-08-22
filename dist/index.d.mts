@@ -39,10 +39,10 @@ declare class UI {
   protected static _counter: number;
   protected _id: string;
   protected _actions: {
-    [type: string]: UIHandler[];
+    [type: string]: (UIHandler | null)[];
   };
   protected _sysActions: {
-    [type: string]: UIHandler[];
+    [type: string]: (UIHandler | null)[];
   };
   protected _states: {
     [key: string]: any;
@@ -70,21 +70,21 @@ declare class UI {
     signal?: AbortSignal;
   }): number;
   off(type: UIPointerAction | (string & {}), which?: number): boolean;
-  listen(type: UIPointerAction | (string & {}), p: PtLike, evt: MouseEvent): boolean;
+  listen(type: UIPointerAction | (string & {}), p: PtLike, evt: UIActionEvent): boolean;
   private _holdsType;
   protected _sysOn(type: string, fn: UIHandler): number;
   protected _sysOff(type: string, which: number): boolean;
   protected hold(type: string): number;
   protected unhold(key?: number): void;
-  static track(uis: UI[], type: string, p: PtLike, evt: MouseEvent): void;
+  static track(uis: UI[], type: string, p: PtLike, evt: UIActionEvent): void;
   render(fn: (group: Group, states: {
     [key: string]: any;
   }) => void): void;
   toString(): string;
   protected _within(p: PtLike): boolean;
-  protected static _trigger(fns: UIHandler[], target: UI, pt: PtLike, type: string, evt: MouseEvent): void;
-  protected static _addHandler(fns: UIHandler[], fn: UIHandler): number;
-  protected static _removeHandler(fns: UIHandler[], index: number): boolean;
+  protected static _trigger(fns: (UIHandler | null)[], target: UI, pt: PtLike, type: string, evt: UIActionEvent): void;
+  protected static _addHandler(fns: (UIHandler | null)[], fn: UIHandler): number;
+  protected static _removeHandler(fns: (UIHandler | null)[], index: number): boolean;
 }
 declare class UIButton extends UI {
   private _hoverID;
@@ -95,7 +95,7 @@ declare class UIButton extends UI {
   offClick(id: number): boolean;
   onContextMenu(fn: UIHandler): number;
   offContextMenu(id: number): boolean;
-  onHover(enter?: UIHandler, leave?: UIHandler): number[];
+  onHover(enter?: UIHandler, leave?: UIHandler): (number | undefined)[];
   offHover(enterID?: number, leaveID?: number): boolean[];
 }
 declare class UIDragger extends UIButton {
@@ -125,12 +125,13 @@ type PtIterable = GroupLike | Pt[] | Iterable<Pt>;
 type PtLikeIterable = GroupLike | PtLike[] | Iterable<PtLike>;
 type TextMeasure = (text: string) => number;
 type TextVerticalAlign = "top" | "start" | "middle" | "center" | "bottom" | "end";
-type AnimateCallbackFn = (time: number, frameTime: number, currentSpace: any) => void;
+type AnimateCallbackFn = (time: number, frameTime: number, currentSpace: Space) => void;
+type UIActionEvent = MouseEvent | TouchEvent | PointerEvent | KeyboardEvent;
 interface IPlayer {
   animateID?: string;
   animate?: AnimateCallbackFn;
-  resize?(bound: Bound, evt?: Event): void;
-  action?(type: string, px: number, py: number, evt: Event): void;
+  resize?(bound: Bound, evt?: Event | null): void;
+  action?(type: string, px: number, py: number, evt: UIActionEvent): void;
   start?(bound: Bound, space: Space): void;
 }
 interface ISpacePlayers {
@@ -144,8 +145,8 @@ interface ITimer {
 }
 type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
 interface MultiTouchElement {
-  addEventListener(evt: any, callback: Function): any;
-  removeEventListener(evt: any, callback: Function): any;
+  addEventListener(evt: string, callback: EventListenerOrEventListenerObject): void;
+  removeEventListener(evt: string, callback: EventListenerOrEventListenerObject): void;
 }
 type CanvasSpaceOptions = {
   bgcolor?: string;
@@ -166,12 +167,12 @@ type DelaunayMesh = {
   [key: string]: DelaunayShape;
 }[];
 type DOMFormContext = {
-  group: Element;
+  group: Element | null | undefined;
   groupID: string;
   groupCount: number;
   currentID: string;
   currentClass?: string;
-  style: object;
+  style: Record<string, string | number | boolean>;
 };
 type IntersectContext = {
   which: number;
@@ -179,9 +180,9 @@ type IntersectContext = {
   normal: Pt;
   vertex: Pt;
   edge: Group;
-  other?: any;
+  other?: unknown;
 };
-type UIHandler = (target: UI, pt: PtLike, type: string, evt: MouseEvent) => void;
+type UIHandler = (target: UI, pt: PtLike, type: UIPointerAction | (string & {}), evt: UIActionEvent) => void;
 type WarningType = "error" | "warn" | "mute";
 type ITempoStartFn = (count: number) => void | boolean;
 type ITempoProgressFn = (count: number, t: number, ms: number, start: boolean) => void | boolean;
@@ -210,8 +211,8 @@ type DefaultFormStyle = {
   fillStyle?: string | CanvasGradient | CanvasPattern;
   strokeStyle?: string | CanvasGradient | CanvasPattern;
   lineWidth?: number;
-  lineJoin?: string;
-  lineCap?: string;
+  lineJoin?: CanvasLineJoin;
+  lineCap?: CanvasLineCap;
   globalAlpha?: number;
 };
 type CanvasPatternRepetition = "repeat" | "repeat-x" | "repeat-y" | "no-repeat";
@@ -251,8 +252,8 @@ declare class Pt extends Float32Array implements IPt, Iterable<number> {
   $divide(...args: any[]): Pt;
   magnitudeSq(): number;
   magnitude(): number;
-  unit(magnitude?: number): Pt;
-  $unit(magnitude?: number): Pt;
+  unit(magnitude?: number | undefined): Pt;
+  $unit(magnitude?: number | undefined): Pt;
   dot(...args: any[]): number;
   $cross2D(...args: any[]): number;
   $cross(...args: any[]): Pt;
@@ -331,7 +332,7 @@ declare class Group extends Array<Pt> {
   $matrixAdd(g: GroupLike | number[][] | number): Group;
   $matrixMultiply(g: GroupLike | number, transposed?: boolean, elementwise?: boolean): Group;
   zipSlice(index: number, defaultValue?: number | boolean): Pt;
-  $zip(defaultValue?: number | boolean, useLongest?: boolean): Group;
+  $zip(defaultValue?: number | boolean | undefined, useLongest?: boolean): Group;
   toBound(): Bound;
   toString(): string;
 }
@@ -363,9 +364,9 @@ declare class Bound extends Group implements IPt {
   set height(h: number);
   get depth(): number;
   set depth(d: number);
-  get x(): number;
-  get y(): number;
-  get z(): number;
+  get x(): number | undefined;
+  get y(): number | undefined;
+  get z(): number | undefined;
   get inited(): boolean;
   update(): this;
 }
@@ -384,7 +385,7 @@ declare abstract class VisualForm extends Form {
   get stroked(): boolean;
   set stroked(b: boolean);
   get currentFont(): Font;
-  protected _multiple(groups: GroupLike[], shape: string, ...rest: any[]): this;
+  protected _multiple(groups: GroupLike[], shape: string, ...rest: unknown[]): this;
   abstract reset(): this;
   alpha(a: number): this;
   fill(c: string | boolean): this;
@@ -456,7 +457,7 @@ declare abstract class Space {
   get center(): Pt;
   get width(): number;
   get height(): number;
-  abstract resize(b: Bound, evt?: Event): this;
+  abstract resize(b: Bound, evt?: Event | null): this;
   abstract clear(): this;
   abstract getForm(): Form;
 }
@@ -521,21 +522,21 @@ declare class Vec {
   static cross2D(a: PtLike, b: PtLike): number;
   static cross(a: PtLike, b: PtLike): Pt;
   static magnitude(a: PtLike): number;
-  static unit(a: PtLike, magnitude?: number): PtLike;
+  static unit(a: PtLike, magnitude?: number | undefined): PtLike;
   static abs(a: PtLike): PtLike;
   static floor(a: PtLike): PtLike;
   static ceil(a: PtLike): PtLike;
   static round(a: PtLike): PtLike;
   static max(a: PtLike): {
-    value: any;
-    index: any;
+    value: number;
+    index: number;
   };
   static min(a: PtLike): {
-    value: any;
-    index: any;
+    value: number;
+    index: number;
   };
   static sum(a: PtLike): number;
-  static map(a: PtLike, fn: (n: number, index: number, arr: any) => number): PtLike;
+  static map(a: PtLike, fn: (n: number, index: number, arr: PtLike) => number): PtLike;
 }
 declare class Mat {
   protected _33: GroupLike;
@@ -579,9 +580,9 @@ declare class Img {
   protected _scale: number;
   protected _loaded: boolean;
   protected _editable: boolean;
-  protected _space: CanvasSpace;
+  protected _space: CanvasSpace | undefined;
   protected _patternCtx: RenderingContext2D;
-  protected _objectUrl: string;
+  protected _objectUrl: string | null;
   private _pendingLoadReject;
   protected _dataDirty: boolean;
   constructor(editable?: boolean | ImgOptions, space?: CanvasSpace, crossOrigin?: boolean);
@@ -613,7 +614,7 @@ declare class Img {
   static imageDataToBlob(data: ImageData): Promise<Blob>;
   toBase64(): string;
   toBlob(): Promise<Blob>;
-  getForm(): CanvasForm;
+  getForm(): CanvasForm | undefined;
   get current(): CanvasImageSource;
   get image(): HTMLImageElement;
   get canvas(): HTMLCanvasElement;
@@ -636,20 +637,20 @@ declare class CanvasSpace extends MultiTouchSpace {
   protected _offscreen: boolean;
   protected _offCanvas: HTMLCanvasElement;
   protected _offCtx: RenderingContext2D;
-  protected _resizeObserver: ResizeObserver;
+  protected _resizeObserver: ResizeObserver | undefined;
   protected _autoResize: boolean;
   protected _initialResize: boolean;
   private _readyObserver;
   private _readyTimer;
   private _disposed;
-  constructor(elem: string | Element, callback?: Function);
-  protected _createElement(elem: string, id: any): HTMLElement;
+  constructor(elem: string | Element, callback?: (bound: Bound, elem: EventTarget) => void);
+  protected _createElement(elem: string | undefined, id: string): HTMLElement;
   private _ready;
   setup(opt: CanvasSpaceOptions): this;
   set autoResize(auto: boolean);
   get autoResize(): boolean;
-  resize(b: Bound, evt?: Event): this;
-  protected _resizeHandler(evt: Event): void;
+  resize(b: Bound, evt?: Event | null): this;
+  protected _resizeHandler(evt: Event | null): void;
   set background(bg: string);
   get background(): string;
   get pixelScale(): number;
@@ -662,7 +663,7 @@ declare class CanvasSpace extends MultiTouchSpace {
   get ready(): boolean;
   get ctx(): CanvasRenderingContext2D;
   clear(bg?: string): this;
-  clearOffscreen(bg?: string): this;
+  clearOffscreen(bg?: string | null): this;
   protected playItems(time: number): void;
   dispose(): this;
   recorder(downloadOrCallback: boolean | ((blobURL: string) => {}), filetype?: string, bitrate?: number): MediaRecorder;
@@ -670,8 +671,8 @@ declare class CanvasSpace extends MultiTouchSpace {
 declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends VisualForm {
   protected _space: CanvasSpace;
   protected _ctx: RenderingContext2D;
-  protected _estimateTextWidth: TextMeasure;
-  protected _estimateMode: "sample" | "char";
+  protected _estimateTextWidth: TextMeasure | undefined;
+  protected _estimateMode: "sample" | "char" | undefined;
   private _styleCache;
   private _styleCacheCtx;
   protected _cacheForCtx(): Record<string, unknown>;
@@ -697,7 +698,7 @@ declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends Visual
   fontWidthEstimate(estimate?: boolean | "sample" | "char"): this;
   getTextWidth(c: string): number;
   protected _textTruncate(str: string, width: number, tail?: string, hint?: number): [string, number];
-  protected _textAlign(box: PtLikeIterable, vertical: TextVerticalAlign, offset?: PtLike, center?: Pt): Pt;
+  protected _textAlign(box: PtLikeIterable, vertical: TextVerticalAlign, offset?: PtLike, center?: Pt): Pt | undefined;
   reset(): this;
   protected _paint(): void;
   static point(ctx: RenderingContext2D, p: PtLike, radius?: number, shape?: string): void;
@@ -744,7 +745,7 @@ declare class Noise extends Pt {
   constructor(...args: any[]);
   initNoise(...args: any[]): this;
   step(x?: number, y?: number): this;
-  seed(s: any): this;
+  seed(s: number): this;
   noise2D(): number;
 }
 declare class Delaunay extends Group {
@@ -758,7 +759,7 @@ declare class Delaunay extends Group {
   mesh(): DelaunayMesh;
   neighborPts(i: number, sort?: boolean): GroupLike;
   neighbors(i: number): DelaunayShape[];
-  protected _cache(o: any): void;
+  protected _cache(o: DelaunayShape): void;
   protected _superTriangle(): Group;
   protected _triangle(i: number, j: number, k: number, pts?: GroupLike): Group;
   protected _circum(i: number, j: number, k: number, tri: GroupLike | false, pts?: GroupLike): DelaunayShape;
@@ -839,7 +840,7 @@ declare class Shaping {
   static cubicBezier(t: number, c?: number, p1?: PtLike, p2?: PtLike): number;
   static quadraticTarget(t: number, c?: number, p1?: PtLike): number;
   static cliff(t: number, c?: number, p?: number): number;
-  static step(fn: Function, steps: number, t: number, c: number, ...args: any[]): any;
+  static step(fn: (t: number, c: number, ...args: any[]) => number, steps: number, t: number, c: number, ...args: any[]): number;
 }
 declare class Range {
   protected _source: Group;
@@ -851,7 +852,7 @@ declare class Range {
   get max(): Pt;
   get min(): Pt;
   get magnitude(): Pt;
-  calc(): this;
+  calc(): this | undefined;
   mapTo(min: number, max: number, exclude?: boolean[]): Group;
   append(pts: PtLikeIterable, update?: boolean): this;
   ticks(count: number): Group;
@@ -860,28 +861,28 @@ declare class Range {
 //#region src/Op.d.ts
 declare class Line {
   static fromAngle(anchor: PtLike, angle: number, magnitude: number): Group;
-  static slope(p1: PtLike, p2: PtLike): number;
+  static slope(p1: PtLike, p2: PtLike): number | undefined;
   static intercept(p1: PtLike, p2: PtLike): {
     slope: number;
-    xi: number;
+    xi: number | undefined;
     yi: number;
-  };
+  } | undefined;
   static sideOfPt2D(line: PtLikeIterable, pt: PtLike): number;
   static collinear(p1: PtLike, p2: PtLike, p3: PtLike, threshold?: number): boolean;
   static magnitude(line: PtIterable): number;
   static magnitudeSq(line: PtIterable): number;
-  static perpendicularFromPt(line: PtIterable, pt: PtLike, asProjection?: boolean): Pt;
+  static perpendicularFromPt(line: PtIterable, pt: PtLike, asProjection?: boolean): Pt | undefined;
   static distanceFromPt(line: GroupLike, pt: PtLike | number[]): number;
-  static intersectRay2D(la: PtIterable, lb: PtIterable): Pt;
-  static intersectLine2D(la: PtIterable, lb: PtIterable): Pt;
-  static intersectLineWithRay2D(line: PtIterable, ray: PtIterable): Pt;
-  static intersectPolygon2D(lineOrRay: PtIterable, poly: PtIterable, sourceIsRay?: boolean): Group;
+  static intersectRay2D(la: PtIterable, lb: PtIterable): Pt | undefined;
+  static intersectLine2D(la: PtIterable, lb: PtIterable): Pt | undefined;
+  static intersectLineWithRay2D(line: PtIterable, ray: PtIterable): Pt | undefined;
+  static intersectPolygon2D(lineOrRay: PtIterable, poly: PtIterable, sourceIsRay?: boolean): Group | undefined;
   static intersectLines2D(lines1: Iterable<PtIterable>, lines2: Iterable<PtIterable>, isRay?: boolean): Group;
   static intersectGridWithRay2D(ray: PtIterable, gridPt: PtLike): Group;
   static intersectGridWithLine2D(line: GroupLike, gridPt: PtLike | number[]): Group;
   static intersectRect2D(line: GroupLike, rect: GroupLike): Group;
   static subpoints(line: PtLikeIterable, num: number): Group;
-  static crop(line: PtIterable, size: PtLike, index?: number, cropAsCircle?: boolean): Pt;
+  static crop(line: PtIterable, size: PtLike, index?: number, cropAsCircle?: boolean): Pt | undefined;
   static marker(line: PtIterable, size: PtLike, graphic?: string, atTail?: boolean): Group;
   static toRect(line: GroupLike): Group;
 }
@@ -905,7 +906,7 @@ declare class Rectangle {
 }
 declare class Circle {
   static fromRect(pts: PtLikeIterable, enclose?: boolean): Group;
-  static fromTriangle(pts: PtIterable, enclose?: boolean): Group;
+  static fromTriangle(pts: PtIterable, enclose?: boolean): Group | undefined;
   static fromCenter(pt: PtLike, radius: number): Group;
   static withinBound(pts: PtIterable, pt: PtLike, threshold?: number): boolean;
   static intersectRay2D(circle: PtIterable, ray: PtIterable): Group;
@@ -922,11 +923,11 @@ declare class Triangle {
   static medial(tri: PtIterable): Group;
   static oppositeSide(tri: PtIterable, index: number): Group;
   static altitude(tri: PtIterable, index: number): Group;
-  static orthocenter(tri: PtIterable): Pt;
-  static incenter(tri: PtIterable): Pt;
-  static incircle(tri: PtIterable, center?: Pt): Group;
-  static circumcenter(tri: PtIterable): Pt;
-  static circumcircle(tri: PtIterable, center?: Pt): Group;
+  static orthocenter(tri: PtIterable): Pt | undefined;
+  static incenter(tri: PtIterable): Pt | undefined;
+  static incircle(tri: PtIterable, center?: Pt): Group | undefined;
+  static circumcenter(tri: PtIterable): Pt | undefined;
+  static circumcircle(tri: PtIterable, center?: Pt): Group | undefined;
 }
 declare class Polygon {
   static centroid(pts: PtLikeIterable): Pt;
@@ -936,7 +937,7 @@ declare class Polygon {
   static lines(poly: PtIterable, closePath?: boolean): Group[];
   static midpoints(poly: PtIterable, closePath?: boolean, t?: number): Group;
   static adjacentSides(poly: PtIterable, index: number, closePath?: boolean): Group[];
-  static bisector(poly: PtIterable, index: number): Pt;
+  static bisector(poly: PtIterable, index: number): Pt | undefined;
   static perimeter(poly: PtIterable, closePath?: boolean): {
     total: number;
     segments: Pt;
@@ -949,8 +950,8 @@ declare class Polygon {
   private static _axisOverlap2D;
   protected static _axisOverlap(poly1: PtIterable, poly2: PtIterable, unitAxis: Pt): number;
   static hasIntersectPoint(poly: PtLikeIterable, pt: PtLike): boolean;
-  static hasIntersectCircle(poly: PtIterable, circle: PtIterable): IntersectContext;
-  static hasIntersectPolygon(poly1: PtIterable, poly2: PtIterable): IntersectContext;
+  static hasIntersectCircle(poly: PtIterable, circle: PtIterable): IntersectContext | null;
+  static hasIntersectPolygon(poly1: PtIterable, poly2: PtIterable): IntersectContext | null;
   static intersectPolygon2D(poly1: PtIterable, poly2: PtIterable): Group;
   static toRects(polys: Iterable<PtIterable>): Group[];
 }
@@ -1096,7 +1097,7 @@ declare class Util {
   static split(pts: any[], size: number, stride?: number, loopBack?: boolean, matchSize?: boolean): any[][];
   static flatten(pts: any[], flattenAsGroup?: boolean): any;
   static combine<T>(a: T[], b: T[], op: (a: T, b: T) => T): T[];
-  static zip(arrays: Array<any>[]): any[];
+  static zip(arrays: Array<any>[]): any[][];
   static stepper(max: number, min?: number, stride?: number, callback?: (n: number) => void): () => number;
   static forRange(fn: (index: number) => any, range: number, start?: number, step?: number): any[];
   static load(url: string, callback: (response: string, success: boolean) => void): void;
@@ -1118,8 +1119,8 @@ declare class DOMSpace extends MultiTouchSpace {
   protected _css: {};
   private _domDisposed;
   private readonly _resizeHandlerBound;
-  constructor(elem: string | Element, callback?: Function);
-  static createElement(elem: string, id: string, appendTo?: Element): Element;
+  constructor(elem: string | Element, callback?: (bound: Bound, elem: Element) => void);
+  static createElement(elem: string | undefined, id: string, appendTo?: Element): Element;
   private _ready;
   setup(opt: {
     bgcolor?: string;
@@ -1128,8 +1129,8 @@ declare class DOMSpace extends MultiTouchSpace {
   getForm(): Form;
   set autoResize(auto: boolean);
   get autoResize(): boolean;
-  resize(b: Bound, evt?: Event): this;
-  protected _resizeHandler(evt: Event): void;
+  resize(b: Bound, evt?: Event | null): this;
+  protected _resizeHandler(evt: Event | null): void;
   get element(): Element;
   get parent(): Element;
   get ready(): boolean;
@@ -1137,14 +1138,14 @@ declare class DOMSpace extends MultiTouchSpace {
   set background(bg: string);
   get background(): string;
   style(key: string, val: string, update?: boolean): this;
-  styles(styles: object, update?: boolean): this;
-  static setAttr(elem: Element, data: object): Element;
-  static getInlineStyles(data: object): string;
+  styles(styles: Record<string, string>, update?: boolean): this;
+  static setAttr(elem: Element, data: Record<string, any>): Element;
+  static getInlineStyles(data: Record<string, any>): string;
   dispose(): this;
 }
 declare class HTMLSpace extends DOMSpace {
   getForm(): Form;
-  static htmlElement(parent: Element, name: string, id?: string, autoClass?: boolean): HTMLElement;
+  static htmlElement(parent: Element | null | undefined, name: string, id?: string, autoClass?: boolean): HTMLElement;
   remove(player: IPlayer): this;
   removeAll(): this;
 }
@@ -1174,7 +1175,7 @@ declare class HTMLForm extends VisualForm {
   protected _ready: boolean;
   constructor(space: HTMLSpace);
   get space(): HTMLSpace;
-  protected styleTo(k: any, v: any, unit?: string): void;
+  protected styleTo(k: string, v: any, unit?: string): void;
   alpha(a: number): this;
   fill(c: string | boolean): this;
   stroke(c: string | boolean, width?: number, linejoin?: string, linecap?: string): this;
@@ -1185,9 +1186,9 @@ declare class HTMLForm extends VisualForm {
   updateScope(group_id: string, group?: Element): object;
   scope(item: IPlayer): object;
   nextID(): string;
-  static getID(ctx: any): string;
+  static getID(ctx: DOMFormContext): string;
   static scopeID(item: IPlayer): string;
-  static style(elem: Element, styles: object): Element;
+  static style(elem: Element, styles: Record<string, any>): Element;
   static rectStyle(ctx: DOMFormContext, pt: PtLike, size: PtLike): DOMFormContext;
   static textStyle(ctx: DOMFormContext, pt: PtLike): DOMFormContext;
   static point(ctx: DOMFormContext, pt: PtLike, radius?: number, shape?: string): Element;
@@ -1196,7 +1197,7 @@ declare class HTMLForm extends VisualForm {
   circle(pts: GroupLike | number[][]): this;
   static square(ctx: DOMFormContext, pt: PtLike, halfsize: number): HTMLElement;
   square(pt: PtLike, halfsize: number): this;
-  static rect(ctx: DOMFormContext, pts: PtLikeIterable): Element;
+  static rect(ctx: DOMFormContext, pts: PtLikeIterable): Element | undefined;
   rect(pts: PtLikeIterable): this;
   static text(ctx: DOMFormContext, pt: PtLike, txt: string): Element;
   text(pt: PtLike, txt: string): this;
@@ -1212,7 +1213,7 @@ declare class SVGGradient {
   readonly kind: "linear" | "radial";
   readonly coords: number[];
   stops: [number, string][];
-  protected _elem: SVGElement;
+  protected _elem: SVGElement | null;
   constructor(kind: "linear" | "radial", coords: number[]);
   addColorStop(offset: number, color: string): void;
   materialize(defs: SVGElement): string;
@@ -1240,8 +1241,8 @@ declare class SVGContext2D {
   protected _stateStack: object[];
   className: string;
   protected _d: string;
-  protected _shapeFill: string;
-  protected _shapeStroke: string;
+  protected _shapeFill: string | null;
+  protected _shapeStroke: string | null;
   protected _shapePainted: boolean;
   protected _shapeClass: string;
   protected _shapeAlpha: number;
@@ -1249,15 +1250,15 @@ declare class SVGContext2D {
   protected _runs: SVGRun[];
   protected _drawCount: number;
   protected _host: SVGElement;
-  protected _group: SVGElement;
-  protected _defs: SVGElement;
+  protected _group: SVGElement | null;
+  protected _defs: SVGElement | null;
   protected _pool: SVGElement[];
   protected _attrCache: Record<string, string>[];
   constructor(host: SVGElement);
   protected static _warnOnce(key: string, msg: string): void;
   beginFrame(): void;
   get drawCount(): number;
-  get group(): SVGElement;
+  get group(): SVGElement | null;
   commitFrame(): void;
   get runs(): SVGRun[];
   resetDom(): void;
@@ -1295,19 +1296,19 @@ declare class SVGContext2D {
 declare class SVGSpace extends DOMSpace {
   protected _bgcolor: string;
   protected _svgContexts: SVGContext2D[];
-  protected _bgElem: SVGElement;
+  protected _bgElem: SVGElement | null;
   protected _svgRefresh: boolean;
-  constructor(elem: string | Element, callback?: Function);
+  constructor(elem: string | Element, callback?: (bound: Bound, elem: Element) => void);
   getForm(): SVGForm;
   get element(): Element;
   registerContext(ctx: SVGContext2D): void;
-  resize(b: Bound, evt?: Event): this;
+  resize(b: Bound, evt?: Event | null): this;
   clear(bg?: string): this;
   protected _updateBackground(): void;
   protected playItems(time: number): void;
   refresh(b: boolean): this;
   toSVG(expand?: boolean): string;
-  static svgElement(parent: Element, name: string, id?: string): SVGElement;
+  static svgElement(parent: Element | null | undefined, name: string, id?: string): SVGElement;
   remove(player: IPlayer): this;
   removeAll(): this;
   dispose(): this;
@@ -1327,21 +1328,21 @@ declare class SVGForm extends CanvasForm<SVGSpace> {
   updateScope(group_id: string, group?: Element): object;
   scope(item: IPlayer): object;
   nextID(): string;
-  static getID(ctx: any): string;
+  static getID(ctx: DOMFormContext): string;
   static scopeID(item: IPlayer): string;
-  static style(elem: SVGElement, styles: object): Element;
+  static style(elem: SVGElement, styles: Record<string, any>): Element;
   static pointElement(ctx: DOMFormContext, pt: PtLike, radius?: number, shape?: string): SVGElement;
   static circleElement(ctx: DOMFormContext, pt: PtLike, radius?: number): SVGElement;
   static arcElement(ctx: DOMFormContext, pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): SVGElement;
   static squareElement(ctx: DOMFormContext, pt: PtLike, halfsize: number): SVGElement;
-  static lineElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
+  static lineElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement | undefined;
   protected static _poly(ctx: DOMFormContext, points: string, closePath?: boolean): SVGElement;
   protected static pointsString(pts: PtLikeIterable): {
     string: string;
     count: number;
   };
   static polygonElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
-  static rectElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
+  static rectElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement | undefined;
   static textElement(ctx: DOMFormContext, pt: PtLike, txt: string): SVGElement;
 }
 //#endregion
@@ -1393,8 +1394,8 @@ declare class World {
   set maxTimeStep(ms: number);
   get bodyCount(): number;
   get particleCount(): number;
-  body(id: number | string): Body;
-  particle(id: number | string): Particle;
+  body(id: number | string): Body | undefined;
+  particle(id: number | string): Particle | undefined;
   bodyIndex(name: string): number;
   particleIndex(name: string): number;
   update(ms: number): void;
@@ -1552,5 +1553,5 @@ declare class Sound {
   dispose(): this;
 }
 //#endregion
-export { AnimateCallbackFn, Body, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, ImgOptions, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TextMeasure, TextVerticalAlign, TouchPointsKey, Triangle, Typography, UI, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, UIShapeTest, Util, Vec, VisualForm, WarningType, World };
+export { AnimateCallbackFn, Body, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, ImgOptions, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TextMeasure, TextVerticalAlign, TouchPointsKey, Triangle, Typography, UI, UIActionEvent, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, UIShapeTest, Util, Vec, VisualForm, WarningType, World };
 //# sourceMappingURL=index.d.mts.map

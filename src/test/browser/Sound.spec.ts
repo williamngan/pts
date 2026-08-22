@@ -26,7 +26,7 @@ class FakeOscillator extends FakeNode {
   type: OscillatorType = "sine";
   started = 0;
   stopped = 0;
-  wave: PeriodicWave;
+  wave!: PeriodicWave;
 
   setPeriodicWave(wave: PeriodicWave) {
     this.wave = wave;
@@ -42,8 +42,8 @@ class FakeOscillator extends FakeNode {
 }
 
 class FakeBufferSource extends FakeNode {
-  buffer: AudioBuffer;
-  onended: () => void;
+  buffer!: AudioBuffer;
+  onended!: () => void;
   starts: [number, number][] = [];
   stopped = 0;
 
@@ -170,7 +170,7 @@ class BlockedMedia extends FakeMedia {
 }
 
 class LegacyMedia extends FakeMedia {
-  play() {
+  play(): any {
     this.played++;
     this.paused = false;
     return undefined; // some older implementations return no promise

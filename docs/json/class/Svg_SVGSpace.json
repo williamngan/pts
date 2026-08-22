@@ -37,7 +37,7 @@
             {
               "name": "callback",
               "comment": "an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a \"ready\" event will also be fired from the `<svg>` element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener(\"ready\")`",
-              "type": "Function",
+              "type": " Fn(bound:Bound, elem:Element)",
               "default": false
             }
           ],
@@ -57,12 +57,12 @@
       "source": [
         [
           "src/Dom.ts",
-          160,
+          163,
           6
         ],
         [
           "src/Dom.ts",
-          170,
+          173,
           6
         ]
       ],
@@ -88,12 +88,12 @@
       "source": [
         [
           "src/Dom.ts",
-          244,
+          247,
           6
         ],
         [
           "src/Dom.ts",
-          248,
+          251,
           6
         ]
       ],
@@ -168,7 +168,7 @@
       "source": [
         [
           "src/Svg.ts",
-          734,
+          737,
           6
         ]
       ],
@@ -260,7 +260,7 @@
       "source": [
         [
           "src/Dom.ts",
-          219,
+          222,
           6
         ]
       ],
@@ -278,7 +278,7 @@
       "source": [
         [
           "src/Space.ts",
-          359,
+          381,
           13
         ]
       ],
@@ -298,7 +298,7 @@
       "source": [
         [
           "src/Dom.ts",
-          226,
+          229,
           6
         ]
       ],
@@ -383,7 +383,7 @@
       "source": [
         [
           "src/Space.ts",
-          372,
+          394,
           2
         ]
       ],
@@ -430,7 +430,7 @@
       "source": [
         [
           "src/Space.ts",
-          399,
+          421,
           2
         ]
       ],
@@ -471,7 +471,7 @@
       "source": [
         [
           "src/Space.ts",
-          508,
+          530,
           2
         ]
       ],
@@ -506,7 +506,7 @@
       "source": [
         [
           "src/Space.ts",
-          419,
+          441,
           2
         ]
       ],
@@ -546,7 +546,7 @@
       "source": [
         [
           "src/Space.ts",
-          459,
+          481,
           2
         ]
       ],
@@ -592,7 +592,7 @@
       "source": [
         [
           "src/Svg.ts",
-          767,
+          770,
           2
         ]
       ],
@@ -621,7 +621,7 @@
       "source": [
         [
           "src/Svg.ts",
-          910,
+          917,
           2
         ]
       ],
@@ -643,7 +643,7 @@
       "source": [
         [
           "src/Svg.ts",
-          727,
+          730,
           2
         ]
       ],
@@ -757,7 +757,7 @@
       "source": [
         [
           "src/Svg.ts",
-          796,
+          799,
           12
         ]
       ],
@@ -817,7 +817,7 @@
       "source": [
         [
           "src/Svg.ts",
-          810,
+          813,
           2
         ]
       ],
@@ -846,7 +846,7 @@
       "source": [
         [
           "src/Svg.ts",
-          739,
+          742,
           2
         ]
       ],
@@ -875,7 +875,7 @@
       "source": [
         [
           "src/Svg.ts",
-          882,
+          889,
           2
         ]
       ],
@@ -904,7 +904,7 @@
       "source": [
         [
           "src/Svg.ts",
-          897,
+          904,
           2
         ]
       ],
@@ -979,7 +979,7 @@
       "source": [
         [
           "src/Svg.ts",
-          749,
+          752,
           2
         ]
       ],
@@ -1001,7 +1001,7 @@
             {
               "name": "evt",
               "comment": "Optionally pass a resize event",
-              "type": "Event",
+              "type": "Event | null",
               "default": false
             }
           ],
@@ -1036,7 +1036,7 @@
       "source": [
         [
           "src/Dom.ts",
-          139,
+          142,
           2
         ]
       ],
@@ -1099,7 +1099,7 @@
       "source": [
         [
           "src/Dom.ts",
-          258,
+          261,
           2
         ]
       ],
@@ -1140,7 +1140,7 @@
       "source": [
         [
           "src/Dom.ts",
-          270,
+          273,
           2
         ]
       ],
@@ -1156,7 +1156,7 @@
             {
               "name": "styles",
               "comment": "a key-value objects of style definitions",
-              "type": "object",
+              "type": "Record",
               "default": false
             },
             {
@@ -1175,7 +1175,7 @@
       "source": [
         [
           "src/Svg.ts",
-          820,
+          823,
           2
         ]
       ],
@@ -1204,7 +1204,7 @@
       "source": [
         [
           "src/Space.ts",
-          592,
+          614,
           2
         ]
       ],
@@ -1239,7 +1239,7 @@
       "source": [
         [
           "src/Space.ts",
-          552,
+          574,
           2
         ]
       ],
@@ -1268,7 +1268,7 @@
       "source": [
         [
           "src/Space.ts",
-          389,
+          411,
           2
         ]
       ],
@@ -1315,7 +1315,7 @@
       "source": [
         [
           "src/Space.ts",
-          405,
+          427,
           2
         ]
       ],
@@ -1356,7 +1356,7 @@
       "source": [
         [
           "src/Space.ts",
-          573,
+          595,
           2
         ]
       ],
@@ -1385,7 +1385,7 @@
       "source": [
         [
           "src/Dom.ts",
-          95,
+          98,
           9
         ]
       ],
@@ -1428,7 +1428,7 @@
       "source": [
         [
           "src/Dom.ts",
-          298,
+          301,
           9
         ]
       ],
@@ -1446,7 +1446,7 @@
             {
               "name": "data",
               "comment": "an object with key-value pairs",
-              "type": "object",
+              "type": "Record",
               "default": false
             }
           ],
@@ -1464,7 +1464,7 @@
       "source": [
         [
           "src/Dom.ts",
-          283,
+          286,
           9
         ]
       ],
@@ -1488,7 +1488,7 @@
             {
               "name": "data",
               "comment": "an object with key-value pairs",
-              "type": "object",
+              "type": "Record",
               "default": false
             }
           ],
@@ -1501,7 +1501,7 @@
       "source": [
         [
           "src/Svg.ts",
-          860,
+          863,
           9
         ]
       ],
@@ -1519,7 +1519,7 @@
             {
               "name": "parent",
               "comment": "the parent element, or `null` to use current `<svg>` as parent.",
-              "type": "Element",
+              "type": "Element | null | undefined",
               "default": false
             },
             {

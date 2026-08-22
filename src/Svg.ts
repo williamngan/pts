@@ -4,15 +4,15 @@ import { VisualForm, Font } from "./Form";
 import { CanvasForm } from "./Canvas";
 import { Geom } from "./Num";
 import { Const, Util } from "./Util";
-import { Pt, Group, Bound } from "./Pt";
+import { Pt, Group, type Bound } from "./Pt";
 import { Rectangle } from "./Op";
 import { DOMSpace } from "./Dom";
 import {
-  PtLike,
-  PtLikeIterable,
-  IPlayer,
-  DOMFormContext,
-  RenderingContext2D,
+  type PtLike,
+  type PtLikeIterable,
+  type IPlayer,
+  type DOMFormContext,
+  type RenderingContext2D,
 } from "./Types";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
@@ -51,7 +51,7 @@ class SVGGradient {
   readonly kind: "linear" | "radial";
   readonly coords: number[];
   stops: [number, string][] = [];
-  protected _elem: SVGElement = null;
+  protected _elem: SVGElement | null = null;
 
   constructor(kind: "linear" | "radial", coords: number[]) {
     this.kind = kind;
@@ -107,7 +107,7 @@ type SVGRun = {
 };
 
 // module-level state for the same tree-shaking reason as _gradientCount above
-let _svgMeasurer: CanvasRenderingContext2D = null;
+let _svgMeasurer: CanvasRenderingContext2D | null = null;
 const _svgWarned: { [k: string]: boolean } = {};
 
 /**
@@ -166,8 +166,8 @@ export class SVGContext2D {
 
   // ---- current path & shape ----
   protected _d: string = "";
-  protected _shapeFill: string = null; // resolved paint or null
-  protected _shapeStroke: string = null;
+  protected _shapeFill: string | null = null; // resolved paint or null
+  protected _shapeStroke: string | null = null;
   protected _shapePainted: boolean = false;
   // class/alpha/blend are captured at paint time (fill/stroke), not at flush
   // time, so a style change between shapes cannot apply retroactively
@@ -181,8 +181,8 @@ export class SVGContext2D {
 
   // ---- DOM ----
   protected _host: SVGElement; // the <svg> element
-  protected _group: SVGElement = null; // managed <g> holding this context's output
-  protected _defs: SVGElement = null;
+  protected _group: SVGElement | null = null; // managed <g> holding this context's output
+  protected _defs: SVGElement | null = null;
   protected _pool: SVGElement[] = []; // pooled elements, index-aligned with runs
   protected _attrCache: Record<string, string>[] = [];
 
@@ -215,7 +215,7 @@ export class SVGContext2D {
   }
 
   /** The `<g>` element holding this context's rendered output. */
-  get group(): SVGElement {
+  get group(): SVGElement | null {
     return this._group;
   }
 
@@ -263,7 +263,7 @@ export class SVGContext2D {
         }
       }
       if (run.tag === "text" && elem.textContent !== run.text) {
-        elem.textContent = run.text;
+        elem.textContent = run.text!;
       }
     }
 
@@ -456,8 +456,8 @@ export class SVGContext2D {
       "pointer-events": "none",
     };
     // canvas maxWidth semantics: compress to fit only when text is wider
-    if (maxWidth > 0 && this.measureText(txt).width > maxWidth) {
-      attrs.textLength = round2(maxWidth);
+    if (maxWidth! > 0 && this.measureText(txt).width > maxWidth!) {
+      attrs.textLength = round2(maxWidth!);
       attrs.lengthAdjust = "spacingAndGlyphs";
     }
     this._applyCommon(attrs);
@@ -467,10 +467,10 @@ export class SVGContext2D {
 
   measureText(txt: string): TextMetrics {
     if (!_svgMeasurer) {
-      _svgMeasurer = document.createElement("canvas").getContext("2d");
+      _svgMeasurer = document.createElement("canvas").getContext("2d")!;
     }
-    _svgMeasurer.font = this.font;
-    return _svgMeasurer.measureText(txt);
+    _svgMeasurer!.font = this.font;
+    return _svgMeasurer!.measureText(txt);
   }
 
   drawImage(
@@ -657,7 +657,7 @@ export class SVGContext2D {
 
     const prev = this._runs[this._runs.length - 1];
     if (prev && prev.tag === "path" && sameRunStyle(prev.attrs, attrs)) {
-      prev.shapeEnds.push((prev.attrs.d as string).length);
+      prev.shapeEnds!.push((prev.attrs.d as string).length);
       prev.attrs.d = (prev.attrs.d as string) + this._d;
     } else {
       this._runs.push({ tag: "path", attrs, shapeEnds: [] });
@@ -697,7 +697,7 @@ function sameRunStyle(
 export class SVGSpace extends DOMSpace {
   protected _bgcolor: string = "#999";
   protected _svgContexts: SVGContext2D[] = [];
-  protected _bgElem: SVGElement = null;
+  protected _bgElem: SVGElement | null = null;
   protected _svgRefresh: boolean = true; // mirrors Space's private refresh flag
 
   /**
@@ -706,7 +706,10 @@ export class SVGSpace extends DOMSpace {
    * @param callback an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a "ready" event will also be fired from the `<svg>` element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener("ready")`
    * @example `new SVGSpace( "#myElementID" )`
    */
-  constructor(elem: string | Element, callback?: Function) {
+  constructor(
+    elem: string | Element,
+    callback?: (bound: Bound, elem: Element) => void,
+  ) {
     super(elem, callback);
 
     if (this._canvas.nodeName.toLowerCase() != "svg") {
@@ -746,7 +749,7 @@ export class SVGSpace extends DOMSpace {
    * @param b a Bound object to resize to
    * @param evt Optionally pass a resize event
    */
-  resize(b: Bound, evt?: Event): this {
+  resize(b: Bound, evt?: Event | null): this {
     super.resize(b, evt);
     SVGSpace.setAttr(this.element, {
       viewBox: `0 0 ${this.bound.width} ${this.bound.height}`,
@@ -838,7 +841,7 @@ export class SVGSpace extends DOMSpace {
           continue;
         }
         const d = run.attrs.d as string;
-        const bounds = [...run.shapeEnds, d.length];
+        const bounds = [...run.shapeEnds!, d.length];
         let begin = 0;
         for (const end of bounds) {
           const elem = document.createElementNS(SVG_NS, "path");
@@ -857,18 +860,22 @@ export class SVGSpace extends DOMSpace {
    * @param name a string of element name,  such as `rect` or `circle`
    * @param id id attribute of the new element
    */
-  static svgElement(parent: Element, name: string, id?: string): SVGElement {
+  static svgElement(
+    parent: Element | null | undefined,
+    name: string,
+    id?: string,
+  ): SVGElement {
     if (!parent || !parent.appendChild)
       throw new Error("parent is not a valid DOM element");
 
     // O(1) id lookup, then verify it's inside the parent so a same-id
     // element elsewhere in the document is never silently adopted
-    let elem: Element = document.getElementById(id);
+    let elem: Element | null = document.getElementById(id!);
     if (elem && !parent.contains(elem)) elem = null;
 
     if (!elem) {
       elem = document.createElementNS(SVG_NS, name);
-      elem.setAttribute("id", id);
+      elem.setAttribute("id", id!);
 
       parent.appendChild(elem);
     }
@@ -883,7 +890,7 @@ export class SVGSpace extends DOMSpace {
     let temp = this._container.querySelectorAll("." + SVGForm.scopeID(player));
 
     temp.forEach((el: Element) => {
-      el.parentNode.removeChild(el);
+      el.parentNode!.removeChild(el);
     });
 
     return super.remove(player);
@@ -1039,7 +1046,7 @@ export class SVGForm extends CanvasForm<SVGSpace> {
    * A static function to generate an ID string based on a context object.
    * @param ctx a context object for an SVGForm
    */
-  static getID(ctx): string {
+  static getID(ctx: DOMFormContext): string {
     return ctx.currentID || `p-${SVGForm.domID++}`;
   }
 
@@ -1063,7 +1070,7 @@ export class SVGForm extends CanvasForm<SVGSpace> {
    * @example `SVGForm.style(elem, {fill: "#f90", stroke: false})`
    * @returns this DOM element
    */
-  static style(elem: SVGElement, styles: object) {
+  static style(elem: SVGElement, styles: Record<string, any>) {
     let st = [];
 
     if (!styles["filled"]) st.push("fill: none");
@@ -1192,7 +1199,10 @@ export class SVGForm extends CanvasForm<SVGSpace> {
    * @param ctx a context object of SVGForm
    * @param pts a Group or an Iterable<PtLike>
    */
-  static lineElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement {
+  static lineElement(
+    ctx: DOMFormContext,
+    pts: PtLikeIterable,
+  ): SVGElement | undefined {
     let points = SVGForm.pointsString(pts);
     if (points.count < 2) return;
 
@@ -1273,7 +1283,10 @@ export class SVGForm extends CanvasForm<SVGSpace> {
    * @param ctx a context object of SVGForm
    * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.
    */
-  static rectElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement {
+  static rectElement(
+    ctx: DOMFormContext,
+    pts: PtLikeIterable,
+  ): SVGElement | undefined {
     if (!Util.arrayCheck(pts)) return;
 
     let elem = SVGSpace.svgElement(ctx.group, "rect", SVGForm.getID(ctx));

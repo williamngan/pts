@@ -63,7 +63,7 @@
       "source": [
         [
           "src/Image.ts",
-          647,
+          649,
           6
         ]
       ],
@@ -81,7 +81,7 @@
       "source": [
         [
           "src/Image.ts",
-          694,
+          696,
           6
         ]
       ],
@@ -99,7 +99,7 @@
       "source": [
         [
           "src/Image.ts",
-          662,
+          664,
           6
         ]
       ],
@@ -117,7 +117,7 @@
       "source": [
         [
           "src/Image.ts",
-          633,
+          635,
           6
         ]
       ],
@@ -135,7 +135,7 @@
       "source": [
         [
           "src/Image.ts",
-          654,
+          656,
           6
         ]
       ],
@@ -153,7 +153,7 @@
       "source": [
         [
           "src/Image.ts",
-          640,
+          642,
           6
         ]
       ],
@@ -171,7 +171,7 @@
       "source": [
         [
           "src/Image.ts",
-          683,
+          685,
           6
         ]
       ],
@@ -189,7 +189,7 @@
       "source": [
         [
           "src/Image.ts",
-          669,
+          671,
           6
         ]
       ],
@@ -207,7 +207,7 @@
       "source": [
         [
           "src/Image.ts",
-          676,
+          678,
           6
         ]
       ],
@@ -225,7 +225,7 @@
       "source": [
         [
           "src/Image.ts",
-          703,
+          705,
           6
         ]
       ],
@@ -274,7 +274,7 @@
       "source": [
         [
           "src/Image.ts",
-          546,
+          548,
           2
         ]
       ],
@@ -301,7 +301,7 @@
       "source": [
         [
           "src/Image.ts",
-          495,
+          497,
           2
         ]
       ],
@@ -330,7 +330,7 @@
       "source": [
         [
           "src/Image.ts",
-          526,
+          528,
           2
         ]
       ],
@@ -352,7 +352,7 @@
       "source": [
         [
           "src/Image.ts",
-          509,
+          511,
           2
         ]
       ],
@@ -381,7 +381,7 @@
       "source": [
         [
           "src/Image.ts",
-          623,
+          625,
           2
         ]
       ],
@@ -391,7 +391,7 @@
       "signatures": [
         {
           "comment": "Get a CanvasForm for drawing on the internal canvas if this Img is editable",
-          "returns": "CanvasForm",
+          "returns": "CanvasForm | undefined",
           "returns_comment": false,
           "parameters": [],
           "tags": []
@@ -473,7 +473,7 @@
       "source": [
         [
           "src/Image.ts",
-          406,
+          408,
           2
         ]
       ],
@@ -530,7 +530,7 @@
       "source": [
         [
           "src/Image.ts",
-          363,
+          365,
           2
         ]
       ],
@@ -565,7 +565,7 @@
       "source": [
         [
           "src/Image.ts",
-          464,
+          466,
           2
         ]
       ],
@@ -600,7 +600,7 @@
       "source": [
         [
           "src/Image.ts",
-          382,
+          384,
           2
         ]
       ],
@@ -641,7 +641,7 @@
       "source": [
         [
           "src/Image.ts",
-          313,
+          315,
           8
         ]
       ],
@@ -663,7 +663,7 @@
       "source": [
         [
           "src/Image.ts",
-          607,
+          609,
           2
         ]
       ],
@@ -685,7 +685,7 @@
       "source": [
         [
           "src/Image.ts",
-          614,
+          616,
           2
         ]
       ],
@@ -707,7 +707,7 @@
       "source": [
         [
           "src/Image.ts",
-          419,
+          421,
           2
         ]
       ],
@@ -772,7 +772,7 @@
       "source": [
         [
           "src/Image.ts",
-          555,
+          557,
           9
         ]
       ],
@@ -815,7 +815,7 @@
       "source": [
         [
           "src/Image.ts",
-          435,
+          437,
           9
         ]
       ],
@@ -852,7 +852,7 @@
       "source": [
         [
           "src/Image.ts",
-          585,
+          587,
           9
         ]
       ],

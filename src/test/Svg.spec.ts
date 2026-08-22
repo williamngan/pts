@@ -3,7 +3,7 @@ import { CanvasForm } from "../Canvas";
 import { SVGContext2D } from "../Svg";
 
 function makeForm() {
-  const ctx = new SVGContext2D(null);
+  const ctx = new SVGContext2D(null!);
   const form = new CanvasForm();
   (form as any)._ctx = ctx;
   (form as any)._ready = true;
@@ -22,7 +22,7 @@ describe("SVGContext2D surface", () => {
       "utf8",
     );
     const used = new Set([...source.matchAll(/ctx\.(\w+)/g)].map((m) => m[1]));
-    const instance = new SVGContext2D(null);
+    const instance = new SVGContext2D(null!);
     for (const member of used) {
       expect(
         member in instance,
@@ -42,7 +42,7 @@ describe("SVGContext2D surface", () => {
         [5, 5],
       ]);
     ctx._flushShape();
-    const paths = ctx._runs.filter((r) => r.tag === "path");
+    const paths = ctx._runs.filter((r: any) => r.tag === "path");
     expect(paths).toHaveLength(1);
     expect(paths[0].shapeEnds).toHaveLength(2); // three shapes, two boundaries
   });
@@ -53,7 +53,7 @@ describe("SVGContext2D surface", () => {
     form.fill("#789").point([30, 10], 2);
     form.alpha(0.5).point([50, 10], 2);
     ctx._flushShape();
-    expect(ctx._runs.filter((r) => r.tag === "path")).toHaveLength(3);
+    expect(ctx._runs.filter((r: any) => r.tag === "path")).toHaveLength(3);
   });
 
   it("captures paint state at paint time, not flush time", () => {
@@ -63,7 +63,7 @@ describe("SVGContext2D surface", () => {
     ctx.className = "b"; // changed before the previous shape is flushed
     form.point([30, 10], 2);
     ctx._flushShape();
-    const paths = ctx._runs.filter((r) => r.tag === "path");
+    const paths = ctx._runs.filter((r: any) => r.tag === "path");
     expect(paths[0].attrs.class).toBe("pts-svgform a");
     expect(paths[1].attrs.class).toBe("pts-svgform b");
   });

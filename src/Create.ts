@@ -1,15 +1,15 @@
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
-import { Pt, Group, Bound } from "./Pt";
+import { Pt, Group, type Bound } from "./Pt";
 import { Line, Triangle } from "./Op";
 import { Const, Util } from "./Util";
 import { Num, Geom } from "./Num";
 import {
-  PtLike,
-  GroupLike,
-  PtIterable,
-  DelaunayMesh,
-  DelaunayShape,
+  type PtLike,
+  type GroupLike,
+  type PtIterable,
+  type DelaunayMesh,
+  type DelaunayShape,
 } from "./Types";
 
 /**
@@ -29,9 +29,9 @@ export class Create {
   ): Group {
     let pts = new Group();
     for (let i = 0; i < count; i++) {
-      let p = [bound.x + Num.random() * bound.width];
-      if (dimensions > 1) p.push(bound.y + Num.random() * bound.height);
-      if (dimensions > 2) p.push(bound.z + Num.random() * bound.depth);
+      let p = [bound.x! + Num.random() * bound.width];
+      if (dimensions > 1) p.push(bound.y! + Num.random() * bound.height);
+      if (dimensions > 2) p.push(bound.z! + Num.random() * bound.depth);
       pts.push(new Pt(p));
     }
     return pts;
@@ -214,8 +214,8 @@ const __noise_permDoubled = __noise_permTable.concat(__noise_permTable);
 
 // Memoize the last seeded table: `Create.noisePts` seeds every point with the
 // same value, so all its Noise Pts share one table.
-let __noise_lastSeed: number = undefined;
-let __noise_lastPerm: number[] = null;
+let __noise_lastSeed: number | undefined = undefined;
+let __noise_lastPerm: number[] | null = null;
 
 function __noise_seededPerm(seed: number): number[] {
   if (seed === __noise_lastSeed && __noise_lastPerm) return __noise_lastPerm;
@@ -251,7 +251,7 @@ export class Noise extends Pt {
    * Create a Noise Pt that can generate noise continuously. See a [Noise demo here](../demo/index.html?name=create.noisePts).
    * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
-  constructor(...args) {
+  constructor(...args: any[]) {
     super(...args);
 
     // shared doubled table for easy index wrapping; replaced by seed()
@@ -263,7 +263,7 @@ export class Noise extends Pt {
    * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    * @example `noise.initNoise( 0.01, 0.1 )`
    */
-  initNoise(...args) {
+  initNoise(...args: any[]) {
     this._n = new Pt(...args);
     return this;
   }
@@ -282,7 +282,7 @@ export class Noise extends Pt {
    * Specify a seed for this Noise.
    * @param s seed value
    */
-  seed(s) {
+  seed(s: number) {
     this.perm = __noise_seededPerm(s);
     return this;
   }
@@ -939,9 +939,9 @@ function _clipCellToRect(
  */
 export class Delaunay extends Group {
   private _mesh: DelaunayMesh = [];
-  private _triangles: Uint32Array = null;
-  private _halfedges: Int32Array = null;
-  private _shapes: DelaunayShape[] = null;
+  private _triangles: Uint32Array | null = null;
+  private _halfedges: Int32Array | null = null;
+  private _shapes: DelaunayShape[] | null = null;
 
   /**
    * Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`. See a [Delaunay demo here](../demo/index.html?name=create.delaunay).
@@ -1039,10 +1039,10 @@ export class Delaunay extends Group {
     const shapes = this._shapes;
     if (!triangles || !halfedges || !shapes) {
       // fallback (eg, subclasses bypassing delaunay()): sort per cell
-      let vs = [];
+      let vs: Group[] = [];
       let n = this._mesh;
       for (let i = 0, len = n.length; i < len; i++) {
-        vs.push(this.neighborPts(i, true));
+        vs.push(this.neighborPts(i, true) as Group);
       }
       return vs;
     }
@@ -1115,7 +1115,7 @@ export class Delaunay extends Group {
    * Record a DelaunayShape in the mesh.
    * @param o DelaunayShape instance
    */
-  protected _cache(o): void {
+  protected _cache(o: DelaunayShape): void {
     this._mesh[o.i][`${Math.min(o.j, o.k)}-${Math.max(o.j, o.k)}`] = o;
     this._mesh[o.j][`${Math.min(o.i, o.k)}-${Math.max(o.i, o.k)}`] = o;
     this._mesh[o.k][`${Math.min(o.i, o.j)}-${Math.max(o.i, o.j)}`] = o;
@@ -1182,7 +1182,7 @@ export class Delaunay extends Group {
       j: j,
       k: k,
       triangle: t,
-      circle: Triangle.circumcircle(t),
+      circle: Triangle.circumcircle(t)!,
     };
   }
 

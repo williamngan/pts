@@ -39,12 +39,12 @@
       "source": [
         [
           "src/Pt.ts",
-          577,
+          584,
           6
         ],
         [
           "src/Pt.ts",
-          580,
+          587,
           6
         ]
       ],
@@ -101,7 +101,7 @@
       "source": [
         [
           "src/Pt.ts",
-          587,
+          594,
           6
         ]
       ],
@@ -119,7 +119,7 @@
       "source": [
         [
           "src/Pt.ts",
-          594,
+          601,
           6
         ]
       ],
@@ -137,7 +137,7 @@
       "source": [
         [
           "src/Pt.ts",
-          601,
+          608,
           6
         ]
       ],
@@ -155,7 +155,7 @@
       "source": [
         [
           "src/Pt.ts",
-          608,
+          615,
           6
         ]
       ],
@@ -173,7 +173,7 @@
       "source": [
         [
           "src/Pt.ts",
-          615,
+          622,
           6
         ]
       ],
@@ -191,7 +191,7 @@
       "source": [
         [
           "src/Pt.ts",
-          622,
+          629,
           6
         ]
       ],
@@ -209,7 +209,7 @@
       "source": [
         [
           "src/Pt.ts",
-          629,
+          636,
           6
         ]
       ],
@@ -227,7 +227,7 @@
       "source": [
         [
           "src/Pt.ts",
-          636,
+          643,
           6
         ]
       ],
@@ -247,7 +247,7 @@
       "source": [
         [
           "src/Pt.ts",
-          990,
+          998,
           2
         ]
       ],
@@ -276,7 +276,7 @@
       "source": [
         [
           "src/Pt.ts",
-          1001,
+          1009,
           2
         ]
       ],
@@ -317,7 +317,7 @@
       "source": [
         [
           "src/Pt.ts",
-          1023,
+          1031,
           2
         ]
       ],
@@ -333,7 +333,7 @@
             {
               "name": "defaultValue",
               "comment": "a default value to fill if index out of bound. If not provided, it will throw an error instead.",
-              "type": "number | boolean",
+              "type": "number | boolean | undefined",
               "default": "undefined"
             },
             {
@@ -352,7 +352,7 @@
       "source": [
         [
           "src/Pt.ts",
-          957,
+          965,
           2
         ]
       ],
@@ -381,7 +381,7 @@
       "source": [
         [
           "src/Pt.ts",
-          788,
+          796,
           2
         ]
       ],
@@ -410,7 +410,7 @@
       "source": [
         [
           "src/Pt.ts",
-          780,
+          788,
           2
         ]
       ],
@@ -461,7 +461,7 @@
       "source": [
         [
           "src/Pt.ts",
-          772,
+          780,
           2
         ]
       ],
@@ -483,7 +483,7 @@
       "source": [
         [
           "src/Pt.ts",
-          764,
+          772,
           2
         ]
       ],
@@ -505,7 +505,7 @@
       "source": [
         [
           "src/Pt.ts",
-          643,
+          650,
           2
         ]
       ],
@@ -527,12 +527,12 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1353,
+          1351,
           4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1359,
+          1357,
           4
         ]
       ],
@@ -575,7 +575,7 @@
       "source": [
         [
           "src/Pt.ts",
-          981,
+          989,
           2
         ]
       ],
@@ -604,12 +604,12 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1440,
+          1438,
           4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1449,
+          1447,
           4
         ]
       ],
@@ -664,12 +664,12 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1476,
+          1474,
           4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1482,
+          1480,
           4
         ]
       ],
@@ -724,7 +724,7 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1464,
+          1462,
           4
         ]
       ],
@@ -759,7 +759,7 @@
       "source": [
         [
           "src/Pt.ts",
-          923,
+          931,
           2
         ]
       ],
@@ -794,7 +794,7 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1425,
+          1423,
           4
         ]
       ],
@@ -864,7 +864,7 @@
       "source": [
         [
           "src/Pt.ts",
-          713,
+          720,
           2
         ]
       ],
@@ -899,7 +899,7 @@
       "source": [
         [
           "src/Pt.ts",
-          825,
+          833,
           2
         ]
       ],
@@ -928,7 +928,7 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1364,
+          1362,
           4
         ]
       ],
@@ -957,7 +957,7 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1431,
+          1429,
           4
         ]
       ],
@@ -992,7 +992,7 @@
       "source": [
         [
           "src/Pt.ts",
-          757,
+          765,
           2
         ]
       ],
@@ -1106,7 +1106,7 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1470,
+          1468,
           4
         ]
       ],
@@ -1141,7 +1141,7 @@
       "source": [
         [
           "src/Pt.ts",
-          841,
+          849,
           2
         ]
       ],
@@ -1170,7 +1170,7 @@
       "source": [
         [
           "src/Pt.ts",
-          849,
+          857,
           2
         ]
       ],
@@ -1199,7 +1199,7 @@
       "source": [
         [
           "src/Pt.ts",
-          973,
+          981,
           2
         ]
       ],
@@ -1228,7 +1228,7 @@
       "source": [
         [
           "src/Pt.ts",
-          798,
+          806,
           2
         ]
       ],
@@ -1262,7 +1262,7 @@
       "source": [
         [
           "src/Pt.ts",
-          811,
+          819,
           2
         ]
       ],
@@ -1296,7 +1296,7 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1342,
+          1340,
           4
         ]
       ],
@@ -1306,7 +1306,7 @@
       "signatures": [
         {
           "comment": "Removes the last element from an array and returns it.\nIf the array is empty, undefined is returned and the array is not modified.",
-          "returns": "Pt",
+          "returns": "Pt | undefined",
           "returns_comment": false,
           "parameters": [],
           "tags": []
@@ -1398,7 +1398,7 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1347,
+          1345,
           4
         ]
       ],
@@ -1427,17 +1427,17 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1488,
+          1486,
           4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1489,
+          1487,
           4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1495,
+          1493,
           4
         ]
       ],
@@ -1506,17 +1506,17 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1501,
+          1499,
           4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1502,
+          1500,
           4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1508,
+          1506,
           4
         ]
       ],
@@ -1585,7 +1585,7 @@
       "source": [
         [
           "src/Pt.ts",
-          902,
+          910,
           2
         ]
       ],
@@ -1620,7 +1620,7 @@
       "source": [
         [
           "src/Pt.ts",
-          735,
+          742,
           2
         ]
       ],
@@ -1655,7 +1655,7 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1369,
+          1367,
           4
         ]
       ],
@@ -1677,7 +1677,7 @@
       "source": [
         [
           "src/Pt.ts",
-          873,
+          881,
           2
         ]
       ],
@@ -1718,7 +1718,7 @@
       "source": [
         [
           "src/Pt.ts",
-          860,
+          868,
           2
         ]
       ],
@@ -1753,7 +1753,7 @@
       "source": [
         [
           "src/Pt.ts",
-          746,
+          754,
           2
         ]
       ],
@@ -1794,7 +1794,7 @@
       "source": [
         [
           "src/Pt.ts",
-          886,
+          894,
           2
         ]
       ],
@@ -1835,7 +1835,7 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1374,
+          1372,
           4
         ]
       ],
@@ -1845,7 +1845,7 @@
       "signatures": [
         {
           "comment": "Removes the first element from an array and returns it.\nIf the array is empty, undefined is returned and the array is not modified.",
-          "returns": "Pt",
+          "returns": "Pt | undefined",
           "returns_comment": false,
           "parameters": [],
           "tags": []
@@ -1857,7 +1857,7 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1384,
+          1382,
           4
         ]
       ],
@@ -1933,7 +1933,7 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1458,
+          1456,
           4
         ]
       ],
@@ -1968,7 +1968,7 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1395,
+          1393,
           4
         ]
       ],
@@ -1997,7 +1997,7 @@
       "source": [
         [
           "src/Pt.ts",
-          914,
+          922,
           2
         ]
       ],
@@ -2032,12 +2032,12 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1404,
+          1402,
           4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1414,
+          1412,
           4
         ]
       ],
@@ -2098,7 +2098,7 @@
       "source": [
         [
           "src/Pt.ts",
-          679,
+          686,
           2
         ]
       ],
@@ -2139,7 +2139,7 @@
       "source": [
         [
           "src/Pt.ts",
-          965,
+          973,
           2
         ]
       ],
@@ -2168,7 +2168,7 @@
       "source": [
         [
           "src/Pt.ts",
-          1030,
+          1041,
           2
         ]
       ],
@@ -2190,12 +2190,12 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1337,
+          1335,
           4
         ],
         [
           "node_modules/typescript/lib/lib.es2015.core.d.ts",
-          64,
+          62,
           4
         ]
       ],
@@ -2237,7 +2237,7 @@
       "source": [
         [
           "src/Pt.ts",
-          1037,
+          1048,
           2
         ]
       ],
@@ -2259,7 +2259,7 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1419,
+          1417,
           4
         ]
       ],
@@ -2288,7 +2288,7 @@
       "source": [
         [
           "src/Pt.ts",
-          1014,
+          1022,
           2
         ]
       ],
@@ -2323,7 +2323,7 @@
       "source": [
         [
           "src/Pt.ts",
-          656,
+          663,
           9
         ]
       ],
@@ -2408,7 +2408,7 @@
       "source": [
         [
           "src/Pt.ts",
-          669,
+          676,
           9
         ]
       ],
@@ -2442,7 +2442,7 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1329,
+          1327,
           4
         ]
       ],

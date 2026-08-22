@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Types.ts",
-      231,
+      243,
       12
     ]
   ],
@@ -20,7 +20,7 @@
   "type_alias": [
     "{ fillStyle:`string",
     "CanvasGradient",
-    "CanvasPattern`, globalAlpha:`number`, lineCap:`string`, lineJoin:`string`, lineWidth:`number`, strokeStyle:`string",
+    "CanvasPattern`, globalAlpha:`number`, lineCap:`CanvasLineCap`, lineJoin:`CanvasLineJoin`, lineWidth:`number`, strokeStyle:`string",
     "CanvasGradient",
     "CanvasPattern` }"
   ]

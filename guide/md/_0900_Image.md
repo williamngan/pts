@@ -15,9 +15,9 @@ space.add( time => form.image( space.pointer, img ) );
 
 ##### Image credit: "C 50 Last Birds And Flowers" by Kurt Schwitters
 
-The above example uses the *static* function [`Img.load`](#image-img), which returns a Promise that resolves to the loaded image, and then uses CanvasForm's [`image`](#canvas-canvasform) function to display it. A load failure rejects the Promise.
+The above example uses the _static_ function [`Img.load`](#image-img), which returns a Promise that resolves to the loaded image, and then uses CanvasForm's [`image`](#canvas-canvasform) function to display it. A load failure rejects the Promise.
 
-You can also create an Img instance yourself and call the *instance* function [`load`](#image-img), which is handy when you want to configure the instance first. An example:
+You can also create an Img instance yourself and call the _instance_ function [`load`](#image-img), which is handy when you want to configure the instance first. An example:
 
 ```
 (async function() {
@@ -32,8 +32,8 @@ Once the image is loaded, you can access its properties like width and height an
 
 ##### In this example, we access the image's original width and height after it's loaded, and then rescale it to fit the canvas size.
 
-
 ### Editing Images
+
 When you create an Img instance with its `editable` parameter set to `true`, it will hold an internal canvas to support image manipulations. It will also match the pixel-density of your display. An example:
 
 ```
@@ -55,7 +55,7 @@ The [`pixel`](#image-img) function supports a very common use case: specify a pi
 
 ##### Try scribbling in different regions of the image to change it. This demo combines `Create.delaunay` with `Img.pixel`.
 
-Another common use case is to crop a region of the image. The [`crop`](#image-img) function takes a bounding box and returns an [`ImageData`](https://developer.mozilla.org/en-US/docs/Web/API/ImageData). You can then use CanvasForm's[`imageData`](#canvas-canvasform) to draw the region. 
+Another common use case is to crop a region of the image. The [`crop`](#image-img) function takes a bounding box and returns an [`ImageData`](https://developer.mozilla.org/en-US/docs/Web/API/ImageData). You can then use CanvasForm's[`imageData`](#canvas-canvasform) to draw the region.
 
 ```
 form.imageData( img.crop( bound ) );
@@ -94,11 +94,11 @@ Additionally, the [`filter`](https://ptsjs.org/docs/?p=Image_Img#function_filter
 img.filter( "blur(10px) contrast(20%) saturate(0%)" )
 ```
 
-To display the edited image, use CanvasForm's [`image`](https://ptsjs.org/docs/?p=Canvas_CanvasForm#function_image) function but pass `img.canvas` (instead of `img` itself) in the parameter. 
+To display the edited image, use CanvasForm's [`image`](https://ptsjs.org/docs/?p=Canvas_CanvasForm#function_image) function but pass `img.canvas` (instead of `img` itself) in the parameter.
 
 ```
 // draw internal image canvas
-form.image( img.canvas ); 
+form.image( img.canvas );
 ```
 
 As we are only editing an internal canvas, the original image is unchanged until it's explicitly updated. Use [`sync`](#image-img), which returns a Promise, to update the original image when needed: `await img.sync()`.
@@ -107,7 +107,7 @@ You can also work at the pixel level: [`setPixel`](#image-img) writes a color in
 
 ### Patterns
 
-In a similar way, you can treat an image (or an image canvas) as a pattern to fill an area. One difference is that we'll get a [CanvasPattern](https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern) instance for use in  `form.fill(...)`, instead of an image for `form.image(...)`.
+In a similar way, you can treat an image (or an image canvas) as a pattern to fill an area. One difference is that we'll get a [CanvasPattern](https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern) instance for use in `form.fill(...)`, instead of an image for `form.image(...)`.
 
 ```
 const pattern = await Img.loadPattern( "tile.jpg", space );
@@ -142,8 +142,7 @@ It's now your turn to experiment!
 
 - CanvasForm's [`image`](#canvas-canvasform) drawing function can take either an Img instance or a [CanvasImageSource](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) which includes various kinds of image objects like HTML Image or Canvas.
 
-- Typically, you can't load an image from another domain due to security concerns. But if the image server allows for it and you want to do it, you can set the `crossOrigin` parameter to `true` when creating an  `Img` instance. [More details here](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image).
-
+- Typically, you can't load an image from another domain due to security concerns. But if the image server allows for it and you want to do it, you can set the `crossOrigin` parameter to `true` when creating an `Img` instance. [More details here](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image).
 
 ### Cheatsheet
 
@@ -160,7 +159,7 @@ let img = await Img.load("demo.png", { editable: true, pixelScale: space.pixelSc
 let img = new Img( { editable: true, pixelScale: space.pixelScale } );
 await img.load("demo.png")
 
-// Display an image automatically when it's loaded 
+// Display an image automatically when it's loaded
 form.image( [0,0], img );
 
 // Load a pattern and use it as fill
@@ -174,6 +173,7 @@ form.fill( pattern ).rect( rect );
 ```
 
 Useful properties
+
 ```
 img.loaded; // true if the image is loaded
 img.image; // the original image
@@ -183,6 +183,7 @@ img.pixelScale; // pixel density which usually matches the space's
 ```
 
 Editing an image
+
 ```
 img.crop( rect )
 img.resize( 0.5, true );
@@ -194,7 +195,7 @@ let imgForm = new CanvasForm( img.ctx );
 imgForm.fill( "#f00" ).point( space.pointer, 20 );
 
 // Export as base64 string
-img.toBase64(); 
+img.toBase64();
 
 // Getting a DOMMatrix instance for pattern transforms
 const m = img.scaledMatrix.rotate2D(...).domMatrix;
@@ -202,7 +203,3 @@ pattern.setTransform( m );
 form.fill( pattern ).rect( rect );
 
 ```
-
-
-
-

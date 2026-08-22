@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Op.ts",
-      678,
+      681,
       13
     ]
   ],
@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Op.ts",
-          718,
+          724,
           9
         ]
       ],
@@ -54,7 +54,7 @@
       "source": [
         [
           "src/Op.ts",
-          685,
+          688,
           9
         ]
       ],
@@ -91,7 +91,7 @@
       "source": [
         [
           "src/Op.ts",
-          704,
+          707,
           9
         ]
       ],
@@ -103,7 +103,7 @@
       "signatures": [
         {
           "comment": "Create a circle that either fits within, or encloses, a triangle. Same as [`Triangle.circumcircle`](#link) or [`Triangle.incircle`](#link).",
-          "returns": "Group",
+          "returns": "Group | undefined",
           "returns_comment": "a Group that represents a circle",
           "parameters": [
             {
@@ -128,7 +128,7 @@
       "source": [
         [
           "src/Op.ts",
-          800,
+          806,
           9
         ]
       ],
@@ -165,7 +165,7 @@
       "source": [
         [
           "src/Op.ts",
-          780,
+          786,
           9
         ]
       ],
@@ -202,7 +202,7 @@
       "source": [
         [
           "src/Op.ts",
-          744,
+          750,
           9
         ]
       ],
@@ -239,7 +239,7 @@
       "source": [
         [
           "src/Op.ts",
-          840,
+          846,
           9
         ]
       ],
@@ -276,7 +276,7 @@
       "source": [
         [
           "src/Op.ts",
-          859,
+          865,
           9
         ]
       ],
@@ -313,7 +313,7 @@
       "source": [
         [
           "src/Op.ts",
-          876,
+          882,
           9
         ]
       ],
@@ -350,7 +350,7 @@
       "source": [
         [
           "src/Op.ts",
-          728,
+          734,
           9
         ]
       ],

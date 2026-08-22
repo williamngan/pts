@@ -4,7 +4,12 @@ import { Const, Util } from "./Util";
 import { Curve } from "./Op";
 import { Pt, Group } from "./Pt";
 import { Vec, Mat } from "./LinearAlgebra";
-import { PtLike, GroupLike, PtLikeIterable, PtIterable } from "./Types";
+import {
+  type PtLike,
+  type GroupLike,
+  type PtLikeIterable,
+  type PtIterable,
+} from "./Types";
 
 import generator from "./uheprng";
 
@@ -233,7 +238,7 @@ export class Geom {
    * @return a Group of two Pts, representing the top-left and bottom-right corners
    */
   static boundingBox(pts: PtIterable): Group {
-    let minPt: Pt, maxPt: Pt;
+    let minPt: Pt | undefined, maxPt: Pt | undefined;
     for (const p of pts) {
       if (minPt == undefined) {
         minPt = p.clone();
@@ -242,11 +247,11 @@ export class Geom {
         // in-place equivalent of `$min` / `$max`, without 2 clones per point
         for (let i = 0, len = Math.min(minPt.length, p.length); i < len; i++) {
           minPt[i] = Math.min(minPt[i], p[i]);
-          maxPt[i] = Math.max(maxPt[i], p[i]);
+          maxPt![i] = Math.max(maxPt![i], p[i]);
         }
       }
     }
-    return new Group(minPt, maxPt);
+    return new Group(minPt!, maxPt!);
   }
 
   /**
@@ -273,9 +278,9 @@ export class Geom {
     let i = 0;
     for (const p of pts) {
       if (typeof ptOrIndex == "number") {
-        if (ptOrIndex !== i) p[method](pts[ptOrIndex]);
+        if (ptOrIndex !== i) (p as any)[method]((pts as any)[ptOrIndex]);
       } else {
-        p[method](ptOrIndex);
+        (p as any)[method](ptOrIndex);
       }
       i++;
     }
@@ -308,11 +313,11 @@ export class Geom {
 
     const p = new Pt(pt);
     const pa = new Pt(p);
-    pa[x] = -p[y];
-    pa[y] = p[x];
+    (pa as any)[x] = -(p as any)[y];
+    (pa as any)[y] = (p as any)[x];
     const pb = new Pt(p);
-    pb[x] = p[y];
-    pb[y] = -p[x];
+    (pb as any)[x] = (p as any)[y];
+    (pb as any)[y] = -(p as any)[x];
 
     return new Group(pa, pb);
   }
@@ -404,7 +409,9 @@ export class Geom {
     anchor?: PtLike,
   ): Geom {
     const pts = Util.iterToArray(
-      ps[0] !== undefined && typeof ps[0] == "number" ? [ps] : ps,
+      (ps as any)[0] !== undefined && typeof (ps as any)[0] == "number"
+        ? [ps]
+        : ps,
     );
     const scs =
       typeof scale == "number" ? Pt.make(pts[0].length, scale) : scale;
@@ -437,7 +444,9 @@ export class Geom {
     axis?: string | PtLike,
   ): Geom {
     const pts = Util.iterToArray(
-      ps[0] !== undefined && typeof ps[0] == "number" ? [ps] : ps,
+      (ps as any)[0] !== undefined && typeof (ps as any)[0] == "number"
+        ? [ps]
+        : ps,
     );
     const fn = anchor ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
     if (!anchor) anchor = Pt.make(pts[0].length, 0);
@@ -474,7 +483,9 @@ export class Geom {
     axis?: string | PtLike,
   ): Geom {
     const pts = Util.iterToArray(
-      ps[0] !== undefined && typeof ps[0] == "number" ? [ps] : ps,
+      (ps as any)[0] !== undefined && typeof (ps as any)[0] == "number"
+        ? [ps]
+        : ps,
     );
     const s = typeof scale == "number" ? [scale, scale] : scale;
     if (!anchor) anchor = Pt.make(pts[0].length, 0);
@@ -509,7 +520,9 @@ export class Geom {
     axis?: string | PtLike,
   ): Geom {
     const pts = Util.iterToArray(
-      ps[0] !== undefined && typeof ps[0] == "number" ? [ps] : ps,
+      (ps as any)[0] !== undefined && typeof (ps as any)[0] == "number"
+        ? [ps]
+        : ps,
     );
     const _line = Util.iterToArray(line);
     const mat = Mat.reflectAt2DMatrix(_line[0], _line[1]);
@@ -935,7 +948,7 @@ export class Shaping {
    * @param args optional paramters to pass to original function
    */
   static step(
-    fn: Function,
+    fn: (t: number, c: number, ...args: any[]) => number,
     steps: number,
     t: number,
     c: number,
@@ -953,9 +966,9 @@ export class Shaping {
  */
 export class Range {
   protected _source: Group;
-  protected _max: Pt;
-  protected _min: Pt;
-  protected _mag: Pt;
+  protected _max!: Pt;
+  protected _min!: Pt;
+  protected _mag!: Pt;
   protected _dims: number = 0;
 
   /**
@@ -991,7 +1004,7 @@ export class Range {
   /**
    * Go through the group and find its min and max values. Usually you don't need to call this function directly.
    */
-  calc(): this {
+  calc(): this | undefined {
     if (!this._source) return;
     const dims = this._source[0].length;
     this._dims = dims;

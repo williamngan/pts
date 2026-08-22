@@ -152,6 +152,7 @@ It's easy to get started with **`Pts`**. Here we'll review the core concepts and
 ##### Here's a spoiler of what we will build. Touch to play it, and take a look at the source code. The core code is only ~10 lines long.
 
 #### Space, Form, and Point
+
 **`Pts`** is built upon the abstractions of Space, Form, and Point. If that's too abstract, you can think of it like drawing: Space represents a piece of paper, Form represents a pencil, and Points represent an idea — and you connect the dots.
 
 Given an idea, you may express it in different forms in different spaces. Would it be expressed in pixels or LEDs? Is it visible or audible? Does it look like abstract art or ASCII art? As **`Pts`** develops, it will offer more Spaces and Forms that enable you to experiment with different ideas and their different expressions.
@@ -181,6 +182,7 @@ import {CanvasSpace, Pt, Group} from "pts/dist/es5"
 ```
 
 #### Using Pts as a script
+
 First get `pts.js` or `pts.min.js`. You may get a direct link from a CDN service (eg, [unpkg](https://unpkg.com/pts/dist/pts.js) or [jsdelivr](https://cdn.jsdelivr.net/gh/williamngan/pts/dist/pts.js)), or download it from [github repo](https://github.com/williamngan/pts/tree/master/dist). Include it in your html, and then create another js file for your script and add it too.
 
 ```
@@ -205,6 +207,7 @@ The online editor enables you to quickly experiment with Pts and download your c
 Now that we've learned how to run Pts in various ways, it's time to start using it!
 
 #### Creating Space and Form
+
 **`Pts`** provides a [`CanvasSpace`](https://ptsjs.org/docs.md#canvas-canvasspace) which enables you to use html `<canvas>` as a space. You can create a `CanvasSpace` like this:
 
 ```
@@ -243,6 +246,7 @@ run( function(time, ftime) { ... } );
 Now we have paper and pencil. What should we draw?
 
 #### Drawing a point
+
 The `space`, which we have created, contains some handy variables. For example, the `pointer` variable tells us the current position of pointer in space (ie, mouse or touch position). Let's use it to draw a point.
 
 To render an animation continuously, we need to add a "player" to the space. A "player" can be a callback function to run your animation, or an object that specifies functions for `start`, `animate`, and `action`. You may add multiple players to a space.
@@ -277,7 +281,9 @@ space.add( (time, ftime) => {
 Success! The calculation `(time%1000)/1000` maps the running time to a value between 0 to 1 every second. Then we use the [`Num.cycle`](https://ptsjs.org/docs.md#num-num) function to make the value cycle between 0...1...0...1, and we multiply the value by 20 to get the radius. Finally, we draw the pointer with the radius as a blue circle. Pretty easy, right?
 
 #### Drawing shapes
+
 There are 3 basic structures in **`Pts`**
+
 - a Pt which is an array of numbers (1D tensor)
 - a Group which is an array of Pts (2D tensor)
 - an array of Groups (3D tensor)
@@ -310,6 +316,7 @@ The 4th and 5th line just draw the rectangle and the sheared polygon.
 Even though it takes words to explain, the code is actually quite simple :)
 
 #### Visibles from invisibles
+
 From here on, it's up to you. Squint your eyes and see what shapes and structures hide between those invisible points, or what motions and interactions could generate unique and expressive forms.
 
 For example, what if we take two corners of the rectangle, and join them with the pointer to draw a triangle?
@@ -372,6 +379,7 @@ A [`Pt`](https://ptsjs.org/docs.md#pt-pt) represents a point in space, or more t
 #### Creating a Pt
 
 You can create a [`Pt`](https://ptsjs.org/docs.md#pt-pt) in many different ways:
+
 ```
 // defaults to (0,0)
 new Pt()
@@ -394,6 +402,7 @@ Here's a simple demo visualizing a Pt, which moves with your mouse/touch.
 #### Float32Array
 
 Since [`Pt`](https://ptsjs.org/docs.md#pt-pt) is a subclass of javascript's [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array), it means you may use all the `Float32Array` features on a `Pt` too. For example:
+
 ```
 p[0]
 p.fill( 0, 1, 2 )
@@ -405,13 +414,17 @@ Note that Float32Array doesn't allow some common Array functions like `push()` a
 #### Updating values
 
 You can update a Pt's values by using [`to`](https://ptsjs.org/docs.md#pt-pt) function, or accessing the [`.x`](https://ptsjs.org/docs.md#pt-pt), [`.y`](https://ptsjs.org/docs.md#pt-pt), [`.z`](https://ptsjs.org/docs.md#pt-pt), [`.w`](https://ptsjs.org/docs.md#pt-pt) properties.
+
 ```
 p.to( 1, 2, 3 )
 p.to( anotherPt )
 p.w = p.x + p.z
 ```
+
 #### Vector math
+
 Pt provides basic functions for calculating vectors and matrices. But don't worry if you are not familiar with linear algebra. To start, think of it as methods to do calculations on arrays of values, like adding or multiplying them.
+
 ```
 let pt = new Pt( 10, 10 )
 pt.add( 1, 2 ) // pt is now (11, 12)
@@ -419,16 +432,21 @@ pt.divide( 2 ) // divide each value by 2
 pt.multiply( {x: 2, y: 1} )
 pt.subtract( anotherPt ).multiply( 5 ).add( [1,2,3] )
 ```
+
 The above functions like [`add`](https://ptsjs.org/docs.md#pt-pt) will update the values of `pt` instance. If you want to get the results as a new Pt, use [`$add`](https://ptsjs.org/docs.md#pt-pt) instead. If a function's name starts with `$`, it indicates that its return value will be a new Pt.
+
 ```
 let p1 = pt.$add( 1,2,3 );
 let p2 = pt.$multiply( 5 ).add( 1,2,3 )
 
 ```
+
 There are other basic vector operations like [`unit`](https://ptsjs.org/docs.md#pt-pt) (get a normalized vector), [`magnitude`](https://ptsjs.org/docs.md#pt-pt) (get its distance from origin), [`dot`](https://ptsjs.org/docs.md#pt-pt) (find dot product), [`$project`](https://ptsjs.org/docs.md#pt-pt) (find its projection vector). Check the docs on [`Pt`](https://ptsjs.org/docs.md#pt-pt) for a full list.
 
 #### Angles
+
 Since a Pt can be thought of as an arrow from origin, you can find its angle with [`angle`](https://ptsjs.org/docs.md#pt-pt) function. You can also find the angle between two Pts with [`angleBetween`](https://ptsjs.org/docs.md#pt-pt) function. A related function [`toAngle`](https://ptsjs.org/docs.md#pt-pt) lets you move a Pt by specifying a target angle.
+
 ```
 pt.angle()
 pt.angle(Const.yz) // get the angle of axis y-z
@@ -445,6 +463,7 @@ pt.toAngle( Math.PI/2 )
 #### Transformations
 
 If you have used Illustrator or other graphics software before, you probably know the operations to rotate or scale a shape. Pt also provides these transformation functions:
+
 ```
 pt.scale( 0.5 )
 pt.rotate2D( Math.PI/3 )
@@ -453,6 +472,7 @@ pt.reflect2D( [p1, p2] )
 ```
 
 If you want to transform from a specific anchor point instead of at (0,0), provide an anchor as the second parameter:
+
 ```
 pt.scale( 0.5, anchorPt )
 pt.rotate( Math.PI/3, anchorPt )
@@ -467,6 +487,7 @@ Take a look at the [`Geom`](https://ptsjs.org/docs.md#num-geom) class which also
 #### Roll your own
 
 You may use all of Float32Array's functions (eg, `slice`, `map`) with Pt. Some additional ones in Pt like [`$concat`](https://ptsjs.org/docs.md#pt-pt), [`$take`](https://ptsjs.org/docs.md#pt-pt) make it simpler to work with TypedArray. Take a look at "Op" section to see how you can write your own functions to work with Pt easily.
+
 ```
 // Use $concat and $take to grow and shrink a TypedArray
 let p1 = new Pt(1, 2, 3).$concat( 4, 5 ); // becomes Pt(1,2,3,4,5)
@@ -476,7 +497,9 @@ p1.op( Line.collinear );
 ```
 
 #### Cheat sheet
+
 Creating and cloning
+
 ```
 new Pt()
 new Pt( 1, 2, 3, 4 )
@@ -488,6 +511,7 @@ pt.clone()
 ```
 
 Getting and setting values
+
 ```
 p[1]
 p[2] = p[0]
@@ -497,6 +521,7 @@ p.id = "p01"
 ```
 
 Calculating
+
 ```
 p.equals( p2, 0.00001 )
 p.$ceil().floor().round()
@@ -506,6 +531,7 @@ p.$min( p2 ).$max( p3 )
 ```
 
 Vector math
+
 ```
 p.add( 1,2 ).subtract( p2 ).multiply( 10 ).divide( 2 )
 p.$add( 1,2 ) // $-prefix means getting result as a new Pt
@@ -520,6 +546,7 @@ p.unit() // unit vector
 ```
 
 Transforming
+
 ```
 p.scale(0.5).rotate2D( Const.half_pi )
 p.shear2D( 0.2 ).reflect2D( line )
@@ -527,6 +554,7 @@ p.toAngle( Math.PI/3, 100 )
 ```
 
 Working with array values
+
 ```
 p.reduce( (a,b) => Math.max(a,b), 0 ) // can use all Float32Array functions
 p.$take("xz")
@@ -544,6 +572,7 @@ Check out the [full documentation](https://ptsjs.org/docs/) too.
 A [`Group`](https://ptsjs.org/docs.md#pt-group) represents an array of [`Pt`](https://ptsjs.org/docs.md#pt-pt). It is an abstraction that can fit many contexts. For example, you may use it to define a matrix, store a polygon, or interpolate a curve where each Pt is an anchor point.
 
 In fact, a wide range of complex forms and ideas can be represented as one of these simple structures:
+
 - a Pt which is an array of numbers
 - a Group which is an array of Pts
 - an array of Groups
@@ -566,6 +595,7 @@ g1[2] = new Pt(1,2,3);
 ```
 
 You can also easily convert an array of number arrays into a Group of Pts:
+
 ```
 let g3 = Group.fromArray( [ [1,2], [3,4], [5,6] ] );
 g3[0]; // returns Pt(1,2)
@@ -579,6 +609,7 @@ let notOk = new Group( [1,2,3], "hello" ); // Don't do this
 ```
 
 #### Array functions
+
 You can use all the javascript's Array functions in a Group. No need to learn a new API.
 
 ```
@@ -605,12 +636,15 @@ There are also a couple additional functions in Group that let you work with arr
 ##### In this demo, we keep track of the last 50 positions of the pointer in a Group, and draw one circle for every 5 segments. Take a look at the source code and note the use of common Array functions like `push` and `map` along with Group functions like `segments`.
 
 #### Transformations
+
 Similar to transformations in Pt, you can use [`scale`](https://ptsjs.org/docs.md#pt-group), [`rotate2D`](https://ptsjs.org/docs.md#pt-group) etc to transform a Group ot Pts. There are also [`moveBy`](https://ptsjs.org/docs.md#pt-group) and [`moveTo`](https://ptsjs.org/docs.md#pt-group) to translate its positions. Basic arithmetics like [`add`](https://ptsjs.org/docs.md#pt-group) and [`multiply`](https://ptsjs.org/docs.md#pt-group) are also included.
 
 Furthermore, you may use [`$matrixAdd`](https://ptsjs.org/docs.md#pt-group) and [`$matrixMultiply`](https://ptsjs.org/docs.md#pt-group) to do advanced matrix calculations.
 
 #### Cheat sheet
+
 Creating and cloning
+
 ```
 new Group( new Pt(1,2), new Pt(3,4) )
 Group.fromArray( [ [1,2], [3,4] ])
@@ -619,6 +653,7 @@ g.clone()
 ```
 
 Getting and setting Pts
+
 ```
 g[0]
 g.p1
@@ -627,6 +662,7 @@ g.id = "g01"
 ```
 
 Working with array
+
 ```
 g.map( (p) => p.unit() ) // support all Array functions
 g.insert( [p1, p2], 0 )
@@ -637,6 +673,7 @@ g.$zip()
 ```
 
 Positions and bounds
+
 ```
 g.boundingBox()
 g.anchorFrom( 3 ) // relative to absolute position
@@ -647,6 +684,7 @@ g.sortByDimension(1, true)
 ```
 
 Calculate
+
 ```
 g.add( 10 )
 g.multiply( 0.5 )
@@ -656,6 +694,7 @@ g.forEachPt( "floor" )
 ```
 
 Transform
+
 ```
 g.moveTo( 100, 100 )
 g.moveBy( 10, 1 )
@@ -679,6 +718,7 @@ In **`Pts`**, these acts of imagination are known as "Op". They transform a stat
 Let's begin with an example. Suppose there are 100 points randomly placed on a canvas, and a pointer moves randomly about. A simple (indeed boring) act of imagination might be to ask: which point is closest to the pointer?
 
 We can draw this whole scene a few lines of code:
+
 ```
 // make 100 pts and pointer
 var pts = Create.distributeRandom( space.innerBound, 100 );
@@ -717,6 +757,7 @@ The group of points becomes active. It's somewhat interesting and kind of a mess
 **`Pts`** includes many different Ops to help you make the points meaningful. Next we will look at them in more details.
 
 #### Static Op
+
 The Op module includes various static functions that deal with specific forms such as [`Rectangle`](https://ptsjs.org/docs.md#op-rectangle) and [`Curve`](https://ptsjs.org/docs.md#op-curve), and Num module includes utility classes like [`Num`](https://ptsjs.org/docs.md#num-num) and [`Geom`](https://ptsjs.org/docs.md#num-geom) for numeric and geometric calculations. Most of them are straightforward and easy to use.
 
 It's time to let our imaginary forces work on these functions. Keeping most of the code from above, let's try the [`perpendicularFromPt`](https://ptsjs.org/docs.md#op-line) function. Given a line and a point, this Op finds a perpendicular line (ie, shortest distance) between the point and the line.
@@ -771,6 +812,7 @@ Knowing how bspline works, we can easily apply it to our 100 random points. The 
 That was quick! By combining different ops together, you can quickly try out and compare different options in forms and interactions.
 
 #### Pt to Op
+
 If you think of code like a narrative, then the static ops are like monologues — telling the story in a dull way.
 
 ```
@@ -796,6 +838,7 @@ When you supply `op` with a function, it applies the Pt or Group as a parameter 
 Let's illustrate this with a concrete example. Suppose we want to make 50 lines by pairing the 100 random points, and then find out which lines intersect with another line drawn by the pointer. What's the code?
 
 It only takes 3 lines:
+
 ```
 let pairs = pts.segments(2, 2);
 let hit = new Group(space.center, space.pointer).op( Line.intersectLine2D );
@@ -810,17 +853,18 @@ First, we take every 2 points in `pts` to make 50 lines. Next, we make a line fr
 
 This approach works best if the op will be re-used in different scenarios, or if it can make the code easier to read. Of course, you can always use the static intersectLine2D function inside the `map(...)`, or even create a custom function and call it `hit`. Just like there're many ways to tell a story, there're many ways to write code.
 
-
 #### Cheat sheet
 
-[`Num`](https://ptsjs.org/docs.md#num-num) from "Num" module includes  helper  functions to simplify numeric calculations.
+[`Num`](https://ptsjs.org/docs.md#num-num) from "Num" module includes helper functions to simplify numeric calculations.
+
 ```
 Num.cycle( 0.3 ); // cycle between 0...1...0
 Num.mapToRange( 5, 1,100, 0, 2 ); // map a value to new range
 Num.lerp( 1, 100, 0.2 ); // linear interpolation
 ```
 
-[`Geom`](https://ptsjs.org/docs.md#num-geom) from "Num" module includes helper  functions to simplify geometric calculations.
+[`Geom`](https://ptsjs.org/docs.md#num-geom) from "Num" module includes helper functions to simplify geometric calculations.
+
 ```
 Geom.boundAngle( 361 ); // bound between 0 to 360
 Geom.withinBound( p1, top_left, bottom_right );
@@ -828,6 +872,7 @@ Geom.interpolate( p1, p2, 0.3 );
 ```
 
 [`Line`](https://ptsjs.org/docs.md#op-line) from "Op" module helps you create and work with lines.
+
 ```
 Line.fromAngle( p1, Math.PI/3, 10 ); // create with angle and distance
 Line.collinear( p1, p2, p3 );
@@ -836,6 +881,7 @@ Line.subpoints( 5 ); // get 5 evenly distributed pts on the line
 ```
 
 [`Rectangle`](https://ptsjs.org/docs.md#op-rectangle) from "Op" module helps you create and work with rectangles.
+
 ```
 Rectangle.fromCenter( center, 100, 50 );
 Rectangle.corners();
@@ -845,6 +891,7 @@ Rectangle.intersectRect2D( rect1, rect2 );
 ```
 
 [`Circle`](https://ptsjs.org/docs.md#op-circle) from "Op" module helps you create and work with circles.
+
 ```
 Circle.fromCenter( center, 10 );
 Circle.fromRect( rect );
@@ -853,6 +900,7 @@ Circle.intersectCircle2D( c1, c2 );
 ```
 
 [`Triangle`](https://ptsjs.org/docs.md#op-triangle) from "Op" module helps you create and work with triangles.
+
 ```
 Triangle.fromCircle( c ); // equilateral triangle
 Triangle.fromRect( rect );
@@ -862,6 +910,7 @@ Triangle.medial( tri );
 ```
 
 [`Polygon`](https://ptsjs.org/docs.md#op-polygon) from "Op" module helps you create and work with polygons.
+
 ```
 Polygon.centroid( poly );
 Polygon.convexHull( poly );
@@ -870,6 +919,7 @@ Polygon.intersectPolygon2D( poly, lines );
 ```
 
 [`Curve`](https://ptsjs.org/docs.md#op-curve) from "Op" module helps you create and work with curves.
+
 ```
 Curve.catmullRom( pts );
 Curve.cardinal( pts );
@@ -888,6 +938,7 @@ Check out the [full documentation](https://ptsjs.org/docs/) too.
 [`Space`](https://ptsjs.org/docs.md#space-space) provides a general context for its points to be expressed. Each subclass of `Space` represents a specific context. Currently **`Pts`** includes [`CanvasSpace`](https://ptsjs.org/docs.md#canvas-canvasspace) which corresponds to the [`canvas`](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element, and [`SVGSpace`](https://ptsjs.org/docs.md#svg-svgspace) which lets you create vector graphics in svg format instead. There is also a deprecated [`HTMLSpace`](https://ptsjs.org/docs.md#dom-htmlspace) which renders forms in basic html elements. Soon we will have spaces for other contexts too.
 
 [`CanvasSpace`](https://ptsjs.org/docs.md#canvas-canvasspace) can be created like this:
+
 ```
 let space = new CanvasSpace( "#hello" );
 space.setup({ bgcolor: "#123", retina: true });
@@ -931,8 +982,8 @@ space.add( {
 ```
 
 Here we add an object that conforms to the [IPlayer](https://ptsjs.org/docs/?p=Types_IPlayer) interface, which defines 4 optional callback functions:
-- `start` function is called when the space is ready. It includes 2 parameters: `bound` which returns the bounding box, and `space` which returns its space.
 
+- `start` function is called when the space is ready. It includes 2 parameters: `bound` which returns the bounding box, and `space` which returns its space.
 
 * `animate` function is called continuously when the space plays. It includes 2 parameters: `time` which gives the current running time, and `ftime` which gives the time taken to draw the previous frame.
 
@@ -943,6 +994,7 @@ Here we add an object that conforms to the [IPlayer](https://ptsjs.org/docs/?p=T
 You may add multiple players into a space, each taking care of specific parts of a scene. Use [`add`](https://ptsjs.org/docs.md#canvas-canvasspace) and [`remove`](https://ptsjs.org/docs.md#canvas-canvasspace) to manage a space's players.
 
 #### Animation and interaction
+
 You can tell a space to play or stop its players using [`play`](https://ptsjs.org/docs.md#canvas-canvasspace), [`stop`](https://ptsjs.org/docs.md#canvas-canvasspace) and other functions:
 
 ```
@@ -953,8 +1005,7 @@ space.resume();
 space.stop();
 ```
 
-Using [`bindMouse`](https://ptsjs.org/docs.md#canvas-canvasspace)  and [`bindTouch`](https://ptsjs.org/docs.md#canvas-canvasspace), you can easily make the space respond to user interactions. Once the space can receive mouse or touch events, you can track the events using a player's `action` callback function, as described above.
-
+Using [`bindMouse`](https://ptsjs.org/docs.md#canvas-canvasspace) and [`bindTouch`](https://ptsjs.org/docs.md#canvas-canvasspace), you can easily make the space respond to user interactions. Once the space can receive mouse or touch events, you can track the events using a player's `action` callback function, as described above.
 
 ```
 // You can chain multiple functions together
@@ -971,7 +1022,6 @@ space.untrack( myButton ); // ...until you stop tracking it
 CanvasSpace also provides a couple convenient properties which you may access once the space is initiated. [`.pointer`](https://ptsjs.org/docs.md#canvas-canvasspace) gives you the current pointer position. [`.size`](https://ptsjs.org/docs.md#canvas-canvasspace), [`.center`](https://ptsjs.org/docs.md#canvas-canvasspace), [`.width`](https://ptsjs.org/docs.md#canvas-canvasspace), [`.height`](https://ptsjs.org/docs.md#canvas-canvasspace) and [`.innerBound`](https://ptsjs.org/docs.md#canvas-canvasspace) are handy to get a space's size and center point. [`.element`](https://ptsjs.org/docs.md#canvas-canvasspace) and [`.parent`](https://ptsjs.org/docs.md#canvas-canvasspace) returns the html elements of this space.
 
 CanvasSpace also supports offscreen rendering which may help with rendering complex scene. Take a look at the source code of [this study](https://ptsjs.org/study/index.html?name=CanvasSpace.offscreen) for more.
-
 
 #### Form
 
@@ -1001,6 +1051,7 @@ If you need more advanced canvas functions, you can get canvas' rendering contex
 And since both Space and Form are javascript classes, you can extend them to override its functions and add new ones.
 
 #### SVG Space
+
 You can switch your code from [`CanvasSpace`](https://ptsjs.org/docs.md#canvas-canvasspace) to [`SVGSpace`](https://ptsjs.org/docs.md#svg-svgspace) without changing your drawing code: initiate the space as `SVGSpace` instead of `CanvasSpace`, and `space.getForm()` will return an [`SVGForm`](https://ptsjs.org/docs.md#svg-svgform), which shares the complete `CanvasForm` drawing API — shapes, gradients, dashes, text and more render as svg automatically.
 
 ```
@@ -1014,7 +1065,6 @@ If you use [`quickStart`](#demo-pts-quick-start), it picks the space for you: mo
 Under the hood, consecutive shapes that share styles are merged into single svg elements per frame, so the output stays fast and compact. To export the current frame as an svg file, use [`SVGSpace.toSVG`](https://ptsjs.org/docs.md#svg-svgspace) — pass `true` to get one element per shape, which is easier to edit in vector graphics tools.
 
 (In earlier versions of Pts, SVG rendering required a `form.scope(this)` call in each animate callback. This is no longer needed — existing code that calls it will still run, as the function is kept as a harmless no-op.)
-
 
 #### HTML Space
 
@@ -1056,6 +1106,7 @@ space.bindMouse().bindTouch().play();
 Canvas element has only basic supports for text, making it difficult to create and experiment with typographic layouts. Pts provides additional functions to help you position text contents on canvas. In this guide, we will take a look at these features.
 
 ![demo](https://ptsjs.org/guide/assets/textbox.png)
+
 ##### You can view this typographic layout demo on the [demo page](http://ptsjs.org/demo/?name=canvasform.textBox).
 
 #### Text Box
@@ -1164,14 +1215,14 @@ let everyTen = tempo.every( 10 ); // count every 10 beats
 
 The [`every`](https://ptsjs.org/docs.md#play-tempo) function returns an object with two chainable functions: `start(...)` and `progress(...)`. These functions let you attach custom callback functions that respond to animation events.
 
-The `start` function lets you set a callback to be triggered at the start of every *n*-beats period. For example:
+The `start` function lets you set a callback to be triggered at the start of every _n_-beats period. For example:
 
 ```
 // at the start of every 2-beats period, do something
 everyTwo.start( (count) => ... )
 ```
 
-The `progress` function lets you set a callback during the progress of every *n*-beats period. The second parameter `t` always start at 0 and ends at 1 in every period, so you can use it to interpolate values and tween properties.
+The `progress` function lets you set a callback during the progress of every _n_-beats period. The second parameter `t` always start at 0 and ends at 1 in every period, so you can use it to interpolate values and tween properties.
 
 ```
 // during every 10-beats period, do something
@@ -1179,6 +1230,7 @@ everyTen.progress( (count, t, time, isStart) => ... )
 ```
 
 Let's look at an example. Here the tempo is set to 60 BPM (or 1 second per beat), and we design the behaviors so that:
+
 - Every 1 beat, the square's color changes
 - Every 2 beats, the circle's color changes and the rotation completes once
 
@@ -1198,7 +1250,6 @@ everyTwo.progress( (count, t, time, isStart) => {
 ```
 
 > Interactive example: [`guide.tempo_shaping`](#demo-guide-tempo-shaping) · [open live](https://ptsjs.org/demo/?name=guide.tempo_shaping)
-
 
 **Stagger**: You can offset a beat's timing by a small difference to create a "stagger" effect. Specify an offset time (in milliseconds) in the optional second parameter. A positive offset activates sooner, and a negative offset activates later.
 
@@ -1220,6 +1271,7 @@ let custom = tempo.every( [2, 2, 1, 1] ); // Taaa, Taaa, ta-ta.
 #### Controls
 
 By changing bpm by setting the [`.bpm`](https://ptsjs.org/docs.md#play-tempo) property, you can control the speed of your animation. This makes it easier to synchronize your animations with music or at specific intervals.
+
 ```
 tempo.bpm = 100; // set new bpm
 tempo.bpm += 20; // make it 20 beats faster per minute
@@ -1244,12 +1296,14 @@ tempo.stop( "robot" ); // another way to stop this animation
 #### Cheat Sheet
 
 Create a [`Tempo`](https://ptsjs.org/docs.md#play-tempo) instance with specific bpm.
+
 ```
 tempo = new Tempo(120); // 120 bpm
 tempo = Tempo.fromBeat( 100 ); // one beat every 100ms
 ```
 
 Count beats and trigger animation callbacks
+
 ```
 let fiveBeats = tempo.every( 5 );
 
@@ -1290,35 +1344,39 @@ Here is the result. Click play button to start.
 
 > Interactive example: [`guide.sound_simple`](#demo-guide-sound-simple) · [open live](https://ptsjs.org/demo/?name=guide.sound_simple)
 
-##### Music snippet from [*Space Travel Clichés*](https://soundcloud.com/mrgreenh/space-travel-cliches) by Mr Green H.
+##### Music snippet from [_Space Travel Clichés_](https://soundcloud.com/mrgreenh/space-travel-cliches) by Mr Green H.
 
 How about something more elaborate? Let's try a silly and fun visualization.
 
 > Interactive example: [`guide.sound_visual`](#demo-guide-sound-visual) · [open live](https://ptsjs.org/demo/?name=guide.sound_visual)
 
-##### Click play button and move your pointer around the character. Music snippet from [*Space Travel Clichés*](https://soundcloud.com/mrgreenh/space-travel-cliches) by Mr Green H.
+##### Click play button and move your pointer around the character. Music snippet from [_Space Travel Clichés_](https://soundcloud.com/mrgreenh/space-travel-cliches) by Mr Green H.
 
 #### Input
 
 Let's get some sounds to begin! Do you want to load from a sound file, receive microphone input, or generate audio dynamically? Pts offers four handy static functions for these.
 
 1. Use [`Sound.load`](https://ptsjs.org/docs.md#play-sound) to load a sound file with an url or a specific `<audio>` element. The sound will play as soon as it has streamed enough data. You can check if the audio file is ready to play by accessing [`.playable`](https://ptsjs.org/docs.md#play-sound) property.
+
 ```
 Sound.load( "/path/to/hello.mp3" ).then( s => sound = s );
 Sound.load( audioElem ).then( s => sound = s ); // load from <audio> element
 ```
 
 2. Use [`Sound.loadAsBuffer`](https://ptsjs.org/docs.md#play-sound) if you need support for Safari and iOS, since they currently don't provide sound data for <audio> element reliably. See discussion in Advanced section below.
+
 ```
 Sound.loadAsBuffer( "/path/to/hello.mp3" ).then( s => sound = s );
 ```
 
 3. Use [`Sound.generate`](https://ptsjs.org/docs.md#play-sound) to create a sound. You may also generate sounds using other libraries like Tone.js. Read more in Advanced section below.
+
 ```
 let sound = Sound.generate( "sine", 120 ); // sine oscillator at 120Hz
 ```
 
 4. Use [`Sound.input`](https://ptsjs.org/docs.md#play-sound) to get audio from default input device (usually microphone). This will return a Promise object which will resolve when the input device is ready, or reject if the device is unavailable or permission is denied.
+
 ```
 let sound;
 Sound.input().then( s => sound = s ).catch( err => ... ); // default input device
@@ -1330,7 +1388,6 @@ Here's a basic demo of getting audio from microphone:
 > Interactive example: [`guide.sound_mic`](#demo-guide-sound-mic) · [open live](https://ptsjs.org/demo/?name=guide.sound_mic)
 
 ##### You may first need to allow this page to access microphone, and then click the record button. We also make the recording stop when the pointer leave the demo area so that your microphone is not always on.
-
 
 You can then [`start`](https://ptsjs.org/docs.md#play-sound) and [`stop`](https://ptsjs.org/docs.md#play-sound) playing the sound like this:
 
@@ -1401,8 +1458,8 @@ The following is a basic frequency-domain example for your reference.
 
 The interplay of sounds and shapes offer many possibilities indeed. Make good use of your imagination to create something beautiful, fun, and unexpected!
 
-
 #### Advanced
+
 Currently Safari and iOS can play streaming <audio> element, but don't reliably provide time and frequency domain data for it. Hopefully Safari will have a fix soon, but for now you can use [`AudioBuffer`](https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer) approach - it's a bit more clumsy but it works (see [`loadAsBuffer`](https://ptsjs.org/docs.md#play-sound)).
 
 ```
@@ -1416,7 +1473,7 @@ Sound.loadAsBuffer( "/path/to/hello.mp3" ).then( s => sound = s );
 sound.createBuffer();
 ```
 
-For custom use cases with other libraries, you can create an instance using  [`Sound.from`](https://ptsjs.org/docs.md#play-sound) static method. Here's an example using Tone.js:
+For custom use cases with other libraries, you can create an instance using [`Sound.from`](https://ptsjs.org/docs.md#play-sound) static method. Here's an example using Tone.js:
 
 ```
 let synth = new Tone.Synth();
@@ -1450,6 +1507,7 @@ Web Audio covers a wide range of topics. Here are a few pointers for you to dive
 #### Cheatsheet
 
 Creating and playing a [`Sound`](https://ptsjs.org/docs.md#play-sound) instance
+
 ```
 Sound.load( "path/file.mp3" ).then( d => s = d ); // from file
 Sound.loadAsBuffer( "path/file.mp3" ).then( d => s = d ); // using AudioBuffer instead
@@ -1463,6 +1521,7 @@ s.toggle();
 ```
 
 Getting time domain and frequency domain data
+
 ```
 s.analyze( 256 ); // Create analyzer with 256 bins
 
@@ -1494,9 +1553,9 @@ space.add( time => form.image( space.pointer, img ) );
 
 ##### Image credit: "C 50 Last Birds And Flowers" by Kurt Schwitters
 
-The above example uses the *static* function [`Img.load`](https://ptsjs.org/docs.md#image-img), which returns a Promise that resolves to the loaded image, and then uses CanvasForm's [`image`](https://ptsjs.org/docs.md#canvas-canvasform) function to display it. A load failure rejects the Promise.
+The above example uses the _static_ function [`Img.load`](https://ptsjs.org/docs.md#image-img), which returns a Promise that resolves to the loaded image, and then uses CanvasForm's [`image`](https://ptsjs.org/docs.md#canvas-canvasform) function to display it. A load failure rejects the Promise.
 
-You can also create an Img instance yourself and call the *instance* function [`load`](https://ptsjs.org/docs.md#image-img), which is handy when you want to configure the instance first. An example:
+You can also create an Img instance yourself and call the _instance_ function [`load`](https://ptsjs.org/docs.md#image-img), which is handy when you want to configure the instance first. An example:
 
 ```
 (async function() {
@@ -1511,8 +1570,8 @@ Once the image is loaded, you can access its properties like width and height an
 
 ##### In this example, we access the image's original width and height after it's loaded, and then rescale it to fit the canvas size.
 
-
 #### Editing Images
+
 When you create an Img instance with its `editable` parameter set to `true`, it will hold an internal canvas to support image manipulations. It will also match the pixel-density of your display. An example:
 
 ```
@@ -1586,7 +1645,7 @@ You can also work at the pixel level: [`setPixel`](https://ptsjs.org/docs.md#ima
 
 #### Patterns
 
-In a similar way, you can treat an image (or an image canvas) as a pattern to fill an area. One difference is that we'll get a [CanvasPattern](https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern) instance for use in  `form.fill(...)`, instead of an image for `form.image(...)`.
+In a similar way, you can treat an image (or an image canvas) as a pattern to fill an area. One difference is that we'll get a [CanvasPattern](https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern) instance for use in `form.fill(...)`, instead of an image for `form.image(...)`.
 
 ```
 const pattern = await Img.loadPattern( "tile.jpg", space );
@@ -1621,8 +1680,7 @@ It's now your turn to experiment!
 
 - CanvasForm's [`image`](https://ptsjs.org/docs.md#canvas-canvasform) drawing function can take either an Img instance or a [CanvasImageSource](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) which includes various kinds of image objects like HTML Image or Canvas.
 
-- Typically, you can't load an image from another domain due to security concerns. But if the image server allows for it and you want to do it, you can set the `crossOrigin` parameter to `true` when creating an  `Img` instance. [More details here](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image).
-
+- Typically, you can't load an image from another domain due to security concerns. But if the image server allows for it and you want to do it, you can set the `crossOrigin` parameter to `true` when creating an `Img` instance. [More details here](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image).
 
 #### Cheatsheet
 
@@ -1653,6 +1711,7 @@ form.fill( pattern ).rect( rect );
 ```
 
 Useful properties
+
 ```
 img.loaded; // true if the image is loaded
 img.image; // the original image
@@ -1662,6 +1721,7 @@ img.pixelScale; // pixel density which usually matches the space's
 ```
 
 Editing an image
+
 ```
 img.crop( rect )
 img.resize( 0.5, true );
@@ -1690,11 +1750,13 @@ form.fill( pattern ).rect( rect );
 Pts.js works well with common web frameworks and can also be used in other environments. You can apply all or a part of Pts in your own project frictionlessly. The following is a list of libraries that extends Pts. Give them a try!
 
 #### Starter Kit
+
 [`pts-starter-kit`](https://github.com/williamngan/pts-starter-kit) provides a convenient way to build your next Pts project, with support for both javascript and typescript.
 
 Behind the scene it uses [esbuild](https://esbuild.github.io/) so it's super fast and optimized. When minified and gzipped, the repo demo is only ~26kb in size.
 
 #### React
+
 [`react-pts-canvas`](https://github.com/williamngan/react-pts-canvas) wraps Pts in a React component. It provides a functional component as well as a class component for backward compatibility.
 
 Using this component, you can create an animation as easy as:
@@ -1709,15 +1771,18 @@ Using this component, you can create an animation as easy as:
 For other examples using this React component, take a look at [this repo](https://github.com/williamngan/react-pts-canvas-examples).
 
 #### Svelte
+
 **[experimental]** [`svelte-pts-canvas`](https://github.com/williamngan/svelte-pts-canvas) provides an experimental Pts component for Svelte. Please give it a try and make it better via feedback and PRs.
 
 #### Node Canvas
+
 **[experimental]**
- [`node-pts-canvas`](https://github.com/williamngan/node-pts-canvas) makes Pts work on [node-canvas](https://github.com/Automattic/node-canvas), a Cairo-backed Canvas implementation for Node.js. This means you can output higher resolution images and SVG without using browsers.
+[`node-pts-canvas`](https://github.com/williamngan/node-pts-canvas) makes Pts work on [node-canvas](https://github.com/Automattic/node-canvas), a Cairo-backed Canvas implementation for Node.js. This means you can output higher resolution images and SVG without using browsers.
 
 Only basic features of Pts are implemented at this point. Please file an issue for bugs and feedback.
 
 #### fxhash Starter Kit
+
 **[experimental]** [`pts-fxhash-starter-kit`](https://github.com/williamngan/pts-fxhash-starter-kit) forked from the fxhash boilerplate, providing a convenient way to make generative NFTs with Pts.
 
 [fxhash](https://www.fxhash.xyz/) is a generative NFT platform on Tezos blockchain. [My fxhash account](https://www.fxhash.xyz/u/William%20Ngan) displays some NFT examples created with this repo.
@@ -1725,6 +1790,7 @@ Only basic features of Pts are implemented at this point. Please file an issue f
 Please understand that this repo may not always be kept up-to-date with the latest fxhash requirements and features. Please refer to fxhash documentations, revise as needed, and fully test your code.
 
 #### Your Contribution
+
 Have you created a new library or project based on Pts? We would love to learn more and potentially feature it here.
 
 Please let us know by [filing an issue](https://github.com/williamngan/pts/issues) or message [@williamngan](https://twitter.com/williamngan) on Twitter.
@@ -1750,8 +1816,8 @@ import {Pt, Line} from "pts/dist/es5"
 
 For using Pts with React, [react-pts-canvas](https://www.npmjs.com/package/react-pts-canvas) is a component which you can extend to make it your own. Also take a look at [react-pts-canvas-examples](https://github.com/williamngan/react-pts-canvas-examples) which includes Pts examples in React.
 
-
 #### Cloning Pt with `clone()` or `$...`
+
 Pt is a subclass of Float32Array, and Group is a subclass of Array that should only contain Pt in it.
 
 Since objects and arrays in javascript are passed by reference, remember to clone them if you are going to change their values. Functions starting with `$` such as `$add` means it will return a new Pt and keeping the original unchanged.
@@ -1762,6 +1828,7 @@ pt.$subtract( 10 ); // use $fn to get a new Pt
 ```
 
 #### Typescript notes
+
 While [`Pt`](https://ptsjs.org/docs.md#pt-pt) extends `Float32Array` and [`Group`](https://ptsjs.org/docs.md#pt-group) extends Array, typescript compiler at the moment (2.4.2) isn't smart enough to auto-cast the return type when you use an Array or Float32Array function. That means if you use typescript, you may need to recast some native Array functions such as `map` or `slice`.
 
 ```

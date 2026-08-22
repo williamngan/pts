@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Op.ts",
-      898,
+      904,
       13
     ]
   ],
@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Op.ts",
-          964,
+          970,
           9
         ]
       ],
@@ -54,7 +54,7 @@
       "source": [
         [
           "src/Op.ts",
-          1020,
+          1029,
           9
         ]
       ],
@@ -66,7 +66,7 @@
       "signatures": [
         {
           "comment": "Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side).",
-          "returns": "Pt",
+          "returns": "Pt | undefined",
           "returns_comment": "the circumcenter as a Pt",
           "parameters": [
             {
@@ -85,7 +85,7 @@
       "source": [
         [
           "src/Op.ts",
-          1039,
+          1048,
           9
         ]
       ],
@@ -97,7 +97,7 @@
       "signatures": [
         {
           "comment": "Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side).",
-          "returns": "Group",
+          "returns": "Group | undefined",
           "returns_comment": false,
           "parameters": [
             {
@@ -122,7 +122,7 @@
       "source": [
         [
           "src/Op.ts",
-          925,
+          931,
           9
         ]
       ],
@@ -159,7 +159,7 @@
       "source": [
         [
           "src/Op.ts",
-          916,
+          922,
           9
         ]
       ],
@@ -190,7 +190,7 @@
       "source": [
         [
           "src/Op.ts",
-          903,
+          909,
           9
         ]
       ],
@@ -221,7 +221,7 @@
       "source": [
         [
           "src/Op.ts",
-          992,
+          1001,
           9
         ]
       ],
@@ -233,7 +233,7 @@
       "signatures": [
         {
           "comment": "Get incenter, which is the center point of its inner circle, and also the intersection point of its 3 angle bisector lines (each of which cuts one of the 3 angles in half).",
-          "returns": "Pt",
+          "returns": "Pt | undefined",
           "returns_comment": "the incenter as a Pt",
           "parameters": [
             {
@@ -252,7 +252,7 @@
       "source": [
         [
           "src/Op.ts",
-          1005,
+          1014,
           9
         ]
       ],
@@ -264,7 +264,7 @@
       "signatures": [
         {
           "comment": "Get an interior circle, which is the largest circle completed enclosed by this triangle.",
-          "returns": "Group",
+          "returns": "Group | undefined",
           "returns_comment": false,
           "parameters": [
             {
@@ -289,7 +289,7 @@
       "source": [
         [
           "src/Op.ts",
-          934,
+          940,
           9
         ]
       ],
@@ -320,7 +320,7 @@
       "source": [
         [
           "src/Op.ts",
-          946,
+          952,
           9
         ]
       ],
@@ -357,7 +357,7 @@
       "source": [
         [
           "src/Op.ts",
-          979,
+          988,
           9
         ]
       ],
@@ -369,7 +369,7 @@
       "signatures": [
         {
           "comment": "Get orthocenter, which is the intersection point of a triangle's 3 altitudes (the 3 lines that are perpendicular to its 3 opposite sides).",
-          "returns": "Pt",
+          "returns": "Pt | undefined",
           "returns_comment": "the orthocenter as a Pt",
           "parameters": [
             {

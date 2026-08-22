@@ -1,15 +1,21 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-	<title>Sound</title>
-	<link href="./assets/style.css" rel="stylesheet" type="text/css" />
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-</head>
+  <head>
+    <title>Sound</title>
+    <link href="./assets/style.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+  </head>
 
-<body>
-<div id="header">
-  <div id="pts"><a href="../">Pts<span>.</span></a>guides</div>
+  <body>
+    <div id="header">
+  <div id="pts">
+    <a href="../">Pts<span>.</span></a
+    >guides
+  </div>
   <div id="topmenu">
     <a href="../demo/index.html">demos</a>
     <a href="../study/index.html">studies</a>
@@ -17,8 +23,8 @@
     <a href="https://github.com/williamngan/pts">github</a>
   </div>
 </div>
-<a href="#menu" id="toc">&#x2261;</a>
-<div id="post"><h1>Sound</h1>
+    <a href="#menu" id="toc">&#x2261;</a>
+    <div id="post"><h1>Sound</h1>
 <p>Audio and visual forms complement each other, giving us new opportunities to create unique expressions. Pts simplifies a subset of Web Audio API to help you with common tasks like playbacks and visualizations.</p>
 <p>Before we dive in, let's review a snippet of using Pts' Sound functions. It's pretty straightforward.</p>
 <pre><code>// Load sound and attach analyzer
@@ -83,7 +89,7 @@ sound.volume = 0.5; // change the volume (default is 1)
 <p>There are two common ways to analyze sound data. First, we can represent sounds as snapshots of sound waves, which correspond to variations in air pressure over time. This is called the time-domain, as it measures amplitudes of the &quot;waves&quot; over time steps.</p>
 <p>To get the time domain data at current time step, call the <a href="#play-sound"><code>timeDomain</code></a> function.</p>
 <pre><code>// get an uint typed array of 128 values (corresponds to bin size above)
-let td = sound.timeDomain(); 
+let td = sound.timeDomain();
 </code></pre>
 <p>Optionally, use the <a href="#play-sound"><code>timeDomainTo</code></a> function to map the data to another range, such as a rectangular area. You can then apply various Pts functions to transform and visualize waveforms in a few lines of code.</p>
 <pre><code>// fit data into a 200x100 area, starting from position (50, 50)
@@ -114,8 +120,8 @@ td = sound.timeDomainTo( [200, 100], [50, 50], [0, 0], td ); // reused
 <pre><code>// optionally, prepare a replay manually by reusing the loaded buffer
 sound.createBuffer();
 </code></pre>
-<p>For custom use cases with other libraries, you can create an instance using  <a href="#play-sound"><code>Sound.from</code></a> static method. Here's an example using Tone.js:</p>
-<pre><code>let synth = new Tone.Synth(); 
+<p>For custom use cases with other libraries, you can create an instance using <a href="#play-sound"><code>Sound.from</code></a> static method. Here's an example using Tone.js:</p>
+<pre><code>let synth = new Tone.Synth();
 let sound = Sound.from( synth, synth.context ); // create Pts Sound instance
 synth.toMaster(); // play using tone.js instead of Pts
 </code></pre>
@@ -162,25 +168,44 @@ g = s.freqDomainTo( area, position, trim, g ); // reuse a Group across frames
 </code></pre>
 </div>
 
-<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>
-
-<div id="footer">Copyright &copy; 2017-current by <a href="https://twitter.com/williamngan">William Ngan</a> and contributors. Pts is an <a href="https://github.com/williamngan/pts">open source project</a> under Apache License 2.0.</div>
+    <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol> <div id="footer">
+  Copyright &copy; 2017-current by
+  <a href="https://twitter.com/williamngan">William Ngan</a> and contributors.
+  Pts is an
+  <a href="https://github.com/williamngan/pts">open source project</a> under
+  Apache License 2.0.
+</div>
 
 <script type="text/javascript" src="../dist/pts.min.js"></script>
 <script type="text/javascript" src="./js/guide.js"></script>
 <script src="./js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-104913373-1', 'auto');
-  ga('send', 'pageview');
-
+  hljs.initHighlightingOnLoad();
 </script>
 
-</body>
+<script>
+  (function (i, s, o, g, r, a, m) {
+    i["GoogleAnalyticsObject"] = r;
+    ((i[r] =
+      i[r] ||
+      function () {
+        (i[r].q = i[r].q || []).push(arguments);
+      }),
+      (i[r].l = 1 * new Date()));
+    ((a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]));
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m);
+  })(
+    window,
+    document,
+    "script",
+    "https://www.google-analytics.com/analytics.js",
+    "ga",
+  );
+
+  ga("create", "UA-104913373-1", "auto");
+  ga("send", "pageview");
+</script>
+  </body>
 </html>

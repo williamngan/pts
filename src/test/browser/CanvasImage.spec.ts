@@ -162,7 +162,7 @@ describe("CanvasSpace and Space interaction", () => {
     expect(
       space.touchesToPoints({ touches: touchList } as unknown as TouchEvent),
     ).toEqual([new Pt(10, 20), new Pt(20, 30)]);
-    expect(space.touchesToPoints(null)).toEqual([]);
+    expect(space.touchesToPoints(null!)).toEqual([]);
     const touch = new TouchEvent("touchmove");
     (space as any)._touchStart(touch);
     (space as any)._touchMove(touch);
@@ -291,7 +291,7 @@ describe("CanvasSpace and Space interaction", () => {
 
   it("creates recordings and handles callback and download results", async () => {
     class FakeRecorder {
-      ondataavailable: (event: { data: Blob }) => void;
+      ondataavailable!: (event: { data: Blob }) => void;
       constructor(
         public stream: MediaStream,
         public options: MediaRecorderOptions,
@@ -331,7 +331,7 @@ describe("CanvasForm", () => {
     canvas.width = 240;
     canvas.height = 160;
     document.body.appendChild(canvas);
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d")!;
     const form = new CanvasForm(ctx);
 
     expect(form.ctx).toBe(ctx);
@@ -417,15 +417,15 @@ describe("CanvasForm", () => {
       .reset();
 
     expect(() => form.point([0, 0], 1, "missing")).toThrow(/static/);
-    expect(CanvasForm.point(ctx, null)).toBeUndefined();
-    expect(CanvasForm.circle(ctx, null)).toBeUndefined();
-    expect(CanvasForm.ellipse(ctx, null, [1, 1])).toBeUndefined();
-    expect(CanvasForm.arc(ctx, null, 1, 0, 1)).toBeUndefined();
-    expect(CanvasForm.square(ctx, null, 1)).toBeUndefined();
+    expect(CanvasForm.point(ctx, null!)).toBeUndefined();
+    expect(CanvasForm.circle(ctx, null!)).toBeUndefined();
+    expect(CanvasForm.ellipse(ctx, null!, [1, 1])).toBeUndefined();
+    expect(CanvasForm.arc(ctx, null!, 1, 0, 1)).toBeUndefined();
+    expect(CanvasForm.square(ctx, null!, 1)).toBeUndefined();
     expect(CanvasForm.line(ctx, [])).toBeUndefined();
     expect(CanvasForm.polygon(ctx, [])).toBeUndefined();
     expect(CanvasForm.rect(ctx, [])).toBeUndefined();
-    expect(CanvasForm.text(ctx, null, "none")).toBeUndefined();
+    expect(CanvasForm.text(ctx, null!, "none")).toBeUndefined();
   });
 
   it("draws canvases and image data in every placement mode", () => {
@@ -435,7 +435,7 @@ describe("CanvasForm", () => {
     const source = document.createElement("canvas");
     source.width = 10;
     source.height = 10;
-    const form = new CanvasForm(target.getContext("2d"));
+    const form = new CanvasForm(target.getContext("2d")!);
     const data = new ImageData(2, 2);
 
     form
@@ -470,7 +470,7 @@ describe("CanvasForm", () => {
     const img = Img.blank([10, 10]);
     (img as any)._img = img.canvas;
     form.image([0, 0], img);
-    expect(target.getContext("2d").getImageData(0, 0, 1, 1)).toBeInstanceOf(
+    expect(target.getContext("2d")!.getImageData(0, 0, 1, 1)).toBeInstanceOf(
       ImageData,
     );
   });
@@ -526,7 +526,7 @@ describe("Img", () => {
     const source = document.createElement("canvas");
     source.width = 4;
     source.height = 3;
-    source.getContext("2d").fillRect(0, 0, 4, 3);
+    source.getContext("2d")!.fillRect(0, 0, 4, 3);
     const url = source.toDataURL();
     const loaded = await Img.loadAsync(url, true);
     expect(loaded.loaded).toBe(true);
@@ -584,7 +584,7 @@ describe("Img correctness fixes", () => {
     const cv = document.createElement("canvas");
     cv.width = w;
     cv.height = h;
-    const ctx = cv.getContext("2d");
+    const ctx = cv.getContext("2d")!;
     ctx.fillStyle = color;
     ctx.fillRect(0, 0, w, h);
     return cv.toDataURL();
@@ -610,7 +610,7 @@ describe("Img correctness fixes", () => {
   it("sync() is awaitable and refreshes data at scale 1 and 2", async () => {
     for (const scale of [1, 2]) {
       const img = Img.blank([4, 4], undefined, scale);
-      const form = img.getForm();
+      const form = img.getForm()!;
       form.fillOnly("#00ff00").rect([
         [0, 0],
         [8, 8],
@@ -634,7 +634,7 @@ describe("Img correctness fixes", () => {
 
   it("resizes canvas-only images", () => {
     const img = Img.blank([4, 4]);
-    const form = img.getForm();
+    const form = img.getForm()!;
     form.fillOnly("#0000ff").rect([
       [0, 0],
       [4, 4],
@@ -738,7 +738,7 @@ describe("style cache survives context resets", () => {
 
   it("re-applies styles after an Img canvas re-init", () => {
     const img = Img.blank([8, 8]);
-    const form = img.getForm();
+    const form = img.getForm()!;
     form.fillOnly("#0c9");
     expect((img.ctx as CanvasRenderingContext2D).fillStyle).toBe("#00cc99");
 

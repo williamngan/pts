@@ -1,8 +1,8 @@
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
-import { Pt, Group, Bound } from "./Pt";
-import { Space } from "./Space";
-import { UI } from "./UI";
+import { type Pt, type Group, type Bound } from "./Pt";
+import { type Space } from "./Space";
+import { type UI, type UIPointerAction } from "./UI";
 
 /**
  * Typescript interface: IPt is an interface that represents an object with x, y, z, w properties.
@@ -53,8 +53,14 @@ export type TextVerticalAlign =
 export type AnimateCallbackFn = (
   time: number,
   frameTime: number,
-  currentSpace: any,
+  currentSpace: Space,
 ) => void;
+
+/**
+ * Typescript type: UIActionEvent represents the DOM events a Space dispatches to players and UI handlers — pointer, mouse, touch, and keyboard.
+ */
+export type UIActionEvent =
+  MouseEvent | TouchEvent | PointerEvent | KeyboardEvent;
 
 /**
  * Typescript interface: IPlayer is an interface that represents a "player" object that can be added into a Space.
@@ -62,8 +68,8 @@ export type AnimateCallbackFn = (
 export interface IPlayer {
   animateID?: string;
   animate?: AnimateCallbackFn;
-  resize?(bound: Bound, evt?: Event): void;
-  action?(type: string, px: number, py: number, evt: Event): void;
+  resize?(bound: Bound, evt?: Event | null): void;
+  action?(type: string, px: number, py: number, evt: UIActionEvent): void;
   start?(bound: Bound, space: Space): void;
 }
 
@@ -93,8 +99,14 @@ export type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
  * Typescript interface: MultiTouchElement represents an element that can handle touch events.
  */
 export interface MultiTouchElement {
-  addEventListener(evt: any, callback: Function);
-  removeEventListener(evt: any, callback: Function);
+  addEventListener(
+    evt: string,
+    callback: EventListenerOrEventListenerObject,
+  ): void;
+  removeEventListener(
+    evt: string,
+    callback: EventListenerOrEventListenerObject,
+  ): void;
 }
 
 /**
@@ -134,12 +146,12 @@ export type DelaunayMesh = { [key: string]: DelaunayShape }[];
  * Typescript type: DOMFormContext represents the current context for an DOMForm.
  */
 export type DOMFormContext = {
-  group: Element;
+  group: Element | null | undefined;
   groupID: string;
   groupCount: number;
   currentID: string;
   currentClass?: string;
-  style: object;
+  style: Record<string, string | number | boolean>;
 };
 
 /**
@@ -151,7 +163,7 @@ export type IntersectContext = {
   normal: Pt;
   vertex: Pt;
   edge: Group;
-  other?: any;
+  other?: unknown;
 };
 
 /**
@@ -160,8 +172,8 @@ export type IntersectContext = {
 export type UIHandler = (
   target: UI,
   pt: PtLike,
-  type: string,
-  evt: MouseEvent,
+  type: UIPointerAction | (string & {}),
+  evt: UIActionEvent,
 ) => void;
 
 /**
@@ -232,8 +244,8 @@ export type DefaultFormStyle = {
   fillStyle?: string | CanvasGradient | CanvasPattern;
   strokeStyle?: string | CanvasGradient | CanvasPattern;
   lineWidth?: number;
-  lineJoin?: string;
-  lineCap?: string;
+  lineJoin?: CanvasLineJoin;
+  lineCap?: CanvasLineCap;
   globalAlpha?: number;
 };
 

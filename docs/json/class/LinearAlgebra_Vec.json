@@ -350,7 +350,7 @@
             {
               "name": "fn",
               "comment": "",
-              "type": " Fn(n:number, index:number, arr:any)",
+              "type": " Fn(n:number, index:number, arr:PtLike)",
               "default": false
             }
           ],
@@ -375,7 +375,7 @@
       "signatures": [
         {
           "comment": "Find the max value within a vector's dimensions.",
-          "returns": "{ index:`any`, value:`any` }",
+          "returns": "{ index:`number`, value:`number` }",
           "returns_comment": "an object with `value` and `index` that specifies the max value and its corresponding dimension.",
           "parameters": [
             {
@@ -406,7 +406,7 @@
       "signatures": [
         {
           "comment": "Find the min value within a vector's dimensions.",
-          "returns": "{ index:`any`, value:`any` }",
+          "returns": "{ index:`number`, value:`number` }",
           "returns_comment": "an object with `value` and `index` that specifies the min value and its corresponding dimension.",
           "parameters": [
             {
@@ -585,7 +585,7 @@
             {
               "name": "magnitude",
               "comment": "",
-              "type": "number",
+              "type": "number | undefined",
               "default": "undefined"
             }
           ],

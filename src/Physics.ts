@@ -3,7 +3,7 @@
 import { Pt, Group, Bound } from "./Pt";
 import { Polygon, Circle } from "./Op";
 import { Geom } from "./Num";
-import { PtLike, PtIterable } from "./Types";
+import { type PtLike, type PtIterable } from "./Types";
 
 /**
  * A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation.
@@ -24,8 +24,8 @@ export class World {
   protected _pnames: string[] = []; // particle name index
   protected _bnames: string[] = []; // body name index
 
-  protected _drawParticles: (p: Particle, i: number) => void;
-  protected _drawBodies: (p: Body, i: number) => void;
+  protected _drawParticles!: (p: Particle, i: number) => void;
+  protected _drawBodies!: (p: Body, i: number) => void;
 
   // substep-adjusted friction, computed once per update
   private _frictionStep: number = 1;
@@ -254,7 +254,7 @@ export class World {
     return this;
   }
 
-  private _index(fn: (string) => number, id: string | number): number {
+  private _index(fn: (name: string) => number, id: string | number): number {
     let index = 0;
     if (typeof id === "string") {
       index = fn(id);
@@ -651,15 +651,15 @@ export class Particle extends Pt {
   protected _force: Pt = new Pt();
   protected _prev: Pt = new Pt();
 
-  protected _body: Body;
+  protected _body!: Body;
   protected _lock: boolean = false;
-  protected _lockPt: Pt;
+  protected _lockPt!: Pt;
 
   /**
    * Create a particle. Once a particle is created, you can set its mass and radius via the corresponding accessors.
    * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
-  constructor(...args) {
+  constructor(...args: any[]) {
     super(...args);
     this._prev = this.clone();
   }
@@ -759,7 +759,7 @@ export class Particle extends Pt {
    * Add to the accumulated force.
    * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
-  addForce(...args): Pt {
+  addForce(...args: any[]): Pt {
     this._force.add(...args);
     return this._force;
   }
@@ -803,7 +803,7 @@ export class Particle extends Pt {
    * @param args an impulse vector defined by either a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    * @example `hit(10, 20)`, `hit( new Pt(5, 9) )`
    */
-  hit(...args): this {
+  hit(...args: any[]): this {
     this._prev.subtract(new Pt(...args).$divide(Math.sqrt(this._mass)));
     return this;
   }

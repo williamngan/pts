@@ -9774,6 +9774,12 @@
     0
   ],
   [
+    "Types_UIActionEvent",
+    "UIActionEvent",
+    "Type alias",
+    0
+  ],
+  [
     "Types_UIHandler",
     "UIHandler",
     "Type alias",

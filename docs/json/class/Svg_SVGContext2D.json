@@ -73,7 +73,7 @@
       "inherits": false,
       "comment": "The `<g>` element holding this context's rendered output.",
       "getter": {
-        "type": "SVGElement"
+        "type": "SVGElement | null"
       },
       "setter": false
     },

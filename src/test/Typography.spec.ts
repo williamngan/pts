@@ -5,7 +5,7 @@ import { Typography } from "../Typography";
 describe("Typography", () => {
   it("builds a weighted text-width estimator", () => {
     const estimate = Typography.textWidthEstimator(
-      (sample) => ({ M: 10, n: 5, ".": 2 })[sample],
+      (sample) => ({ M: 10, n: 5, ".": 2 })[sample]!,
     );
     expect(estimate("abcd")).toBeCloseTo(19.52);
 

@@ -1,23 +1,28 @@
-import { Pt, Group, Bound } from "./Pt";
+import { Pt, Group, type Bound } from "./Pt";
 import { Num } from "./Num";
 import {
-  ITempoListener,
-  ITempoStartFn,
-  ITempoProgressFn,
-  ITempoResponses,
+  type ITempoListener,
+  type ITempoStartFn,
+  type ITempoProgressFn,
+  type ITempoResponses,
 } from "./Types";
-import { ISoundAnalyzer, SoundType, PtLike, IPlayer } from "./Types";
+import {
+  type ISoundAnalyzer,
+  type SoundType,
+  type PtLike,
+  type IPlayer,
+} from "./Types";
 
 /**
  * Tempo helps you create synchronized and rhythmic animations.
  */
 export class Tempo implements IPlayer {
-  protected _bpm: number; // beat per minute
-  protected _ms: number; // millis per beat
+  protected _bpm!: number; // beat per minute
+  protected _ms!: number; // millis per beat
 
   protected _listeners: { [key: string]: ITempoListener } = {};
   protected _listenerInc: number = 0;
-  public animateID: string;
+  public animateID!: string;
 
   /**
    * Construct a new Tempo instance by beats-per-minute. Alternatively, you can use [`Tempo.fromBeat`](#link) to create from milliseconds.
@@ -128,33 +133,39 @@ export class Tempo implements IPlayer {
       if (this._listeners.hasOwnProperty(k)) {
         const li = this._listeners[k];
         const _t = li.offset ? time + li.offset : time;
-        const ms = li.period * this._ms; // time per period
+        const ms = li.period! * this._ms; // time per period
         let isStart = false;
 
-        if (li.duration < 0) {
+        if (li.duration! < 0) {
           // first tick is the start of the first period
           li.duration = _t - (_t % this._ms);
           li.count = li.count || 0; // a hand-built listener may omit count
           isStart = true;
-        } else if (_t > li.duration + ms) {
+        } else if (_t > li.duration! + ms) {
           li.duration = _t - (_t % this._ms); // update
           if (Array.isArray(li.beats)) {
             // find next period from array
-            li.index = (li.index + 1) % li.beats.length;
+            li.index = (li.index! + 1) % li.beats.length;
             li.period = li.beats[li.index];
           }
           li.count = (li.count || 0) + 1;
           isStart = true;
         }
 
-        let done: void | boolean;
+        let done: void | boolean | undefined;
         if (li.continuous) {
-          const t = Num.clamp((_t - li.duration) / ms, 0, 1);
-          done = (li.fn as ITempoProgressFn).call(li, li.count, t, _t, isStart);
+          const t = Num.clamp((_t - li.duration!) / ms, 0, 1);
+          done = (li.fn as ITempoProgressFn).call(
+            li,
+            li.count!,
+            t,
+            _t,
+            isStart,
+          );
         } else if (isStart) {
-          done = (li.fn as ITempoStartFn).call(li, li.count);
+          done = (li.fn as ITempoStartFn).call(li, li.count!);
         }
-        if (done) delete this._listeners[li.name];
+        if (done) delete this._listeners[li.name!];
       }
     }
   }
@@ -199,34 +210,34 @@ export class Sound {
   _ctx: AudioContext;
 
   /** The audio node, which is usually a subclass liked OscillatorNode */
-  _node: AudioNode;
+  _node!: AudioNode;
 
   /**
    * The audio node to be connected to AudioContext when playing, if different than _node
    * This is useful when using the connect() function to filter, as typically the output would
    * come from the filtering nodes
    */
-  _outputNode: AudioNode;
+  _outputNode!: AudioNode;
 
   /** The audio stream when streaming from input device */
-  _stream: MediaStream;
+  _stream!: MediaStream;
 
   /** Audio src when loading from file */
-  _source: HTMLMediaElement;
+  _source!: HTMLMediaElement;
 
   /* Audio buffer when using AudioBufferSourceNode */
-  _buffer: AudioBuffer;
+  _buffer!: AudioBuffer;
 
   /** Analyzer if any */
-  analyzer: ISoundAnalyzer;
+  analyzer!: ISoundAnalyzer;
 
   protected _playing: boolean = false;
 
-  protected _timestamp: number; // Tracking play time against ctx.currentTime
+  protected _timestamp!: number; // Tracking play time against ctx.currentTime
 
-  protected _wave: PeriodicWave; // Wave when generating a "custom" oscillator
+  protected _wave!: PeriodicWave; // Wave when generating a "custom" oscillator
 
-  protected _gain: GainNode; // Gain node for volume control, created on first start
+  protected _gain!: GainNode; // Gain node for volume control, created on first start
 
   protected _volume: number = 1;
 
@@ -579,7 +590,7 @@ export class Sound {
    * Note: if you start the Sound after calling this, it will play via the default node
    */
   removeOutputNode(): this {
-    this._outputNode = null;
+    this._outputNode = null!;
     return this;
   }
 
@@ -830,16 +841,16 @@ export class Sound {
     this.reset();
     if (this.analyzer) {
       this.analyzer.node.disconnect();
-      this.analyzer = undefined;
+      this.analyzer = undefined!;
     }
     if (this._gain) {
       this._gain.disconnect();
-      this._gain = undefined;
+      this._gain = undefined!;
     }
     this._connected = [];
-    this._stream = undefined;
-    this._source = undefined;
-    this._buffer = undefined;
+    this._stream = undefined!;
+    this._source = undefined!;
+    this._buffer = undefined!;
     return this;
   }
 }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Font, VisualForm } from "../Form";
 import { Pt } from "../Pt";
-import { PtLike } from "../Types";
+import { type PtLike } from "../Types";
 
 class RecordingForm extends VisualForm {
   calls: Array<[string, ...unknown[]]> = [];
@@ -39,42 +39,48 @@ class RecordingForm extends VisualForm {
     return this;
   }
 
-  circle(points) {
+  circle(points: any) {
     this.calls.push(["circle", points]);
     return this;
   }
 
-  square(points) {
+  square(points: any) {
     this.calls.push(["square", points]);
     return this;
   }
 
-  arc(point, radius, startAngle, endAngle, cc = false) {
+  arc(point: any, radius: any, startAngle: any, endAngle: any, cc = false) {
     this.calls.push(["arc", point, radius, startAngle, endAngle, cc]);
     return this;
   }
 
-  line(points) {
+  line(points: any) {
     this.calls.push(["line", points]);
     return this;
   }
 
-  polygon(points) {
+  polygon(points: any) {
     this.calls.push(["polygon", points]);
     return this;
   }
 
-  rect(points) {
+  rect(points: any) {
     this.calls.push(["rect", points]);
     return this;
   }
 
-  text(point, value, maxWidth?) {
+  text(point: any, value: any, maxWidth?: any) {
     this.calls.push(["text", point, value, maxWidth]);
     return this;
   }
 
-  font(sizeOrFont, weight?, style?, lineHeight?, family?) {
+  font(
+    sizeOrFont: any,
+    weight?: any,
+    style?: any,
+    lineHeight?: any,
+    family?: any,
+  ) {
     this.calls.push(["font", sizeOrFont, weight, style, lineHeight, family]);
     return this;
   }
@@ -119,7 +125,7 @@ describe("VisualForm", () => {
     expect(form.lines(groups)).toBe(form);
     expect(form.polygons(groups)).toBe(form);
     expect(form.rects(groups)).toBe(form);
-    expect(form.circles(null)).toBe(form);
+    expect(form.circles(null!)).toBe(form);
 
     expect(form.calls.filter(([name]) => name === "point")).toHaveLength(2);
     for (const name of ["circle", "square", "line", "polygon", "rect"]) {
