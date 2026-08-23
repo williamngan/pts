@@ -40,7 +40,7 @@ export default defineConfig({
         assetFileNames: "pts.[ext]",
         entryFileNames: "monaco.js",
         chunkFileNames: "[name]-[hash].js",
-        inlineDynamicImports: true,
+        codeSplitting: false,
       },
     },
   },

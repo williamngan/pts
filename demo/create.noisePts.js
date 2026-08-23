@@ -29,9 +29,10 @@ Pts.quickStart( "#pt", "#f1f5f9" );
       let speed = space.pointer.$subtract( space.center ).divide( space.center ).abs();
 
       // Generate noise in a grid
-      noiseGrid.map( (p) => {
+      form.fillOnly("#123");
+      noiseGrid.forEach( (p) => {
         p.step( 0.01*speed.x, 0.01*(1-speed.y) );
-        form.fillOnly("#123").point( p, Math.abs( p.noise2D() * space.size.x/18 ) );
+        form.point( p, Math.abs( p.noise2D() * space.size.x/18 ) );
       });
 
       // Generate noise in a line

@@ -11,6 +11,8 @@ window.demoDescription = "Microphone demo in Sound guide.";
 
   var sound;
   var recording = false;
+  var pending = false;
+  var status = "";
   var rainbow = ["#f03", "#f90", "#fe6", "#3c0", "#0f6", "#03f", "#60f"];
 
   // Draw button
@@ -21,19 +23,29 @@ window.demoDescription = "Microphone demo in Sound guide.";
     } else {
       form.fillOnly("#fff").rect( [[18, 18], [32,32]] );
     }
+    if (status) form.fillOnly("#789").text( [60, 30], status );
   }
 
   function toggleRecord() {
     if ( Geom.withinBound( space.pointer, [0,0], [50,50] ) ) {
-      if (!recording) {
-        recording = true;
-        Sound.input().then( s => { sound = s.analyze( 128 ); }).catch( e => {
-          recording = false;
+      if (!recording && !pending) {
+        pending = true;
+        status = "Requesting microphone...";
+        Sound.input().then( s => {
+          sound = s.analyze( 128 );
+          recording = true;
+          status = "";
+        }).catch( e => {
+          status = "Microphone unavailable.";
           console.error( e );
+        }).finally( () => {
+          pending = false;
         });
-      } else {
+      } else if (recording && sound) {
         recording = false;
         sound.stop();
+        sound = undefined;
+        status = "";
       }
     }
   }

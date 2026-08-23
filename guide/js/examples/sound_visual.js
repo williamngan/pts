@@ -18,31 +18,24 @@
   var bins = 256;
   var ctrls, radius;
   var colors = ["#f06", "#30f", "#fff", "#fe3", "#0c9"];
-  var bufferLoaded = false;
+  var status = "Loading...";
 
-  // Method 1: Streaming play - simpler but time/freq domain doesn't work in Safari and iOS (as of 4/2019)
-  // Sound.load( "/assets/spacetravel.mp3" ).then( s => {
-  //   sound = s.analyze( bins );
-  // });
-
-  // If using Method 1: Sound.load(...)
-  // function toggle() {
-  //    sound.toggle();
-  // }
-
-  // Method 2 --------------------------------
   // Buffer and play - work across all browsers but no streaming and more code
   Sound.loadAsBuffer("/assets/spacetravel.mp3")
     .then((s) => {
       sound = s;
-      space.playOnce(50); // render for noce
-      bufferLoaded = true;
+      space.playOnce(50); // render once more after loading
+      status = "";
     })
-    .catch((e) => console.error(e));
+    .catch((e) => {
+      status = "Could not load sound.";
+      space.playOnce(50);
+      console.error(e);
+    });
 
-  // If using Method 2: Sound.loadAsBuffer(...)
   function toggle() {
-    if (sound.playing || !bufferLoaded) {
+    if (!sound) return;
+    if (sound.playing) {
       sound.stop();
     } else {
       sound.createBuffer().analyze(bins); // recreate buffer again
@@ -53,11 +46,11 @@
 
   // Draw play button
   function playButton() {
-    if (!bufferLoaded) {
-      form.fillOnly("#9ab").text([20, 30], "Loading...");
+    if (!sound) {
+      form.fillOnly("#9ab").text([20, 30], status);
       return;
     }
-    if (!sound || !sound.playing) {
+    if (!sound.playing) {
       form.fillOnly("#f06").rect([
         [0, 0],
         [50, 50],

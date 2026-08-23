@@ -14,7 +14,7 @@ Pts.quickStart( "#pt", "#0c3" );
   space.add({ 
     start: (bound) => {
       // Make a face with 30 radial points with slight randomness
-      radius = space.size.minValue().value/3;
+      let radius = space.size.minValue().value/3;
       pts = Create.radialPts( space.center, radius, 30  );
       pts.map( p => p.add( 50*(Math.random() - Math.random()) ) )
       

@@ -16,6 +16,9 @@
 
   var sound;
   var recording = false;
+  var pending = false;
+  var requestID = 0;
+  var status = "";
   var rainbow = ["#f03", "#f90", "#fe6", "#3c0", "#0f6", "#03f", "#60f"];
 
   // Draw button
@@ -32,25 +35,40 @@
         [32, 32],
       ]);
     }
+    if (status) form.fillOnly("#789").text([60, 30], status);
   }
 
   function toggleRecord() {
     if (Geom.withinBound(space.pointer, [0, 0], [50, 50])) {
-      if (!recording) {
+      if (!recording && !pending) {
+        var id = ++requestID;
+        pending = true;
+        status = "Requesting microphone...";
         Sound.input()
           .then((s) => {
-            sound = s;
-            sound.analyze(128);
+            if (id !== requestID) {
+              s.stop();
+              return;
+            }
+            sound = s.analyze(128);
+            recording = true;
+            status = "";
           })
           .catch((e) => {
-            recording = false;
+            if (id === requestID) status = "Microphone unavailable.";
             console.error(e);
+          })
+          .finally(() => {
+            if (id !== requestID) return;
+            pending = false;
+            space.playOnce(50);
           });
-      } else {
+      } else if (recording && sound) {
         sound.stop();
         sound = undefined;
+        recording = false;
+        status = "";
       }
-      recording = !recording;
     }
   }
 
@@ -82,6 +100,9 @@
   // For use in demo page only
   if (window.registerDemo) window.registerDemo(demoID, space, null, stopFn);
   function stopFn() {
+    requestID += 1;
+    pending = false;
+    status = "";
     if (sound) {
       sound.stop();
       recording = false;

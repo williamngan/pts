@@ -17,10 +17,12 @@
   var ASSET_TIMEOUT = 10000;
 
   var editor = null;
-  var currFile = "";
+  var runID = 0;
   var frame = document.getElementById("demo");
   var loader = document.getElementById("loader");
   var errorBar = document.getElementById("error");
+  var loadButton = document.getElementById("load");
+  var loadMenu = document.getElementById("loadmenu");
 
   /**
    * The sketch host document. Every Run creates a *new* iframe with this
@@ -56,10 +58,12 @@
    */
   var FRAME_SRCDOC = [
     "<!doctype html>",
-    "<html>",
+    '<html lang="en">',
     "<head>",
     '<meta charset="UTF-8" />',
-    '<script type="text/javascript" src="../../dist/pts.min.js"><\/script>',
+    '<meta name="viewport" content="width=device-width, initial-scale=1" />',
+    "<title>Pts demo preview</title>",
+    '<script type="text/javascript" src="../../dist/pts.min.js"></script>',
     "<style>",
     "html, body { height: 100%; }",
     // overflow hidden: sketch content that outgrows the viewport by even a
@@ -72,63 +76,41 @@
     "</head>",
     "<body>",
     '<div id="pt"></div>',
-    '<script type="text/javascript">Pts.namespace(window);<\/script>',
+    '<script type="text/javascript">Pts.namespace(window);</script>',
     "</body>",
     "</html>",
   ].join("\n");
 
   // ---------------------------------------------------------------- helpers
 
-  function qs(name, limit) {
-    name = name.replace(/[[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
-    var results = regex.exec(location.search);
-    var q =
-      results === null
-        ? ""
-        : decodeURIComponent(results[1].replace(/\+/g, " "));
-    return cleanStr(q, limit);
+  function queryName() {
+    var name = new URLSearchParams(window.location.search).get("name") || "";
+    if (!name) return "";
+    if (name.length <= 50 && /^[a-zA-Z0-9_]+\.[a-zA-Z0-9_]+$/.test(name)) {
+      return name;
+    }
+    showError("Invalid demo name.");
+    return "";
   }
 
-  function cleanStr(str, limit) {
-    if (limit) str = str.substr(0, limit);
-    return str.replace(/[^a-zA-Z0-9._]/g, "_");
-  }
+  async function loadText(url) {
+    var controller = new AbortController();
+    var timer = setTimeout(function () {
+      controller.abort();
+    }, ASSET_TIMEOUT);
 
-  function loadText(url) {
-    return new Promise(function (resolve, reject) {
-      var request = new XMLHttpRequest();
-      var settled = false;
-      var timer = setTimeout(function () {
-        if (settled) return;
-        settled = true;
-        request.abort();
-        reject(new Error("timed out loading " + url));
-      }, ASSET_TIMEOUT);
-
-      request.open("GET", url);
-      request.onload = function () {
-        if (settled) return;
-        settled = true;
-        clearTimeout(timer);
-        // A file:// read reports status 0 with a body, so accept that too.
-        if (
-          request.status === 0 ||
-          (request.status >= 200 && request.status < 400)
-        ) {
-          resolve(request.responseText);
-        } else {
-          reject(new Error(url + " returned " + request.status));
-        }
-      };
-      request.onerror = function () {
-        if (settled) return;
-        settled = true;
-        clearTimeout(timer);
-        reject(new Error("could not load " + url));
-      };
-      request.send();
-    });
+    try {
+      var response = await fetch(url, { signal: controller.signal });
+      if (!response.ok) throw new Error(url + " returned " + response.status);
+      return await response.text();
+    } catch (error) {
+      if (error.name === "AbortError") {
+        throw new Error("timed out loading " + url, { cause: error });
+      }
+      throw error;
+    } finally {
+      clearTimeout(timer);
+    }
   }
 
   function showError(message, line) {
@@ -193,10 +175,11 @@
       return;
     }
     var source = editor.getValue();
+    var id = ++runID;
     showError(null);
 
     var next = document.createElement("iframe");
-    next.setAttribute("title", "demo");
+    next.setAttribute("title", "Pts demo preview");
     next.className = "pending";
     next.srcdoc = FRAME_SRCDOC;
     // `id="demo"` is not decoration: the stylesheet hides #demo below 768px,
@@ -209,7 +192,7 @@
       if (settled) return;
       settled = true;
       if (next.parentNode) next.parentNode.removeChild(next);
-      showError("The sketch frame took too long to load.");
+      if (id === runID) showError("The sketch frame took too long to load.");
     }, RUN_TIMEOUT);
 
     next.addEventListener("load", function () {
@@ -217,8 +200,14 @@
       settled = true;
       clearTimeout(timer);
 
+      // A slower previous Run must never replace a newer one.
+      if (id !== runID) {
+        if (next.parentNode) next.parentNode.removeChild(next);
+        return;
+      }
+
       try {
-        injectSketch(next, source);
+        injectSketch(next, source, id);
       } catch (e) {
         showError(e.message);
       }
@@ -246,16 +235,21 @@
    *
    * The frame is same-origin, so this appends a script element directly rather
    * than routing the source through the URL, which would cap sketch length.
+   * This editor runs code the visitor writes or deliberately opens; it is not an
+   * isolation boundary for untrusted shared code. A real sandbox would also need
+   * a separate preview origin or an asset proxy so local sound/image demos keep
+   * working.
    */
-  function injectSketch(iframe, source) {
+  function injectSketch(iframe, source, id) {
     var win = iframe.contentWindow;
     var doc = iframe.contentDocument;
     if (!win || !doc) throw new Error("The sketch frame is not accessible.");
 
     win.addEventListener("error", function (e) {
-      showError(e.message, e.lineno);
+      if (id === runID) showError(e.message, e.lineno);
     });
     win.addEventListener("unhandledrejection", function (e) {
+      if (id !== runID) return;
       var reason = e.reason;
       showError(reason && reason.message ? reason.message : String(reason));
     });
@@ -280,14 +274,7 @@
   function monacoReady() {
     return new Promise(function (resolve, reject) {
       if (window.__monacoReady) return resolve();
-      window.addEventListener(
-        "monaco-ready",
-        function () {
-          resolve();
-        },
-        { once: true },
-      );
-      setTimeout(function () {
+      var timer = setTimeout(function () {
         if (window.__monacoReady) return resolve();
         reject(
           new Error(
@@ -295,6 +282,14 @@
           ),
         );
       }, ASSET_TIMEOUT);
+      window.addEventListener(
+        "monaco-ready",
+        function () {
+          clearTimeout(timer);
+          resolve();
+        },
+        { once: true },
+      );
     });
   }
 
@@ -318,7 +313,8 @@
 
     loadCode().then(function () {
       loader.style.display = "none";
-      document.getElementById("run").removeAttribute("disabled");
+      document.getElementById("run").disabled = false;
+      document.getElementById("save").disabled = false;
     });
   }
 
@@ -421,12 +417,15 @@
   }
 
   function loadCode() {
-    var name = qs("name", 30);
+    var name = queryName();
     if (!name) return Promise.resolve();
+
+    var backURL = new URL("../", window.location.href);
+    backURL.searchParams.set("name", name);
+    document.getElementById("back").href = backURL.href;
 
     return loadText("../" + name + ".js").then(
       function (text) {
-        currFile = name;
         editor.setValue(text);
         runCode();
       },
@@ -455,44 +454,76 @@
 
   // ------------------------------------------------------------------- UI
 
+  function openLoadMenu() {
+    loadMenu.inert = false;
+    loadMenu.classList.add("open");
+    loadMenu.setAttribute("aria-hidden", "false");
+    loadButton.setAttribute("aria-expanded", "true");
+    loadMenu.querySelector(".demo").focus();
+  }
+
+  function closeLoadMenu(restoreFocus) {
+    loadMenu.classList.remove("open");
+    loadMenu.setAttribute("aria-hidden", "true");
+    loadMenu.inert = true;
+    loadButton.setAttribute("aria-expanded", "false");
+    if (restoreFocus) loadButton.focus();
+  }
+
+  function downloadHTML(html) {
+    var blob = new Blob([html], { type: "text/html;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement("a");
+    link.href = url;
+    link.download = "pts_demo.html";
+    link.hidden = true;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(function () {
+      URL.revokeObjectURL(url);
+    }, 1000);
+  }
+
   document.getElementById("run").addEventListener("click", runCode);
-
-  document.getElementById("load").addEventListener("click", function () {
-    document.getElementById("loadmenu").className = "open";
-  });
-
+  loadButton.addEventListener("click", openLoadMenu);
   document.getElementById("closemenu").addEventListener("click", function () {
-    document.getElementById("loadmenu").className = "";
+    closeLoadMenu(true);
   });
 
-  document.getElementById("back").addEventListener("click", function () {
-    // Relative, so the editor works when the site is served from a subpath.
-    window.location.href = "../?name=" + currFile;
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && loadMenu.classList.contains("open")) {
+      closeLoadMenu(true);
+    }
   });
 
   document.getElementById("save").addEventListener("click", function () {
-    var html =
-      '<html>\n  <head><script src="https://unpkg.com/pts/dist/pts.min.js"><\/script></head>\n' +
-      '\n  <body style="font-family: sans-serif; margin: 0;">\n    <div id="pt" style="width: 800px; height: 600px; margin: 30px auto 0;"></div>' +
-      '\n    <div style="padding: 20px 0; font-family: sans-serif; font-size: 0.8em; color: #9ab; text-align: center;">\n       Generated by <a href="https://ptsjs.org/demo/edit">Pts demo editor</a>. Learn more at <a href="https://ptsjs.org">https://ptsjs.org</a>.\n     </div>\n\n    <script>\n\n\n' +
-      editor.getValue() +
-      "\n\n\n    <\/script>\n  </body>\n</html>";
-    var blob = new Blob([html], { type: "text/plain;charset=utf-8" });
-    saveAs(blob, "pts_demo.html");
+    if (!editor) return;
+    var source = editor.getValue().replace(/<\/script/gi, "<\\/script");
+    var html = [
+      "<!doctype html>",
+      '<html lang="en">',
+      "  <head>",
+      '    <meta charset="UTF-8" />',
+      '    <meta name="viewport" content="width=device-width, initial-scale=1" />',
+      "    <title>Pts demo</title>",
+      '    <script src="https://unpkg.com/pts@0.12.9/dist/pts.min.js"></script>',
+      "  </head>",
+      '  <body style="font-family: sans-serif; margin: 0;">',
+      '    <div id="pt" style="width: 800px; height: 600px; margin: 30px auto 0;"></div>',
+      '    <div style="padding: 20px 0; font-size: 0.8em; color: #9ab; text-align: center;">',
+      '      Generated by <a href="https://ptsjs.org/demo/edit">Pts demo editor</a>.',
+      "    </div>",
+      "    <script>",
+      "",
+      source,
+      "",
+      "    </script>",
+      "  </body>",
+      "</html>",
+    ].join("\n");
+    downloadHTML(html);
   });
-
-  var demos = document.querySelectorAll(".demo");
-  for (var i = 0; i < demos.length; i++) {
-    demos[i].addEventListener("click", function () {
-      var sel = this.getAttribute("data-src");
-      if (sel.indexOf("https://") === 0) {
-        window.open(sel, "pts_demo");
-      } else {
-        window.location.href =
-          window.location.pathname + "?name=" + encodeURIComponent(sel);
-      }
-    });
-  }
 
   boot();
 })();

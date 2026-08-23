@@ -46,6 +46,7 @@ Pts.quickStart( "#pt", "#666" );
 
       // Use pointer position to change background and speed
       let speed = space.pointer.$subtract( space.center ).divide( space.center ).abs();
+      let radius = space.size.minValue().value;
 
       let gr = speed.x * 100; // background gray
       form.fill( `rgb(${gr+80},${gr+80},${gr+80})` ).rect( space.innerBound );
@@ -60,8 +61,8 @@ Pts.quickStart( "#pt", "#666" );
 
       for (let k=0, klen=nps.length; k<klen; k++) {
         for (let i=0; i<nums; i++) {
-          let c1 = Circle.fromCenter( nps[k][i], space.size.minValue().value * 0.2 );
-          let c2 = Circle.fromCenter( nps[k][i], space.size.minValue().value * 0.7 );
+          let c1 = Circle.fromCenter( nps[k][i], radius * 0.2 );
+          let c2 = Circle.fromCenter( nps[k][i], radius * 0.7 );
           let grad = gradients[ k===0 ? i : nums-i-1 ];
           form.fillOnly( grad( c1, c2 ) ).circle( c2 );
         } 

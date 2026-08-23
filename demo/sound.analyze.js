@@ -9,33 +9,30 @@ window.demoDescription = "Basic example of loading sound and visualizing frequen
 
   Pts.quickStart( "#pt", "#eae6ef" );
 
-  /*
-   * Note: If you don't need Safari/iOS compatibility right away (as of Apr 2019)
-   * A simpler method to use would be Sound.load(...) instead of Sound.loadAsBuffer(...)
-   * See this demo: http://ptsjs.org/demo/edit/?name=guide.sound_simple
-   */
-
   var bins = 256;
   var sound;
   var colors = ["#f06", "#62e", "#fff", "#fe3", "#0c9"];
-  var bufferLoaded = false;
+  var status = "Loading...";
   Sound.loadAsBuffer( "/assets/spacetravel.mp3" ).then( s => {
     sound = s.analyze( bins );
-    bufferLoaded = true;
-  }).catch( e => console.error(e) );
+    status = "";
+  }).catch( e => {
+    status = "Could not load sound.";
+    console.error(e);
+  });
 
   function toggle() {
     // Sound recreates the buffer as needed for replay
-    if (bufferLoaded) sound.toggle();
+    if (sound) sound.toggle();
   }
 
   // Draw play button
   function playButton() {
-    if (!bufferLoaded) {
-      form.fillOnly("#9ab").text( [20,30], "Loading..." );
+    if (!sound) {
+      form.fillOnly("#9ab").text( [20,30], status );
       return;
     }
-    if (!sound || !sound.playing) {
+    if (!sound.playing) {
       form.fillOnly("#f06").rect( [[0,0], [50,50]] );
       form.fillOnly('#fff').polygon( Triangle.fromCenter( [25,25], 10 ).rotate2D( Const.half_pi, [25,25] ) );
     } else {
@@ -50,7 +47,7 @@ window.demoDescription = "Basic example of loading sound and visualizing frequen
 
     animate: (time, ftime) => {
       if (sound && sound.playing) {
-        sound.freqDomainTo(space.size).map( (t, i) => {
+        sound.freqDomainTo(space.size).forEach( (t, i) => {
           form.fillOnly( colors[i%5] ).point( t, 30 );
         });
       }

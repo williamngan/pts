@@ -20,25 +20,46 @@
     "/assets/tambourine.mp3",
   ];
   var sounds = [];
-  var currFile = 0;
+  var currFile = -1;
   var bins = 32;
   var sound;
+  var failed = false;
+  var status = "Loading...";
 
   function loadSound(i) {
     Sound.loadAsBuffer(files[i])
       .then((s) => {
-        sound = s;
         sounds.push(s);
-        if (i < files.length - 1) loadSound(i + 1);
+        if (!sound) sound = s;
       })
-      .catch((e) => console.error(e));
+      .catch((e) => {
+        failed = true;
+        console.error(e);
+      })
+      .finally(() => {
+        if (i < files.length - 1) {
+          loadSound(i + 1);
+        } else {
+          status =
+            sounds.length > 0
+              ? failed
+                ? "Some sounds could not be loaded."
+                : ""
+              : "Could not load sound.";
+          space.playOnce(50);
+        }
+      });
   }
 
   loadSound(0); // load all sounds
 
   // Draw play button
   function playButton() {
-    if (!sound || !sound.playing) {
+    if (!sound) {
+      form.fillOnly("#789").text(space.center.$subtract(55, 0), status);
+      return;
+    }
+    if (!sound.playing) {
       form
         .fillOnly("rgba(0,0,0,.2)")
         .circle(Circle.fromCenter(space.center, 30));
@@ -97,7 +118,7 @@
           space.center.$add(25),
         )
       ) {
-        if (!sound.playing && sounds.length > 0) {
+        if (sound && !sound.playing && sounds.length > 0) {
           currFile = (currFile + 1) % sounds.length;
           sound = sounds[currFile];
           sound.createBuffer().analyze(bins).start(); // reset buffer and analyzer

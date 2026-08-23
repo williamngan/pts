@@ -63,7 +63,6 @@ try {
   const page = await browser.newPage({
     viewport: { width: 1440, height: 900 },
   });
-  await page.route("**/google-analytics.com/**", (route) => route.abort());
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("console", (message) => {
     if (message.type() === "error") consoleErrors.push(message.text());

@@ -41,7 +41,7 @@ Pts.quickStart( "#pt", "#123" );
           let side = Line.sideOfPt2D( ln, space.pointer );
           form.stroke( (side<0) ? "rgba(255,255,0,.1)" : "rgba(0,255,255,.1)" ).line( ln );
         }
-        form.fillOnly("rgba(255,255,255,0.8").points( ln, 0.5);
+        form.fillOnly("rgba(255,255,255,0.8)").points( ln, 0.5);
       }
 
       form.fillOnly("#f03").point( space.pointer, 3, "circle");

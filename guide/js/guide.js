@@ -224,7 +224,7 @@ Pts.namespace(this);
       if (demo.space.isPlaying) return;
       try {
         demo.space.playOnce(0);
-      } catch (e) {
+      } catch {
         // a demo that cannot repaint is not worth breaking the page over
       }
     }

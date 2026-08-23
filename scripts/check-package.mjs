@@ -129,7 +129,10 @@ try {
     "published file allowlist changed",
   );
   assert.ok(
-    dryRun.size < 1_050_000,
+    // Keep a small (~2%) growth budget above the current release archive. The
+    // previous ceiling predates the recent Color, Sound, and Typography work
+    // and is already below the unchanged package allowlist's baseline size.
+    dryRun.size < 1_115_000,
     `packed tarball is unexpectedly large: ${dryRun.size} bytes`,
   );
   assert.equal(

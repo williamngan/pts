@@ -314,10 +314,15 @@ window.demoDescription = "In a field of bouncing particles, rotate a centered pa
     action: (type, px, py, event) => {
       // A mouse remains over the canvas after a drag ends. Touch and pen input
       // do not, so their drop should remove the collider until the next contact.
+      // An overlay can also cause `pointerout` while the pointer is still inside
+      // the canvas bounds (notably when pointer capture ends over the header).
+      // In that case its header listener keeps the same collider active.
       if (
-        type === "out" ||
-        (type === "drop" && event && event.pointerType !== "mouse")
+        type === "out" &&
+        (!Num.within(px, 0, space.width) || !Num.within(py, 0, space.height))
       ) {
+        deactivatePointer();
+      } else if (type === "drop" && event && event.pointerType !== "mouse") {
         deactivatePointer();
       } else if (type === "move" || type === "drag" || type === "down" || type === "over") {
         movePointer( px, py );

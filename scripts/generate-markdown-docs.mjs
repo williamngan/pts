@@ -657,44 +657,6 @@ async function renderSketch(directoryName, file, anchorPrefix) {
   ].join("\n");
 }
 
-async function renderAdditionalDemos() {
-  const relativeDirectory = "demo/more/tfjs_posenet";
-  const directory = path.join(projectRoot, relativeDirectory);
-  const readme = adjustHeadingLevels(
-    await readFile(path.join(directory, "README.md"), "utf8"),
-    2,
-  ).replaceAll("(./", `(${siteOrigin}/${relativeDirectory}/`);
-  const files = [
-    "a.html",
-    "b.html",
-    "c.html",
-    "d.html",
-    "js/a.js",
-    "js/b.js",
-    "js/bodypose.js",
-    "js/c.js",
-    "js/d.js",
-  ];
-  const lines = [
-    '<a id="additional-tfjs-posenet"></a>',
-    "### TensorFlow.js PoseNet",
-    "",
-    `[Source directory](${siteOrigin}/${relativeDirectory}/) · [GitHub](${sourceOrigin}/${relativeDirectory})`,
-    "",
-    readme,
-  ];
-  for (const file of files) {
-    await readFile(path.join(directory, file));
-    lines.push(
-      "",
-      `#### ${inlineCode(file)}`,
-      "",
-      `[Source code](${siteOrigin}/${relativeDirectory}/${file}) · [GitHub](${sourceOrigin}/${relativeDirectory}/${file})${file.endsWith(".html") ? ` · [Open live](${siteOrigin}/${relativeDirectory}/${file})` : ""}`,
-    );
-  }
-  return lines.join("\n");
-}
-
 async function guideMarkdown(version) {
   const packageModules = JSON.parse(
     await readFile(path.join(docsJsonDirectory, "modules.json"), "utf8"),
@@ -757,10 +719,6 @@ async function guideMarkdown(version) {
       return `- [${inlineCode(name)}](#study-${slug(name)})`;
     }),
     "",
-    "### Additional demos",
-    "",
-    "- [TensorFlow.js PoseNet](#additional-tfjs-posenet)",
-    "",
     "## Guides",
   ];
 
@@ -786,7 +744,6 @@ async function guideMarkdown(version) {
   for (const file of studyFiles) {
     lines.push("", await renderSketch("study", file, "study"));
   }
-  lines.push("", "## Additional Demos", "", await renderAdditionalDemos());
   return `${lines.join("\n")}\n`;
 }
 

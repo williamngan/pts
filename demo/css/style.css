@@ -98,7 +98,6 @@ html * {
 #page {
   padding: 0 10px 0 40px;
   position: relative;
-  user-select: none;
 }
 
 #cover {
@@ -163,6 +162,12 @@ html * {
   background: #42e;
 }
 
+#hint.error {
+  background: #f34;
+  color: #fff;
+  padding: 5px 8px;
+}
+
 #hint a {
   display: block;
   border: none;
@@ -200,7 +205,6 @@ a:hover {
 }
 
 .demo, .section {
-  cursor: pointer;
   font-size: 12px; 
   line-height: 2; 
   margin: 0;
@@ -210,6 +214,11 @@ a:hover {
   text-overflow: ellipsis;
 }
 
+.demo {
+  cursor: pointer;
+  display: block;
+}
+
 .demo > span {
   /* font-weight: bold; */
   color: #678
@@ -217,7 +226,15 @@ a:hover {
 .demo > strong {
   font-weight: 400;
 }
-.demo:hover, .demo:hover > span { color: #42e;}
+.demo:hover, .demo:hover > span,
+.demo:focus-visible, .demo:focus-visible > span { color: #42e;}
+
+.demo:focus-visible,
+#topmenu > a:focus-visible,
+#hint a:focus-visible {
+  outline: 2px solid #42e;
+  outline-offset: 2px;
+}
 
 .section {
   font-weight: 600;
@@ -337,10 +354,5 @@ a:hover {
   
   .demo {
     padding: 3px 0;
-  }
-
-
-  #hint {
-    display: none;
   }
 }

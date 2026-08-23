@@ -21,7 +21,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { createServer } from "node:http";
-import { readFile, stat } from "node:fs/promises";
+import { readdir, readFile, stat } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";
 
 import { chromium } from "playwright";
@@ -103,6 +103,72 @@ const CANVAS_PROBE = () =>
     }
     return { id: div.id, hasCanvas: !!canvas, uniform };
   });
+
+async function filesUnder(directory, extensions) {
+  const files = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const file = join(directory, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await filesUnder(file, extensions)));
+    } else if (extensions.has(extname(entry.name))) {
+      files.push(file);
+    }
+  }
+  return files;
+}
+
+async function checkNoAnalytics() {
+  const extensions = new Set([".html", ".js"]);
+  const files = [join(ROOT, "index.html")];
+  for (const directory of ["assets", "demo", "docs", "guide", "study"]) {
+    files.push(...(await filesUnder(join(ROOT, directory), extensions)));
+  }
+
+  const analytics =
+    /google-analytics\.com|googletagmanager\.com|GoogleAnalyticsObject|\bUA-\d|\bgtag\s*\(/u;
+  for (const file of files) {
+    const source = await readFile(file, "utf8");
+    assert.doesNotMatch(
+      source,
+      analytics,
+      `${file.slice(ROOT.length)} still contains Analytics code`,
+    );
+  }
+
+  return `${files.length} shipped HTML/JS files contain no Analytics code`;
+}
+
+async function checkPoseNetIsRetired() {
+  const directory = join(ROOT, "demo/more/tfjs_posenet");
+  const notice = await readFile(join(directory, "index.html"), "utf8");
+  assert.match(notice, /PoseNet demo has been retired/u);
+  assert.doesNotMatch(notice, /<script\b[^>]*\bsrc=|getUserMedia/u);
+
+  for (const file of ["a.html", "b.html", "c.html", "d.html"]) {
+    const source = await readFile(join(directory, file), "utf8");
+    assert.match(
+      source,
+      /content="0; url=\.\/"/u,
+      `${file} is not a tombstone`,
+    );
+    assert.doesNotMatch(
+      source,
+      /<script\b|getUserMedia|test_video/u,
+      `${file} still runs the retired prototype`,
+    );
+  }
+
+  for (const file of ["index.html", "demo/index.html", "guide.md"]) {
+    const source = await readFile(join(ROOT, file), "utf8");
+    assert.doesNotMatch(
+      source,
+      /tfjs_posenet|TensorFlow\.js PoseNet/u,
+      `${file} still advertises PoseNet`,
+    );
+  }
+
+  return "old URLs are tombstones and public catalogs no longer advertise PoseNet";
+}
 
 async function checkAgentMarkdown() {
   const expected = [
@@ -194,6 +260,255 @@ async function checkTopNavigation() {
   }
 
   return `${routes.length} routes use the same study-free links`;
+}
+
+async function checkDemoEditorLink() {
+  const page = await browser.newPage();
+  const name = "circle.intersectCircle2D";
+  const demoURL = `${ORIGIN}/demo?name=${name}`;
+  const editorURL = `${ORIGIN}/demo/edit/?name=${name}`;
+
+  try {
+    await page.goto(demoURL, { waitUntil: "load" });
+    assert.equal(
+      page.url(),
+      demoURL,
+      "the test server unexpectedly normalized the extensionless demo URL",
+    );
+
+    const link = page.locator("a.source-code");
+    await link.waitFor();
+    assert.equal(
+      await link.evaluate((element) => element.href),
+      editorURL,
+      "view/edit code resolved outside the demo directory",
+    );
+
+    const [response] = await Promise.all([
+      page.waitForNavigation({ waitUntil: "domcontentloaded" }),
+      link.click(),
+    ]);
+    assert.equal(response?.status(), 200, "the demo editor link returned 404");
+    assert.equal(page.url(), editorURL, "the demo editor opened the wrong URL");
+  } finally {
+    await page.close();
+  }
+
+  return "extensionless /demo routes open the shared editor";
+}
+
+async function checkGuideEditorLink() {
+  const page = await browser.newPage();
+  const name = "guide.getting_started";
+  const editorURL = `${ORIGIN}/demo/edit/?name=${name}`;
+
+  try {
+    await page.goto(`${ORIGIN}/guide/Get-started-0100.html`, {
+      waitUntil: "load",
+    });
+
+    const link = page.locator("a.sourceCodeLink").first();
+    await link.waitFor({ state: "attached" });
+    assert.equal(
+      await link.evaluate((element) => element.href),
+      editorURL,
+      "the guide's Edit live code link resolved outside the demo directory",
+    );
+
+    // The real link opens a named editor tab and is only visible while its demo
+    // is active. Keep this page in place and activate the anchor directly so
+    // this path check does not also depend on the demo's hover state.
+    const [response] = await Promise.all([
+      page.waitForNavigation({ waitUntil: "domcontentloaded" }),
+      link.evaluate((element) => {
+        element.removeAttribute("target");
+        element.click();
+      }),
+    ]);
+    assert.equal(response?.status(), 200, "the guide editor link returned 404");
+    assert.equal(
+      page.url(),
+      editorURL,
+      "the guide opened the wrong editor URL",
+    );
+  } finally {
+    await page.close();
+  }
+
+  return "guide examples open the shared editor";
+}
+
+async function checkDemoShell() {
+  const page = await browser.newPage({
+    viewport: { width: 1200, height: 800 },
+  });
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+
+  try {
+    await page.goto(`${ORIGIN}/demo?x=1&name=pt.unit`, {
+      waitUntil: "load",
+    });
+    assert.equal(
+      await page.locator("#src").getAttribute("src"),
+      "../demo/pt.unit.js",
+      "a non-leading name parameter loaded the wrong demo",
+    );
+    assert.match(page.url(), /\?x=1&name=pt\.unit$/u);
+
+    const semantics = await page.evaluate(() => ({
+      demoLinks: document.querySelectorAll("a.demo").length,
+      htmlLanguage: document.documentElement.lang,
+      nonLinks: document.querySelectorAll(".demo:not(a)").length,
+      viewport: document.querySelector('meta[name="viewport"]').content,
+    }));
+    assert.deepEqual(semantics, {
+      demoLinks: 40,
+      htmlLanguage: "en",
+      nonLinks: 0,
+      viewport: "width=device-width, initial-scale=1",
+    });
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    assert.equal(
+      await page.locator("a.source-code").isVisible(),
+      true,
+      "the edit link disappeared on a narrow screen",
+    );
+
+    await page.goto(`${ORIGIN}/demo?name=%E0%A4%A`, { waitUntil: "load" });
+    assert.equal(
+      await page.locator("#hint.error").textContent(),
+      "Invalid demo name.",
+      "malformed encoding did not produce a useful error",
+    );
+
+    await page.goto(`${ORIGIN}/demo?name=missing.demo`, { waitUntil: "load" });
+    await page.locator("#hint.error").waitFor();
+    assert.equal(
+      await page.locator("#hint.error").textContent(),
+      "Could not load demo “missing.demo”.",
+    );
+
+    await page.goto(`${ORIGIN}/demo/`, { waitUntil: "load" });
+    assert.match(
+      page.url(),
+      /\?name=circle\.intersectCircle2D$/u,
+      "the default demo was not reflected in the URL",
+    );
+    assert.deepEqual(errors, [], "the demo shell raised a page error");
+  } finally {
+    await page.close();
+  }
+
+  return "query edge cases fail visibly and 40 choices use native links";
+}
+
+async function checkAllDemos() {
+  const files = (await readdir(join(ROOT, "demo"), { withFileTypes: true }))
+    .filter(
+      (entry) =>
+        entry.isFile() &&
+        entry.name.endsWith(".js") &&
+        entry.name !== "template.js",
+    )
+    .map((entry) => entry.name.slice(0, -3))
+    .sort();
+  const issues = [];
+  let cursor = 0;
+
+  async function worker() {
+    const page = await browser.newPage({
+      viewport: { width: 1000, height: 700 },
+    });
+    let current = null;
+
+    await page.addInitScript(() => {
+      window.__invalidCanvasColors = [];
+      const proto = CanvasRenderingContext2D.prototype;
+      for (const property of ["fillStyle", "strokeStyle"]) {
+        const descriptor = Object.getOwnPropertyDescriptor(proto, property);
+        Object.defineProperty(proto, property, {
+          ...descriptor,
+          set(value) {
+            if (typeof value === "string" && !CSS.supports("color", value)) {
+              window.__invalidCanvasColors.push(value);
+            }
+            descriptor.set.call(this, value);
+          },
+        });
+      }
+    });
+
+    page.on("pageerror", (error) => {
+      if (current) current.push(`page error: ${error.message}`);
+    });
+    page.on("console", (message) => {
+      if (current && message.type() === "error") {
+        current.push(`console error: ${message.text()}`);
+      }
+    });
+    page.on("response", (response) => {
+      if (
+        current &&
+        response.url().startsWith(ORIGIN) &&
+        response.status() >= 400
+      ) {
+        current.push(`${response.status()} ${response.url()}`);
+      }
+    });
+    page.on("requestfailed", (request) => {
+      if (current && request.url().startsWith(ORIGIN)) {
+        current.push(`request failed: ${request.url()}`);
+      }
+    });
+
+    try {
+      while (cursor < files.length) {
+        const name = files[cursor++];
+        const local = [];
+        current = local;
+        const response = await page.goto(
+          `${ORIGIN}/demo/?name=${encodeURIComponent(name)}`,
+          { waitUntil: "load" },
+        );
+        if (response?.status() !== 200) {
+          local.push(`document returned ${response?.status()}`);
+        }
+
+        await page.locator("a.source-code").waitFor({ timeout: 3000 });
+        await page.waitForTimeout(400);
+        const state = await page.evaluate(() => {
+          const surfaces = [
+            ...document.querySelectorAll(
+              "#pt canvas, #pt svg, #pt > div, #pt > img",
+            ),
+          ];
+          return {
+            invalidColors: [...new Set(window.__invalidCanvasColors)],
+            visibleSurface: surfaces.some((surface) => {
+              const box = surface.getBoundingClientRect();
+              return box.width > 0 && box.height > 0;
+            }),
+          };
+        });
+        if (!state.visibleSurface) local.push("no visible rendering surface");
+        if (state.invalidColors.length > 0) {
+          local.push(
+            `invalid canvas colors: ${state.invalidColors.join(", ")}`,
+          );
+        }
+        if (local.length > 0) issues.push(`${name}: ${local.join("; ")}`);
+        current = null;
+      }
+    } finally {
+      await page.close();
+    }
+  }
+
+  await Promise.all(Array.from({ length: 4 }, () => worker()));
+  assert.deepEqual(issues, [], issues.join("\n"));
+  return `${files.length} authored sketches loaded without runtime or rendering errors`;
 }
 
 async function checkHomepageHero() {
@@ -542,10 +857,9 @@ async function checkHomepageHero() {
       "sustained contact refreshed a fading flash",
     );
 
-    const dragTarget = [
-      Math.min(canvas.width - 50, target[0] + 100),
-      Math.max(50, target[1] - 50),
-    ];
+    // End over the header overlay to exercise pointer-capture release while the
+    // mouse is still geometrically inside the canvas.
+    const dragTarget = [canvas.width * 0.7, 80];
     await page.mouse.down();
     await page.mouse.move(dragTarget[0], dragTarget[1]);
     await page.waitForTimeout(50);
@@ -569,7 +883,9 @@ async function checkHomepageHero() {
       particle.previous.to(x, y);
       particle.to(x, y);
     }, dragTarget);
-    await page.waitForTimeout(50);
+    await page
+      .waitForFunction(() => window.__pointerCollisions > 0, { timeout: 500 })
+      .catch(() => {});
     const postDragCollisions = await page.evaluate(
       () => window.__pointerCollisions,
     );
@@ -583,14 +899,17 @@ async function checkHomepageHero() {
     const dividerStart = [canvas.width * 0.75, canvas.height * 0.5];
     await page.mouse.move(dividerStart[0], dividerStart[1]);
     await page.waitForTimeout(50);
-    await page.evaluate(([x, y]) => {
-      const particle = window.__flashProbeParticle;
-      particle.to(x, y);
-      particle.previous.to(particle);
-    }, [
-      canvas.width / 2 + 200 * Math.cos((Math.PI * 7) / 12),
-      canvas.height / 2 + 200 * Math.sin((Math.PI * 7) / 12),
-    ]);
+    await page.evaluate(
+      ([x, y]) => {
+        const particle = window.__flashProbeParticle;
+        particle.to(x, y);
+        particle.previous.to(particle);
+      },
+      [
+        canvas.width / 2 + 200 * Math.cos((Math.PI * 7) / 12),
+        canvas.height / 2 + 200 * Math.sin((Math.PI * 7) / 12),
+      ],
+    );
     await page.evaluate(() => {
       const ParticleClass = window.Particle;
       const hit = ParticleClass.prototype.hit;
@@ -967,6 +1286,172 @@ async function openEditor(name) {
   return page;
 }
 
+async function checkEditorControls() {
+  const page = await openEditor("triangle.incircle");
+
+  try {
+    const semantics = await page.evaluate(() => ({
+      actions: Object.fromEntries(
+        ["back", "load", "save", "docs", "run"].map((id) => [
+          id,
+          document.getElementById(id).tagName,
+        ]),
+      ),
+      errorLive: document.getElementById("error").getAttribute("aria-live"),
+      errorRole: document.getElementById("error").getAttribute("role"),
+      frameTitle: document.getElementById("demo").title,
+      language: document.documentElement.lang,
+      menuExpanded: document
+        .getElementById("load")
+        .getAttribute("aria-expanded"),
+      menuHidden: document
+        .getElementById("loadmenu")
+        .getAttribute("aria-hidden"),
+      menuInert: document.getElementById("loadmenu").inert,
+      viewport: document.querySelector('meta[name="viewport"]').content,
+    }));
+    assert.deepEqual(semantics, {
+      actions: {
+        back: "A",
+        load: "BUTTON",
+        save: "BUTTON",
+        docs: "A",
+        run: "BUTTON",
+      },
+      errorLive: "assertive",
+      errorRole: "alert",
+      frameTitle: "Pts demo preview",
+      language: "en",
+      menuExpanded: "false",
+      menuHidden: "true",
+      menuInert: true,
+      viewport: "width=device-width, initial-scale=1",
+    });
+
+    await page.click("#load");
+    const opened = await page.evaluate(() => ({
+      expanded: document.getElementById("load").getAttribute("aria-expanded"),
+      hidden: document.getElementById("loadmenu").getAttribute("aria-hidden"),
+      inert: document.getElementById("loadmenu").inert,
+      firstChoiceFocused: document.activeElement.matches("#loadmenu .demo"),
+    }));
+    assert.deepEqual(opened, {
+      expanded: "true",
+      hidden: "false",
+      inert: false,
+      firstChoiceFocused: true,
+    });
+
+    await page.keyboard.press("Escape");
+    const closed = await page.evaluate(() => ({
+      expanded: document.getElementById("load").getAttribute("aria-expanded"),
+      focus: document.activeElement.id,
+      hidden: document.getElementById("loadmenu").getAttribute("aria-hidden"),
+      inert: document.getElementById("loadmenu").inert,
+    }));
+    assert.deepEqual(closed, {
+      expanded: "false",
+      focus: "load",
+      hidden: "true",
+      inert: true,
+    });
+  } finally {
+    await page.close();
+  }
+
+  return "native controls expose state, focus, and keyboard dismissal";
+}
+
+async function checkEditorExport() {
+  const page = await openEditor("triangle.incircle");
+  const source = 'var marker = "</script>";\nconsole.log(marker);';
+
+  try {
+    await page.evaluate((value) => window.editor.setValue(value), source);
+    const downloadPromise = page.waitForEvent("download");
+    await page.click("#save");
+    const download = await downloadPromise;
+    const stream = await download.createReadStream();
+    const chunks = [];
+    for await (const chunk of stream) chunks.push(chunk);
+    const html = Buffer.concat(chunks).toString("utf8");
+
+    assert.equal(download.suggestedFilename(), "pts_demo.html");
+    assert.match(html, /^<!doctype html>\n<html lang="en">/u);
+    assert.match(
+      html,
+      /https:\/\/unpkg\.com\/pts@0\.12\.9\/dist\/pts\.min\.js/u,
+    );
+    assert.ok(
+      html.includes('var marker = "<\\/script>";'),
+      "the exported sketch did not escape its closing script tag",
+    );
+    assert.ok(
+      !html.includes(source),
+      "the exported sketch retained an unsafe closing script tag",
+    );
+  } finally {
+    await page.close();
+  }
+
+  return "standalone HTML is pinned, named, and safe for closing script text";
+}
+
+async function checkLatestEditorRunWins() {
+  const page = await openEditor("triangle.incircle");
+
+  try {
+    await page.evaluate(() => {
+      const create = document.createElement;
+      let frames = 0;
+      document.createElement = function () {
+        const element = create.apply(this, arguments);
+        if (String(arguments[0]).toLowerCase() !== "iframe") return element;
+
+        frames += 1;
+        if (frames === 1) {
+          const listen = element.addEventListener.bind(element);
+          element.addEventListener = function (type, listener, options) {
+            if (type !== "load") return listen(type, listener, options);
+            return listen(
+              type,
+              function (event) {
+                setTimeout(() => listener.call(element, event), 300);
+              },
+              options,
+            );
+          };
+        } else {
+          document.createElement = create;
+        }
+        return element;
+      };
+
+      window.editor.setValue('window.__runMarker = "old";');
+      document.getElementById("run").click();
+      window.editor.setValue('window.__runMarker = "new";');
+      document.getElementById("run").click();
+    });
+
+    await page.waitForFunction(
+      () =>
+        document.querySelectorAll("iframe").length === 1 &&
+        document.getElementById("demo")?.contentWindow.__runMarker === "new",
+      { timeout: 5000 },
+    );
+    await page.waitForTimeout(500);
+    const state = await page.evaluate(() => ({
+      frames: document.querySelectorAll("iframe").length,
+      marker: document.getElementById("demo").contentWindow.__runMarker,
+    }));
+    assert.deepEqual(state, { frames: 1, marker: "new" });
+  } finally {
+    await page.close();
+  }
+
+  return "a delayed older frame cannot replace the newest Run";
+}
+
 async function checkEditorRunsAreIsolated() {
   const page = await openEditor("triangle.incircle");
 
@@ -1136,7 +1621,13 @@ async function checkEditorReportsErrors() {
 
 const checks = [
   ["agent documentation is discoverable", checkAgentMarkdown],
+  ["shipped pages contain no analytics", checkNoAnalytics],
+  ["PoseNet is retired", checkPoseNetIsRetired],
   ["top navigation is consistent", checkTopNavigation],
+  ["demo editor links resolve", checkDemoEditorLink],
+  ["guide editor links resolve", checkGuideEditorLink],
+  ["demo shell handles URLs accessibly", checkDemoShell],
+  ["all authored demos load", checkAllDemos],
   ["homepage hero preserves particle behavior", checkHomepageHero],
   ["guide renders with slow images", checkGuideUnderSlowImages],
   ["guide loads demos lazily", checkGuideIsLazy],
@@ -1145,6 +1636,9 @@ const checks = [
   ["editor bundle is one file", checkEditorBundleIsSelfContained],
   ["editor assets are cache-safe", checkEditorAssetsAreVersioned],
   ["editor renders a named demo", checkEditorRendersNamedDemo],
+  ["editor controls are accessible", checkEditorControls],
+  ["editor exports standalone HTML", checkEditorExport],
+  ["latest editor Run wins", checkLatestEditorRunWins],
   ["editor isolates each Run", checkEditorRunsAreIsolated],
   ["editor survives top-level const", checkEditorHandlesLexicalDeclarations],
   ["editor reports sketch errors", checkEditorReportsErrors],

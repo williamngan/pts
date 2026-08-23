@@ -1,70 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>Pts.js Demo Editor</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Pts live coding editor. Pts is a javascript library that enables you to compose and visualize points in spaces.">
 
-    <script type="text/javascript" src="./js/FileSaver.min.js"></script>
-    <link rel="stylesheet" href="./vs/pts.css?v=d600326f1b42" type="text/css" />
-    <link rel="stylesheet" href="./css/style.css?v=d600326f1b42" type="text/css" />
+    <link rel="stylesheet" href="./vs/pts.css?v=0d5878faccf4" type="text/css" />
+    <link rel="stylesheet" href="./css/style.css?v=0d5878faccf4" type="text/css" />
   </head>
   <body>
 
     <!-- Placeholder pane only. Every Run replaces it with a fresh iframe whose
          sketch shell is embedded in edit.js (see FRAME_SRCDOC there). -->
-    <iframe id="demo" title="demo"></iframe>
+    <iframe id="demo" title="Pts demo preview"></iframe>
 
-    <div id="error"></div>
-    <div id="loader">Loading Editor...</div>
+    <div id="error" role="alert" aria-live="assertive"></div>
+    <div id="loader" role="status">Loading Editor...</div>
     <div id="editor"></div>
-    
-    <div id="menu">
-      <div class="cta" id="back">◀ Back</div>
-      <div class="cta" id="load">Open</div>
-      <div class="cta" id="save">Export</div>
-      <a href="../../docs" target="ptsdocs"><div class="cta" id="docs">Docs <small>↗</small></div></a>
-      <div class="cta" id="run" disabled>Run <small>[Cmd+Enter]</small></div>
-    </div>
 
-    <div id="loadmenu">
-      <div id="closemenu">&times;</div>
-      <p class="demo" data-src="pts.quickStart"><span>Pts.</span><strong>quickStart</strong></p>
-      <p class="demo" data-src="canvasspace.action"><span>CanvasSpace.</span><strong>action</strong></p>
-      <p class="demo" data-src="canvasspace.resize"><span>CanvasSpace.</span><strong>resize</strong></p>
-      <p class="demo" data-src="canvasform.textBox"><span>CanvasForm.</span><strong>textBox</strong></p>
-      <p class="demo" data-src="pt.extends"><span>Pt.</span><strong>extends</strong></p>
-      <p class="demo" data-src="pt.unit"><span>Pt.</span><strong>unit</strong></p>
-      <p class="demo" data-src="circle.intersectCircle2D"><span>Circle.</span><strong>intersectCircle2D</strong></p>
-      <p class="demo" data-src="circle.intersectLine2D"><span>Circle.</span><strong>intersectLine2D</strong></p>
-      <p class="demo" data-src="circle.withinBound"><span>Circle.</span><strong>withinBound</strong></p>
-      <p class="demo" data-src="color.HSLtoRGB"><span>Color.</span><strong>HSLtoRGB</strong></p>
-      <p class="demo" data-src="color.LABtoRGB"><span>Color.</span><strong>LABtoRGB</strong></p>
-      <p class="demo" data-src="curve.bezier"><span>Curve.</span><strong>bezier</strong></p>
-      <p class="demo" data-src="curve.cardinal"><span>Curve.</span><strong>cardinal</strong></p>
-      <p class="demo" data-src="curve.bspline"><span>Curve.</span><strong>bspline</strong></p>
-      <p class="demo" data-src="geom.interpolate"><span>Geom.</span><strong>interpolate</strong></p>
-      <p class="demo" data-src="geom.perpendicular"><span>Geom.</span><strong>perpendicular</strong></p>
-      <p class="demo" data-src="line.collinear"><span>Line.</span><strong>collinear</strong></p>
-      <p class="demo" data-src="line.perpendicularFromPt"><span>Line.</span><strong>perpendicularFromPt</strong></p>
-      <p class="demo" data-src="line.intersectLine2D"><span>Line.</span><strong>intersectLine2D</strong></p>
-      <p class="demo" data-src="polygon.convexHull"><span>Polygon.</span><strong>convexHull</strong></p>
-      <p class="demo" data-src="triangle.incircle"><span>Triangle.</span><strong>incircle</strong></p>
-      <p class="demo" data-src="shaping.linear"><span>Shaping.</span><strong>linear</strong></p>
-      <p class="demo" data-src="create.gridcells"><span>Create.</span><strong>gridCells</strong></p>
-      <p class="demo" data-src="create.noisePts"><span>Create.</span><strong>noisePts</strong></p>
-      <p class="demo" data-src="create.delaunay"><span>Create.</span><strong>delaunay</strong></p>
-      <p class="demo" data-src="physics.particles"><span>Physics.</span><strong>particles</strong></p>
-      <p class="demo" data-src="physics.shapes"><span>Physics.</span><strong>shapes</strong></p>
-      <p class="demo" data-src="svgform.scope"><span>SVGForm.</span><strong>scope</strong></p>
-      <p class="demo" data-src="htmlform.scope"><span>HTMLForm.</span><strong>scope</strong></p>
-    </div>
+    <nav id="menu" aria-label="Editor actions">
+      <a class="cta" id="back" href="../">◀ Back</a>
+      <button class="cta" id="load" type="button" aria-controls="loadmenu" aria-expanded="false">Open</button>
+      <button class="cta" id="save" type="button" disabled>Export</button>
+      <a class="cta" id="docs" href="../../docs" target="ptsdocs" rel="noopener">Docs <small>↗</small></a>
+      <button class="cta" id="run" type="button" disabled>Run <small>[Cmd+Enter]</small></button>
+    </nav>
+
+    <aside id="loadmenu" aria-label="Open a demo" aria-hidden="true" inert>
+      <button id="closemenu" type="button" aria-label="Close demo list">&times;</button>
+      <a class="demo" href="?name=pts.quickStart"><span>Pts.</span><strong>quickStart</strong></a>
+      <a class="demo" href="?name=canvasspace.action"><span>CanvasSpace.</span><strong>action</strong></a>
+      <a class="demo" href="?name=canvasspace.resize"><span>CanvasSpace.</span><strong>resize</strong></a>
+      <a class="demo" href="?name=canvasform.textBox"><span>CanvasForm.</span><strong>textBox</strong></a>
+      <a class="demo" href="?name=pt.extends"><span>Pt.</span><strong>extends</strong></a>
+      <a class="demo" href="?name=pt.unit"><span>Pt.</span><strong>unit</strong></a>
+      <a class="demo" href="?name=circle.intersectCircle2D"><span>Circle.</span><strong>intersectCircle2D</strong></a>
+      <a class="demo" href="?name=circle.intersectLine2D"><span>Circle.</span><strong>intersectLine2D</strong></a>
+      <a class="demo" href="?name=circle.withinBound"><span>Circle.</span><strong>withinBound</strong></a>
+      <a class="demo" href="?name=color.HSLtoRGB"><span>Color.</span><strong>HSLtoRGB</strong></a>
+      <a class="demo" href="?name=color.LABtoRGB"><span>Color.</span><strong>LABtoRGB</strong></a>
+      <a class="demo" href="?name=curve.bezier"><span>Curve.</span><strong>bezier</strong></a>
+      <a class="demo" href="?name=curve.cardinal"><span>Curve.</span><strong>cardinal</strong></a>
+      <a class="demo" href="?name=curve.bspline"><span>Curve.</span><strong>bspline</strong></a>
+      <a class="demo" href="?name=geom.interpolate"><span>Geom.</span><strong>interpolate</strong></a>
+      <a class="demo" href="?name=geom.perpendicular"><span>Geom.</span><strong>perpendicular</strong></a>
+      <a class="demo" href="?name=line.collinear"><span>Line.</span><strong>collinear</strong></a>
+      <a class="demo" href="?name=line.perpendicularFromPt"><span>Line.</span><strong>perpendicularFromPt</strong></a>
+      <a class="demo" href="?name=line.intersectLine2D"><span>Line.</span><strong>intersectLine2D</strong></a>
+      <a class="demo" href="?name=polygon.convexHull"><span>Polygon.</span><strong>convexHull</strong></a>
+      <a class="demo" href="?name=triangle.incircle"><span>Triangle.</span><strong>incircle</strong></a>
+      <a class="demo" href="?name=shaping.linear"><span>Shaping.</span><strong>linear</strong></a>
+      <a class="demo" href="?name=create.gridcells"><span>Create.</span><strong>gridCells</strong></a>
+      <a class="demo" href="?name=create.noisePts"><span>Create.</span><strong>noisePts</strong></a>
+      <a class="demo" href="?name=create.delaunay"><span>Create.</span><strong>delaunay</strong></a>
+      <a class="demo" href="?name=physics.particles"><span>Physics.</span><strong>particles</strong></a>
+      <a class="demo" href="?name=physics.shapes"><span>Physics.</span><strong>shapes</strong></a>
+      <a class="demo" href="?name=svgform.scope"><span>SVGForm.</span><strong>scope</strong></a>
+      <a class="demo" href="?name=htmlform.scope"><span>HTMLForm.</span><strong>scope</strong></a>
+    </aside>
     
     
-    <script type="module" src="./vs/monaco.js?v=d600326f1b42"></script>
-    <script type="text/javascript" src="./js/pts-api.js?v=d600326f1b42"></script>
-    <script type="text/javascript" src="./js/edit.js?v=d600326f1b42"></script>
+    <script type="module" src="./vs/monaco.js?v=0d5878faccf4"></script>
+    <script type="text/javascript" src="./js/pts-api.js?v=0d5878faccf4"></script>
+    <script type="text/javascript" src="./js/edit.js?v=0d5878faccf4"></script>
     
   </body>
 </html>

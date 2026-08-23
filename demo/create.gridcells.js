@@ -24,13 +24,14 @@ Pts.quickStart( "#pt", "#123" );
       form.stroke("#123");
 
       // calculate the size and color of each cell based on its distance to the pointer
-      let rects = pts.map( (p) => {
-        let mag = follower.$subtract( Rectangle.center( p ) ).magnitude()
+      pts.forEach( (p) => {
+        let c = Rectangle.center( p );
+        let mag = follower.$subtract( c ).magnitude();
         let scale = Math.min( 1, Math.abs( 1 - ( 0.7 * mag / space.center.y ) ) );
-        let r = Rectangle.fromCenter( Rectangle.center(p), Rectangle.size(p).multiply( scale ) );
+        let r = Rectangle.fromCenter( c, Rectangle.size(p).multiply( scale ) );
         form.fill( Color.HSLtoRGB( Color.hsl( scale*270, 1, 0.5 ) ).hex ).rect( r );
-      })
-  
+      });
+
       form.fillOnly("#fff").point( space.pointer, 10, "circle" );
     }
 

@@ -9,31 +9,41 @@ Pts.quickStart( "#pt", "#eae6ef" );
 
 (function() {
 
-  /*
-   * Note: If you don't need Safari/iOS compatibility right away (as of Apr 2019)
-   * A simpler method to use would be Sound.load(...) instead of Sound.loadAsBuffer(...)
-   * See this demo: http://ptsjs.org/demo/edit/?name=guide.sound_time
-   */
-  
   var files = ["/assets/flute.mp3", "/assets/drum.mp3", "/assets/tambourine.mp3"];
   var sounds = [];
-  var currFile = 0;
+  var currFile = -1;
   var bins = 256; 
   var sound;
+  var failed = false;
+  var status = "Loading...";
 
   function loadSound(i) {
     Sound.loadAsBuffer( files[i] ).then( s => {
-      sound = s;
       sounds.push( s );
-      if (i < files.length-1) loadSound(i+1);
-    }).catch( e => console.error(e) );
+      if (!sound) sound = s;
+    }).catch( e => {
+      failed = true;
+      console.error(e);
+    }).finally( () => {
+      if (i < files.length-1) {
+        loadSound(i+1);
+      } else if (sounds.length > 0) {
+        status = failed ? "Some sounds could not be loaded." : "";
+      } else {
+        status = "Could not load sound.";
+      }
+    });
   }
 
   loadSound(0); // load all sounds
 
   // Draw play button
   function playButton() {
-    if (!sound || !sound.playing) {
+    if (!sound) {
+      form.fillOnly("#789").text( space.center.$subtract( 55, 0 ), status );
+      return;
+    }
+    if (!sound.playing) {
       form.fillOnly('rgba(0,0,0,.2)').circle( Circle.fromCenter( space.center, 30 ) );
       form.fillOnly('#fff').polygon( Triangle.fromCenter( space.center, 15 ).rotate2D( Const.half_pi, space.center ) );
     
@@ -62,7 +72,7 @@ Pts.quickStart( "#pt", "#eae6ef" );
 
     action: (type, x, y) => {
       if (type === "up" && Geom.withinBound( [x,y], space.center.$subtract( 25 ), space.center.$add( 25 ) )) {
-        if (!sound.playing && sounds.length > 0) {
+        if (sound && !sound.playing && sounds.length > 0) {
           currFile = (currFile + 1) % sounds.length;
           sound = sounds[currFile];
           sound.createBuffer().analyze(bins).start(); // reset buffer and analyzer 

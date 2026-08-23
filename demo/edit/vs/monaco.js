@@ -15,7 +15,7 @@ var e = Object.defineProperty, t = (e, t, n) => () => {
 	return n || e(r, Symbol.toStringTag, { value: "Module" }), r;
 };
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/arrays.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/arrays.js
 function i(e) {
 	if (e.length === 0) throw Error("Invalid tail call");
 	return [e.slice(0, e.length - 1), e[e.length - 1]];
@@ -213,7 +213,7 @@ var ce, le, ue, de, fe, pe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/errors.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/errors.js
 function me(e) {
 	Ce.onUnexpectedError(e);
 }
@@ -298,7 +298,7 @@ var Se, Ce, we, Te, Ee, De, Oe, ke = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/assert.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/assert.js
 function Ae(e, t) {
 	if (!e) throw Error(t ? `Assertion failed (${t})` : "Assertion Failed");
 }
@@ -327,7 +327,7 @@ var Ie = t((() => {
 	ke();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/types.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/types.js
 function Le(e) {
 	return typeof e == "string";
 }
@@ -390,7 +390,7 @@ var $e = t((() => {
 	Ie();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/objects.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/objects.js
 function et(e) {
 	if (!e || typeof e != "object" || e instanceof RegExp) return e;
 	let t = Array.isArray(e) ? [] : {};
@@ -459,7 +459,7 @@ var ot, st = t((() => {
 	$e(), ot = Object.prototype.hasOwnProperty;
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/nls.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/nls.js
 function ct() {
 	return globalThis._VSCODE_NLS_MESSAGES;
 }
@@ -497,7 +497,7 @@ var ft, T = t((() => {
 	ft = lt() === "pseudo" || typeof document < "u" && document.location && typeof document.location.hash == "string" && document.location.hash.indexOf("pseudo=true") >= 0;
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/platform.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/platform.js
 function pt() {
 	if (!Bt) {
 		Bt = !0;
@@ -541,7 +541,7 @@ var mt, ht, gt, _t, vt, yt, bt, xt, St, Ct, wt, Tt, Et, Dt, Ot, kt, At, jt, eee,
 	})(), Rt = ht || yt ? 2 : mt ? 1 : 3, zt = !0, Bt = !1, Vt = !!(Ft && Ft.indexOf("Chrome") >= 0), tee = !!(Ft && Ft.indexOf("Firefox") >= 0), Ht = !!(!Vt && Ft && Ft.indexOf("Safari") >= 0), Ut = !!(Ft && Ft.indexOf("Edg/") >= 0), Wt = !!(Ft && Ft.indexOf("Android") >= 0);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/functional.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/functional.js
 function Kt(e, t) {
 	let n = this, r = !1, i;
 	return function() {
@@ -662,7 +662,7 @@ var qt = t((() => {})), Jt, Yt = t((() => {
 	})(Jt ||= {});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/lifecycle.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/lifecycle.js
 function Xt(e) {
 	return e;
 }
@@ -944,7 +944,7 @@ var tn, E, D, nn, rn, an, on, O = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/event.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/event.js
 function _n() {
 	return !!pn.VSCODE_DEV;
 }
@@ -1580,7 +1580,7 @@ var bn, xn, k, Sn, Cn, wn, Tn, En, Dn, On, kn, A, iee, An, jn, aee, Mn, Nn, Pn, 
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/core/wordHelper.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/core/wordHelper.js
 function oee(e = "") {
 	let t = "(-?\\d*\\.\\d\\w*)|([^";
 	for (let n of Qn) e.indexOf(n) >= 0 || (t += "\\" + n);
@@ -1637,7 +1637,7 @@ var Qn, $n, er, tr = t((() => {
 	});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/config/editorOptions.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/config/editorOptions.js
 function nr(e, t) {
 	if (typeof e != "object" || typeof t != "object" || !e || !t) return new mr(t, e !== t);
 	if (Array.isArray(e) || Array.isArray(t)) {
@@ -4724,7 +4724,7 @@ var dr, fr, pr, mr, hr, gr, _r, vr, yr, br, xr, Sr, Cr, wr, Tr, Er, Dr, Or, kr, 
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/keyCodes.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/keyCodes.js
 function mi(e, t) {
 	return (e | (t & 65535) << 16 >>> 0) >>> 0;
 }
@@ -7313,7 +7313,7 @@ var gi, _i, vi, yi, bi, xi, Si, Ci, wi, Ti = t((() => {
 	})(wi ||= {});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/path.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/path.js
 function See(e, t) {
 	if (typeof e != "object" || !e) throw new Vi(t, "Object", e);
 }
@@ -7791,7 +7791,7 @@ var Mi, Ni, Pi, Fi, Ii, Li, Ri, zi, Bi, Vi, Hi, Ui, Wi, Gi, Ki, qi, Ji, Yi, Xi, 
 	}, Gi.win32 = Ui.win32 = Ui, Gi.posix = Ui.posix = Gi, Ki = Hi ? Ui.normalize : Gi.normalize, qi = Hi ? Ui.join : Gi.join, Ji = Hi ? Ui.resolve : Gi.resolve, Yi = Hi ? Ui.relative : Gi.relative, Xi = Hi ? Ui.dirname : Gi.dirname, Zi = Hi ? Ui.basename : Gi.basename, Qi = Hi ? Ui.extname : Gi.extname, $i = Hi ? Ui.sep : Gi.sep;
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/uri.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/uri.js
 function wee(e, t) {
 	if (!e.scheme && t) throw Error(`[UriError]: Scheme is missing: {scheme: "", authority: "${e.authority}", path: "${e.path}", query: "${e.query}", fragment: "${e.fragment}"}`);
 	if (e.scheme && !oa.test(e.scheme)) {
@@ -8196,7 +8196,7 @@ var oa, sa, ca, la, ua, da, fa, pa, ma, ha, ga, _a = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/codiconsUtil.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/codiconsUtil.js
 function I(e, t) {
 	if (Le(t)) {
 		let n = Sa[t];
@@ -9038,7 +9038,7 @@ var Sa, Ca = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages.js
 function Aee(e) {
 	return !!e && fa.isUri(e.uri) && P.isIRange(e.range) && (P.isIRange(e.originSelectionRange) || P.isIRange(e.targetSelectionRange));
 }
@@ -9304,7 +9304,7 @@ var ka, Aa, ja, Ma, Na, Pa, Fa, jee, Ia, Mee, La, Ra, za, Nee, Ba, Pee, Fee, Iee
 	})(jte ||= {});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/services/editorBaseApi.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/services/editorBaseApi.js
 function Mte() {
 	return {
 		editor: void 0,
@@ -9343,7 +9343,7 @@ var Nte, Pte = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/window.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/window.js
 function Fte(e, t) {
 	let n = e;
 	typeof n.vscodeWindowId != "number" && Object.defineProperty(n, "vscodeWindowId", { get: () => t });
@@ -9352,7 +9352,7 @@ var Ga, Ka = t((() => {
 	Ga = window;
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/cache.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/cache.js
 function Ite(e) {
 	return e;
 }
@@ -9406,7 +9406,7 @@ var Lte, qa, Rte = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/strings.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/strings.js
 function zte(e) {
 	return !e || typeof e != "string" || e.trim().length === 0;
 }
@@ -9796,7 +9796,7 @@ var Mo, No, Po, Fo, Io, Lo, Ro, zo, Bo, Vo = t((() => {
 	};
 })), ene = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/browser.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/browser.js
 function Ho(e, t, n) {
 	typeof t == "string" && (t = e.matchMedia(t)), t.addEventListener("change", n);
 }
@@ -9836,7 +9836,7 @@ var Go, Ko, qo, Jo, Yo, Xo, Zo, Qo, $o, es = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/keybindings.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/keybindings.js
 function rs(e, t) {
 	if (typeof e == "number") {
 		if (e === 0) return null;
@@ -9876,7 +9876,7 @@ var as, os, ss, cs, ls = t((() => {
 	}, cs = class {};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/keyboardEvent.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/keyboardEvent.js
 function tne(e) {
 	if (e.charCode) {
 		let t = String.fromCharCode(e.charCode).toUpperCase();
@@ -9930,7 +9930,7 @@ var us, ds, fs, ps, ms, hs = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/iframe.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/iframe.js
 function nne(e) {
 	if (!e.parent || e.parent === e) return null;
 	try {
@@ -10027,7 +10027,7 @@ var gs, _s, rne = t((() => {
 	xs = Symbol("MicrotaskDelay");
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/async.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/async.js
 function Cs(e) {
 	return !!e && typeof e.then == "function";
 }
@@ -10579,7 +10579,7 @@ var As, js, Ms, Ns, Ps, Fs, Is, Ls, Rs, zs, Bs, Vs, Hs, Us, Ws, Gs, Ks, qs, Js =
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/network.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/network.js
 function Ys(e, t) {
 	return fa.isUri(e) ? po(e.scheme, t) : mo(e, t + ":");
 }
@@ -10668,7 +10668,7 @@ var Zs, Qs, $s, ec, tc, nc, rc, ic, ac = t((() => {
 	})(ic ||= {});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/buffer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/buffer.js
 function one(e, t) {
 	return e[t + 0] << 0 >>> 0 | e[t + 1] << 8 >>> 0;
 }
@@ -10709,7 +10709,7 @@ var uc, dc, fc, pc, mc = t((() => {
 	}, pc = "0123456789abcdef";
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/hash.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/hash.js
 function hc(e) {
 	return gc(e, 0);
 }
@@ -10797,7 +10797,7 @@ var xc, Sc = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/equals.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/equals.js
 function Cc(e, t) {
 	return e === t;
 }
@@ -10849,7 +10849,7 @@ var vne, Oc = t((() => {
 	})(vne ||= {});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/logging/logging.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/logging/logging.js
 function yne(e) {
 	Ac ? Ac instanceof jc ? Ac.loggers.push(e) : Ac = new jc([Ac, e]) : Ac = e;
 }
@@ -10900,7 +10900,7 @@ var Ac, jc, Mc = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/debugLocation.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/debugLocation.js
 function bne(e) {
 	let t = e.match(/\((.*):(\d+):(\d+)\)/);
 	if (t) return {
@@ -10943,7 +10943,7 @@ var Nc, xne, Pc = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/debugName.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/debugName.js
 function Sne(e, t) {
 	let n = Rc.get(e);
 	if (n) return n;
@@ -11001,7 +11001,7 @@ var Ic, Lc, Rc, zc, Bc, Vc = t((() => {
 	}, Lc = /* @__PURE__ */ new Map(), Rc = /* @__PURE__ */ new WeakMap(), zc = /* @__PURE__ */ new Map(), Bc = /* @__PURE__ */ new WeakMap();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/baseObservable.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/baseObservable.js
 function Dne(e) {
 	Hc = e;
 }
@@ -11062,7 +11062,7 @@ var Hc, kne, Uc, Wc, Gc = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/derivedImpl.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/derivedImpl.js
 function Ane(e) {
 	switch (e) {
 		case 0: return "initial";
@@ -11238,7 +11238,7 @@ var Kc, jne, Mne = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/derived.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/derived.js
 function qc(e, t, n = Nc.ofCaller()) {
 	return t === void 0 ? new Kc(new Ic(void 0, void 0, e), e, void 0, void 0, Cc, n) : new Kc(new Ic(e, void 0, t), t, void 0, void 0, Cc, n);
 }
@@ -11264,7 +11264,7 @@ var Zc = t((() => {
 	Oc(), j(), O(), Pc(), Vc(), Gc(), Mne(), Dne(Yc);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/reactions/autorunImpl.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/reactions/autorunImpl.js
 function Nne(e) {
 	switch (e) {
 		case 1: return "dependenciesMightHaveChanged";
@@ -11385,7 +11385,7 @@ var Qc, Pne = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/reactions/autorun.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/reactions/autorun.js
 function $c(e, t = Nc.ofCaller()) {
 	return new Qc(new Ic(void 0, void 0, e), e, void 0, t);
 }
@@ -11424,7 +11424,7 @@ var rl = t((() => {
 	Oc(), j(), O(), Vc(), Pne(), Pc();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/base.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/base.js
 function Ine(e) {
 	let t = /* @__PURE__ */ Error("BugIndicatingErrorRecovery: " + e);
 	he(t), console.error("recovered from an error that indicates a bug", t);
@@ -11433,7 +11433,7 @@ var Lne = t((() => {
 	ke(), Oc(), j(), O();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/transaction.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/transaction.js
 function il(e, t) {
 	let n = new cl(e, t);
 	try {
@@ -11495,7 +11495,7 @@ var sl, cl, ll = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/observableValue.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/observableValue.js
 function ul(e, t, n = Nc.ofCaller()) {
 	let r;
 	return r = typeof e == "string" ? new Ic(void 0, e, void 0) : new Ic(e, void 0, void 0), new dl(r, t, Cc, n);
@@ -11561,7 +11561,7 @@ var dl, zne, fl = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/observableFromEvent.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/observableFromEvent.js
 function pl(...e) {
 	let t, n, r, i;
 	return e.length === 2 ? [n, r] = e : [t, n, r, i] = e, new hl(new Ic(t, void 0, r), n, r, () => hl.globalTransaction, Cc, i ?? Nc.ofCaller());
@@ -11635,7 +11635,7 @@ var hl, gl = t((() => {
 	})(pl ||= {});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/observableSignal.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/observableSignal.js
 function _l(e, t = Nc.ofCaller()) {
 	return typeof e == "string" ? new vl(e, void 0, t) : new vl(void 0, e, t);
 }
@@ -11663,7 +11663,7 @@ var vl, yl = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/utils/utils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/utils/utils.js
 function bl(e, t) {
 	let n = new Bne(!0, t);
 	e.addObserver(n);
@@ -11702,7 +11702,7 @@ var Bne, Cl = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/logging/consoleObservableLogger.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/logging/consoleObservableLogger.js
 function wl(e, t) {
 	switch (typeof e) {
 		case "number": return "" + e;
@@ -11785,7 +11785,7 @@ var Une = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/logging/debugger/debuggerRpc.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/logging/debugger/debuggerRpc.js
 function Kne(e, t) {
 	let n = globalThis, r = [], i, { channel: a, handler: o } = qne({ sendNotification: (e) => {
 		i ? i.sendNotification(e) : r.push(e);
@@ -11817,7 +11817,7 @@ var Jne = t((() => {
 	Gne();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/logging/debugger/utils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/logging/debugger/utils.js
 function Yne(e, t) {
 	for (let n in t) e[n] && typeof e[n] == "object" && t[n] && typeof t[n] == "object" ? Yne(e[n], t[n]) : e[n] = t[n];
 }
@@ -12140,7 +12140,7 @@ var Zne, Qne = t((() => {
 	Oc(), j(), O(), Mc(), Pc(), Zc(), pi(), Cl(), gl(), ere(), mn(), pn && pn.VSCODE_DEV_DEBUG_OBSERVABLES && yne($ne.getInstance());
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/dom.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/dom.js
 function tre() {
 	for (let e of gu) {
 		let t = e();
@@ -12911,7 +12911,7 @@ var V, cu, lu, uu, du, fu, pu, mu, hu, gu, _u, vu, yu, bu, xu, Su, Cu, wu, Tu, E
 	}, Uu = new Hu();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/fastDomNode.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/fastDomNode.js
 function Gu(e) {
 	return typeof e == "number" ? `${e}px` : e;
 }
@@ -13033,7 +13033,7 @@ var qu, Ju = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/config/domFontInfo.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/config/domFontInfo.js
 function Yu(e, t) {
 	e instanceof qu ? (e.setFontFamily(t.getMassagedFontFamily()), e.setFontWeight(t.fontWeight), e.setFontSize(t.fontSize), e.setFontFeatureSettings(t.fontFeatureSettings), e.setFontVariationSettings(t.fontVariationSettings), e.setLineHeight(t.lineHeight), e.setLetterSpacing(t.letterSpacing)) : (e.style.fontFamily = t.getMassagedFontFamily(), e.style.fontWeight = t.fontWeight, e.style.fontSize = t.fontSize + "px", e.style.fontFeatureSettings = t.fontFeatureSettings, e.style.fontVariationSettings = t.fontVariationSettings, e.style.lineHeight = t.lineHeight + "px", e.style.letterSpacing = t.letterSpacing + "px");
 }
@@ -13041,7 +13041,7 @@ var Xu = t((() => {
 	Ju();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/config/charWidthReader.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/config/charWidthReader.js
 function Cre(e, t, n) {
 	new Qu(t, n).read(e);
 }
@@ -13208,7 +13208,7 @@ var Zu, Qu, wre = t((() => {
 	}, td = new $u();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/instantiation/common/instantiation.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/instantiation/common/instantiation.js
 function Tre(e, t, n) {
 	t[id.DI_TARGET] === t ? t[id.DI_DEPENDENCIES].push({
 		id: e,
@@ -13242,7 +13242,7 @@ var id, ad, W = t((() => {
 	W(), ud = rd("textModelService");
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/actions.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/actions.js
 function fd(e) {
 	return {
 		id: e.id,
@@ -13489,7 +13489,7 @@ var pd, md, hd, gd, _d, vd = t((() => {
 	}(), Cd.registerCommand("noop", () => {});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/contextkey/common/scanner.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/contextkey/common/scanner.js
 function Td(...e) {
 	switch (e.length) {
 		case 1: return C(1755, "Did you mean {0}?", e[0]);
@@ -13687,7 +13687,7 @@ var Ed, Dd, Od, Ere = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/contextkey/common/contextkey.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/contextkey/common/contextkey.js
 function kd(e, t) {
 	return e.cmp(t);
 }
@@ -14672,7 +14672,7 @@ var Ld, Rd, zd, Bd, Vd, Hd, Ud, Wd, Gd, Kd, qd, Jd, G, Yd, Xd, Zd, Qd, $d, ef, t
 	}, hf = new mf();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/keybinding/common/keybindingsRegistry.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/keybinding/common/keybindingsRegistry.js
 function Dre(e, t) {
 	if (e.weight1 !== t.weight1) return e.weight1 - t.weight1;
 	if (e.command && t.command) {
@@ -14736,7 +14736,7 @@ var _f, vf, yf, bf = t((() => {
 	}, vf = new _f(), yf = { EditorModes: "platform.keybindingsRegistry" }, hf.add(yf.EditorModes, vf);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/actions/common/actions.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/actions/common/actions.js
 function xf(e) {
 	return e.command !== void 0;
 }
@@ -15656,7 +15656,7 @@ var Cf, wf, Tf, Ef, Df, Of, kf, Af, jf, Mf, Nf = t((() => {
 	W(), Pf = rd("telemetryService");
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/map.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/map.js
 function kre(e) {
 	return Array.isArray(e);
 }
@@ -16067,7 +16067,7 @@ var If, Lf, Rf, zf, Bf, Vf, Hf, Uf, Wf, Gf, Kf, qf, Jf = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/extpath.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/extpath.js
 function Yf(e) {
 	return e === 47 || e === 92;
 }
@@ -16119,7 +16119,7 @@ var ep = t((() => {
 	ea(), Gt(), Vo();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/resources.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/resources.js
 function tp(e) {
 	return na(e, !0);
 }
@@ -16239,7 +16239,7 @@ var np, rp, ip, ap, op, sp, cp, lp, up, dp, fp, pp, mp, hp, gp = t((() => {
 	})(hp ||= {});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/log/common/log.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/log/common/log.js
 function Mre(e, t) {
 	return e !== bp.Off && e <= t;
 }
@@ -16426,7 +16426,7 @@ var vp, yp, bp, xp, Sp, Cp, wp, Tp, Ep, Dp, Op = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/editorExtensions.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/editorExtensions.js
 function Ap(e, t) {
 	Cd.registerCommand(e, function(e, ...n) {
 		let r = e.get(ad), [i, a] = n;
@@ -16765,7 +16765,7 @@ var Pp, Fp, Ip, Lp, Rp, zp, Bp, Vp, Hp, Up, Wp, Gp, Kp, qp = t((() => {
 	}));
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/worker/webWorker.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/worker/webWorker.js
 function Jp(e) {
 	At && ($p || ($p = !0, console.warn("Could not create web worker(s). Falling back to loading web worker code in main thread, which might cause UI freezes. Please see https://github.com/microsoft/monaco-editor#faq")), console.warn(e.message));
 }
@@ -16957,7 +16957,7 @@ var Zp, Qp, $p, em, tm, nm, rm, im, am, om, sm = t((() => {
 	W(), lm = rd("IWebWorkerService");
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/languageConfiguration.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/languageConfiguration.js
 function dm(e, t, n) {
 	e.has(t) ? e.get(t).push(n) : e.set(t, [n]);
 }
@@ -17038,7 +17038,7 @@ var fm, pm, mm, hm = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/supports.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/supports.js
 function _m(e, t) {
 	let n = e.getCount(), r = e.findTokenIndexAtOffset(t), i = e.getLanguageId(r), a = r;
 	for (; a + 1 < n && e.getLanguageId(a + 1) === i;) a++;
@@ -17078,7 +17078,7 @@ var ym, bm = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/core/stringBuilder.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/core/stringBuilder.js
 function xm() {
 	return Cm ||= new TextDecoder("UTF-16LE"), Cm;
 }
@@ -17138,7 +17138,7 @@ var Cm, wm, Tm, Em, Dm = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/supports/richEditBrackets.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/supports/richEditBrackets.js
 function Hre(e) {
 	let t = e.length;
 	e = e.map((e) => [e[0].toLowerCase(), e[1].toLowerCase()]);
@@ -17311,7 +17311,7 @@ var Mm, Nm, Pm, Fm, Im = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/supports/indentRules.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/supports/indentRules.js
 function Rm(e) {
 	return e.global && (e.lastIndex = 0), !0;
 }
@@ -17399,7 +17399,7 @@ var zm, Yre = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/configuration/common/configuration.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/configuration/common/configuration.js
 function Vm(e, t) {
 	let n = Object.create(null);
 	for (let r in e) Hm(n, r, e[r], t);
@@ -17474,7 +17474,7 @@ var Um, Wm = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/instantiation/common/extensions.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/instantiation/common/extensions.js
 function Ym(e, t, n) {
 	t instanceof qm || (t = new qm(t, [], !!n)), Xm.push([e, t]);
 }
@@ -17495,7 +17495,7 @@ var Xm, Zm = t((() => {
 	});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/jsonschemas/common/jsonContributionRegistry.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/jsonschemas/common/jsonContributionRegistry.js
 function nie(e) {
 	return e.length > 0 && e.charAt(e.length - 1) === "#" ? e.substring(0, e.length - 1) : e;
 }
@@ -17559,7 +17559,7 @@ var eh, rie, iie, th = t((() => {
 	ih = nh;
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/configuration/common/configurationRegistry.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/configuration/common/configurationRegistry.js
 function ah(e) {
 	let t = [];
 	if (dh.test(e)) {
@@ -17813,7 +17813,7 @@ var oh, sh, ch, cie, lh, uh, lie, dh, fh, uie, ph = t((() => {
 	} }]);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/supports/languageBracketsConfiguration.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/supports/languageBracketsConfiguration.js
 function mie(e) {
 	return e.filter(([e, t]) => e !== "" && t !== "");
 }
@@ -17891,7 +17891,7 @@ var hie, _h, gie, _ie, vie = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/languageConfigurationRegistry.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/languageConfigurationRegistry.js
 function yie(e, t, n, r) {
 	let i = t.getLanguageConfiguration(e);
 	if (!i) {
@@ -18122,7 +18122,7 @@ var wie, vh, yh, bh, xh, Sh, Tie, Ch, wh, Eie, Th, Eh = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/diff/diff.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/diff/diff.js
 function Oie(e, t, n) {
 	return new Mh(new Oh(e), new Oh(t)).ComputeDiff(n).changes;
 }
@@ -18404,7 +18404,7 @@ var Oh, kh, Ah, jh, Mh, Nh = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/uint.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/uint.js
 function Ph(e) {
 	return e < 0 ? 0 : e > 255 ? 255 : e | 0;
 }
@@ -18447,7 +18447,7 @@ var Ih = t((() => {})), Lh, Rh, zh = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/linkComputer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/linkComputer.js
 function kie() {
 	return Bh === null && (Bh = new Nie([
 		[
@@ -18791,7 +18791,7 @@ var Mie, Nie, Bh, Vh, Pie, Fie = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/core/wordCharacterClassifier.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/core/wordCharacterClassifier.js
 function Wh(e, t) {
 	let n = `${e}/${t.join(",")}`, r = Gh.get(n);
 	return r || (r = new Rie(e, t), Gh.set(n, r)), r;
@@ -18829,7 +18829,7 @@ var Rie, Gh, Kh = t((() => {
 	}, Gh = new Wf(10);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model.js
 function zie(e) {
 	return !!e && typeof e.read == "function";
 }
@@ -18882,7 +18882,7 @@ var qh, Jh, Yh, Xh, Zh, Qh, $h, Vie, Hie, eg = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/textModelSearch.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/textModelSearch.js
 function Uie(e) {
 	if (!e || e.length === 0) return !1;
 	for (let t = 0, n = e.length; t < n; t++) {
@@ -19093,7 +19093,7 @@ var Kie, rg, ig, ag, og, sg = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/services/unicodeTextModelHighlighter.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/services/unicodeTextModelHighlighter.js
 function qie(e, t) {
 	return `[${$a(e.map((e) => String.fromCodePoint(e)).join(""))}]`;
 }
@@ -19329,7 +19329,7 @@ var Yie, cg, Xie = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/arraysFind.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/arraysFind.js
 function mg(e, t, n = e.length - 1) {
 	let r = Qie(e, t, n);
 	if (r !== -1) return e[r];
@@ -19616,7 +19616,7 @@ var vg, yg = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/core/text/positionToOffsetImpl.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/core/text/positionToOffsetImpl.js
 function iae(e) {
 	Tg._deps = e;
 }
@@ -19751,7 +19751,7 @@ var aae, Tg, Eg, Dg = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/core/edits/textEdit.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/core/edits/textEdit.js
 function Mg(e, t) {
 	if (e.lineNumber === t.lineNumber && e.column === 2 ** 53 - 1) return P.fromPositions(t, t);
 	if (!e.isBeforeOrEqual(t)) throw new Oe("start must be before end");
@@ -19892,7 +19892,7 @@ var Ng, Pg, Fg = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/rangeMapping.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/rangeMapping.js
 function Ig(e, t) {
 	if (e.lineNumber < 1) return new N(1, 1);
 	if (e.lineNumber > t.length) return new N(t.length, t[t.length - 1].length + 1);
@@ -20003,7 +20003,7 @@ var Rg, zg, Bg, Vg = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/legacyLinesDiffComputer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/legacyLinesDiffComputer.js
 function lae(e, t, n, r) {
 	return new Mh(e, t, n).ComputeDiff(r);
 }
@@ -20297,7 +20297,7 @@ var fae, pae, Wg, mae, Gg, Kg, hae, gae = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/defaultLinesDiffComputer/utils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/defaultLinesDiffComputer/utils.js
 function Qg(e) {
 	return e === 32 || e === 9;
 }
@@ -20440,7 +20440,7 @@ var $g, e_, t_ = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/defaultLinesDiffComputer/linesSliceCharSequence.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/defaultLinesDiffComputer/linesSliceCharSequence.js
 function i_(e) {
 	return e >= 97 && e <= 122 || e >= 65 && e <= 90 || e >= 48 && e <= 57;
 }
@@ -20540,7 +20540,7 @@ var a_, Eae, Dae = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/defaultLinesDiffComputer/computeMovedLines.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/defaultLinesDiffComputer/computeMovedLines.js
 function Oae(e, t, n, r, i, a) {
 	let { moves: o, excludedChanges: s } = Aae(e, t, n, a);
 	if (!a.isValid()) return [];
@@ -20664,7 +20664,7 @@ var Fae = t((() => {
 	Zg(), Vg(), pe(), yg(), Jf(), Sg(), Dae(), t_(), Sae(), F();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/defaultLinesDiffComputer/heuristicSequenceOptimizations.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/defaultLinesDiffComputer/heuristicSequenceOptimizations.js
 function Iae(e, t, n) {
 	let r = n;
 	return r = Lae(e, t, r), r = Lae(e, t, r), r = Rae(e, t, r), r;
@@ -20827,7 +20827,7 @@ var Gae = t((() => {
 	pe(), pg(), Zg();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/defaultLinesDiffComputer/lineSequence.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/defaultLinesDiffComputer/lineSequence.js
 function Kae(e) {
 	let t = 0;
 	for (; t < e.length && (e.charCodeAt(t) === 32 || e.charCodeAt(t) === 9);) t++;
@@ -20856,7 +20856,7 @@ var o_, qae = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/defaultLinesDiffComputer/defaultLinesDiffComputer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/defaultLinesDiffComputer/defaultLinesDiffComputer.js
 function Jae(e) {
 	return new Rg(new bg(e.seq1Range.start + 1, e.seq1Range.endExclusive + 1), new bg(e.seq2Range.start + 1, e.seq2Range.endExclusive + 1));
 }
@@ -20926,7 +20926,7 @@ var Yae, Xae = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/amdX.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/amdX.js
 function Zae(e, t) {
 	(globalThis._VSCODE_PRODUCT_JSON ?? globalThis.vscode?.context?.configuration()?.product)?.commit;
 	let n = `${e}/${t}`, r = `${ec}/${n}`;
@@ -21134,7 +21134,7 @@ var Qae = t((() => {
 	});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/externalLinesDiffComputer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/diff/externalLinesDiffComputer.js
 function aoe() {
 	return coe ||= import(
 		/* webpackIgnore: true */
@@ -21181,7 +21181,7 @@ var coe, loe, uoe, doe, foe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/color.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/color.js
 function d_(e, t) {
 	let n = 10 ** t;
 	return Math.round(e * n) / n;
@@ -21618,7 +21618,7 @@ var Y, f_, p_, X, m_ = t((() => {
 	})(X ||= {});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/defaultDocumentColorsComputer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/defaultDocumentColorsComputer.js
 function moe(e) {
 	let t = [];
 	for (let n of e) {
@@ -21690,7 +21690,7 @@ var boe = t((() => {
 	m_();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/services/findSectionHeaders.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/services/findSectionHeaders.js
 function xoe(e, t) {
 	let n = [];
 	if (t.findRegionSectionHeaders && t.foldingRules?.markers) {
@@ -22077,7 +22077,7 @@ var Toe, Eoe, Doe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/services/editorWebWorker.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/services/editorWebWorker.js
 function Roe(e) {
 	switch (e) {
 		case "legacy": return u_.getLegacy();
@@ -22304,7 +22304,7 @@ var zoe, Boe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/services/completionsEnablement.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/services/completionsEnablement.js
 function Hoe() {
 	return ih.defaultChatAgent?.completionsEnablementSetting;
 }
@@ -22319,7 +22319,7 @@ var Goe = t((() => {
 	aie(), $e();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/services/editorWorkerService.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/services/editorWorkerService.js
 function T_(e, t) {
 	let n = e.getModel(t);
 	return !(!n || n.isTooLargeForSyncing());
@@ -22516,7 +22516,7 @@ var E_, D_, O_, k_, A_, j_, M_, N_, P_, F_ = t((() => {
 	}, P_ = E_([D_(2, cd), D_(3, lm)], P_);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/browser/standaloneWebWorker.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/browser/standaloneWebWorker.js
 function Koe(e, t, n) {
 	return new I_(e, t, n);
 }
@@ -22552,7 +22552,7 @@ var I_, qoe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/nullTokenize.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/nullTokenize.js
 function z_(e, t) {
 	return new Aa([new ka(0, "", e)], t);
 }
@@ -22571,7 +22571,7 @@ var V_, H_ = t((() => {
 	}();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/trustedTypes.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/trustedTypes.js
 function U_(e, t) {
 	let n = Wo();
 	if (n?.createTrustedTypesPolicy) try {
@@ -22632,7 +22632,7 @@ var W_ = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/tokens/lineTokens.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/tokens/lineTokens.js
 function Joe(e, t) {
 	let n = t.lineNumber;
 	if (!e.tokenization.isCheapToTokenize(n)) return;
@@ -22986,7 +22986,7 @@ var q_, J_, Y_, X_, Z_, Q_ = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/viewLayout/viewLineRenderer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/viewLayout/viewLineRenderer.js
 function av(e, t) {
 	if (e.lineContent.length === 0) {
 		if (e.lineDecorations.length > 0) {
@@ -23341,7 +23341,7 @@ var cv, lv, uv, dv, fv, pv, mv = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/common/monarch/monarchCommon.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/common/monarch/monarchCommon.js
 function ose(e) {
 	return Array.isArray(e);
 }
@@ -23404,7 +23404,7 @@ var kv = t((() => {
 	Vo();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/common/monarch/monarchLexer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/common/monarch/monarchLexer.js
 function dse(e, t) {
 	if (!t) return null;
 	t = wv(e, t);
@@ -23761,7 +23761,7 @@ var Av, jv, Mv, Nv, Pv, Fv, Iv, Lv, Rv, zv, Bv, Vv, Hv = t((() => {
 	}, Vv = Mv = Av([jv(4, Um)], Vv);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/browser/colorizer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/browser/colorizer.js
 function fse(e, t, n, r) {
 	return new Promise((i, a) => {
 		let o = () => {
@@ -23833,7 +23833,7 @@ var Wv, Gv, mse = t((() => {
 	};
 })), hse = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/aria/aria.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/aria/aria.js
 function gse(e) {
 	Xv = document.createElement("div"), Xv.className = "monaco-aria-container";
 	let t = () => {
@@ -23932,7 +23932,7 @@ var Yv, Xv, Zv, Qv, $v, ey, ty = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/config/migrateOptions.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/config/migrateOptions.js
 function dy(e, t) {
 	py.items.push(new py(e, t));
 }
@@ -24061,7 +24061,7 @@ var py, my, xse = t((() => {
 	}, gy = new hy();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/config/fontInfoFromSettings.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/config/fontInfoFromSettings.js
 function Sse(e, t, n) {
 	let r = e.get(58), i = e.get(62), a = e.get(61), o = e.get(60), s = e.get(63), c = e.get(75), l = e.get(72);
 	return zn._create(r, i, a, o, s, c, l, t, n);
@@ -24085,7 +24085,7 @@ var vy = t((() => {
 	}, Cy = new Sy();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/config/editorConfiguration.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/config/editorConfiguration.js
 function wse(e) {
 	let t = 0;
 	for (; e;) e = Math.floor(e / 10), t++;
@@ -24326,7 +24326,7 @@ var Ey, Dy, Oy, ky, Ay, jy, Ese = t((() => {
 	})(My ||= {});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/domStylesheets.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/domStylesheets.js
 function Py(e = Ga.document.head, t, n) {
 	let r = document.createElement("style");
 	if (r.type = "text/css", r.media = "screen", t?.(r), e.appendChild(r), n && n.add(en(() => r.remove())), e === Ga.document.head) {
@@ -24416,7 +24416,7 @@ var Ry, zy, By = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/theme/common/colorUtils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/theme/common/colorUtils.js
 function Uy(e) {
 	return `--vscode-${e.replace(/\./g, "-")}`;
 }
@@ -25388,7 +25388,7 @@ var Zy, Qy, $y, eb, tb, nb, rb, ib = t((() => {
 	}, C(2090, "Border color of the Search Editor query matches."));
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/editorDom.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/editorDom.js
 function yC(e) {
 	let t = jl(e);
 	return new CC(t.left, t.top, t.width, t.height);
@@ -25857,7 +25857,7 @@ var xC, SC, CC, wC, TC, EC, DC, OC, kC, AC, jC = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/theme/common/theme.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/theme/common/theme.js
 function KC(e) {
 	return e === JC.HIGH_CONTRAST_DARK || e === JC.HIGH_CONTRAST_LIGHT;
 }
@@ -25872,7 +25872,7 @@ var JC, YC, XC = t((() => {
 	})(YC ||= {});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/viewParts/viewLines/viewLine.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/viewParts/viewLines/viewLine.js
 function Pse(e, t, n, r) {
 	return new rw(e, t, n, r);
 }
@@ -26250,7 +26250,7 @@ var QC, $C, ew, tw, nw, rw, iw, aw = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/controller/mouseTarget.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/controller/mouseTarget.js
 function uw(e) {
 	return {
 		isAfterLines: !1,
@@ -26861,7 +26861,7 @@ var dw, fw, pw, mw, hw, gw, _w, vw, yw, bw, xw, Sw, Cw = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/decorators.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/decorators.js
 function ww(e, t, n) {
 	let r = null, i = null;
 	if (typeof n.value == "function" ? (r = "value", i = n.value, i.length !== 0 && console.warn("Memoize should only be used in functions with zero parameters")) : typeof n.get == "function" && (r = "get", i = n.get), !i) throw Error("not supported");
@@ -27385,7 +27385,7 @@ var Tw = t((() => {})), Ew, Dw, Ow, kw = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/scrollable.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/scrollable.js
 function Uw(e, t) {
 	let n = t - e;
 	return function(t) {
@@ -27556,7 +27556,7 @@ var Ww, Gw, Kw, qw, Jw = t((() => {
 	};
 })), Use = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/scrollbar/scrollableElement.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/scrollbar/scrollableElement.js
 function Wse(e) {
 	let t = {
 		lazyRender: e.lazyRender !== void 0 && e.lazyRender,
@@ -28157,7 +28157,7 @@ var Yw, Xw, Zw, Qw, $w, eT, tT, nT, rT = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/uuid.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/uuid.js
 function qse(e) {
 	return `${e}-${hT()}`;
 }
@@ -28180,7 +28180,7 @@ var hT, gT = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/dataTransfer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/dataTransfer.js
 function yT(e, t) {
 	return {
 		id: t,
@@ -28260,7 +28260,7 @@ var CT, wT, TT = t((() => {
 	});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/dnd/browser/dnd.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/dnd/browser/dnd.js
 function ET(e) {
 	if (kt && typeof globalThis.vscode?.webUtils?.getPathForFile == "function") return globalThis.vscode?.webUtils?.getPathForFile(e);
 }
@@ -28285,7 +28285,7 @@ var DT, OT, kT, Yse = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/dataTransfer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/dataTransfer.js
 function Xse(e) {
 	let t = new CT();
 	for (let n of e.items) {
@@ -28332,7 +28332,7 @@ var AT, $se = t((() => {
 	]);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/controller/editContext/clipboardUtils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/controller/editContext/clipboardUtils.js
 function ece(e, t, n) {
 	let { dataToCopy: r, metadata: i } = MT(e);
 	return jT(r.text, i, n), {
@@ -28812,7 +28812,7 @@ var FT, IT, LT, RT = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/core/misc/indentation.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/core/misc/indentation.js
 function ice(e, t, n) {
 	let r = 0;
 	for (let n = 0; n < e.length; n++) e.charAt(n) === "	" ? r = ow.nextIndentTabStop(r, t) : r++;
@@ -28833,7 +28833,7 @@ var QT = t((() => {
 	Vo(), sw();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/cursorCommon.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/cursorCommon.js
 function $T(e) {
 	return e === "'" || e === "\"" || e === "`";
 }
@@ -28990,7 +28990,7 @@ var eE, tE, nE, rE, iE, aE, oE, sE, cE, lE = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/commands/replaceCommand.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/commands/replaceCommand.js
 function dE(e, t, n) {
 	if (n < 0) throw Error("Unexpected negative delta");
 	let r = e.getLineCount(), i = new N(r, e.getLineMaxColumn(r));
@@ -30073,7 +30073,7 @@ var fE, pE, mE, hE, gE, _E, vE, yE = t((() => {
 	})(OE ||= {});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/supports/indentationLineProcessor.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/supports/indentationLineProcessor.js
 function AE(e, t) {
 	e.tokenization.forceTokenization(t.lineNumber);
 	let n = e.tokenization.getLineTokens(t.lineNumber), r = _m(n, t.column - 1), i = r.firstCharOffset === 0, a = n.getLanguageId(0) === r.languageId;
@@ -30167,7 +30167,7 @@ var jE, ME, NE, PE = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/enterAction.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/enterAction.js
 function FE(e, t, n, r) {
 	t.tokenization.forceTokenization(n.startLineNumber);
 	let i = t.getLanguageIdAtPosition(n.startLineNumber, n.startColumn), a = r.getLanguageConfiguration(i);
@@ -30188,7 +30188,7 @@ var IE = t((() => {
 	hm(), Eh(), PE();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/commands/shiftCommand.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/commands/shiftCommand.js
 function LE(e, t) {
 	if (t <= 0) return "";
 	zE[e] || (zE[e] = ["", e]);
@@ -30302,7 +30302,7 @@ var oce, sce, RE, zE, BE, VE = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/autoIndent.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/autoIndent.js
 function dce(e, t, n) {
 	let r = e.tokenization.getLanguageIdAtPosition(t, 0);
 	if (t > 1) {
@@ -30489,7 +30489,7 @@ var WE = t((() => {
 	Vo(), hm(), PE();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/cursor/cursorTypeEditOperations.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/cursor/cursorTypeEditOperations.js
 function GE(e, t) {
 	return e === " " ? t === 5 || t === 6 ? 6 : 5 : 4;
 }
@@ -31126,7 +31126,7 @@ var bce, xce, Sce, XE, ZE, Cce, wce, Tce, QE, Ece, Dce, Oce, kce, $E, Ace, jce, 
 	})($ ||= {});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/coreCommands.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/coreCommands.js
 function iD(e, t) {
 	vf.registerKeybindingRule({
 		id: e,
@@ -33143,7 +33143,7 @@ var oD, sD, cD, lD, uD, dD, Pce, Fce, fD, Ice = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/viewParts/contentWidgets/contentWidgets.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/viewParts/contentWidgets/contentWidgets.js
 function vD(e, t, ...n) {
 	try {
 		return e.call(t, ...n);
@@ -33391,7 +33391,7 @@ var Jce, Yce, yD, bD, xD, Xce = t((() => {
 	NC(), SD = class extends MC {};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/theme/common/themeService.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/theme/common/themeService.js
 function wD(e) {
 	return { id: e };
 }
@@ -34056,7 +34056,7 @@ var DD, OD, Qce, kD, $ce, AD = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/utils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/utils.js
 function QD(e, t) {
 	let n = 0, r = 0, i = e.length;
 	for (; r < i;) {
@@ -34258,7 +34258,7 @@ var $D = t((() => {})), eO, tO, nO, rO = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/viewParts/indentGuides/indentGuides.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/viewParts/indentGuides/indentGuides.js
 function aO(e) {
 	if (!(e && e.isTransparent())) return e;
 }
@@ -35199,7 +35199,7 @@ var sue, cue = t((() => {
 	Gt(), Lue = Et ? "\"Segoe WPC\", \"Segoe UI\", sans-serif" : Dt ? "-apple-system, BlinkMacSystemFont, sans-serif" : "system-ui, \"Ubuntu\", \"Droid Sans\", sans-serif";
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/viewModel/viewModelDecoration.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/viewModel/viewModelDecoration.js
 function zue(e, t) {
 	return !(t.options.hideInCommentTokens && Bue(e, t) || t.options.hideInStringTokens && Vue(e, t));
 }
@@ -36432,7 +36432,7 @@ var yO, Uue = t((() => {
 	};
 })), pde = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/viewParts/selections/selections.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/viewParts/selections/selections.js
 function mde(e) {
 	return new gde(e);
 }
@@ -36886,7 +36886,7 @@ var gde, _de, vde, yde = t((() => {
 	});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/viewParts/viewZones/viewZones.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/viewParts/viewZones/viewZones.js
 function wde(e, t) {
 	try {
 		return e(t);
@@ -37233,7 +37233,7 @@ var jO, Tde, Ede = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/gpu/gpuUtils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/gpu/gpuUtils.js
 function NO(e) {
 	if (!e) throw Error(`Value "${e}" cannot be null`);
 	return e;
@@ -37504,7 +37504,7 @@ var PO, FO = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/gpu/atlas/textureAtlasSlabAllocator.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/gpu/atlas/textureAtlasSlabAllocator.js
 function Jde(e, t, n) {
 	let r = e.get(t);
 	r || (r = [], e.set(t, r)), r.push(n);
@@ -37802,7 +37802,7 @@ var Yde, Xde = t((() => {
 	JO(), W(), YO = qO, XO = rd("notificationService"), $de = class {};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/gpu/gpuDisposable.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/gpu/gpuDisposable.js
 function QO(e) {
 	return {
 		object: e,
@@ -37855,7 +37855,7 @@ var $O, ek = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/gpu/objectCollectionBuffer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/gpu/objectCollectionBuffer.js
 function nfe(e, t) {
 	return new rfe(e, t);
 }
@@ -38129,7 +38129,7 @@ var rfe, ife, afe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/utils/runOnChange.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/utils/runOnChange.js
 function tk(e, t) {
 	let n, r = !0;
 	return Fne({ changeTracker: {
@@ -38153,7 +38153,7 @@ var nk = t((() => {
 	pi(), Oc(), j(), O(), rl();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/gpu/viewGpuContext.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/gpu/viewGpuContext.js
 function hfe(e, t) {
 	if (!_fe.includes(e)) return !1;
 	switch (e) {
@@ -38296,7 +38296,7 @@ var gfe, rk, ik, ak, _fe, ok = t((() => {
 	];
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/gpu/contentSegmenter.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/gpu/contentSegmenter.js
 function sk(e, t) {
 	return e.isBasicASCII && t.useMonospaceOptimizations ? new vfe(e) : new yfe(e);
 }
@@ -38422,7 +38422,7 @@ struct VSOutput {
 `;
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/gpu/renderStrategy/viewportRenderStrategy.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/gpu/renderStrategy/viewportRenderStrategy.js
 function Sfe(e) {
 	switch (e) {
 		case "lighter":
@@ -38583,7 +38583,7 @@ var wfe, Tfe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/gpu/renderStrategy/fullFileRenderStrategy.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/gpu/renderStrategy/fullFileRenderStrategy.js
 function Efe(e) {
 	switch (e) {
 		case "lighter":
@@ -39157,7 +39157,7 @@ var dk, Ofe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/controller/editContext/screenReaderUtils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/controller/editContext/screenReaderUtils.js
 function yk(e, t) {
 	if (e.get(2) === 1) {
 		let e = t.lookupKeybinding("editor.action.toggleScreenReaderAccessibilityMode")?.getAriaLabel(), n = t.lookupKeybinding("workbench.action.showCommands")?.getAriaLabel(), r = t.lookupKeybinding("workbench.action.openGlobalKeybindings")?.getAriaLabel(), i = C(65, "The editor is not accessible at this time.");
@@ -39224,7 +39224,7 @@ var bk, xk = t((() => {
 	}, Ife = new Ffe();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/controller/editContext/textArea/textAreaEditContext.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/controller/editContext/textArea/textAreaEditContext.js
 function Rfe(e, t, n, r) {
 	if (t.length === 0) return 0;
 	let i = e.createElement("div");
@@ -39528,7 +39528,7 @@ var zfe, Sk, Bfe, Ck, wk, Vfe = t((() => {
 	}, wk = zfe([Sk(5, gk), Sk(6, ad)], wk);
 })), Hfe = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/controller/editContext/native/nativeEditContextUtils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/controller/editContext/native/nativeEditContextUtils.js
 function Tk(e, t, n, r) {
 	return e.addEventListener(t, n, r), { dispose() {
 		e.removeEventListener(t, n);
@@ -40244,7 +40244,7 @@ var Ufe, Wfe, Ek, Gfe = t((() => {
 	W(), Lk = rd("userInteractionService");
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/view.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/view.js
 function zk(e) {
 	try {
 		return e();
@@ -40623,7 +40623,7 @@ var hpe, Bk, Vk, gpe, _pe, vpe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/modelLineProjectionData.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/modelLineProjectionData.js
 function ype(e) {
 	return e == null || e === Xh.Right || e === Xh.Both;
 }
@@ -40843,7 +40843,7 @@ var Hk, Uk, xpe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/view/domLineBreaksComputer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/view/domLineBreaksComputer.js
 function Ope(e, t, n, r, i, a, o, s) {
 	function c(e) {
 		let n = t.getLineInjectedText(e);
@@ -41058,7 +41058,7 @@ var jpe, Mpe, Npe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/collections.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/collections.js
 function Lpe(e, t) {
 	let n = [], r = [];
 	for (let r of e) t.has(r) || n.push(r);
@@ -41148,7 +41148,7 @@ var zpe, tA, nA = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/core/misc/eolCounter.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/core/misc/eolCounter.js
 function sA(e) {
 	let t = 0, n = 0, r = 0, i = 0;
 	for (let a = 0, o = e.length; a < o; a++) {
@@ -41164,7 +41164,7 @@ function sA(e) {
 }
 var cA = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/textModelEditSource.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/textModelEditSource.js
 function lA(e) {
 	return new dA(e, Upe);
 }
@@ -41321,7 +41321,7 @@ var Upe, dA, fA, Wpe, Gpe, pA = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/length.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/length.js
 function Ype(e, t, n, r) {
 	return e === n ? gA(0, r - t) : gA(n - e, r);
 }
@@ -41924,7 +41924,7 @@ var TA, EA = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/brackets.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/brackets.js
 function fme(e) {
 	let t = $a(e);
 	return /^[\w ]+/.test(e) && (t = `\\b${t}`), /[\w ]+$/.test(e) && (t = `${t}\\b`), t;
@@ -41987,7 +41987,7 @@ var pme, mme, hme = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/concat23Trees.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/concat23Trees.js
 function gme(e) {
 	if (e.length === 0) return null;
 	if (e.length === 1) return e[0];
@@ -42058,7 +42058,7 @@ var xme = t((() => {
 	VA();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/nodeReader.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/nodeReader.js
 function WA(e, t = -1) {
 	for (;;) {
 		if (t++, t >= e.childrenLength) return -1;
@@ -42112,7 +42112,7 @@ var Sme, Cme = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/parser.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/parser.js
 function wme(e, t, n, r) {
 	return new Tme(e, t, n, r).parseDocument();
 }
@@ -42166,7 +42166,7 @@ var Tme, Eme = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/combineTextEditInfos.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/combineTextEditInfos.js
 function KA(e, t) {
 	if (e.length === 0) return t;
 	if (t.length === 0) return e;
@@ -42238,7 +42238,7 @@ var qA, Ome = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/bracketPairsTree.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/bracketPairsTree.js
 function kme(e, t, n, r) {
 	if (e.kind === 4 || e.kind === 2) {
 		let i = [];
@@ -42433,7 +42433,7 @@ var jme, Mme, Nme = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsImpl.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsImpl.js
 function Pme(e, t) {
 	return {
 		object: e,
@@ -42844,7 +42844,7 @@ var Fme, QA, Ime = t((() => {
 	});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/core/textChange.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/core/textChange.js
 function ej(e) {
 	return e.replace(/\n/g, "\\n").replace(/\r/g, "\\r");
 }
@@ -42994,7 +42994,7 @@ var tj, Bme, Vme = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/editStack.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/editStack.js
 function nj(e) {
 	return e.toString();
 }
@@ -43208,7 +43208,7 @@ var aj, oj, Hme, Ume, Wme = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/indentationGuesser.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/indentationGuesser.js
 function Gme(e, t, n, r, i) {
 	i.spacesDiff = 0, i.looksLikeAlignment = !1;
 	let a;
@@ -43286,7 +43286,7 @@ var qme, Jme = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/intervalTree.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/intervalTree.js
 function sj(e) {
 	return (e.metadata & 1) >>> 0;
 }
@@ -43660,7 +43660,7 @@ var _j, vj, yj, yhe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/pieceTreeTextBuffer/rbTreeBase.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/pieceTreeTextBuffer/rbTreeBase.js
 function bj(e) {
 	for (; e.left !== Aj;) e = e.left;
 	return e;
@@ -43751,7 +43751,7 @@ var kj, Aj, She = t((() => {
 	}, Aj = new kj(null, 0), Aj.parent = Aj, Aj.left = Aj, Aj.right = Aj, Aj.color = 0;
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/pieceTreeTextBuffer/pieceTreeBase.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/pieceTreeTextBuffer/pieceTreeBase.js
 function Che(e) {
 	let t;
 	return t = e[e.length - 1] < 65536 ? new Uint16Array(e.length) : new Uint32Array(e.length), t.set(e, 0), t;
@@ -44838,7 +44838,7 @@ var Mj, The, Nj, Pj, Ehe, Dhe, Ohe, khe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/observableValueOpts.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/observableValueOpts.js
 function Lj(e, t, n = Nc.ofCaller()) {
 	return e.lazy ? new Nhe(new Ic(e.owner, e.debugName, void 0), t, e.equalsFn ?? Cc, n) : new dl(new Ic(e.owner, e.debugName, void 0), t, e.equalsFn ?? Cc, n);
 }
@@ -44933,7 +44933,7 @@ var Rj = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/supports/tokenization.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/supports/tokenization.js
 function Bhe(e) {
 	if (!e || !Array.isArray(e)) return [];
 	let t = [], n = 0;
@@ -45188,7 +45188,7 @@ var Jhe, Yhe, Xhe, Uj, Zhe, Qhe, $he, ege = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/textModelStringEdit.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/textModelStringEdit.js
 function ige(e) {
 	let t = e.map((e) => new c_(fg.ofStartAndLength(e.rangeOffset, e.rangeLength), e.text));
 	return t.reverse(), new s_(t);
@@ -45268,7 +45268,7 @@ var age = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/tokens/treeSitter/cursorUtils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/tokens/treeSitter/cursorUtils.js
 function cge(e, t) {
 	let n = e.gotoNextSibling(), r = t.gotoNextSibling();
 	if (n !== r) throw Error("Trees are out of sync");
@@ -45312,7 +45312,7 @@ function dge(e, t) {
 }
 var fge = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/tokens/treeSitter/treeSitterTree.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/tokens/treeSitter/treeSitterTree.js
 function pge() {
 	let e = performance.now();
 	return function(t) {
@@ -45528,7 +45528,7 @@ var Kj, qj, Jj, hge = t((() => {
 	}, Jj = Kj([qj(5, vp), qj(6, Pf)], Jj);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/fixedArray.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/fixedArray.js
 function gge(e, t) {
 	let n = [];
 	for (let r = 0; r < e; r++) n[r] = t;
@@ -45608,7 +45608,7 @@ var Yj, _ge = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/textModelTokens.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/textModelTokens.js
 function $j(e, t, n) {
 	let r = e.getLineFirstNonWhitespaceColumn(t), i = [], a = null;
 	for (let o = t - 1; r > 1 && o >= 1; o--) {
@@ -45836,7 +45836,7 @@ var tM, nM, rM, iM, aM, oM, sM = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/tokens/treeSitter/tokenStore.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/tokens/treeSitter/tokenStore.js
 function cM(e) {
 	return e.token !== void 0;
 }
@@ -46082,7 +46082,7 @@ var uM, dM, fM, xge = t((() => {
 	W(), pM = rd("treeSitterThemeService");
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/changeTracker.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/changeTracker.js
 function Cge(e) {
 	return {
 		createChangeSummary: (e) => ({ changes: [] }),
@@ -46771,7 +46771,7 @@ var wge = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/tokens/contiguousTokensEditing.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/tokens/contiguousTokensEditing.js
 function DM(e) {
 	return e instanceof Uint32Array ? e : new Uint32Array(e);
 }
@@ -46827,7 +46827,7 @@ var OM, kM, kge = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/tokens/contiguousTokensStore.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/tokens/contiguousTokensStore.js
 function AM(e) {
 	return (e << 0 | 33588224) >>> 0;
 }
@@ -47221,7 +47221,7 @@ var jM, Age = t((() => {
 	], IM);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/textModel.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/model/textModel.js
 function Nge(e) {
 	let t = new Ij();
 	return t.acceptChunk(e), t.finish();
@@ -48385,7 +48385,7 @@ var HM, UM, WM, GM, KM, qM, JM, YM, XM, ZM, QM, $M, eN, tN, nN, rN, iN, aN, oN, 
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/viewModel/monospaceLineBreaksComputer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/viewModel/monospaceLineBreaksComputer.js
 function Rge(e, t, n, r, i, a, o, s) {
 	if (i === -1) return null;
 	let c = n.length;
@@ -49547,7 +49547,7 @@ var pN, mN, hN, gN, Vge = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/textToHtmlTokenizer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languages/textToHtmlTokenizer.js
 async function Kge(e, t, n) {
 	if (!n) return uP(t, e.languageIdCodec, dP);
 	let r = await Ha.getOrCreate(n);
@@ -50536,7 +50536,7 @@ var dP, fP = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/viewModel/modelLineProjection.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/viewModel/modelLineProjection.js
 function AP(e, t) {
 	return e === null ? t ? NP.INSTANCE : PP.INSTANCE : new MP(e, t);
 }
@@ -50783,7 +50783,7 @@ var MP, NP, PP, FP, Qge = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/viewModel/viewModelLines.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/viewModel/viewModelLines.js
 function e_e(e) {
 	if (e.length === 0) return [];
 	let t = e.slice();
@@ -51304,7 +51304,7 @@ var LP, RP, zP, BP, VP, t_e = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/viewModel/viewModelImpl.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/viewModel/viewModelImpl.js
 function r_e(e, t) {
 	let n = [], r = 0, i = 0;
 	for (; r < e.length && i < t.length;) {
@@ -51984,7 +51984,7 @@ var WP, GP, KP, qP, JP, a_e = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/codeEditor/codeEditorWidget.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/codeEditor/codeEditorWidget.js
 function ZP(e) {
 	return uF + encodeURIComponent(e.toString()) + dF;
 }
@@ -53078,7 +53078,7 @@ var $P, eF, tF, nF, rF, iF, aF, oF, sF, cF, lF, uF, dF, fF, pF, mF = t((() => {
 	W(), bF = rd("contextViewService"), xF = rd("contextMenuService");
 })), o_e = t((() => {})), s_e = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/hover/hoverWidget.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/hover/hoverWidget.js
 function CF(e, t) {
 	return e && t ? C(7, "Inspect this in the accessible view with {0}.", t) : e ? C(8, "Inspect this in the accessible view via the command Open Accessible View which is currently not triggerable via keybinding.") : "";
 }
@@ -53242,7 +53242,7 @@ var wF, TF, EF, DF, OF, kF = t((() => {
 	]);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/normalization.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/normalization.js
 function l_e(e) {
 	return u_e(e, "NFD", AF);
 }
@@ -53265,7 +53265,7 @@ var AF, jF, d_e = t((() => {
 	}();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/filters.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/filters.js
 function MF(...e) {
 	return function(t, n) {
 		for (let r = 0, i = e.length; r < i; r++) {
@@ -53557,7 +53557,7 @@ var ZF, QF, $F, eI, tI, nI, rI, iI, aI, oI, sI, cI, lI, uI = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/iconLabels.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/iconLabels.js
 function D_e(e) {
 	return e.replace(_I, (e, t) => t ? e : `\\${e}`);
 }
@@ -53601,7 +53601,7 @@ var hI, gI, _I, vI, yI, bI, xI = t((() => {
 	uI(), Vo(), xd(), hI = "$(", gI = RegExp(`\\$\\(${bd.iconNameExpression}(?:${bd.iconModifierExpression})?\\)`, "g"), _I = RegExp(`(\\\\)?${gI.source}`, "g"), vI = RegExp(`\\\\${gI.source}`, "g"), yI = RegExp(`(\\s)?(\\\\)?${gI.source}(\\s)?`, "g"), bI = RegExp(`\\$\\(${bd.iconNameCharacter}+\\)`, "g");
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/htmlContent.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/htmlContent.js
 function SI(e) {
 	return CI(e) ? !e.value : !Array.isArray(e) || e.every(SI);
 }
@@ -53682,7 +53682,7 @@ var EI, DI = t((() => {
 	}, kI = new OI("id#");
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/marked/marked.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/marked/marked.js
 function jI() {
 	return {
 		async: !1,
@@ -54938,7 +54938,7 @@ var BI, VI, HI, UI, WI, GI, KI, qI, JI, YI, XI, ZI, QI, $I, eL, tL, nL, rL, iL, 
 	}, zI.parseInline = KL.parseInline, zI.Parser = UL, zI.parser = UL.parse, zI.Renderer = VL, zI.TextRenderer = HL, zI.Lexer = BL, zI.lexer = BL.lex, zI.Tokenizer = YI, zI.Hooks = WL, zI.parse = zI, zI.options, zI.setOptions, zI.use, zI.walkTokens, zI.parseInline, qL = zI, UL.parse, JL = BL.lex;
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/marshalling.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/marshalling.js
 function L_e(e) {
 	return JSON.stringify(e, R_e);
 }
@@ -54971,7 +54971,7 @@ var ZL = t((() => {
 	mc(), _a();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/dompurify/dompurify.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/dompurify/dompurify.js
 function QL(e, t) {
 	(t == null || t > e.length) && (t = e.length);
 	for (var n = 0, r = Array(t); n < t; n++) r[n] = e[n];
@@ -55668,7 +55668,7 @@ var iR, aR, oR, sR, cR, lR, uR, dR, fR, pR, mR, hR, gR, _R, vR, yR, bR, xR, SR, 
 	}, oz = rR();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/domSanitize.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/domSanitize.js
 function sz(e, t) {
 	if (t.override === "*") return !0;
 	try {
@@ -55788,7 +55788,7 @@ var dz, fz, pz, mz, hz, gz, _z = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/iconLabel/iconLabels.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/iconLabel/iconLabels.js
 function vz(e, t) {
 	let n = [], r, i = 0, a = 0;
 	for (; (r = bz.exec(e)) !== null;) {
@@ -55806,7 +55806,7 @@ var bz, xz = t((() => {
 	U(), xd(), bz = RegExp(`(\\\\)?\\$\\((${bd.iconNameExpression}(?:${bd.iconModifierExpression})?)\\)`, "g");
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/markdownRenderer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/markdownRenderer.js
 function Z_e(e) {
 	try {
 		let t = fa.parse(e);
@@ -56226,7 +56226,7 @@ var jz, Mz, Nz, Pz, Fz, Iz = t((() => {
 	]), Fz = 3;
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/opener/common/opener.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/opener/common/opener.js
 function xve(e, t) {
 	return e.with({ fragment: `${t.startLineNumber},${t.startColumn}${t.endLineNumber ? `-${t.endLineNumber}${t.endColumn ? `,${t.endColumn}` : ""}` : ""}` });
 }
@@ -56246,7 +56246,7 @@ var Lz, Rz = t((() => {
 	W(), Lz = rd("openerService");
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/markdown/browser/markdownRenderer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/markdown/browser/markdownRenderer.js
 async function zz(e, t, n, r) {
 	try {
 		return await e.open(t, {
@@ -56604,7 +56604,7 @@ var Bz, Vz, Hz, Uz, Wz = t((() => {
 	})(Zz ||= {});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/layout.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/layout.js
 function $z(e, t, n) {
 	let r = n.mode === tB.ALIGN ? n.offset : n.offset + n.size, i = n.mode === tB.ALIGN ? n.offset + n.size : n.offset;
 	return n.position === 0 ? t <= e - r ? {
@@ -56686,7 +56686,7 @@ var tB, nB = t((() => {
 	})(tB ||= {});
 })), Tve = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/contextview/contextview.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/contextview/contextview.js
 function Eve(e) {
 	let t = e;
 	return !!t && typeof t.x == "number" && typeof t.y == "number";
@@ -56804,7 +56804,7 @@ var iB, aB, oB = t((() => {
 	W(), sB = rd("layoutService");
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/hover/hover.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/hover/hover.js
 function lB(e) {
 	let t = e;
 	return typeof t == "object" && "markdown" in t && "markdownNotSupportedFallback" in t;
@@ -56857,7 +56857,7 @@ var uB = t((() => {})), dB, Dve = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/hover/browser/hoverService.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/hover/browser/hoverService.js
 function fB(e) {
 	if (e !== void 0) return e?.id ?? e;
 }
@@ -57200,7 +57200,7 @@ var _B, vB, yB, bB, xB, Ave = t((() => {
 	W(), SB = rd("dialogService");
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/undoRedo/common/undoRedoService.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/undoRedo/common/undoRedoService.js
 function wB(e) {
 	return e.scheme === Zs.file ? e.fsPath : e.path;
 }
@@ -57831,7 +57831,7 @@ var TB, EB, DB, OB, kB, AB, jB, MB, NB, PB, FB, IB, jve = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/storage/common/storage.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/storage/common/storage.js
 function Nve(e) {
 	let t = e.get(JB);
 	if (t) try {
@@ -58132,7 +58132,7 @@ var JB, YB, XB, ZB, QB, $B = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/numbers.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/numbers.js
 function cV(e, t, n) {
 	return Math.min(Math.max(e, t), n);
 }
@@ -58232,7 +58232,7 @@ var lV, uV, dV = t((() => {
 	}, bV = mV([hV(0, vp), hV(1, fV)], bV), Ym(gV, bV, 1);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/glob.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/glob.js
 function SV(e, t) {
 	switch (e) {
 		case 0: return "";
@@ -58505,7 +58505,7 @@ var jV, MV, NV, PV, FV, IV, LV, RV, zV, BV, VV, HV, UV = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languageSelector.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languageSelector.js
 function WV(e, t, n, r, i, a) {
 	if (Array.isArray(e)) {
 		let o = 0;
@@ -58553,7 +58553,7 @@ var GV = t((() => {
 	UV(), ea();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languageFeatureRegistry.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/languageFeatureRegistry.js
 function KV(e) {
 	return typeof e == "string" ? !1 : Array.isArray(e) ? e.every(KV) : !!e.exclusive;
 }
@@ -59696,7 +59696,7 @@ var JV, YV, Uve = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/actions/common/menuService.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/actions/common/menuService.js
 function Qve(e, t, n) {
 	let r = Ore(t) ? t.submenu.id : t.id, i = typeof t.title == "string" ? t.title : t.title.value, a = fd({
 		id: `hide/${e.id}/${r}`,
@@ -60085,7 +60085,7 @@ var kH, AH, jH, MH, NH, PH, FH, IH, LH, RH = t((() => {
 	W(), WH = rd("clipboardService");
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/configuration/common/configurationModels.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/configuration/common/configurationModels.js
 function KH(e) {
 	return Object.isFrozen(e) ? e : tt(e);
 }
@@ -60852,7 +60852,7 @@ var qH, JH, YH, XH, ZH, QH = t((() => {
 	Gt(), T(), pf(), new K("isMac", Dt, C(1746, "Whether the operating system is macOS")), new K("isLinux", Ot, C(1747, "Whether the operating system is Linux")), cU = new K("isWindows", Et, C(1748, "Whether the operating system is Windows")), lU = new K("isWeb", At, C(1749, "Whether the platform is a web browser")), new K("isMacNative", Dt && !At, C(1750, "Whether the operating system is macOS on a non-browser platform")), new K("isIOS", Mt, C(1751, "Whether the operating system is iOS")), new K("isMobile", Nt, C(1752, "Whether the platform is a mobile web browser")), new K("isDevelopment", !1, !0), new K("productQualityType", "", C(1753, "Quality type of VS Code")), uU = "inputFocus", dU = new K(uU, !1, C(1754, "Whether keyboard focus is inside an input box"));
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/contextkey/browser/contextKeyService.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/contextkey/browser/contextKeyService.js
 function tye(e, t) {
 	return e.allKeysContainedIn(new Set(Object.keys(t)));
 }
@@ -61128,7 +61128,7 @@ var pU, mU, hU, gU, _U, vU, yU, bU, xU, SU, CU, wU, TU, aye = t((() => {
 	});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/cssValue.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/cssValue.js
 function EU(e) {
 	return e;
 }
@@ -61177,7 +61177,7 @@ var NU, PU = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/hover/hoverDelegateFactory.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/hover/hoverDelegateFactory.js
 function oye(e) {
 	RU = e;
 }
@@ -61197,7 +61197,7 @@ var LU, RU, zU, BU, VU = t((() => {
 	}), RU = LU, zU = new Ya(() => RU("mouse", !1)), BU = new Ya(() => RU("element", !1));
 })), HU = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/hover/hoverDelegate2.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/hover/hoverDelegate2.js
 function sye(e) {
 	WU = e;
 }
@@ -61237,7 +61237,7 @@ var WU, GU = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/list/rangeMap.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/list/rangeMap.js
 function XU(e, t) {
 	let n = [];
 	for (let r of t) {
@@ -61398,7 +61398,7 @@ var QU, fye = t((() => {
 	};
 })), mye = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/dnd/dnd.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/dnd/dnd.js
 function hye(e, t, n, r = []) {
 	if (!e.dataTransfer) return;
 	let i = B(".monaco-drag-image");
@@ -61411,7 +61411,7 @@ var gye = t((() => {
 	U(), mye();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/list/listView.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/list/listView.js
 function _ye(e, t) {
 	return Array.isArray(e) && Array.isArray(t) ? a(e, t) : e === t;
 }
@@ -62034,7 +62034,7 @@ var eW, tW, nW, rW, iW, aW, oW, sW, cW = t((() => {
 	}, eW([ww], sW.prototype, "onMouseClick", null), eW([ww], sW.prototype, "onMouseDblClick", null), eW([ww], sW.prototype, "onMouseMiddleClick", null), eW([ww], sW.prototype, "onMouseDown", null), eW([ww], sW.prototype, "onMouseOver", null), eW([ww], sW.prototype, "onMouseOut", null), eW([ww], sW.prototype, "onContextMenu", null), eW([ww], sW.prototype, "onTouchStart", null), eW([ww], sW.prototype, "onTap", null);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/constObservable.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/constObservable.js
 function lW(e) {
 	return new uW(e);
 }
@@ -62057,7 +62057,7 @@ var uW, dW = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/list/listWidget.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/list/listWidget.js
 function fW(e, t) {
 	return e.classList.contains(t) ? !0 : e.classList.contains("monaco-list") || !e.parentElement ? !1 : fW(e.parentElement, t);
 }
@@ -63643,7 +63643,7 @@ var bW, xW, SW, CW, wW, TW, EW, DW, OW, kW, AW, jW, MW, NW, PW, FW, IW, LW, RW, 
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/keybindingLabels.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/keybindingLabels.js
 function Eye(e, t, n) {
 	if (t === null) return "";
 	let r = [];
@@ -63733,13 +63733,13 @@ var sG, cG, lG, uG, dG, fG = t((() => {
 	});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/action/common/action.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/action/common/action.js
 function Dye(e) {
 	return e ? e.condition !== void 0 : !1;
 }
 var Oye = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/theme/browser/defaultStyles.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/theme/browser/defaultStyles.js
 function kye(e, t) {
 	let n = { ...t };
 	for (let t in e) {
@@ -63885,7 +63885,7 @@ var mG, hG, gG, _G, vG, yG, bG, xG, SG, CG, wG, TG = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/animations/animations.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/animations/animations.js
 function EG(e) {
 	if (AG) return;
 	let t = e.getBoundingClientRect(), n = V(e).document, r = B(".animation-overlay");
@@ -64227,7 +64227,7 @@ var kG, AG, Fye = t((() => {
 	];
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/window/common/window.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/window/common/window.js
 function Iye(e, t) {
 	if (At) return !1;
 	let n = Lye(e, t), r = e.getValue("window");
@@ -64255,7 +64255,7 @@ var MG = t((() => {
 	Gt();
 })), zye = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/actions/browser/menuEntryActionViewItem.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/actions/browser/menuEntryActionViewItem.js
 function Bye(e, t) {
 	let n = [];
 	return Vye(e, n), n;
@@ -64728,7 +64728,7 @@ var LG, RG, zG, BG, VG, HG, UG, WG = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/menu/menu.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/menu/menu.js
 function Uye(e) {
 	let t = JG, n = t.exec(e);
 	if (!n) return e;
@@ -65844,7 +65844,7 @@ var JG, YG, XG, ZG, QG, $G, eK, tK, Gye = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/keybinding/common/keybindingResolver.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/keybinding/common/keybindingResolver.js
 function $ye(e, t, n) {
 	return {
 		kind: 2,
@@ -66148,7 +66148,7 @@ var SK, CK, wK, TK = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/keybinding/common/resolvedKeybindingItem.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/keybinding/common/resolvedKeybindingItem.js
 function kK(e) {
 	let t = [];
 	for (let n = 0, r = e.length; n < r; n++) {
@@ -66308,7 +66308,7 @@ var AK, jK = t((() => {
 	W(), PK = rd("labelService");
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/list/listPaging.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/list/listPaging.js
 function rbe(e, t) {
 	return {
 		...t,
@@ -67001,7 +67001,7 @@ var IK, LK, RK, ibe = t((() => {
 	};
 })), sbe = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/table/tableWidget.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/table/tableWidget.js
 function cbe(e) {
 	return {
 		getHeight(t) {
@@ -67167,7 +67167,7 @@ var oq, sq, cq, lbe = t((() => {
 	};
 })), ube = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/toggle/toggle.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/toggle/toggle.js
 function lq(e) {
 	return (t, n) => {
 		if (t.checked !== void 0) return new dq(null, t, {
@@ -67406,7 +67406,7 @@ var uq, dq, fq, pq, mq, hq, gq = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/formattedTextRenderer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/formattedTextRenderer.js
 function dbe(e, t, n) {
 	let r = n ?? document.createElement("div");
 	return r.textContent = e, r;
@@ -68019,7 +68019,7 @@ var Eq, hbe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/tree/indexTreeModel.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/tree/indexTreeModel.js
 function Uq(e) {
 	return !!e && e.visibility !== void 0;
 }
@@ -68326,7 +68326,7 @@ var Kq, qq = t((() => {
 	};
 })), vbe = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/tree/abstractTree.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/tree/abstractTree.js
 function Jq(e) {
 	return e instanceof rW ? new Qq(e) : e;
 }
@@ -69637,7 +69637,7 @@ var Qq, $q, eJ, tJ, nJ, rJ, iJ, aJ, oJ, sJ, cJ, lJ, uJ, dJ, fJ, pJ, mJ, hJ, gJ, 
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/tree/compressedObjectTreeModel.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/tree/compressedObjectTreeModel.js
 function CJ(e) {
 	return {
 		element: {
@@ -69968,7 +69968,7 @@ var OJ, kJ, AJ, jJ, MJ, wbe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/tree/objectTree.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/tree/objectTree.js
 function Tbe(e, t) {
 	return t && {
 		...t,
@@ -70111,7 +70111,7 @@ var NJ, PJ, FJ, IJ, LJ, RJ = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/tree/asyncDataTree.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/tree/asyncDataTree.js
 function zJ(e) {
 	return {
 		...e,
@@ -70740,7 +70740,7 @@ var KJ, qJ, JJ, YJ, XJ, ZJ, QJ, $J, eY, tY, kbe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/list/browser/listService.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/list/browser/listService.js
 function rY(e, t) {
 	let n = e.createScoped(t.getHTMLElement());
 	return hY.bindTo(n), n;
@@ -71752,7 +71752,7 @@ var uY, dY, fY, pY, mY, hY, gY, _Y, vY, yY, bY, xY, SY, CY, wY, TY, EY, DY, OY, 
 	}, Ym(Lk, xX, 1);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/workspace/common/workspace.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/workspace/common/workspace.js
 function SX(e) {
 	let t = e;
 	return typeof t?.id == "string" && fa.isUri(t.uri);
@@ -71963,7 +71963,7 @@ var CX, wX, TX, zbe, EX, DX = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/config/editorConfigurationSchema.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/config/editorConfigurationSchema.js
 function Jbe(e) {
 	return e.type !== void 0 || e.anyOf !== void 0;
 }
@@ -72316,7 +72316,7 @@ var Qbe, BX, VX, $be = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/editorFeatures.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/editorFeatures.js
 function exe(e) {
 	WX.push(e);
 }
@@ -72327,7 +72327,7 @@ var WX, GX = t((() => {
 	WX = [];
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/services/languagesAssociations.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/services/languagesAssociations.js
 function KX(e, t = !1) {
 	nxe(e, !1, t);
 }
@@ -72717,7 +72717,7 @@ var qX, JX, YX, lxe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/services/modelService.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/services/modelService.js
 function tZ(e) {
 	return e.toString();
 }
@@ -73064,7 +73064,7 @@ var vxe, nZ, rZ, yxe, bxe, xxe, iZ, Sxe, Cxe = t((() => {
 	], lZ);
 })), uZ = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/linkedText.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/linkedText.js
 function zxe(e) {
 	let t = [], n = 0, r;
 	for (; r = Vxe.exec(e);) {
@@ -73097,7 +73097,7 @@ var Bxe, dZ, Vxe, Hxe = t((() => {
 	}, Bxe([ww], dZ.prototype, "toString", null), Vxe = /\[([^\]]+)\]\(((?:https?:\/\/|command:|file:)[^\)\s]+)(?: (["'])(.+?)(\3))?\)/gi;
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/quickinput/browser/quickInputUtils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/quickinput/browser/quickInputUtils.js
 function Uxe(e) {
 	if (!e) return;
 	let t, n = e.dark.toString();
@@ -74141,7 +74141,7 @@ var pZ, Kxe, qxe, mZ = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/iconLabel/iconLabel.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/browser/ui/iconLabel/iconLabel.js
 function _Se(e, t, n) {
 	if (!n) return;
 	let r = 0;
@@ -74336,7 +74336,7 @@ var BZ, VZ, vSe, ySe, HZ = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/comparers.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/comparers.js
 function SSe(e, t, n = !1) {
 	let r = e || "", i = t || "", a = KZ.value.collator.compare(r, i);
 	return KZ.value.collatorIsNumeric && a === 0 && r !== i ? r < i ? -1 : 1 : a;
@@ -74374,7 +74374,7 @@ var KZ, TSe = t((() => {
 	}).value }));
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/quickinput/browser/quickInputList.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/quickinput/browser/quickInputList.js
 function ESe(e, t) {
 	let { text: n, iconOffsets: r } = t;
 	if (!r || r.length === 0) return DSe(e, n);
@@ -75097,7 +75097,7 @@ var qZ, JZ, YZ, XZ, ZZ, QZ, $Z, eQ, tQ, kSe, ASe, nQ, rQ, iQ, aQ, jSe = t((() =>
 	}, qZ([ww], aQ.prototype, "onDidChangeFocus", null), qZ([ww], aQ.prototype, "onDidChangeSelection", null), aQ = qZ([JZ(5, ad), JZ(6, yy)], aQ);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/quickinput/browser/quickInputActions.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/quickinput/browser/quickInputActions.js
 function MSe(e, t = {}) {
 	vf.registerCommandAndKeybindingRule({
 		weight: 200,
@@ -75364,7 +75364,7 @@ var lQ, uQ, dQ, NSe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/quickinput/browser/tree/quickInputTree.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/quickinput/browser/tree/quickInputTree.js
 function gQ(e) {
 	let t = !1, n = !1, r = !1;
 	for (let i of e) {
@@ -76532,7 +76532,7 @@ var zSe = t((() => {})), BSe, VSe = t((() => {
 	}, Mp(jQ.ID, jQ, 4);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/webWorker/browser/webWorkerServiceImpl.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/webWorker/browser/webWorkerServiceImpl.js
 function aCe(e, t, n) {
 	if (!(/^((http:)|(https:)|(file:))/.test(t) && t.substring(0, globalThis.origin.length) !== globalThis.origin)) {
 		let n = t.lastIndexOf("?"), r = t.lastIndexOf("#", n), i = n > 0 ? new URLSearchParams(t.substring(n + 1, ~r ? r : void 0)) : new URLSearchParams();
@@ -77350,7 +77350,7 @@ Ensure your bundler properly bundles modules referenced by "new URL('...?esm', i
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/theme/common/iconRegistry.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/theme/common/iconRegistry.js
 function NQ(e, t, n, r) {
 	return PQ.registerIcon(e, t, n, r);
 }
@@ -77475,7 +77475,7 @@ var bCe, xCe, SCe, CCe, wCe, TCe, PQ, FQ, IQ, LQ, ECe, RQ = t((() => {
 	}), ECe = NQ("widget-close", L.close, C(2096, "Icon for the close action in widgets.")), NQ("goto-previous-location", L.arrowUp, C(2097, "Icon for goto previous editor location.")), NQ("goto-next-location", L.arrowDown, C(2098, "Icon for goto next editor location.")), bd.modify(L.sync, "spin"), bd.modify(L.loading, "spin");
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/theme/browser/iconsStyleSheet.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/theme/browser/iconsStyleSheet.js
 function DCe(e) {
 	let t = new E(), n = t.add(new A()), r = vCe();
 	return t.add(r.onDidChange(() => n.fire())), e && t.add(e.onDidProductIconThemeChange(() => n.fire())), {
@@ -77512,7 +77512,7 @@ var zQ, OCe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/browser/standaloneThemeService.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/browser/standaloneThemeService.js
 function BQ(e) {
 	return e === "vs" || e === "vs-dark" || e === "hc-black" || e === "hc-light";
 }
@@ -77709,7 +77709,7 @@ var UQ, WQ, GQ, KQ, kCe, qQ, ACe, jCe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/browser/standaloneServices.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/browser/standaloneServices.js
 function PCe(e) {
 	return !!e && typeof e == "object" && (!e.overrideIdentifier || typeof e.overrideIdentifier == "string") && (!e.resource || e.resource instanceof fa);
 }
@@ -78166,7 +78166,7 @@ var YQ, XQ, FCe, ZQ, ICe, LCe, RCe, zCe, BCe, QQ, $Q, VCe, e$, t$, n$, HCe, UCe,
 	})(o$ ||= {});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/hotReloadHelpers.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/hotReloadHelpers.js
 function c$(e, t) {
 	return e;
 }
@@ -78177,7 +78177,7 @@ var l$ = t((() => {
 	Tl(), dW();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/observable/common/platformObservableUtils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/observable/common/platformObservableUtils.js
 function u$(e, t, n, r = Nc.ofCaller()) {
 	let i = e.bindTo(t), a = new E();
 	return Yc({ debugName: () => `Set Context Key "${e.key}"` }, (e) => {
@@ -78218,7 +78218,7 @@ var ZCe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/diffEditor/utils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/diffEditor/utils.js
 function QCe(e, t, n, r) {
 	if (e.length === 0) return t;
 	if (t.length === 0) return e;
@@ -78429,7 +78429,7 @@ var _$, v$, y$, awe, b$, x$, owe, S$ = t((() => {
 	};
 })), swe = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/diffEditor/components/accessibleDiffViewer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/diffEditor/components/accessibleDiffViewer.js
 function cwe(e, t, n) {
 	let r = [];
 	for (let i of d(e, (e, t) => t.modified.startLineNumber - e.modified.endLineNumberExclusive < 6)) {
@@ -78853,7 +78853,7 @@ var C$, w$, lwe, uwe, dwe, T$, E$, D$, O$, fwe, pwe, mwe, hwe, gwe, k$, _we, vwe
 	}, H$ = z$ = L$([R$(1, ny), R$(2, Pf)], H$);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/utils/utilsCancellation.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/utils/utilsCancellation.js
 function Ewe(e, t, n, r) {
 	return t ||= (e) => e != null, new Promise((i, a) => {
 		let o = !0, s = !1, c = e.map((e) => ({
@@ -78880,7 +78880,7 @@ var Dwe = t((() => {
 	ke(), pi(), rl();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/observableSignalFromEvent.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/observables/observableSignalFromEvent.js
 function U$(e, t, n = Nc.ofCaller()) {
 	return new Owe(typeof e == "string" ? e : new Ic(e, void 0, void 0), t, n);
 }
@@ -78903,7 +78903,7 @@ var Owe, W$ = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/diffEditor/diffEditorViewModel.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/diffEditor/diffEditorViewModel.js
 function kwe(e, t, n) {
 	return {
 		changes: e.changes.map((e) => new zg(e.original, e.modified, e.innerChanges ? e.innerChanges.map((e) => Awe(e, t, n)) : void 0)),
@@ -79152,7 +79152,7 @@ var jwe, Mwe, G$, Nwe, K$, q$, Pwe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/diffEditor/components/diffEditorViewZones/copySelection.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/diffEditor/components/diffEditorViewZones/copySelection.js
 function Fwe(e) {
 	let { domNode: t, renderLinesResult: n, diffEntry: r, originalModel: i, clipboardService: a } = e, o = new E();
 	return o.add(R(t, "copy", (e) => {
@@ -79231,7 +79231,7 @@ var Iwe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/diffEditor/components/diffEditorViewZones/renderLines.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/diffEditor/components/diffEditorViewZones/renderLines.js
 function zwe(e, t, n, r, i = !1) {
 	Yu(r, t.fontInfo);
 	let a = n.length > 0, o = new Em(1e4), s = 0, c = 0, l = [], u = [];
@@ -79320,7 +79320,7 @@ var J$, Vwe, Hwe, Uwe, Y$, Wwe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/diffEditor/components/diffEditorViewZones/diffEditorViewZones.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/diffEditor/components/diffEditorViewZones/diffEditorViewZones.js
 function Gwe(e, t, n, r, i, a) {
 	let o = new de(Kwe(e, r)), s = new de(Kwe(t, i)), c = e.getOption(75), l = t.getOption(75), u = [], d = 0, f = 0;
 	function p(e, t) {
@@ -79861,7 +79861,7 @@ var Jwe, Z$, Q$, $$ = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/observableCodeEditor.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/observableCodeEditor.js
 function r1(e) {
 	return eTe.get(e);
 }
@@ -80450,7 +80450,7 @@ var eTe, i1 = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/experimental/utils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/observableInternal/experimental/utils.js
 function uTe(e, t) {
 	return xl(e, (e, n) => n ?? t(e));
 }
@@ -80458,7 +80458,7 @@ var dTe = t((() => {
 	Cl();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/diffEditor/diffEditorOptions.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/diffEditor/diffEditorOptions.js
 function fTe(e, t) {
 	return e.mappings.every((e) => pTe(e.lineRangeMapping) || mTe(e.lineRangeMapping) || t && X$(e.lineRangeMapping));
 }
@@ -81228,7 +81228,7 @@ var gTe, _Te, u1, vTe = t((() => {
 	};
 })), MTe = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/diffEditor/diffEditorWidget.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/diffEditor/diffEditorWidget.js
 function NTe(e) {
 	return e.mappings.map((e) => {
 		let t = e.lineRangeMapping, n, r, i, a, o = t.innerChanges;
@@ -81546,7 +81546,7 @@ var PTe, M1, N1, FTe = t((() => {
 	], N1);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/editorBrowser.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/editorBrowser.js
 function P1(e) {
 	return e && typeof e.getEditorType == "function" ? e.getEditorType() === L_.ICodeEditor : !1;
 }
@@ -81591,7 +81591,7 @@ var F1 = t((() => {
 	}, R1 = L1 = RTe([I1(0, Um), I1(1, Gm)], R1);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/browser/standaloneCodeEditor.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/browser/standaloneCodeEditor.js
 function BTe(e) {
 	if (!e) {
 		if (V1) return;
@@ -81940,7 +81940,7 @@ var z1, B1, UTe, V1, H1, U1, W1, WTe = t((() => {
 	};
 })), ZTe = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/multiDiffEditor/multiDiffEditorWidgetImpl.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/multiDiffEditor/multiDiffEditorWidgetImpl.js
 function QTe(e, t) {
 	let n = e.getModel(), r = e.createDecorationsCollection([{
 		range: t,
@@ -82197,7 +82197,7 @@ var $Te, q1, J1, eEe, tEe = t((() => {
 	}, Y1 = nEe([rEe(2, ad)], Y1);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/browser/standaloneEditor.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/browser/standaloneEditor.js
 function aEe(e, t, n) {
 	return o$.initialize(n || {}).createInstance(U1, e, t);
 }
@@ -82446,7 +82446,7 @@ var BEe = t((() => {
 	Ka(), O(), Vo(), _a(), ene(), nd(), qp(), sd(), qoe(), ci(), Ln(), qn(), R_(), Ua(), Km(), gh(), H_(), eg(), ld(), Wa(), mse(), WTe(), s$(), oZ(), Nf(), wd(), pf(), _k(), fX(), Rz(), iEe(), um();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/common/monarch/monarchCompile.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/common/monarch/monarchCompile.js
 function VEe(e, t) {
 	if (!t || !Array.isArray(t)) return !1;
 	for (let n of t) if (!e(n)) return !1;
@@ -82733,7 +82733,7 @@ var JEe, YEe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/browser/standaloneLanguages.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/standalone/browser/standaloneLanguages.js
 function XEe(e) {
 	mh.registerLanguage(e);
 }
@@ -83112,7 +83112,7 @@ var IDe, e0, LDe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/format/browser/format.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/format/browser/format.js
 function WDe(e, t, n) {
 	let r = [], i = new HDe(), a = e.ordered(n);
 	for (let e of a) r.push(e), e.extensionId && i.add(e.extensionId);
@@ -83659,7 +83659,7 @@ var YDe, XDe = t((() => {
 	}, Mp(_0.ID, _0, 4);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/dropOrPasteInto/browser/defaultProviders.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/dropOrPasteInto/browser/defaultProviders.js
 async function OOe(e) {
 	let t = e.get(Qm.uriList);
 	if (!t) return [];
@@ -83794,7 +83794,7 @@ var b0, x0, S0, C0, w0, T0, kOe, E0, D0, O0, AOe = t((() => {
 	}, O0 = b0([x0(0, S_), x0(1, CX)], O0);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/snippet/browser/snippetParser.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/snippet/browser/snippetParser.js
 function jOe(e, t) {
 	let n = [...e];
 	for (; n.length > 0;) {
@@ -84258,7 +84258,7 @@ var MOe, k0, A0, j0, M0, N0, NOe, P0, F0, I0, L0, R0 = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/dropOrPasteInto/browser/edit.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/dropOrPasteInto/browser/edit.js
 function POe(e, t, n) {
 	return (typeof n.insertText == "string" ? n.insertText === "" : n.insertText.snippet === "") ? { edits: n.additionalEdit?.edits ?? [] } : { edits: [...t.map((t) => new AX(e, {
 		range: t,
@@ -84295,7 +84295,7 @@ var IOe = t((() => {
 	MX(), R0();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/errorMessage.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/errorMessage.js
 function z0(e, t) {
 	return t && (e.stack || e.stacktrace) ? C(33, "{0}: {1}", ROe(e), LOe(e.stack) || LOe(e.stacktrace)) : ROe(e);
 }
@@ -84323,7 +84323,7 @@ var zOe = t((() => {
 	pe(), $e(), T();
 })), BOe = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/actionWidget/browser/actionList.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/actionWidget/browser/actionList.js
 function VOe(e) {
 	if (e.kind === "action") return e.label;
 }
@@ -85804,7 +85804,7 @@ var H0, U0, W0, G0, K0, HOe, UOe, q0, WOe, J0, Y0, X0, GOe = t((() => {
 	], u2);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/clipboard/browser/clipboard.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/clipboard/browser/clipboard.js
 function d2(e) {
 	return e.register(), e;
 }
@@ -86775,7 +86775,7 @@ var p2, rke, m2, ike, ake, oke, h2, ske, cke = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/folding/browser/foldingModel.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/folding/browser/foldingModel.js
 function Eke(e, t, n) {
 	let r = [];
 	for (let i of n) {
@@ -87055,7 +87055,7 @@ var Pke, Fke = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/folding/browser/hiddenRangeModel.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/folding/browser/hiddenRangeModel.js
 function Ike(e, t) {
 	return e >= t.startLineNumber && e <= t.endLineNumber;
 }
@@ -87111,7 +87111,7 @@ var Rke, zke = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/folding/browser/indentRangeProvider.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/folding/browser/indentRangeProvider.js
 function Bke(e, t, n, r = Wke) {
 	let i = e.getOptions().tabSize, a = new Uke(r), o, s, c;
 	n && (n.start.flags === n.end.flags ? o = RegExp(`(${n.start.source})|(?:${n.end.source})`, n.start.flags) : (s = n.start, c = n.end));
@@ -87355,7 +87355,7 @@ var Vke, Hke, M2, Uke, Wke, Gke = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/folding/browser/syntaxRangeProvider.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/folding/browser/syntaxRangeProvider.js
 function Yke(e, t, n) {
 	let r = null, i = e.map((e, i) => Promise.resolve(e.provideFoldingRanges(t, Zke, n)).then((e) => {
 		if (!n.isCancellationRequested && Array.isArray(e)) {
@@ -87444,7 +87444,7 @@ var Zke, Qke, B2, $ke, eAe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/folding/browser/folding.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/folding/browser/folding.js
 function tAe(e) {
 	return !e || e.length === 0 ? { startsInside: () => !1 } : { startsInside(t, n) {
 		for (let r of e) {
@@ -88188,7 +88188,7 @@ var rAe, V2, H2, U2, W2, iAe, G2, aAe, oAe, sAe, cAe, lAe, uAe, dAe, fAe, pAe, m
 	T(), TAe = "editor.action.showHover", EAe = "editor.action.showDefinitionPreviewHover", DAe = "editor.action.hideHover", OAe = "editor.action.scrollUpHover", kAe = "editor.action.scrollDownHover", AAe = "editor.action.scrollLeftHover", jAe = "editor.action.scrollRightHover", MAe = "editor.action.pageUpHover", NAe = "editor.action.pageDownHover", PAe = "editor.action.goToTopHover", FAe = "editor.action.goToBottomHover", q2 = "editor.action.increaseHoverVerbosityLevel", IAe = C(1145, "Increase Hover Verbosity Level"), J2 = "editor.action.decreaseHoverVerbosityLevel", LAe = C(1146, "Decrease Hover Verbosity Level"), Y2 = "editor.action.hideLongLineWarningHover";
 })), RAe = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/gotoSymbol/browser/link/clickLinkGesture.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/gotoSymbol/browser/link/clickLinkGesture.js
 function Z2(e, t) {
 	return !!e[t];
 }
@@ -88248,7 +88248,7 @@ var Q2, $2, e4, t4, n4 = t((() => {
 	};
 })), BAe = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/codeEditor/embeddedCodeEditorWidget.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/browser/widget/codeEditor/embeddedCodeEditorWidget.js
 function VAe(e) {
 	let t = e.get(od).getFocusedCodeEditor();
 	return t instanceof i4 ? t.getParentEditor() : t;
@@ -89184,7 +89184,7 @@ var HAe, r4, i4, a4 = t((() => {
 	], M4);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/gotoSymbol/browser/peek/referencesController.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/gotoSymbol/browser/peek/referencesController.js
 function N4(e, t) {
 	let n = VAe(e);
 	if (!n) return;
@@ -89490,7 +89490,7 @@ var fje, P4, F4, I4, L4, pje = t((() => {
 	}, U4 = R4([z4(0, od)], U4);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/gotoSymbol/browser/goToSymbol.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/gotoSymbol/browser/goToSymbol.js
 function W4(e, t) {
 	return t.uri.scheme === e.uri.scheme || !Xs(t.uri, Zs.walkThroughSnippet, Zs.vscodeChatCodeBlock, Zs.vscodeChatCodeCompareBlock);
 }
@@ -90470,7 +90470,7 @@ var hje = t((() => {
 	], p3);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/hover/browser/hoverUtils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/hover/browser/hoverUtils.js
 function m3(e, t, n) {
 	let r = jl(e);
 	return !(t < r.left + 3 || t > r.left + r.width - 3 || n < r.top + 3 || n > r.top + r.height - 3);
@@ -90735,7 +90735,7 @@ var g3 = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/hover/browser/contentHoverWidget.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/hover/browser/contentHoverWidget.js
 function Lje(e, t, n, r, i, a) {
 	let o = n + i / 2, s = r + a / 2, c = Math.max(Math.abs(e - o) - i / 2, 0), l = Math.max(Math.abs(t - s) - a / 2, 0);
 	return Math.sqrt(c * c + l * l);
@@ -91243,7 +91243,7 @@ var Rje, T3, E3, D3, O3, zje = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/search.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/search.js
 function Zje(e, t) {
 	if (e && e[0] !== "") {
 		let n = Qje(e, t, "-"), r = Qje(e, t, "_");
@@ -91264,7 +91264,7 @@ var eMe = t((() => {
 	Vo();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/find/browser/replacePattern.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/find/browser/replacePattern.js
 function tMe(e) {
 	if (!e || e.length === 0) return new P3(null);
 	let t = [], n = new rMe(e);
@@ -91717,7 +91717,7 @@ var N3, nMe, P3, F3, rMe, iMe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/history/browser/contextScopedHistoryWidget.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/history/browser/contextScopedHistoryWidget.js
 function pMe(e, t) {
 	if (e6.includes(t)) throw Error("Cannot register the same widget multiple times");
 	e6.push(t);
@@ -91779,13 +91779,13 @@ var q3, J3, Y3, X3, Z3, Q3, $3, e6, t6, n6, mMe = t((() => {
 	});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/history/browser/historyWidgetKeybindingHint.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/history/browser/historyWidgetKeybindingHint.js
 function hMe(e) {
 	return e.lookupKeybinding("history.showPrevious")?.getElectronAccelerator() === "Up" && e.lookupKeybinding("history.showNext")?.getElectronAccelerator() === "Down";
 }
 var gMe = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/find/browser/findWidget.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/find/browser/findWidget.js
 function _Me(e, t, n) {
 	let r = !!t.match(/\n/);
 	if (n && r && n.selectionStart > 0) {
@@ -92350,7 +92350,7 @@ var r6, i6, yMe, bMe, xMe, SMe, CMe, wMe, a6, TMe, EMe, DMe, OMe, kMe, o6, AMe, 
 	}, m6 = BMe([p6(2, WH), p6(3, _F)], m6);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/hover/browser/getHover.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/hover/browser/getHover.js
 async function HMe(e, t, n, r, i) {
 	let a = await Promise.resolve(e.provideHover(n, r, i)).catch(ge);
 	if (!(!a || !WMe(a))) return new GMe(e, a, t);
@@ -92376,7 +92376,7 @@ var GMe, KMe = t((() => {
 	}, Ap("_executeHoverProvider", (e, t, n) => UMe(e.get(S_).hoverProvider, t, n, ui.None)), Ap("_executeHoverProvider_recursive", (e, t, n) => UMe(e.get(S_).hoverProvider, t, n, ui.None, !0));
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/hover/browser/markdownHoverParticipant.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/hover/browser/markdownHoverParticipant.js
 function qMe(e, t, n, r) {
 	let i = new E(), a = _6("div.hover-row"), o = _6("div.hover-row-contents");
 	a.appendChild(o);
@@ -92644,7 +92644,7 @@ var YMe, g6, _6, XMe, ZMe, v6, y6, b6, x6, QMe, S6 = t((() => {
 	}, E6 = C6([w6(0, S_), w6(1, ny)], E6);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/colorPicker/browser/color.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/colorPicker/browser/color.js
 async function eNe(e, t, n, r = "auto") {
 	return nNe(new rNe(), e, t, n, r);
 }
@@ -93043,7 +93043,7 @@ var rNe, iNe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/colorPicker/browser/colorPickerParticipantUtils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/colorPicker/browser/colorPickerParticipantUtils.js
 async function ONe(e, t, n) {
 	let r = e.getValueInRange(t.range), { red: i, green: a, blue: o, alpha: s } = t.color, c = new Y(Math.round(i * 255), Math.round(a * 255), Math.round(o * 255), s), l = new X(c), u = await tNe(e, t, n, ui.None), d = new ENe(l, [], 0);
 	return d.colorPresentations = u || [], d.guessColorPresentation(l, r), {
@@ -93166,7 +93166,7 @@ var jNe = t((() => {
 	}, L6 = MNe([NNe(1, DD)], L6);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/inlayHints/browser/inlayHints.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/inlayHints/browser/inlayHints.js
 function FNe(e) {
 	return N_e(e.id, ...e.arguments ?? []).toString();
 }
@@ -93241,7 +93241,7 @@ var R6, INe, z6, LNe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/inlayHints/browser/inlayHintsLocations.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/inlayHints/browser/inlayHintsLocations.js
 async function RNe(e, t, n, r) {
 	let i = e.get(ud), a = e.get(xF), o = e.get(Sd), s = e.get(ad), c = e.get(XO);
 	if (await r.item.resolve(ui.None), !r.part.location) return;
@@ -93308,7 +93308,7 @@ var BNe = t((() => {
 	U(), vd(), pi(), gT(), F(), dd(), _je(), g4(), Nf(), wd(), pf(), SF(), W(), ZO();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/inlayHints/browser/inlayHintsController.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/inlayHints/browser/inlayHintsController.js
 function VNe(e) {
 	return e.replace(/[ \t]/g, "\xA0");
 }
@@ -94149,7 +94149,7 @@ var HNe, B6, V6, UNe, H6, U6, WNe, GNe, W6, KNe = t((() => {
 	], t8);
 })), n8 = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/colorPicker/browser/hoverColorPicker/hoverColorPicker.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/colorPicker/browser/hoverColorPicker/hoverColorPicker.js
 function $Ne(e) {
 	let t = e.target;
 	return !!t && t.type === 6 && t.detail.injectedText?.options.attachedData === k6;
@@ -94593,7 +94593,7 @@ var ePe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/codeAction/common/types.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/codeAction/common/types.js
 function _Pe(e, t) {
 	return !(e.include && !e.include.intersects(t) || e.excludes && e.excludes.some((n) => yPe(t, n, e.include)) || !e.includeSourceActions && s8.Source.contains(t));
 }
@@ -94651,7 +94651,7 @@ var s8, c8, bPe, xPe, l8 = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/codeAction/browser/codeAction.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/codeAction/browser/codeAction.js
 async function u8(e, t, n, r, i, o) {
 	let s = r.filter || {}, c = {
 		...s,
@@ -94891,7 +94891,7 @@ var DPe, OPe, kPe, APe, jPe, MPe, NPe, PPe, d8, f8, p8 = t((() => {
 	}, C(1579, "The foreground color for variable symbols. These symbols appear in the outline, breadcrumb, and suggest widget."));
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/codeAction/browser/codeActionMenu.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/codeAction/browser/codeActionMenu.js
 function HPe(e, t, n) {
 	if (!t) return e.map((e) => ({
 		kind: "action",
@@ -95155,7 +95155,7 @@ var g8, UPe, WPe = t((() => {
 	};
 })), YPe = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/codeAction/browser/lightBulbWidget.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/codeAction/browser/lightBulbWidget.js
 function XPe(e, t, n, r, i = !1) {
 	if (e.validActions.length <= 0) return;
 	let a, o = !1;
@@ -96547,7 +96547,7 @@ var ZPe, QPe, y8, b8, x8, S8, C8, w8, T8, E8, $Pe = t((() => {
 	}), a5.register(new NFe()), a5.register(new PFe()), a5.register(new FFe());
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/indentation/common/indentation.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/indentation/common/indentation.js
 function RFe(e, t, n, r) {
 	if (e.getLineCount() === 1 && e.getLineMaxColumn(1) === 1) return [];
 	let i = t.getLanguageConfiguration(e.getLanguageId()).indentRulesSupport;
@@ -96571,7 +96571,7 @@ var BFe = t((() => {
 	Vo(), VE(), UX(), QT(), ba(), PE();
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/indentation/common/indentUtils.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/indentation/common/indentUtils.js
 function o5(e, t) {
 	let n = 0;
 	for (let r = 0; r < e.length; r++) e.charAt(r) === "	" ? n += t : n++;
@@ -96590,7 +96590,7 @@ function s5(e, t, n) {
 }
 var VFe = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/indentation/browser/indentation.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/indentation/browser/indentation.js
 function HFe(e, t) {
 	let n = (t) => Joe(e, t) === 2;
 	return n(t.getStartPosition()) || n(t.getEndPosition());
@@ -96932,7 +96932,7 @@ var WFe, GFe, KFe, qFe, c5, JFe, YFe, XFe, ZFe, QFe, $Fe, eIe, l5, tIe, nIe, rIe
 	}, J(iIe);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/commands/trimTrailingWhitespaceCommand.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/commands/trimTrailingWhitespaceCommand.js
 function oIe(e, t, n) {
 	t.sort((e, t) => e.lineNumber === t.lineNumber ? e.column - t.column : e.lineNumber - t.lineNumber);
 	for (let e = t.length - 2; e >= 0; e--) t[e].lineNumber === t[e + 1].lineNumber && t.splice(e, 1);
@@ -97145,7 +97145,7 @@ var sIe, cIe = t((() => {
 	}, d5 = uIe([dIe(3, bh)], d5);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/linesOperations/browser/sortLinesCommand.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/linesOperations/browser/sortLinesCommand.js
 function pIe(e, t, n) {
 	let r = t.startLineNumber, i = t.endLineNumber;
 	if (t.endColumn === 1 && i--, r >= i) return null;
@@ -97911,7 +97911,7 @@ var f5, hIe = t((() => {
 	}, J(gIe), J(_Ie), J(vIe), J(yIe), J(bIe), J(xIe), J(SIe), J(CIe), J(TIe), J(EIe), J(DIe), J(OIe), J(kIe), J(AIe), J(jIe), J(MIe), J(NIe), J(PIe), J(FIe), J(IIe), J(wIe), b5.caseBoundary.isSupported() && b5.singleLetters.isSupported() && J(b5), x5.singleLineWordBoundary.isSupported() && x5.multiLineWordBoundary.isSupported() && J(x5), S5.wordBoundary.isSupported() && J(S5), y5.titleBoundary.isSupported() && J(y5), C5.isSupported() && J(C5);
 })), RIe = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/links/browser/getLinks.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/links/browser/getLinks.js
 async function zIe(e, t, n) {
 	let r = [], i = e.ordered(t).reverse().map(async (e, i) => {
 		try {
@@ -97992,7 +97992,7 @@ var BIe, w5, VIe = t((() => {
 	});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/links/browser/links.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/links/browser/links.js
 function HIe(e, t) {
 	let n = e.url && /^command:/i.test(e.url.toString()), r = e.tooltip ? e.tooltip : n ? C(1325, "Execute command") : C(1326, "Follow link"), i = t ? Dt ? C(1327, "cmd + click") : C(1328, "ctrl + click") : Dt ? C(1329, "option + click") : C(1330, "alt + click");
 	if (e.url) {
@@ -98300,7 +98300,7 @@ var UIe, T5, E5, D5, O5, k5, WIe, GIe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/find/browser/findState.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/find/browser/findState.js
 function j5(e, t) {
 	return e === 1 || e !== 2 && t;
 }
@@ -98525,7 +98525,7 @@ var XIe, ZIe = t((() => {
 	}, F5 = P5 = tLe([nLe(0, YB)], F5);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/find/browser/findController.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/find/browser/findController.js
 function I5(e, t = "single", n = !1) {
 	if (!e.hasModel()) return null;
 	let r = e.getSelection();
@@ -99166,7 +99166,7 @@ var L5, R5, z5, aLe, B5, V5, oLe, sLe, cLe, lLe, uLe, dLe, fLe, H5, pLe, mLe, hL
 	}));
 })), _Le = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/wordHighlighter/browser/highlightDecorations.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/wordHighlighter/browser/highlightDecorations.js
 function vLe(e) {
 	return e === za.Write ? TLe : e === za.Text ? ELe : kLe;
 }
@@ -99252,7 +99252,7 @@ var bLe, xLe, SLe, CLe, wLe, TLe, ELe, DLe, OLe, kLe, ALe = t((() => {
 	});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/multicursor/browser/multicursor.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/multicursor/browser/multicursor.js
 function W5(e, t) {
 	let n = t.filter((t) => !e.find((e) => e.equals(t)));
 	if (n.length >= 1) {
@@ -99839,7 +99839,7 @@ var NLe, PLe, G5, FLe, ILe, LLe, RLe, K5, q5, J5, Y5, X5, zLe, BLe, VLe, HLe, UL
 	}, Mp(Y5.ID, Y5, 4), Mp(Z5.ID, Z5, 1), J(FLe), J(ILe), J(LLe), J(zLe), J(BLe), J(VLe), J(HLe), J(ULe), J(WLe), J(RLe), J(K5), J(KLe), J(qLe);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/parameterHints/browser/provideSignatureHelp.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/parameterHints/browser/provideSignatureHelp.js
 async function YLe(e, t, n, r, i) {
 	let a = e.ordered(t);
 	for (let e of a) try {
@@ -99870,7 +99870,7 @@ var Q5, $5 = t((() => {
 	});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/parameterHints/browser/parameterHintsModel.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/parameterHints/browser/parameterHintsModel.js
 function XLe(e, t) {
 	switch (t.triggerKind) {
 		case Ra.Invoke: return t;
@@ -100247,7 +100247,7 @@ var e7, ZLe, QLe = t((() => {
 	}));
 })), sRe = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/placeholderText/browser/placeholderTextContribution.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/placeholderText/browser/placeholderTextContribution.js
 function cRe(e, t) {
 	return xl(e, (e, n) => n === !0 || t(e));
 }
@@ -100285,7 +100285,7 @@ var u7, lRe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/observable/common/wrapInReloadableClass.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/platform/observable/common/wrapInReloadableClass.js
 function uRe(e) {
 	return e();
 }
@@ -100450,7 +100450,7 @@ var dRe, fRe, pRe, d7, mRe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/smartSelect/browser/smartSelect.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/smartSelect/browser/smartSelect.js
 async function yRe(e, t, n, r, i) {
 	let a = e.all(t).concat(new _Re(r.selectSubwords));
 	a.length === 1 && a.unshift(new f7());
@@ -100689,7 +100689,7 @@ var bRe, xRe, p7, SRe, m7, h7, CRe, wRe, TRe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/suggest/browser/suggest.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/suggest/browser/suggest.js
 async function v7(e, t, n, r = S7.default, i = { triggerKind: 0 }, a = ui.None) {
 	let o = new hn();
 	n = n.clone();
@@ -100991,7 +100991,7 @@ var b7, x7, jRe, S7, MRe, C7, w7, T7 = t((() => {
 	}, A7 = D7 = NRe([E7(0, YB), E7(1, Um)], A7), j7 = rd("ISuggestMemories"), Ym(j7, A7, 1);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/inlineCompletions/browser/controller/common.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/inlineCompletions/browser/controller/common.js
 function LRe(e) {
 	return RRe?.(e) ?? null;
 }
@@ -101039,7 +101039,7 @@ var RRe, zRe = t((() => {})), M7, BRe = t((() => {
 	};
 })), VRe = t((() => {}));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/labels.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/base/common/labels.js
 function HRe(e, t = Et) {
 	return jre(e, t) ? e.charAt(0).toUpperCase() + e.slice(1) : e;
 }
@@ -101872,7 +101872,7 @@ var URe = t((() => {
 	};
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/suggest/browser/suggestModel.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/suggest/browser/suggestModel.js
 function $Re(e, t, n) {
 	if (!t.getContextKeyValue(M7.inlineSuggestionVisible.key)) return !0;
 	let r = t.getContextKeyValue(M7.suppressSuggestions.key);
@@ -102299,7 +102299,7 @@ var tze, Z7, Q7, $7, e9, nze = t((() => {
 	}, J(aze);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/unusualLineTerminators/browser/unusualLineTerminators.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/unusualLineTerminators/browser/unusualLineTerminators.js
 function sze(e, t, n) {
 	e.setModelProperty(t.uri, o9, n);
 }
@@ -102406,7 +102406,7 @@ var lze, a9, o9, s9, uze = t((() => {
 	}, l9 = dze([fze(0, S_)], l9);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/wordHighlighter/browser/wordHighlighter.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/wordHighlighter/browser/wordHighlighter.js
 function mze(e, t, n, r) {
 	return ks(e.ordered(t).map((e) => () => Promise.resolve(e.provideDocumentHighlights(t, n, r)).then(void 0, ge)), (e) => e != null).then((e) => {
 		if (e) {
@@ -103362,7 +103362,7 @@ var u9, d9, f9, p9, m9, h9, vze, yze, g9, _9, v9, bze, xze, Sze, Cze = t((() => 
 	], A9);
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/suggest/browser/suggestWidgetDetails.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/suggest/browser/suggestWidgetDetails.js
 function j9(e) {
 	return !!e && !!(e.completion.documentation || e.completion.detail && e.completion.detail !== e.completion.label);
 }
@@ -103581,7 +103581,7 @@ var sBe, M9, N9, cBe, lBe = t((() => {
 	})(P9 ||= {});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/services/getIconClasses.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/common/services/getIconClasses.js
 function F9(e, t, n, r, i) {
 	if (bd.isThemeIcon(i)) return [`codicon-${i.id}`, "predefined-file-icon"];
 	if (fa.isUri(i)) return [];
@@ -103628,7 +103628,7 @@ var fBe, pBe = t((() => {
 	ac(), gp(), _a(), gh(), uBe(), xd(), fBe = /(?:\/|^)(?:([^\/]+)\/)?([^\/]+)$/;
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/suggest/browser/suggestWidgetRenderer.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/contrib/suggest/browser/suggestWidgetRenderer.js
 function L9(e) {
 	return e.replace(/\r\n|\r|\n/g, "");
 }
@@ -104756,7 +104756,7 @@ var mBe, R9, hBe, gBe, z9, _Be = t((() => {
 	});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/languages/definitions/_.contribution.js
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/languages/definitions/_.contribution.js
 function OBe(e) {
 	let t = e.id;
 	Y9[t] = e, c0.register(e);
@@ -105076,7 +105076,7 @@ var Y9, X9, kBe, ABe = t((() => {
 	});
 }));
 //#endregion
-//#region ../../../../../../app/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/editor.worker.js?worker&inline
+//#region node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/editor/editor.worker.js?worker&inline
 function RBe(e) {
 	let t;
 	try {

@@ -13,17 +13,29 @@ window.demoDescription = "Demo in Sound guide.";
   var currFile = 0;
   var bins = 256; // try change this (must be a power of 2^)
   var sound;
+  var loading = false;
+  var status = "";
 
-  // Note: use Sound.loadAsBuffer instead if you need support for Safari/iOS browser. (as of Apr 2019)
-  // See this example: http://ptsjs.org/demo/edit/?name=sound.timeDomain
   function loadSound() {
+    if (loading) return;
+    loading = true;
+    status = "Loading...";
     Sound.load( files[currFile] ).then( s => {
       sound = s.analyze(bins).start();
       currFile = (currFile + 1) % files.length;
-    }).catch( e => console.error(e) );
+      status = "";
+    }).catch( e => {
+      status = "Could not load sound.";
+      console.error(e);
+    }).finally( () => {
+      loading = false;
+    });
   }
 
   function playButton() {
+    if (status) {
+      form.fillOnly("#789").text( space.center.$subtract( 55, 0 ), status );
+    }
     if (!sound || !sound.playing) {
       form.fillOnly('rgba(0,0,0,.2)').circle( Circle.fromCenter( space.center, 30 ) );
       form.fillOnly('#fff').polygon( Triangle.fromCenter( space.center, 15 ).rotate2D( Const.half_pi, space.center ) );
@@ -51,7 +63,7 @@ window.demoDescription = "Demo in Sound guide.";
 
     action: (type, x, y) => {
       if (type === "up" && Geom.withinBound( [x,y], space.center.$subtract( 25 ), space.center.$add( 25 ) )) {
-        if (!sound || !sound.playing) loadSound();
+        if (!loading && (!sound || !sound.playing)) loadSound();
       }
     }
   });
