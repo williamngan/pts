@@ -109,14 +109,16 @@ Generators and media:
   `fontSizeToBox`) used with `form.textBox` / `paragraphBox` for
   truncation and alignment inside shapes.
 - `UI`, `UIButton`, `UIDragger` — hit-tested interactive elements
-  (rectangle/circle/polygon/line, or custom via `UI.registerShape`);
-  register with `space.track(ui)`.
+  (rectangle/circle/polygon/line/polyline, or custom via
+  `UI.registerShape`); register with `space.track(ui)`.
 
 References: full API at https://ptsjs.org/docs.md (single markdown
 file, agent-friendly); guides + demo catalog at https://ptsjs.org/guide.md;
 source at https://github.com/williamngan/pts. The repo's `demo/` folder
-has ~90 runnable single-file examples named `Class.method.js` — read one
-before writing a sketch in an unfamiliar area.
+has 80 runnable single-file examples, each named after the API it
+demonstrates (eg, `circle.intersectCircle2D.js`, `create.delaunay.js`,
+`sound.freqDomain.js`) — read one before writing a sketch in an
+unfamiliar area.
 
 ## Conventions that matter
 
@@ -149,8 +151,11 @@ before writing a sketch in an unfamiliar area.
 it: `randomRange`, `randomPt`, `Create.distributeRandom`, noise seeding)
 deterministic. Sequences are stable across versions (pinned by tests).
 Seeds are hashed by _effective_ key — surrounding whitespace and control
-characters are stripped. For Perlin noise, pass a seed to
-`Create.noisePts(...)` or call `noise.seed(n)`.
+characters are stripped. Perlin noise follows the same rule:
+`Create.noisePts` takes no seed parameter — it seeds itself from
+`Num.random()`, so call `Num.seed(...)` beforehand for a deterministic
+field. Individual `Noise` points can also be reseeded with
+`noise.seed(n)`.
 
 ## Rendering targets
 
