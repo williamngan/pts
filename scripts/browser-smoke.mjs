@@ -63,6 +63,41 @@ try {
     assert.equal(result.namespaceWorked, true);
     assert.equal(result.quickStart, "function");
     assert.equal(result.disposed, true);
+
+    for (const kind of ["canvas", "svg", "svg-container"]) {
+      for (const argument of ["bare-id", "selector", "element"]) {
+        await page.setContent(
+          `<!doctype html><div id="host" style="width:320px;height:180px">${
+            kind === "svg-container"
+              ? '<div id="mount"><svg></svg></div>'
+              : `<${kind} id="mount"></${kind}>`
+          }</div>`,
+        );
+        const mounted = await page.evaluate(
+          ({ kind, argument }) => {
+            const mount = document.getElementById("mount");
+            const input =
+              argument === "element"
+                ? mount
+                : argument === "selector"
+                  ? "#mount"
+                  : "mount";
+            globalThis.Pts.quickStart(input);
+            const space = globalThis.space;
+            const expected =
+              kind === "canvas"
+                ? globalThis.Pts.CanvasSpace
+                : globalThis.Pts.SVGSpace;
+            const valid =
+              space instanceof expected && mount.contains(space.element);
+            space.dispose();
+            return valid;
+          },
+          { kind, argument },
+        );
+        assert.equal(mounted, true, `${file}: ${kind} mount using ${argument}`);
+      }
+    }
     await page.close();
   }
 } finally {

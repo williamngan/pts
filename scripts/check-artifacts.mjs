@@ -72,8 +72,8 @@ const sizeLimits = {
   "index.d.ts": 64291,
   "index.js": 235550,
   "index.mjs": 234681,
-  "pts.js": 246326,
-  "pts.min.js": 144576,
+  "pts.js": 246431,
+  "pts.min.js": 144631,
 };
 const banner = "Copyright © 2017-present William Ngan and contributors.";
 

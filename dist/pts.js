@@ -8359,11 +8359,12 @@ See https://github.com/williamngan/pts for details. */
 		if (!window) return;
 		let s = globalThis;
 		globalThis.Pts.namespace(s);
-		const elem = typeof id === "string" ? document.querySelector(id) : id;
-		s.space = elem && (elem.nodeName.toLowerCase() === "svg" || !!elem.querySelector(":scope > svg")) ? new SVGSpace(id).setup({
+		const mount = typeof id === "string" && id[0] !== "#" && id[0] !== "." ? `#${id}` : id;
+		const elem = typeof mount === "string" ? document.querySelector(mount) : mount;
+		s.space = elem && (elem.nodeName.toLowerCase() === "svg" || !!elem.querySelector(":scope > svg")) ? new SVGSpace(mount).setup({
 			bgcolor: bg,
 			resize: true
-		}) : new CanvasSpace(id).setup({
+		}) : new CanvasSpace(mount).setup({
 			bgcolor: bg,
 			resize: true,
 			retina: true

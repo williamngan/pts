@@ -53,7 +53,7 @@ globalThis.Pts.namespace = (scope: any) => {
   }
 };
 
-globalThis.Pts.quickStart = (id: string, bg: string = "#9ab") => {
+globalThis.Pts.quickStart = (id: string | Element, bg: string = "#9ab") => {
   if (!window) return;
 
   let s: any = globalThis;
@@ -62,15 +62,19 @@ globalThis.Pts.quickStart = (id: string, bg: string = "#9ab") => {
   // pick the rendering backend from the mount element: an <svg> element (or a
   // container holding one) gets an SVGSpace, anything else a CanvasSpace —
   // so a sketch can swap renderers by changing only its HTML
-  const elem = typeof id === "string" ? document.querySelector(id) : id;
+  // Preserve CanvasSpace's bare-ID shorthand for both rendering backends.
+  const mount =
+    typeof id === "string" && id[0] !== "#" && id[0] !== "." ? `#${id}` : id;
+  const elem =
+    typeof mount === "string" ? document.querySelector(mount) : mount;
   const isSVG =
     elem &&
     ((elem as Element).nodeName.toLowerCase() === "svg" ||
       !!(elem as Element).querySelector(":scope > svg"));
 
   s.space = isSVG
-    ? new Svg.SVGSpace(id).setup({ bgcolor: bg, resize: true })
-    : new Canvas.CanvasSpace(id).setup({
+    ? new Svg.SVGSpace(mount).setup({ bgcolor: bg, resize: true })
+    : new Canvas.CanvasSpace(mount).setup({
         bgcolor: bg,
         resize: true,
         retina: true,
