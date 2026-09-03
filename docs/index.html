@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <link rel="alternate" type="text/markdown" href="/docs.md" title="Complete Pts API reference">
     <script type="text/javascript" src="./js/vue.min.js"></script>
-    <script type="text/javascript" src="./js/marked.min.js"></script>
+    <script type="text/javascript" src="./js/markdown-it.min.js"></script>
     <link rel="stylesheet" href="./css/style.css" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -105,13 +105,13 @@
             <p>If you're getting started, read <a href="../guide/">the guides</a> and check out <a href="../demo">the demos</a> first.</p>
           </div>
           <h2 class="overview-title">Organization</h2>
-          <p>
+          <div>
             Pts classes are organized into modules like this: Modules ⇢ Classes ⇢  Methods &amp; Accessors. <br /> 
             For example, when using ES6 modules, you can access a Pts function this way:
             <pre ><code><span class="keyword">import</span> <b>{Polygon}</b> <span class="keyword">from</span> "pts";
               ...
               <b>Polygon</b>.centroid( myPts );</code></pre>
-          </p>
+          </div>
           <p>If you don't know what this means, don't worry about it. You can also link pts.js in your html and access all the classes directly. See the <a href="../guide/">getting started guide</a> for a quick example.</p>
           <h2 class="overview-title">Overview</h2>
           <p>Pts provides you with essential building blocks for creative coding and visualization.</p>

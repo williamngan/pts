@@ -77,6 +77,17 @@ try {
     waitUntil: "networkidle",
   });
   await page.getByRole("heading", { name: "Pts Docs" }).waitFor();
+  const markdownSafety = await page.evaluate(() => ({
+    version: window.Vue.version,
+    safe: window.app.md("**bold** and [`Pt`](#link)"),
+    unsafe: window.app.md(
+      '<img src=x onerror="alert(1)"> [bad](javascript:alert(1))',
+    ),
+  }));
+  assert.match(markdownSafety.version, /^3\./u);
+  assert.match(markdownSafety.safe, /<strong>bold<\/strong>/u);
+  assert.match(markdownSafety.safe, /<a href="#link"><code>Pt<\/code><\/a>/u);
+  assert.doesNotMatch(markdownSafety.unsafe, /<img|href="javascript:/u);
   assert.equal(await page.locator("#modules > div").count(), 19);
   assert.deepEqual(await page.locator("#modules h4").allTextContents(), [
     "Canvas",

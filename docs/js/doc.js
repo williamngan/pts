@@ -1,5 +1,8 @@
 var sourceRoot = "https://github.com/williamngan/pts/blob/master/";
 var _search = [];
+// API comments are Markdown, never executable HTML. markdown-it also rejects
+// unsafe link protocols such as javascript: by default.
+var docsMarkdown = markdownit({ html: false });
 
 function loadJSON(url, callback) {
   var request = new XMLHttpRequest();
@@ -76,32 +79,39 @@ loadJSON("./json/search.json", (data, status) => {
     });
 });
 
-var app = new Vue({
-  el: "#docapp",
-
-  data: {
-    message: "",
-    modules: [],
-    searchResults: [],
-    searchQuery: "",
-    contents: {
-      name: "",
-      constructor: {},
-      methods: [],
-      accessors: [],
-      variables: [],
-      properties: [],
-      type_alias: [],
-      count: 0,
-    },
-    loadError: false,
-    selected: "",
-    selHash: "",
+var app = Vue.createApp({
+  data: function () {
+    return {
+      message: "",
+      modules: [],
+      searchResults: [],
+      searchQuery: "",
+      contents: {
+        name: "",
+        constructor: {},
+        methods: [],
+        accessors: [],
+        variables: [],
+        properties: [],
+        type_alias: [],
+        count: 0,
+      },
+      loadError: false,
+      selected: "",
+      selHash: "",
+    };
   },
 
   methods: {
     navigate: function (event, page, hash) {
-      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      )
+        return;
       event.preventDefault();
       if (this.selected === page) this.jumpTo(hash);
       else loadContents(page, hash);
@@ -137,7 +147,7 @@ var app = new Vue({
 
     md: function (s) {
       if (!s || typeof s !== "string") return "";
-      return marked(s);
+      return docsMarkdown.render(s);
     },
 
     source: function (s) {
@@ -170,12 +180,15 @@ var app = new Vue({
       app.searchQuery = query;
       document.querySelector("#search").className =
         query.length > 0 ? "searching" : "";
-      if (query && getComputedStyle(document.querySelector("#toc")).display !== "none") toggleMenu(true);
+      if (
+        query &&
+        getComputedStyle(document.querySelector("#toc")).display !== "none"
+      )
+        toggleMenu(true);
     },
 
     expandMemberPane: function () {
-      if (!app || !app.contents) return false;
-      return app.contents.count > 5 || app.searchQuery.length > 0;
+      return this.contents.count > 5 || this.searchQuery.length > 0;
     },
 
     clickTarget: function (evt) {
@@ -202,7 +215,7 @@ var app = new Vue({
       this.jumpTo(this.selHash, true);
     }
   },
-});
+}).mount("#docapp");
 
 // ---
 

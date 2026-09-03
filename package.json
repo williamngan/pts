@@ -51,7 +51,7 @@
     "bench:compare": "node --expose-gc scripts/bench.mjs --compare",
     "bench:check": "node scripts/bench-dryrun.mjs",
     "check:artifacts": "node scripts/check-artifacts.mjs",
-    "check:docs": "node scripts/generate-docs.mjs --check && node scripts/generate-guides.mjs --check && node scripts/generate-markdown-docs.mjs --check && pnpm test:docs",
+    "check:docs": "node scripts/build-docs-runtime.mjs --check && node scripts/generate-docs.mjs --check && node scripts/generate-guides.mjs --check && node scripts/generate-markdown-docs.mjs --check && pnpm test:docs",
     "check:package": "node scripts/check-package.mjs",
     "check:publishing": "publint && attw --pack .",
     "lint": "eslint assets/cover.js bench demo guide/js/guide.js guide/js/examples src scripts test/integrations test/visual *.config.*",
@@ -60,7 +60,8 @@
     "format:watch": "chokidar README.md 'plans/**/*.md' package.json tsconfig.json '*.config.*' 'bench/**/*.mjs' 'guide/js/guide.js' 'demo/edit/js/edit.js' 'demo/edit/src/*.js' 'scripts/**/*.mjs' 'src/**/*.ts' '.github/**/*.yml' '.prettierrc.json' '.vscode/*.json' 'test/integrations/**/*.{css,html,json,md,mjs,ts,tsx,vue}' 'test/visual/**/*.{ts,md}' -c \"prettier --write --ignore-unknown \\\"{path}\\\"\"",
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test:coverage && pnpm check:docs && pnpm build && pnpm check:artifacts && pnpm bench:check && pnpm test:browser && pnpm test:site && pnpm check:package && pnpm test:integrations && pnpm check:publishing",
     "prepack": "pnpm build",
-    "docs": "node scripts/generate-docs.mjs && node scripts/generate-guides.mjs && node scripts/generate-markdown-docs.mjs",
+    "docs": "node scripts/build-docs-runtime.mjs && node scripts/generate-docs.mjs && node scripts/generate-guides.mjs && node scripts/generate-markdown-docs.mjs",
+    "build:docs-runtime": "node scripts/build-docs-runtime.mjs",
     "build:editor": "node scripts/build-editor.mjs"
   },
   "keywords": [
@@ -96,7 +97,8 @@
     "typescript": "6.0.3",
     "typescript-eslint": "8.67.0",
     "vite": "8.2.1",
-    "vitest": "4.1.10"
+    "vitest": "4.1.10",
+    "vue": "3.5.41"
   },
   "bugs": {
     "url": "https://github.com/williamngan/pts/issues"
