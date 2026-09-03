@@ -3,6 +3,29 @@ var _search = [];
 // API comments are Markdown, never executable HTML. markdown-it also rejects
 // unsafe link protocols such as javascript: by default.
 var docsMarkdown = markdownit({ html: false });
+docsMarkdown.renderer.rules.link_open = function (
+  tokens,
+  index,
+  options,
+  env,
+  renderer,
+) {
+  const token = tokens[index];
+  if (token.attrGet("href") === "#link" && env.searchReady) {
+    let query = "";
+    let end = index + 1;
+    for (; end < tokens.length && tokens[end].type !== "link_close"; end++)
+      query += tokens[end].content;
+    const target = firstResult(query);
+    if (target) token.attrSet("href", "?p=" + target[0]);
+    else {
+      // A primitive or unknown type is text, not a dead navigation target.
+      token.hidden = true;
+      tokens[end].hidden = true;
+    }
+  }
+  return renderer.renderToken(tokens, index, options);
+};
 
 function loadJSON(url, callback) {
   var request = new XMLHttpRequest();
@@ -61,6 +84,7 @@ loadJSON("./json/modules.json", (data, status) => {
 
 loadJSON("./json/search.json", (data, status) => {
   _search = data || [];
+  app.searchReady = true;
 
   let se = document.querySelector("#search_input");
   se.addEventListener("input", function (evt) {
@@ -86,6 +110,7 @@ var app = Vue.createApp({
       modules: [],
       searchResults: [],
       searchQuery: "",
+      searchReady: false,
       contents: {
         name: "",
         constructor: {},
@@ -147,7 +172,7 @@ var app = Vue.createApp({
 
     md: function (s) {
       if (!s || typeof s !== "string") return "";
-      return docsMarkdown.render(s);
+      return docsMarkdown.render(s, { searchReady: this.searchReady });
     },
 
     source: function (s) {
@@ -192,16 +217,10 @@ var app = Vue.createApp({
     },
 
     clickTarget: function (evt) {
-      if (
-        evt.target.tagName.toLowerCase() === "code" &&
-        evt.target.parentElement.getAttribute("href") === "#link"
-      ) {
-        evt.preventDefault();
-        evt.stopPropagation();
-        var currId = getParentID(evt.target, 0);
-        if (currId && app.selected) setHistory(app.selected, currId);
-        app.codeLink(evt.target.textContent);
-        return false;
+      const link = evt.target.closest("a");
+      if (link && (link.getAttribute("href") || "").startsWith("?p=")) {
+        const target = new URL(link.href);
+        this.navigate(evt, target.searchParams.get("p"), target.hash.slice(1));
       }
     },
 
@@ -314,11 +333,18 @@ function getSearchResult(q) {
     return query.every((part) => name.indexOf(part) >= 0);
   });
   return res
-    .sort((a, b) => b[3] * 100 - b[0].length - (a[3] * 100 - a[0].length))
+    .sort((a, b) => {
+      const exact = query.join(" ");
+      return (
+        Number(b[1].toLowerCase() === exact) -
+          Number(a[1].toLowerCase() === exact) ||
+        b[3] * 100 - b[0].length - (a[3] * 100 - a[0].length)
+      );
+    })
     .slice(0, 50);
 }
 
-function loadFirstResult(q) {
+function firstResult(q) {
   let skips = [
     "number",
     "boolean",
@@ -333,12 +359,15 @@ function loadFirstResult(q) {
     if (q.indexOf(skips[i]) === 0) return;
   }
 
-  if (q.indexOf(" | ")) q = q.split(" ")[0];
+  if (q.includes(" | ")) q = q.split(" | ")[0];
+  return getSearchResult(q)[0];
+}
 
-  let res = getSearchResult(q);
-  if (res && res[0]) {
-    let qsel = qs("p", 40, "?p=" + res[0][0]);
-    if (qsel) loadContents(qsel, qsHash(res[0][0]), false);
+function loadFirstResult(q) {
+  const result = firstResult(q);
+  if (result) {
+    let qsel = qs("p", 40, "?p=" + result[0]);
+    if (qsel) loadContents(qsel, qsHash(result[0]), false);
   }
 }
 

@@ -86,7 +86,10 @@ try {
   }));
   assert.match(markdownSafety.version, /^3\./u);
   assert.match(markdownSafety.safe, /<strong>bold<\/strong>/u);
-  assert.match(markdownSafety.safe, /<a href="#link"><code>Pt<\/code><\/a>/u);
+  assert.match(
+    markdownSafety.safe,
+    /<a href="\?p=Pt_Pt"><code>Pt<\/code><\/a>/u,
+  );
   assert.doesNotMatch(markdownSafety.unsafe, /<img|href="javascript:/u);
   assert.equal(await page.locator("#modules > div").count(), 19);
   assert.deepEqual(await page.locator("#modules h4").allTextContents(), [
@@ -231,6 +234,18 @@ try {
     return Math.round(Math.abs(target.top - contents.top));
   });
   assert.equal(staticArcAlignment, 0);
+  const inlineTarget = page
+    .locator('#contents a[href="?p=Canvas_CanvasSpace"]')
+    .first();
+  assert.equal(await inlineTarget.count(), 1);
+  await inlineTarget.press("Enter");
+  await page.waitForURL(
+    `${documentation.origin}/index.html?p=Canvas_CanvasSpace`,
+  );
+  await page
+    .locator("#contents")
+    .getByRole("heading", { name: "CanvasSpace", exact: true })
+    .waitFor();
 
   // Every generated long anchor must survive a direct link, not just an
   // in-page click that bypasses loadContents' URL handling.
