@@ -1,6 +1,6 @@
 # Pts consumer integration-test plan
 
-**Date:** 2026-08-10  
+**Date:** 2026-08-10\
 **Scope:** Durable consumer fixtures for React with Vite, Vue with Vite, Node with `skia-canvas`, and a single-file vanilla browser page.
 
 ## Objective

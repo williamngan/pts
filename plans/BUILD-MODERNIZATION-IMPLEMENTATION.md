@@ -1,7 +1,7 @@
 # Pts build modernization implementation
 
-**Completed:** 2026-08-10  
-**Starting package version:** 0.12.9  
+**Completed:** 2026-08-10\
+**Starting package version:** 0.12.9\
 **Scope:** Pts build, package, tests, and CI. The React wrapper and examples remain separate repositories and were used only as compatibility consumers.
 
 ## Result
