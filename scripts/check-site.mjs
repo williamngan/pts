@@ -686,8 +686,20 @@ async function checkHomepageHero() {
       headerTarget,
     );
     assert.ok(headerCoversPointer, "header pointer probe missed the overlay");
-    await page.mouse.move(headerTarget[0], headerTarget[1]);
-    await page.waitForTimeout(50);
+    // The first pointer event after navigation can have a zero movement delta.
+    // Send a real two-step movement, matching the hero's intentional stationary-
+    // cursor guard, then wait for its rendered frame instead of a fixed delay.
+    await page.mouse.move(headerTarget[0], headerTarget[1], { steps: 2 });
+    await page.waitForFunction(
+      ([x, y]) =>
+        window.__heroFrame.arcs.some(
+          ({ arc, color }) =>
+            color !== "#ffffff" &&
+            Math.abs(arc[2] - 1.5) < 0.001 &&
+            Math.hypot(arc[0] - x, arc[1] - y) < 0.001,
+        ),
+      headerPointer,
+    );
     const headerPointerDistance = await page.evaluate(([x, y]) => {
       const dots = window.__heroFrame.arcs.filter(
         ({ arc, color }) =>
