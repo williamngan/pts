@@ -2442,7 +2442,7 @@ perm: number[]
 
 DOMSpace hosts a Space in a DOM element. It is the subclassing entry point for building
 custom element-based spaces; usually its subclass [`SVGSpace`](#svg-svgspace) should be used instead.
-Learn more about spaces in [this guide](https://ptsjs.org/guide/space-0500).
+Learn more about spaces in [this guide](https://ptsjs.org/guide/Space-0500.html).
 
 When using a Space inside a component framework, create it on mount and call
 [`DOMSpace.dispose`](#dom-domspace-dispose) on unmount so listeners and the animation loop are released.
@@ -2815,7 +2815,7 @@ Draw a circle.
 
 - `pts` (`GroupLike | number[][]`) — usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
 
-**See also:** [`Circle.fromCenter`](./?p=Op_Circle#function_fromCenter)
+**See also:** [`Circle.fromCenter`](#op-circle-static-from-center)
 
 <a id="dom-htmlform-cls"></a>
 ##### `cls`
@@ -3574,7 +3574,7 @@ Draw a circle (not implemented here  -- to be implemented in subclasses).
 
 - `pts` (`GroupLike | number[][]`) — usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
 
-**See also:** [`Circle.fromCenter`](./?p=Op_Circle#function_fromCenter)
+**See also:** [`Circle.fromCenter`](#op-circle-static-from-center)
 
 <a id="form-visualform-circles"></a>
 ##### `circles`

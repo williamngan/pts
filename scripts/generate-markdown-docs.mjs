@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readdir, readFile, writeFile } from "node:fs/promises";
+import { readdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -616,6 +616,10 @@ function rewriteGuide(markdown, apiAnchors, demoNames) {
       return anchor === "play-quickstart" ? "](#demo-pts-quick-start)" : match;
     })
     .replaceAll("(./assets/", `(${siteOrigin}/guide/assets/`)
+    .replace(
+      /\]\(\.\/([^/()]+\.html)(#[^)]*)?\)/gu,
+      (_, file, hash = "") => `](${siteOrigin}/guide/${file}${hash})`,
+    )
     .replaceAll("(./js/examples/", `(${siteOrigin}/guide/js/examples/`)
     .replaceAll("(../docs/", `(${siteOrigin}/docs/`)
     .replaceAll("(../demo/", `(${siteOrigin}/demo/`)
@@ -767,7 +771,7 @@ function markdownProse(markdown) {
     .join("\n");
 }
 
-function validateMarkdown(file, markdown) {
+async function validateMarkdown(file, markdown) {
   const prose = markdownProse(markdown);
   const ids = [...prose.matchAll(/<a id="([^"]+)"><\/a>/gu)].map(
     (match) => match[1],
@@ -784,6 +788,15 @@ function validateMarkdown(file, markdown) {
     );
   }
   assert.doesNotMatch(prose, /\]\(#link\)/u, `${file} has an unresolved link`);
+  for (const [, target] of prose.matchAll(/\]\(([^)\s]+)\)/gu)) {
+    if (target.startsWith("#")) continue;
+    const url = new URL(target, `${siteOrigin}/${file}`);
+    if (url.origin !== siteOrigin) continue;
+    const local = path.join(projectRoot, decodeURIComponent(url.pathname));
+    const info = await stat(local).catch(() => null);
+    assert.ok(info, `${file} links to missing site path ${target}`);
+    if (info.isDirectory()) await stat(path.join(local, "index.html"));
+  }
   assert.equal(
     markdown.includes(projectRoot),
     false,
@@ -807,7 +820,8 @@ async function expectedOutputs() {
     ["guide.md", await guideMarkdown(packageJson.version)],
     ["llms.txt", llmsText()],
   ]);
-  for (const [file, markdown] of outputs) validateMarkdown(file, markdown);
+  for (const [file, markdown] of outputs)
+    await validateMarkdown(file, markdown);
   return outputs;
 }
 

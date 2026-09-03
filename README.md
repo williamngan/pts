@@ -42,7 +42,7 @@ Starter projects and integrations:
 - [pts-react-example](https://github.com/williamngan/pts-react-example)
 - [react-pts-canvas](https://www.npmjs.com/package/react-pts-canvas)
 
-Read the [guides](https://ptsjs.org/guide/get-started-0100) and explore the [demos](https://ptsjs.org/demo/?name=circle.intersectCircle2D).
+Read the [guides](https://ptsjs.org/guide/Get-started-0100.html) and explore the [demos](https://ptsjs.org/demo/?name=circle.intersectCircle2D).
 
 ## Development
 

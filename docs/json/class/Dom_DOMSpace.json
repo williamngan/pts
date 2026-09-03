@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "comment": "DOMSpace hosts a Space in a DOM element. It is the subclassing entry point for building\ncustom element-based spaces; usually its subclass [`SVGSpace`](#link) should be used instead.\nLearn more about spaces in [this guide](../guide/space-0500).\n\nWhen using a Space inside a component framework, create it on mount and call\n[`DOMSpace.dispose`](#link) on unmount so listeners and the animation loop are released.\nFor example, in React:\n```\nuseEffect(() => {\n  const space = new SVGSpace(ref.current).setup({ resize: true });\n  space.add(...).play();\n  return () => { space.dispose(); };\n}, []);\n```\nDispose is idempotent, and a new Space can be mounted on the same element afterwards\n(as happens under React's StrictMode).",
+  "comment": "DOMSpace hosts a Space in a DOM element. It is the subclassing entry point for building\ncustom element-based spaces; usually its subclass [`SVGSpace`](#link) should be used instead.\nLearn more about spaces in [this guide](../guide/Space-0500.html).\n\nWhen using a Space inside a component framework, create it on mount and call\n[`DOMSpace.dispose`](#link) on unmount so listeners and the animation loop are released.\nFor example, in React:\n```\nuseEffect(() => {\n  const space = new SVGSpace(ref.current).setup({ resize: true });\n  space.add(...).play();\n  return () => { space.dispose(); };\n}, []);\n```\nDispose is idempotent, and a new Space can be mounted on the same element afterwards\n(as happens under React's StrictMode).",
   "constructor": [
     {
       "name": "constructor",

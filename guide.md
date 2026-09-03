@@ -1017,7 +1017,7 @@ CanvasSpace also supports offscreen rendering which may help with rendering comp
 
 #### Form
 
-In the [Get Started](./Get-started-0100.html) guide, we made an analogy of paper and pencil when introducing Space and Form. So [`CanvasForm`](https://ptsjs.org/docs.md#canvas-canvasform) represents a pencil to draw on CanvasSpace. You can get the form with a single function call.
+In the [Get Started](https://ptsjs.org/guide/Get-started-0100.html) guide, we made an analogy of paper and pencil when introducing Space and Form. So [`CanvasForm`](https://ptsjs.org/docs.md#canvas-canvasform) represents a pencil to draw on CanvasSpace. You can get the form with a single function call.
 
 ```
 let space = new CanvasSpace("#paper");
@@ -1105,7 +1105,7 @@ Canvas element has only basic supports for text, making it difficult to create a
 
 The [`textBox`](https://ptsjs.org/docs.md#canvas-canvasform) function in [`CanvasForm`](https://ptsjs.org/docs.md#canvas-canvasform) lets you control how a single-line text should be displayed inside a box.
 
-First, specify a rectangular area (specified by a [`Group`](./Group-0300.html)) and a text string. Optionally, you can also specify where the text should be placed vertically, as well as the characters used for abbreviation when the text truncates. For example:
+First, specify a rectangular area (specified by a [`Group`](https://ptsjs.org/guide/Group-0300.html)) and a text string. Optionally, you can also specify where the text should be placed vertically, as well as the characters used for abbreviation when the text truncates. For example:
 
 ```
 form.textBox( area, "hello world", "bottom", "..." );

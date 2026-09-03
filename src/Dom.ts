@@ -15,7 +15,7 @@ import {
 /**
  * DOMSpace hosts a Space in a DOM element. It is the subclassing entry point for building
  * custom element-based spaces; usually its subclass [`SVGSpace`](#link) should be used instead.
- * Learn more about spaces in [this guide](../guide/space-0500).
+ * Learn more about spaces in [this guide](../guide/Space-0500.html).
  *
  * When using a Space inside a component framework, create it on mount and call
  * [`DOMSpace.dispose`](#link) on unmount so listeners and the animation loop are released.
@@ -779,7 +779,7 @@ export class HTMLForm extends VisualForm {
   /**
    * Draw a circle.
    * @param pts usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
-   * @see [`Circle.fromCenter`](./?p=Op_Circle#function_fromCenter)
+   * @see [`Circle.fromCenter`](#link)
    */
   circle(pts: GroupLike | number[][]): this {
     this.nextID();
