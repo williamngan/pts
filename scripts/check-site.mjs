@@ -992,6 +992,7 @@ async function checkHomepageHero() {
           if (dx * dx + dy * dy < distance * distance) {
             window.__pointerCollisions += 1;
             window.__flashProbeParticle = this.radius === 30 ? other : this;
+            window.__heroPointerParticle = this.radius === 30 ? this : other;
           }
         }
         return collide.call(this, other, damping);
@@ -1143,15 +1144,18 @@ async function checkHomepageHero() {
 
     // Releasing a mouse drag inside the canvas must leave its collider active.
     // A `drop` is also emitted for mouse input, even though the pointer remains.
-    await page.evaluate(([x, y]) => {
+    await page.evaluate(async () => {
+      // Let pointer-capture release events settle, then exercise the actual
+      // FlashParticle guard directly. A single random-world placement can be
+      // separated by another collision before this pair is visited.
+      await new Promise(requestAnimationFrame);
       window.__pointerCollisions = 0;
       const particle = window.__flashProbeParticle;
-      particle.previous.to(x, y);
-      particle.to(x, y);
-    }, dragTarget);
-    await page
-      .waitForFunction(() => window.__pointerCollisions > 0, { timeout: 500 })
-      .catch(() => {});
+      const pointer = window.__heroPointerParticle;
+      particle.previous.to(pointer);
+      particle.to(pointer);
+      particle.collide(pointer, 1);
+    });
     const postDragCollisions = await page.evaluate(
       () => window.__pointerCollisions,
     );
