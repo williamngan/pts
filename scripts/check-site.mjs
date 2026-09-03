@@ -1419,6 +1419,21 @@ async function checkEditorBundleIsSelfContained() {
 }
 
 async function checkEditorAssetsAreVersioned() {
+  const apiSource = await readFile(
+    join(ROOT, "demo/edit/js/pts-api.js"),
+    "utf8",
+  );
+  const api = JSON.parse(
+    apiSource
+      .slice(apiSource.indexOf(" = ") + 3)
+      .trim()
+      .replace(/;$/u, ""),
+  );
+  assert.equal(
+    api.library,
+    await readFile(join(ROOT, "dist/pts.min.js"), "utf8"),
+    "editor library differs from the site build; run pnpm build:editor",
+  );
   const hash = createHash("sha256");
   for (const path of EDITOR_VERSIONED_ASSETS) {
     hash.update(path);
@@ -1572,7 +1587,8 @@ async function checkEditorControls() {
 
 async function checkEditorExport() {
   const page = await openEditor("triangle.incircle");
-  const source = 'var marker = "</script>";\nconsole.log(marker);';
+  const source =
+    'var marker = "</script>";\nwindow.exportProbe = new Pt(3, 4).magnitude();\nwindow.hasRevampAPI = typeof Pts.SVGContext2D;';
 
   try {
     await page.evaluate((value) => window.editor.setValue(value), source);
@@ -1586,9 +1602,11 @@ async function checkEditorExport() {
 
     assert.equal(download.suggestedFilename(), "pts_demo.html");
     assert.match(html, /^<!doctype html>\n<html lang="en">/u);
-    assert.match(
-      html,
-      /https:\/\/unpkg\.com\/pts@0\.12\.9\/dist\/pts\.min\.js/u,
+    assert.doesNotMatch(html, /<script[^>]+src=/u);
+    const library = await readFile(join(ROOT, "dist/pts.min.js"), "utf8");
+    assert.ok(
+      html.includes(library.replace(/<\/script/gi, "<\\/script")),
+      "export does not contain the exact preview library",
     );
     assert.ok(
       html.includes('var marker = "<\\/script>";'),
@@ -1598,11 +1616,37 @@ async function checkEditorExport() {
       !html.includes(source),
       "the exported sketch retained an unsafe closing script tag",
     );
+    const exported = await browser.newPage({
+      viewport: { width: 320, height: 700 },
+    });
+    const errors = [];
+    exported.on("pageerror", (error) => errors.push(error.message));
+    try {
+      await exported.context().setOffline(true);
+      await exported.setContent(html);
+      assert.deepEqual(
+        await exported.evaluate(() => ({
+          magnitude: window.exportProbe,
+          marker: window.marker,
+          renderer: window.hasRevampAPI,
+          overflows: document.documentElement.scrollWidth > innerWidth,
+        })),
+        {
+          magnitude: 5,
+          marker: "</script>",
+          renderer: "function",
+          overflows: false,
+        },
+      );
+      assert.deepEqual(errors, []);
+    } finally {
+      await exported.close();
+    }
   } finally {
     await page.close();
   }
 
-  return "standalone HTML is pinned, named, and safe for closing script text";
+  return "export uses the exact preview build, runs offline, namespaces Pts, and fits 320px";
 }
 
 async function checkLatestEditorRunWins() {
