@@ -15,5 +15,6 @@ dogfood-output/
 .pnpm-store/
 .wt/
 test/visual/**/*.png
+!test/visual/baselines/*.png
 
 dist/

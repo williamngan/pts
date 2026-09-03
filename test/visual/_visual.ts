@@ -121,17 +121,16 @@ export function matchBaseline(
   const maxSoftDiffRatio = opts.maxSoftDiffRatio ?? 0.01;
   const file = join(BASELINE_DIR, `${name}.png`);
 
-  if (UPDATE || !existsSync(file)) {
-    if (!existsSync(file) && CI) {
-      throw new Error(
-        `Missing visual baseline "${name}.png". Run \`pnpm test:visual:update\` and commit it.`,
-      );
-    }
+  if (UPDATE) {
+    if (CI) throw new Error("Visual baselines must not be updated in CI.");
     write(BASELINE_DIR, name, image);
-    if (!UPDATE) {
-      console.warn(`[visual] recorded new baseline ${name}.png`);
-    }
     return;
+  }
+
+  if (!existsSync(file)) {
+    throw new Error(
+      `Missing visual baseline "${name}.png". Run \`pnpm test:visual:update\` and commit it.`,
+    );
   }
 
   const baseline = decodePNG(readFileSync(file));

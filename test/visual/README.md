@@ -15,10 +15,12 @@ pnpm test:visual          # compare against baselines
 pnpm test:visual:update   # re-record baselines after an intended change
 ```
 
-Visual specs live in `test/visual/` and run as part of `pnpm test` too.
+Visual specs live in `test/visual/` and also run in `pnpm test`,
+`pnpm test:coverage`, and the CI `pnpm check` gate.
 
-A missing baseline is recorded automatically on a local run (with a warning) but
-fails when `CI` is set, so an unreviewed snapshot can never sneak through CI.
+A missing baseline always fails. Only `pnpm test:visual:update` records
+baselines, and updates are forbidden when `CI` is set. Review and commit the
+resulting PNGs with the intended rendering change.
 
 A comparison fails if **any** pixel differs by more than 1 per channel, or if
 more than 1% of pixels differ at all. The first catches real changes; the second
