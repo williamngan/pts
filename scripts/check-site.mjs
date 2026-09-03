@@ -332,6 +332,64 @@ async function checkGuideTouchControls() {
   return "touch taps independently play and pause without synthetic hover interference";
 }
 
+async function checkGuideChapterMenu() {
+  const page = await browser.newPage();
+  try {
+    for (const width of [320, 390, 768]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`${ORIGIN}/guide/Get-started-0100.html`);
+      const menu = page.getByRole("navigation", { name: "Guide chapters" });
+      const toc = page.getByRole("link", { name: "Open guide menu" });
+      assert.equal(
+        await page.locator("#menu").evaluate((element) => element.inert),
+        true,
+      );
+      await toc.press("Enter");
+      await page.waitForFunction(
+        () =>
+          document.getElementById("toc").getAttribute("aria-expanded") ===
+          "true",
+      );
+      const clipped = await menu.locator("li").evaluateAll((items) =>
+        items
+          .filter((item) => {
+            const link = item.querySelector("a");
+            return (
+              link.scrollWidth > link.clientWidth ||
+              item.scrollWidth > item.clientWidth
+            );
+          })
+          .map((item) => item.textContent),
+      );
+      assert.deepEqual(clipped, [], `chapter labels are clipped at ${width}px`);
+      assert.equal(await menu.isVisible(), true);
+      await page.keyboard.press("Escape");
+      assert.equal(await toc.getAttribute("aria-expanded"), "false");
+      assert.equal(
+        await toc.evaluate((element) => document.activeElement === element),
+        true,
+      );
+      assert.equal(
+        await page.locator("#menu").evaluate((element) => element.inert),
+        true,
+      );
+    }
+    for (const width of [1024, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.waitForFunction(() => !document.getElementById("menu").inert);
+      assert.equal(
+        await page
+          .getByRole("navigation", { name: "Guide chapters" })
+          .isVisible(),
+        true,
+      );
+    }
+  } finally {
+    await page.close();
+  }
+  return "chapter labels fit at 320–768px, Escape restores focus, and desktop navigation stays accessible";
+}
+
 async function checkPoseNetIsRetired() {
   const directory = join(ROOT, "demo/more/tfjs_posenet");
   const notice = await readFile(join(directory, "index.html"), "utf8");
@@ -1898,6 +1956,7 @@ const checks = [
   ["guide API links resolve", checkGuideApiLinks],
   ["guide demos support keyboard controls", checkGuideKeyboardControls],
   ["guide demos support touch controls", checkGuideTouchControls],
+  ["guide chapter menu is readable and accessible", checkGuideChapterMenu],
   ["guide loads demos lazily", checkGuideIsLazy],
   ["guide waits for off-screen demos", checkGuideDoesNotFailOffscreenDemos],
   ["editor is usable on narrow screens", checkEditorOnNarrowScreens],

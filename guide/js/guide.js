@@ -26,6 +26,44 @@ Pts.namespace(this);
 (function () {
   "use strict";
 
+  // Keep the native hash-link menu usable without JavaScript, while adding
+  // announced state, focus management, and Escape dismissal when JS runs.
+  const menu = document.getElementById("menu");
+  const toc = document.getElementById("toc");
+  const close = document.getElementById("close");
+  if (menu && toc && close) {
+    let previousHash = location.hash === "#menu" ? "" : location.hash;
+    const syncMenu = function () {
+      const mobile = getComputedStyle(toc).display !== "none";
+      const open = mobile && location.hash === "#menu";
+      toc.setAttribute("aria-expanded", String(open));
+      toc.setAttribute("aria-controls", "menu");
+      menu.inert = mobile && !open;
+      menu.setAttribute("aria-hidden", String(mobile && !open));
+      if (open) close.focus({ preventScroll: true });
+    };
+    const closeMenu = function (event) {
+      event.preventDefault();
+      history.replaceState(
+        null,
+        "",
+        location.pathname + location.search + previousHash,
+      );
+      syncMenu();
+      toc.focus({ preventScroll: true });
+    };
+    toc.addEventListener("click", function () {
+      previousHash = location.hash === "#menu" ? "" : location.hash;
+    });
+    close.addEventListener("click", closeMenu);
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && location.hash === "#menu") closeMenu(event);
+    });
+    window.addEventListener("hashchange", syncMenu);
+    window.addEventListener("resize", syncMenu);
+    syncMenu();
+  }
+
   // Relative, so the guide works when the site is served from a subpath.
   const EDIT_PATH = "../demo/edit/?name=guide.";
 

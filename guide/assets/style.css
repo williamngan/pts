@@ -647,11 +647,13 @@ p {
   #menu {
     position: fixed;
     left: -100%;
+    visibility: hidden;
     top: 0;
     bottom: 0;
-    padding: 100px;
+    padding: 90px 40px 40px;
     margin: 0;
-    width: 90%;
+    width: min(90vw, 520px);
+    max-width: none;
     box-sizing: border-box;
     overflow: auto;
     z-index: 100;
@@ -697,6 +699,7 @@ p {
   }
 
   #menu:target {
+    visibility: visible;
     background: #42e;
     transition: left 0.3s;
     left: 0;
@@ -753,11 +756,12 @@ p {
   /* ------- */
 
   #menu {
-    padding: 50px;
+    padding: 60px 24px 24px;
   }
 
   #menu li {
     font-size: 1.2em;
+    line-height: 44px;
   }
 
   #menu li::before {
