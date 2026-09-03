@@ -55,13 +55,13 @@
 <p>The online editor enables you to quickly experiment with Pts and download your code to run locally too. <a href="https://ptsjs.org/demo/edit/?name=triangle.incircle">Try the editor here</a>.</p>
 <p>Now that we've learned how to run Pts in various ways, it's time to start using it!</p>
 <h3>Creating Space and Form</h3>
-<p><strong><code>Pts</code></strong> provides a <a href="#canvas-canvasspace"><code>CanvasSpace</code></a> which enables you to use html <code>&lt;canvas&gt;</code> as a space. You can create a <code>CanvasSpace</code> like this:</p>
+<p><strong><code>Pts</code></strong> provides a <a href="../docs/?p=Canvas_CanvasSpace"><code>CanvasSpace</code></a> which enables you to use html <code>&lt;canvas&gt;</code> as a space. You can create a <code>CanvasSpace</code> like this:</p>
 <pre><code>var space = new CanvasSpace(&quot;#hello&quot;);
 space.setup({ bgcolor: &quot;#fff&quot; });
 </code></pre>
 <p>This assumes you have an element with <code>id=&quot;hello&quot;</code> in your html. If your element is <code>&lt;canvas id=&quot;hello&quot;&gt;</code>, CanvasSpace will target that canvas. Otherwise if your element is a container like <code>&lt;div id=&quot;hello&quot;&gt;</code>, a new canvas will be created and appended into it. You may also pass an HTMLElement instance directly into <code>CanvasSpace</code>.</p>
-<p>The <a href="#canvas-canvasspace"><code>setup</code></a> function allows you to initiate the space with an object that specifies some setup options, like background-color and auto-resize.</p>
-<p>Next, you can get the default <a href="#canvas-canvasform"><code>CanvasForm</code></a> which, as we mentioned before, provides the &quot;pencils&quot;. CanvasForm helps you draw lines, circles, curves and more on the html canvas.</p>
+<p>The <a href="../docs/?p=Canvas_CanvasSpace#function_setup"><code>setup</code></a> function allows you to initiate the space with an object that specifies some setup options, like background-color and auto-resize.</p>
+<p>Next, you can get the default <a href="../docs/?p=Canvas_CanvasForm"><code>CanvasForm</code></a> which, as we mentioned before, provides the &quot;pencils&quot;. CanvasForm helps you draw lines, circles, curves and more on the html canvas.</p>
 <pre><code>var form = space.getForm();
 </code></pre>
 <p>Do you know you can create your own forms by extending <code>CanvasForm</code> or <code>Form</code> class? It's like making your own pencils. You can initiate your custom form like this:</p>
@@ -94,7 +94,7 @@ run( function(time, ftime) { ... } );
 });
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:getting_started_2"></p>
-<p>Success! The calculation <code>(time%1000)/1000</code> maps the running time to a value between 0 to 1 every second. Then we use the <a href="#num-num"><code>Num.cycle</code></a> function to make the value cycle between 0...1...0...1, and we multiply the value by 20 to get the radius. Finally, we draw the pointer with the radius as a blue circle. Pretty easy, right?</p>
+<p>Success! The calculation <code>(time%1000)/1000</code> maps the running time to a value between 0 to 1 every second. Then we use the <a href="../docs/?p=Num_Num#function_static_cycle"><code>Num.cycle</code></a> function to make the value cycle between 0...1...0...1, and we multiply the value by 20 to get the radius. Finally, we draw the pointer with the radius as a blue circle. Pretty easy, right?</p>
 <h3>Drawing shapes</h3>
 <p>There are 3 basic structures in <strong><code>Pts</code></strong></p>
 <ul>
@@ -113,9 +113,9 @@ form.strokeOnly(&quot;#fff&quot;, 3).rect( rect );
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:getting_started_3"></p>
 <p>What's happening in these 5 lines of code? Let's find out.</p>
-<p>The first line create a &quot;rectangle&quot; from a center point, and we specify that the center is space's center and the size is space's half-size. (<a href="#pt-pt"><code>$divide</code></a> is a <code>Pt</code> function that calculates division and returns a new Pt.) The variable <code>rect</code> stores a Group of 2 Pts — its top-left and bottom-right positions.</p>
+<p>The first line create a &quot;rectangle&quot; from a center point, and we specify that the center is space's center and the size is space's half-size. (<a href="../docs/?p=Pt_Pt#function_$divide"><code>$divide</code></a> is a <code>Pt</code> function that calculates division and returns a new Pt.) The variable <code>rect</code> stores a Group of 2 Pts — its top-left and bottom-right positions.</p>
 <p>The second line takes <code>rect</code> and get its corners. So the variable <code>poly</code> contains a Group of 4 Pts.</p>
-<p>The third line use the Group's <a href="#pt-group"><code>shear2D</code></a> function to shear the polygon at space's center. The amount of shearing cycles between -0.5 to 0.5 every 5 seconds.</p>
+<p>The third line use the Group's <a href="../docs/?p=Pt_Group#function_shear2D"><code>shear2D</code></a> function to shear the polygon at space's center. The amount of shearing cycles between -0.5 to 0.5 every 5 seconds.</p>
 <p>The 4th and 5th line just draw the rectangle and the sheared polygon.</p>
 <p>Even though it takes words to explain, the code is actually quite simple :)</p>
 <h3>Visibles from invisibles</h3>

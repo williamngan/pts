@@ -315,41 +315,6 @@ Pts.namespace(this);
     controllers[id] = { registered: registered };
   }
 
-  function cap(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
-  /** Rewrite in-page `#class-name` code links to point at the docs site. */
-  function updateCodeLinks() {
-    const codes = document.querySelectorAll("a > code");
-    for (let i = 0, len = codes.length; i < len; i++) {
-      const c = codes[i];
-      if (
-        c.parentNode.getAttribute("href").indexOf("#") === 0 &&
-        c.textContent
-      ) {
-        let link = c.parentNode
-          .getAttribute("href")
-          .replace(/#/g, "")
-          .split("-");
-        let linkAnchor = c.textContent.split(".");
-        const ftype =
-          linkAnchor.length > 1 && linkAnchor[0] === ""
-            ? "accessor"
-            : "function";
-        linkAnchor = linkAnchor[linkAnchor.length - 1].replace(
-          /[^a-zA-Z0-9._$]/g,
-          "_",
-        );
-        c.parentNode.setAttribute(
-          "href",
-          `../docs/?p=${cap(link[0])}_${cap(link[1] || link[0])}#${ftype}_${linkAnchor}`,
-        );
-        c.parentNode.setAttribute("target", "ptsdocs");
-      }
-    }
-  }
-
   const blocks = Array.from(document.querySelectorAll("img")).filter(
     function (img) {
       const alt = img.getAttribute("alt");
@@ -360,6 +325,4 @@ Pts.namespace(this);
   for (let i = 0, len = blocks.length; i < len; i++) {
     createDemo(blocks[i]);
   }
-
-  window.addEventListener("load", updateCodeLinks);
 })();

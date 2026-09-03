@@ -189,6 +189,59 @@ async function checkGuideResponsiveLayout() {
   return "three guides fit 320, 390, 768, 1024, and 1440px viewports";
 }
 
+async function checkGuideApiLinks() {
+  let count = 0;
+  for (const file of await readdir(join(ROOT, "guide"))) {
+    if (!file.endsWith(".html")) continue;
+    const html = await readFile(join(ROOT, "guide", file), "utf8");
+    for (const [, page, hash] of html.matchAll(
+      /href="\.\.\/docs\/\?p=([^"#]+)(?:#([^"]+))?"/gu,
+    )) {
+      const document = JSON.parse(
+        await readFile(join(ROOT, "docs/json/class", `${page}.json`), "utf8"),
+      );
+      if (hash) {
+        const anchors = [
+          "methods",
+          "accessors",
+          "properties",
+          "variables",
+        ].flatMap((key) =>
+          (document[key] ?? []).map((member) => {
+            const prefix =
+              key === "methods"
+                ? "function"
+                : key === "accessors"
+                  ? "accessor"
+                  : "property";
+            return `${prefix}_${prefix === "function" && member.flags?.isStatic ? "static_" : ""}${member.name}`;
+          }),
+        );
+        assert.ok(
+          anchors.includes(hash),
+          `${file} links to missing ${page}#${hash}`,
+        );
+      }
+      count += 1;
+    }
+  }
+  assert.ok(count > 100, "Guide API links were not generated into HTML");
+  const page = await browser.newPage();
+  try {
+    await page.goto(`${ORIGIN}/guide/Space-0500.html`);
+    await page
+      .locator('#post a[href="../docs/?p=Canvas_CanvasSpace"]')
+      .first()
+      .click();
+    await page
+      .getByRole("heading", { name: "CanvasSpace", exact: true })
+      .waitFor();
+  } finally {
+    await page.close();
+  }
+  return `${count} static API links resolve with exact class names and member anchors`;
+}
+
 async function checkPoseNetIsRetired() {
   const directory = join(ROOT, "demo/more/tfjs_posenet");
   const notice = await readFile(join(directory, "index.html"), "utf8");
@@ -1705,6 +1758,7 @@ const checks = [
   ["homepage hero preserves particle behavior", checkHomepageHero],
   ["guide renders with slow images", checkGuideUnderSlowImages],
   ["guide layout fits narrow viewports", checkGuideResponsiveLayout],
+  ["guide API links resolve", checkGuideApiLinks],
   ["guide loads demos lazily", checkGuideIsLazy],
   ["guide waits for off-screen demos", checkGuideDoesNotFailOffscreenDemos],
   ["editor is usable on narrow screens", checkEditorOnNarrowScreens],

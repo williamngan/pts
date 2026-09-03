@@ -38,7 +38,7 @@
 pt.$subtract( 10 ); // use $fn to get a new Pt
 </code></pre>
 <h3>Typescript notes</h3>
-<p>While <a href="#pt-pt"><code>Pt</code></a> extends <code>Float32Array</code> and <a href="#pt-group"><code>Group</code></a> extends Array, typescript compiler at the moment (2.4.2) isn't smart enough to auto-cast the return type when you use an Array or Float32Array function. That means if you use typescript, you may need to recast some native Array functions such as <code>map</code> or <code>slice</code>.</p>
+<p>While <a href="../docs/?p=Pt_Pt"><code>Pt</code></a> extends <code>Float32Array</code> and <a href="../docs/?p=Pt_Group"><code>Group</code></a> extends Array, typescript compiler at the moment (2.4.2) isn't smart enough to auto-cast the return type when you use an Array or Float32Array function. That means if you use typescript, you may need to recast some native Array functions such as <code>map</code> or <code>slice</code>.</p>
 <pre><code>let p:Pt = new Pt(1,2,3);
 let p2 = p.map( (d) =&gt; d+1 ); // typescript thinks p2 is Float32Array
 let p3 = p.map( (d) =&gt; d+1 ) as Pt; // type is now cast back to Pt

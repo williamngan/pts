@@ -21,6 +21,54 @@ const markdown = new MarkdownIt({
   typographer: false,
 });
 
+// Resolve API links before publishing HTML. Class casing and static-member
+// qualifiers come from TypeDoc rather than a browser-side naming heuristic.
+markdown.renderer.rules.link_open = (tokens, index, options, env, self) => {
+  const token = tokens[index];
+  const href = token.attrGet("href");
+  if (href === "#play-quickstart") {
+    token.attrSet("href", "../demo/?name=pts.quickStart");
+  } else if (href?.startsWith("#")) {
+    const api = env.apiLinks?.get(href.slice(1));
+    assert.ok(api, `Unknown guide API link ${href}`);
+    const label = tokens[index + 1]?.content ?? "";
+    const name = label.split(".").at(-1);
+    let hash = "";
+    if (name !== api.document.name) {
+      for (const [key, prefix] of [
+        ["methods", "function"],
+        ["accessors", "accessor"],
+        ["properties", "property"],
+        ["variables", "property"],
+      ]) {
+        const member = api.document[key]?.find(
+          (member) => member.name === name,
+        );
+        if (member) {
+          hash = `#${prefix}_${prefix === "function" && member.flags?.isStatic ? "static_" : ""}${member.name}`;
+          break;
+        }
+      }
+    }
+    token.attrSet("href", `../docs/?p=${api.page}${hash}`);
+  }
+  return self.renderToken(tokens, index, options);
+};
+
+async function apiLinkIndex() {
+  const directory = path.join(projectRoot, "docs", "json", "class");
+  const links = new Map();
+  for (const file of await readdir(directory)) {
+    if (!file.endsWith(".json")) continue;
+    const document = JSON.parse(
+      await readFile(path.join(directory, file), "utf8"),
+    );
+    const page = file.slice(0, -5);
+    links.set(page.replace("_", "-").toLowerCase(), { page, document });
+  }
+  return links;
+}
+
 function escapeHtml(value) {
   return value
     .replaceAll("&", "&amp;")
@@ -166,6 +214,7 @@ function renderIndex(firstGuide) {
 }
 
 async function expectedOutputs() {
+  const apiLinks = await apiLinkIndex();
   const [guides, template, header, footer] = await Promise.all([
     readGuideSources(),
     readFile(path.join(assetsDirectory, "template.html"), "utf8"),
@@ -188,7 +237,7 @@ async function expectedOutputs() {
     const page = replaceToken(
       replaceToken(shared, "{{TITLE}}", escapeHtml(guide.title)),
       "{{CONTENT}}",
-      markdown.render(guide.source),
+      markdown.render(guide.source, { apiLinks }),
     );
     outputs.set(guide.output, page);
   }

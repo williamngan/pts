@@ -25,7 +25,7 @@
 </div>
     <a href="#menu" id="toc">&#x2261;</a>
     <div id="post"><h1>Image</h1>
-<p>The standard API for working with images on canvas is rather laborious, and often takes the fun out of creative coding. In Pts, the <a href="#image-img"><code>Img</code></a> class simplifies the common use cases, from loading and displaying static images to generating dynamic textures, so that you can get started quickly. Let's take a look.</p>
+<p>The standard API for working with images on canvas is rather laborious, and often takes the fun out of creative coding. In Pts, the <a href="../docs/?p=Image_Img"><code>Img</code></a> class simplifies the common use cases, from loading and displaying static images to generating dynamic textures, so that you can get started quickly. Let's take a look.</p>
 <h3>Loading and Displaying Images</h3>
 <p>We will start a minimalistic example: Load an image and display it on canvas. This can be done in 2 lines of code:</p>
 <pre><code>const img = await Img.load( &quot;/assets/demo.jpg&quot; );
@@ -33,8 +33,8 @@ space.add( time =&gt; form.image( space.pointer, img ) );
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:image_load"></p>
 <h5>Image credit: &quot;C 50 Last Birds And Flowers&quot; by Kurt Schwitters</h5>
-<p>The above example uses the <em>static</em> function <a href="#image-img"><code>Img.load</code></a>, which returns a Promise that resolves to the loaded image, and then uses CanvasForm's <a href="#canvas-canvasform"><code>image</code></a> function to display it. A load failure rejects the Promise.</p>
-<p>You can also create an Img instance yourself and call the <em>instance</em> function <a href="#image-img"><code>load</code></a>, which is handy when you want to configure the instance first. An example:</p>
+<p>The above example uses the <em>static</em> function <a href="../docs/?p=Image_Img#function_load"><code>Img.load</code></a>, which returns a Promise that resolves to the loaded image, and then uses CanvasForm's <a href="../docs/?p=Canvas_CanvasForm#function_image"><code>image</code></a> function to display it. A load failure rejects the Promise.</p>
+<p>You can also create an Img instance yourself and call the <em>instance</em> function <a href="../docs/?p=Image_Img#function_load"><code>load</code></a>, which is handy when you want to configure the instance first. An example:</p>
 <pre><code>(async function() {
   let img = await new Img().load( &quot;/assets/img_demo.jpg&quot; );
   space.add( time =&gt; form.image( space.pointer, img ) );
@@ -54,19 +54,19 @@ let img2 = await Img.load( &quot;/assets/demo.jpg&quot;, { editable: true, pixel
 </code></pre>
 <p>You can do a lot with an editable image. Let's cover a couple common use cases.</p>
 <h3>Get Pixels and Crop Regions</h3>
-<p>The <a href="#image-img"><code>pixel</code></a> function supports a very common use case: specify a pixel position on the image, get its RGBA color values, and do something with it. A wide range of visual possibilities may open up if you use this simple function creatively.</p>
+<p>The <a href="../docs/?p=Image_Img#function_pixel"><code>pixel</code></a> function supports a very common use case: specify a pixel position on the image, get its RGBA color values, and do something with it. A wide range of visual possibilities may open up if you use this simple function creatively.</p>
 <p><img src="./assets/bg.png" alt="js:image_pixel"></p>
 <h5>Try scribbling in different regions of the image to change it. This demo combines <code>Create.delaunay</code> with <code>Img.pixel</code>.</h5>
-<p>Another common use case is to crop a region of the image. The <a href="#image-img"><code>crop</code></a> function takes a bounding box and returns an <a href="https://developer.mozilla.org/en-US/docs/Web/API/ImageData"><code>ImageData</code></a>. You can then use CanvasForm's<a href="#canvas-canvasform"><code>imageData</code></a> to draw the region.</p>
+<p>Another common use case is to crop a region of the image. The <a href="../docs/?p=Image_Img#function_crop"><code>crop</code></a> function takes a bounding box and returns an <a href="https://developer.mozilla.org/en-US/docs/Web/API/ImageData"><code>ImageData</code></a>. You can then use CanvasForm's<a href="../docs/?p=Canvas_CanvasForm#function_imageData"><code>imageData</code></a> to draw the region.</p>
 <pre><code>form.imageData( img.crop( bound ) );
 </code></pre>
 <p>Let's try this in a demo:</p>
 <p><img src="./assets/bg.png" alt="js:image_crop"></p>
 <h5>Click to cut out a region in the image. Move pointer to shift its position.</h5>
-<p>It's more efficient to draw <code>ImageData</code> directly on canvas. If needed, you can also export it to a blob using <a href="#image-img"><code>Img.imageDataToBlob</code></a> and then load it into an image again.</p>
+<p>It's more efficient to draw <code>ImageData</code> directly on canvas. If needed, you can also export it to a blob using <a href="../docs/?p=Image_Img#function_static_imageDataToBlob"><code>Img.imageDataToBlob</code></a> and then load it into an image again.</p>
 <h3>Edit and Sync</h3>
-<p>Since an editable <a href="#image-img"><code>Img</code></a> stores an internal canvas, you can leverage <a href="#canvas-canvasform"><code>CanvasForm</code></a>'s many drawing functions to draw directly on it. It's that easy!</p>
-<p>After the image is loaded, you can access the canvas' rendering context through the property <code>img.ctx</code> and then create a new <a href="#canvas-canvasform"><code>CanvasForm</code></a> instance with it. For example:</p>
+<p>Since an editable <a href="../docs/?p=Image_Img"><code>Img</code></a> stores an internal canvas, you can leverage <a href="../docs/?p=Canvas_CanvasForm"><code>CanvasForm</code></a>'s many drawing functions to draw directly on it. It's that easy!</p>
+<p>After the image is loaded, you can access the canvas' rendering context through the property <code>img.ctx</code> and then create a new <a href="../docs/?p=Canvas_CanvasForm"><code>CanvasForm</code></a> instance with it. For example:</p>
 <pre><code>const img = await Img.load( &quot;demo.jpg&quot;, true );
 const imgForm = new CanvasForm( img.ctx );
 ...
@@ -82,8 +82,8 @@ imgForm.fill(&quot;#f00&quot;).rect( rect );
 <pre><code>// draw internal image canvas
 form.image( img.canvas );
 </code></pre>
-<p>As we are only editing an internal canvas, the original image is unchanged until it's explicitly updated. Use <a href="#image-img"><code>sync</code></a>, which returns a Promise, to update the original image when needed: <code>await img.sync()</code>.</p>
-<p>You can also work at the pixel level: <a href="#image-img"><code>setPixel</code></a> writes a color into the cached pixel data, <a href="#image-img"><code>updatePixels</code></a> applies those changes onto the canvas, and <a href="#image-img"><code>loadPixels</code></a> refreshes the cache after you've drawn on the canvas directly. When you're done with an Img, call <a href="#image-img"><code>dispose</code></a> to release its resources.</p>
+<p>As we are only editing an internal canvas, the original image is unchanged until it's explicitly updated. Use <a href="../docs/?p=Image_Img#function_sync"><code>sync</code></a>, which returns a Promise, to update the original image when needed: <code>await img.sync()</code>.</p>
+<p>You can also work at the pixel level: <a href="../docs/?p=Image_Img#function_setPixel"><code>setPixel</code></a> writes a color into the cached pixel data, <a href="../docs/?p=Image_Img#function_updatePixels"><code>updatePixels</code></a> applies those changes onto the canvas, and <a href="../docs/?p=Image_Img#function_loadPixels"><code>loadPixels</code></a> refreshes the cache after you've drawn on the canvas directly. When you're done with an Img, call <a href="../docs/?p=Image_Img#function_dispose"><code>dispose</code></a> to release its resources.</p>
 <h3>Patterns</h3>
 <p>In a similar way, you can treat an image (or an image canvas) as a pattern to fill an area. One difference is that we'll get a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern">CanvasPattern</a> instance for use in <code>form.fill(...)</code>, instead of an image for <code>form.image(...)</code>.</p>
 <pre><code>const pattern = await Img.loadPattern( &quot;tile.jpg&quot;, space );
@@ -106,10 +106,10 @@ pattern.setTransform( m );
 <p>Anticipate screens with different pixel density. You can pass a CanvasSpace's <a href="https://ptsjs.org/docs/?p=Canvas_CanvasSpace#accessor_pixelScale"><code>pixelScale</code></a> when creating an Img instance. (See example in Cheatsheet below)</p>
 </li>
 <li>
-<p>You can <a href="#image-img"><code>load</code></a> an image from a base64 string or an url, or from a blob via the <a href="#image-img"><code>fromBlob</code></a> function. To export the current image, use <a href="#image-img"><code>toBase64</code></a> or <a href="#image-img"><code>toBlob</code></a> functions.</p>
+<p>You can <a href="../docs/?p=Image_Img#function_load"><code>load</code></a> an image from a base64 string or an url, or from a blob via the <a href="../docs/?p=Image_Img#function_static_fromBlob"><code>fromBlob</code></a> function. To export the current image, use <a href="../docs/?p=Image_Img#function_toBase64"><code>toBase64</code></a> or <a href="../docs/?p=Image_Img#function_toBlob"><code>toBlob</code></a> functions.</p>
 </li>
 <li>
-<p>CanvasForm's <a href="#canvas-canvasform"><code>image</code></a> drawing function can take either an Img instance or a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource">CanvasImageSource</a> which includes various kinds of image objects like HTML Image or Canvas.</p>
+<p>CanvasForm's <a href="../docs/?p=Canvas_CanvasForm#function_image"><code>image</code></a> drawing function can take either an Img instance or a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource">CanvasImageSource</a> which includes various kinds of image objects like HTML Image or Canvas.</p>
 </li>
 <li>
 <p>Typically, you can't load an image from another domain due to security concerns. But if the image server allows for it and you want to do it, you can set the <code>crossOrigin</code> parameter to <code>true</code> when creating an <code>Img</code> instance. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image">More details here</a>.</p>

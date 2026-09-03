@@ -25,9 +25,9 @@
 </div>
     <a href="#menu" id="toc">&#x2261;</a>
     <div id="post"><h1>Pt</h1>
-<p>A <a href="#pt-pt"><code>Pt</code></a> represents a point in space, or more technically, an <em>n</em>-dimensional vector. You may also think of a <code>Pt</code> as an array of numeric values, a set of weights, or an arrow coming from the origin point (0,0,0...).</p>
+<p>A <a href="../docs/?p=Pt_Pt"><code>Pt</code></a> represents a point in space, or more technically, an <em>n</em>-dimensional vector. You may also think of a <code>Pt</code> as an array of numeric values, a set of weights, or an arrow coming from the origin point (0,0,0...).</p>
 <h3>Creating a Pt</h3>
-<p>You can create a <a href="#pt-pt"><code>Pt</code></a> in many different ways:</p>
+<p>You can create a <a href="../docs/?p=Pt_Pt"><code>Pt</code></a> in many different ways:</p>
 <pre><code>// defaults to (0,0)
 new Pt()
 
@@ -43,14 +43,14 @@ Pt.make( 5, 0 ) // same as new Pt(0,0,0,0,0)
 <p><img src="./assets/bg.png" alt="js:pt_create"></p>
 <h5>Here the blue dot is the last position of your mouse/touch as a Pt. The black lines are the distances from the origin (top-left corner), which is equivalent to the Pt's position. The blue line represents another way to think of this Pt -- as a vector, as an arrow from the origin of this space.</h5>
 <h3>Float32Array</h3>
-<p>Since <a href="#pt-pt"><code>Pt</code></a> is a subclass of javascript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array"><code>Float32Array</code></a>, it means you may use all the <code>Float32Array</code> features on a <code>Pt</code> too. For example:</p>
+<p>Since <a href="../docs/?p=Pt_Pt"><code>Pt</code></a> is a subclass of javascript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array"><code>Float32Array</code></a>, it means you may use all the <code>Float32Array</code> features on a <code>Pt</code> too. For example:</p>
 <pre><code>p[0]
 p.fill( 0, 1, 2 )
 p.reduce( (a,b) =&gt; Math.max(a,b), 0 );
 </code></pre>
-<p>Note that Float32Array doesn't allow some common Array functions like <code>push()</code> and <code>pop()</code> . If you need to grow or shrink the Pt's dimensions, either create a new one or use <a href="#pt-pt"><code>$concat</code></a> and <a href="#pt-pt"><code>$take</code></a>.</p>
+<p>Note that Float32Array doesn't allow some common Array functions like <code>push()</code> and <code>pop()</code> . If you need to grow or shrink the Pt's dimensions, either create a new one or use <a href="../docs/?p=Pt_Pt#function_$concat"><code>$concat</code></a> and <a href="../docs/?p=Pt_Pt#function_$take"><code>$take</code></a>.</p>
 <h3>Updating values</h3>
-<p>You can update a Pt's values by using <a href="#pt-pt"><code>to</code></a> function, or accessing the <a href="#pt-pt"><code>.x</code></a>, <a href="#pt-pt"><code>.y</code></a>, <a href="#pt-pt"><code>.z</code></a>, <a href="#pt-pt"><code>.w</code></a> properties.</p>
+<p>You can update a Pt's values by using <a href="../docs/?p=Pt_Pt#function_to"><code>to</code></a> function, or accessing the <a href="../docs/?p=Pt_Pt#accessor_x"><code>.x</code></a>, <a href="../docs/?p=Pt_Pt#accessor_y"><code>.y</code></a>, <a href="../docs/?p=Pt_Pt#accessor_z"><code>.z</code></a>, <a href="../docs/?p=Pt_Pt#accessor_w"><code>.w</code></a> properties.</p>
 <pre><code>p.to( 1, 2, 3 )
 p.to( anotherPt )
 p.w = p.x + p.z
@@ -63,20 +63,20 @@ pt.divide( 2 ) // divide each value by 2
 pt.multiply( {x: 2, y: 1} )
 pt.subtract( anotherPt ).multiply( 5 ).add( [1,2,3] )
 </code></pre>
-<p>The above functions like <a href="#pt-pt"><code>add</code></a> will update the values of <code>pt</code> instance. If you want to get the results as a new Pt, use <a href="#pt-pt"><code>$add</code></a> instead. If a function's name starts with <code>$</code>, it indicates that its return value will be a new Pt.</p>
+<p>The above functions like <a href="../docs/?p=Pt_Pt#function_add"><code>add</code></a> will update the values of <code>pt</code> instance. If you want to get the results as a new Pt, use <a href="../docs/?p=Pt_Pt#function_$add"><code>$add</code></a> instead. If a function's name starts with <code>$</code>, it indicates that its return value will be a new Pt.</p>
 <pre><code>let p1 = pt.$add( 1,2,3 );
 let p2 = pt.$multiply( 5 ).add( 1,2,3 )
 
 </code></pre>
-<p>There are other basic vector operations like <a href="#pt-pt"><code>unit</code></a> (get a normalized vector), <a href="#pt-pt"><code>magnitude</code></a> (get its distance from origin), <a href="#pt-pt"><code>dot</code></a> (find dot product), <a href="#pt-pt"><code>$project</code></a> (find its projection vector). Check the docs on <a href="#pt-pt"><code>Pt</code></a> for a full list.</p>
+<p>There are other basic vector operations like <a href="../docs/?p=Pt_Pt#function_unit"><code>unit</code></a> (get a normalized vector), <a href="../docs/?p=Pt_Pt#function_magnitude"><code>magnitude</code></a> (get its distance from origin), <a href="../docs/?p=Pt_Pt#function_dot"><code>dot</code></a> (find dot product), <a href="../docs/?p=Pt_Pt#function_$project"><code>$project</code></a> (find its projection vector). Check the docs on <a href="../docs/?p=Pt_Pt"><code>Pt</code></a> for a full list.</p>
 <h3>Angles</h3>
-<p>Since a Pt can be thought of as an arrow from origin, you can find its angle with <a href="#pt-pt"><code>angle</code></a> function. You can also find the angle between two Pts with <a href="#pt-pt"><code>angleBetween</code></a> function. A related function <a href="#pt-pt"><code>toAngle</code></a> lets you move a Pt by specifying a target angle.</p>
+<p>Since a Pt can be thought of as an arrow from origin, you can find its angle with <a href="../docs/?p=Pt_Pt#function_angle"><code>angle</code></a> function. You can also find the angle between two Pts with <a href="../docs/?p=Pt_Pt#function_angleBetween"><code>angleBetween</code></a> function. A related function <a href="../docs/?p=Pt_Pt#function_toAngle"><code>toAngle</code></a> lets you move a Pt by specifying a target angle.</p>
 <pre><code>pt.angle()
 pt.angle(Const.yz) // get the angle of axis y-z
 pt.angleBetween( anotherPt )
 pt.toAngle( Math.PI/2 )
 </code></pre>
-<h5>* Note that all angles are specified in radian, where 180 degrees = <em>π</em> radian. (Imagine half-circle is like 180 degrees.) You can use <a href="#num-geom"><code>Geom.toRadian</code></a> and <a href="#num-geom"><code>Geom.toDegree</code></a> functions to convert between degrees and radian.</h5>
+<h5>* Note that all angles are specified in radian, where 180 degrees = <em>π</em> radian. (Imagine half-circle is like 180 degrees.) You can use <a href="../docs/?p=Num_Geom#function_static_toRadian"><code>Geom.toRadian</code></a> and <a href="../docs/?p=Num_Geom#function_static_toDegree"><code>Geom.toDegree</code></a> functions to convert between degrees and radian.</h5>
 <p><img src="./assets/bg.png" alt="js:pt_angle"></p>
 <h5>The above demo uses some basic vector operations and angle functions.</h5>
 <h3>Transformations</h3>
@@ -90,11 +90,11 @@ pt.reflect2D( [p1, p2] )
 <pre><code>pt.scale( 0.5, anchorPt )
 pt.rotate( Math.PI/3, anchorPt )
 </code></pre>
-<p>Take a look at the <a href="#num-geom"><code>Geom</code></a> class which also provides many functions to help with geometry and transformations.</p>
+<p>Take a look at the <a href="../docs/?p=Num_Geom"><code>Geom</code></a> class which also provides many functions to help with geometry and transformations.</p>
 <p><img src="./assets/bg.png" alt="js:pt_reflect"></p>
 <h5>A demo of scale and reflect transformation. The blue line's length changes the scale, while its angle specifies the reflection. Take a look at the source code to see how easy this it :)</h5>
 <h3>Roll your own</h3>
-<p>You may use all of Float32Array's functions (eg, <code>slice</code>, <code>map</code>) with Pt. Some additional ones in Pt like <a href="#pt-pt"><code>$concat</code></a>, <a href="#pt-pt"><code>$take</code></a> make it simpler to work with TypedArray. Take a look at &quot;Op&quot; section to see how you can write your own functions to work with Pt easily.</p>
+<p>You may use all of Float32Array's functions (eg, <code>slice</code>, <code>map</code>) with Pt. Some additional ones in Pt like <a href="../docs/?p=Pt_Pt#function_$concat"><code>$concat</code></a>, <a href="../docs/?p=Pt_Pt#function_$take"><code>$take</code></a> make it simpler to work with TypedArray. Take a look at &quot;Op&quot; section to see how you can write your own functions to work with Pt easily.</p>
 <pre><code>// Use $concat and $take to grow and shrink a TypedArray
 let p1 = new Pt(1, 2, 3).$concat( 4, 5 ); // becomes Pt(1,2,3,4,5)
 

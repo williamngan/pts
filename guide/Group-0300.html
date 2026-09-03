@@ -25,7 +25,7 @@
 </div>
     <a href="#menu" id="toc">&#x2261;</a>
     <div id="post"><h1>Group</h1>
-<p>A <a href="#pt-group"><code>Group</code></a> represents an array of <a href="#pt-pt"><code>Pt</code></a>. It is an abstraction that can fit many contexts. For example, you may use it to define a matrix, store a polygon, or interpolate a curve where each Pt is an anchor point.</p>
+<p>A <a href="../docs/?p=Pt_Group"><code>Group</code></a> represents an array of <a href="../docs/?p=Pt_Pt"><code>Pt</code></a>. It is an abstraction that can fit many contexts. For example, you may use it to define a matrix, store a polygon, or interpolate a curve where each Pt is an anchor point.</p>
 <p>In fact, a wide range of complex forms and ideas can be represented as one of these simple structures:</p>
 <ul>
 <li>a Pt which is an array of numbers</li>
@@ -34,7 +34,7 @@
 </ul>
 <p>The goal of <code>pts.js</code> is to help you see and express these structures in creative ways.</p>
 <h3>Creating a Group</h3>
-<p><a href="#pt-group"><code>Group</code></a> is a subclass of javascript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>Array</code></a>. Therefore, similar to creating an Array, you can create a Group like these:</p>
+<p><a href="../docs/?p=Pt_Group"><code>Group</code></a> is a subclass of javascript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>Array</code></a>. Therefore, similar to creating an Array, you can create a Group like these:</p>
 <pre><code>// Like Array constructor
 let g1 = new Group( p1, p2, p3 );
 
@@ -59,18 +59,18 @@ g.pop();
 let mags = g.map( (p) =&gt; p.magnitude() );
 </code></pre>
 <h5>Note on typescript: you may need to cast Array function result back to <code>Group</code> because the typescript compiler cannot figure it out yet (as of v2.4). For example: <code>let gg = group.map( (p) =&gt; p.unit() ) as Group</code>;</h5>
-<p>It's common to apply a Pt function to all the Pts in a Group. You can use <a href="#pt-group"><code>forEachPt</code></a> to do this easily, as long as the Pt function will return a Pt.</p>
+<p>It's common to apply a Pt function to all the Pts in a Group. You can use <a href="../docs/?p=Pt_Group#function_forEachPt"><code>forEachPt</code></a> to do this easily, as long as the Pt function will return a Pt.</p>
 <pre><code>let g = new Group( new Pt(1.1, 2.2), new Pt(3.3, 4.4) );
 g.forEachPt( &quot;floor&quot; ); // g is now [ Pt(1,2), Pt(3,4) ]
 g.forEachPt( &quot;$min&quot;, 2, 2 ); // g is now [ Pt(1, 2), Pt(2, 2) ]
 g.forEachPt( &quot;dot&quot;, new Pt(1,2) ); // Error, dot() doesn't return Pt
 </code></pre>
-<p>There are also a couple additional functions in Group that let you work with array more effectively. Take a look at <a href="#pt-group"><code>insert</code></a>, <a href="#pt-group"><code>remove</code></a>, <a href="#pt-group"><code>segments</code></a> and others.</p>
+<p>There are also a couple additional functions in Group that let you work with array more effectively. Take a look at <a href="../docs/?p=Pt_Group#function_insert"><code>insert</code></a>, <a href="../docs/?p=Pt_Group#function_remove"><code>remove</code></a>, <a href="../docs/?p=Pt_Group#function_segments"><code>segments</code></a> and others.</p>
 <p><img src="./assets/bg.png" alt="js:group_segments"></p>
 <h5>In this demo, we keep track of the last 50 positions of the pointer in a Group, and draw one circle for every 5 segments. Take a look at the source code and note the use of common Array functions like <code>push</code> and <code>map</code> along with Group functions like <code>segments</code>.</h5>
 <h3>Transformations</h3>
-<p>Similar to transformations in Pt, you can use <a href="#pt-group"><code>scale</code></a>, <a href="#pt-group"><code>rotate2D</code></a> etc to transform a Group ot Pts. There are also <a href="#pt-group"><code>moveBy</code></a> and <a href="#pt-group"><code>moveTo</code></a> to translate its positions. Basic arithmetics like <a href="#pt-group"><code>add</code></a> and <a href="#pt-group"><code>multiply</code></a> are also included.</p>
-<p>Furthermore, you may use <a href="#pt-group"><code>$matrixAdd</code></a> and <a href="#pt-group"><code>$matrixMultiply</code></a> to do advanced matrix calculations.</p>
+<p>Similar to transformations in Pt, you can use <a href="../docs/?p=Pt_Group#function_scale"><code>scale</code></a>, <a href="../docs/?p=Pt_Group#function_rotate2D"><code>rotate2D</code></a> etc to transform a Group ot Pts. There are also <a href="../docs/?p=Pt_Group#function_moveBy"><code>moveBy</code></a> and <a href="../docs/?p=Pt_Group#function_moveTo"><code>moveTo</code></a> to translate its positions. Basic arithmetics like <a href="../docs/?p=Pt_Group#function_add"><code>add</code></a> and <a href="../docs/?p=Pt_Group#function_multiply"><code>multiply</code></a> are also included.</p>
+<p>Furthermore, you may use <a href="../docs/?p=Pt_Group#function_$matrixAdd"><code>$matrixAdd</code></a> and <a href="../docs/?p=Pt_Group#function_$matrixMultiply"><code>$matrixMultiply</code></a> to do advanced matrix calculations.</p>
 <h3>Cheat sheet</h3>
 <p>Creating and cloning</p>
 <pre><code>new Group( new Pt(1,2), new Pt(3,4) )

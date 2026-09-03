@@ -56,14 +56,14 @@ form.strokeOnly(&quot;#f03&quot;, 2).line( [pts[0], space.pointer] );
 <p>The group of points becomes active. It's somewhat interesting and kind of a mess -- a starting point for further experimentation.</p>
 <p><strong><code>Pts</code></strong> includes many different Ops to help you make the points meaningful. Next we will look at them in more details.</p>
 <h3>Static Op</h3>
-<p>The Op module includes various static functions that deal with specific forms such as <a href="#op-rectangle"><code>Rectangle</code></a> and <a href="#op-curve"><code>Curve</code></a>, and Num module includes utility classes like <a href="#num-num"><code>Num</code></a> and <a href="#num-geom"><code>Geom</code></a> for numeric and geometric calculations. Most of them are straightforward and easy to use.</p>
-<p>It's time to let our imaginary forces work on these functions. Keeping most of the code from above, let's try the <a href="#op-line"><code>perpendicularFromPt</code></a> function. Given a line and a point, this Op finds a perpendicular line (ie, shortest distance) between the point and the line.</p>
+<p>The Op module includes various static functions that deal with specific forms such as <a href="../docs/?p=Op_Rectangle"><code>Rectangle</code></a> and <a href="../docs/?p=Op_Curve"><code>Curve</code></a>, and Num module includes utility classes like <a href="../docs/?p=Num_Num"><code>Num</code></a> and <a href="../docs/?p=Num_Geom"><code>Geom</code></a> for numeric and geometric calculations. Most of them are straightforward and easy to use.</p>
+<p>It's time to let our imaginary forces work on these functions. Keeping most of the code from above, let's try the <a href="../docs/?p=Op_Line#function_static_perpendicularFromPt"><code>perpendicularFromPt</code></a> function. Given a line and a point, this Op finds a perpendicular line (ie, shortest distance) between the point and the line.</p>
 <pre><code>let path = [new Pt(), space.pointer];
 let perpends = pts.map( (p) =&gt; [p, Line.perpendicularFromPt(path, p)] );
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:op_perpendicular"></p>
 <h5>Demo: Find a perpendicular line from a point onto an infinite path.</h5>
-<p>First we create a line by joining the pointer and the top-left corner at (0,0), and then we convert the set of random points on canvas to perpendicular lines. Also note that, since we don't need additional features from <a href="#pt-group"><code>Group</code></a>, we can just use Array to store the Pts for drawing. Pretty fun and simple, right?</p>
+<p>First we create a line by joining the pointer and the top-left corner at (0,0), and then we convert the set of random points on canvas to perpendicular lines. Also note that, since we don't need additional features from <a href="../docs/?p=Pt_Group"><code>Group</code></a>, we can just use Array to store the Pts for drawing. Pretty fun and simple, right?</p>
 <p>Ops can also construct shapes out of points. Creating a rectangle or a line from 2 points is obvious, so let's get a bit more elaborate.</p>
 <pre><code>// create a group of 4 Pts from rectangle
 let c = space.center;
@@ -83,10 +83,10 @@ form.fill(&quot;#f03&quot;).stroke(&quot;#fff&quot;, 3).polygon( curve );
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:op_bspline"></p>
 <h5>Demo: Drawing a B-spline using 5 anchor points.</h5>
-<p>What's going on here? First, we use <a href="#op-rectangle"><code>Rectangle.fromCenter</code></a> to make a rectangle and then get its 4 corners as a group.</p>
-<p>Then, we define a function called <code>cycle</code> to get a value between 0 to 1 for interpolation. The function takes two parameters <code>t</code> (for time) and <code>i</code> (for index). And we map the 4 corners into 4 interpolated points, making use of <a href="#num-geom"><code>Geom.interpolate</code></a> op.</p>
-<p>Next, we add the first 3 points again to the end of the <code>pts</code> group, which is a quick way to close a b-spline curve. Finally, we get the curve from <a href="#op-curve"><code>Curve.bspline</code></a> and just draw it.</p>
-<p>Knowing how bspline works, we can easily apply it to our 100 random points. The following sketch also uses <a href="#op-polygon"><code>Polygon.convexHull</code></a>: think of it like a rubber band that wraps around a group of points.</p>
+<p>What's going on here? First, we use <a href="../docs/?p=Op_Rectangle#function_static_fromCenter"><code>Rectangle.fromCenter</code></a> to make a rectangle and then get its 4 corners as a group.</p>
+<p>Then, we define a function called <code>cycle</code> to get a value between 0 to 1 for interpolation. The function takes two parameters <code>t</code> (for time) and <code>i</code> (for index). And we map the 4 corners into 4 interpolated points, making use of <a href="../docs/?p=Num_Geom#function_static_interpolate"><code>Geom.interpolate</code></a> op.</p>
+<p>Next, we add the first 3 points again to the end of the <code>pts</code> group, which is a quick way to close a b-spline curve. Finally, we get the curve from <a href="../docs/?p=Op_Curve#function_static_bspline"><code>Curve.bspline</code></a> and just draw it.</p>
+<p>Knowing how bspline works, we can easily apply it to our 100 random points. The following sketch also uses <a href="../docs/?p=Op_Polygon#function_static_convexHull"><code>Polygon.convexHull</code></a>: think of it like a rubber band that wraps around a group of points.</p>
 <p><img src="./assets/bg.png" alt="js:op_bspline_2"></p>
 <h5>Demo: Find 10 points closest to pointer and use them as anchor points to draw a B-spline.</h5>
 <p>That was quick! By combining different ops together, you can quickly try out and compare different options in forms and interactions.</p>
@@ -101,7 +101,7 @@ pts.convexHull()
 // fun
 makeRubberBand()
 </code></pre>
-<p>The <a href="#pt-pt"><code>op</code></a> function in both Pt and Group enables you to turn your dull code into an expressive one. Let's see how it works:</p>
+<p>The <a href="../docs/?p=Pt_Pt#function_op"><code>op</code></a> function in both Pt and Group enables you to turn your dull code into an expressive one. Let's see how it works:</p>
 <pre><code>let makeRubberBand = pts.op( Polygon.convexHull );
 makeRubberBand();
 </code></pre>
@@ -114,52 +114,52 @@ let hitPts = pairs.map( (pa) =&gt; hit( pa ) );
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:op_intersect"></p>
 <h5>Demo: Creating line segments from a sorted array of points, and then check their intersections with another line drawn by pointer.</h5>
-<p>First, we take every 2 points in <code>pts</code> to make 50 lines. Next, we make a line from space's center to pointer, and immediately turn it into an op of <a href="#op-line"><code>Line.intersectLine2D</code></a>. Lastly we just apply the <code>hit</code> function to each pair and get its intersection point.</p>
+<p>First, we take every 2 points in <code>pts</code> to make 50 lines. Next, we make a line from space's center to pointer, and immediately turn it into an op of <a href="../docs/?p=Op_Line#function_static_intersectLine2D"><code>Line.intersectLine2D</code></a>. Lastly we just apply the <code>hit</code> function to each pair and get its intersection point.</p>
 <p>This approach works best if the op will be re-used in different scenarios, or if it can make the code easier to read. Of course, you can always use the static intersectLine2D function inside the <code>map(...)</code>, or even create a custom function and call it <code>hit</code>. Just like there're many ways to tell a story, there're many ways to write code.</p>
 <h3>Cheat sheet</h3>
-<p><a href="#num-num"><code>Num</code></a> from &quot;Num&quot; module includes helper functions to simplify numeric calculations.</p>
+<p><a href="../docs/?p=Num_Num"><code>Num</code></a> from &quot;Num&quot; module includes helper functions to simplify numeric calculations.</p>
 <pre><code>Num.cycle( 0.3 ); // cycle between 0...1...0
 Num.mapToRange( 5, 1,100, 0, 2 ); // map a value to new range
 Num.lerp( 1, 100, 0.2 ); // linear interpolation
 </code></pre>
-<p><a href="#num-geom"><code>Geom</code></a> from &quot;Num&quot; module includes helper functions to simplify geometric calculations.</p>
+<p><a href="../docs/?p=Num_Geom"><code>Geom</code></a> from &quot;Num&quot; module includes helper functions to simplify geometric calculations.</p>
 <pre><code>Geom.boundAngle( 361 ); // bound between 0 to 360
 Geom.withinBound( p1, top_left, bottom_right );
 Geom.interpolate( p1, p2, 0.3 );
 </code></pre>
-<p><a href="#op-line"><code>Line</code></a> from &quot;Op&quot; module helps you create and work with lines.</p>
+<p><a href="../docs/?p=Op_Line"><code>Line</code></a> from &quot;Op&quot; module helps you create and work with lines.</p>
 <pre><code>Line.fromAngle( p1, Math.PI/3, 10 ); // create with angle and distance
 Line.collinear( p1, p2, p3 );
 Line.intersectRay2D( ln1, ln2 );
 Line.subpoints( 5 ); // get 5 evenly distributed pts on the line
 </code></pre>
-<p><a href="#op-rectangle"><code>Rectangle</code></a> from &quot;Op&quot; module helps you create and work with rectangles.</p>
+<p><a href="../docs/?p=Op_Rectangle"><code>Rectangle</code></a> from &quot;Op&quot; module helps you create and work with rectangles.</p>
 <pre><code>Rectangle.fromCenter( center, 100, 50 );
 Rectangle.corners();
 Rectangle.sides();
 Rectangle.quadrants(); // get 4 inner rectangles
 Rectangle.intersectRect2D( rect1, rect2 );
 </code></pre>
-<p><a href="#op-circle"><code>Circle</code></a> from &quot;Op&quot; module helps you create and work with circles.</p>
+<p><a href="../docs/?p=Op_Circle"><code>Circle</code></a> from &quot;Op&quot; module helps you create and work with circles.</p>
 <pre><code>Circle.fromCenter( center, 10 );
 Circle.fromRect( rect );
 Circle.toRect();
 Circle.intersectCircle2D( c1, c2 );
 </code></pre>
-<p><a href="#op-triangle"><code>Triangle</code></a> from &quot;Op&quot; module helps you create and work with triangles.</p>
+<p><a href="../docs/?p=Op_Triangle"><code>Triangle</code></a> from &quot;Op&quot; module helps you create and work with triangles.</p>
 <pre><code>Triangle.fromCircle( c ); // equilateral triangle
 Triangle.fromRect( rect );
 Triangle.incircle( tri );
 Triangle.orthocenter( tri );
 Triangle.medial( tri );
 </code></pre>
-<p><a href="#op-polygon"><code>Polygon</code></a> from &quot;Op&quot; module helps you create and work with polygons.</p>
+<p><a href="../docs/?p=Op_Polygon"><code>Polygon</code></a> from &quot;Op&quot; module helps you create and work with polygons.</p>
 <pre><code>Polygon.centroid( poly );
 Polygon.convexHull( poly );
 Polygon.lines( poly ); // get line segments
 Polygon.intersectPolygon2D( poly, lines );
 </code></pre>
-<p><a href="#op-curve"><code>Curve</code></a> from &quot;Op&quot; module helps you create and work with curves.</p>
+<p><a href="../docs/?p=Op_Curve"><code>Curve</code></a> from &quot;Op&quot; module helps you create and work with curves.</p>
 <pre><code>Curve.catmullRom( pts );
 Curve.cardinal( pts );
 Curve.cardinal( pts, 20, 0.3 ); // step and tension parameters
