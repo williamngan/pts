@@ -446,6 +446,11 @@ async function checkAgentMarkdown() {
   const home = await (await fetch(`${ORIGIN}/`)).text();
   assert.match(home, /href="\/docs\.md"/u);
   assert.match(home, /href="\/guide\.md"/u);
+  const guide = await (
+    await fetch(`${ORIGIN}/guide/Get-started-0100.html`)
+  ).text();
+  assert.match(guide, /rel="alternate"[^>]*href="\/guide\.md"/u);
+  assert.match(guide, /rel="alternate"[^>]*href="\/docs\.md"/u);
   return "docs.md, guide.md, and llms.txt served with discovery links";
 }
 
