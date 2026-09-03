@@ -70,6 +70,17 @@ async function readGuideSources() {
     const source = (
       await readFile(path.join(markdownDirectory, file), "utf8")
     ).replaceAll("\r\n", "\n");
+    for (const [, specifier] of source.matchAll(
+      /from\s+["'](pts\/[^"']+)["']/gu,
+    )) {
+      await access(
+        path.join(projectRoot, specifier.slice("pts/".length)),
+      ).catch(() => {
+        throw new Error(
+          `Guide ${file} imports missing package artifact ${specifier}`,
+        );
+      });
+    }
     const tokens = markdown.parse(source, {});
     const headings = tokens
       .map((token, index) => ({ token, index }))

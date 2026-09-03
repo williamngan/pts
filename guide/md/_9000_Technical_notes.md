@@ -8,11 +8,7 @@ When using Pts as an [npm package](https://www.npmjs.com/package/pts), you can c
 import {Pt, Line} from "pts"
 ```
 
-Pts is an ES6 library by default. If you want to include it in your older ES5 projects, import it like this:
-
-```
-import {Pt, Line} from "pts/dist/es5"
-```
+Pts targets ES2015 and does not ship a separate ES5 build. For older JavaScript environments, transpile the `"pts"` import with your application's bundler and supply any required platform polyfills.
 
 For using Pts with React, [react-pts-canvas](https://www.npmjs.com/package/react-pts-canvas) is a component which you can extend to make it your own. Also take a look at [react-pts-canvas-examples](https://github.com/williamngan/react-pts-canvas-examples) which includes Pts examples in React.
 

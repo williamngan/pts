@@ -171,11 +171,7 @@ To get started quickly with a webpack es6 build, try [pts-starter-kit](https://g
 
 To use Pts in React, take a look at [pts-react-example](https://github.com/williamngan/pts-react-example), which provides components built with create-react-app or neutrino.js
 
-Note that Pts is an es6 library, so if you want to compile to es5, import it like this:
-
-```
-import {CanvasSpace, Pt, Group} from "pts/dist/es5"
-```
+Pts targets ES2015 and does not ship a separate ES5 build. If your application needs an older JavaScript target, configure your bundler to transpile Pts and provide the platform polyfills your application requires. Keep importing from `"pts"`.
 
 #### Using Pts as a script
 
@@ -1804,11 +1800,7 @@ When using Pts as an [npm package](https://www.npmjs.com/package/pts), you can c
 import {Pt, Line} from "pts"
 ```
 
-Pts is an ES6 library by default. If you want to include it in your older ES5 projects, import it like this:
-
-```
-import {Pt, Line} from "pts/dist/es5"
-```
+Pts targets ES2015 and does not ship a separate ES5 build. For older JavaScript environments, transpile the `"pts"` import with your application's bundler and supply any required platform polyfills.
 
 For using Pts with React, [react-pts-canvas](https://www.npmjs.com/package/react-pts-canvas) is a component which you can extend to make it your own. Also take a look at [react-pts-canvas-examples](https://github.com/williamngan/react-pts-canvas-examples) which includes Pts examples in React.
 
