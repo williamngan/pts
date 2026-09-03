@@ -1538,17 +1538,25 @@ async function checkEditorRunsAreIsolated() {
       if (window.__wrapped) return;
       window.__wrapped = true;
       window.__ticks = 0;
+      window.__frameTimes = new Set();
       const raf = window.requestAnimationFrame;
       window.requestAnimationFrame = function (cb) {
         return raf.call(window, function (t) {
           window.__ticks += 1;
+          window.__frameTimes.add(t);
           return cb(t);
         });
       };
     });
-    await frame.evaluate(() => (window.__ticks = 0));
+    await frame.evaluate(() => {
+      window.__ticks = 0;
+      window.__frameTimes.clear();
+    });
     await page.waitForTimeout(1000);
-    return frame.evaluate(() => window.__ticks);
+    return frame.evaluate(() => ({
+      ticks: window.__ticks,
+      frames: window.__frameTimes.size,
+    }));
   };
 
   const rates = [];
@@ -1558,11 +1566,14 @@ async function checkEditorRunsAreIsolated() {
     rates.push(await rate());
   }
 
-  // One 60fps loop is ~60/sec. Leaked loops made this grow by ~60 per Run.
+  // One animation chain schedules one callback per frame at any refresh rate.
+  // Multiple chains receive the same rAF timestamp; count those duplicates
+  // instead of assuming that the host display runs at 60 Hz.
   for (const r of rates) {
+    assert.ok(r.frames > 0, "the sketch did not animate");
     assert.ok(
-      r < 100,
-      `animation loops accumulated across Runs: ${rates.join(", ")} callbacks/sec`,
+      r.ticks === r.frames,
+      `animation loops accumulated across Runs: ${JSON.stringify(rates)}`,
     );
   }
 
@@ -1572,7 +1583,7 @@ async function checkEditorRunsAreIsolated() {
   assert.equal(frames, 1, "sketch frames accumulated");
 
   await page.close();
-  return `${rates.join(", ")} rAF/sec over four Runs`;
+  return `${rates.map((r) => `${r.ticks}/${r.frames}`).join(", ")} callbacks/frames over four Runs`;
 }
 
 async function checkEditorHandlesLexicalDeclarations() {
