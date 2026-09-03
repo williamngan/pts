@@ -538,7 +538,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`. See a [Delaunay demo here](../demo/index.html?name=create.delaunay).",
+          "comment": "Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`. See a [Delaunay demo here](https://ptsjs.org/demo/?name=create.delaunay).",
           "returns": "GroupLike[] | DelaunayShape[]",
           "returns_comment": "an array of Groups or an array of DelaunayShapes `{i, j, k, triangle, circle}` which records the indices of the vertices, and the calculated triangles and circumcircles",
           "parameters": [
@@ -1671,7 +1671,7 @@
           "parameters": [
             {
               "name": "scale",
-              "comment": "",
+              "comment": "shearing value which can be a number or an array of 2 numbers",
               "type": "number | PtLike",
               "default": false
             },
@@ -2118,7 +2118,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Generate Voronoi cells. `delaunay()` must be called before calling this function. See a [Voronoi demo here](../demo/index.html?name=create.delaunay).",
+          "comment": "Generate Voronoi cells. `delaunay()` must be called before calling this function. See a [Voronoi demo here](https://ptsjs.org/demo/?name=create.delaunay).",
           "returns": "Group[]",
           "returns_comment": "an array of Groups, each of which represents a Voronoi cell. Unclipped cells share their vertex Pts with the cached mesh (see [`Delaunay.mesh`](#link)), so treat them as read-only or clone before mutating.",
           "parameters": [
@@ -2153,7 +2153,7 @@
           "parameters": [
             {
               "name": "index",
-              "comment": "",
+              "comment": "index to zip at",
               "type": "number",
               "default": false
             },

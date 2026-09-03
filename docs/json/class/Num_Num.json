@@ -285,25 +285,25 @@
             },
             {
               "name": "currA",
-              "comment": "",
+              "comment": "first endpoint of the input range",
               "type": "number",
               "default": false
             },
             {
               "name": "currB",
-              "comment": "",
+              "comment": "second endpoint of the input range",
               "type": "number",
               "default": false
             },
             {
               "name": "targetA",
-              "comment": "",
+              "comment": "first endpoint of the output range",
               "type": "number",
               "default": false
             },
             {
               "name": "targetB",
-              "comment": "",
+              "comment": "second endpoint of the output range",
               "type": "number",
               "default": false
             }

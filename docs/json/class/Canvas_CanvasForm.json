@@ -1419,19 +1419,19 @@
           "parameters": [
             {
               "name": "pt",
-              "comment": "",
+              "comment": "a Pt or numeric array to specify the anchor point",
               "type": "PtLike",
               "default": false
             },
             {
               "name": "txt",
-              "comment": "",
+              "comment": "text",
               "type": "string",
               "default": false
             },
             {
               "name": "maxWidth",
-              "comment": "",
+              "comment": "specify a maximum width per line",
               "type": "number",
               "default": false
             }
@@ -2058,19 +2058,19 @@
             },
             {
               "name": "pt",
-              "comment": "",
+              "comment": "a Point object to specify the anchor point",
               "type": "PtLike",
               "default": false
             },
             {
               "name": "txt",
-              "comment": "",
+              "comment": "a string of text to draw",
               "type": "string",
               "default": false
             },
             {
               "name": "maxWidth",
-              "comment": "",
+              "comment": "specify a maximum width per line",
               "type": "number",
               "default": false
             }

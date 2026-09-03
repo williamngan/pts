@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Dom.ts",
-      408,
+      407,
       13
     ]
   ],
@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Dom.ts",
-          460,
+          459,
           2
         ]
       ],
@@ -113,7 +113,7 @@
       "source": [
         [
           "src/Dom.ts",
-          477,
+          476,
           6
         ]
       ],
@@ -162,12 +162,12 @@
       "source": [
         [
           "src/Dom.ts",
-          446,
+          445,
           13
         ],
         [
           "src/Dom.ts",
-          449,
+          448,
           13
         ]
       ],
@@ -195,12 +195,12 @@
       "source": [
         [
           "src/Dom.ts",
-          440,
+          439,
           13
         ],
         [
           "src/Dom.ts",
-          443,
+          442,
           13
         ]
       ],
@@ -230,7 +230,7 @@
       "source": [
         [
           "src/Dom.ts",
-          498,
+          497,
           2
         ]
       ],
@@ -264,7 +264,7 @@
       "source": [
         [
           "src/Dom.ts",
-          893,
+          889,
           2
         ]
       ],
@@ -317,7 +317,7 @@
       "source": [
         [
           "src/Dom.ts",
-          784,
+          782,
           2
         ]
       ],
@@ -380,7 +380,7 @@
       "source": [
         [
           "src/Dom.ts",
-          559,
+          558,
           2
         ]
       ],
@@ -414,7 +414,7 @@
       "source": [
         [
           "src/Dom.ts",
-          508,
+          507,
           2
         ]
       ],
@@ -477,7 +477,7 @@
       "source": [
         [
           "src/Dom.ts",
-          549,
+          548,
           2
         ]
       ],
@@ -511,7 +511,7 @@
       "source": [
         [
           "src/Dom.ts",
-          577,
+          576,
           2
         ]
       ],
@@ -569,7 +569,7 @@
       "source": [
         [
           "src/Dom.ts",
-          907,
+          903,
           2
         ]
       ],
@@ -627,7 +627,7 @@
       "source": [
         [
           "src/Dom.ts",
-          885,
+          881,
           2
         ]
       ],
@@ -656,7 +656,7 @@
       "source": [
         [
           "src/Dom.ts",
-          640,
+          639,
           2
         ]
       ],
@@ -678,7 +678,7 @@
       "source": [
         [
           "src/Dom.ts",
-          751,
+          749,
           2
         ]
       ],
@@ -693,7 +693,7 @@
           "parameters": [
             {
               "name": "pt",
-              "comment": "",
+              "comment": "a Pt object",
               "type": "PtLike",
               "default": false
             },
@@ -765,7 +765,7 @@
       "source": [
         [
           "src/Dom.ts",
-          916,
+          912,
           2
         ]
       ],
@@ -823,7 +823,7 @@
       "source": [
         [
           "src/Dom.ts",
-          843,
+          841,
           2
         ]
       ],
@@ -881,7 +881,7 @@
       "source": [
         [
           "src/Dom.ts",
-          602,
+          601,
           2
         ]
       ],
@@ -903,7 +903,7 @@
       "source": [
         [
           "src/Dom.ts",
-          630,
+          629,
           2
         ]
       ],
@@ -932,7 +932,7 @@
       "source": [
         [
           "src/Dom.ts",
-          816,
+          814,
           2
         ]
       ],
@@ -996,7 +996,7 @@
       "source": [
         [
           "src/Dom.ts",
-          527,
+          526,
           2
         ]
       ],
@@ -1095,7 +1095,7 @@
       "source": [
         [
           "src/Dom.ts",
-          487,
+          486,
           12
         ]
       ],
@@ -1138,7 +1138,7 @@
       "source": [
         [
           "src/Dom.ts",
-          875,
+          871,
           2
         ]
       ],
@@ -1147,19 +1147,19 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Draw text on canvas.",
+          "comment": "Draw text in a DOM element.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
               "name": "pt",
-              "comment": "",
+              "comment": "a Pt or numeric array to specify the anchor point",
               "type": "PtLike",
               "default": false
             },
             {
               "name": "txt",
-              "comment": "",
+              "comment": "text",
               "type": "string",
               "default": false
             }
@@ -1173,7 +1173,7 @@
       "source": [
         [
           "src/Dom.ts",
-          617,
+          616,
           2
         ]
       ],
@@ -1208,7 +1208,7 @@
       "source": [
         [
           "src/Dom.ts",
-          765,
+          763,
           9
         ]
       ],
@@ -1251,7 +1251,7 @@
       "source": [
         [
           "src/Dom.ts",
-          650,
+          649,
           9
         ]
       ],
@@ -1282,7 +1282,7 @@
       "source": [
         [
           "src/Dom.ts",
-          731,
+          729,
           9
         ]
       ],
@@ -1336,7 +1336,7 @@
       "source": [
         [
           "src/Dom.ts",
-          828,
+          826,
           9
         ]
       ],
@@ -1373,7 +1373,7 @@
       "source": [
         [
           "src/Dom.ts",
-          700,
+          698,
           9
         ]
       ],
@@ -1390,19 +1390,19 @@
           "parameters": [
             {
               "name": "ctx",
-              "comment": "",
+              "comment": "the HTMLForm context whose style is updated",
               "type": "DOMFormContext",
               "default": false
             },
             {
               "name": "pt",
-              "comment": "",
+              "comment": "left and top position",
               "type": "PtLike",
               "default": false
             },
             {
               "name": "size",
-              "comment": "",
+              "comment": "width and height",
               "type": "PtLike",
               "default": false
             }
@@ -1416,7 +1416,7 @@
       "source": [
         [
           "src/Dom.ts",
-          658,
+          657,
           9
         ]
       ],
@@ -1447,7 +1447,7 @@
       "source": [
         [
           "src/Dom.ts",
-          797,
+          795,
           9
         ]
       ],
@@ -1490,7 +1490,7 @@
       "source": [
         [
           "src/Dom.ts",
-          669,
+          668,
           9
         ]
       ],
@@ -1532,7 +1532,7 @@
       "source": [
         [
           "src/Dom.ts",
-          857,
+          854,
           9
         ]
       ],
@@ -1555,13 +1555,13 @@
             },
             {
               "name": "pt",
-              "comment": "",
+              "comment": "a Point object to specify the anchor point",
               "type": "PtLike",
               "default": false
             },
             {
               "name": "txt",
-              "comment": "",
+              "comment": "a string of text to draw",
               "type": "string",
               "default": false
             }
@@ -1575,7 +1575,7 @@
       "source": [
         [
           "src/Dom.ts",
-          717,
+          715,
           9
         ]
       ],

@@ -810,7 +810,7 @@
             },
             {
               "name": "index",
-              "comment": "",
+              "comment": "index to zip at",
               "type": "number",
               "default": false
             },

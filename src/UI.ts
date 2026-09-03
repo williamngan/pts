@@ -198,7 +198,7 @@ export class UI {
    * Get and/or set a specific UI state.
    * @param key state's name
    * @param value optionally set a new value for this state.key
-   * @param if `value` is changed, return this instance. Otherwise, return the value of the specific key.
+   * @returns If `value` is changed, return this instance. Otherwise, return the value of the specific key.
    */
   state(key: string, value?: any): any {
     if (!key) return null;

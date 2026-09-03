@@ -653,9 +653,9 @@ Draw text on canvas.
 
 **Parameters**
 
-- `pt` (`PtLike`)
-- `txt` (`string`)
-- `maxWidth` (`number`)
+- `pt` (`PtLike`) — a Pt or numeric array to specify the anchor point
+- `txt` (`string`) — text
+- `maxWidth` (`number`) — specify a maximum width per line
 
 <a id="canvas-canvasform-text-box"></a>
 ##### `textBox`
@@ -903,9 +903,9 @@ A static function to draw text.
 **Parameters**
 
 - `ctx` (`RenderingContext2D`) — canvas rendering context
-- `pt` (`PtLike`)
-- `txt` (`string`)
-- `maxWidth` (`number`)
+- `pt` (`PtLike`) — a Point object to specify the anchor point
+- `txt` (`string`) — a string of text to draw
+- `maxWidth` (`number`) — specify a maximum width per line
 
 #### Inherited API
 
@@ -1692,7 +1692,7 @@ A static function to convert LUV to RGB.
 
 **Parameters**
 
-- `luv` (`Color`)
+- `luv` (`Color`) — a LUV Color
 - `normalizedInput` (`boolean`; default `false`) — a boolean specifying whether input color is normalized. Default is not normalized: `false`.
 - `normalizedOutput` (`boolean`; default `false`) — a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
 
@@ -2260,7 +2260,7 @@ The triangulation core is adapted from [Delaunator](https://github.com/mapbox/de
 delaunay(triangleOnly: boolean = true): GroupLike[] | DelaunayShape[]
 ```
 
-Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`. See a [Delaunay demo here](https://ptsjs.org/demo/index.html?name=create.delaunay).
+Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`. See a [Delaunay demo here](https://ptsjs.org/demo/?name=create.delaunay).
 
 **Parameters**
 
@@ -2317,7 +2317,7 @@ Given an index of a Pt in this Delaunay Group, returns its neighboring DelaunayS
 voronoi(bound: PtIterable): Group[]
 ```
 
-Generate Voronoi cells. `delaunay()` must be called before calling this function. See a [Voronoi demo here](https://ptsjs.org/demo/index.html?name=create.delaunay).
+Generate Voronoi cells. `delaunay()` must be called before calling this function. See a [Voronoi demo here](https://ptsjs.org/demo/?name=create.delaunay).
 
 **Parameters**
 
@@ -2351,7 +2351,7 @@ This implementation is based on this [gist](https://gist.github.com/banksean/304
 new Noise(args: any[]): Noise
 ```
 
-Create a Noise Pt that can generate noise continuously. See a [Noise demo here](https://ptsjs.org/demo/index.html?name=create.noisePts).
+Create a Noise Pt that can generate noise continuously. See a [Noise demo here](https://ptsjs.org/demo/?name=create.noisePts).
 
 **Parameters**
 
@@ -2708,7 +2708,7 @@ id: string
 <a id="dom-htmlform"></a>
 ### `HTMLForm`
 
-**Kind:** Class · **Source:** [`src/Dom.ts:408`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L408)
+**Kind:** Class · **Source:** [`src/Dom.ts:407`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L407)
 
 **Extends:** `VisualForm`
 
@@ -2953,7 +2953,7 @@ Draws a point.
 
 **Parameters**
 
-- `pt` (`PtLike`)
+- `pt` (`PtLike`) — a Pt object
 - `radius` (`number`; default `5`) — radius of the point. Default is 5.
 - `shape` (`string`; default `"square"`) — The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
 
@@ -3083,12 +3083,12 @@ Usually not used directly. This updates a style in `_ctx` context or throw an Er
 text(pt: PtLike, txt: string): this
 ```
 
-Draw text on canvas.
+Draw text in a DOM element.
 
 **Parameters**
 
-- `pt` (`PtLike`)
-- `txt` (`string`)
+- `pt` (`PtLike`) — a Pt or numeric array to specify the anchor point
+- `txt` (`string`) — text
 
 <a id="dom-htmlform-update-scope"></a>
 ##### `updateScope`
@@ -3191,9 +3191,9 @@ A helper function to set top, left, width, height of DOM element.
 
 **Parameters**
 
-- `ctx` (`DOMFormContext`)
-- `pt` (`PtLike`)
-- `size` (`PtLike`)
+- `ctx` (`DOMFormContext`) — the HTMLForm context whose style is updated
+- `pt` (`PtLike`) — left and top position
+- `size` (`PtLike`) — width and height
 
 <a id="dom-htmlform-static-scope-id"></a>
 ##### `scopeID`
@@ -3265,8 +3265,8 @@ A static function to draw text.
 **Parameters**
 
 - `ctx` (`DOMFormContext`) — a context object of HTMLForm
-- `pt` (`PtLike`)
-- `txt` (`string`)
+- `pt` (`PtLike`) — a Point object to specify the anchor point
+- `txt` (`string`) — a string of text to draw
 
 <a id="dom-htmlform-static-text-style"></a>
 ##### `textStyle`
@@ -3292,7 +3292,7 @@ A helper function to set the top and left position styling of text DOM context.
 <a id="dom-htmlspace"></a>
 ### `HTMLSpace`
 
-**Kind:** Class · **Source:** [`src/Dom.ts:337`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L337)
+**Kind:** Class · **Source:** [`src/Dom.ts:336`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L336)
 
 **Extends:** `DOMSpace`
 
@@ -3324,7 +3324,7 @@ Remove an item from this space.
 
 **Parameters**
 
-- `player` (`IPlayer`)
+- `player` (`IPlayer`) — a player item with an auto-assigned `animateID` property
 
 <a id="dom-htmlspace-remove-all"></a>
 ##### `removeAll`
@@ -3833,9 +3833,9 @@ Draw text (not implemented here  -- to be implemented in subclasses).
 
 **Parameters**
 
-- `pt` (`PtLike`)
-- `txt` (`string`)
-- `maxWidth` (`number`)
+- `pt` (`PtLike`) — a Pt or numeric array to specify the anchor point
+- `txt` (`string`) — text
+- `maxWidth` (`number`) — specify a maximum width per line
 
 #### Inherited API
 
@@ -4674,7 +4674,7 @@ Zip one slice of an array of Pts. For example, if the input `g` are organized in
 **Parameters**
 
 - `g` (`GroupLike | number[][]`) — a group of Pt
-- `index` (`number`)
+- `index` (`number`) — index to zip at
 - `defaultValue` (`number | boolean`; default `false`) — a default value to fill if index out of bound. If not provided, it will throw an error instead.
 
 <a id="linearalgebra-vec"></a>
@@ -5408,10 +5408,10 @@ Map a value from one range to another.
 **Parameters**
 
 - `n` (`number`) — a value in the first range
-- `currA` (`number`)
-- `currB` (`number`)
-- `targetA` (`number`)
-- `targetB` (`number`)
+- `currA` (`number`) — first endpoint of the input range
+- `currB` (`number`) — second endpoint of the input range
+- `targetA` (`number`) — first endpoint of the output range
+- `targetB` (`number`) — second endpoint of the output range
 
 **Returns:** a remapped value in the second range
 
@@ -5985,7 +5985,7 @@ Quadratic bezier curve, adapted from Golan Levin's [shaping functions](http://ww
 
 - `t` (`number`) — a value between 0 to 1
 - `c` (`number`; default `1`) — the value to shape, default is 1
-- `p` (`number | PtLike`; default `...`)
+- `p` (`number | PtLike`; default `...`) — a Pt object specifying the control Pt, or a value specifying its x position (its y position will default to 0.5). Default is `[0.05, 0.95]`.
 
 <a id="num-shaping-static-quadratic-in"></a>
 ##### `quadraticIn`
@@ -6348,7 +6348,7 @@ Check if a point is within a circle.
 <a id="op-curve"></a>
 ### `Curve`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1700`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1700)
+**Kind:** Class · **Source:** [`src/Op.ts:1699`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1699)
 
 Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -6830,7 +6830,7 @@ Get squared magnitude of a line segment.
 
 **Parameters**
 
-- `line` (`PtIterable`)
+- `line` (`PtIterable`) — a Group or an Iterable<Pt> with at least 2 Pt
 
 <a id="op-line-static-marker"></a>
 ##### `marker`
@@ -7309,7 +7309,7 @@ Get the center of this rectangle.
 
 **Parameters**
 
-- `pts` (`PtIterable`)
+- `pts` (`PtIterable`) — a Group or an Iterable<Pt> with 2 Pt representing a Rectangle
 
 <a id="op-rectangle-static-corners"></a>
 ##### `corners`
@@ -7358,7 +7358,7 @@ Create a rectangle given a center position and a size.
 
 **Parameters**
 
-- `center` (`PtLike`)
+- `center` (`PtLike`) — center point
 - `widthOrSize` (`number | PtLike`) — width as a number, or a Pt that defines its size
 - `height` (`number`) — optional height as a number
 
@@ -7498,7 +7498,7 @@ Get the size of this rectangle as a Pt.
 
 **Parameters**
 
-- `pts` (`PtIterable`)
+- `pts` (`PtIterable`) — a Group or an Iterable<Pt> with 2 Pt representing a Rectangle
 
 <a id="op-rectangle-static-to-circle"></a>
 ##### `toCircle`
@@ -7756,7 +7756,7 @@ Get orthocenter, which is the intersection point of a triangle's 3 altitudes (th
 **Extends:** `Group`
 
 Body is a subclass of [`Group`](#pt-group) that stores a set of [`Particle`](#physics-particle)s and edge constraints. It is usually added into a [`World`](#physics-world) to create physics simulations.
-See [a demo here](https://ptsjs.org/demo/index.html?name=physics.shapes).
+See [a demo here](https://ptsjs.org/demo/?name=physics.shapes).
 
 #### Constructors
 
@@ -7935,7 +7935,7 @@ Create and populate a body.
 **Extends:** `Pt`
 
 Particle is a subclass of [`Pt`](#pt-pt) that has radius and mass. It's usually added into [`World`](#physics-world) to create physics simulations.
-See [a demo here](https://ptsjs.org/demo/index.html?name=physics.particles).
+See [a demo here](https://ptsjs.org/demo/?name=physics.particles).
 
 #### Constructors
 
@@ -8133,7 +8133,7 @@ Verlet integration.
 
 A `World` stores and manages [`Body`](#physics-body) and [`Particle`](#physics-particle) for 2D physics simulation.
 It advances with a substepped position-based (XPBD-style) solver and a spatial-hash broad phase.
-See a [Particle demo](https://ptsjs.org/demo/index.html?name=physics.particles) and a [Body demo](https://ptsjs.org/demo/index.html?name=physics.shapes) on the demo page.
+See a [Particle demo](https://ptsjs.org/demo/?name=physics.particles) and a [Body demo](https://ptsjs.org/demo/?name=physics.shapes) on the demo page.
 
 #### Constructors
 
@@ -9745,7 +9745,7 @@ Shear this group's Pt from an anchor point in 2D. Default anchor point is the fi
 
 **Parameters**
 
-- `scale` (`number | PtLike`)
+- `scale` (`number | PtLike`) — shearing value which can be a number or an array of 2 numbers
 - `anchor` (`PtLike`) — optional anchor point to scale from
 - `axis` (`string`) — optional string such as "yz" to specify a 2D plane
 
@@ -9822,7 +9822,7 @@ Zip one slice of an array of Pt. Imagine the Pts are organized in rows, then thi
 
 **Parameters**
 
-- `index` (`number`)
+- `index` (`number`) — index to zip at
 - `defaultValue` (`number | boolean`; default `false`) — a default value to fill if index out of bound. If not provided, it will throw an error instead.
 
 <a id="pt-group-static-from-array"></a>
@@ -10447,7 +10447,7 @@ Shear this Pt from origin or from an anchor point in 2D.
 
 **Parameters**
 
-- `scale` (`number | PtLike`)
+- `scale` (`number | PtLike`) — shearing value which can be a number or an array of 2 numbers
 - `anchor` (`PtLike`) — optional anchor point to scale from
 - `axis` (`string`) — optional string such as "yz" to specify a 2D plane
 
@@ -10855,7 +10855,7 @@ Subclasses of Space may define other callback functions.
 
 **Parameters**
 
-- `p` (`IPlayer | AnimateCallbackFn`)
+- `p` (`IPlayer | AnimateCallbackFn`) — an [`IPlayer`](#types-iplayer) object with animate function, or a callback function `fn(time, ftime)`.
 
 <a id="space-space-clear"></a>
 ##### `clear`
@@ -11911,8 +11911,8 @@ A static function to draw a text element.
 **Parameters**
 
 - `ctx` (`DOMFormContext`) — a context object of SVGForm
-- `pt` (`PtLike`)
-- `txt` (`string`)
+- `pt` (`PtLike`) — a Point object to specify the anchor point
+- `txt` (`string`) — a string of text to draw
 
 #### Inherited API
 
@@ -12071,7 +12071,7 @@ Remove an item from this Space.
 
 **Parameters**
 
-- `player` (`IPlayer`)
+- `player` (`IPlayer`) — a player item with an auto-assigned `animateID` property
 
 <a id="svg-svgspace-remove-all"></a>
 ##### `removeAll`
@@ -12147,7 +12147,7 @@ A static function to add a svg element inside a node. Usually you don't need to 
 
 **Kind:** Class · **Source:** [`src/Typography.ts:10`](https://github.com/williamngan/pts/blob/master/src/Typography.ts#L10)
 
-Typography provides helper functions to support typographic layouts. For a concrete example, see [a demo here](https://ptsjs.org/demo/index.html?name=canvasform.textBox) that uses the [`CanvasForm.textBox`](#canvas-canvasform-text-box) function.
+Typography provides helper functions to support typographic layouts. For a concrete example, see [a demo here](https://ptsjs.org/demo/?name=canvasform.textBox) that uses the [`CanvasForm.textBox`](#canvas-canvasform-text-box) function.
 
 #### Methods
 
@@ -12437,6 +12437,8 @@ Get and/or set a specific UI state.
 
 - `key` (`string`) — state's name
 - `value` (`any`) — optionally set a new value for this state.key
+
+**Returns:** If `value` is changed, return this instance. Otherwise, return the value of the specific key.
 
 <a id="ui-ui-to-string"></a>
 ##### `toString`

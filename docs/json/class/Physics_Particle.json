@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "comment": "Particle is a subclass of [`Pt`](#link) that has radius and mass. It's usually added into [`World`](#link) to create physics simulations.\nSee [a demo here](../demo/index.html?name=physics.particles).",
+  "comment": "Particle is a subclass of [`Pt`](#link) that has radius and mass. It's usually added into [`World`](#link) to create physics simulations.\nSee [a demo here](https://ptsjs.org/demo/?name=physics.particles).",
   "constructor": [
     {
       "name": "constructor",
@@ -2236,7 +2236,7 @@
           "parameters": [
             {
               "name": "scale",
-              "comment": "",
+              "comment": "shearing value which can be a number or an array of 2 numbers",
               "type": "number | PtLike",
               "default": false
             },

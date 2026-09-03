@@ -236,9 +236,9 @@ export abstract class VisualForm extends Form {
 
   /**
    * Draw text (not implemented here  -- to be implemented in subclasses).
-   * @param `pt` a Pt or numeric array to specify the anchor point
-   * @param `txt` text
-   * @param `maxWidth` specify a maximum width per line
+   * @param pt a Pt or numeric array to specify the anchor point
+   * @param txt text
+   * @param maxWidth specify a maximum width per line
    */
   abstract text(pt: PtLike, txt: string, maxWidth?: number): this;
 

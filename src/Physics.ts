@@ -8,7 +8,7 @@ import { type PtLike, type PtIterable } from "./Types";
 /**
  * A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation.
  * It advances with a substepped position-based (XPBD-style) solver and a spatial-hash broad phase.
- * See a [Particle demo](../demo/index.html?name=physics.particles) and a [Body demo](../demo/index.html?name=physics.shapes) on the demo page.
+ * See a [Particle demo](https://ptsjs.org/demo/?name=physics.particles) and a [Body demo](https://ptsjs.org/demo/?name=physics.shapes) on the demo page.
  */
 export class World {
   protected _gravity: Pt = new Pt();
@@ -643,7 +643,7 @@ export class World {
 
 /**
  * Particle is a subclass of [`Pt`](#link) that has radius and mass. It's usually added into [`World`](#link) to create physics simulations.
- * See [a demo here](../demo/index.html?name=physics.particles).
+ * See [a demo here](https://ptsjs.org/demo/?name=physics.particles).
  */
 export class Particle extends Pt {
   protected _mass: number = 1;
@@ -880,7 +880,7 @@ export class Particle extends Pt {
 
 /**
  * Body is a subclass of [`Group`](#link) that stores a set of [`Particle`](#link)s and edge constraints. It is usually added into a [`World`](#link) to create physics simulations.
- * See [a demo here](../demo/index.html?name=physics.shapes).
+ * See [a demo here](https://ptsjs.org/demo/?name=physics.shapes).
  */
 export class Body extends Group {
   protected _cs: Array<number[]> = [];

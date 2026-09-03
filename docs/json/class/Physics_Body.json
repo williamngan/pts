@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "comment": "Body is a subclass of [`Group`](#link) that stores a set of [`Particle`](#link)s and edge constraints. It is usually added into a [`World`](#link) to create physics simulations.\nSee [a demo here](../demo/index.html?name=physics.shapes).",
+  "comment": "Body is a subclass of [`Group`](#link) that stores a set of [`Particle`](#link)s and edge constraints. It is usually added into a [`World`](#link) to create physics simulations.\nSee [a demo here](https://ptsjs.org/demo/?name=physics.shapes).",
   "constructor": [
     {
       "name": "constructor",
@@ -1809,7 +1809,7 @@
           "parameters": [
             {
               "name": "scale",
-              "comment": "",
+              "comment": "shearing value which can be a number or an array of 2 numbers",
               "type": "number | PtLike",
               "default": false
             },
@@ -2303,7 +2303,7 @@
           "parameters": [
             {
               "name": "index",
-              "comment": "",
+              "comment": "index to zip at",
               "type": "number",
               "default": false
             },

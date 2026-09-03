@@ -593,7 +593,7 @@
           "parameters": [
             {
               "name": "line",
-              "comment": "",
+              "comment": "a Group or an Iterable<Pt> with at least 2 Pt",
               "type": "PtIterable",
               "default": false
             }

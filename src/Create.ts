@@ -248,7 +248,7 @@ export class Noise extends Pt {
   private _n: Pt = new Pt(0.01, 0.01);
 
   /**
-   * Create a Noise Pt that can generate noise continuously. See a [Noise demo here](../demo/index.html?name=create.noisePts).
+   * Create a Noise Pt that can generate noise continuously. See a [Noise demo here](https://ptsjs.org/demo/?name=create.noisePts).
    * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
   constructor(...args: any[]) {
@@ -944,7 +944,7 @@ export class Delaunay extends Group {
   private _shapes: DelaunayShape[] | null = null;
 
   /**
-   * Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`. See a [Delaunay demo here](../demo/index.html?name=create.delaunay).
+   * Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`. See a [Delaunay demo here](https://ptsjs.org/demo/?name=create.delaunay).
    * @param triangleOnly if true, returns an array of triangles in Groups, otherwise return the whole DelaunayShape
    * @returns an array of Groups or an array of DelaunayShapes `{i, j, k, triangle, circle}` which records the indices of the vertices, and the calculated triangles and circumcircles
    */
@@ -1009,7 +1009,7 @@ export class Delaunay extends Group {
   }
 
   /**
-   * Generate Voronoi cells. `delaunay()` must be called before calling this function. See a [Voronoi demo here](../demo/index.html?name=create.delaunay).
+   * Generate Voronoi cells. `delaunay()` must be called before calling this function. See a [Voronoi demo here](https://ptsjs.org/demo/?name=create.delaunay).
    * @param bound Optionally provide a rectangular bound (eg, `space.innerBound`) to clip the cells against.
    * Without a bound, cells around sliver triangles can extend to enormous coordinates (circumcenters of
    * nearly-collinear points), which is technically correct but extremely slow to draw.

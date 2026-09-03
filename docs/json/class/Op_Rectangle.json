@@ -65,7 +65,7 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a Rectangle",
               "type": "PtIterable",
               "default": false
             }
@@ -170,7 +170,7 @@
           "parameters": [
             {
               "name": "center",
-              "comment": "",
+              "comment": "center point",
               "type": "PtLike",
               "default": false
             },
@@ -478,7 +478,7 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a Rectangle",
               "type": "PtIterable",
               "default": false
             }

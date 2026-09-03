@@ -150,10 +150,10 @@ export class Num {
   /**
    * Map a value from one range to another.
    * @param n a value in the first range
-   * @param currMin lower bound of the first range
-   * @param currMax upper bound of the first range
-   * @param targetMin lower bound of the second range
-   * @param targetMax upper bound of the second range
+   * @param currA first endpoint of the input range
+   * @param currB second endpoint of the input range
+   * @param targetA first endpoint of the output range
+   * @param targetB second endpoint of the output range
    * @returns a remapped value in the second range
    */
   static mapToRange(
@@ -870,7 +870,7 @@ export class Shaping {
    * Quadratic bezier curve, adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_exp/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
-   * @param p1 a Pt object specifying the first control Pt, or a value specifying the control Pt's x position (its y position will default to 0.5). Default is `[0.05, 0.95]`.
+   * @param p a Pt object specifying the control Pt, or a value specifying its x position (its y position will default to 0.5). Default is `[0.05, 0.95]`.
    */
   static quadraticBezier(
     t: number,

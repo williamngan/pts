@@ -803,7 +803,7 @@
             },
             {
               "name": "p",
-              "comment": "",
+              "comment": "a Pt object specifying the control Pt, or a value specifying its x position (its y position will default to 0.5). Default is `[0.05, 0.95]`.",
               "type": "number | PtLike",
               "default": "..."
             }

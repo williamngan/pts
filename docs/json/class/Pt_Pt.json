@@ -2016,7 +2016,7 @@
           "parameters": [
             {
               "name": "scale",
-              "comment": "",
+              "comment": "shearing value which can be a number or an array of 2 numbers",
               "type": "number | PtLike",
               "default": false
             },

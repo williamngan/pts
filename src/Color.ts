@@ -667,7 +667,7 @@ export class Color extends Pt {
 
   /**
    * A static function to convert LUV to RGB.
-   * @param rgb a RGB Color
+   * @param luv a LUV Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
    * @returns a new RGB Color

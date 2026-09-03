@@ -1455,9 +1455,9 @@ export class CanvasForm<
   /**
    * A static function to draw text.
    * @param ctx canvas rendering context
-   * @param `pt` a Point object to specify the anchor point
-   * @param `txt` a string of text to draw
-   * @param `maxWidth` specify a maximum width per line
+   * @param pt a Point object to specify the anchor point
+   * @param txt a string of text to draw
+   * @param maxWidth specify a maximum width per line
    */
   static text(
     ctx: RenderingContext2D,
@@ -1471,9 +1471,9 @@ export class CanvasForm<
 
   /**
    * Draw text on canvas.
-   * @param `pt` a Pt or numeric array to specify the anchor point
-   * @param `txt` text
-   * @param `maxWidth` specify a maximum width per line
+   * @param pt a Pt or numeric array to specify the anchor point
+   * @param txt text
+   * @param maxWidth specify a maximum width per line
    */
   text(pt: PtLike, txt: string, maxWidth?: number): this {
     CanvasForm.text(this._ctx, pt, txt, maxWidth);

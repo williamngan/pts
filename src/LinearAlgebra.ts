@@ -369,7 +369,7 @@ export class Mat {
   /**
    * Zip one slice of an array of Pts. For example, if the input `g` are organized in rows, then this function will take the values in a specific column.
    * @param g a group of Pt
-   * @param idx index to zip at
+   * @param index index to zip at
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    */
   static zipSlice(

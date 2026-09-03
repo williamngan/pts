@@ -61,7 +61,7 @@ export abstract class Space {
    * - optional: `resize: fn( size, event )`
    * - optional: `action: fn( type, x, y, event )`
    * Subclasses of Space may define other callback functions.
-   * @param player an [`IPlayer`](#link) object with animate function, or a callback function `fn(time, ftime)`.
+   * @param p an [`IPlayer`](#link) object with animate function, or a callback function `fn(time, ftime)`.
    */
   add(p: IPlayer | AnimateCallbackFn): this {
     const player: IPlayer = typeof p == "function" ? { animate: p } : p;

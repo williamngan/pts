@@ -111,7 +111,7 @@ export class Line {
 
   /**
    * Get squared magnitude of a line segment.
-   * @param _line a Group or an Iterable<Pt> with at least 2 Pt
+   * @param line a Group or an Iterable<Pt> with at least 2 Pt
    */
   static magnitudeSq(line: PtIterable): number {
     let _line = Util.iterToArray(line);
@@ -457,7 +457,7 @@ export class Rectangle {
 
   /**
    * Create a rectangle given a center position and a size.
-   * @param topLeft top-left point
+   * @param center center point
    * @param widthOrSize width as a number, or a Pt that defines its size
    * @param height optional height as a number
    * @returns a Group of 2 Pts representing a rectangle
@@ -499,7 +499,7 @@ export class Rectangle {
 
   /**
    * Get the size of this rectangle as a Pt.
-   * @param p a Group or an Iterable<Pt> with 2 Pt representing a Rectangle
+   * @param pts a Group or an Iterable<Pt> with 2 Pt representing a Rectangle
    */
   static size(pts: PtIterable): Pt {
     let p = Util.iterToArray(pts);
@@ -508,7 +508,7 @@ export class Rectangle {
 
   /**
    * Get the center of this rectangle.
-   * @param p a Group or an Iterable<Pt> with 2 Pt representing a Rectangle
+   * @param pts a Group or an Iterable<Pt> with 2 Pt representing a Rectangle
    */
   static center(pts: PtIterable): Pt {
     let p = Util.iterToArray(pts);
@@ -1187,7 +1187,6 @@ export class Polygon {
    * Get a bisector which is a line that split between two sides of a polygon equally.
    * @param poly a Group or an Iterable<Pt>
    * @param index the Pt in the polygon to bisect from
-   * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
    * @returns a bisector direction Pt, the average of the two adjacent sides' unit vectors (not itself normalized)
    */
   static bisector(poly: PtIterable, index: number): Pt | undefined {

@@ -513,7 +513,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
 
   /**
    * Shear this Pt from origin or from an anchor point in 2D.
-   * @param shear shearing value which can be a number or an array of 2 numbers
+   * @param scale shearing value which can be a number or an array of 2 numbers
    * @param anchor optional anchor point to scale from
    * @param axis optional string such as "yz" to specify a 2D plane
    */
@@ -887,7 +887,7 @@ export class Group extends Array<Pt> {
 
   /**
    * Shear this group's Pt from an anchor point in 2D. Default anchor point is the first Pt in this group.
-   * @param shear shearing value which can be a number or an array of 2 numbers
+   * @param scale shearing value which can be a number or an array of 2 numbers
    * @param anchor optional anchor point to scale from
    * @param axis optional string such as "yz" to specify a 2D plane
    */
@@ -1016,7 +1016,7 @@ export class Group extends Array<Pt> {
 
   /**
    * Zip one slice of an array of Pt. Imagine the Pts are organized in rows, then this function will take the values in a specific column.
-   * @param idx index to zip at
+   * @param index index to zip at
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    */
   zipSlice(index: number, defaultValue: number | boolean = false): Pt {

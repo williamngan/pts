@@ -294,9 +294,8 @@ export class DOMSpace extends MultiTouchSpace {
 
   /**
    * A static helper function to compose an inline style string from a object of styles.
-   * @param elem Element to update
    * @param data an object with key-value pairs
-   * @exmaple `DOMSpace.getInlineStyles( {width: "100px", "font-size": "10px"} )`
+   * @example `DOMSpace.getInlineStyles( {width: "100px", "font-size": "10px"} )`
    */
   static getInlineStyles(data: Record<string, any>): string {
     let str = "";
@@ -332,7 +331,7 @@ export class DOMSpace extends MultiTouchSpace {
 
 /**
  * @deprecated HTML rendering is deprecated and will be removed in a future major version. Use [`SVGSpace`](#link) for DOM-based output instead — it shares the complete [`CanvasForm`](#link) drawing API.
- * **[Experimental]** HTMLSpace is a subclass of DOMSpace that works with HTML elements. See [a demo here](../demo/index.html?name=htmlform.scope).
+ * **[Experimental]** HTMLSpace is a subclass of DOMSpace that works with HTML elements. See [a demo here](https://ptsjs.org/demo/?name=htmlform.scope).
  */
 export class HTMLSpace extends DOMSpace {
   /**
@@ -376,7 +375,7 @@ export class HTMLSpace extends DOMSpace {
 
   /**
    * Remove an item from this space.
-   * @param item a player item with an auto-assigned `animateID` property
+   * @param player a player item with an auto-assigned `animateID` property
    */
   remove(player: IPlayer): this {
     let temp = this._container.querySelectorAll("." + HTMLForm.scopeID(player));
@@ -692,10 +691,9 @@ export class HTMLForm extends VisualForm {
 
   /**
    * A helper function to set top, left, width, height of DOM element.
-   * @param x left position
-   * @param y top position
-   * @param w width
-   * @param h height
+   * @param ctx the HTMLForm context whose style is updated
+   * @param pt left and top position
+   * @param size width and height
    */
   static rectStyle(
     ctx: DOMFormContext,
@@ -743,7 +741,7 @@ export class HTMLForm extends VisualForm {
 
   /**
    * Draws a point.
-   * @param p a Pt object
+   * @param pt a Pt object
    * @param radius radius of the point. Default is 5.
    * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
    * @example `form.point( p )`, `form.point( p, 10, "circle" )`
@@ -850,9 +848,8 @@ export class HTMLForm extends VisualForm {
   /**
    * A static function to draw text.
    * @param ctx a context object of HTMLForm
-   * @param `pt` a Point object to specify the anchor point
-   * @param `txt` a string of text to draw
-   * @param `maxWidth` specify a maximum width per line
+   * @param pt a Point object to specify the anchor point
+   * @param txt a string of text to draw
    */
   static text(ctx: DOMFormContext, pt: PtLike, txt: string): Element {
     let elem = HTMLSpace.htmlElement(ctx.group, "div", HTMLForm.getID(ctx));
@@ -867,10 +864,9 @@ export class HTMLForm extends VisualForm {
   }
 
   /**
-   * Draw text on canvas.
-   * @param `pt` a Pt or numeric array to specify the anchor point
-   * @param `txt` text
-   * @param `maxWidth` specify a maximum width per line
+   * Draw text in a DOM element.
+   * @param pt a Pt or numeric array to specify the anchor point
+   * @param txt text
    */
   text(pt: PtLike, txt: string): this {
     this.nextID();

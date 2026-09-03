@@ -369,7 +369,7 @@
           "parameters": [
             {
               "name": "p",
-              "comment": "",
+              "comment": "an [`IPlayer`](#link) object with animate function, or a callback function `fn(time, ftime)`.",
               "type": "IPlayer | AnimateCallbackFn",
               "default": false
             }
@@ -621,7 +621,7 @@
       "source": [
         [
           "src/Dom.ts",
-          316,
+          315,
           2
         ]
       ],
@@ -1365,7 +1365,7 @@
       "source": [
         [
           "src/Dom.ts",
-          301,
+          300,
           9
         ]
       ],
@@ -1389,7 +1389,7 @@
           ],
           "tags": [
             {
-              "tag": "exmaple",
+              "tag": "example",
               "text": "`DOMSpace.getInlineStyles( {width: \"100px\", \"font-size\": \"10px\"} )`"
             }
           ]

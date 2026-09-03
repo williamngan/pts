@@ -5,7 +5,7 @@ import { Util } from "./Util";
 import { type PtLikeIterable, type TextMeasure } from "./Types";
 
 /**
- * Typography provides helper functions to support typographic layouts. For a concrete example, see [a demo here](../demo/index.html?name=canvasform.textBox) that uses the [`CanvasForm.textBox`](#link) function.
+ * Typography provides helper functions to support typographic layouts. For a concrete example, see [a demo here](https://ptsjs.org/demo/?name=canvasform.textBox) that uses the [`CanvasForm.textBox`](#link) function.
  */
 export class Typography {
   /**

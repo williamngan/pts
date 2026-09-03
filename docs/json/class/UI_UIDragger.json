@@ -713,7 +713,7 @@
         {
           "comment": "Get and/or set a specific UI state.",
           "returns": "any",
-          "returns_comment": false,
+          "returns_comment": "If `value` is changed, return this instance. Otherwise, return the value of the specific key.",
           "parameters": [
             {
               "name": "key",

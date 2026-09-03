@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "comment": "A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation.\nIt advances with a substepped position-based (XPBD-style) solver and a spatial-hash broad phase.\nSee a [Particle demo](../demo/index.html?name=physics.particles) and a [Body demo](../demo/index.html?name=physics.shapes) on the demo page.",
+  "comment": "A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation.\nIt advances with a substepped position-based (XPBD-style) solver and a spatial-hash broad phase.\nSee a [Particle demo](https://ptsjs.org/demo/?name=physics.particles) and a [Body demo](https://ptsjs.org/demo/?name=physics.shapes) on the demo page.",
   "constructor": [
     {
       "name": "constructor",

@@ -684,13 +684,18 @@ async function buildOutput() {
     compilerOptions: { lib: ["es2016", "dom", "dom.iterable"] },
     entryPoints: await sourceEntryPoints(),
     entryPointStrategy: EntryPointStrategy.Resolve,
-    logLevel: "Error",
+    logLevel: "Warn",
     readme: "none",
   });
   const project = await app.convert();
   if (!project || app.logger.errorCount > 0) {
     throw new Error("TypeDoc failed to build the documentation model");
   }
+  assert.equal(
+    app.logger.warningCount,
+    0,
+    "TypeDoc warnings must be fixed before publishing documentation",
+  );
 
   const modules = {};
   const documents = new Map();

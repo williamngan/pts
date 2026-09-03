@@ -884,7 +884,7 @@ export class SVGSpace extends DOMSpace {
 
   /**
    * Remove an item from this Space.
-   * @param item a player item with an auto-assigned `animateID` property
+   * @param player a player item with an auto-assigned `animateID` property
    */
   remove(player: IPlayer): this {
     let temp = this._container.querySelectorAll("." + SVGForm.scopeID(player));
@@ -1308,8 +1308,8 @@ export class SVGForm extends CanvasForm<SVGSpace> {
   /**
    * A static function to draw a text element.
    * @param ctx a context object of SVGForm
-   * @param `pt` a Point object to specify the anchor point
-   * @param `txt` a string of text to draw
+   * @param pt a Point object to specify the anchor point
+   * @param txt a string of text to draw
    */
   static textElement(ctx: DOMFormContext, pt: PtLike, txt: string): SVGElement {
     let elem = SVGSpace.svgElement(ctx.group, "text", SVGForm.getID(ctx));

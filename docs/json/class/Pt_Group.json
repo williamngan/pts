@@ -1858,7 +1858,7 @@
           "parameters": [
             {
               "name": "scale",
-              "comment": "",
+              "comment": "shearing value which can be a number or an array of 2 numbers",
               "type": "number | PtLike",
               "default": false
             },
@@ -2333,7 +2333,7 @@
           "parameters": [
             {
               "name": "index",
-              "comment": "",
+              "comment": "index to zip at",
               "type": "number",
               "default": false
             },

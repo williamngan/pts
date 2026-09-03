@@ -196,7 +196,6 @@ export class Img {
 
   /**
    * Rescale the canvas and draw an image-source on it.
-   * @param imgScale rescale factor for the image
    * @param canvasScale rescale factor for the canvas
    * @param img an image source like Image, Canvas, or ImageBitmap.
    */

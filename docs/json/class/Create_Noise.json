@@ -24,7 +24,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Create a Noise Pt that can generate noise continuously. See a [Noise demo here](../demo/index.html?name=create.noisePts).",
+          "comment": "Create a Noise Pt that can generate noise continuously. See a [Noise demo here](https://ptsjs.org/demo/?name=create.noisePts).",
           "returns": "Noise",
           "returns_comment": false,
           "parameters": [
@@ -1995,7 +1995,7 @@
           "parameters": [
             {
               "name": "scale",
-              "comment": "",
+              "comment": "shearing value which can be a number or an array of 2 numbers",
               "type": "number | PtLike",
               "default": false
             },
