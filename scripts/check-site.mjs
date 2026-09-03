@@ -242,6 +242,37 @@ async function checkGuideApiLinks() {
   return `${count} static API links resolve with exact class names and member anchors`;
 }
 
+async function checkGuideKeyboardControls() {
+  const page = await browser.newPage();
+  try {
+    await page.goto(`${ORIGIN}/guide/Get-started-0100.html`);
+    const demo = page.getByRole("group", {
+      name: "Interactive example: getting started",
+      exact: true,
+    });
+    const toggle = demo.getByRole("button");
+    await toggle.waitFor();
+    await page.waitForFunction(
+      () => !document.querySelector(".demoToggle").disabled,
+    );
+    await toggle.press("Enter");
+    assert.equal(await toggle.getAttribute("aria-pressed"), "true");
+    await toggle.press("Enter");
+    assert.equal(await toggle.getAttribute("aria-pressed"), "false");
+    await toggle.press("Space");
+    assert.equal(await toggle.getAttribute("aria-pressed"), "true");
+    await toggle.press("Escape");
+    assert.equal(await toggle.getAttribute("aria-pressed"), "false");
+    assert.equal(
+      await demo.getByRole("link", { name: /Edit live code/u }).isVisible(),
+      true,
+    );
+  } finally {
+    await page.close();
+  }
+  return "Enter/Space toggle playback, Escape pauses, and the editor link stays visible";
+}
+
 async function checkPoseNetIsRetired() {
   const directory = join(ROOT, "demo/more/tfjs_posenet");
   const notice = await readFile(join(directory, "index.html"), "utf8");
@@ -1759,6 +1790,7 @@ const checks = [
   ["guide renders with slow images", checkGuideUnderSlowImages],
   ["guide layout fits narrow viewports", checkGuideResponsiveLayout],
   ["guide API links resolve", checkGuideApiLinks],
+  ["guide demos support keyboard controls", checkGuideKeyboardControls],
   ["guide loads demos lazily", checkGuideIsLazy],
   ["guide waits for off-screen demos", checkGuideDoesNotFailOffscreenDemos],
   ["editor is usable on narrow screens", checkEditorOnNarrowScreens],

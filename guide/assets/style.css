@@ -488,8 +488,8 @@ p {
   opacity: 1;
 }
 
-/* "Touch to try demo" is only true once there is a demo to try. */
-.demoOverlay.is-ready::after,
+/* Keep playback and source controls visible and keyboard reachable. */
+.demoOverlay .demoToggle,
 .demoOverlay .sourceCodeLink {
   display: block;
   position: absolute;
@@ -499,26 +499,31 @@ p {
   color: #fff;
   padding: 10px;
   font-size: 11px;
-  content: "Touch to try demo";
+  border: 0;
+  line-height: 1.5;
+  z-index: 1;
 }
 
 .demoOverlay.active {
   box-shadow: 0 0 0 2px #fff;
 }
 
-.demoOverlay.active::after {
-  display: none;
+.demoOverlay .demoToggle {
+  left: 0;
+  right: auto;
+  cursor: pointer;
 }
 
-.demoOverlay .sourceCodeLink {
-  display: none;
+.demoOverlay .demoToggle:disabled {
+  visibility: hidden;
+}
+.demoOverlay .demoToggle:focus-visible,
+.demoOverlay .sourceCodeLink:focus-visible {
+  outline: 3px solid #42e;
+  outline-offset: 2px;
 }
 
-.demoOverlay.active .sourceCodeLink {
-  display: block;
-}
-
-.demoOverlay.active .sourceCodeLink::after {
+.demoOverlay .sourceCodeLink::after {
   content: "↗";
 }
 
@@ -760,10 +765,6 @@ p {
 
   code {
     font-size: 0.8em;
-  }
-
-  .demoOverlay.active .sourceCodeLink::after {
-    content: "(desktop)";
   }
 
   .demoOverlay {

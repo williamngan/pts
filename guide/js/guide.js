@@ -64,6 +64,23 @@ Pts.namespace(this);
     const container = document.createElement("div");
     container.className = "demoOverlay is-pending";
     container.setAttribute("id", id);
+    container.setAttribute("role", "group");
+    container.setAttribute(
+      "aria-label",
+      `Interactive example: ${id.replaceAll("_", " ")}`,
+    );
+
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "demoToggle";
+    toggle.textContent = "Play demo";
+    toggle.disabled = true;
+    toggle.setAttribute("aria-pressed", "false");
+    toggle.addEventListener("click", function () {
+      if (container.classList.contains("active")) stop();
+      else start();
+    });
+    container.appendChild(toggle);
 
     const spinner = document.createElement("div");
     spinner.className = "demoSpinner";
@@ -72,6 +89,7 @@ Pts.namespace(this);
 
     const status = document.createElement("p");
     status.className = "demoStatus";
+    status.setAttribute("role", "status");
     container.appendChild(status);
 
     const link = document.createElement("a");
@@ -96,6 +114,7 @@ Pts.namespace(this);
       container.classList.remove("is-" + state);
       state = next;
       container.classList.add("is-" + state);
+      toggle.disabled = state !== "ready";
     }
 
     function fail(message) {
@@ -231,8 +250,11 @@ Pts.namespace(this);
 
     function start() {
       const demo = registry[id];
-      if (state !== "ready" || !demo) return;
+      if (state !== "ready" || !demo || container.classList.contains("active"))
+        return;
       container.classList.add("active");
+      toggle.textContent = "Pause demo";
+      toggle.setAttribute("aria-pressed", "true");
       if (demo.space && !demo.isCustom) demo.space.replay();
       if (demo.startCallback) demo.startCallback();
     }
@@ -240,6 +262,8 @@ Pts.namespace(this);
     function stop() {
       const demo = registry[id];
       container.classList.remove("active");
+      toggle.textContent = "Play demo";
+      toggle.setAttribute("aria-pressed", "false");
       if (!demo) return;
       if (demo.space && !demo.isCustom) demo.space.stop();
       // Sound examples hold an AudioContext; this is what releases it.
@@ -311,6 +335,10 @@ Pts.namespace(this);
     container.addEventListener("touchstart", start, { passive: true });
     container.addEventListener("mouseleave", stop);
     container.addEventListener("touchend", stop);
+    container.addEventListener("touchcancel", stop);
+    container.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") stop();
+    });
 
     controllers[id] = { registered: registered };
   }
