@@ -331,10 +331,25 @@ Pts.namespace(this);
       repaintTimer = setTimeout(repaintIfIdle, RESIZE_DEBOUNCE);
     }
 
-    container.addEventListener("mouseenter", start);
-    container.addEventListener("touchstart", start, { passive: true });
+    // Native controls own their gesture. Letting touchend stop a button tap
+    // before its click toggles playback would make Pause start it again.
+    function isControl(event) {
+      return event.target.closest("button, a");
+    }
+    container.addEventListener("mouseenter", function () {
+      if (matchMedia("(hover: hover)").matches) start();
+    });
+    container.addEventListener(
+      "touchstart",
+      function (event) {
+        if (!isControl(event)) start();
+      },
+      { passive: true },
+    );
     container.addEventListener("mouseleave", stop);
-    container.addEventListener("touchend", stop);
+    container.addEventListener("touchend", function (event) {
+      if (!isControl(event)) stop();
+    });
     container.addEventListener("touchcancel", stop);
     container.addEventListener("keydown", function (event) {
       if (event.key === "Escape") stop();

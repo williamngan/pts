@@ -309,6 +309,29 @@ async function checkGuideKeyboardControls() {
   return "Enter/Space toggle playback, Escape pauses, and the editor link stays visible";
 }
 
+async function checkGuideTouchControls() {
+  const page = await browser.newPage({
+    viewport: { width: 390, height: 844 },
+    isMobile: true,
+    hasTouch: true,
+  });
+  try {
+    await page.goto(`${ORIGIN}/guide/Get-started-0100.html`);
+    const toggle = page.locator(".demoToggle").first();
+    await toggle.scrollIntoViewIfNeeded();
+    await page.waitForFunction(
+      () => !document.querySelector(".demoToggle").disabled,
+    );
+    for (const expected of ["true", "false", "true", "false"]) {
+      await toggle.tap();
+      assert.equal(await toggle.getAttribute("aria-pressed"), expected);
+    }
+  } finally {
+    await page.close();
+  }
+  return "touch taps independently play and pause without synthetic hover interference";
+}
+
 async function checkPoseNetIsRetired() {
   const directory = join(ROOT, "demo/more/tfjs_posenet");
   const notice = await readFile(join(directory, "index.html"), "utf8");
@@ -1830,6 +1853,7 @@ const checks = [
   ["guide layout fits narrow viewports", checkGuideResponsiveLayout],
   ["guide API links resolve", checkGuideApiLinks],
   ["guide demos support keyboard controls", checkGuideKeyboardControls],
+  ["guide demos support touch controls", checkGuideTouchControls],
   ["guide loads demos lazily", checkGuideIsLazy],
   ["guide waits for off-screen demos", checkGuideDoesNotFailOffscreenDemos],
   ["editor is usable on narrow screens", checkEditorOnNarrowScreens],
