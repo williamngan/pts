@@ -1,41 +1,41 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <title>Image</title>
     <link href="./assets/style.css" rel="stylesheet" type="text/css" />
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+      content="width=device-width, initial-scale=1"
     />
   </head>
 
   <body>
-    <div id="header">
+    <header id="header">
   <div id="pts">
     <a href="../">Pts<span>.</span></a
     >guides
   </div>
-  <div id="topmenu">
+  <nav id="topmenu" aria-label="Site links">
     <a href="../demo/index.html">demos</a>
     <a href="../guide/Get-started-0100.html">guides</a>
     <a href="../docs/">docs</a>
     <a href="https://github.com/williamngan/pts">github</a>
-  </div>
-</div>
-    <a href="#menu" id="toc">&#x2261;</a>
-    <div id="post"><h1>Image</h1>
+  </nav>
+</header>
+    <a href="#menu" id="toc" aria-label="Open guide menu">&#x2261;</a>
+    <main id="post"><h1>Image</h1>
 <p>The standard API for working with images on canvas is rather laborious, and often takes the fun out of creative coding. In Pts, the <a href="../docs/?p=Image_Img"><code>Img</code></a> class simplifies the common use cases, from loading and displaying static images to generating dynamic textures, so that you can get started quickly. Let's take a look.</p>
 <h3>Loading and Displaying Images</h3>
 <p>We will start a minimalistic example: Load an image and display it on canvas. This can be done in 2 lines of code:</p>
-<pre><code>const img = await Img.load( &quot;/assets/demo.jpg&quot; );
+<pre tabindex="0"><code>const img = await Img.load( &quot;/assets/demo.jpg&quot; );
 space.add( time =&gt; form.image( space.pointer, img ) );
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:image_load"></p>
 <h5>Image credit: &quot;C 50 Last Birds And Flowers&quot; by Kurt Schwitters</h5>
 <p>The above example uses the <em>static</em> function <a href="../docs/?p=Image_Img#function_load"><code>Img.load</code></a>, which returns a Promise that resolves to the loaded image, and then uses CanvasForm's <a href="../docs/?p=Canvas_CanvasForm#function_image"><code>image</code></a> function to display it. A load failure rejects the Promise.</p>
 <p>You can also create an Img instance yourself and call the <em>instance</em> function <a href="../docs/?p=Image_Img#function_load"><code>load</code></a>, which is handy when you want to configure the instance first. An example:</p>
-<pre><code>(async function() {
+<pre tabindex="0"><code>(async function() {
   let img = await new Img().load( &quot;/assets/img_demo.jpg&quot; );
   space.add( time =&gt; form.image( space.pointer, img ) );
 })();
@@ -45,7 +45,7 @@ space.add( time =&gt; form.image( space.pointer, img ) );
 <h5>In this example, we access the image's original width and height after it's loaded, and then rescale it to fit the canvas size.</h5>
 <h3>Editing Images</h3>
 <p>When you create an Img instance with its <code>editable</code> parameter set to <code>true</code>, it will hold an internal canvas to support image manipulations. It will also match the pixel-density of your display. An example:</p>
-<pre><code>// Create an editable img with the current space's pixelScale
+<pre tabindex="0"><code>// Create an editable img with the current space's pixelScale
 let img = new Img( { editable: true, pixelScale: space.pixelScale } );
 img.load( &quot;/assets/demo.jpg&quot; ).then( ... );
 
@@ -58,7 +58,7 @@ let img2 = await Img.load( &quot;/assets/demo.jpg&quot;, { editable: true, pixel
 <p><img src="./assets/bg.png" alt="js:image_pixel"></p>
 <h5>Try scribbling in different regions of the image to change it. This demo combines <code>Create.delaunay</code> with <code>Img.pixel</code>.</h5>
 <p>Another common use case is to crop a region of the image. The <a href="../docs/?p=Image_Img#function_crop"><code>crop</code></a> function takes a bounding box and returns an <a href="https://developer.mozilla.org/en-US/docs/Web/API/ImageData"><code>ImageData</code></a>. You can then use CanvasForm's<a href="../docs/?p=Canvas_CanvasForm#function_imageData"><code>imageData</code></a> to draw the region.</p>
-<pre><code>form.imageData( img.crop( bound ) );
+<pre tabindex="0"><code>form.imageData( img.crop( bound ) );
 </code></pre>
 <p>Let's try this in a demo:</p>
 <p><img src="./assets/bg.png" alt="js:image_crop"></p>
@@ -67,7 +67,7 @@ let img2 = await Img.load( &quot;/assets/demo.jpg&quot;, { editable: true, pixel
 <h3>Edit and Sync</h3>
 <p>Since an editable <a href="../docs/?p=Image_Img"><code>Img</code></a> stores an internal canvas, you can leverage <a href="../docs/?p=Canvas_CanvasForm"><code>CanvasForm</code></a>'s many drawing functions to draw directly on it. It's that easy!</p>
 <p>After the image is loaded, you can access the canvas' rendering context through the property <code>img.ctx</code> and then create a new <a href="../docs/?p=Canvas_CanvasForm"><code>CanvasForm</code></a> instance with it. For example:</p>
-<pre><code>const img = await Img.load( &quot;demo.jpg&quot;, true );
+<pre tabindex="0"><code>const img = await Img.load( &quot;demo.jpg&quot;, true );
 const imgForm = new CanvasForm( img.ctx );
 ...
 imgForm.fill(&quot;#f00&quot;).rect( rect );
@@ -76,24 +76,24 @@ imgForm.fill(&quot;#f00&quot;).rect( rect );
 <p><img src="./assets/bg.png" alt="js:image_edit"></p>
 <h5>Move pointer to draw patches on the image canvas.</h5>
 <p>Additionally, the <a href="https://ptsjs.org/docs/?p=Image_Img#function_filter"><code>filter</code></a> function supports image filter effects like desaturation and blur (See the <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter">full list</a> supported by canvas). Note that some effects may not work in mobile browsers.</p>
-<pre><code>img.filter( &quot;blur(10px) contrast(20%) saturate(0%)&quot; )
+<pre tabindex="0"><code>img.filter( &quot;blur(10px) contrast(20%) saturate(0%)&quot; )
 </code></pre>
 <p>To display the edited image, use CanvasForm's <a href="https://ptsjs.org/docs/?p=Canvas_CanvasForm#function_image"><code>image</code></a> function but pass <code>img.canvas</code> (instead of <code>img</code> itself) in the parameter.</p>
-<pre><code>// draw internal image canvas
+<pre tabindex="0"><code>// draw internal image canvas
 form.image( img.canvas );
 </code></pre>
 <p>As we are only editing an internal canvas, the original image is unchanged until it's explicitly updated. Use <a href="../docs/?p=Image_Img#function_sync"><code>sync</code></a>, which returns a Promise, to update the original image when needed: <code>await img.sync()</code>.</p>
 <p>You can also work at the pixel level: <a href="../docs/?p=Image_Img#function_setPixel"><code>setPixel</code></a> writes a color into the cached pixel data, <a href="../docs/?p=Image_Img#function_updatePixels"><code>updatePixels</code></a> applies those changes onto the canvas, and <a href="../docs/?p=Image_Img#function_loadPixels"><code>loadPixels</code></a> refreshes the cache after you've drawn on the canvas directly. When you're done with an Img, call <a href="../docs/?p=Image_Img#function_dispose"><code>dispose</code></a> to release its resources.</p>
 <h3>Patterns</h3>
 <p>In a similar way, you can treat an image (or an image canvas) as a pattern to fill an area. One difference is that we'll get a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern">CanvasPattern</a> instance for use in <code>form.fill(...)</code>, instead of an image for <code>form.image(...)</code>.</p>
-<pre><code>const pattern = await Img.loadPattern( &quot;tile.jpg&quot;, space );
+<pre tabindex="0"><code>const pattern = await Img.loadPattern( &quot;tile.jpg&quot;, space );
 ...
 form.fill( pattern ).rect( rect );
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:image_pattern"></p>
 <h5>Loading an image and filling it as a pattern.</h5>
 <p>A pattern can be transformed via the standard canvas API <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern/setTransform">pattern.setTransform</a>. However, its documentation is confusing and incomplete. Pts provides an easy way to create a <a href="https://developer.mozilla.org/en-US/docs/Web/API/DOMMatrix"><code>DOMMatrix</code></a> for this use case.</p>
-<pre><code>const m = new Mat().translate2D( ... ).rotate2D( ... ).domMatrix;
+<pre tabindex="0"><code>const m = new Mat().translate2D( ... ).rotate2D( ... ).domMatrix;
 pattern.setTransform( m );
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:image_pattern2"></p>
@@ -117,7 +117,7 @@ pattern.setTransform( m );
 </ul>
 <h3>Cheatsheet</h3>
 <p>Creating, loading, displaying</p>
-<pre><code>// Simplest way
+<pre tabindex="0"><code>// Simplest way
 let img = await Img.load( &quot;demo.jpg&quot;);
 
 // Load an editable image that matches the screen's resolution
@@ -140,14 +140,14 @@ form.fill( pattern ).rect( rect );
 
 </code></pre>
 <p>Useful properties</p>
-<pre><code>img.loaded; // true if the image is loaded
+<pre tabindex="0"><code>img.loaded; // true if the image is loaded
 img.image; // the original image
 img.canvas; // the internal canvas of an editable Img
 img.ctx; // the context which can be used to create a CanvasForm
 img.pixelScale; // pixel density which usually matches the space's
 </code></pre>
 <p>Editing an image</p>
-<pre><code>img.crop( rect )
+<pre tabindex="0"><code>img.crop( rect )
 img.resize( 0.5, true );
 img.filter( &quot;blur(10px) | contrast(200%)&quot; );
 img.pixel( space.pointer );
@@ -165,9 +165,9 @@ pattern.setTransform( m );
 form.fill( pattern ).rect( rect );
 
 </code></pre>
-</div>
+</main>
 
-    <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol> <div id="footer">
+    <nav id="menu" aria-label="Guide chapters"><a id="close" href="#" aria-label="Close guide menu">&times;</a><ol><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol></nav> <div id="footer">
   Copyright &copy; 2017-current by
   <a href="https://twitter.com/williamngan">William Ngan</a> and contributors.
   Pts is an

@@ -1,33 +1,33 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <title>Space</title>
     <link href="./assets/style.css" rel="stylesheet" type="text/css" />
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+      content="width=device-width, initial-scale=1"
     />
   </head>
 
   <body>
-    <div id="header">
+    <header id="header">
   <div id="pts">
     <a href="../">Pts<span>.</span></a
     >guides
   </div>
-  <div id="topmenu">
+  <nav id="topmenu" aria-label="Site links">
     <a href="../demo/index.html">demos</a>
     <a href="../guide/Get-started-0100.html">guides</a>
     <a href="../docs/">docs</a>
     <a href="https://github.com/williamngan/pts">github</a>
-  </div>
-</div>
-    <a href="#menu" id="toc">&#x2261;</a>
-    <div id="post"><h1>Space</h1>
+  </nav>
+</header>
+    <a href="#menu" id="toc" aria-label="Open guide menu">&#x2261;</a>
+    <main id="post"><h1>Space</h1>
 <p><a href="../docs/?p=Space_Space"><code>Space</code></a> provides a general context for its points to be expressed. Each subclass of <code>Space</code> represents a specific context. Currently <strong><code>Pts</code></strong> includes <a href="../docs/?p=Canvas_CanvasSpace"><code>CanvasSpace</code></a> which corresponds to the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API"><code>canvas</code></a> element, and <a href="../docs/?p=Svg_SVGSpace"><code>SVGSpace</code></a> which lets you create vector graphics in svg format instead. There is also a deprecated <a href="../docs/?p=Dom_HTMLSpace"><code>HTMLSpace</code></a> which renders forms in basic html elements. Soon we will have spaces for other contexts too.</p>
 <p><a href="../docs/?p=Canvas_CanvasSpace"><code>CanvasSpace</code></a> can be created like this:</p>
-<pre><code>let space = new CanvasSpace( &quot;#hello&quot; );
+<pre tabindex="0"><code>let space = new CanvasSpace( &quot;#hello&quot; );
 space.setup({ bgcolor: &quot;#123&quot;, retina: true });
 </code></pre>
 <p>The &quot;#hello&quot; is a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector"><code>selector string</code></a> that selects an element in the html page. If the element is a <code>&lt;canvas&gt;</code>, it will be used by CanvasSpace. If the element is a <code>&lt;div&gt;</code> or other block element, a new <code>&lt;canvas&gt;</code> will be appended into it. You may also pass a HTMLElement directly, instead of a query selector string.</p>
@@ -35,13 +35,13 @@ space.setup({ bgcolor: &quot;#123&quot;, retina: true });
 <p>Now the space is set up, let's look at what it can do.</p>
 <h3>Players</h3>
 <p>A space by itself is void of form. Let's add a &quot;player&quot; to it. A player can be either a function or an object with specific properties.</p>
-<pre><code>space.add( (time, ftime) =&gt; {
+<pre tabindex="0"><code>space.add( (time, ftime) =&gt; {
   // do things
 });
 </code></pre>
 <p>In the above, we use <a href="../docs/?p=Canvas_CanvasSpace#function_add"><code>add</code></a> to add a simple callback function. It has 2 parameters: <code>time</code> which gives the current running time, and <code>ftime</code> which gives the time taken to draw the previous frame. This callback is like an animation loop, which will be called continuously when the player plays.</p>
 <p>Let's look at a more elaborate player:</p>
-<pre><code>space.add( {
+<pre tabindex="0"><code>space.add( {
   start: (bound, space) =&gt; {
     // code for init
   },
@@ -74,29 +74,29 @@ space.setup({ bgcolor: &quot;#123&quot;, retina: true });
 <p>You may add multiple players into a space, each taking care of specific parts of a scene. Use <a href="../docs/?p=Canvas_CanvasSpace#function_add"><code>add</code></a> and <a href="../docs/?p=Canvas_CanvasSpace#function_remove"><code>remove</code></a> to manage a space's players.</p>
 <h3>Animation and interaction</h3>
 <p>You can tell a space to play or stop its players using <a href="../docs/?p=Canvas_CanvasSpace#function_play"><code>play</code></a>, <a href="../docs/?p=Canvas_CanvasSpace#function_stop"><code>stop</code></a> and other functions:</p>
-<pre><code>space.play();
+<pre tabindex="0"><code>space.play();
 space.playOnce( 1000 ); // play 1 sec then stop
 space.pause();
 space.resume();
 space.stop();
 </code></pre>
 <p>Using <a href="../docs/?p=Canvas_CanvasSpace#function_bindMouse"><code>bindMouse</code></a> and <a href="../docs/?p=Canvas_CanvasSpace#function_bindTouch"><code>bindTouch</code></a>, you can easily make the space respond to user interactions. Once the space can receive mouse or touch events, you can track the events using a player's <code>action</code> callback function, as described above.</p>
-<pre><code>// You can chain multiple functions together
+<pre tabindex="0"><code>// You can chain multiple functions together
 space.bindMouse().bindTouch().play();
 </code></pre>
 <p>If you use interactive <a href="../docs/?p=UI_UI"><code>UI</code></a> elements like <a href="../docs/?p=UI_UIButton"><code>UIButton</code></a> or <a href="../docs/?p=UI_UIDragger"><code>UIDragger</code></a>, you can skip the <code>action</code> callback entirely: <a href="../docs/?p=Space_MultiTouchSpace#function_track"><code>track</code></a> forwards the space's events to them for you.</p>
-<pre><code>space.track( myButton ); // myButton now receives clicks, hovers, drags...
+<pre tabindex="0"><code>space.track( myButton ); // myButton now receives clicks, hovers, drags...
 space.untrack( myButton ); // ...until you stop tracking it
 </code></pre>
 <p>CanvasSpace also provides a couple convenient properties which you may access once the space is initiated. <a href="../docs/?p=Canvas_CanvasSpace#accessor_pointer"><code>.pointer</code></a> gives you the current pointer position. <a href="../docs/?p=Canvas_CanvasSpace#accessor_size"><code>.size</code></a>, <a href="../docs/?p=Canvas_CanvasSpace#accessor_center"><code>.center</code></a>, <a href="../docs/?p=Canvas_CanvasSpace#accessor_width"><code>.width</code></a>, <a href="../docs/?p=Canvas_CanvasSpace#accessor_height"><code>.height</code></a> and <a href="../docs/?p=Canvas_CanvasSpace#accessor_innerBound"><code>.innerBound</code></a> are handy to get a space's size and center point. <a href="../docs/?p=Canvas_CanvasSpace#accessor_element"><code>.element</code></a> and <a href="../docs/?p=Canvas_CanvasSpace#accessor_parent"><code>.parent</code></a> returns the html elements of this space.</p>
 <p>CanvasSpace also supports offscreen rendering which may help with rendering complex scene. Take a look at the source code of <a href="../study/index.html?name=CanvasSpace.offscreen">this study</a> for more.</p>
 <h3>Form</h3>
 <p>In the <a href="./Get-started-0100.html">Get Started</a> guide, we made an analogy of paper and pencil when introducing Space and Form. So <a href="../docs/?p=Canvas_CanvasForm"><code>CanvasForm</code></a> represents a pencil to draw on CanvasSpace. You can get the form with a single function call.</p>
-<pre><code>let space = new CanvasSpace(&quot;#paper&quot;);
+<pre tabindex="0"><code>let space = new CanvasSpace(&quot;#paper&quot;);
 let form = space.getForm(); // get default CanvasForm
 </code></pre>
 <p><a href="../docs/?p=Canvas_CanvasForm"><code>CanvasForm</code></a> includes many convenient functions to draw shapes on <code>&lt;canvas&gt;</code> element. Usually, you'll use these drawing functions in a player's <code>animate</code> function like this:</p>
-<pre><code>// Draw points inside the animate callback function
+<pre tabindex="0"><code>// Draw points inside the animate callback function
 space.add( (time, ftime) =&gt; {
     form.stroke(&quot;#fff&quot;).fill(&quot;#f03&quot;).circle( c );
     form.point( p, 10 );
@@ -108,7 +108,7 @@ space.add( (time, ftime) =&gt; {
 <p>And since both Space and Form are javascript classes, you can extend them to override its functions and add new ones.</p>
 <h3>SVG Space</h3>
 <p>You can switch your code from <a href="../docs/?p=Canvas_CanvasSpace"><code>CanvasSpace</code></a> to <a href="../docs/?p=Svg_SVGSpace"><code>SVGSpace</code></a> without changing your drawing code: initiate the space as <code>SVGSpace</code> instead of <code>CanvasSpace</code>, and <code>space.getForm()</code> will return an <a href="../docs/?p=Svg_SVGForm"><code>SVGForm</code></a>, which shares the complete <code>CanvasForm</code> drawing API — shapes, gradients, dashes, text and more render as svg automatically.</p>
-<pre><code>const space = new SVGSpace( &quot;#elem&quot; ).setup({ bgcolor: &quot;#123&quot;, resize: true });
+<pre tabindex="0"><code>const space = new SVGSpace( &quot;#elem&quot; ).setup({ bgcolor: &quot;#123&quot;, resize: true });
 const form = space.getForm();
 // ... the same drawing code as canvas
 </code></pre>
@@ -120,13 +120,13 @@ const form = space.getForm();
 <p>If you use Pts with React or other web rendering frameworks, it will be better to use the props and states of their virtual DOM implementations instead.</p>
 <h3>Cheat sheet</h3>
 <p>The quickest way to start is to use the <code>quickStart</code> function, which initiates a <a href="../docs/?p=Canvas_CanvasSpace"><code>CanvasSpace</code></a> and adds <code>space</code> and <code>form</code> instances into current scope. You can create an interactive piece in 2 lines of code:</p>
-<pre><code>Pts.namespace( this ); // not needed if using npm package
+<pre tabindex="0"><code>Pts.namespace( this ); // not needed if using npm package
 
 let run = Pts.quickStart( &quot;elemID&quot;, &quot;#f03&quot; )
 run( (time, ftime) =&gt; form.fill(&quot;#f03&quot;).point( space.pointer, 10, &quot;circle&quot; ) );
 </code></pre>
 <p>The following snippet is a typical template for creating a Pts space and form. Use this if you need more than an animation loop. You can add either an animation function or an <code>IPlayer</code> object to a space. (See above for details)</p>
-<pre><code>Pts.namespace( this ); // not needed if using npm package
+<pre tabindex="0"><code>Pts.namespace( this ); // not needed if using npm package
 
 var space = new CanvasSpace(&quot;elemID&quot;).setup({ retina: true });
 var form = space.getForm();
@@ -137,9 +137,9 @@ space.add( (time, ftime) =&gt; {
 
 space.bindMouse().bindTouch().play();
 </code></pre>
-</div>
+</main>
 
-    <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol> <div id="footer">
+    <nav id="menu" aria-label="Guide chapters"><a id="close" href="#" aria-label="Close guide menu">&times;</a><ol><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol></nav> <div id="footer">
   Copyright &copy; 2017-current by
   <a href="https://twitter.com/williamngan">William Ngan</a> and contributors.
   Pts is an

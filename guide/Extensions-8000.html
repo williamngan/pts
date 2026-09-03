@@ -1,30 +1,30 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <title>Extensions</title>
     <link href="./assets/style.css" rel="stylesheet" type="text/css" />
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+      content="width=device-width, initial-scale=1"
     />
   </head>
 
   <body>
-    <div id="header">
+    <header id="header">
   <div id="pts">
     <a href="../">Pts<span>.</span></a
     >guides
   </div>
-  <div id="topmenu">
+  <nav id="topmenu" aria-label="Site links">
     <a href="../demo/index.html">demos</a>
     <a href="../guide/Get-started-0100.html">guides</a>
     <a href="../docs/">docs</a>
     <a href="https://github.com/williamngan/pts">github</a>
-  </div>
-</div>
-    <a href="#menu" id="toc">&#x2261;</a>
-    <div id="post"><h1>Extensions</h1>
+  </nav>
+</header>
+    <a href="#menu" id="toc" aria-label="Open guide menu">&#x2261;</a>
+    <main id="post"><h1>Extensions</h1>
 <p>Pts.js works well with common web frameworks and can also be used in other environments. You can apply all or a part of Pts in your own project frictionlessly. The following is a list of libraries that extends Pts. Give them a try!</p>
 <h3>Starter Kit</h3>
 <p><a href="https://github.com/williamngan/pts-starter-kit"><code>pts-starter-kit</code></a> provides a convenient way to build your next Pts project, with support for both javascript and typescript.</p>
@@ -32,7 +32,7 @@
 <h3>React</h3>
 <p><a href="https://github.com/williamngan/react-pts-canvas"><code>react-pts-canvas</code></a> wraps Pts in a React component. It provides a functional component as well as a class component for backward compatibility.</p>
 <p>Using this component, you can create an animation as easy as:</p>
-<pre><code>&lt;PtsCanvas
+<pre tabindex="0"><code>&lt;PtsCanvas
   background=&quot;#9ab&quot;
   onAnimate={ (space, form, time, ftime) =&gt; {...} }
 /&gt;
@@ -51,9 +51,9 @@
 <h3>Your Contribution</h3>
 <p>Have you created a new library or project based on Pts? We would love to learn more and potentially feature it here.</p>
 <p>Please let us know by <a href="https://github.com/williamngan/pts/issues">filing an issue</a> or message <a href="https://twitter.com/williamngan">@williamngan</a> on Twitter.</p>
-</div>
+</main>
 
-    <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol> <div id="footer">
+    <nav id="menu" aria-label="Guide chapters"><a id="close" href="#" aria-label="Close guide menu">&times;</a><ol><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol></nav> <div id="footer">
   Copyright &copy; 2017-current by
   <a href="https://twitter.com/williamngan">William Ngan</a> and contributors.
   Pts is an

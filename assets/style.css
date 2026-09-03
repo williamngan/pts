@@ -65,6 +65,7 @@ html * {
 }
 
 #header_title  {
+  margin: 0;
   color: #fff;
   display: inline-block;
   padding-right: 0px;

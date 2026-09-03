@@ -21,6 +21,12 @@ const markdown = new MarkdownIt({
   typographer: false,
 });
 
+for (const rule of ["fence", "code_block"]) {
+  const render = markdown.renderer.rules[rule];
+  markdown.renderer.rules[rule] = (...args) =>
+    render(...args).replace("<pre>", '<pre tabindex="0">');
+}
+
 // Resolve API links before publishing HTML. Class casing and static-member
 // qualifiers come from TypeDoc rather than a browser-side naming heuristic.
 markdown.renderer.rules.link_open = (tokens, index, options, env, self) => {
@@ -193,21 +199,22 @@ function renderMenu(guides) {
         `<li><a href="${escapeHtml(guide.output)}">${escapeHtml(guide.title)}</a></li>`,
     )
     .join("");
-  return `<ol id="menu"><a id="close" href="#">&times;</a>${links}</ol>`;
+  return `<nav id="menu" aria-label="Guide chapters"><a id="close" href="#" aria-label="Close guide menu">&times;</a><ol>${links}</ol></nav>`;
 }
 
 function renderIndex(firstGuide) {
   return `<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 \t<title>Pts</title>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="alternate" type="text/markdown" href="/guide.md" title="Complete Pts guides and demos">
   <meta http-equiv="refresh" content="0; url=./${firstGuide.output}">
 </head>
 
 <body>
-  <small>Redirecting...</small>
+  <p>Continue to <a href="./${firstGuide.output}">${escapeHtml(firstGuide.title)}</a>.</p>
 </body>
 </html>
 `;

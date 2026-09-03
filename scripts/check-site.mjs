@@ -138,6 +138,42 @@ async function checkNoAnalytics() {
   return `${files.length} shipped HTML/JS files contain no Analytics code`;
 }
 
+async function checkSiteAccessibilityBasics() {
+  const files = [
+    "index.html",
+    ...(await readdir(join(ROOT, "guide")))
+      .filter((file) => file.endsWith(".html"))
+      .map((file) => `guide/${file}`),
+  ];
+  for (const file of files) {
+    const html = await readFile(join(ROOT, file), "utf8");
+    assert.match(
+      html,
+      /<html\s+lang="en"/u,
+      `${file} lacks its document language`,
+    );
+    assert.doesNotMatch(
+      html,
+      /user-scalable\s*=\s*no|maximum-scale\s*=\s*1\b/u,
+      `${file} disables zoom`,
+    );
+  }
+  const page = await browser.newPage();
+  try {
+    await page.goto(`${ORIGIN}/`);
+    assert.equal(await page.getByRole("heading", { level: 1 }).count(), 1);
+    await page.goto(`${ORIGIN}/guide/Get-started-0100.html`);
+    assert.equal(await page.getByRole("main").count(), 1);
+    assert.equal(await page.locator("pre:not([tabindex='0'])").count(), 0);
+    assert.ok(
+      await page.getByRole("navigation", { name: "Guide chapters" }).count(),
+    );
+  } finally {
+    await page.close();
+  }
+  return `${files.length} pages declare their language and allow zoom; headings, landmarks, and code focus are present`;
+}
+
 async function checkGuideResponsiveLayout() {
   const page = await browser.newPage();
   try {
@@ -1780,6 +1816,7 @@ async function checkEditorReportsErrors() {
 const checks = [
   ["agent documentation is discoverable", checkAgentMarkdown],
   ["shipped pages contain no analytics", checkNoAnalytics],
+  ["site accessibility basics are present", checkSiteAccessibilityBasics],
   ["PoseNet is retired", checkPoseNetIsRetired],
   ["top navigation is consistent", checkTopNavigation],
   ["demo editor links resolve", checkDemoEditorLink],

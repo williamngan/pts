@@ -1,33 +1,33 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <title>Sound</title>
     <link href="./assets/style.css" rel="stylesheet" type="text/css" />
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+      content="width=device-width, initial-scale=1"
     />
   </head>
 
   <body>
-    <div id="header">
+    <header id="header">
   <div id="pts">
     <a href="../">Pts<span>.</span></a
     >guides
   </div>
-  <div id="topmenu">
+  <nav id="topmenu" aria-label="Site links">
     <a href="../demo/index.html">demos</a>
     <a href="../guide/Get-started-0100.html">guides</a>
     <a href="../docs/">docs</a>
     <a href="https://github.com/williamngan/pts">github</a>
-  </div>
-</div>
-    <a href="#menu" id="toc">&#x2261;</a>
-    <div id="post"><h1>Sound</h1>
+  </nav>
+</header>
+    <a href="#menu" id="toc" aria-label="Open guide menu">&#x2261;</a>
+    <main id="post"><h1>Sound</h1>
 <p>Audio and visual forms complement each other, giving us new opportunities to create unique expressions. Pts simplifies a subset of Web Audio API to help you with common tasks like playbacks and visualizations.</p>
 <p>Before we dive in, let's review a snippet of using Pts' Sound functions. It's pretty straightforward.</p>
-<pre><code>// Load sound and attach analyzer
+<pre tabindex="0"><code>// Load sound and attach analyzer
 Sound.load( &quot;/assets/spacetravel.mp3&quot; ).then( s =&gt; {
   sound = s.analyze(bins);
 });
@@ -50,23 +50,23 @@ sound.freqDomainTo( space.size ).forEach( (t, i) =&gt; {
 <ol>
 <li>Use <a href="../docs/?p=Play_Sound#function_static_load"><code>Sound.load</code></a> to load a sound file with an url or a specific <code>&lt;audio&gt;</code> element. The sound will play as soon as it has streamed enough data. You can check if the audio file is ready to play by accessing <a href="../docs/?p=Play_Sound#accessor_playable"><code>.playable</code></a> property.</li>
 </ol>
-<pre><code>Sound.load( &quot;/path/to/hello.mp3&quot; ).then( s =&gt; sound = s );
+<pre tabindex="0"><code>Sound.load( &quot;/path/to/hello.mp3&quot; ).then( s =&gt; sound = s );
 Sound.load( audioElem ).then( s =&gt; sound = s ); // load from &lt;audio&gt; element
 </code></pre>
 <ol start="2">
 <li>Use <a href="../docs/?p=Play_Sound#function_static_loadAsBuffer"><code>Sound.loadAsBuffer</code></a> if you need support for Safari and iOS, since they currently don't provide sound data for &lt;audio&gt; element reliably. See discussion in Advanced section below.</li>
 </ol>
-<pre><code>Sound.loadAsBuffer( &quot;/path/to/hello.mp3&quot; ).then( s =&gt; sound = s );
+<pre tabindex="0"><code>Sound.loadAsBuffer( &quot;/path/to/hello.mp3&quot; ).then( s =&gt; sound = s );
 </code></pre>
 <ol start="3">
 <li>Use <a href="../docs/?p=Play_Sound#function_static_generate"><code>Sound.generate</code></a> to create a sound. You may also generate sounds using other libraries like Tone.js. Read more in Advanced section below.</li>
 </ol>
-<pre><code>let sound = Sound.generate( &quot;sine&quot;, 120 ); // sine oscillator at 120Hz
+<pre tabindex="0"><code>let sound = Sound.generate( &quot;sine&quot;, 120 ); // sine oscillator at 120Hz
 </code></pre>
 <ol start="4">
 <li>Use <a href="../docs/?p=Play_Sound#function_static_input"><code>Sound.input</code></a> to get audio from default input device (usually microphone). This will return a Promise object which will resolve when the input device is ready, or reject if the device is unavailable or permission is denied.</li>
 </ol>
-<pre><code>let sound;
+<pre tabindex="0"><code>let sound;
 Sound.input().then( s =&gt; sound = s ).catch( err =&gt; ... ); // default input device
 Sound.input( constraints ).then( s =&gt; sound = s ); // advanced use cases
 </code></pre>
@@ -74,7 +74,7 @@ Sound.input( constraints ).then( s =&gt; sound = s ); // advanced use cases
 <p><img src="./assets/bg.png" alt="js:sound_mic"></p>
 <h5>You may first need to allow this page to access microphone, and then click the record button. We also make the recording stop when the pointer leave the demo area so that your microphone is not always on.</h5>
 <p>You can then <a href="../docs/?p=Play_Sound#function_start"><code>start</code></a> and <a href="../docs/?p=Play_Sound#function_stop"><code>stop</code></a> playing the sound like this:</p>
-<pre><code>sound.start();
+<pre tabindex="0"><code>sound.start();
 sound.stop();
 sound.toggle(); // toggle between start and stop
 sound.playing; // boolean to indicate if sound is playing
@@ -83,45 +83,45 @@ sound.volume = 0.5; // change the volume (default is 1)
 <h5>Note that current browsers no longer support autoplay. Users will need to express intent to play the sound (eg, with a click).</h5>
 <h3>Analyze</h3>
 <p>Using the <a href="../docs/?p=Play_Sound#function_analyze"><code>analyze</code></a> function, we can attach an analyzer to keep track of the data in our Sound instance.</p>
-<pre><code>sound.analyze( 128 ); // Call once to initiate the analyzer
+<pre tabindex="0"><code>sound.analyze( 128 ); // Call once to initiate the analyzer
 </code></pre>
 <p>This will create an analyzer with 128 bins (more on that later) and default decibel range and smoothing values. See <a href="../docs/?p=Play_Sound#function_analyze"><code>analyze</code></a> docs for description of the advanced options.</p>
 <p>There are two common ways to analyze sound data. First, we can represent sounds as snapshots of sound waves, which correspond to variations in air pressure over time. This is called the time-domain, as it measures amplitudes of the &quot;waves&quot; over time steps.</p>
 <p>To get the time domain data at current time step, call the <a href="../docs/?p=Play_Sound#function_timeDomain"><code>timeDomain</code></a> function.</p>
-<pre><code>// get an uint typed array of 128 values (corresponds to bin size above)
+<pre tabindex="0"><code>// get an uint typed array of 128 values (corresponds to bin size above)
 let td = sound.timeDomain();
 </code></pre>
 <p>Optionally, use the <a href="../docs/?p=Play_Sound#function_timeDomainTo"><code>timeDomainTo</code></a> function to map the data to another range, such as a rectangular area. You can then apply various Pts functions to transform and visualize waveforms in a few lines of code.</p>
-<pre><code>// fit data into a 200x100 area, starting from position (50, 50)
+<pre tabindex="0"><code>// fit data into a 200x100 area, starting from position (50, 50)
 let td = sound.timeDomainTo( [200, 100], [50, 50] );
 
 form.points( td ); // visualize as points
 </code></pre>
 <p>Since you'll typically call these functions on every animation frame, you can optionally pass the resulting <code>Group</code> back in the last parameter to reuse it, which avoids creating new objects per frame:</p>
-<pre><code>let td; // keep a reference across frames
+<pre tabindex="0"><code>let td; // keep a reference across frames
 td = sound.timeDomainTo( [200, 100], [50, 50], [0, 0], td ); // reused
 </code></pre>
 <p>In the following example, we map the data to a normalized circle and then re-map it to draw colorful lines.</p>
-<pre><code>sound.timeDomainTo( [Const.two_pi, 1] ).map( t =&gt; ... );
+<pre tabindex="0"><code>sound.timeDomainTo( [Const.two_pi, 1] ).map( t =&gt; ... );
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:sound_time"></p>
 <h5>Click to play and visualize sounds of drum, tambourine, and flute from Philharmonia Orchestra.</h5>
 <p>In a similar way, we can access the frequency domain data by <a href="../docs/?p=Play_Sound#function_freqDomain"><code>freqDomain</code></a> and <a href="../docs/?p=Play_Sound#function_freqDomainTo"><code>freqDomainTo</code></a>. The frequency bins are calculated by an algorithm called Fast Fourier Transform (FFT). The FFT size is 2 times the bin size and both need to be powers of 2. (Recall that we set bin size to 128 earlier). You can quickly test it with a single line of code:</p>
-<pre><code>form.points( sound.freqDomainTo( space.size ) );
+<pre tabindex="0"><code>form.points( sound.freqDomainTo( space.size ) );
 </code></pre>
 <p>The following is a basic frequency-domain example for your reference.</p>
 <p><img src="./assets/bg.png" alt="js:sound_frequency"></p>
 <p>The interplay of sounds and shapes offer many possibilities indeed. Make good use of your imagination to create something beautiful, fun, and unexpected!</p>
 <h3>Advanced</h3>
 <p>Currently Safari and iOS can play streaming &lt;audio&gt; element, but don't reliably provide time and frequency domain data for it. Hopefully Safari will have a fix soon, but for now you can use <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer"><code>AudioBuffer</code></a> approach - it's a bit more clumsy but it works (see <a href="../docs/?p=Play_Sound#function_static_loadAsBuffer"><code>loadAsBuffer</code></a>).</p>
-<pre><code>Sound.loadAsBuffer( &quot;/path/to/hello.mp3&quot; ).then( s =&gt; sound = s );
+<pre tabindex="0"><code>Sound.loadAsBuffer( &quot;/path/to/hello.mp3&quot; ).then( s =&gt; sound = s );
 </code></pre>
 <p><code>AudioBuffer</code> doesn't support streaming and its source node can only be played once. Pts recreates the buffer for you when you call <a href="../docs/?p=Play_Sound#function_start"><code>start</code></a> or <a href="../docs/?p=Play_Sound#function_toggle"><code>toggle</code></a> again, so replay just works. If you want to prepare a replay manually, use the convenient <a href="../docs/?p=Play_Sound#function_createBuffer"><code>createBuffer</code></a> function without parameter to re-use the previous buffer.</p>
-<pre><code>// optionally, prepare a replay manually by reusing the loaded buffer
+<pre tabindex="0"><code>// optionally, prepare a replay manually by reusing the loaded buffer
 sound.createBuffer();
 </code></pre>
 <p>For custom use cases with other libraries, you can create an instance using <a href="../docs/?p=Play_Sound#function_static_from"><code>Sound.from</code></a> static method. Here's an example using Tone.js:</p>
-<pre><code>let synth = new Tone.Synth();
+<pre tabindex="0"><code>let synth = new Tone.Synth();
 let sound = Sound.from( synth, synth.context ); // create Pts Sound instance
 synth.toMaster(); // play using tone.js instead of Pts
 </code></pre>
@@ -146,7 +146,7 @@ synth.toMaster(); // play using tone.js instead of Pts
 </ul>
 <h3>Cheatsheet</h3>
 <p>Creating and playing a <a href="../docs/?p=Play_Sound"><code>Sound</code></a> instance</p>
-<pre><code>Sound.load( &quot;path/file.mp3&quot; ).then( d =&gt; s = d ); // from file
+<pre tabindex="0"><code>Sound.load( &quot;path/file.mp3&quot; ).then( d =&gt; s = d ); // from file
 Sound.loadAsBuffer( &quot;path/file.mp3&quot; ).then( d =&gt; s = d ); // using AudioBuffer instead
 Sound.input().then( d =&gt; s = d ); // get microphone input
 s = Sound.generate( &quot;sine&quot;, 120 ); // sine wave at 120hz
@@ -157,7 +157,7 @@ s.stop();
 s.toggle();
 </code></pre>
 <p>Getting time domain and frequency domain data</p>
-<pre><code>s.analyze( 256 ); // Create analyzer with 256 bins
+<pre tabindex="0"><code>s.analyze( 256 ); // Create analyzer with 256 bins
 
 s.timeDomain();
 s.timeDomainTo( area, position ); // map to a area [w, h] from position [x, y]
@@ -166,9 +166,9 @@ s.freqDomain();
 s.freqDomainTo( [10, 5] ); // map to a 10x5 area
 g = s.freqDomainTo( area, position, trim, g ); // reuse a Group across frames
 </code></pre>
-</div>
+</main>
 
-    <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol> <div id="footer">
+    <nav id="menu" aria-label="Guide chapters"><a id="close" href="#" aria-label="Close guide menu">&times;</a><ol><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol></nav> <div id="footer">
   Copyright &copy; 2017-current by
   <a href="https://twitter.com/williamngan">William Ngan</a> and contributors.
   Pts is an
