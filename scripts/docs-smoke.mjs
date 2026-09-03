@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createReadStream } from "node:fs";
-import { access, stat } from "node:fs/promises";
+import { access, readFile, stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -217,6 +217,33 @@ try {
     return Math.round(Math.abs(target.top - contents.top));
   });
   assert.equal(staticArcAlignment, 0);
+
+  // Every generated long anchor must survive a direct link, not just an
+  // in-page click that bypasses loadContents' URL handling.
+  const searchIndex = JSON.parse(
+    await readFile(path.join(docsDirectory, "json/search.json"), "utf8"),
+  );
+  const longTargets = searchIndex
+    .map(([target]) => target)
+    .filter((target) => (target.split("#")[1]?.length ?? 0) > 30);
+  assert.ok(longTargets.length > 0);
+  for (const target of longTargets) {
+    const hash = target.split("#")[1];
+    await page.goto(`${documentation.origin}/index.html?p=${target}`);
+    await page.locator(`[id="${hash}"]`).waitFor({ state: "attached" });
+    await page.waitForFunction((hash) => {
+      const target = document.getElementById(hash);
+      const contents = document.getElementById("contents");
+      return (
+        location.hash === `#${hash}` &&
+        contents.scrollTop > 0 &&
+        target.getBoundingClientRect().top >=
+          contents.getBoundingClientRect().top - 1 &&
+        target.getBoundingClientRect().top <
+          contents.getBoundingClientRect().bottom
+      );
+    }, hash);
+  }
 
   await search.fill("Color.ranges");
   const rangesResult = page

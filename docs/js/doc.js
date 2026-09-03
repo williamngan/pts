@@ -228,7 +228,7 @@ function loadContents(id, hash, reloading) {
   if (!id) return;
   if (!hash) hash = "";
   if (hash.indexOf("#") === 0) hash = hash.substr(1);
-  hash = clean_str(hash, 30);
+  hash = clean_str(hash);
 
   loadJSON(`./json/class/${id}.json`, (data, status) => {
     if (!data) {
@@ -401,13 +401,16 @@ document.querySelector("#close").addEventListener("click", function () {
   toggleMenu(false);
 });
 
-// force reload on back button click
-window.addEventListener("popstate", function (event) {
-  if (!event || !event.state || !event.state.path) {
-    resetContents();
-    setHistory("");
+// Native hash links and history entries need not carry our pushState payload.
+// The address bar, not optional history state, is the navigation source of truth.
+window.addEventListener("popstate", function () {
+  const qsel = qs("p", 40);
+  if (qsel) {
+    loadContents(qsel, window.location.hash, true);
   } else {
-    let qsel = qs("p", 40, event.state.path);
-    if (qsel) loadContents(qsel, qsHash(event.state.path), true);
+    resetContents();
+    app.selected = "";
+    app.selHash = "";
+    lastHistory = "";
   }
 });
