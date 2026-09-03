@@ -274,7 +274,8 @@ try {
   ).trim();
   assert.equal(
     resolvedPts,
-    pathToFileURL(path.join(extractedRoot, "dist", "index.mjs")).href,
+    pathToFileURL(await realpath(path.join(extractedRoot, "dist", "index.mjs")))
+      .href,
   );
   assert.ok(!resolvedPts.includes(pathToFileURL(projectRoot).href));
   console.log(
