@@ -100,6 +100,12 @@ var app = new Vue({
   },
 
   methods: {
+    navigate: function (event, page, hash) {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      if (this.selected === page) this.jumpTo(hash);
+      else loadContents(page, hash);
+    },
     searchLink: function (link) {
       let n = link[0].split("#");
       if (this.selected && n[0] === this.selected) {
@@ -399,6 +405,14 @@ document.querySelector("#toc").addEventListener("click", function (evt) {
 
 document.querySelector("#close").addEventListener("click", function () {
   toggleMenu(false);
+  document.querySelector("#toc").focus();
+});
+
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Escape" && _menu_toggle) {
+    toggleMenu(false);
+    document.querySelector("#toc").focus();
+  }
 });
 
 // Native hash links and history entries need not carry our pushState payload.

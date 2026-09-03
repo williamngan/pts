@@ -46,16 +46,16 @@
         <nav id="modules" tabindex="0" aria-label="Modules">
             <div v-for="m in modules">
               <h4>{{ m[0] }}</h4>
-              <div class="item" v-for="c in m[1]" v-on:click="loadClass( m[0], c )">
+              <a class="item" v-for="c in m[1]" v-bind:href="'?p='+m[0]+'_'+c" v-on:click="navigate($event, m[0]+'_'+c)">
                 <span v-bind:class="{selected: m[0]+'_'+c === selected, ts: m[0] === 'Types' }">{{ c }}</span>
-              </div>
+              </a>
             </div>
         </nav>
 
         <nav id="members" tabindex="0" aria-label="Class members" v-bind:class="{collapsed: !expandMemberPane(), searchResults: searchQuery.length > 0}">
           <div v-if="searchResults.length > 0">
             <div v-for="s in searchResults" class="item">
-              <span v-on:click="searchLink(s)">{{s[1]}}</span>
+              <a v-bind:href="'?p='+s[0]" v-on:click="navigate($event, s[0].split('#')[0], s[0].split('#')[1])">{{s[1]}}</a>
               <span class="itemType">{{ s[2] }}</span>
             </div>
           </div>
@@ -69,25 +69,25 @@
           <div v-if="searchQuery.length === 0 && searchResults.length === 0">
             <h4 v-if="contents.constructor && contents.constructor.length > 0">Constructor</h4>
             <div v-for="m in contents.constructor">
-              <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'constructor_'+m.name )">{{ contents.name }}</span>
+              <a v-bind:href="'?p='+selected+'#constructor_'+m.name" v-bind:class="{inherits: m.inherits}" v-on:click="navigate($event, selected, 'constructor_'+m.name)">{{ contents.name }}</a>
             </div>
 
             <h4 v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">Properties</h4>
             <div v-for="m in contents.variables">
-              <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'property_'+m.name )">{{ m.name }}</span>
+              <a v-bind:href="'?p='+selected+'#property_'+m.name" v-bind:class="{inherits: m.inherits}" v-on:click="navigate($event, selected, 'property_'+m.name)">{{ m.name }}</a>
             </div>
             <div v-for="m in contents.properties">
-              <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'property_'+m.name )">{{ m.name }}</span>
+              <a v-bind:href="'?p='+selected+'#property_'+m.name" v-bind:class="{inherits: m.inherits}" v-on:click="navigate($event, selected, 'property_'+m.name)">{{ m.name }}</a>
             </div>
 
             <h4 v-if="contents.accessors && contents.accessors.length > 0">Accessors</h4>
             <div v-for="m in contents.accessors">
-              <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'accessor_'+m.name )">{{ m.name }}</span>
+              <a v-bind:href="'?p='+selected+'#accessor_'+m.name" v-bind:class="{inherits: m.inherits}" v-on:click="navigate($event, selected, 'accessor_'+m.name)">{{ m.name }}</a>
             </div>
 
             <h4 v-if="contents.methods && contents.methods.length > 0">Methods</h4>
             <div v-for="m in contents.methods">
-              <span v-bind:class="{inherits: m.inherits}" v-bind:data-target="anchor('function', m)" v-on:click="jumpTo( anchor('function', m) )">{{ m.name }}</span>
+              <a v-bind:href="'?p='+selected+'#'+anchor('function', m)" v-bind:class="{inherits: m.inherits}" v-bind:data-target="anchor('function', m)" v-on:click="navigate($event, selected, anchor('function', m))">{{ m.name }}</a>
             </div>
 
             <h4 v-if="contents.type_alias && contents.type_alias.length > 0">Types</h4>

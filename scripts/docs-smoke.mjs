@@ -137,9 +137,9 @@ try {
   });
 
   await page
-    .locator("#modules .item")
-    .filter({ hasText: /^CanvasSpace$/u })
-    .click();
+    .getByRole("navigation", { name: "Modules", exact: true })
+    .getByRole("link", { name: "CanvasSpace", exact: true })
+    .press("Enter");
   await page
     .locator("#contents")
     .getByRole("heading", { name: "CanvasSpace", exact: true })
@@ -159,7 +159,10 @@ try {
     .waitFor();
 
   await page.locator("#function_setup").first().waitFor({ state: "attached" });
-  await page.locator("#members").getByText("setup", { exact: true }).click();
+  await page
+    .locator("#members")
+    .getByRole("link", { name: "setup", exact: true })
+    .press("Enter");
   await page.waitForURL(
     `${documentation.origin}/index.html?p=Canvas_CanvasSpace#function_setup`,
   );
@@ -251,7 +254,9 @@ try {
     .filter({ hasText: "Color.ranges" })
     .first();
   await rangesResult.waitFor();
-  await rangesResult.locator("span").first().click();
+  await rangesResult
+    .getByRole("link", { name: "Color.ranges", exact: true })
+    .press("Enter");
   await page.waitForURL(
     `${documentation.origin}/index.html?p=Color_Color#property_ranges`,
   );

@@ -415,6 +415,20 @@ code {
   line-height: 1.75;
 }
 
+#modules a,
+#members a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #42e;
+  outline-offset: 2px;
+}
+
 #modules h4,
 #members h4 {
   text-transform: uppercase;
@@ -471,11 +485,11 @@ code {
   display: none;
 }
 
-#members span {
+#members a {
   cursor: pointer;
 }
 
-#members span:hover {
+#members a:hover {
   color: #007a3d;
 }
 
