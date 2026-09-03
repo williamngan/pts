@@ -910,3 +910,36 @@ XCode style (c) Angel Garcia <angelgarcia.mail@gmail.com>
 .hljs-emphasis {
   font-style: italic;
 }
+
+@media screen and (max-width: 768px) {
+  #header {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 0 12px 0 52px;
+    display: flex;
+    align-items: center;
+  }
+  #pts {
+    padding: 0;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  #toc {
+    width: 50px;
+  }
+  #topmenu {
+    position: static;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  #topmenu > a,
+  #topmenu > a:nth-child(n + 3) {
+    display: block;
+    padding: 0 4px;
+    font-size: 12px;
+    line-height: 44px;
+  }
+}

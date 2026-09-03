@@ -334,6 +334,16 @@ try {
   await page.waitForFunction(
     () => document.querySelector("#menu").getBoundingClientRect().left === 0,
   );
+  await page.locator("#close").press("Enter");
+  await search.fill("Circle.intersectCircle2D");
+  await page
+    .locator("#members")
+    .getByRole("link", { name: "Circle.intersectCircle2D", exact: true })
+    .press("Enter");
+  await page.waitForURL(
+    `${documentation.origin}/index.html?p=Op_Circle#function_static_intersectCircle2D`,
+  );
+  await page.locator("#function_static_intersectCircle2D").waitFor();
 
   assert.deepEqual(
     localFailures,

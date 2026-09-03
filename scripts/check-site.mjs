@@ -388,7 +388,9 @@ async function checkTopNavigation() {
   try {
     for (const [width, expectedVisible] of [
       [1200, expectedLinks.map(([label]) => label)],
-      [390, ["demos", "guides"]],
+      [768, expectedLinks.map(([label]) => label)],
+      [390, expectedLinks.map(([label]) => label)],
+      [320, expectedLinks.map(([label]) => label)],
     ]) {
       await page.setViewportSize({ width, height: 844 });
 

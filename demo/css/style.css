@@ -321,7 +321,7 @@ a:hover {
 }
 
 
-@media only screen and (max-device-width : 767px) {
+@media only screen and (max-device-width : 767px), screen and (max-width : 767px) {
   /* Header and Footer */
   
   #header {
@@ -355,4 +355,11 @@ a:hover {
   .demo {
     padding: 3px 0;
   }
+}
+/* All primary destinations remain available in narrow and split-screen views. */
+@media screen and (max-width: 768px) {
+  #header { box-sizing: border-box; padding: 0 12px; width: 100%; line-height: 72px; }
+  #pts { padding: 0; font-size: 14px; white-space: nowrap; }
+  #topmenu { top: 0; right: 12px; height: 72px; display: flex; align-items: center; }
+  #topmenu > a, #topmenu > a:nth-child(n + 3) { display: block; padding: 0 5px; font-size: 12px; line-height: 44px; height: auto; }
 }

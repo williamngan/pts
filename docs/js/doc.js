@@ -170,6 +170,7 @@ var app = new Vue({
       app.searchQuery = query;
       document.querySelector("#search").className =
         query.length > 0 ? "searching" : "";
+      if (query && getComputedStyle(document.querySelector("#toc")).display !== "none") toggleMenu(true);
     },
 
     expandMemberPane: function () {

@@ -862,3 +862,16 @@ p {
     font-size: 2.2em;
   }
 }
+
+@media screen and (max-width: 768px) {
+  #header { height: 115px; align-items: flex-start; }
+  #pts { font-size: 12px; line-height: 70px; padding: 0 6px; }
+  #topmenu { padding-right: 6px; }
+  #topmenu > a, #topmenu > a:nth-child(n + 3) { display: block; padding: 0 4px; font-size: 12px; line-height: 44px; height: auto; }
+  #search { display: block; top: 70px; left: 0; width: 100%; height: 44px; border-top: 1px solid #cde; border-bottom: 1px solid #cde; }
+  #search > input { width: 100%; height: 43px; padding: 0 48px 0 16px; margin: 0; }
+  #search > input:focus, #search.searching > input { padding: 0 48px 0 16px; border-left: 0; }
+  #clearSearch { line-height: 43px; padding: 0 16px; }
+  #docapp { top: 115px; }
+  #members.searchResults { left: 0; width: 100%; z-index: 1; }
+}
