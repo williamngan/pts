@@ -1,5 +1,7 @@
 var sourceRoot = "https://github.com/williamngan/pts/blob/master/";
 var _search = [];
+var contentRequest = 0;
+var loadingPage = "";
 // API comments are Markdown, never executable HTML. markdown-it also rejects
 // unsafe link protocols such as javascript: by default.
 var docsMarkdown = markdownit({ html: false });
@@ -138,7 +140,7 @@ var app = Vue.createApp({
       )
         return;
       event.preventDefault();
-      if (this.selected === page) this.jumpTo(hash);
+      if (this.selected === page && !loadingPage) this.jumpTo(hash);
       else loadContents(page, hash);
     },
     searchLink: function (link) {
@@ -159,6 +161,10 @@ var app = Vue.createApp({
     },
 
     jumpTo: function (id, ignoreHistory) {
+      if (!ignoreHistory) {
+        this.selHash = id || "";
+        setHistory(this.selected, this.selHash);
+      }
       if (!id) {
         document.querySelector("#contents").scrollTo(0, 0);
         return;
@@ -166,7 +172,6 @@ var app = Vue.createApp({
       let elem = document.getElementById(id);
       if (elem) {
         elem.scrollIntoView(true);
-        if (!ignoreHistory) setHistory(app.selected, id);
       }
     },
 
@@ -264,11 +269,15 @@ function getParentID(elem, depth = 0) {
 
 function loadContents(id, hash, reloading) {
   if (!id) return;
+  const request = ++contentRequest;
+  loadingPage = id;
   if (!hash) hash = "";
   if (hash.indexOf("#") === 0) hash = hash.substr(1);
   hash = clean_str(hash);
 
   loadJSON(`./json/class/${id}.json`, (data, status) => {
+    if (request !== contentRequest) return;
+    loadingPage = "";
     if (!data) {
       resetContents();
       app.contents.name = "Page not found";
@@ -314,9 +323,10 @@ function loadContents(id, hash, reloading) {
 
     if (!reloading) {
       setHistory(id, hash);
-    }
+    } else lastHistory = id + hash;
 
     setTimeout(function () {
+      if (request !== contentRequest || app.selHash !== hash) return;
       document.getElementById("members").scrollTo(0, 0);
       document.getElementById("contents").scrollTo(0, 0);
       app.jumpTo(hash, reloading);
@@ -418,6 +428,8 @@ function setHistory(id, hash) {
 }
 
 function resetContents() {
+  contentRequest++;
+  loadingPage = "";
   app.contents = {
     name: " ",
     constructor: {},

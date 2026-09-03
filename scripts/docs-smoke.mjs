@@ -401,9 +401,54 @@ try {
     true,
   );
   await page.setViewportSize({ width: 1440, height: 900 });
+  await page.waitForFunction(() => !document.querySelector("#menu").inert);
   assert.equal(
     await page.locator("#menu").evaluate((menu) => menu.inert),
     false,
+  );
+
+  // An older response must not replace a newer selection, including selecting
+  // the currently displayed class again while another request is in flight.
+  await page.goto(`${documentation.origin}/index.html?p=Pt_Pt`, {
+    waitUntil: "networkidle",
+  });
+  let releaseOldRequest;
+  const heldRequest = new Promise((resolve) => {
+    releaseOldRequest = resolve;
+  });
+  await page.route("**/json/class/Canvas_CanvasSpace.json", async (route) => {
+    await heldRequest;
+    await route.continue();
+  });
+  const oldRequest = page.waitForRequest(
+    "**/json/class/Canvas_CanvasSpace.json",
+  );
+  const modules = page.getByRole("navigation", {
+    name: "Modules",
+    exact: true,
+  });
+  await modules.getByRole("link", { name: "CanvasSpace", exact: true }).click();
+  await oldRequest;
+  await modules.getByRole("link", { name: "Pt", exact: true }).click();
+  await page.waitForFunction(() => window.loadingPage === "");
+  const oldResponse = page.waitForResponse(
+    "**/json/class/Canvas_CanvasSpace.json",
+  );
+  releaseOldRequest();
+  await oldResponse;
+  await page.waitForLoadState("networkidle");
+  assert.equal(await page.locator("#contents h1").textContent(), "Pt");
+  assert.equal(new URL(page.url()).searchParams.get("p"), "Pt_Pt");
+  await page.unroute("**/json/class/Canvas_CanvasSpace.json");
+  await page.locator('#members a[href="?p=Pt_Pt#function_add"]').click();
+  await page.waitForURL(
+    `${documentation.origin}/index.html?p=Pt_Pt#function_add`,
+  );
+  await modules.getByRole("link", { name: "Pt", exact: true }).click();
+  await page.waitForURL(`${documentation.origin}/index.html?p=Pt_Pt`);
+  assert.equal(
+    await page.locator("#contents").evaluate((element) => element.scrollTop),
+    0,
   );
 
   assert.deepEqual(
