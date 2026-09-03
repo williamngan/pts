@@ -77,6 +77,13 @@ try {
     waitUntil: "networkidle",
   });
   await page.getByRole("heading", { name: "Pts Docs" }).waitFor();
+  assert.deepEqual(
+    await page.evaluate(() => [
+      window.qs("p", 40, "?other=1&p=Pt_Pt#function_add"),
+      window.qs("p", 40, "?p=%E0%A4%A"),
+    ]),
+    ["Pt_Pt", "__A"],
+  );
   const markdownSafety = await page.evaluate(() => ({
     version: window.Vue.version,
     safe: window.app.md("**bold** and [`Pt`](#link)"),

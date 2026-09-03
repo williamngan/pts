@@ -239,11 +239,10 @@ var app = Vue.createApp({
 // ---
 
 function qs(name, limit, path) {
-  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-    results = regex.exec(path ? path : location.search);
-  let q =
-    results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  // URLSearchParams tolerates malformed percent-encoding instead of throwing
+  // before the docs can render their normal missing-page message.
+  const q =
+    new URL(path || location.href, location.href).searchParams.get(name) || "";
   return clean_str(q, limit);
 }
 
