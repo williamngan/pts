@@ -138,6 +138,57 @@ async function checkNoAnalytics() {
   return `${files.length} shipped HTML/JS files contain no Analytics code`;
 }
 
+async function checkGuideResponsiveLayout() {
+  const page = await browser.newPage();
+  try {
+    for (const width of [320, 390, 768, 1024, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const route of [
+        "Get-started-0100",
+        "Technical-notes-9000",
+        "Space-0500",
+      ]) {
+        await page.goto(`${ORIGIN}/guide/${route}.html`, {
+          waitUntil: "networkidle",
+        });
+        const layout = await page.evaluate(() => {
+          const title = document.getElementById("pts").getBoundingClientRect();
+          const menu = document
+            .getElementById("topmenu")
+            .getBoundingClientRect();
+          const toc = document.getElementById("toc");
+          return {
+            width: document.documentElement.clientWidth,
+            scrollWidth: document.documentElement.scrollWidth,
+            titleRight: title.right,
+            menuLeft: menu.left,
+            tocRight:
+              getComputedStyle(toc).display === "none"
+                ? 0
+                : toc.getBoundingClientRect().right,
+            titleLeft: title.left,
+          };
+        });
+        assert.ok(
+          layout.scrollWidth <= layout.width,
+          `${route} overflows at ${width}px: ${JSON.stringify(layout)}`,
+        );
+        assert.ok(
+          layout.titleRight <= layout.menuLeft,
+          `${route} header overlaps at ${width}px`,
+        );
+        assert.ok(
+          layout.tocRight <= layout.titleLeft,
+          `${route} menu toggle overlaps at ${width}px`,
+        );
+      }
+    }
+  } finally {
+    await page.close();
+  }
+  return "three guides fit 320, 390, 768, 1024, and 1440px viewports";
+}
+
 async function checkPoseNetIsRetired() {
   const directory = join(ROOT, "demo/more/tfjs_posenet");
   const notice = await readFile(join(directory, "index.html"), "utf8");
@@ -1630,6 +1681,7 @@ const checks = [
   ["all authored demos load", checkAllDemos],
   ["homepage hero preserves particle behavior", checkHomepageHero],
   ["guide renders with slow images", checkGuideUnderSlowImages],
+  ["guide layout fits narrow viewports", checkGuideResponsiveLayout],
   ["guide loads demos lazily", checkGuideIsLazy],
   ["guide waits for off-screen demos", checkGuideDoesNotFailOffscreenDemos],
   ["editor is usable on narrow screens", checkEditorOnNarrowScreens],
@@ -1647,7 +1699,11 @@ const checks = [
 
 let failed = 0;
 try {
-  for (const [name, fn] of checks) {
+  const selected = checks.filter(([name]) =>
+    name.includes(process.argv[2] ?? ""),
+  );
+  assert.ok(selected.length > 0, "No site checks match the requested filter");
+  for (const [name, fn] of selected) {
     try {
       const detail = await fn();
       process.stdout.write(`ok    ${name} — ${detail}\n`);

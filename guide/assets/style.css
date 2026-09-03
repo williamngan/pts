@@ -445,6 +445,9 @@ pre {
   padding: 5px 0 5px 20px;
   font-size: 0.9em;
   margin: 20px 0 40px;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
 }
 
 code {
@@ -688,22 +691,39 @@ p {
 }
 
 /* Mobile */
-@media screen and (max-device-width: 767px) {
+@media screen and (max-device-width: 767px), screen and (max-width: 767px) {
   /* Header and Footer */
 
   #header {
-    padding: 0;
-    margin-left: 15%;
-    width: 85%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 0 12px 0 52px;
+    margin: 0;
+    width: 100%;
     line-height: 70px;
     font-size: 1.2em;
   }
 
+  #pts {
+    white-space: nowrap;
+  }
+  #topmenu {
+    position: static;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
   #topmenu > a {
-    padding-left: 0;
+    padding: 0 6px;
   }
   #topmenu > a:last-child {
-    padding-right: 20px;
+    padding-right: 0;
+  }
+
+  #post {
+    width: calc(100% - 40px);
+    overflow-wrap: anywhere;
   }
 
   #toc {
