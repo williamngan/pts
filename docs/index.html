@@ -97,7 +97,7 @@
         <button type="button" id="close" aria-label="Close documentation menu">&times;</button>
       </div>
       
-      <main id="contents" v-bind:class="{expanded: expandMemberPane()}" v-on:click="clickTarget">
+      <main id="contents" tabindex="-1" v-bind:class="{expanded: expandMemberPane()}" v-on:click="clickTarget">
         <div v-if="contents.name.length < 2">
           <h1>Pts Docs</h1>
           <div class="top_info">

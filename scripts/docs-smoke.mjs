@@ -316,12 +316,14 @@ try {
     return {
       contentsLeft: contents.left,
       menuLeft: menu.left,
+      menuInert: document.querySelector("#menu").inert,
       tocDisplay: toc.display,
     };
   });
   assert.deepEqual(mobileLayout, {
     contentsLeft: 0,
     menuLeft: -390,
+    menuInert: true,
     tocDisplay: "block",
   });
   const mobileHeader = await page.evaluate(() => {
@@ -342,6 +344,17 @@ try {
   assert.ok(mobileHeader.ptsRight <= mobileHeader.topmenuLeft);
   assert.ok(mobileHeader.topmenuRight <= mobileHeader.headerRight);
   await page.locator("#toc").click();
+  assert.equal(
+    await page.locator("#menu").evaluate((menu) => menu.inert),
+    false,
+  );
+  assert.equal(
+    await page
+      .locator("#modules .item")
+      .first()
+      .evaluate((link) => link === document.activeElement),
+    true,
+  );
   await page.waitForFunction(
     () => document.querySelector("#menu").getBoundingClientRect().left === 0,
   );
@@ -355,6 +368,21 @@ try {
     `${documentation.origin}/index.html?p=Op_Circle#function_static_intersectCircle2D`,
   );
   await page.locator("#function_static_intersectCircle2D").waitFor();
+  assert.equal(
+    await page.locator("#menu").evaluate((menu) => menu.inert),
+    true,
+  );
+  assert.equal(
+    await page
+      .locator("#contents")
+      .evaluate((main) => main === document.activeElement),
+    true,
+  );
+  await page.setViewportSize({ width: 1440, height: 900 });
+  assert.equal(
+    await page.locator("#menu").evaluate((menu) => menu.inert),
+    false,
+  );
 
   assert.deepEqual(
     localFailures,

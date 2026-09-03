@@ -404,6 +404,19 @@ function resetContents() {
 }
 
 var _menu_toggle = false;
+var mobileMenu = window.matchMedia(
+  "(max-width: 768px), (max-device-width: 768px)",
+);
+
+function syncMenuAccessibility() {
+  const menu = document.querySelector("#menu");
+  const hidden = mobileMenu.matches && !_menu_toggle;
+  if (hidden && menu.contains(document.activeElement)) {
+    document.querySelector("#contents").focus({ preventScroll: true });
+  }
+  menu.inert = hidden;
+  menu.setAttribute("aria-hidden", String(hidden));
+}
 
 function toggleMenu(t) {
   _menu_toggle = t !== undefined ? t : !_menu_toggle;
@@ -411,11 +424,18 @@ function toggleMenu(t) {
   document
     .querySelector("#toc")
     .setAttribute("aria-expanded", String(_menu_toggle));
+  syncMenuAccessibility();
 }
 
 document.querySelector("#toc").addEventListener("click", function (evt) {
   toggleMenu();
+  if (_menu_toggle) document.querySelector("#modules .item").focus();
 });
+
+mobileMenu.addEventListener("change", function () {
+  toggleMenu(false);
+});
+syncMenuAccessibility();
 
 document.querySelector("#close").addEventListener("click", function () {
   toggleMenu(false);
