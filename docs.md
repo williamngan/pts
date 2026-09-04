@@ -10606,7 +10606,7 @@ Bind event listener in canvas element. You can also use [`MultiTouchSpace.bindMo
 - `evt` (`string`) — an event string such as "mousedown"
 - `callback` (`EventListener`) — callback function for this event
 - `options` (`any`; default `{}`) — options for [addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener).
-- `customTarget` (`Element`) — If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.
+- `customTarget` (`Element`) — an optional event target to use instead of the canvas element
 
 <a id="space-multitouchspace-bind-doc"></a>
 ##### `bindDoc`
@@ -10650,7 +10650,7 @@ The types of mouse actions are defined by [`UIPointerActions`](#ui-uipointeracti
 **Parameters**
 
 - `bind` (`boolean`; default `true`) — a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
-- `customTarget` (`Element`) — If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.
+- `customTarget` (`Element`) — an optional event target to use instead of the canvas element
 
 **See also:** [`Space.add`](#space-space-add)
 
@@ -10669,7 +10669,7 @@ The types of mouse actions are defined by [`UIPointerActions`](#ui-uipointeracti
 
 - `bind` (`boolean`; default `true`) — a boolean value to bind touch events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
 - `passive` (`boolean`; default `false`) — a boolean value to set passive mode, ie, it won't block scrolling. Default is false.
-- `customTarget` (`Element`) — If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.
+- `customTarget` (`Element`) — an optional event target to use instead of the canvas element
 
 **See also:** [`Space.add`](#space-space-add)
 

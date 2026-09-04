@@ -181,7 +181,7 @@ async function checkGuideResponsiveLayout() {
       await page.setViewportSize({ width, height: 900 });
       for (const route of [
         "Get-started-0100",
-        "Technical-notes-9000",
+        "Ecosystem-8000",
         "Space-0500",
       ]) {
         await page.goto(`${ORIGIN}/guide/${route}.html`, {

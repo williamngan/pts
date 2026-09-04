@@ -416,7 +416,7 @@
             },
             {
               "name": "customTarget",
-              "comment": "If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.",
+              "comment": "an optional event target to use instead of the canvas element",
               "type": "Element",
               "default": false
             }
@@ -527,7 +527,7 @@
             },
             {
               "name": "customTarget",
-              "comment": "If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.",
+              "comment": "an optional event target to use instead of the canvas element",
               "type": "Element",
               "default": false
             }
@@ -573,7 +573,7 @@
             },
             {
               "name": "customTarget",
-              "comment": "If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.",
+              "comment": "an optional event target to use instead of the canvas element",
               "type": "Element",
               "default": false
             }

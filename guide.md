@@ -18,8 +18,7 @@ Demo and study source files are linked directly from `ptsjs.org` instead of embe
 - [Animation](#guide-animation)
 - [Sound](#guide-sound)
 - [Image](#guide-image)
-- [Extensions](#guide-extensions)
-- [Technical notes](#guide-technical-notes)
+- [Ecosystem](#guide-ecosystem)
 - [Changelog](#guide-changelog)
 
 ### Demos
@@ -1737,22 +1736,14 @@ form.fill( pattern ).rect( rect );
 
 [Guide source](https://github.com/williamngan/pts/blob/master/guide/md/_0900_Image.md)
 
-<a id="guide-extensions"></a>
-### Extensions
+<a id="guide-ecosystem"></a>
+### Ecosystem
 
-Pts.js works well with common web frameworks and can also be used in other environments. You can apply all or a part of Pts in your own project frictionlessly. The following is a list of libraries that extends Pts. Give them a try!
+Pts can be used on its own or alongside tools made for different workflows. The ecosystem currently starts with these two projects.
 
-#### Starter Kit
+#### react-pts-canvas
 
-[`pts-starter-kit`](https://github.com/williamngan/pts-starter-kit) provides a convenient way to build your next Pts project, with support for both javascript and typescript.
-
-Behind the scene it uses [esbuild](https://esbuild.github.io/) so it's super fast and optimized. When minified and gzipped, the repo demo is only ~26kb in size.
-
-#### React
-
-[`react-pts-canvas`](https://github.com/williamngan/react-pts-canvas) wraps Pts in a React component. It provides a functional component as well as a class component for backward compatibility.
-
-Using this component, you can create an animation as easy as:
+[`react-pts-canvas`](https://github.com/williamngan/react-pts-canvas) is a React component for creating Pts canvases inside a React application. It connects a component's lifecycle to a Pts space and provides callbacks for setup, animation, actions, and resizing.
 
 ```
 <PtsCanvas
@@ -1761,78 +1752,17 @@ Using this component, you can create an animation as easy as:
 />
 ```
 
-For other examples using this React component, take a look at [this repo](https://github.com/williamngan/react-pts-canvas-examples).
+Install it from [npm](https://www.npmjs.com/package/react-pts-canvas).
 
-#### Svelte
+#### pts-cli
 
-**[experimental]** [`svelte-pts-canvas`](https://github.com/williamngan/svelte-pts-canvas) provides an experimental Pts component for Svelte. Please give it a try and make it better via feedback and PRs.
+`pts-cli` is a command-line version of Pts for working with Pts projects from the terminal. Installation and usage details will be added here with its public release.
 
-#### Node Canvas
+#### Your contribution
 
-**[experimental]**
-[`node-pts-canvas`](https://github.com/williamngan/node-pts-canvas) makes Pts work on [node-canvas](https://github.com/Automattic/node-canvas), a Cairo-backed Canvas implementation for Node.js. This means you can output higher resolution images and SVG without using browsers.
+Have you created a library or project based on Pts? We would love to learn more and potentially feature it here. Please let us know by [filing an issue](https://github.com/williamngan/pts/issues).
 
-Only basic features of Pts are implemented at this point. Please file an issue for bugs and feedback.
-
-#### fxhash Starter Kit
-
-**[experimental]** [`pts-fxhash-starter-kit`](https://github.com/williamngan/pts-fxhash-starter-kit) forked from the fxhash boilerplate, providing a convenient way to make generative NFTs with Pts.
-
-[fxhash](https://www.fxhash.xyz/) is a generative NFT platform on Tezos blockchain. [My fxhash account](https://www.fxhash.xyz/u/William%20Ngan) displays some NFT examples created with this repo.
-
-Please understand that this repo may not always be kept up-to-date with the latest fxhash requirements and features. Please refer to fxhash documentations, revise as needed, and fully test your code.
-
-#### Your Contribution
-
-Have you created a new library or project based on Pts? We would love to learn more and potentially feature it here.
-
-Please let us know by [filing an issue](https://github.com/williamngan/pts/issues) or message [@williamngan](https://twitter.com/williamngan) on Twitter.
-
-[Guide source](https://github.com/williamngan/pts/blob/master/guide/md/_8000_Extensions.md)
-
-<a id="guide-technical-notes"></a>
-### Technical notes
-
-#### Working with React and other libraries
-
-When using Pts as an [npm package](https://www.npmjs.com/package/pts), you can choose to import only a small part of Pts into your own project. Perhaps just a couple of Line functions are all you need:
-
-```
-import {Pt, Line} from "pts"
-```
-
-Pts targets ES2015 and does not ship a separate ES5 build. For older JavaScript environments, transpile the `"pts"` import with your application's bundler and supply any required platform polyfills.
-
-For using Pts with React, [react-pts-canvas](https://www.npmjs.com/package/react-pts-canvas) is a component which you can extend to make it your own. Also take a look at [react-pts-canvas-examples](https://github.com/williamngan/react-pts-canvas-examples) which includes Pts examples in React.
-
-#### Cloning Pt with `clone()` or `$...`
-
-Pt is a subclass of Float32Array, and Group is a subclass of Array that should only contain Pt in it.
-
-Since objects and arrays in javascript are passed by reference, remember to clone them if you are going to change their values. Functions starting with `$` such as `$add` means it will return a new Pt and keeping the original unchanged.
-
-```
-myGroup.push( space.center.clone() );
-pt.$subtract( 10 ); // use $fn to get a new Pt
-```
-
-#### Typescript notes
-
-While [`Pt`](https://ptsjs.org/docs.md#pt-pt) extends `Float32Array` and [`Group`](https://ptsjs.org/docs.md#pt-group) extends Array, typescript compiler at the moment (2.4.2) isn't smart enough to auto-cast the return type when you use an Array or Float32Array function. That means if you use typescript, you may need to recast some native Array functions such as `map` or `slice`.
-
-```
-let p:Pt = new Pt(1,2,3);
-let p2 = p.map( (d) => d+1 ); // typescript thinks p2 is Float32Array
-let p3 = p.map( (d) => d+1 ) as Pt; // type is now cast back to Pt
-```
-
-#### Remember to file issues and feedbacks
-
-Support this open-source project by filing bugs and pull requests on [github](https://github.com/williamngan/pts). If you have other feedbacks, please ping [@williamngan](https://twitter.com/williamngan).
-
-Show us what you have made with Pts too!
-
-[Guide source](https://github.com/williamngan/pts/blob/master/guide/md/_9000_Technical_notes.md)
+[Guide source](https://github.com/williamngan/pts/blob/master/guide/md/_8000_Ecosystem.md)
 
 <a id="guide-changelog"></a>
 ### Changelog
