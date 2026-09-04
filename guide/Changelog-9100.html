@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Changelog</title>
+    <link href="./assets/style.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8" />
+    <link rel="alternate" type="text/markdown" href="/guide.md" title="Complete Pts guides and demos" />
+    <link rel="alternate" type="text/markdown" href="/docs.md" title="Complete Pts API reference" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+  </head>
+
+  <body>
+    <header id="header">
+  <div id="pts">
+    <a href="../">Pts<span>.</span></a
+    >guides
+  </div>
+  <nav id="topmenu" aria-label="Site links">
+    <a href="../demo/index.html">demos</a>
+    <a href="../guide/Get-started-0100.html">guides</a>
+    <a href="../docs/">docs</a>
+    <a href="https://github.com/williamngan/pts">github</a>
+  </nav>
+</header>
+    <a href="#menu" id="toc" aria-label="Open guide menu">&#x2261;</a>
+    <main id="post"><h1>Changelog</h1>
+      <h2>Pts reaches v1.0</h2>
+<p>It has been <a href="https://news.ycombinator.com/item?id=17716542" target="_blank">8 years</a> since I released Pts.js. Life and work overwhelmed me in the few years, and instead of coding for fun, I learned to be a new parent and that was hard work too.</p>
+<p>I asked the latest AI models to improve Pts.js and cleared years of tech debts. It worked. This brings the question whether Pts.js is still needed in 2026 and beyond. I cannot quite answer this question, except to say I still appreciate the beauty of code and I hope Pts.js will always be useful and fun for humans.</p>
+
+<h3>v1.0 changes</h3>
+<ul>
+  <li style="margin-bottom:16px"><strong>10x faster</strong>: Lots of performance improvements across the board, many functions are 10x or more performant.</li>
+  <li style="margin-bottom:16px"><strong>CLI</strong>: Pts.js now renders images and svgs directly in the command line. See <a href="https://ptsjs.org/cli">the cli page</a> for more.
+  <li style="margin-bottom:16px"><strong>New SVG renderer</strong>: <code>SVGForm</code> now follows the Canvas drawing API and automatically keeps SVG elements in sync between frames. It can also serve as a reference for custom renderers.</li>
+  <li style="margin-bottom:16px"><strong>Feature improvements</strong>: <code>Color</code> now supports Oklab and Oklch. Improved image and sound handling. Revamped physics engine. Better geometry operations, animation handling, curve and voronoi and noise generation, UI tracking, and more.</li>
+  <li style="margin-bottom:16px"><strong>Modernized build system</strong>: Updated to Typescript 6 in strict mode. Build scripts now use pnpm and tsdown. Packages include explicit ESM and CommonJS entry points.</li>
+  <li style="margin-bottom:16px"><strong>AI ready</strong>: Documentation and guide now accessible to AI in md format. Point your agent simply to ptsjs.org and it'll follow instructions in <a href="https://ptsjs.org/llms.txt">llms.txt</a></li>
+  <li style="margin-bottom:16px"><strong>Full test coverage</strong>. Vitest suite covering Node.js, real-browser behavior, type contracts, integrations, and visual regressions. Benchmarks established for testing.</li>
+</ul>
+
+<h3>Compatibility notes</h3>
+<p>Most API changes are additive, but corrected bugs may produce different results when old code depended on incorrect behavior. TypeScript users may also see new compile errors. See the <a href="../CHANGELOG.md">full project changelog</a>.</p>
+<p>Deprecated API (but remain available):</p>
+<ul>
+<li><code>HTMLSpace</code> and <code>HTMLForm</code>: use <code>SVGSpace</code> and <code>SVGForm</code>.</li>
+<li><code>Img.loadAsync</code>: use <code>Img.load</code>.</li>
+<li><code>Img.cleanup</code>: use <code>Img.dispose</code>.</li>
+<li><code>SVGForm.scope</code> and <code>SVGForm.updateScope</code>: SVG elements are now reconciled automatically.</li>
+<li>The initial-box form of <code>Typography.fontSizeToBox</code>: use <code>fontSizeToBox(ratio, byHeight)</code>.</li>
+<li><code>Util.randomInt</code>: use <code>Num.randomRange</code>.</li>
+</ul>
+</main>
+
+    <nav id="menu" aria-label="Guide chapters"><a id="close" href="#" aria-label="Close guide menu">&times;</a><ol><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Extensions-8000.html">Extensions</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li><li><a href="Changelog-9100.html">Changelog</a></li></ol></nav> <div id="footer">
+  Copyright &copy; 2017-current by
+  <a href="https://twitter.com/williamngan">William Ngan</a> and contributors.
+  Pts is an
+  <a href="https://github.com/williamngan/pts">open source project</a> under
+  Apache License 2.0.
+</div>
+
+<script type="text/javascript" src="../dist/pts.min.js"></script>
+<script type="text/javascript" src="./js/guide.js"></script>
+<script src="./js/highlight.pack.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+  </body>
+</html>
