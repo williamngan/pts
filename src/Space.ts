@@ -125,7 +125,9 @@ export abstract class Space {
     if (this._firstFrame) {
       // the first frame after a fresh start renders immediately with no
       // elapsed time — `time` is an arbitrary clock timestamp, not a delta
-      this._firstFrame = false;
+      // play() draws synchronously at synthetic time 0. Keep initialization
+      // pending until RAF supplies its first real clock timestamp.
+      this._firstFrame = time === 0;
       this._time.diff = 0;
       this._time.prev = time;
     } else {
