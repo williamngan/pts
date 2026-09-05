@@ -623,6 +623,45 @@ describe("Img correctness fixes", () => {
     img.dispose();
   });
 
+  it.each([false, true])(
+    "rejects an editable=%s pending load on disposal",
+    async (editable) => {
+      const img = new Img(editable);
+      const image = img.image;
+      const pending = img.load(sourceUrl());
+      const rejection = expect(pending).rejects.toThrow(/disposed/);
+      img.dispose().dispose();
+      await rejection;
+      expect(image.onload).toBeNull();
+      expect(image.onerror).toBeNull();
+      expect(img.loaded).toBe(false);
+      expect(img.current).toBeNull();
+      await expect(img.load(sourceUrl())).rejects.toThrow(/disposed/);
+      await expect(img.sync()).rejects.toThrow(/disposed/);
+    },
+  );
+
+  it("does not revive an image disposed between load completion and its continuation", async () => {
+    const img = new Img();
+    const pending = img.load(sourceUrl());
+    const rejection = expect(pending).rejects.toThrow(/disposed/);
+    img.image.dispatchEvent(new Event("load"));
+    img.dispose();
+    await rejection;
+    expect(img.loaded).toBe(false);
+    expect(img.current).toBeNull();
+  });
+
+  it("rejects a pending sync when disposed during asynchronous encoding", async () => {
+    const img = Img.blank([4, 4]);
+    const pending = img.sync();
+    const rejection = expect(pending).rejects.toThrow(/disposed/);
+    img.dispose();
+    await rejection;
+    expect(img.loaded).toBe(false);
+    expect(img.current).toBeNull();
+  });
+
   it("supersedes a pending load with a rejection", async () => {
     const img = new Img(true);
     const first = img.load(sourceUrl(4, 4, "#00ff00"));

@@ -36,6 +36,7 @@ export class Img {
   protected _patternCtx!: RenderingContext2D; // lazy fallback when no space is set
   protected _objectUrl!: string | null; // tracked for revocation on dispose
   private _pendingLoadReject: ((err: Error) => void) | null = null; // newer loads supersede pending ones
+  private _disposed = false;
   protected _dataDirty: boolean = false; // ImageData refreshes lazily on first read
 
   /**
@@ -141,6 +142,7 @@ export class Img {
     }
 
     return this._loadImageSrc(src).then(() => {
+      if (this._disposed) throw new Error("Img has been disposed");
       if (this._editable) {
         if (!this._cv)
           this._cv = document.createElement("canvas") as HTMLCanvasElement;
@@ -157,6 +159,8 @@ export class Img {
    * pipeline. Shared by `load()` and `sync()` so both respect the supersede rule.
    */
   protected _loadImageSrc(src: string): Promise<void> {
+    if (this._disposed)
+      return Promise.reject(new Error("Img has been disposed"));
     return new Promise<void>((resolve, reject) => {
       // a newer load replaces this one's handlers on the shared <img>, so a
       // pending previous promise must be rejected proactively
@@ -312,6 +316,7 @@ export class Img {
    * To display the internal canvas, use `form.image( [0, 0], img.current )`.
    */
   async sync(): Promise<Img> {
+    if (this._disposed) throw new Error("Img has been disposed");
     // Blob-blit instead of a base64 round-trip: encode asynchronously, load
     // the result into the image, and leave the working canvas untouched (the
     // canvas is already the source of truth, so no redraw or readback is
@@ -347,6 +352,7 @@ export class Img {
     this._objectUrl = url;
     try {
       await this._loadImageSrc(url);
+      if (this._disposed) throw new Error("Img has been disposed");
       this._loaded = true;
     } finally {
       URL.revokeObjectURL(url);
@@ -522,9 +528,17 @@ export class Img {
   }
 
   /**
-   * Dispose of the elements, data, and any object URL associated with this Img.
+   * Dispose of the elements, data, and any object URL associated with this Img. Pending loads reject; the instance should not be reused.
    */
   dispose(): this {
+    this._disposed = true;
+    this._pendingLoadReject?.(new Error("Img has been disposed"));
+    this._pendingLoadReject = null;
+    if (this._img) {
+      this._img.onload = null;
+      this._img.onerror = null;
+      this._img.removeAttribute("src");
+    }
     if (this._objectUrl) {
       URL.revokeObjectURL(this._objectUrl);
       this._objectUrl = null;
