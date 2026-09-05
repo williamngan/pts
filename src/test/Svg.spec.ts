@@ -89,6 +89,44 @@ describe("SVGContext2D surface", () => {
     expect(segments).toHaveLength(2);
   });
 
+  it("captures stroke width, caps, joins, and dashes before later style changes", () => {
+    const { ctx, form } = makeForm();
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.setLineDash([4, 2]);
+    ctx.lineDashOffset = 3;
+    form.strokeOnly("#f00", 2).line([
+      [0, 10],
+      [100, 10],
+    ]);
+    ctx.lineCap = "square";
+    ctx.lineJoin = "miter";
+    ctx.setLineDash([]);
+    ctx.lineDashOffset = 0;
+    form.strokeOnly("#00f", 10).line([
+      [0, 20],
+      [100, 20],
+    ]);
+    ctx._flushShape();
+    expect(ctx.runs).toHaveLength(2);
+    expect(ctx.runs[0].attrs).toMatchObject({
+      stroke: "#f00",
+      "stroke-width": 2,
+      "stroke-linecap": "round",
+      "stroke-linejoin": "round",
+      "stroke-dasharray": "4 2",
+      "stroke-dashoffset": 3,
+    });
+    expect(ctx.runs[1].attrs).toMatchObject({
+      stroke: "#00f",
+      "stroke-width": 10,
+      "stroke-linecap": "square",
+      "stroke-linejoin": "miter",
+    });
+    expect(ctx.runs[1].attrs).not.toHaveProperty("stroke-dasharray");
+    expect(ctx.runs[1].attrs).not.toHaveProperty("stroke-dashoffset");
+  });
+
   it("supports save and restore of paint state", () => {
     const { ctx } = makeForm();
     ctx.fillStyle = "#111";

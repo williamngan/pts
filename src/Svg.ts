@@ -168,6 +168,7 @@ export class SVGContext2D {
   protected _d: string = "";
   protected _shapeFill: string | null = null; // resolved paint or null
   protected _shapeStroke: string | null = null;
+  protected _shapeStrokeStyle: Record<string, string | number> = {};
   protected _shapePainted: boolean = false;
   // class/alpha/blend are captured at paint time (fill/stroke), not at flush
   // time, so a style change between shapes cannot apply retroactively
@@ -409,6 +410,16 @@ export class SVGContext2D {
 
   stroke(): void {
     this._shapeStroke = this._resolvePaint(this.strokeStyle);
+    this._shapeStrokeStyle = {
+      "stroke-width": this.lineWidth,
+      "stroke-linejoin": this.lineJoin,
+      "stroke-linecap": this.lineCap,
+    };
+    if (this._dash.length > 0) {
+      this._shapeStrokeStyle["stroke-dasharray"] = this._dash.join(" ");
+      if (this.lineDashOffset)
+        this._shapeStrokeStyle["stroke-dashoffset"] = this.lineDashOffset;
+    }
     this._capturePaintState();
   }
 
@@ -631,14 +642,7 @@ export class SVGContext2D {
       stroke: this._shapeStroke ?? "none",
     };
     if (this._shapeStroke) {
-      attrs["stroke-width"] = this.lineWidth;
-      attrs["stroke-linejoin"] = this.lineJoin;
-      attrs["stroke-linecap"] = this.lineCap;
-      if (this._dash.length > 0) {
-        attrs["stroke-dasharray"] = this._dash.join(" ");
-        if (this.lineDashOffset)
-          attrs["stroke-dashoffset"] = this.lineDashOffset;
-      }
+      Object.assign(attrs, this._shapeStrokeStyle);
     }
     attrs.class = this._shapeClass
       ? `pts-svgform ${this._shapeClass}`
