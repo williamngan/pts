@@ -847,34 +847,53 @@ async function checkHomepageHero() {
     const canvas = await page.locator("canvas").boundingBox();
     assert.ok(canvas, "homepage hero canvas was not created");
 
-    await page.waitForTimeout(100);
-    const initialDividers = await page.evaluate(() => {
-      const { lines } = window.__heroFrame;
-      const canvasBounds = document
-        .querySelector("canvas")
-        .getBoundingClientRect();
-      const center = [canvasBounds.width / 2, canvasBounds.height / 2];
-      const targetAngle = Math.PI / 6;
-      let connectorCount = 0;
-      let maxAngleError = 0;
+    // A resize can clear the canvas between animation frames. Wait for a
+    // painted scene and capture its geometry atomically, not after a fixed delay.
+    const initialFrame = await page
+      .waitForFunction(() => {
+        const { lines, arcs } = window.__heroFrame;
+        if (lines.length === 0 || arcs.length === 0) return false;
+        const canvasBounds = document
+          .querySelector("canvas")
+          .getBoundingClientRect();
+        const center = [canvasBounds.width / 2, canvasBounds.height / 2];
+        const targetAngle = Math.PI / 6;
+        let connectorCount = 0;
+        let maxAngleError = 0;
 
-      for (const { to } of lines) {
-        const dx = to[0] - center[0];
-        const dy = to[1] - center[1];
-        if (Math.hypot(dx, dy) < 1) continue;
+        for (const { to } of lines) {
+          const dx = to[0] - center[0];
+          const dy = to[1] - center[1];
+          if (Math.hypot(dx, dy) < 1) continue;
 
-        let angle = Math.atan2(dy, dx) % Math.PI;
-        if (angle < 0) angle += Math.PI;
-        const delta = Math.abs(angle - targetAngle);
-        connectorCount += 1;
-        maxAngleError = Math.max(
-          maxAngleError,
-          Math.min(delta, Math.PI - delta),
+          let angle = Math.atan2(dy, dx) % Math.PI;
+          if (angle < 0) angle += Math.PI;
+          const delta = Math.abs(angle - targetAngle);
+          connectorCount += 1;
+          maxAngleError = Math.max(
+            maxAngleError,
+            Math.min(delta, Math.PI - delta),
+          );
+        }
+
+        return { connectorCount, maxAngleError };
+      })
+      .catch(async (error) => {
+        const state = await page.evaluate(() => ({
+          arcs: window.__heroFrame.arcs.length,
+          lines: window.__heroFrame.lines.length,
+          canvas: document
+            .querySelector("canvas")
+            ?.getBoundingClientRect()
+            .toJSON(),
+        }));
+        throw new Error(
+          `Hero did not paint: ${JSON.stringify({ errors, ...state })}`,
+          { cause: error },
         );
-      }
-
-      return { connectorCount, maxAngleError };
-    });
+      });
+    const initialDividers = await initialFrame.jsonValue();
+    await initialFrame.dispose();
     assert.ok(
       initialDividers.connectorCount > 0,
       "the initial divider did not receive connectors",
@@ -1993,7 +2012,9 @@ try {
       process.stdout.write(`ok    ${name} — ${detail}\n`);
     } catch (error) {
       failed += 1;
-      process.stdout.write(`FAIL  ${name}\n      ${error.message}\n`);
+      process.stdout.write(
+        `FAIL  ${name}\n      ${error.stack ?? error.message}\n`,
+      );
     }
   }
 } finally {
