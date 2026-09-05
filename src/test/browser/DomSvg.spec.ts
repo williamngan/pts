@@ -384,7 +384,7 @@ describe("SVGContext2D", () => {
     const pooled = ctx.group!.children[0];
     expect(pooled.getAttribute("stroke-dasharray")).toBe("5 3");
     expect(pooled.getAttribute("stroke-dashoffset")).toBe("2");
-    expect(pooled.getAttribute("mix-blend-mode")).toBe("multiply");
+    expect(getComputedStyle(pooled).mixBlendMode).toBe("multiply");
 
     // same shape without dashes or blend: the reused element must not keep
     // the attributes the previous frame set
@@ -399,7 +399,7 @@ describe("SVGContext2D", () => {
     expect(ctx.group!.children[0]).toBe(pooled);
     expect(pooled.getAttribute("stroke-dasharray")).toBeNull();
     expect(pooled.getAttribute("stroke-dashoffset")).toBeNull();
-    expect(pooled.getAttribute("mix-blend-mode")).toBeNull();
+    expect(getComputedStyle(pooled).mixBlendMode).toBe("normal");
 
     // fill-only: the stroke-only attributes go away with the stroke
     ctx.beginFrame();
@@ -486,10 +486,10 @@ describe("SVGContext2D", () => {
     ctx.fill();
     ctx.commitFrame();
     const paths = ctx.group!.querySelectorAll("path");
-    expect(paths[0].getAttribute("mix-blend-mode")).toBe("multiply");
+    expect(getComputedStyle(paths[0]).mixBlendMode).toBe("multiply");
     expect(paths[0].getAttribute("stroke-dasharray")).toBe("2 3");
     expect(paths[0].getAttribute("stroke-dashoffset")).toBe("1");
-    expect(paths[1].getAttribute("mix-blend-mode")).toBeNull();
+    expect(getComputedStyle(paths[1]).mixBlendMode).toBe("normal");
   });
 
   it("builds path data through every verb", () => {

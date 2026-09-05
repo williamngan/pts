@@ -629,7 +629,7 @@ export class SVGContext2D {
     const op = this.globalCompositeOperation;
     if (op !== "source-over") {
       if (BLEND_MODES.has(op)) {
-        attrs["mix-blend-mode"] = op;
+        attrs.style = `mix-blend-mode: ${op}`;
       } else {
         SVGContext2D._warnOnce(
           `composite-${op}`,
@@ -663,7 +663,7 @@ export class SVGContext2D {
     attrs.opacity = this._shapeAlpha;
     if (this._shapeBlend !== "source-over") {
       if (BLEND_MODES.has(this._shapeBlend)) {
-        attrs["mix-blend-mode"] = this._shapeBlend;
+        attrs.style = `mix-blend-mode: ${this._shapeBlend}`;
       } else {
         SVGContext2D._warnOnce(
           `composite-${this._shapeBlend}`,

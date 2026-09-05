@@ -153,7 +153,7 @@ describe("SVGContext2D surface", () => {
     ctx._flushShape();
     const run = ctx._runs[0];
     expect(run.attrs["stroke-dasharray"]).toBe("5 3");
-    expect(run.attrs["mix-blend-mode"]).toBe("multiply");
+    expect(run.attrs.style).toBe("mix-blend-mode: multiply");
     expect(run.attrs.fill).toBe("none");
   });
 });
