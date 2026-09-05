@@ -45,6 +45,26 @@ afterEach(() => {
 });
 
 describe("DOMSpace", () => {
+  it("cancels readiness when disposed before mounting completes", async () => {
+    const host = document.createElementNS(SVG_NS, "svg");
+    document.body.appendChild(host);
+    const callback = vi.fn();
+    const event = vi.fn();
+    host.addEventListener("ready", event);
+    const space = new SVGSpace(host, callback);
+    space.dispose().dispose();
+    await new Promise((resolve) => setTimeout(resolve, 80));
+    expect(space.ready).toBe(false);
+    expect(host.childElementCount).toBe(0);
+    expect(callback).not.toHaveBeenCalled();
+    expect(event).not.toHaveBeenCalled();
+    const replacement = new SVGSpace(host);
+    await ready(replacement);
+    expect(replacement.ready).toBe(true);
+    expect(event).toHaveBeenCalledOnce();
+    replacement.dispose();
+  });
+
   it("creates elements and manages attributes, styles, sizing, and contents", async () => {
     const { parent, element } = mount();
     element.id = "dom-target";

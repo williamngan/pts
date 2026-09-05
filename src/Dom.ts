@@ -39,6 +39,7 @@ export class DOMSpace extends MultiTouchSpace {
   protected _bgcolor = "#e1e9f0";
   protected _css = {};
   private _domDisposed = false;
+  private _readyTimer: ReturnType<typeof setTimeout>;
 
   // one stable bound reference, so removeEventListener actually removes the
   // listener that addEventListener added (and double-adds dedupe)
@@ -86,7 +87,7 @@ export class DOMSpace extends MultiTouchSpace {
     }
 
     // no mutation observer, so we set a timeout for ready event
-    setTimeout(this._ready.bind(this, callback), 50);
+    this._readyTimer = setTimeout(this._ready.bind(this, callback), 50);
   }
 
   /**
@@ -111,6 +112,7 @@ export class DOMSpace extends MultiTouchSpace {
    * @param callback
    */
   private _ready(callback?: (bound: Bound, elem: Element) => void) {
+    if (this._domDisposed) return;
     if (!this._container)
       throw new Error(`Cannot initiate #${this.id} element`);
 
@@ -315,6 +317,7 @@ export class DOMSpace extends MultiTouchSpace {
   dispose(): this {
     if (this._domDisposed) return this;
     this._domDisposed = true;
+    clearTimeout(this._readyTimer);
 
     this.autoResize = false; // removes the window resize listener
     this._unbindAll(); // removes mouse/touch listeners on the element
