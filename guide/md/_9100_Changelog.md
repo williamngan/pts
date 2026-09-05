@@ -5,7 +5,7 @@ The revamp is a full modernization of Pts. Most existing sketches should continu
 ### New capabilities
 
 - **Modern color spaces.** `Color` now supports Oklab and Oklch, alongside corrected conversions for RGB, HSL, HSB, XYZ, LAB, LCH, and LUV. Hex colors now handle alpha correctly too.
-- **A complete SVG renderer.** `SVGForm` now follows the Canvas drawing API and automatically keeps SVG elements in sync between frames. It can also serve as a reference for custom renderers.
+- **A new SVG renderer.** `SVGForm` now follows the supported subset of the Canvas drawing API and automatically keeps SVG elements in sync between frames. It can also serve as a reference for custom renderers.
 - **Simpler UI interactions.** Spaces can track and untrack UI elements directly. UI also gains custom shape registration, line and polyline hit testing, typed actions, state helpers, and one-time or abortable handlers.
 - **Improved image handling.** `Img.load` is now promise-based, images clean up through `dispose`, and loading, cropping, scaling, pixel access, and canvas drawing are more reliable.
 - **Stronger sound controls.** Sound sources share audio contexts when appropriate, can be restarted safely, expose volume and cleanup controls, and report loading or input failures consistently.
@@ -55,6 +55,10 @@ The repository also gained consistent formatting and line-ending rules, cleaner 
 ### Compatibility notes
 
 Most API changes are additive, but corrected bugs may produce different results when old code depended on incorrect behavior. TypeScript users may also see new compile errors where a function can legitimately return `undefined`; check the result before using it.
+
+`Img.load` now returns a Promise instead of an `Img`: use `const img = await Img.load(url)`, or use `.then(...)`. If you need the instance before loading finishes, use `const img = new Img()` and then `await img.load(url)`.
+
+The original SVG static drawing helpers still accept a legacy DOM context; the explicit `*Element` names are available too, such as `SVGForm.circleElement(ctx, pt, radius)`. `SVGForm.styleTo` is no longer available: use the form's `fill`, `stroke`, `alpha`, and `font` methods. Use `form.text([10, 14], message)` instead of `form.log(message)`.
 
 The following older APIs remain available but are deprecated:
 

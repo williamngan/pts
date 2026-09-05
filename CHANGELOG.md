@@ -23,6 +23,20 @@ review pass live in the `plans/` directory.
 - New Oklab/Oklch color modes, modernized UI and Space event APIs, and
   a documented renderer contract for building custom renderers.
 
+### Breaking changes — API migration
+
+- `Img.load(url)` now returns `Promise<Img>`, not an immediately available
+  `Img`. Use `const img = await Img.load(url)` or `.then(...)`. To retain an
+  instance while loading, use `const img = new Img(); await img.load(url)`.
+- `SVGForm.styleTo` and `SVGForm.log` are no longer available. Use the form's
+  `fill`, `stroke`, `alpha`, and `font` methods for styles, and
+  `form.text([10, 14], message)` for a debug label. Original static drawing
+  names still accept legacy DOM contexts; the explicit `*Element` names
+  are also available, for example `SVGForm.circleElement(ctx, pt, radius)`.
+- SVG supports a subset of Canvas drawing. Clipping, image-data writes,
+  source-cropped image drawing, canvas offscreen buffers, and Porter-Duff
+  composites require Canvas output. See the Space guide for details.
+
 ### Breaking changes — runtime behavior
 
 These are places where the old result was a defect. Code that relied on
@@ -109,8 +123,8 @@ always did:
 ### Deprecated
 
 - `HTMLSpace` / `HTMLForm` — deprecated, removal in a future major.
-  Use `SVGSpace` / `SVGForm`, which share the complete `CanvasForm`
-  drawing API. `DOMSpace` remains public as the subclassing point.
+  Use `SVGSpace` / `SVGForm`, which share the supported subset of the
+  `CanvasForm` drawing API. `DOMSpace` remains public as the subclassing point.
 - `Img.loadAsync` — use `Img.load`, which now returns a Promise.
 - `Img.cleanup` — use `Img.dispose`.
 - `SVGForm.updateScope` / `SVGForm.scope` — no longer needed; elements

@@ -117,7 +117,7 @@ And since both Space and Form are javascript classes, you can extend them to ove
 
 ### SVG Space
 
-You can switch your code from [`CanvasSpace`](#canvas-canvasspace) to [`SVGSpace`](#svg-svgspace) without changing your drawing code: initiate the space as `SVGSpace` instead of `CanvasSpace`, and `space.getForm()` will return an [`SVGForm`](#svg-svgform), which shares the complete `CanvasForm` drawing API — shapes, gradients, dashes, text and more render as svg automatically.
+For supported drawing functions, you can switch your code from [`CanvasSpace`](#canvas-canvasspace) to [`SVGSpace`](#svg-svgspace) without changing your drawing code: initiate the space as `SVGSpace` instead of `CanvasSpace`, and `space.getForm()` will return an [`SVGForm`](#svg-svgform), which shares the `CanvasForm` drawing API — shapes, gradients, dashes, text and more render as svg automatically.
 
 ```
 const space = new SVGSpace( "#elem" ).setup({ bgcolor: "#123", resize: true });
@@ -125,7 +125,9 @@ const form = space.getForm();
 // ... the same drawing code as canvas
 ```
 
-If you use [`quickStart`](#play-quickstart), it picks the space for you: mount on an `<svg>` element and you get an `SVGSpace`; mount on a `<canvas>` or `<div>` and you get a `CanvasSpace`. No other changes needed — a sketch written for canvas runs on svg as-is.
+If you use [`quickStart`](#play-quickstart), it picks the space for you: mount on an `<svg>` element and you get an `SVGSpace`; mount on a `<canvas>` or `<div>` and you get a `CanvasSpace`.
+
+SVG does not currently support clipping, image-data writes, source-cropped image drawing, canvas offscreen buffers, or Porter-Duff composites such as `source-in`. Use `CanvasSpace` if your sketch needs these functions.
 
 Under the hood, consecutive shapes that share styles are merged into single svg elements per frame, so the output stays fast and compact. To export the current frame as an svg file, use [`SVGSpace.toSVG`](#svg-svgspace) — pass `true` to get one element per shape, which is easier to edit in vector graphics tools.
 

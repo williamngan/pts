@@ -115,7 +115,7 @@ const _svgWarned: { [k: string]: boolean } = {};
  * [`CanvasForm`](#link) draws through, and renders it as SVG. Consecutive shapes that share
  * paint state are merged into single `<path>` elements ("style runs"), so the DOM cost per
  * frame is proportional to the number of style changes, not the number of shapes. This is
- * what lets the same sketch run unchanged on canvas and SVG.
+ * what lets sketches using the supported subset run unchanged on canvas and SVG.
  *
  * Capability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,
  * `clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so
@@ -709,7 +709,7 @@ function sameRunStyle(
 /**
  * SVGSpace extends [`DOMSpace`](#link) to support SVG elements. Use it with [`SVGForm`](#link),
  * which shares its drawing API and semantics with [`CanvasForm`](#link) — a sketch written for
- * canvas runs on SVG unchanged. Check out the [Space guide](../guide/Space-0500.html) for details.
+ * canvas can run on SVG with the supported subset. Check out the [Space guide](../guide/Space-0500.html) for details.
  */
 export class SVGSpace extends DOMSpace {
   protected _bgcolor: string = "#999";
@@ -948,9 +948,9 @@ let _svgFormDomID = 0;
 
 /**
  * SVGForm is a [`CanvasForm`](#link) rendered through a [`SVGContext2D`](#link): it inherits
- * the complete canvas drawing API — shapes, gradients, dashes, images, `textBox` — with SVG
- * output, so a sketch can swap between `CanvasSpace` and `SVGSpace` without changing any
- * drawing code. The legacy per-element static helpers and `scope()` workflow are retained
+ * the canvas drawing API — shapes, gradients, dashes, images, `textBox` — with SVG
+ * output, subject to the capability notes in `SVGContext2D`. Sketches using this subset
+ * can swap between `CanvasSpace` and `SVGSpace`. The legacy per-element static helpers and `scope()` workflow are retained
  * for compatibility but are no longer needed.
  */
 export class SVGForm extends CanvasForm<SVGSpace> {

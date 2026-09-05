@@ -332,7 +332,7 @@ export class DOMSpace extends MultiTouchSpace {
 }
 
 /**
- * @deprecated HTML rendering is deprecated and will be removed in a future major version. Use [`SVGSpace`](#link) for DOM-based output instead — it shares the complete [`CanvasForm`](#link) drawing API.
+ * @deprecated HTML rendering is deprecated and will be removed in a future major version. Use [`SVGSpace`](#link) for DOM-based output instead — it shares the supported subset of the [`CanvasForm`](#link) drawing API.
  * **[Experimental]** HTMLSpace is a subclass of DOMSpace that works with HTML elements. See [a demo here](https://ptsjs.org/demo/?name=htmlform.scope).
  */
 export class HTMLSpace extends DOMSpace {
