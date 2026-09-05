@@ -1,6 +1,6 @@
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
-import { Space, MultiTouchSpace } from "./Space";
+import { MultiTouchSpace } from "./Space";
 import { type Form, VisualForm, Font } from "./Form";
 import { Util } from "./Util";
 import { Pt, Bound } from "./Pt";
@@ -325,7 +325,7 @@ export class DOMSpace extends MultiTouchSpace {
     // Remove the players without the subclass's DOM-clearing `removeAll`:
     // disposing must release resources, never destroy a user-owned host
     // element's contents (a re-mount on the same element must work).
-    Space.prototype.removeAll.call(this);
+    MultiTouchSpace.prototype.removeAll.call(this);
 
     return this;
   }

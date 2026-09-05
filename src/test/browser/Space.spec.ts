@@ -178,6 +178,42 @@ describe("MultiTouchSpace dispatch", () => {
 });
 
 describe("Space UI tracking", () => {
+  it("can track again after removing all players without retaining old UIs", async () => {
+    const space = new CanvasSpace(host());
+    await ready(space);
+    space.bindKeyboard().play(10);
+    const first = UIButton.fromRectangle(
+      [
+        [0, 0],
+        [50, 50],
+      ],
+      {},
+    );
+    const second = UIButton.fromRectangle(
+      [
+        [0, 0],
+        [50, 50],
+      ],
+      {},
+    );
+    const firstAction = vi.fn();
+    const secondAction = vi.fn();
+    first.on("keydown", firstAction);
+    second.on("keydown", secondAction);
+    const send = () => document.dispatchEvent(new KeyboardEvent("keydown"));
+    space.track(first);
+    send();
+    space.removeAll();
+    space.track(second);
+    send();
+    expect(firstAction).toHaveBeenCalledOnce();
+    expect(secondAction).toHaveBeenCalledOnce();
+    space.removeAll().track(second);
+    send();
+    expect(secondAction).toHaveBeenCalledTimes(2);
+    space.dispose();
+  });
+
   it("tracks UIs through space.track without manual wiring", async () => {
     const space = new CanvasSpace(host()).setup({ retina: false });
     await ready(space);

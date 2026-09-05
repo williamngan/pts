@@ -565,6 +565,13 @@ export abstract class MultiTouchSpace extends Space {
   private _trackedUIs: UI[] = [];
   private _uiPlayer: IPlayer | null = null;
 
+  /** Remove all players and the UI registrations forwarded by them. */
+  removeAll(): this {
+    this.untrack();
+    this._uiPlayer = null;
+    return super.removeAll();
+  }
+
   /**
    * Track one or more [`UI`](#link) elements: every pointer, touch, and keyboard
    * action dispatched by this space is forwarded to them via [`UI.track`](#link),
