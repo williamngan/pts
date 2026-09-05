@@ -1093,7 +1093,12 @@ export class Bound extends Group implements IPt {
       throw new Error(
         "Cannot create a Bound from a group that has less than 2 Pt",
       );
-    return new Bound(_g[0], _g[_g.length - 1]);
+    const first = _g[0];
+    const last = _g[_g.length - 1];
+    return new Bound(
+      first instanceof Pt ? first : new Pt(first),
+      last instanceof Pt ? last : new Pt(last),
+    );
   }
 
   /**

@@ -294,6 +294,28 @@ describe("Group", () => {
 });
 
 describe("Bound", () => {
+  it("accepts array-like points and one-shot iterables in fromGroup", () => {
+    const points = [
+      [0, 0],
+      [10, 20],
+    ];
+    for (const input of [
+      points,
+      points.map((p) => new Float32Array(p)),
+      points.values(),
+    ]) {
+      const bound = Bound.fromGroup(input);
+      expect(bound.size.equals([10, 20])).toBe(true);
+      expect(bound.center.equals([5, 10])).toBe(true);
+      expect(bound[0]).toBeInstanceOf(Pt);
+      expect(bound[1]).toBeInstanceOf(Pt);
+    }
+    const group = Group.fromArray(points);
+    const bound = Bound.fromGroup(group);
+    expect(bound[0]).toBe(group[0]);
+    expect(bound[1]).toBe(group[1]);
+  });
+
   it("constructs from rectangles, groups, and partial points", () => {
     const fromRect = Bound.fromBoundingRect({
       left: 10,
