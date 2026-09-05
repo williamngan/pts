@@ -59,6 +59,7 @@ export default defineConfig({
     },
   ],
   build: {
+    license: { fileName: "THIRD-PARTY-NOTICES.md" },
     lib: {
       entry: "demo/edit/src/editor.entry.js",
       formats: ["es"],
@@ -70,6 +71,7 @@ export default defineConfig({
     cssCodeSplit: false,
     rollupOptions: {
       output: {
+        banner: "/*! Third-party licenses: ./THIRD-PARTY-NOTICES.md */",
         assetFileNames: "pts.[ext]",
         entryFileNames: "monaco.js",
         chunkFileNames: "[name]-[hash].js",

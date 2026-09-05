@@ -1,3 +1,4 @@
+/*! Third-party licenses: ./THIRD-PARTY-NOTICES.md */
 //#region \0rolldown/runtime.js
 var e = Object.defineProperty, t = (e, t, n) => () => {
 	if (n) throw n[0];

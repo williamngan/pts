@@ -327,6 +327,7 @@ export class Noise extends Pt {
 // ------------------------------------------------------------------------
 // Incremental half-edge Delaunay triangulation, adapted from Delaunator
 // (https://github.com/mapbox/delaunator), ISC License, Copyright © Mapbox.
+// Full copyright and permission notice: ../THIRD-PARTY-NOTICES.txt.
 // Points are inserted in order of distance from a seed circumcenter onto an
 // advancing convex hull (with an angular hash for O(1) edge lookup), and new
 // edges are legalized with in-circle flips.

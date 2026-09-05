@@ -22,7 +22,8 @@
   },
   "files": [
     "dist",
-    "src/*.ts"
+    "src/*.ts",
+    "THIRD-PARTY-NOTICES.txt"
   ],
   "sideEffects": [
     "./dist/pts.js",

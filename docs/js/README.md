@@ -3,6 +3,9 @@
 `vue.min.js` and `markdown-it.min.js` are production browser builds from the
 exact versions in the root `package.json` and `pnpm-lock.yaml`. Their upstream
 license notices are retained in each file.
+Full license texts are also collected in `THIRD-PARTY-NOTICES.txt`, including
+transitive production dependencies conservatively. These are website packages,
+not dependencies of the published Pts library.
 
 Run `pnpm build:docs-runtime` after updating these dependencies. `pnpm check:docs`
 verifies the committed copies match the installed packages before browser tests.

@@ -88,6 +88,7 @@ try {
   const expectedPackedFiles = [
     "LICENSE",
     "README.md",
+    "THIRD-PARTY-NOTICES.txt",
     "dist/index.d.mts",
     "dist/index.d.mts.map",
     "dist/index.d.ts",
@@ -129,10 +130,9 @@ try {
     "published file allowlist changed",
   );
   assert.ok(
-    // Keep a small (~2%) growth budget above the current release archive. The
-    // previous ceiling predates the recent Color, Sound, and Typography work
-    // and is already below the unchanged package allowlist's baseline size.
-    dryRun.size < 1_115_000,
+    // Approximately 2% above the launch-fix archive (1,116,916 bytes),
+    // including compatibility overloads and required third-party notices.
+    dryRun.size < 1_140_000,
     `packed tarball is unexpectedly large: ${dryRun.size} bytes`,
   );
   assert.equal(

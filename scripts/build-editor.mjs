@@ -19,7 +19,7 @@
 
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { readdir, readFile, writeFile } from "node:fs/promises";
+import { appendFile, readdir, readFile, writeFile } from "node:fs/promises";
 
 const root = new URL("../", import.meta.url);
 const classDir = new URL("docs/json/class/", root);
@@ -195,5 +195,14 @@ async function versionAssets() {
 }
 
 run("npx", ["vite", "build", "--config", "vite.monaco.config.mjs"]);
+await appendFile(
+  new URL("demo/edit/vs/THIRD-PARTY-NOTICES.md", root),
+  "\n\n## Upstream Monaco distribution notices\n\nOptional components listed below may be omitted from this editor build.\n\n```text\n" +
+    (await readFile(
+      new URL("node_modules/monaco-editor/ThirdPartyNotices.txt", root),
+      "utf8",
+    )) +
+    "\n```\n",
+);
 await buildApiData();
 await versionAssets();

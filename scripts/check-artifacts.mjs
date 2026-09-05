@@ -68,14 +68,19 @@ const expectedExports = [
   "World",
 ];
 const sizeLimits = {
-  "index.d.mts": 64292,
-  "index.d.ts": 64291,
-  "index.js": 235550,
-  "index.mjs": 234681,
-  "pts.js": 246431,
-  "pts.min.js": 144631,
+  // Launch fixes add legacy SVG overloads, complete hull cells, and retained
+  // license notices. Keep approximately 2% headroom above the measured build.
+  "index.d.mts": 68800,
+  "index.d.ts": 68800,
+  "index.js": 248100,
+  "index.mjs": 247200,
+  "pts.js": 259300,
+  "pts.min.js": 152600,
 };
 const banner = "Copyright © 2017-present William Ngan and contributors.";
+const thirdPartyNotice = (
+  await readFile(new URL("../THIRD-PARTY-NOTICES.txt", import.meta.url), "utf8")
+).trim();
 
 assert.deepEqual(
   (await readdir(dist)).sort(),
@@ -127,6 +132,10 @@ for (const [file, limit] of Object.entries(sizeLimits)) {
 
 for (const file of ["index.js", "index.mjs", "pts.js", "pts.min.js"]) {
   const source = await readFile(new URL(file, dist), "utf8");
+  assert.ok(
+    source.includes(thirdPartyNotice),
+    `${file} lost third-party notices`,
+  );
   assert.ok(
     source.includes(banner),
     `${file} is missing the stable license banner`,
