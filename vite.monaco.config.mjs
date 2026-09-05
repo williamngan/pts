@@ -1,4 +1,12 @@
 import { defineConfig } from "vite";
+import { createRequire } from "node:module";
+import { dirname, join } from "node:path";
+
+const monacoRequire = createRequire(import.meta.resolve("monaco-editor"));
+const sanitizer = join(
+  dirname(monacoRequire.resolve("dompurify")),
+  "purify.es.mjs",
+);
 
 /**
  * Builds the editor's Monaco bundle. Run via `scripts/build-editor.mjs`.
@@ -25,6 +33,31 @@ export default defineConfig({
   // Relative, so any emitted asset URL resolves next to the bundle rather than
   // at the site root — the editor lives at /demo/edit/, not /.
   base: "./",
+  // Monaco also vendors an older copy internally: a lockfile override alone
+  // does not replace that code. Bundle the patched package instead.
+  resolve: {
+    alias: [
+      { find: /^(?:.*\/)?dompurify\/dompurify\.js$/, replacement: sanitizer },
+    ],
+  },
+  plugins: [
+    {
+      name: "verify-editor-sanitizer",
+      generateBundle() {
+        const modules = [...this.getModuleIds()];
+        if (
+          !modules.includes(sanitizer) ||
+          modules.some((id) =>
+            /\/monaco-editor\/esm\/.*\/dompurify\.js$/.test(id),
+          )
+        ) {
+          throw new Error(
+            "Editor must bundle the patched DOMPurify package, not Monaco's vendored copy",
+          );
+        }
+      },
+    },
+  ],
   build: {
     lib: {
       entry: "demo/edit/src/editor.entry.js",

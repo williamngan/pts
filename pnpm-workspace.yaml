@@ -1,0 +1,4 @@
+# Monaco is a website-only build dependency. Keep its sanitizer patched
+# without adding any dependency to the published Pts runtime.
+overrides:
+  monaco-editor>dompurify: 3.4.14
