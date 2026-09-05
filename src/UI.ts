@@ -1,7 +1,7 @@
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 import { Pt, Group } from "./Pt";
-import { Rectangle, Circle, Polygon, Line } from "./Op";
+import { Rectangle, Circle, Polygon } from "./Op";
 import {
   type UIHandler,
   type UIActionEvent,
@@ -17,6 +17,28 @@ export type UIShapeTest = (
   states: { [key: string]: any },
 ) => boolean;
 
+function _withinSegment(
+  a: PtLike,
+  b: PtLike,
+  pt: PtLike,
+  threshold: number,
+): boolean {
+  if (threshold < 0) return false;
+  const dx = b[0] - a[0];
+  const dy = b[1] - a[1];
+  const lengthSq = dx * dx + dy * dy;
+  const t =
+    lengthSq === 0
+      ? 0
+      : Math.max(
+          0,
+          Math.min(1, ((pt[0] - a[0]) * dx + (pt[1] - a[1]) * dy) / lengthSq),
+        );
+  const px = pt[0] - a[0] - t * dx;
+  const py = pt[1] - a[1] - t * dy;
+  return px * px + py * py <= threshold * threshold;
+}
+
 // Shape hit tests, keyed by shape name. Extensible via `UI.registerShape`.
 const _shapeTests: { [key: string]: UIShapeTest } = {
   rectangle: (group, pt) => Rectangle.withinBound(group, pt),
@@ -24,13 +46,14 @@ const _shapeTests: { [key: string]: UIShapeTest } = {
   polygon: (group, pt) => Polygon.hasIntersectPoint(group, pt),
   line: (group, pt, states) => {
     const threshold = states.lineThreshold ?? 5;
-    return Line.distanceFromPt(group, pt) <= threshold;
+    return (
+      group.length >= 2 && _withinSegment(group[0], group[1], pt, threshold)
+    );
   },
   polyline: (group, pt, states) => {
     const threshold = states.lineThreshold ?? 5;
     for (let i = 0, len = group.length - 1; i < len; i++) {
-      if (Line.distanceFromPt([group[i], group[i + 1]], pt) <= threshold)
-        return true;
+      if (_withinSegment(group[i], group[i + 1], pt, threshold)) return true;
     }
     return false;
   },

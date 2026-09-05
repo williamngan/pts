@@ -307,6 +307,55 @@ describe("UI API modernization", () => {
     expect(never).toBe(0);
   });
 
+  it.each(["line", "polyline"])(
+    "limits %s hits to finite segments and endpoint caps",
+    (shape) => {
+      const ui = new UI(
+        [
+          [0, 0],
+          [10, 0],
+        ],
+        shape,
+        { lineThreshold: 1 },
+      );
+      const hit = vi.fn();
+      ui.on("click", hit);
+      for (const point of [
+        [-100, 0],
+        [100000, 0],
+        [5, 2],
+      ]) {
+        ui.listen("click", point, evt);
+      }
+      expect(hit).not.toHaveBeenCalled();
+      for (const point of [
+        [-1, 0],
+        [11, 0],
+        [5, 1],
+      ])
+        ui.listen("click", point, evt);
+      expect(hit).toHaveBeenCalledTimes(3);
+      const degenerate = new UI(
+        [
+          [5, 5],
+          [5, 5],
+        ],
+        shape,
+        { lineThreshold: 1 },
+      );
+      degenerate.on("click", hit);
+      degenerate.listen("click", [5, 6], evt);
+      degenerate.listen("click", [5, 7], evt);
+      expect(hit).toHaveBeenCalledTimes(4);
+      degenerate.setState("lineThreshold", -1);
+      degenerate.listen("click", [5, 5], evt);
+      expect(hit).toHaveBeenCalledTimes(4);
+      const empty = new UI([], shape);
+      empty.on("click", hit);
+      expect(() => empty.listen("click", [0, 0], evt)).not.toThrow();
+    },
+  );
+
   it("hit-tests line and polyline shapes and supports custom shapes", () => {
     const line = new UI(
       [
