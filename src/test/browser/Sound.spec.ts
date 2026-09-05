@@ -29,6 +29,7 @@ class FakeOscillator extends FakeNode {
   wave!: PeriodicWave;
 
   setPeriodicWave(wave: PeriodicWave) {
+    this.type = "custom";
     this.wave = wave;
   }
 

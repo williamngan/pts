@@ -409,11 +409,11 @@ export class Sound {
     this._node = this._ctx.createOscillator();
     this._generated = true;
     const osc = this._node as OscillatorNode;
-    osc.type = type;
     if (type === "custom") {
       this._wave = val as PeriodicWave;
       osc.setPeriodicWave(this._wave);
     } else {
+      osc.type = type;
       osc.frequency.value = val as number;
     }
     return this;
