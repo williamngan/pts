@@ -82,8 +82,8 @@ class SVGGradient {
         if (r0) this._elem.setAttribute("fr", `${r0}`);
       }
       this._render(this._elem);
-      defs.appendChild(this._elem);
     }
+    if (this._elem.parentNode !== defs) defs.appendChild(this._elem);
     return `url(#${this.id})`;
   }
 
@@ -273,6 +273,19 @@ export class SVGContext2D {
       this._group.removeChild(this._pool[i]);
       this._pool.pop();
       this._attrCache.pop();
+    }
+
+    // Definitions belong to the committed scene, not to every gradient ever
+    // created. A retained gradient handle can materialize again when reused.
+    if (this._defs) {
+      const paints = new Set<string | number>();
+      for (const run of runs) {
+        paints.add(run.attrs.fill);
+        paints.add(run.attrs.stroke);
+      }
+      for (const elem of Array.from(this._defs.children)) {
+        if (!paints.has(`url(#${elem.id})`)) elem.remove();
+      }
     }
   }
 

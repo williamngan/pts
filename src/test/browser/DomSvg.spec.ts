@@ -241,6 +241,37 @@ describe("SVGContext2D", () => {
     expect(texts[1].hasAttribute("textLength")).toBe(false);
   });
 
+  it("retires unused gradient definitions and rematerializes retained handles", () => {
+    const { ctx, host: svg } = makeCtx();
+    const retained = ctx.createLinearGradient(0, 0, 100, 100);
+    retained.addColorStop(0, "red");
+    const draw = (gradient: typeof retained) => {
+      ctx.beginFrame();
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 100, 100);
+      ctx.commitFrame();
+    };
+    draw(retained);
+    for (let i = 0; i < 100; i++) {
+      draw(ctx.createLinearGradient(0, 0, i + 1, 100));
+      expect(svg.querySelectorAll("linearGradient")).toHaveLength(1);
+    }
+    retained.addColorStop(1, "blue");
+    draw(retained);
+    expect(svg.querySelector("linearGradient")!.id).toBe(retained.id);
+    expect(svg.querySelectorAll("stop")).toHaveLength(2);
+    svg.innerHTML = "";
+    ctx.resetDom();
+    draw(retained);
+    expect(svg.querySelector("linearGradient")!.id).toBe(retained.id);
+    expect(svg.querySelector("path")!.getAttribute("fill")).toBe(
+      `url(#${retained.id})`,
+    );
+    ctx.beginFrame();
+    ctx.commitFrame();
+    expect(svg.querySelectorAll("linearGradient")).toHaveLength(0);
+  });
+
   it("materializes gradients into <defs> and keeps stops in sync", () => {
     const { host, ctx } = makeCtx();
     ctx.beginFrame();
