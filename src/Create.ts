@@ -931,6 +931,27 @@ function _clipCellToRect(
   return out;
 }
 
+/** Keep the part of a convex cell nearer to site a than site b. */
+function _clipCellToBisector(cell: Group, a: Pt, b: Pt): Group {
+  const dx = b[0] - a[0];
+  const dy = b[1] - a[1];
+  const mx = a[0] + dx / 2;
+  const my = a[1] + dy / 2;
+  const out = new Group();
+  for (let i = 0; i < cell.length; i++) {
+    const p = cell[i === 0 ? cell.length - 1 : i - 1];
+    const q = cell[i];
+    const dp = (p[0] - mx) * dx + (p[1] - my) * dy;
+    const dq = (q[0] - mx) * dx + (q[1] - my) * dy;
+    if (dp <= 0 !== dq <= 0) {
+      const t = dp / (dp - dq);
+      out.push(new Pt(p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t));
+    }
+    if (dq <= 0) out.push(q);
+  }
+  return out;
+}
+
 /**
  * Delaunay is a [`Group`](#link) of Pts that generates Delaunay and Voronoi tessellations.
  * The triangulation core is adapted from [Delaunator](https://github.com/mapbox/delaunator)
@@ -949,11 +970,13 @@ export class Delaunay extends Group {
    * @returns an array of Groups or an array of DelaunayShapes `{i, j, k, triangle, circle}` which records the indices of the vertices, and the calculated triangles and circumcircles
    */
   delaunay(triangleOnly: boolean = true): GroupLike[] | DelaunayShape[] {
-    if (this.length < 3) return [];
-
     const n = this.length;
     this._mesh = [];
     for (let i = 0; i < n; i++) this._mesh[i] = {};
+    this._triangles = null;
+    this._halfedges = null;
+    this._shapes = null;
+    if (n < 3) return [];
 
     const coords = new Float64Array(n * 2);
     for (let i = 0; i < n; i++) {
@@ -1010,7 +1033,7 @@ export class Delaunay extends Group {
 
   /**
    * Generate Voronoi cells. `delaunay()` must be called before calling this function. See a [Voronoi demo here](https://ptsjs.org/demo/?name=create.delaunay).
-   * @param bound Optionally provide a rectangular bound (eg, `space.innerBound`) to clip the cells against.
+   * @param bound Optionally provide a rectangular bound (eg, `space.innerBound`) to clip the cells against, including the unbounded cells on the convex hull.
    * Without a bound, cells around sliver triangles can extend to enormous coordinates (circumcenters of
    * nearly-collinear points), which is technically correct but extremely slow to draw.
    * @returns an array of Groups, each of which represents a Voronoi cell. Unclipped cells share their vertex Pts with the cached mesh (see [`Delaunay.mesh`](#link)), so treat them as read-only or clone before mutating.
@@ -1024,8 +1047,50 @@ export class Delaunay extends Group {
     const y0 = _bound[0][1];
     const x1 = _bound[1][0];
     const y1 = _bound[1][1];
+    const hull = new Set<number>();
+    if (this._triangles && this._halfedges) {
+      for (let e = 0; e < this._halfedges.length; e++) {
+        if (this._halfedges[e] === -1) {
+          hull.add(this._triangles[e]);
+          hull.add(this._triangles[e % 3 === 2 ? e - 2 : e + 1]);
+        }
+      }
+    }
+    const seen = new Set<string>();
     for (let i = 0, len = cells.length; i < len; i++) {
-      cells[i] = _clipCellToRect(cells[i], x0, y0, x1, y1);
+      const key = `${this[i][0]},${this[i][1]}`;
+      if (seen.has(key)) {
+        cells[i] = new Group();
+        continue;
+      }
+      seen.add(key);
+      if (!hull.has(i) && cells[i].length >= 3) {
+        cells[i] = _clipCellToRect(cells[i], x0, y0, x1, y1);
+        continue;
+      }
+
+      // Hull fans do not enclose their unbounded Voronoi regions. Start
+      // with the bound and intersect the half-planes of neighboring sites.
+      const neighbors = new Set<number>();
+      for (const shape of this.neighbors(i)) {
+        for (const index of [shape.i, shape.j, shape.k]) {
+          if (index !== i) neighbors.add(index);
+        }
+      }
+      // Collinear and small point sets have no triangles; every site is a
+      // candidate neighbor. Duplicate sites leave the first cell unchanged.
+      if (neighbors.size === 0) {
+        for (let j = 0; j < this.length; j++) if (j !== i) neighbors.add(j);
+      }
+      let cell = Group.fromArray([
+        [x0, y0],
+        [x1, y0],
+        [x1, y1],
+        [x0, y1],
+      ]);
+      for (const j of neighbors)
+        cell = _clipCellToBisector(cell, this[i], this[j]);
+      cells[i] = cell;
     }
     return cells;
   }
@@ -1094,7 +1159,7 @@ export class Delaunay extends Group {
     for (let k in n[i]) {
       if (n[i].hasOwnProperty(k)) cs.push(n[i][k].circle[0]);
     }
-    return sort ? Geom.sortEdges(cs) : cs;
+    return sort && cs.length > 1 ? Geom.sortEdges(cs) : cs;
   }
 
   /**

@@ -342,6 +342,74 @@ describe("Voronoi half-edge assembly", () => {
 });
 
 describe("Voronoi clipping", () => {
+  it("constructs bounded hull cells instead of clipping incomplete circumcenter fans", () => {
+    const d = Create.delaunay(
+      Group.fromArray([
+        [0, 0],
+        [10, 0],
+        [10, 10],
+        [0, 10],
+      ]),
+    );
+    d.delaunay();
+    const cells = d.voronoi(
+      Group.fromArray([
+        [0, 0],
+        [10, 10],
+      ]),
+    );
+    const area = (cell: Group) =>
+      Math.abs(
+        cell.reduce((sum, p, i) => {
+          const q = cell[(i + 1) % cell.length];
+          return sum + p[0] * q[1] - q[0] * p[1];
+        }, 0),
+      ) / 2;
+    expect(cells.map(area)).toEqual([25, 25, 25, 25]);
+    for (let i = 0; i < cells.length; i++) {
+      for (const p of cells[i]) {
+        const own = p.$subtract(d[i]).magnitudeSq();
+        for (const site of d)
+          expect(own).toBeLessThanOrEqual(
+            p.$subtract(site).magnitudeSq() + 0.001,
+          );
+      }
+    }
+  });
+
+  it("handles empty, single, paired, collinear, and duplicate sites without stale cells", () => {
+    const bound = Group.fromArray([
+      [0, 0],
+      [10, 10],
+    ]);
+    const d = Create.delaunay(
+      Group.fromArray([
+        [0, 5],
+        [5, 5],
+        [10, 5],
+        [10, 5],
+      ]),
+    );
+    d.delaunay();
+    const cells = d.voronoi(bound);
+    expect(cells).toHaveLength(4);
+    expect(cells[3]).toHaveLength(0);
+    expect(
+      cells
+        .slice(0, 3)
+        .map((cell) => cell.boundingBox()[1].x - cell.boundingBox()[0].x),
+    ).toEqual([2.5, 5, 2.5]);
+    d.splice(2);
+    d.delaunay();
+    expect(d.voronoi(bound)).toHaveLength(2);
+    d.splice(1);
+    d.delaunay();
+    expect(d.voronoi(bound)[0]).toHaveLength(4);
+    d.splice(0);
+    d.delaunay();
+    expect(d.voronoi(bound)).toEqual([]);
+  });
+
   it("clips cells to a bound, keeping interior cells untouched", () => {
     // a near-collinear chain like a fast mouse drag produces sliver
     // triangles with far-away circumcenters
