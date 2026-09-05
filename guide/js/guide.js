@@ -384,7 +384,9 @@ Pts.namespace(this);
       },
       { passive: true },
     );
-    container.addEventListener("mouseleave", stop);
+    container.addEventListener("mouseleave", function () {
+      if (matchMedia("(hover: hover)").matches) stop();
+    });
     container.addEventListener("touchend", function (event) {
       if (!isControl(event)) stop();
     });
