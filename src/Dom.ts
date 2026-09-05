@@ -56,6 +56,7 @@ export class DOMSpace extends MultiTouchSpace {
     callback?: (bound: Bound, elem: Element) => void,
   ) {
     super();
+    this.refresh(false); // DOM elements persist unless a renderer opts into refreshing.
 
     let _selector: Element | null = null;
     let _existed = false;
@@ -130,8 +131,6 @@ export class DOMSpace extends MultiTouchSpace {
     }
 
     this._pointer = this.center;
-
-    this.refresh(false); // No need to clear and redraw for every frame in DOM
 
     if (callback) callback(this.bound, this._canvas);
   }

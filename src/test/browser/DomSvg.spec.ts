@@ -515,6 +515,30 @@ describe("SVGContext2D", () => {
 });
 
 describe("SVGSpace frame lifecycle and export", () => {
+  it.each([undefined, false, true])(
+    "preserves refresh=%s through readiness",
+    async (refresh) => {
+      const { element } = mount();
+      const space = new SVGSpace(element);
+      if (refresh !== undefined) space.refresh(refresh);
+      const form = space.getForm();
+      let draw = true;
+      space.add(() => {
+        if (draw) form.fillOnly("red").point([10, 10], 3);
+      });
+      await ready(space);
+      const play = (time: number) => (space as any).playItems(time);
+      play(1);
+      expect(space.element.querySelectorAll("path")).toHaveLength(1);
+      draw = false;
+      play(2);
+      expect(space.element.querySelectorAll("path")).toHaveLength(
+        refresh === false ? 1 : 0,
+      );
+      space.dispose();
+    },
+  );
+
   it("commits frames through playItems, honoring the refresh flag", async () => {
     const { element } = mount();
     const space = new SVGSpace(element);
