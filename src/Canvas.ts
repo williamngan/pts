@@ -42,6 +42,8 @@ export class CanvasSpace extends MultiTouchSpace {
   private _readyObserver: MutationObserver | undefined;
   private _readyTimer: number | undefined;
   private _disposed = false;
+  private _ownsCanvas = false;
+  private _ownsContainer = false;
 
   /**
    * Create a CanvasSpace which represents a HTML Canvas Space
@@ -72,6 +74,7 @@ export class CanvasSpace extends MultiTouchSpace {
 
     // if selector is not defined, create a default canvas
     if (!_selector) {
+      this._ownsContainer = true;
       this._container = this._createElement("div", this.id + "_container");
       this._canvas = this._createElement(
         "canvas",
@@ -101,6 +104,7 @@ export class CanvasSpace extends MultiTouchSpace {
 
     // if we created the canvas, add it to the container and observe mutation for readiness
     if (!_existed) {
+      this._ownsCanvas = true;
       this._readyObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           if (mutation.type === "childList" && mutation.addedNodes.length) {
@@ -490,6 +494,9 @@ export class CanvasSpace extends MultiTouchSpace {
     this._cancelAnimation();
     this.removeAll();
     this._isReady = false;
+    if (this._ownsCanvas) this._canvas.remove();
+    if (this._ownsContainer && this._container.childNodes.length === 0)
+      this._container.remove();
 
     return this;
   }

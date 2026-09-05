@@ -41,6 +41,32 @@ afterEach(() => {
 });
 
 describe("CanvasSpace and Space interaction", () => {
+  it("removes owned canvases on disposal without removing caller-owned hosts", async () => {
+    const container = host();
+    const sibling = document.createElement("span");
+    container.appendChild(sibling);
+    const first = new CanvasSpace(container);
+    first.dispose().dispose();
+    const second = new CanvasSpace(container);
+    await ready(second);
+    expect(container.querySelectorAll("canvas")).toHaveLength(1);
+    second.dispose();
+    expect(container.isConnected).toBe(true);
+    expect(sibling.isConnected).toBe(true);
+    expect(container.querySelectorAll("canvas")).toHaveLength(0);
+
+    const canvas = document.createElement("canvas");
+    container.appendChild(canvas);
+    new CanvasSpace(canvas).dispose();
+    expect(canvas.isConnected).toBe(true);
+
+    const generated = new CanvasSpace("launch-generated-canvas");
+    generated.dispose();
+    expect(
+      document.querySelector("#launch-generated-canvas_container"),
+    ).toBeNull();
+  });
+
   it("initializes, sizes, clears, renders, and disposes visible/offscreen canvases", async () => {
     vi.stubGlobal(
       "ResizeObserver",
