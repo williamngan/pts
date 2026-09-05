@@ -358,7 +358,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "A convenient method to bind (or unbind) all mouse events in canvas element.\nAll [`IPlayer`](#link) objects added to this space that implement an `action` callback property will receive mouse event callbacks.\nThe types of mouse actions are defined by [`UIPointerActions`](#link) constants: \"up\", \"down\", \"move\", \"drag\", \"drop\", \"over\", and \"out\".",
+          "comment": "A convenient method to bind (or unbind) all mouse events in canvas element.\nAll [`IPlayer`](#link) objects added to this space that implement an `action` callback property will receive mouse event callbacks.\nMouse action names are defined by [`UIPointerActions`](#link), including \"up\", \"down\", \"move\", \"drag\", \"drop\", \"over\", \"out\", \"click\", \"pointerdown\", \"pointerup\", and \"contextmenu\".",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
@@ -398,13 +398,13 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "A convenient method to bind (or unbind) all touch events in canvas element.\nAll [`IPlayer`](#link) objects added to this space that implement an `action` callback property will receive touch event callbacks.\nThe types of mouse actions are defined by [`UIPointerActions`](#link) constants: \"up\", \"down\", \"move\", \"drag\", \"drop\", \"over\", and \"out\".",
+          "comment": "A convenient method to bind (or unbind) all touch events in canvas element.\nAll [`IPlayer`](#link) objects added to this space that implement an `action` callback property will receive touch event callbacks.\nTouch action names are defined by [`UIPointerActions`](#link), including \"up\", \"down\", \"move\", \"drag\", \"drop\", \"over\", and \"out\".",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
               "name": "bind",
-              "comment": "a boolean value to bind touch events if set to `true`. If `false`, all mouse events will be unbound. Default is true.",
+              "comment": "a boolean value to bind touch events if set to `true`. If `false`, all touch events will be unbound. Default is true.",
               "type": "boolean",
               "default": "true"
             },

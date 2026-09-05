@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../../../dist/pts.js"></script>
     <script
       type="text/javascript"
-      src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.8.9/Tone.js"
+      src="https://unpkg.com/tone@15.1.22/build/Tone.js"
     ></script>
   </head>
 
@@ -30,14 +30,15 @@
       Pts.quickStart("pts", "#62e");
 
       let index = new Pt(-1, -1);
-      let synth = new Tone.Synth();
-      let sound = Sound.from(synth, synth.context).analyze(128);
-      synth.toMaster(); // play using tone.js instead of Pts
+      let synth = new Tone.Synth().toDestination();
+      let context = Tone.getContext().rawContext;
+      let tap = context.createGain();
+      synth.connect(tap);
+      let sound = Sound.from(tap, context).analyze(128);
 
       space.add({
         animate: (time) => {
-          if (synth.context.state === "suspended") {
-            // mostly for safari
+          if (Tone.getContext().state === "suspended") {
             form.fillOnly("#fff").text([20, 30], "Click anywhere to start");
           }
 
@@ -74,9 +75,8 @@
 
         action: (type, x, y) => {
           if (type === "up") {
-            // for safari
-            if (synth.context.state === "suspended") {
-              synth.context.resume();
+            if (Tone.getContext().state === "suspended") {
+              Tone.start();
             }
           }
         },

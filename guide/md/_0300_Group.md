@@ -49,7 +49,7 @@ g.pop();
 let mags = g.map( (p) => p.magnitude() );
 ```
 
-##### Note on typescript: you may need to cast Array function result back to `Group` because the typescript compiler cannot figure it out yet (as of v2.4). For example: `let gg = group.map( (p) => p.unit() ) as Group`;
+##### Note on typescript: Array functions such as `map` are typed to return an Array. If you need Group-specific methods on the result, wrap it explicitly: `let gg = Group.fromPtArray( group.map( (p) => p.unit() ) );`
 
 It's common to apply a Pt function to all the Pts in a Group. You can use [`forEachPt`](#pt-group) to do this easily, as long as the Pt function will return a Pt.
 
@@ -68,7 +68,7 @@ There are also a couple additional functions in Group that let you work with arr
 
 ### Transformations
 
-Similar to transformations in Pt, you can use [`scale`](#pt-group), [`rotate2D`](#pt-group) etc to transform a Group ot Pts. There are also [`moveBy`](#pt-group) and [`moveTo`](#pt-group) to translate its positions. Basic arithmetics like [`add`](#pt-group) and [`multiply`](#pt-group) are also included.
+Similar to transformations in Pt, you can use [`scale`](#pt-group), [`rotate2D`](#pt-group) etc to transform a Group of Pts. There are also [`moveBy`](#pt-group) and [`moveTo`](#pt-group) to translate its positions. Basic arithmetics like [`add`](#pt-group) and [`multiply`](#pt-group) are also included.
 
 Furthermore, you may use [`$matrixAdd`](#pt-group) and [`$matrixMultiply`](#pt-group) to do advanced matrix calculations.
 
@@ -79,7 +79,7 @@ Creating and cloning
 ```
 new Group( new Pt(1,2), new Pt(3,4) )
 Group.fromArray( [ [1,2], [3,4] ])
-Group.fromPtArray( [new Pt(1,2), new Pt(3,4) )
+Group.fromPtArray( [new Pt(1,2), new Pt(3,4)] )
 g.clone()
 ```
 

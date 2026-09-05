@@ -34,14 +34,14 @@ How about something more elaborate? Let's try a silly and fun visualization.
 
 Let's get some sounds to begin! Do you want to load from a sound file, receive microphone input, or generate audio dynamically? Pts offers four handy static functions for these.
 
-1. Use [`Sound.load`](#play-sound) to load a sound file with an url or a specific `<audio>` element. The sound will play as soon as it has streamed enough data. You can check if the audio file is ready to play by accessing [`.playable`](#play-sound) property.
+1. Use [`Sound.load`](#play-sound) to load a sound file with a URL or a specific `<audio>` element. The Promise resolves when enough data has loaded to play through, but playback does not start automatically. You can check if the audio file is ready to play by accessing [`.playable`](#play-sound) property.
 
 ```
 Sound.load( "/path/to/hello.mp3" ).then( s => sound = s );
 Sound.load( audioElem ).then( s => sound = s ); // load from <audio> element
 ```
 
-2. Use [`Sound.loadAsBuffer`](#play-sound) if you need support for Safari and iOS, since they currently don't provide sound data for <audio> element reliably. See discussion in Advanced section below.
+2. Use [`Sound.loadAsBuffer`](#play-sound) to decode the entire file into an [`AudioBuffer`](https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer). This does not stream, but it can provide more consistent analysis and replay behavior across browsers.
 
 ```
 Sound.loadAsBuffer( "/path/to/hello.mp3" ).then( s => sound = s );
@@ -77,7 +77,7 @@ sound.playing; // boolean to indicate if sound is playing
 sound.volume = 0.5; // change the volume (default is 1)
 ```
 
-##### Note that current browsers no longer support autoplay. Users will need to express intent to play the sound (eg, with a click).
+##### Browsers commonly block audible playback until the user interacts with the page, so start sound from a click or another user gesture.
 
 ### Analyze
 
@@ -138,7 +138,7 @@ The interplay of sounds and shapes offer many possibilities indeed. Make good us
 
 ### Advanced
 
-Currently Safari and iOS can play streaming <audio> element, but don't reliably provide time and frequency domain data for it. Hopefully Safari will have a fix soon, but for now you can use [`AudioBuffer`](https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer) approach - it's a bit more clumsy but it works (see [`loadAsBuffer`](#play-sound)).
+If media-element analysis behaves differently across target browsers, load and decode the whole file with [`loadAsBuffer`](#play-sound). This uses an [`AudioBuffer`](https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer) instead of a streaming `<audio>` element.
 
 ```
 Sound.loadAsBuffer( "/path/to/hello.mp3" ).then( s => sound = s );
@@ -154,9 +154,11 @@ sound.createBuffer();
 For custom use cases with other libraries, you can create an instance using [`Sound.from`](#play-sound) static method. Here's an example using Tone.js:
 
 ```
-let synth = new Tone.Synth();
-let sound = Sound.from( synth, synth.context ); // create Pts Sound instance
-synth.toMaster(); // play using tone.js instead of Pts
+const synth = new Tone.Synth().toDestination();
+const context = Tone.getContext().rawContext;
+const tap = context.createGain();
+synth.connect( tap );
+const sound = Sound.from( tap, context ).analyze( 128 );
 ```
 
 The following demo generates audio using [Tone.js](https://tonejs.github.io/) and then visualizes it with Pts:

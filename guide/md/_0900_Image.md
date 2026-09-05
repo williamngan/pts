@@ -55,10 +55,10 @@ The [`pixel`](#image-img) function supports a very common use case: specify a pi
 
 ##### Try scribbling in different regions of the image to change it. This demo combines `Create.delaunay` with `Img.pixel`.
 
-Another common use case is to crop a region of the image. The [`crop`](#image-img) function takes a bounding box and returns an [`ImageData`](https://developer.mozilla.org/en-US/docs/Web/API/ImageData). You can then use CanvasForm's[`imageData`](#canvas-canvasform) to draw the region.
+Another common use case is to crop a region of the image. The [`crop`](#image-img) function takes a bounding box and returns an [`ImageData`](https://developer.mozilla.org/en-US/docs/Web/API/ImageData). You can then use CanvasForm's [`imageData`](#canvas-canvasform) to draw the region.
 
 ```
-form.imageData( img.crop( bound ) );
+form.imageData( [0, 0], img.crop( bound ) );
 ```
 
 Let's try this in a demo:
@@ -73,11 +73,12 @@ It's more efficient to draw `ImageData` directly on canvas. If needed, you can a
 
 Since an editable [`Img`](#image-img) stores an internal canvas, you can leverage [`CanvasForm`](#canvas-canvasform)'s many drawing functions to draw directly on it. It's that easy!
 
-After the image is loaded, you can access the canvas' rendering context through the property `img.ctx` and then create a new [`CanvasForm`](#canvas-canvasform) instance with it. For example:
+After the image is loaded, you can use [`getForm`](#image-img) to create a [`CanvasForm`](#canvas-canvasform) for its internal canvas. For example:
 
 ```
-const img = await Img.load( "demo.jpg", true );
-const imgForm = new CanvasForm( img.ctx );
+const img = await Img.load( "demo.jpg", { editable: true } );
+const imgForm = img.getForm();
+if (!imgForm) throw new Error( "Expected an editable image" );
 ...
 imgForm.fill("#f00").rect( rect );
 ```
@@ -94,11 +95,11 @@ Additionally, the [`filter`](https://ptsjs.org/docs/?p=Image_Img#function_filter
 img.filter( "blur(10px) contrast(20%) saturate(0%)" )
 ```
 
-To display the edited image, use CanvasForm's [`image`](https://ptsjs.org/docs/?p=Canvas_CanvasForm#function_image) function but pass `img.canvas` (instead of `img` itself) in the parameter.
+To display the edited image, use CanvasForm's [`image`](https://ptsjs.org/docs/?p=Canvas_CanvasForm#function_image) function and pass `img.current` as the image source.
 
 ```
 // draw internal image canvas
-form.image( img.canvas );
+form.image( [0, 0], img.current );
 ```
 
 As we are only editing an internal canvas, the original image is unchanged until it's explicitly updated. Use [`sync`](#image-img), which returns a Promise, to update the original image when needed: `await img.sync()`.
@@ -163,7 +164,7 @@ await img.load("demo.png")
 form.image( [0,0], img );
 
 // Load a pattern and use it as fill
-let pattern = Img.loadPattern( "tile.jpg" );
+let pattern = await Img.loadPattern( "tile.jpg", space );
 form.fill( pattern ).rect( rect );
 
 // Get a pattern from an Img instance
@@ -186,8 +187,8 @@ Editing an image
 
 ```
 img.crop( rect )
-img.resize( 0.5, true );
-img.filter( "blur(10px) | contrast(200%)" );
+img.resize( [0.5, 0.5], true );
+img.filter( "blur(10px) contrast(200%)" );
 img.pixel( space.pointer );
 
 // Draw on image

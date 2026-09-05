@@ -59,8 +59,8 @@ let img2 = await Img.load( &quot;/assets/demo.jpg&quot;, { editable: true, pixel
 <p>The <a href="../docs/?p=Image_Img#function_pixel"><code>pixel</code></a> function supports a very common use case: specify a pixel position on the image, get its RGBA color values, and do something with it. A wide range of visual possibilities may open up if you use this simple function creatively.</p>
 <p><img src="./assets/bg.png" alt="js:image_pixel"></p>
 <h5>Try scribbling in different regions of the image to change it. This demo combines <code>Create.delaunay</code> with <code>Img.pixel</code>.</h5>
-<p>Another common use case is to crop a region of the image. The <a href="../docs/?p=Image_Img#function_crop"><code>crop</code></a> function takes a bounding box and returns an <a href="https://developer.mozilla.org/en-US/docs/Web/API/ImageData"><code>ImageData</code></a>. You can then use CanvasForm's<a href="../docs/?p=Canvas_CanvasForm#function_imageData"><code>imageData</code></a> to draw the region.</p>
-<pre tabindex="0"><code>form.imageData( img.crop( bound ) );
+<p>Another common use case is to crop a region of the image. The <a href="../docs/?p=Image_Img#function_crop"><code>crop</code></a> function takes a bounding box and returns an <a href="https://developer.mozilla.org/en-US/docs/Web/API/ImageData"><code>ImageData</code></a>. You can then use CanvasForm's <a href="../docs/?p=Canvas_CanvasForm#function_imageData"><code>imageData</code></a> to draw the region.</p>
+<pre tabindex="0"><code>form.imageData( [0, 0], img.crop( bound ) );
 </code></pre>
 <p>Let's try this in a demo:</p>
 <p><img src="./assets/bg.png" alt="js:image_crop"></p>
@@ -68,9 +68,10 @@ let img2 = await Img.load( &quot;/assets/demo.jpg&quot;, { editable: true, pixel
 <p>It's more efficient to draw <code>ImageData</code> directly on canvas. If needed, you can also export it to a blob using <a href="../docs/?p=Image_Img#function_static_imageDataToBlob"><code>Img.imageDataToBlob</code></a> and then load it into an image again.</p>
 <h3>Edit and Sync</h3>
 <p>Since an editable <a href="../docs/?p=Image_Img"><code>Img</code></a> stores an internal canvas, you can leverage <a href="../docs/?p=Canvas_CanvasForm"><code>CanvasForm</code></a>'s many drawing functions to draw directly on it. It's that easy!</p>
-<p>After the image is loaded, you can access the canvas' rendering context through the property <code>img.ctx</code> and then create a new <a href="../docs/?p=Canvas_CanvasForm"><code>CanvasForm</code></a> instance with it. For example:</p>
-<pre tabindex="0"><code>const img = await Img.load( &quot;demo.jpg&quot;, true );
-const imgForm = new CanvasForm( img.ctx );
+<p>After the image is loaded, you can use <a href="../docs/?p=Image_Img#function_getForm"><code>getForm</code></a> to create a <a href="../docs/?p=Canvas_CanvasForm"><code>CanvasForm</code></a> for its internal canvas. For example:</p>
+<pre tabindex="0"><code>const img = await Img.load( &quot;demo.jpg&quot;, { editable: true } );
+const imgForm = img.getForm();
+if (!imgForm) throw new Error( &quot;Expected an editable image&quot; );
 ...
 imgForm.fill(&quot;#f00&quot;).rect( rect );
 </code></pre>
@@ -80,9 +81,9 @@ imgForm.fill(&quot;#f00&quot;).rect( rect );
 <p>Additionally, the <a href="https://ptsjs.org/docs/?p=Image_Img#function_filter"><code>filter</code></a> function supports image filter effects like desaturation and blur (See the <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter">full list</a> supported by canvas). Note that some effects may not work in mobile browsers.</p>
 <pre tabindex="0"><code>img.filter( &quot;blur(10px) contrast(20%) saturate(0%)&quot; )
 </code></pre>
-<p>To display the edited image, use CanvasForm's <a href="https://ptsjs.org/docs/?p=Canvas_CanvasForm#function_image"><code>image</code></a> function but pass <code>img.canvas</code> (instead of <code>img</code> itself) in the parameter.</p>
+<p>To display the edited image, use CanvasForm's <a href="https://ptsjs.org/docs/?p=Canvas_CanvasForm#function_image"><code>image</code></a> function and pass <code>img.current</code> as the image source.</p>
 <pre tabindex="0"><code>// draw internal image canvas
-form.image( img.canvas );
+form.image( [0, 0], img.current );
 </code></pre>
 <p>As we are only editing an internal canvas, the original image is unchanged until it's explicitly updated. Use <a href="../docs/?p=Image_Img#function_sync"><code>sync</code></a>, which returns a Promise, to update the original image when needed: <code>await img.sync()</code>.</p>
 <p>You can also work at the pixel level: <a href="../docs/?p=Image_Img#function_setPixel"><code>setPixel</code></a> writes a color into the cached pixel data, <a href="../docs/?p=Image_Img#function_updatePixels"><code>updatePixels</code></a> applies those changes onto the canvas, and <a href="../docs/?p=Image_Img#function_loadPixels"><code>loadPixels</code></a> refreshes the cache after you've drawn on the canvas directly. When you're done with an Img, call <a href="../docs/?p=Image_Img#function_dispose"><code>dispose</code></a> to release its resources.</p>
@@ -133,7 +134,7 @@ await img.load(&quot;demo.png&quot;)
 form.image( [0,0], img );
 
 // Load a pattern and use it as fill
-let pattern = Img.loadPattern( &quot;tile.jpg&quot; );
+let pattern = await Img.loadPattern( &quot;tile.jpg&quot;, space );
 form.fill( pattern ).rect( rect );
 
 // Get a pattern from an Img instance
@@ -150,8 +151,8 @@ img.pixelScale; // pixel density which usually matches the space's
 </code></pre>
 <p>Editing an image</p>
 <pre tabindex="0"><code>img.crop( rect )
-img.resize( 0.5, true );
-img.filter( &quot;blur(10px) | contrast(200%)&quot; );
+img.resize( [0.5, 0.5], true );
+img.filter( &quot;blur(10px) contrast(200%)&quot; );
 img.pixel( space.pointer );
 
 // Draw on image

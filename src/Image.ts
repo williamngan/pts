@@ -309,7 +309,7 @@ export class Img {
 
   /**
    * Replace the image with the current canvas data. For example, you can use CanvasForm's static functions to draw on `this.ctx` and then update the current image.
-   * To display the internal canvas, you can also use `form.image( img.canvas )` directly.
+   * To display the internal canvas, use `form.image( [0, 0], img.current )`.
    */
   async sync(): Promise<Img> {
     // Blob-blit instead of a base64 round-trip: encode asynchronously, load
@@ -505,7 +505,7 @@ export class Img {
 
   /**
    * Apply filters such as blur and grayscale to the canvas image. The original image is unchanged until `sync()`.
-   * @param css a css filter string such as "blur(10px) | contrast(200%)". See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter#browser_compatibility) for a list of filter functions.
+   * @param css a css filter string such as "blur(10px) contrast(200%)". See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter#browser_compatibility) for a list of filter functions.
    */
   filter(css: string): this {
     // "copy" replaces the canvas with the filtered result (the source is

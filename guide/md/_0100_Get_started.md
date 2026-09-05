@@ -20,25 +20,23 @@ But enough of abstractions for now. Let's see how it works in a concrete example
 
 (If you don't know how npm works, it's not a problem. Skip to next section to use Pts as a script directly.)
 
-If you use npm, first [`npm install pts`](https://www.npmjs.com/package/pts) and then import the classes you need:
+If you use npm, first [`npm install pts`](https://www.npmjs.com/package/pts) (or `pnpm add pts`) and then import the classes you need:
 
 ```
 import {CanvasSpace, Pt, Group} from "pts"
 ```
 
-To get started quickly with a webpack es6 build, try [pts-starter-kit](https://github.com/williamngan/pts-starter-kit). If you prefer typescript, try this [pts-ts-starter-kit](https://github.com/pierpo/pts-ts-starter-kit) by pierpo.
-
-To use Pts in React, take a look at [pts-react-example](https://github.com/williamngan/pts-react-example), which provides components built with create-react-app or neutrino.js
+To use Pts in React, take a look at [`react-pts-canvas`](./Ecosystem-8000.html) in the Ecosystem guide.
 
 Pts targets ES2015 and does not ship a separate ES5 build. If your application needs an older JavaScript target, configure your bundler to transpile Pts and provide the platform polyfills your application requires. Keep importing from `"pts"`.
 
 ### Using Pts as a script
 
-First get `pts.js` or `pts.min.js`. You may get a direct link from a CDN service (eg, [unpkg](https://unpkg.com/pts/dist/pts.js) or [jsdelivr](https://cdn.jsdelivr.net/gh/williamngan/pts/dist/pts.js)), or download it from [github repo](https://github.com/williamngan/pts/tree/master/dist). Include it in your html, and then create another js file for your script and add it too.
+First get `pts.js` or `pts.min.js`. You may get a direct link from a CDN service (eg, [unpkg](https://unpkg.com/pts/dist/pts.js) or [jsDelivr](https://cdn.jsdelivr.net/npm/pts/dist/pts.js)), or download it from the [github repo](https://github.com/williamngan/pts/tree/master/dist). Include it in your html, and then create another js file for your script and add it too.
 
 ```
-<script type="text/javascript" src="path/to/pts.js"></script>
-<script type="text/javascript" src="path/to/my_script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pts/dist/pts.min.js"></script>
+<script src="path/to/my_script.js"></script>
 ```
 
 When using as a script, we usually start by adding **`Pts`** into the global scope first.
@@ -199,12 +197,12 @@ space.add( (time, ftime) => {
   tris.map( (t) => t.push( space.pointer ) );
 
   // circle
-  var circles = tris.map( (t) => Triangle.incircle( t ) );
+  var circles = tris.map( (t) => Triangle.incircle( t ) ).filter( Boolean );
 
   // drawing
   form.fillOnly("#123").polygon( poly );
   form.fill("#f03").circles( circles );
-  form.strokeOnly("#fff ", 3 ).polygons( tris );
+  form.strokeOnly("#fff", 3 ).polygons( tris );
   form.fill("#123").point( space.pointer, 5 );
 
 });

@@ -50,13 +50,13 @@ sound.freqDomainTo( space.size ).forEach( (t, i) =&gt; {
 <h3>Input</h3>
 <p>Let's get some sounds to begin! Do you want to load from a sound file, receive microphone input, or generate audio dynamically? Pts offers four handy static functions for these.</p>
 <ol>
-<li>Use <a href="../docs/?p=Play_Sound#function_static_load"><code>Sound.load</code></a> to load a sound file with an url or a specific <code>&lt;audio&gt;</code> element. The sound will play as soon as it has streamed enough data. You can check if the audio file is ready to play by accessing <a href="../docs/?p=Play_Sound#accessor_playable"><code>.playable</code></a> property.</li>
+<li>Use <a href="../docs/?p=Play_Sound#function_static_load"><code>Sound.load</code></a> to load a sound file with a URL or a specific <code>&lt;audio&gt;</code> element. The Promise resolves when enough data has loaded to play through, but playback does not start automatically. You can check if the audio file is ready to play by accessing <a href="../docs/?p=Play_Sound#accessor_playable"><code>.playable</code></a> property.</li>
 </ol>
 <pre tabindex="0"><code>Sound.load( &quot;/path/to/hello.mp3&quot; ).then( s =&gt; sound = s );
 Sound.load( audioElem ).then( s =&gt; sound = s ); // load from &lt;audio&gt; element
 </code></pre>
 <ol start="2">
-<li>Use <a href="../docs/?p=Play_Sound#function_static_loadAsBuffer"><code>Sound.loadAsBuffer</code></a> if you need support for Safari and iOS, since they currently don't provide sound data for &lt;audio&gt; element reliably. See discussion in Advanced section below.</li>
+<li>Use <a href="../docs/?p=Play_Sound#function_static_loadAsBuffer"><code>Sound.loadAsBuffer</code></a> to decode the entire file into an <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer"><code>AudioBuffer</code></a>. This does not stream, but it can provide more consistent analysis and replay behavior across browsers.</li>
 </ol>
 <pre tabindex="0"><code>Sound.loadAsBuffer( &quot;/path/to/hello.mp3&quot; ).then( s =&gt; sound = s );
 </code></pre>
@@ -82,7 +82,7 @@ sound.toggle(); // toggle between start and stop
 sound.playing; // boolean to indicate if sound is playing
 sound.volume = 0.5; // change the volume (default is 1)
 </code></pre>
-<h5>Note that current browsers no longer support autoplay. Users will need to express intent to play the sound (eg, with a click).</h5>
+<h5>Browsers commonly block audible playback until the user interacts with the page, so start sound from a click or another user gesture.</h5>
 <h3>Analyze</h3>
 <p>Using the <a href="../docs/?p=Play_Sound#function_analyze"><code>analyze</code></a> function, we can attach an analyzer to keep track of the data in our Sound instance.</p>
 <pre tabindex="0"><code>sound.analyze( 128 ); // Call once to initiate the analyzer
@@ -115,7 +115,7 @@ td = sound.timeDomainTo( [200, 100], [50, 50], [0, 0], td ); // reused
 <p><img src="./assets/bg.png" alt="js:sound_frequency"></p>
 <p>The interplay of sounds and shapes offer many possibilities indeed. Make good use of your imagination to create something beautiful, fun, and unexpected!</p>
 <h3>Advanced</h3>
-<p>Currently Safari and iOS can play streaming &lt;audio&gt; element, but don't reliably provide time and frequency domain data for it. Hopefully Safari will have a fix soon, but for now you can use <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer"><code>AudioBuffer</code></a> approach - it's a bit more clumsy but it works (see <a href="../docs/?p=Play_Sound#function_static_loadAsBuffer"><code>loadAsBuffer</code></a>).</p>
+<p>If media-element analysis behaves differently across target browsers, load and decode the whole file with <a href="../docs/?p=Play_Sound#function_static_loadAsBuffer"><code>loadAsBuffer</code></a>. This uses an <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer"><code>AudioBuffer</code></a> instead of a streaming <code>&lt;audio&gt;</code> element.</p>
 <pre tabindex="0"><code>Sound.loadAsBuffer( &quot;/path/to/hello.mp3&quot; ).then( s =&gt; sound = s );
 </code></pre>
 <p><code>AudioBuffer</code> doesn't support streaming and its source node can only be played once. Pts recreates the buffer for you when you call <a href="../docs/?p=Play_Sound#function_start"><code>start</code></a> or <a href="../docs/?p=Play_Sound#function_toggle"><code>toggle</code></a> again, so replay just works. If you want to prepare a replay manually, use the convenient <a href="../docs/?p=Play_Sound#function_createBuffer"><code>createBuffer</code></a> function without parameter to re-use the previous buffer.</p>
@@ -123,9 +123,11 @@ td = sound.timeDomainTo( [200, 100], [50, 50], [0, 0], td ); // reused
 sound.createBuffer();
 </code></pre>
 <p>For custom use cases with other libraries, you can create an instance using <a href="../docs/?p=Play_Sound#function_static_from"><code>Sound.from</code></a> static method. Here's an example using Tone.js:</p>
-<pre tabindex="0"><code>let synth = new Tone.Synth();
-let sound = Sound.from( synth, synth.context ); // create Pts Sound instance
-synth.toMaster(); // play using tone.js instead of Pts
+<pre tabindex="0"><code>const synth = new Tone.Synth().toDestination();
+const context = Tone.getContext().rawContext;
+const tap = context.createGain();
+synth.connect( tap );
+const sound = Sound.from( tap, context ).analyze( 128 );
 </code></pre>
 <p>The following demo generates audio using <a href="https://tonejs.github.io/">Tone.js</a> and then visualizes it with Pts:</p>
 <p><a href="./js/examples/tone.html"> <img src="./assets/tone.png" alt="screenshot"> </a></p>

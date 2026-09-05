@@ -350,8 +350,8 @@ export class Sound {
   }
 
   /**
-   * Create a `Sound` by loading from a sound file url as `AudioBufferSourceNode`.
-   * Use this method for now if you need to visualize sound in Safari and iOS. Once Apple has full support for FFT with streaming `HTMLMediaElement`, this method will likely be deprecated.
+   * Create a `Sound` by loading and decoding a sound file URL as an `AudioBufferSourceNode`.
+   * Unlike [`Sound.load`](#link), this loads the complete file instead of streaming it, which can provide more consistent analysis and replay behavior across browsers.
    * @param url an url to the sound file
    */
   static async loadAsBuffer(url: string): Promise<Sound> {

@@ -4,7 +4,7 @@ Canvas element has only basic supports for text, making it difficult to create a
 
 ![demo](./assets/textbox.png)
 
-##### You can view this typographic layout demo on the [demo page](http://ptsjs.org/demo/?name=canvasform.textBox).
+##### You can view this typographic layout demo on the [demo page](https://ptsjs.org/demo/?name=canvasform.textBox).
 
 ### Text Box
 
@@ -20,7 +20,7 @@ Below is a demo of truncated text at placed at top, middle, and bottom of a a re
 
 ![js:canvas_textbox](./assets/bg.png)
 
-### Aligment
+### Alignment
 
 Canvas API already provides `textBaseline` and `textAlign` for text alignments. Pts makes these more convenient via [`alignText`](#canvas-canvasform) function. Use it with [`textBox`](#canvas-canvasform) to position your text within a rectangular area.
 
@@ -58,7 +58,7 @@ For long paragraphs, you may consider using [`fontWidthEstimate`](#canvas-canvas
 
 Hope these functions will give you more control over text on canvas, especially when you want to play with typographic experiments. However, putting text on canvas may not be a good approach in many cases. For example, it has poor accessibility (cannot be read for screen reader) and cannot be indexed by search engines.
 
-And we will be adding similar functions to support for SVG text too. Stay tuned!
+[`SVGForm`](#svg-svgform) supports these text functions too.
 
 ### Cheatsheet
 

@@ -367,7 +367,7 @@
           "parameters": [
             {
               "name": "css",
-              "comment": "a css filter string such as \"blur(10px) | contrast(200%)\". See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter#browser_compatibility) for a list of filter functions.",
+              "comment": "a css filter string such as \"blur(10px) contrast(200%)\". See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter#browser_compatibility) for a list of filter functions.",
               "type": "string",
               "default": false
             }
@@ -650,7 +650,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Replace the image with the current canvas data. For example, you can use CanvasForm's static functions to draw on `this.ctx` and then update the current image.\nTo display the internal canvas, you can also use `form.image( img.canvas )` directly.",
+          "comment": "Replace the image with the current canvas data. For example, you can use CanvasForm's static functions to draw on `this.ctx` and then update the current image.\nTo display the internal canvas, use `form.image( [0, 0], img.current )`.",
           "returns": "Promise",
           "returns_comment": false,
           "parameters": [],

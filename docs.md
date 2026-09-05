@@ -4028,7 +4028,7 @@ Apply filters such as blur and grayscale to the canvas image. The original image
 
 **Parameters**
 
-- `css` (`string`) — a css filter string such as "blur(10px) | contrast(200%)". See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter#browser_compatibility) for a list of filter functions.
+- `css` (`string`) — a css filter string such as "blur(10px) contrast(200%)". See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter#browser_compatibility) for a list of filter functions.
 
 <a id="image-img-get-form"></a>
 ##### `getForm`
@@ -4149,7 +4149,7 @@ sync(): Promise
 ```
 
 Replace the image with the current canvas data. For example, you can use CanvasForm's static functions to draw on `this.ctx` and then update the current image.
-To display the internal canvas, you can also use `form.image( img.canvas )` directly.
+To display the internal canvas, use `form.image( [0, 0], img.current )`.
 
 <a id="image-img-to-base64"></a>
 ##### `toBase64`
@@ -8890,8 +8890,8 @@ Sound.load( '/path/to/file.mp3' )
 static loadAsBuffer(url: string): Promise
 ```
 
-Create a `Sound` by loading from a sound file url as `AudioBufferSourceNode`.
-Use this method for now if you need to visualize sound in Safari and iOS. Once Apple has full support for FFT with streaming `HTMLMediaElement`, this method will likely be deprecated.
+Create a `Sound` by loading and decoding a sound file URL as an `AudioBufferSourceNode`.
+Unlike [`Sound.load`](#play-sound-static-load), this loads the complete file instead of streaming it, which can provide more consistent analysis and replay behavior across browsers.
 
 **Parameters**
 
@@ -10645,7 +10645,7 @@ bindMouse(bind: boolean = true, customTarget: Element): this
 
 A convenient method to bind (or unbind) all mouse events in canvas element.
 All [`IPlayer`](#types-iplayer) objects added to this space that implement an `action` callback property will receive mouse event callbacks.
-The types of mouse actions are defined by [`UIPointerActions`](#ui-uipointeractions) constants: "up", "down", "move", "drag", "drop", "over", and "out".
+Mouse action names are defined by [`UIPointerActions`](#ui-uipointeractions), including "up", "down", "move", "drag", "drop", "over", "out", "click", "pointerdown", "pointerup", and "contextmenu".
 
 **Parameters**
 
@@ -10663,11 +10663,11 @@ bindTouch(bind: boolean = true, passive: boolean = false, customTarget: Element)
 
 A convenient method to bind (or unbind) all touch events in canvas element.
 All [`IPlayer`](#types-iplayer) objects added to this space that implement an `action` callback property will receive touch event callbacks.
-The types of mouse actions are defined by [`UIPointerActions`](#ui-uipointeractions) constants: "up", "down", "move", "drag", "drop", "over", and "out".
+Touch action names are defined by [`UIPointerActions`](#ui-uipointeractions), including "up", "down", "move", "drag", "drop", "over", and "out".
 
 **Parameters**
 
-- `bind` (`boolean`; default `true`) — a boolean value to bind touch events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
+- `bind` (`boolean`; default `true`) — a boolean value to bind touch events if set to `true`. If `false`, all touch events will be unbound. Default is true.
 - `passive` (`boolean`; default `false`) — a boolean value to set passive mode, ie, it won't block scrolling. Default is false.
 - `customTarget` (`Element`) — an optional event target to use instead of the canvas element
 

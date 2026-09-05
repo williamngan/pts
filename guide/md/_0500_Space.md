@@ -1,6 +1,6 @@
 # Space
 
-[`Space`](#space-space) provides a general context for its points to be expressed. Each subclass of `Space` represents a specific context. Currently **`Pts`** includes [`CanvasSpace`](#canvas-canvasspace) which corresponds to the [`canvas`](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element, and [`SVGSpace`](#svg-svgspace) which lets you create vector graphics in svg format instead. There is also a deprecated [`HTMLSpace`](#dom-htmlspace) which renders forms in basic html elements. Soon we will have spaces for other contexts too.
+[`Space`](#space-space) provides a general context for its points to be expressed. Each subclass of `Space` represents a specific context. **`Pts`** includes [`CanvasSpace`](#canvas-canvasspace) which corresponds to the [`canvas`](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element, and [`SVGSpace`](#svg-svgspace) which lets you create vector graphics in svg format instead. There is also a deprecated [`HTMLSpace`](#dom-htmlspace) which renders forms in basic html elements.
 
 [`CanvasSpace`](#canvas-canvasspace) can be created like this:
 
@@ -52,7 +52,7 @@ Here we add an object that conforms to the [IPlayer](../docs/?p=Types_IPlayer) i
 
 * `animate` function is called continuously when the space plays. It includes 2 parameters: `time` which gives the current running time, and `ftime` which gives the time taken to draw the previous frame.
 
-* `action` function is called when an user event is detected. It includes 4 parameters: `type` is a string that returns the action's name. ("up", "down", "move", "drag", "drop", "over", and "out"). `x` and `y` returns the position at which the action happened, and `event` returns the actual event object. See also: [`bindMouse`](#canvas-canvasspace)
+* `action` function is called when a user event is detected. It includes 4 parameters: `type` is a string that returns the action's name. Common types include "up", "down", "move", "drag", "drop", "over", "out", "click", "contextmenu", "pointerdown", "pointerup", "keydown", and "keyup". `x` and `y` return the position at which the action happened, and `event` returns the actual event object. See also: [`bindMouse`](#canvas-canvasspace), [`bindTouch`](#canvas-canvasspace), and [`bindKeyboard`](#space-multitouchspace).
 
 * `resize` function is called when the space is resized. It includes 2 parameter: `size` which returns the new size, and event which returns the event object. You'll also need to add `{resize: true}` in [`setup`](#canvas-canvasspace) to enable tracking.
 
@@ -70,7 +70,7 @@ space.resume();
 space.stop();
 ```
 
-Using [`bindMouse`](#canvas-canvasspace) and [`bindTouch`](#canvas-canvasspace), you can easily make the space respond to user interactions. Once the space can receive mouse or touch events, you can track the events using a player's `action` callback function, as described above.
+Using [`bindMouse`](#canvas-canvasspace), [`bindTouch`](#canvas-canvasspace), and [`bindKeyboard`](#space-multitouchspace), you can easily make the space respond to user interactions. Once the space can receive events, you can track them using a player's `action` callback function, as described above.
 
 ```
 // You can chain multiple functions together

@@ -9,6 +9,7 @@ Let's start by counting the beats. Tempo is usually measured in beats-per-minute
 ```
 // 120 beats-per-minute, or 500ms per beat
 let tempo = new Tempo( 120 );
+space.add( tempo ); // let the Space update it on every frame
 
 // 500ms per beat, or 120 bpm
 let another = Tempo.fromBeat( 500 );
@@ -30,7 +31,7 @@ The `start` function lets you set a callback to be triggered at the start of eve
 everyTwo.start( (count) => ... )
 ```
 
-The `progress` function lets you set a callback during the progress of every _n_-beats period. The second parameter `t` always start at 0 and ends at 1 in every period, so you can use it to interpolate values and tween properties.
+The `progress` function lets you set a callback during the progress of every _n_-beats period. The second parameter `t` starts at 0 and moves toward 1 in every period, so you can use it to interpolate values and tween properties.
 
 ```
 // during every 10-beats period, do something
@@ -48,7 +49,7 @@ Pretty easy to create synchronized animation sequences, right? Let's try a few m
 
 ### Variations
 
-**Tween**: Since the `t` parameter in `progress` callback function always go from 0 to 1, we can map its value to a [`Shaping`](#num-shaping) function and change the tweening style. Another neat trick is to use [`Num.cycle`](#num-num) to map the `t` value from [0...1] to [0...1...0].
+**Tween**: Since the `t` parameter in `progress` callback function goes from 0 toward 1, we can map its value to a [`Shaping`](#num-shaping) function and change the tweening style. Another neat trick is to use [`Num.cycle`](#num-num) to map the `t` value from [0...1] to [0...1...0].
 
 ```
 everyTwo.progress( (count, t, time, isStart) => {
@@ -108,6 +109,7 @@ Create a [`Tempo`](#play-tempo) instance with specific bpm.
 ```
 tempo = new Tempo(120); // 120 bpm
 tempo = Tempo.fromBeat( 100 ); // one beat every 100ms
+space.add( tempo ); // update it from the Space animation loop
 ```
 
 Count beats and trigger animation callbacks
