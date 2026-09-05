@@ -25,6 +25,7 @@ export abstract class Space {
   protected _ctx: any;
 
   private _animID: number = -1;
+  private _fromFrame = false;
 
   private _pause: boolean = false;
   private _refresh: boolean | undefined = undefined;
@@ -104,16 +105,27 @@ export abstract class Space {
    * @param time current time
    */
   play(time = 0): this {
+    // A real RAF can have timestamp 0 too. Consume its marker before invoking
+    // players so a nested manual play() still cannot start a second loop.
+    const fromFrame = this._fromFrame;
+    this._fromFrame = false;
     // make sure only one play loop is active: an external play() while the
     // loop runs is a no-op...
-    if (time === 0 && this._animID !== -1) {
+    if (time === 0 && this._animID !== -1 && !fromFrame) {
       return this;
     }
     // ...and any other call (a frame callback, or a manual play(t)) replaces
     // the pending frame instead of stacking a parallel chain — cancelling an
     // already-fired frame id is a spec-defined no-op
     if (this._animID !== -1) cancelAnimationFrame(this._animID);
-    this._animID = requestAnimationFrame(this.play.bind(this));
+    this._animID = requestAnimationFrame((frameTime) => {
+      this._fromFrame = true;
+      try {
+        this.play(frameTime);
+      } finally {
+        this._fromFrame = false;
+      }
+    });
 
     if (this._pause) {
       // track time while paused so resuming doesn't deliver the entire
@@ -127,7 +139,7 @@ export abstract class Space {
       // elapsed time — `time` is an arbitrary clock timestamp, not a delta
       // play() draws synchronously at synthetic time 0. Keep initialization
       // pending until RAF supplies its first real clock timestamp.
-      this._firstFrame = time === 0;
+      this._firstFrame = time === 0 && !fromFrame;
       this._time.diff = 0;
       this._time.prev = time;
     } else {

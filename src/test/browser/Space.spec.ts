@@ -39,6 +39,30 @@ afterEach(() => {
 });
 
 describe("Space animation loop", () => {
+  it("keeps scheduling when the first real RAF timestamp is zero", async () => {
+    const space = new CanvasSpace(host()).setup({ retina: false });
+    await ready(space);
+    let frame!: FrameRequestCallback;
+    const request = vi
+      .spyOn(window, "requestAnimationFrame")
+      .mockImplementation((callback) => {
+        frame = callback;
+        return 1;
+      });
+    vi.spyOn(window, "cancelAnimationFrame").mockImplementation(() => {});
+    const elapsed: number[] = [];
+    space.add((_time, delta) => {
+      elapsed.push(delta);
+      space.play();
+    });
+    space.play();
+    frame(0);
+    expect(request).toHaveBeenCalledTimes(2);
+    frame(16);
+    expect(elapsed).toEqual([0, 0, 16]);
+    space.dispose();
+  });
+
   it("initializes elapsed time from the first real RAF after default play()", async () => {
     const space = new CanvasSpace(host()).setup({ retina: false });
     await ready(space);
