@@ -599,6 +599,44 @@ describe("SVGSpace frame lifecycle and export", () => {
 });
 
 describe("SVGForm legacy static helpers", () => {
+  it("dispatches the original static names to DOM or rendering contexts", () => {
+    const svg = document.createElementNS(SVG_NS, "svg");
+    document.body.appendChild(svg);
+    const legacy: DOMFormContext = {
+      group: svg,
+      groupID: "legacy",
+      groupCount: 0,
+      currentID: "legacy-0",
+      currentClass: "",
+      style: { filled: true, fill: "red" },
+    };
+    const native = document.createElement("canvas").getContext("2d")!;
+    const rendering = new SVGContext2D(document.createElementNS(SVG_NS, "svg"));
+    const p = [10, 10];
+    const pts = [
+      [0, 0],
+      [20, 20],
+      [10, 30],
+    ];
+    const calls = [
+      (ctx: any) => SVGForm.point(ctx, p),
+      (ctx: any) => SVGForm.circle(ctx, p),
+      (ctx: any) => SVGForm.arc(ctx, p, 10, 0, Math.PI),
+      (ctx: any) => SVGForm.square(ctx, p, 5),
+      (ctx: any) => SVGForm.line(ctx, pts),
+      (ctx: any) => SVGForm.polygon(ctx, pts),
+      (ctx: any) => SVGForm.rect(ctx, pts.slice(0, 2)),
+      (ctx: any) => SVGForm.text(ctx, p, "hello"),
+    ];
+    for (const [index, draw] of calls.entries()) {
+      legacy.currentID = `legacy-${index}`;
+      expect(draw(legacy)).toBeInstanceOf(SVGElement);
+      expect(() => draw(native)).not.toThrow();
+      expect(() => draw(rendering)).not.toThrow();
+    }
+    expect(svg.children).toHaveLength(calls.length);
+  });
+
   it("draws every legacy element type into a scoped group", () => {
     const svg = document.createElementNS(SVG_NS, "svg");
     document.body.appendChild(svg);

@@ -1111,6 +1111,135 @@ export class SVGForm extends CanvasForm<SVGSpace> {
     return DOMSpace.setAttr(elem, { style: st.join(";") });
   }
 
+  /** Draw through a rendering context, or use the legacy per-element DOM context. */
+  static point(
+    ctx: DOMFormContext,
+    pt: PtLike,
+    radius?: number,
+    shape?: string,
+  ): SVGElement;
+  static point(
+    ctx: RenderingContext2D,
+    pt: PtLike,
+    radius?: number,
+    shape?: string,
+  ): void;
+  static point(
+    ctx: DOMFormContext | RenderingContext2D,
+    pt: PtLike,
+    radius = 5,
+    shape = "square",
+  ) {
+    return "style" in ctx
+      ? SVGForm.pointElement(ctx, pt, radius, shape)
+      : CanvasForm.point(ctx, pt, radius, shape);
+  }
+
+  /** Draw through a rendering context, or use the legacy per-element DOM context. */
+  static circle(ctx: DOMFormContext, pt: PtLike, radius?: number): SVGElement;
+  static circle(ctx: RenderingContext2D, pt: PtLike, radius?: number): void;
+  static circle(
+    ctx: DOMFormContext | RenderingContext2D,
+    pt: PtLike,
+    radius = 10,
+  ) {
+    return "style" in ctx
+      ? SVGForm.circleElement(ctx, pt, radius)
+      : CanvasForm.circle(ctx, pt, radius);
+  }
+
+  /** Draw through a rendering context, or use the legacy per-element DOM context. */
+  static arc(
+    ctx: DOMFormContext,
+    pt: PtLike,
+    radius: number,
+    startAngle: number,
+    endAngle: number,
+    cc?: boolean,
+  ): SVGElement;
+  static arc(
+    ctx: RenderingContext2D,
+    pt: PtLike,
+    radius: number,
+    startAngle: number,
+    endAngle: number,
+    cc?: boolean,
+  ): void;
+  static arc(
+    ctx: DOMFormContext | RenderingContext2D,
+    pt: PtLike,
+    radius: number,
+    startAngle: number,
+    endAngle: number,
+    cc?: boolean,
+  ) {
+    return "style" in ctx
+      ? SVGForm.arcElement(ctx, pt, radius, startAngle, endAngle, cc)
+      : CanvasForm.arc(ctx, pt, radius, startAngle, endAngle, cc);
+  }
+
+  /** Draw through a rendering context, or use the legacy per-element DOM context. */
+  static square(ctx: DOMFormContext, pt: PtLike, halfsize: number): SVGElement;
+  static square(ctx: RenderingContext2D, pt: PtLike, halfsize: number): void;
+  static square(
+    ctx: DOMFormContext | RenderingContext2D,
+    pt: PtLike,
+    halfsize: number,
+  ) {
+    return "style" in ctx
+      ? SVGForm.squareElement(ctx, pt, halfsize)
+      : CanvasForm.square(ctx, pt, halfsize);
+  }
+
+  /** Draw through a rendering context, or use the legacy per-element DOM context. */
+  static line(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement | undefined;
+  static line(ctx: RenderingContext2D, pts: PtLikeIterable): void;
+  static line(ctx: DOMFormContext | RenderingContext2D, pts: PtLikeIterable) {
+    return "style" in ctx
+      ? SVGForm.lineElement(ctx, pts)
+      : CanvasForm.line(ctx, pts);
+  }
+
+  /** Draw through a rendering context, or use the legacy per-element DOM context. */
+  static polygon(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
+  static polygon(ctx: RenderingContext2D, pts: PtLikeIterable): void;
+  static polygon(
+    ctx: DOMFormContext | RenderingContext2D,
+    pts: PtLikeIterable,
+  ) {
+    return "style" in ctx
+      ? SVGForm.polygonElement(ctx, pts)
+      : CanvasForm.polygon(ctx, pts);
+  }
+
+  /** Draw through a rendering context, or use the legacy per-element DOM context. */
+  static rect(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement | undefined;
+  static rect(ctx: RenderingContext2D, pts: PtLikeIterable): void;
+  static rect(ctx: DOMFormContext | RenderingContext2D, pts: PtLikeIterable) {
+    return "style" in ctx
+      ? SVGForm.rectElement(ctx, pts)
+      : CanvasForm.rect(ctx, pts);
+  }
+
+  /** Draw through a rendering context, or use the legacy per-element DOM context. */
+  static text(ctx: DOMFormContext, pt: PtLike, txt: string): SVGElement;
+  static text(
+    ctx: RenderingContext2D,
+    pt: PtLike,
+    txt: string,
+    maxWidth?: number,
+  ): void;
+  static text(
+    ctx: DOMFormContext | RenderingContext2D,
+    pt: PtLike,
+    txt: string,
+    maxWidth?: number,
+  ) {
+    return "style" in ctx
+      ? SVGForm.textElement(ctx, pt, txt)
+      : CanvasForm.text(ctx, pt, txt, maxWidth);
+  }
+
   /**
    * A static function to draw a point as a circle or square element.
    * @param ctx a context object of SVGForm
