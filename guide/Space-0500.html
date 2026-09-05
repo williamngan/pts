@@ -109,12 +109,13 @@ space.add( (time, ftime) =&gt; {
 <h5>A demo of drawing different shapes</h5>
 <p>And since both Space and Form are javascript classes, you can extend them to override its functions and add new ones.</p>
 <h3>SVG Space</h3>
-<p>You can switch your code from <a href="../docs/?p=Canvas_CanvasSpace"><code>CanvasSpace</code></a> to <a href="../docs/?p=Svg_SVGSpace"><code>SVGSpace</code></a> without changing your drawing code: initiate the space as <code>SVGSpace</code> instead of <code>CanvasSpace</code>, and <code>space.getForm()</code> will return an <a href="../docs/?p=Svg_SVGForm"><code>SVGForm</code></a>, which shares the complete <code>CanvasForm</code> drawing API — shapes, gradients, dashes, text and more render as svg automatically.</p>
+<p>For supported drawing functions, you can switch your code from <a href="../docs/?p=Canvas_CanvasSpace"><code>CanvasSpace</code></a> to <a href="../docs/?p=Svg_SVGSpace"><code>SVGSpace</code></a> without changing your drawing code: initiate the space as <code>SVGSpace</code> instead of <code>CanvasSpace</code>, and <code>space.getForm()</code> will return an <a href="../docs/?p=Svg_SVGForm"><code>SVGForm</code></a>, which shares the <code>CanvasForm</code> drawing API — shapes, gradients, dashes, text and more render as svg automatically.</p>
 <pre tabindex="0"><code>const space = new SVGSpace( &quot;#elem&quot; ).setup({ bgcolor: &quot;#123&quot;, resize: true });
 const form = space.getForm();
 // ... the same drawing code as canvas
 </code></pre>
-<p>If you use <a href="../demo/?name=pts.quickStart"><code>quickStart</code></a>, it picks the space for you: mount on an <code>&lt;svg&gt;</code> element and you get an <code>SVGSpace</code>; mount on a <code>&lt;canvas&gt;</code> or <code>&lt;div&gt;</code> and you get a <code>CanvasSpace</code>. No other changes needed — a sketch written for canvas runs on svg as-is.</p>
+<p>If you use <a href="../demo/?name=pts.quickStart"><code>quickStart</code></a>, it picks the space for you: mount on an <code>&lt;svg&gt;</code> element and you get an <code>SVGSpace</code>; mount on a <code>&lt;canvas&gt;</code> or <code>&lt;div&gt;</code> and you get a <code>CanvasSpace</code>.</p>
+<p>SVG does not currently support clipping, image-data writes, source-cropped image drawing, canvas offscreen buffers, or Porter-Duff composites such as <code>source-in</code>. Use <code>CanvasSpace</code> if your sketch needs these functions.</p>
 <p>Under the hood, consecutive shapes that share styles are merged into single svg elements per frame, so the output stays fast and compact. To export the current frame as an svg file, use <a href="../docs/?p=Svg_SVGSpace#function_toSVG"><code>SVGSpace.toSVG</code></a> — pass <code>true</code> to get one element per shape, which is easier to edit in vector graphics tools.</p>
 <p>(In earlier versions of Pts, SVG rendering required a <code>form.scope(this)</code> call in each animate callback. This is no longer needed — existing code that calls it will still run, as the function is kept as a harmless no-op.)</p>
 <h3>HTML Space</h3>

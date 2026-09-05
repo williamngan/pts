@@ -130,7 +130,7 @@ Complete API reference for [Pts 0.12.9](https://ptsjs.org), generated from the s
 <a id="canvas-canvasform"></a>
 ### `CanvasForm`
 
-**Kind:** Class · **Source:** [`src/Canvas.ts:548`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L548)
+**Kind:** Class · **Source:** [`src/Canvas.ts:555`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L555)
 
 **Extends:** `VisualForm`
 
@@ -1175,8 +1175,8 @@ space.setup({ bgcolor: "#f00", retina: true, resize: true })
 
 #### Inherited API
 
-- From [`Space`](#space-space): [`center`](#space-space-center), [`customRendering`](#space-space-custom-rendering), [`height`](#space-space-height), [`innerBound`](#space-space-inner-bound), [`isPlaying`](#space-space-is-playing), [`outerBound`](#space-space-outer-bound), [`size`](#space-space-size), [`width`](#space-space-width), [`add`](#space-space-add), [`minFrameTime`](#space-space-min-frame-time), [`pause`](#space-space-pause), [`play`](#space-space-play), [`playOnce`](#space-space-play-once), [`refresh`](#space-space-refresh), [`remove`](#space-space-remove), [`removeAll`](#space-space-remove-all), [`render`](#space-space-render), [`replay`](#space-space-replay), [`resume`](#space-space-resume), [`stop`](#space-space-stop), [`bound`](#space-space-bound), [`id`](#space-space-id), [`playerCount`](#space-space-player-count), [`players`](#space-space-players).
-- From [`MultiTouchSpace`](#space-multitouchspace): [`pointer`](#space-multitouchspace-pointer), [`bindCanvas`](#space-multitouchspace-bind-canvas), [`bindDoc`](#space-multitouchspace-bind-doc), [`bindKeyboard`](#space-multitouchspace-bind-keyboard), [`bindMouse`](#space-multitouchspace-bind-mouse), [`bindTouch`](#space-multitouchspace-bind-touch), [`touchesToPoints`](#space-multitouchspace-touches-to-points), [`track`](#space-multitouchspace-track), [`unbindCanvas`](#space-multitouchspace-unbind-canvas), [`unbindDoc`](#space-multitouchspace-unbind-doc), [`untrack`](#space-multitouchspace-untrack).
+- From [`Space`](#space-space): [`center`](#space-space-center), [`customRendering`](#space-space-custom-rendering), [`height`](#space-space-height), [`innerBound`](#space-space-inner-bound), [`isPlaying`](#space-space-is-playing), [`outerBound`](#space-space-outer-bound), [`size`](#space-space-size), [`width`](#space-space-width), [`add`](#space-space-add), [`minFrameTime`](#space-space-min-frame-time), [`pause`](#space-space-pause), [`play`](#space-space-play), [`playOnce`](#space-space-play-once), [`refresh`](#space-space-refresh), [`remove`](#space-space-remove), [`render`](#space-space-render), [`replay`](#space-space-replay), [`resume`](#space-space-resume), [`stop`](#space-space-stop), [`bound`](#space-space-bound), [`id`](#space-space-id), [`playerCount`](#space-space-player-count), [`players`](#space-space-players).
+- From [`MultiTouchSpace`](#space-multitouchspace): [`pointer`](#space-multitouchspace-pointer), [`bindCanvas`](#space-multitouchspace-bind-canvas), [`bindDoc`](#space-multitouchspace-bind-doc), [`bindKeyboard`](#space-multitouchspace-bind-keyboard), [`bindMouse`](#space-multitouchspace-bind-mouse), [`bindTouch`](#space-multitouchspace-bind-touch), [`removeAll`](#space-multitouchspace-remove-all), [`touchesToPoints`](#space-multitouchspace-touches-to-points), [`track`](#space-multitouchspace-track), [`unbindCanvas`](#space-multitouchspace-unbind-canvas), [`unbindDoc`](#space-multitouchspace-unbind-doc), [`untrack`](#space-multitouchspace-untrack).
 
 <a id="module-color"></a>
 ## Module: `Color`
@@ -2242,7 +2242,7 @@ Create a set of Pts around a circular path.
 <a id="create-delaunay"></a>
 ### `Delaunay`
 
-**Kind:** Class · **Source:** [`src/Create.ts:940`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L940)
+**Kind:** Class · **Source:** [`src/Create.ts:962`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L962)
 
 **Extends:** `Group`
 
@@ -2321,7 +2321,7 @@ Generate Voronoi cells. `delaunay()` must be called before calling this function
 
 **Parameters**
 
-- `bound` (`PtIterable`) — Optionally provide a rectangular bound (eg, `space.innerBound`) to clip the cells against. Without a bound, cells around sliver triangles can extend to enormous coordinates (circumcenters of nearly-collinear points), which is technically correct but extremely slow to draw.
+- `bound` (`PtIterable`) — Optionally provide a rectangular bound (eg, `space.innerBound`) to clip the cells against, including the unbounded cells on the convex hull. Without a bound, cells around sliver triangles can extend to enormous coordinates (circumcenters of nearly-collinear points), which is technically correct but extremely slow to draw.
 
 **Returns:** an array of Groups, each of which represents a Voronoi cell. Unclipped cells share their vertex Pts with the cached mesh (see [`Delaunay.mesh`](#create-delaunay-mesh)), so treat them as read-only or clone before mutating.
 
@@ -2702,13 +2702,13 @@ id: string
 
 #### Inherited API
 
-- From [`Space`](#space-space): [`center`](#space-space-center), [`customRendering`](#space-space-custom-rendering), [`height`](#space-space-height), [`innerBound`](#space-space-inner-bound), [`isPlaying`](#space-space-is-playing), [`outerBound`](#space-space-outer-bound), [`size`](#space-space-size), [`width`](#space-space-width), [`add`](#space-space-add), [`minFrameTime`](#space-space-min-frame-time), [`pause`](#space-space-pause), [`play`](#space-space-play), [`playItems`](#space-space-play-items), [`playOnce`](#space-space-play-once), [`refresh`](#space-space-refresh), [`remove`](#space-space-remove), [`removeAll`](#space-space-remove-all), [`render`](#space-space-render), [`replay`](#space-space-replay), [`resume`](#space-space-resume), [`stop`](#space-space-stop), [`bound`](#space-space-bound), [`playerCount`](#space-space-player-count), [`players`](#space-space-players).
-- From [`MultiTouchSpace`](#space-multitouchspace): [`pointer`](#space-multitouchspace-pointer), [`bindCanvas`](#space-multitouchspace-bind-canvas), [`bindDoc`](#space-multitouchspace-bind-doc), [`bindKeyboard`](#space-multitouchspace-bind-keyboard), [`bindMouse`](#space-multitouchspace-bind-mouse), [`bindTouch`](#space-multitouchspace-bind-touch), [`touchesToPoints`](#space-multitouchspace-touches-to-points), [`track`](#space-multitouchspace-track), [`unbindCanvas`](#space-multitouchspace-unbind-canvas), [`unbindDoc`](#space-multitouchspace-unbind-doc), [`untrack`](#space-multitouchspace-untrack).
+- From [`Space`](#space-space): [`center`](#space-space-center), [`customRendering`](#space-space-custom-rendering), [`height`](#space-space-height), [`innerBound`](#space-space-inner-bound), [`isPlaying`](#space-space-is-playing), [`outerBound`](#space-space-outer-bound), [`size`](#space-space-size), [`width`](#space-space-width), [`add`](#space-space-add), [`minFrameTime`](#space-space-min-frame-time), [`pause`](#space-space-pause), [`play`](#space-space-play), [`playItems`](#space-space-play-items), [`playOnce`](#space-space-play-once), [`refresh`](#space-space-refresh), [`remove`](#space-space-remove), [`render`](#space-space-render), [`replay`](#space-space-replay), [`resume`](#space-space-resume), [`stop`](#space-space-stop), [`bound`](#space-space-bound), [`playerCount`](#space-space-player-count), [`players`](#space-space-players).
+- From [`MultiTouchSpace`](#space-multitouchspace): [`pointer`](#space-multitouchspace-pointer), [`bindCanvas`](#space-multitouchspace-bind-canvas), [`bindDoc`](#space-multitouchspace-bind-doc), [`bindKeyboard`](#space-multitouchspace-bind-keyboard), [`bindMouse`](#space-multitouchspace-bind-mouse), [`bindTouch`](#space-multitouchspace-bind-touch), [`removeAll`](#space-multitouchspace-remove-all), [`touchesToPoints`](#space-multitouchspace-touches-to-points), [`track`](#space-multitouchspace-track), [`unbindCanvas`](#space-multitouchspace-unbind-canvas), [`unbindDoc`](#space-multitouchspace-unbind-doc), [`untrack`](#space-multitouchspace-untrack).
 
 <a id="dom-htmlform"></a>
 ### `HTMLForm`
 
-**Kind:** Class · **Source:** [`src/Dom.ts:407`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L407)
+**Kind:** Class · **Source:** [`src/Dom.ts:409`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L409)
 
 **Extends:** `VisualForm`
 
@@ -3292,7 +3292,7 @@ A helper function to set the top and left position styling of text DOM context.
 <a id="dom-htmlspace"></a>
 ### `HTMLSpace`
 
-**Kind:** Class · **Source:** [`src/Dom.ts:336`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L336)
+**Kind:** Class · **Source:** [`src/Dom.ts:338`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L338)
 
 **Extends:** `DOMSpace`
 
@@ -4015,7 +4015,7 @@ Crop an area of the image.
 dispose(): this
 ```
 
-Dispose of the elements, data, and any object URL associated with this Img.
+Dispose of the elements, data, and any object URL associated with this Img. Pending loads reject; the instance should not be reused.
 
 <a id="image-img-filter"></a>
 ##### `filter`
@@ -7751,7 +7751,7 @@ Get orthocenter, which is the intersection point of a triangle's 3 altitudes (th
 <a id="physics-body"></a>
 ### `Body`
 
-**Kind:** Class · **Source:** [`src/Physics.ts:885`](https://github.com/williamngan/pts/blob/master/src/Physics.ts#L885)
+**Kind:** Class · **Source:** [`src/Physics.ts:891`](https://github.com/williamngan/pts/blob/master/src/Physics.ts#L891)
 
 **Extends:** `Group`
 
@@ -7930,7 +7930,7 @@ Create and populate a body.
 <a id="physics-particle"></a>
 ### `Particle`
 
-**Kind:** Class · **Source:** [`src/Physics.ts:648`](https://github.com/williamngan/pts/blob/master/src/Physics.ts#L648)
+**Kind:** Class · **Source:** [`src/Physics.ts:654`](https://github.com/williamngan/pts/blob/master/src/Physics.ts#L654)
 
 **Extends:** `Pt`
 
@@ -8323,7 +8323,7 @@ Draw particles using the provided function.
 *protected*
 
 ```ts
-integrate(p: Particle, dt: number, prevDt: number): Particle
+integrate(p: Particle, dt: number, prevDt: number = ...): Particle
 ```
 
 Integrate a particle for one substep: Verlet with the accumulated force plus gravity as
@@ -8334,7 +8334,7 @@ here — they persist across the substeps of one update and are cleared when it 
 
 - `p` (`Particle`) — particle
 - `dt` (`number`) — substep time in seconds
-- `prevDt` (`number`) — unused; substeps are equal so no time-correction is needed. Kept for signature compatibility.
+- `prevDt` (`number`; default `...`) — previous substep time in seconds, used to preserve velocity when frame timing changes.
 
 <a id="physics-world-particle"></a>
 ##### `particle`
@@ -9883,7 +9883,7 @@ See [Pt guide](https://ptsjs.org/guide/Pt-0200.html) for details.
 ##### Constructor
 
 ```ts
-new Pt(args: (number | number[] | IPt | Float32Array)[]): Pt
+new Pt(args: (number | number[] | Float32Array | IPt)[]): Pt
 ```
 
 Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].
@@ -9891,7 +9891,7 @@ Note that `new Pt(3)` will only instantiate Pt with length of 3 (ie, same as `ne
 
 **Parameters**
 
-- `args` (`(number | number[] | IPt | Float32Array)[]`) — a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
+- `args` (`(number | number[] | Float32Array | IPt)[]`) — a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
 
 **Example**
 
@@ -10570,7 +10570,7 @@ Create an n-dimensional Pt with either default value or random values.
 <a id="space-multitouchspace"></a>
 ### `MultiTouchSpace`
 
-**Kind:** Class · **Source:** [`src/Space.ts:327`](https://github.com/williamngan/pts/blob/master/src/Space.ts#L327)
+**Kind:** Class · **Source:** [`src/Space.ts:341`](https://github.com/williamngan/pts/blob/master/src/Space.ts#L341)
 
 **Extends:** `Space`
 
@@ -10673,6 +10673,17 @@ Touch action names are defined by [`UIPointerActions`](#ui-uipointeractions), in
 
 **See also:** [`Space.add`](#space-space-add)
 
+<a id="space-multitouchspace-remove-all"></a>
+##### `removeAll`
+
+*overrides `Space.removeAll`*
+
+```ts
+removeAll(): this
+```
+
+Remove all players and the UI registrations forwarded by them.
+
 <a id="space-multitouchspace-touches-to-points"></a>
 ##### `touchesToPoints`
 
@@ -10750,7 +10761,7 @@ Stop tracking one or more [`UI`](#ui-ui) elements added via [`MultiTouchSpace.tr
 
 #### Inherited API
 
-- From [`Space`](#space-space): [`center`](#space-space-center), [`customRendering`](#space-space-custom-rendering), [`height`](#space-space-height), [`innerBound`](#space-space-inner-bound), [`isPlaying`](#space-space-is-playing), [`outerBound`](#space-space-outer-bound), [`size`](#space-space-size), [`width`](#space-space-width), [`add`](#space-space-add), [`clear`](#space-space-clear), [`getForm`](#space-space-get-form), [`minFrameTime`](#space-space-min-frame-time), [`pause`](#space-space-pause), [`play`](#space-space-play), [`playItems`](#space-space-play-items), [`playOnce`](#space-space-play-once), [`refresh`](#space-space-refresh), [`remove`](#space-space-remove), [`removeAll`](#space-space-remove-all), [`render`](#space-space-render), [`replay`](#space-space-replay), [`resize`](#space-space-resize), [`resume`](#space-space-resume), [`stop`](#space-space-stop), [`bound`](#space-space-bound), [`id`](#space-space-id), [`playerCount`](#space-space-player-count), [`players`](#space-space-players).
+- From [`Space`](#space-space): [`center`](#space-space-center), [`customRendering`](#space-space-custom-rendering), [`height`](#space-space-height), [`innerBound`](#space-space-inner-bound), [`isPlaying`](#space-space-is-playing), [`outerBound`](#space-space-outer-bound), [`size`](#space-space-size), [`width`](#space-space-width), [`add`](#space-space-add), [`clear`](#space-space-clear), [`getForm`](#space-space-get-form), [`minFrameTime`](#space-space-min-frame-time), [`pause`](#space-space-pause), [`play`](#space-space-play), [`playItems`](#space-space-play-items), [`playOnce`](#space-space-play-once), [`refresh`](#space-space-refresh), [`remove`](#space-space-remove), [`render`](#space-space-render), [`replay`](#space-space-replay), [`resize`](#space-space-resize), [`resume`](#space-space-resume), [`stop`](#space-space-stop), [`bound`](#space-space-bound), [`id`](#space-space-id), [`playerCount`](#space-space-player-count), [`players`](#space-space-players).
 
 <a id="space-space"></a>
 ### `Space`
@@ -11093,7 +11104,7 @@ players: ISpacePlayers
 [`CanvasForm`](#canvas-canvasform) draws through, and renders it as SVG. Consecutive shapes that share
 paint state are merged into single `<path>` elements ("style runs"), so the DOM cost per
 frame is proportional to the number of style changes, not the number of shapes. This is
-what lets the same sketch run unchanged on canvas and SVG.
+what lets sketches using the supported subset run unchanged on canvas and SVG.
 
 Capability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,
 `clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so
@@ -11570,14 +11581,14 @@ textBaseline: string
 <a id="svg-svgform"></a>
 ### `SVGForm`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:939`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L939)
+**Kind:** Class · **Source:** [`src/Svg.ts:956`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L956)
 
 **Extends:** `CanvasForm`
 
 SVGForm is a [`CanvasForm`](#canvas-canvasform) rendered through a [`SVGContext2D`](#svg-svgcontext2d): it inherits
-the complete canvas drawing API — shapes, gradients, dashes, images, `textBox` — with SVG
-output, so a sketch can swap between `CanvasSpace` and `SVGSpace` without changing any
-drawing code. The legacy per-element static helpers and `scope()` workflow are retained
+the canvas drawing API — shapes, gradients, dashes, images, `textBox` — with SVG
+output, subject to the capability notes in `SVGContext2D`. Sketches using this subset
+can swap between `CanvasSpace` and `SVGSpace`. The legacy per-element static helpers and `scope()` workflow are retained
 for compatibility but are no longer needed.
 
 #### Constructors
@@ -11699,6 +11710,45 @@ updateScope(group_id: string, group: Element): object
 **deprecated:** No longer needed: elements are reconciled automatically each frame. Kept
 for compatibility with code that pairs it with the legacy static helpers.
 
+<a id="svg-svgform-static-arc"></a>
+##### `arc`
+
+*static · overrides `CanvasForm.arc`*
+
+**Overload 1**
+
+```ts
+static arc(ctx: DOMFormContext, pt: PtLike, radius: number, startAngle: number, endAngle: number, cc: boolean): SVGElement
+```
+
+Draw through a rendering context, or use the legacy per-element DOM context.
+
+**Parameters**
+
+- `ctx` (`DOMFormContext`)
+- `pt` (`PtLike`)
+- `radius` (`number`)
+- `startAngle` (`number`)
+- `endAngle` (`number`)
+- `cc` (`boolean`)
+
+**Overload 2**
+
+```ts
+static arc(ctx: RenderingContext2D, pt: PtLike, radius: number, startAngle: number, endAngle: number, cc: boolean): void
+```
+
+Draw through a rendering context, or use the legacy per-element DOM context.
+
+**Parameters**
+
+- `ctx` (`RenderingContext2D`)
+- `pt` (`PtLike`)
+- `radius` (`number`)
+- `startAngle` (`number`)
+- `endAngle` (`number`)
+- `cc` (`boolean`)
+
 <a id="svg-svgform-static-arc-element"></a>
 ##### `arcElement`
 
@@ -11718,6 +11768,39 @@ A static function to draw an arc element.
 - `startAngle` (`number`) — start angle of the arc
 - `endAngle` (`number`) — end angle of the arc
 - `cc` (`boolean`) — an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
+
+<a id="svg-svgform-static-circle"></a>
+##### `circle`
+
+*static · overrides `CanvasForm.circle`*
+
+**Overload 1**
+
+```ts
+static circle(ctx: DOMFormContext, pt: PtLike, radius: number): SVGElement
+```
+
+Draw through a rendering context, or use the legacy per-element DOM context.
+
+**Parameters**
+
+- `ctx` (`DOMFormContext`)
+- `pt` (`PtLike`)
+- `radius` (`number`)
+
+**Overload 2**
+
+```ts
+static circle(ctx: RenderingContext2D, pt: PtLike, radius: number): void
+```
+
+Draw through a rendering context, or use the legacy per-element DOM context.
+
+**Parameters**
+
+- `ctx` (`RenderingContext2D`)
+- `pt` (`PtLike`)
+- `radius` (`number`)
 
 <a id="svg-svgform-static-circle-element"></a>
 ##### `circleElement`
@@ -11751,6 +11834,37 @@ A static function to generate an ID string based on a context object.
 
 - `ctx` (`DOMFormContext`) — a context object for an SVGForm
 
+<a id="svg-svgform-static-line"></a>
+##### `line`
+
+*static · overrides `CanvasForm.line`*
+
+**Overload 1**
+
+```ts
+static line(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement | undefined
+```
+
+Draw through a rendering context, or use the legacy per-element DOM context.
+
+**Parameters**
+
+- `ctx` (`DOMFormContext`)
+- `pts` (`PtLikeIterable`)
+
+**Overload 2**
+
+```ts
+static line(ctx: RenderingContext2D, pts: PtLikeIterable): void
+```
+
+Draw through a rendering context, or use the legacy per-element DOM context.
+
+**Parameters**
+
+- `ctx` (`RenderingContext2D`)
+- `pts` (`PtLikeIterable`)
+
 <a id="svg-svgform-static-line-element"></a>
 ##### `lineElement`
 
@@ -11766,6 +11880,41 @@ A static function to draw a line or polyline element.
 
 - `ctx` (`DOMFormContext`) — a context object of SVGForm
 - `pts` (`PtLikeIterable`) — a Group or an Iterable<PtLike>
+
+<a id="svg-svgform-static-point"></a>
+##### `point`
+
+*static · overrides `CanvasForm.point`*
+
+**Overload 1**
+
+```ts
+static point(ctx: DOMFormContext, pt: PtLike, radius: number, shape: string): SVGElement
+```
+
+Draw through a rendering context, or use the legacy per-element DOM context.
+
+**Parameters**
+
+- `ctx` (`DOMFormContext`)
+- `pt` (`PtLike`)
+- `radius` (`number`)
+- `shape` (`string`)
+
+**Overload 2**
+
+```ts
+static point(ctx: RenderingContext2D, pt: PtLike, radius: number, shape: string): void
+```
+
+Draw through a rendering context, or use the legacy per-element DOM context.
+
+**Parameters**
+
+- `ctx` (`RenderingContext2D`)
+- `pt` (`PtLike`)
+- `radius` (`number`)
+- `shape` (`string`)
 
 <a id="svg-svgform-static-point-element"></a>
 ##### `pointElement`
@@ -11808,6 +11957,37 @@ Given a list of points, return a space-separated string
 
 **Returns:** an object of {string, count}
 
+<a id="svg-svgform-static-polygon"></a>
+##### `polygon`
+
+*static · overrides `CanvasForm.polygon`*
+
+**Overload 1**
+
+```ts
+static polygon(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement
+```
+
+Draw through a rendering context, or use the legacy per-element DOM context.
+
+**Parameters**
+
+- `ctx` (`DOMFormContext`)
+- `pts` (`PtLikeIterable`)
+
+**Overload 2**
+
+```ts
+static polygon(ctx: RenderingContext2D, pts: PtLikeIterable): void
+```
+
+Draw through a rendering context, or use the legacy per-element DOM context.
+
+**Parameters**
+
+- `ctx` (`RenderingContext2D`)
+- `pts` (`PtLikeIterable`)
+
 <a id="svg-svgform-static-polygon-element"></a>
 ##### `polygonElement`
 
@@ -11823,6 +12003,37 @@ A static function to draw a polygon element.
 
 - `ctx` (`DOMFormContext`) — a context object of SVGForm
 - `pts` (`PtLikeIterable`) — a Group or an Iterable<PtLike> representing a polygon
+
+<a id="svg-svgform-static-rect"></a>
+##### `rect`
+
+*static · overrides `CanvasForm.rect`*
+
+**Overload 1**
+
+```ts
+static rect(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement | undefined
+```
+
+Draw through a rendering context, or use the legacy per-element DOM context.
+
+**Parameters**
+
+- `ctx` (`DOMFormContext`)
+- `pts` (`PtLikeIterable`)
+
+**Overload 2**
+
+```ts
+static rect(ctx: RenderingContext2D, pts: PtLikeIterable): void
+```
+
+Draw through a rendering context, or use the legacy per-element DOM context.
+
+**Parameters**
+
+- `ctx` (`RenderingContext2D`)
+- `pts` (`PtLikeIterable`)
 
 <a id="svg-svgform-static-rect-element"></a>
 ##### `rectElement`
@@ -11854,6 +12065,39 @@ A static function to generate an ID string for a scope, based on an [`IPlayer`](
 **Parameters**
 
 - `item` (`IPlayer`) — a [`IPlayer`](#types-iplayer) object that's added to space (see [`Space.add`](#space-space-add)) and has an `animateID` property
+
+<a id="svg-svgform-static-square"></a>
+##### `square`
+
+*static · overrides `CanvasForm.square`*
+
+**Overload 1**
+
+```ts
+static square(ctx: DOMFormContext, pt: PtLike, halfsize: number): SVGElement
+```
+
+Draw through a rendering context, or use the legacy per-element DOM context.
+
+**Parameters**
+
+- `ctx` (`DOMFormContext`)
+- `pt` (`PtLike`)
+- `halfsize` (`number`)
+
+**Overload 2**
+
+```ts
+static square(ctx: RenderingContext2D, pt: PtLike, halfsize: number): void
+```
+
+Draw through a rendering context, or use the legacy per-element DOM context.
+
+**Parameters**
+
+- `ctx` (`RenderingContext2D`)
+- `pt` (`PtLike`)
+- `halfsize` (`number`)
 
 <a id="svg-svgform-static-square-element"></a>
 ##### `squareElement`
@@ -11897,6 +12141,40 @@ Note that this put all styles into `style` attribute instead of individual svg a
 SVGForm.style(elem, {fill: "#f90", stroke: false})
 ```
 
+<a id="svg-svgform-static-text"></a>
+##### `text`
+
+*static · overrides `CanvasForm.text`*
+
+**Overload 1**
+
+```ts
+static text(ctx: DOMFormContext, pt: PtLike, txt: string): SVGElement
+```
+
+Draw through a rendering context, or use the legacy per-element DOM context.
+
+**Parameters**
+
+- `ctx` (`DOMFormContext`)
+- `pt` (`PtLike`)
+- `txt` (`string`)
+
+**Overload 2**
+
+```ts
+static text(ctx: RenderingContext2D, pt: PtLike, txt: string, maxWidth: number): void
+```
+
+Draw through a rendering context, or use the legacy per-element DOM context.
+
+**Parameters**
+
+- `ctx` (`RenderingContext2D`)
+- `pt` (`PtLike`)
+- `txt` (`string`)
+- `maxWidth` (`number`)
+
 <a id="svg-svgform-static-text-element"></a>
 ##### `textElement`
 
@@ -11916,20 +12194,20 @@ A static function to draw a text element.
 
 #### Inherited API
 
-- From [`CanvasForm`](#canvas-canvasform): [`ctx`](#canvas-canvasform-ctx), [`filled`](#form-visualform-filled), [`stroked`](#form-visualform-stroked), [`alignText`](#canvas-canvasform-align-text), [`alpha`](#canvas-canvasform-alpha), [`applyFillStroke`](#canvas-canvasform-apply-fill-stroke), [`arc`](#canvas-canvasform-arc), [`circle`](#canvas-canvasform-circle), [`clip`](#canvas-canvasform-clip), [`composite`](#canvas-canvasform-composite), [`dash`](#canvas-canvasform-dash), [`ellipse`](#canvas-canvasform-ellipse), [`fill`](#canvas-canvasform-fill), [`fillOnly`](#canvas-canvasform-fill-only), [`font`](#canvas-canvasform-font), [`fontWidthEstimate`](#canvas-canvasform-font-width-estimate), [`getTextWidth`](#canvas-canvasform-get-text-width), [`gradient`](#canvas-canvasform-gradient), [`image`](#canvas-canvasform-image), [`imageData`](#canvas-canvasform-image-data), [`line`](#canvas-canvasform-line), [`log`](#canvas-canvasform-log), [`paragraphBox`](#canvas-canvasform-paragraph-box), [`point`](#canvas-canvasform-point), [`polygon`](#canvas-canvasform-polygon), [`rect`](#canvas-canvasform-rect), [`renderOffscreen`](#canvas-canvasform-render-offscreen), [`reset`](#canvas-canvasform-reset), [`square`](#canvas-canvasform-square), [`stroke`](#canvas-canvasform-stroke), [`strokeOnly`](#canvas-canvasform-stroke-only), [`text`](#canvas-canvasform-text), [`textBox`](#canvas-canvasform-text-box), [`useOffscreen`](#canvas-canvasform-use-offscreen), [`arc`](#canvas-canvasform-arc), [`circle`](#canvas-canvasform-circle), [`ellipse`](#canvas-canvasform-ellipse), [`image`](#canvas-canvasform-image), [`imageData`](#canvas-canvasform-image-data), [`line`](#canvas-canvasform-line), [`point`](#canvas-canvasform-point), [`polygon`](#canvas-canvasform-polygon), [`rect`](#canvas-canvasform-rect), [`resetStyleCache`](#canvas-canvasform-static-reset-style-cache), [`square`](#canvas-canvasform-square), [`text`](#canvas-canvasform-text).
+- From [`CanvasForm`](#canvas-canvasform): [`ctx`](#canvas-canvasform-ctx), [`filled`](#form-visualform-filled), [`stroked`](#form-visualform-stroked), [`alignText`](#canvas-canvasform-align-text), [`alpha`](#canvas-canvasform-alpha), [`applyFillStroke`](#canvas-canvasform-apply-fill-stroke), [`arc`](#canvas-canvasform-arc), [`circle`](#canvas-canvasform-circle), [`clip`](#canvas-canvasform-clip), [`composite`](#canvas-canvasform-composite), [`dash`](#canvas-canvasform-dash), [`ellipse`](#canvas-canvasform-ellipse), [`fill`](#canvas-canvasform-fill), [`fillOnly`](#canvas-canvasform-fill-only), [`font`](#canvas-canvasform-font), [`fontWidthEstimate`](#canvas-canvasform-font-width-estimate), [`getTextWidth`](#canvas-canvasform-get-text-width), [`gradient`](#canvas-canvasform-gradient), [`image`](#canvas-canvasform-image), [`imageData`](#canvas-canvasform-image-data), [`line`](#canvas-canvasform-line), [`log`](#canvas-canvasform-log), [`paragraphBox`](#canvas-canvasform-paragraph-box), [`point`](#canvas-canvasform-point), [`polygon`](#canvas-canvasform-polygon), [`rect`](#canvas-canvasform-rect), [`renderOffscreen`](#canvas-canvasform-render-offscreen), [`reset`](#canvas-canvasform-reset), [`square`](#canvas-canvasform-square), [`stroke`](#canvas-canvasform-stroke), [`strokeOnly`](#canvas-canvasform-stroke-only), [`text`](#canvas-canvasform-text), [`textBox`](#canvas-canvasform-text-box), [`useOffscreen`](#canvas-canvasform-use-offscreen), [`ellipse`](#canvas-canvasform-ellipse), [`image`](#canvas-canvasform-image), [`imageData`](#canvas-canvasform-image-data), [`resetStyleCache`](#canvas-canvasform-static-reset-style-cache).
 - From [`VisualForm`](#form-visualform): [`currentFont`](#form-visualform-current-font), [`circles`](#form-visualform-circles), [`lines`](#form-visualform-lines), [`points`](#form-visualform-points), [`polygons`](#form-visualform-polygons), [`rects`](#form-visualform-rects), [`squares`](#form-visualform-squares).
 - From [`Form`](#form-form): [`ready`](#form-form-ready).
 
 <a id="svg-svgspace"></a>
 ### `SVGSpace`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:697`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L697)
+**Kind:** Class · **Source:** [`src/Svg.ts:714`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L714)
 
 **Extends:** `DOMSpace`
 
 SVGSpace extends [`DOMSpace`](#dom-domspace) to support SVG elements. Use it with [`SVGForm`](#svg-svgform),
 which shares its drawing API and semantics with [`CanvasForm`](#canvas-canvasform) — a sketch written for
-canvas runs on SVG unchanged. Check out the [Space guide](https://ptsjs.org/guide/Space-0500.html) for details.
+canvas can run on SVG with the supported subset. Check out the [Space guide](https://ptsjs.org/guide/Space-0500.html) for details.
 
 #### Constructors
 
@@ -12266,7 +12544,7 @@ Truncate text to fit width. The result is guaranteed to fit: the largest prefix 
 <a id="ui-ui"></a>
 ### `UI`
 
-**Kind:** Class · **Source:** [`src/UI.ts:82`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L82)
+**Kind:** Class · **Source:** [`src/UI.ts:105`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L105)
 
 **[Experimental]** An abstract class that represents an UI element. It wraps a [`Group`](#pt-group) and supports UI event handling.
 Extend this class to create custom UI elements.
@@ -12570,7 +12848,7 @@ A static function to listen for a list of UIs. See also [`UI.listen`](#ui-ui-lis
 <a id="ui-uibutton"></a>
 ### `UIButton`
 
-**Kind:** Class · **Source:** [`src/UI.ts:452`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L452)
+**Kind:** Class · **Source:** [`src/UI.ts:484`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L484)
 
 **Extends:** `UI`
 
@@ -12697,7 +12975,7 @@ Add handlers for hover events. Remember this button will also need to be tracked
 <a id="ui-uidragger"></a>
 ### `UIDragger`
 
-**Kind:** Class · **Source:** [`src/UI.ts:580`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L580)
+**Kind:** Class · **Source:** [`src/UI.ts:612`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L612)
 
 **Extends:** `UIButton`
 
@@ -12793,7 +13071,7 @@ Add a new drop handler. Remember this button will also need to be tracked for ev
 <a id="ui-uipointeraction"></a>
 ### `UIPointerAction`
 
-**Kind:** Typealias · **Source:** [`src/UI.ts:75`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L75)
+**Kind:** Typealias · **Source:** [`src/UI.ts:98`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L98)
 
 A known pointer, touch, or keyboard action dispatched by a Pts space.
 
@@ -12815,7 +13093,7 @@ type UIShapeTest =  Fn(group:Group, pt:PtLike, states:);
 <a id="ui-uipointeractions"></a>
 ### `UIPointerActions`
 
-**Kind:** Objectliteral · **Source:** [`src/UI.ts:53`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L53)
+**Kind:** Objectliteral · **Source:** [`src/UI.ts:76`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L76)
 
 **[Experimental]** A set of string constants to represent different UI event types.
 
@@ -12986,7 +13264,7 @@ readonly up: up
 <a id="ui-uishape"></a>
 ### `UIShape`
 
-**Kind:** Objectliteral · **Source:** [`src/UI.ts:42`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L42)
+**Kind:** Objectliteral · **Source:** [`src/UI.ts:65`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L65)
 
 **[Experimental]** A set of string constatns to represent different UI types, for use in [`UI`](#ui-ui) instances.
 

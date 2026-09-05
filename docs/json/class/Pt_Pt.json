@@ -31,7 +31,7 @@
             {
               "name": "args",
               "comment": "a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties",
-              "type": "(number | number[] | IPt | Float32Array)[]",
+              "type": "(number | number[] | Float32Array | IPt)[]",
               "default": false
             }
           ],

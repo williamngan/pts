@@ -1,6 +1,39 @@
 /*! Copyright © 2017-present William Ngan and contributors.
 Licensed under Apache 2.0 License.
 See https://github.com/williamngan/pts for details. */
+/*! Pts has no runtime package dependencies. Its source includes the following
+attributed implementations. This notice does not change the Apache-2.0
+license of the rest of Pts.
+
+Delaunator — adapted triangulation implementation in src/Create.ts
+https://github.com/mapbox/delaunator
+
+ISC License
+
+Copyright (c) 2026, Mapbox
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+
+UHEPRNG — TypeScript port in src/uheprng.ts, introduced in 2021
+https://www.grc.com/otg/uheprng.htm
+
+Steve Gibson / Gibson Research Corporation released this implementation
+into the public domain. The original public-domain declaration and port
+notes are retained in src/uheprng.ts.
+
+The website's third-party software is separate from the Pts runtime. Its
+notices are generated in docs/js/THIRD-PARTY-NOTICES.txt and
+demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 //#region src/UI.d.ts
 type UIShapeTest = (group: Group, pt: PtLike, states: {
   [key: string]: any;
@@ -34,6 +67,7 @@ declare const UIPointerActions: {
 };
 type UIPointerAction = (typeof UIPointerActions)[keyof typeof UIPointerActions];
 declare class UI {
+  private _abortCleanup;
   _group: Group;
   _shape: string;
   protected static _counter: number;
@@ -427,6 +461,7 @@ declare abstract class Space {
   protected playerCount: number;
   protected _ctx: any;
   private _animID;
+  private _fromFrame;
   private _pause;
   private _refresh;
   private _renderFunc;
@@ -494,6 +529,7 @@ declare abstract class MultiTouchSpace extends Space {
   protected _unbindAll(): this;
   private _trackedUIs;
   private _uiPlayer;
+  removeAll(): this;
   track(uis: UI | UI[]): this;
   untrack(uis?: UI | UI[]): this;
   touchesToPoints(evt: TouchEvent, which?: TouchPointsKey): Pt[];
@@ -584,6 +620,7 @@ declare class Img {
   protected _patternCtx: RenderingContext2D;
   protected _objectUrl: string | null;
   private _pendingLoadReject;
+  private _disposed;
   protected _dataDirty: boolean;
   constructor(editable?: boolean | ImgOptions, space?: CanvasSpace, crossOrigin?: boolean);
   static load(src: string, editable?: boolean | ImgOptions, space?: CanvasSpace, ready?: (img: Img) => void): Promise<Img>;
@@ -643,6 +680,8 @@ declare class CanvasSpace extends MultiTouchSpace {
   private _readyObserver;
   private _readyTimer;
   private _disposed;
+  private _ownsCanvas;
+  private _ownsContainer;
   constructor(elem: string | Element, callback?: (bound: Bound, elem: EventTarget) => void);
   protected _createElement(elem: string | undefined, id: string): HTMLElement;
   private _ready;
@@ -1118,6 +1157,7 @@ declare class DOMSpace extends MultiTouchSpace {
   protected _bgcolor: string;
   protected _css: {};
   private _domDisposed;
+  private _readyTimer;
   private readonly _resizeHandlerBound;
   constructor(elem: string | Element, callback?: (bound: Bound, elem: Element) => void);
   static createElement(elem: string | undefined, id: string, appendTo?: Element): Element;
@@ -1243,6 +1283,7 @@ declare class SVGContext2D {
   protected _d: string;
   protected _shapeFill: string | null;
   protected _shapeStroke: string | null;
+  protected _shapeStrokeStyle: Record<string, string | number>;
   protected _shapePainted: boolean;
   protected _shapeClass: string;
   protected _shapeAlpha: number;
@@ -1331,6 +1372,22 @@ declare class SVGForm extends CanvasForm<SVGSpace> {
   static getID(ctx: DOMFormContext): string;
   static scopeID(item: IPlayer): string;
   static style(elem: SVGElement, styles: Record<string, any>): Element;
+  static point(ctx: DOMFormContext, pt: PtLike, radius?: number, shape?: string): SVGElement;
+  static point(ctx: RenderingContext2D, pt: PtLike, radius?: number, shape?: string): void;
+  static circle(ctx: DOMFormContext, pt: PtLike, radius?: number): SVGElement;
+  static circle(ctx: RenderingContext2D, pt: PtLike, radius?: number): void;
+  static arc(ctx: DOMFormContext, pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): SVGElement;
+  static arc(ctx: RenderingContext2D, pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): void;
+  static square(ctx: DOMFormContext, pt: PtLike, halfsize: number): SVGElement;
+  static square(ctx: RenderingContext2D, pt: PtLike, halfsize: number): void;
+  static line(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement | undefined;
+  static line(ctx: RenderingContext2D, pts: PtLikeIterable): void;
+  static polygon(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
+  static polygon(ctx: RenderingContext2D, pts: PtLikeIterable): void;
+  static rect(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement | undefined;
+  static rect(ctx: RenderingContext2D, pts: PtLikeIterable): void;
+  static text(ctx: DOMFormContext, pt: PtLike, txt: string): SVGElement;
+  static text(ctx: RenderingContext2D, pt: PtLike, txt: string, maxWidth?: number): void;
   static pointElement(ctx: DOMFormContext, pt: PtLike, radius?: number, shape?: string): SVGElement;
   static circleElement(ctx: DOMFormContext, pt: PtLike, radius?: number): SVGElement;
   static arcElement(ctx: DOMFormContext, pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): SVGElement;
@@ -1372,6 +1429,7 @@ declare class World {
   protected _drawParticles: (p: Particle, i: number) => void;
   protected _drawBodies: (p: Body, i: number) => void;
   private _frictionStep;
+  private _lastStep;
   private _hashKeys;
   private _cellStart;
   private _cellEntries;

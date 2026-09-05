@@ -1,6 +1,39 @@
 /*! Copyright © 2017-present William Ngan and contributors.
 Licensed under Apache 2.0 License.
 See https://github.com/williamngan/pts for details. */
+/*! Pts has no runtime package dependencies. Its source includes the following
+attributed implementations. This notice does not change the Apache-2.0
+license of the rest of Pts.
+
+Delaunator — adapted triangulation implementation in src/Create.ts
+https://github.com/mapbox/delaunator
+
+ISC License
+
+Copyright (c) 2026, Mapbox
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+
+UHEPRNG — TypeScript port in src/uheprng.ts, introduced in 2021
+https://www.grc.com/otg/uheprng.htm
+
+Steve Gibson / Gibson Research Corporation released this implementation
+into the public domain. The original public-domain declaration and port
+notes are retained in src/uheprng.ts.
+
+The website's third-party software is separate from the Pts runtime. Its
+notices are generated in docs/js/THIRD-PARTY-NOTICES.txt and
+demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 (function() {
 
 //#region \0rolldown/runtime.js
@@ -2431,7 +2464,9 @@ See https://github.com/williamngan/pts for details. */
 		static fromGroup(g) {
 			const _g = Util.iterToArray(g);
 			if (_g.length < 2) throw new Error("Cannot create a Bound from a group that has less than 2 Pt");
-			return new Bound(_g[0], _g[_g.length - 1]);
+			const first = _g[0];
+			const last = _g[_g.length - 1];
+			return new Bound(first instanceof Pt ? first : new Pt(first), last instanceof Pt ? last : new Pt(last));
 		}
 		init() {
 			if (this.p1) {
@@ -2616,6 +2651,16 @@ See https://github.com/williamngan/pts for details. */
 		UIPointerActions: () => UIPointerActions,
 		UIShape: () => UIShape
 	});
+	function _withinSegment(a, b, pt, threshold) {
+		if (threshold < 0) return false;
+		const dx = b[0] - a[0];
+		const dy = b[1] - a[1];
+		const lengthSq = dx * dx + dy * dy;
+		const t = lengthSq === 0 ? 0 : Math.max(0, Math.min(1, ((pt[0] - a[0]) * dx + (pt[1] - a[1]) * dy) / lengthSq));
+		const px = pt[0] - a[0] - t * dx;
+		const py = pt[1] - a[1] - t * dy;
+		return px * px + py * py <= threshold * threshold;
+	}
 	const _shapeTests = {
 		rectangle: (group, pt) => Rectangle.withinBound(group, pt),
 		circle: (group, pt) => Circle.withinBound(group, pt),
@@ -2623,12 +2668,12 @@ See https://github.com/williamngan/pts for details. */
 		line: (group, pt, states) => {
 			var _states$lineThreshold;
 			const threshold = (_states$lineThreshold = states.lineThreshold) !== null && _states$lineThreshold !== void 0 ? _states$lineThreshold : 5;
-			return Line.distanceFromPt(group, pt) <= threshold;
+			return group.length >= 2 && _withinSegment(group[0], group[1], pt, threshold);
 		},
 		polyline: (group, pt, states) => {
 			var _states$lineThreshold2;
 			const threshold = (_states$lineThreshold2 = states.lineThreshold) !== null && _states$lineThreshold2 !== void 0 ? _states$lineThreshold2 : 5;
-			for (let i = 0, len = group.length - 1; i < len; i++) if (Line.distanceFromPt([group[i], group[i + 1]], pt) <= threshold) return true;
+			for (let i = 0, len = group.length - 1; i < len; i++) if (_withinSegment(group[i], group[i + 1], pt, threshold)) return true;
 			return false;
 		}
 	};
@@ -2661,6 +2706,7 @@ See https://github.com/williamngan/pts for details. */
 	};
 	var UI = class UI {
 		constructor(group, shape, states = {}, id) {
+			this._abortCleanup = {};
 			this._holds = /* @__PURE__ */ new Map();
 			this._group = Group.fromArray(group);
 			this._shape = shape;
@@ -2729,15 +2775,29 @@ See https://github.com/williamngan/pts for details. */
 				fn(t, p, ty, e);
 			};
 			id = UI._addHandler(this._actions[type], handler);
-			if (options === null || options === void 0 ? void 0 : options.signal) options.signal.addEventListener("abort", () => this.off(type, id), { once: true });
+			if (options === null || options === void 0 ? void 0 : options.signal) {
+				const signal = options.signal;
+				const abort = () => this.off(type, id);
+				signal.addEventListener("abort", abort, { once: true });
+				if (!this._abortCleanup[type]) this._abortCleanup[type] = /* @__PURE__ */ new Map();
+				this._abortCleanup[type].set(id, () => signal.removeEventListener("abort", abort));
+			}
 			return id;
 		}
 		off(type, which) {
 			if (!this._actions[type]) return false;
 			if (which === void 0) {
+				var _this$_abortCleanup$t;
+				(_this$_abortCleanup$t = this._abortCleanup[type]) === null || _this$_abortCleanup$t === void 0 || _this$_abortCleanup$t.forEach((cleanup) => cleanup());
+				delete this._abortCleanup[type];
 				delete this._actions[type];
 				return true;
-			} else return UI._removeHandler(this._actions[type], which);
+			} else {
+				var _this$_abortCleanup$t2, _this$_abortCleanup$t3, _this$_abortCleanup$t4;
+				(_this$_abortCleanup$t2 = this._abortCleanup[type]) === null || _this$_abortCleanup$t2 === void 0 || (_this$_abortCleanup$t3 = _this$_abortCleanup$t2.get(which)) === null || _this$_abortCleanup$t3 === void 0 || _this$_abortCleanup$t3.call(_this$_abortCleanup$t2);
+				(_this$_abortCleanup$t4 = this._abortCleanup[type]) === null || _this$_abortCleanup$t4 === void 0 || _this$_abortCleanup$t4.delete(which);
+				return UI._removeHandler(this._actions[type], which);
+			}
 		}
 		listen(type, p, evt) {
 			let fired = false;
@@ -2948,6 +3008,7 @@ See https://github.com/williamngan/pts for details. */
 			this.players = {};
 			this.playerCount = 0;
 			this._animID = -1;
+			this._fromFrame = false;
 			this._pause = false;
 			this._refresh = void 0;
 			this._pointer = new Pt();
@@ -2982,15 +3043,24 @@ See https://github.com/williamngan/pts for details. */
 			return this;
 		}
 		play(time = 0) {
-			if (time === 0 && this._animID !== -1) return this;
+			const fromFrame = this._fromFrame;
+			this._fromFrame = false;
+			if (time === 0 && this._animID !== -1 && !fromFrame) return this;
 			if (this._animID !== -1) cancelAnimationFrame(this._animID);
-			this._animID = requestAnimationFrame(this.play.bind(this));
+			this._animID = requestAnimationFrame((frameTime) => {
+				this._fromFrame = true;
+				try {
+					this.play(frameTime);
+				} finally {
+					this._fromFrame = false;
+				}
+			});
 			if (this._pause) {
 				this._time.prev = time;
 				return this;
 			}
 			if (this._firstFrame) {
-				this._firstFrame = false;
+				this._firstFrame = time === 0 && !fromFrame;
 				this._time.diff = 0;
 				this._time.prev = time;
 			} else {
@@ -3201,6 +3271,11 @@ See https://github.com/williamngan/pts for details. */
 			this.bindTouch(false);
 			this.bindKeyboard(false);
 			return this;
+		}
+		removeAll() {
+			this.untrack();
+			this._uiPlayer = null;
+			return super.removeAll();
 		}
 		track(uis) {
 			const list = Array.isArray(uis) ? uis : [uis];
@@ -3605,6 +3680,7 @@ See https://github.com/williamngan/pts for details. */
 			this._scale = 1;
 			this._loaded = false;
 			this._pendingLoadReject = null;
+			this._disposed = false;
 			this._dataDirty = false;
 			const opts = typeof editable === "object" ? editable : {
 				editable,
@@ -3642,6 +3718,7 @@ See https://github.com/williamngan/pts for details. */
 		load(src) {
 			if (this._editable && typeof document === "undefined") return Promise.reject(/* @__PURE__ */ new Error("Cannot create html canvas element. document not found."));
 			return this._loadImageSrc(src).then(() => {
+				if (this._disposed) throw new Error("Img has been disposed");
 				if (this._editable) {
 					if (!this._cv) this._cv = document.createElement("canvas");
 					this._drawToScale(this._scale, this._img);
@@ -3652,6 +3729,7 @@ See https://github.com/williamngan/pts for details. */
 			});
 		}
 		_loadImageSrc(src) {
+			if (this._disposed) return Promise.reject(/* @__PURE__ */ new Error("Img has been disposed"));
 			return new Promise((resolve, reject) => {
 				if (this._pendingLoadReject) this._pendingLoadReject(/* @__PURE__ */ new Error("Img loading superseded by a newer load"));
 				this._pendingLoadReject = reject;
@@ -3713,6 +3791,7 @@ See https://github.com/williamngan/pts for details. */
 		sync() {
 			var _this = this;
 			return _asyncToGenerator(function* () {
+				if (_this._disposed) throw new Error("Img has been disposed");
 				let source = _this._cv;
 				if (_this._scale !== 1) {
 					source = document.createElement("canvas");
@@ -3727,6 +3806,7 @@ See https://github.com/williamngan/pts for details. */
 				_this._objectUrl = url;
 				try {
 					yield _this._loadImageSrc(url);
+					if (_this._disposed) throw new Error("Img has been disposed");
 					_this._loaded = true;
 				} finally {
 					URL.revokeObjectURL(url);
@@ -3826,6 +3906,15 @@ See https://github.com/williamngan/pts for details. */
 			return this;
 		}
 		dispose() {
+			var _this$_pendingLoadRej;
+			this._disposed = true;
+			(_this$_pendingLoadRej = this._pendingLoadReject) === null || _this$_pendingLoadRej === void 0 || _this$_pendingLoadRej.call(this, /* @__PURE__ */ new Error("Img has been disposed"));
+			this._pendingLoadReject = null;
+			if (this._img) {
+				this._img.onload = null;
+				this._img.onerror = null;
+				this._img.removeAttribute("src");
+			}
 			if (this._objectUrl) {
 				URL.revokeObjectURL(this._objectUrl);
 				this._objectUrl = null;
@@ -3937,6 +4026,8 @@ See https://github.com/williamngan/pts for details. */
 			this._autoResize = true;
 			this._initialResize = false;
 			this._disposed = false;
+			this._ownsCanvas = false;
+			this._ownsContainer = false;
 			let _selector = null;
 			let _existed = false;
 			this.id = Util.uniqueId();
@@ -3950,6 +4041,7 @@ See https://github.com/williamngan/pts for details. */
 				this.id = id.substr(1);
 			}
 			if (!_selector) {
+				this._ownsContainer = true;
 				this._container = this._createElement("div", this.id + "_container");
 				this._canvas = this._createElement("canvas", this.id);
 				document.body.appendChild(this._container);
@@ -3965,6 +4057,7 @@ See https://github.com/williamngan/pts for details. */
 			}
 			this._ctx = this._canvas.getContext("2d");
 			if (!_existed) {
+				this._ownsCanvas = true;
 				this._readyObserver = new MutationObserver((mutations) => {
 					mutations.forEach((mutation) => {
 						if (mutation.type === "childList" && mutation.addedNodes.length) {
@@ -4154,6 +4247,8 @@ See https://github.com/williamngan/pts for details. */
 			this._cancelAnimation();
 			this.removeAll();
 			this._isReady = false;
+			if (this._ownsCanvas) this._canvas.remove();
+			if (this._ownsContainer && this._container.childNodes.length === 0) this._container.remove();
 			return this;
 		}
 		recorder(downloadOrCallback, filetype = "webm", bitrate = 15e6) {
@@ -5438,6 +5533,25 @@ See https://github.com/williamngan/pts for details. */
 		for (let i = 0, len = pts.length; i < len; i++) out.push(new Pt(pts[i]));
 		return out;
 	}
+	function _clipCellToBisector(cell, a, b) {
+		const dx = b[0] - a[0];
+		const dy = b[1] - a[1];
+		const mx = a[0] + dx / 2;
+		const my = a[1] + dy / 2;
+		const out = new Group();
+		for (let i = 0; i < cell.length; i++) {
+			const p = cell[i === 0 ? cell.length - 1 : i - 1];
+			const q = cell[i];
+			const dp = (p[0] - mx) * dx + (p[1] - my) * dy;
+			const dq = (q[0] - mx) * dx + (q[1] - my) * dy;
+			if (dp <= 0 !== dq <= 0) {
+				const t = dp / (dp - dq);
+				out.push(new Pt(p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t));
+			}
+			if (dq <= 0) out.push(q);
+		}
+		return out;
+	}
 	var Delaunay = class extends Group {
 		constructor(..._args) {
 			super(..._args);
@@ -5447,10 +5561,13 @@ See https://github.com/williamngan/pts for details. */
 			this._shapes = null;
 		}
 		delaunay(triangleOnly = true) {
-			if (this.length < 3) return [];
 			const n = this.length;
 			this._mesh = [];
 			for (let i = 0; i < n; i++) this._mesh[i] = {};
+			this._triangles = null;
+			this._halfedges = null;
+			this._shapes = null;
+			if (n < 3) return [];
 			const coords = new Float64Array(n * 2);
 			for (let i = 0; i < n; i++) {
 				coords[2 * i] = this[i][0];
@@ -5496,7 +5613,43 @@ See https://github.com/williamngan/pts for details. */
 			const y0 = _bound[0][1];
 			const x1 = _bound[1][0];
 			const y1 = _bound[1][1];
-			for (let i = 0, len = cells.length; i < len; i++) cells[i] = _clipCellToRect(cells[i], x0, y0, x1, y1);
+			const hull = /* @__PURE__ */ new Set();
+			if (this._triangles && this._halfedges) {
+				for (let e = 0; e < this._halfedges.length; e++) if (this._halfedges[e] === -1) {
+					hull.add(this._triangles[e]);
+					hull.add(this._triangles[e % 3 === 2 ? e - 2 : e + 1]);
+				}
+			}
+			const seen = /* @__PURE__ */ new Set();
+			for (let i = 0, len = cells.length; i < len; i++) {
+				const key = `${this[i][0]},${this[i][1]}`;
+				if (seen.has(key)) {
+					cells[i] = new Group();
+					continue;
+				}
+				seen.add(key);
+				if (!hull.has(i) && cells[i].length >= 3) {
+					cells[i] = _clipCellToRect(cells[i], x0, y0, x1, y1);
+					continue;
+				}
+				const neighbors = /* @__PURE__ */ new Set();
+				for (const shape of this.neighbors(i)) for (const index of [
+					shape.i,
+					shape.j,
+					shape.k
+				]) if (index !== i) neighbors.add(index);
+				if (neighbors.size === 0) {
+					for (let j = 0; j < this.length; j++) if (j !== i) neighbors.add(j);
+				}
+				let cell = Group.fromArray([
+					[x0, y0],
+					[x1, y0],
+					[x1, y1],
+					[x0, y1]
+				]);
+				for (const j of neighbors) cell = _clipCellToBisector(cell, this[i], this[j]);
+				cells[i] = cell;
+			}
 			return cells;
 		}
 		_voronoiCells() {
@@ -5539,7 +5692,7 @@ See https://github.com/williamngan/pts for details. */
 			let cs = new Group();
 			let n = this._mesh;
 			for (let k in n[i]) if (n[i].hasOwnProperty(k)) cs.push(n[i][k].circle[0]);
-			return sort ? Geom.sortEdges(cs) : cs;
+			return sort && cs.length > 1 ? Geom.sortEdges(cs) : cs;
 		}
 		neighbors(i) {
 			let cs = [];
@@ -6118,6 +6271,7 @@ See https://github.com/williamngan/pts for details. */
 			this._css = {};
 			this._domDisposed = false;
 			this._resizeHandlerBound = this._resizeHandler.bind(this);
+			this.refresh(false);
 			let _selector = null;
 			this.id = "pts";
 			if (elem instanceof Element) {
@@ -6136,7 +6290,7 @@ See https://github.com/williamngan/pts for details. */
 				this._canvas = _selector;
 				this._container = _selector.parentElement;
 			}
-			setTimeout(this._ready.bind(this, callback), 50);
+			this._readyTimer = setTimeout(this._ready.bind(this, callback), 50);
 		}
 		static createElement(elem = "div", id, appendTo) {
 			let d = document.createElement(elem);
@@ -6145,6 +6299,7 @@ See https://github.com/williamngan/pts for details. */
 			return d;
 		}
 		_ready(callback) {
+			if (this._domDisposed) return;
 			if (!this._container) throw new Error(`Cannot initiate #${this.id} element`);
 			this._isReady = true;
 			this._resizeHandler(null);
@@ -6154,7 +6309,6 @@ See https://github.com/williamngan/pts for details. */
 				if (this.players[k].start) this.players[k].start(this.bound.clone(), this);
 			}
 			this._pointer = this.center;
-			this.refresh(false);
 			if (callback) callback(this.bound, this._canvas);
 		}
 		setup(opt) {
@@ -6245,10 +6399,11 @@ See https://github.com/williamngan/pts for details. */
 		dispose() {
 			if (this._domDisposed) return this;
 			this._domDisposed = true;
+			clearTimeout(this._readyTimer);
 			this.autoResize = false;
 			this._unbindAll();
 			this._cancelAnimation();
-			Space.prototype.removeAll.call(this);
+			MultiTouchSpace.prototype.removeAll.call(this);
 			return this;
 		}
 	};
@@ -6580,8 +6735,8 @@ See https://github.com/williamngan/pts for details. */
 					if (r0) this._elem.setAttribute("fr", `${r0}`);
 				}
 				this._render(this._elem);
-				defs.appendChild(this._elem);
 			}
+			if (this._elem.parentNode !== defs) defs.appendChild(this._elem);
 			return `url(#${this.id})`;
 		}
 		_render(elem) {
@@ -6615,6 +6770,7 @@ See https://github.com/williamngan/pts for details. */
 			this._d = "";
 			this._shapeFill = null;
 			this._shapeStroke = null;
+			this._shapeStrokeStyle = {};
 			this._shapePainted = false;
 			this._shapeClass = "";
 			this._shapeAlpha = 1;
@@ -6684,6 +6840,14 @@ See https://github.com/williamngan/pts for details. */
 				this._group.removeChild(this._pool[i]);
 				this._pool.pop();
 				this._attrCache.pop();
+			}
+			if (this._defs) {
+				const paints = /* @__PURE__ */ new Set();
+				for (const run of runs) {
+					paints.add(run.attrs.fill);
+					paints.add(run.attrs.stroke);
+				}
+				for (const elem of Array.from(this._defs.children)) if (!paints.has(`url(#${elem.id})`)) elem.remove();
 			}
 		}
 		get runs() {
@@ -6758,6 +6922,15 @@ See https://github.com/williamngan/pts for details. */
 		}
 		stroke() {
 			this._shapeStroke = this._resolvePaint(this.strokeStyle);
+			this._shapeStrokeStyle = {
+				"stroke-width": this.lineWidth,
+				"stroke-linejoin": this.lineJoin,
+				"stroke-linecap": this.lineCap
+			};
+			if (this._dash.length > 0) {
+				this._shapeStrokeStyle["stroke-dasharray"] = this._dash.join(" ");
+				if (this.lineDashOffset) this._shapeStrokeStyle["stroke-dashoffset"] = this.lineDashOffset;
+			}
 			this._capturePaintState();
 		}
 		_capturePaintState() {
@@ -6898,7 +7071,7 @@ See https://github.com/williamngan/pts for details. */
 			else attrs.opacity = 1;
 			const op = this.globalCompositeOperation;
 			if (op !== "source-over") {
-				if (BLEND_MODES.has(op)) attrs["mix-blend-mode"] = op;
+				if (BLEND_MODES.has(op)) attrs.style = `mix-blend-mode: ${op}`;
 				else SVGContext2D._warnOnce(`composite-${op}`, `composite operation "${op}" has no SVG equivalent`);
 			}
 		}
@@ -6913,19 +7086,11 @@ See https://github.com/williamngan/pts for details. */
 				fill: (_this$_shapeFill = this._shapeFill) !== null && _this$_shapeFill !== void 0 ? _this$_shapeFill : "none",
 				stroke: (_this$_shapeStroke = this._shapeStroke) !== null && _this$_shapeStroke !== void 0 ? _this$_shapeStroke : "none"
 			};
-			if (this._shapeStroke) {
-				attrs["stroke-width"] = this.lineWidth;
-				attrs["stroke-linejoin"] = this.lineJoin;
-				attrs["stroke-linecap"] = this.lineCap;
-				if (this._dash.length > 0) {
-					attrs["stroke-dasharray"] = this._dash.join(" ");
-					if (this.lineDashOffset) attrs["stroke-dashoffset"] = this.lineDashOffset;
-				}
-			}
+			if (this._shapeStroke) Object.assign(attrs, this._shapeStrokeStyle);
 			attrs.class = this._shapeClass ? `pts-svgform ${this._shapeClass}` : "pts-svgform";
 			attrs.opacity = this._shapeAlpha;
 			if (this._shapeBlend !== "source-over") {
-				if (BLEND_MODES.has(this._shapeBlend)) attrs["mix-blend-mode"] = this._shapeBlend;
+				if (BLEND_MODES.has(this._shapeBlend)) attrs.style = `mix-blend-mode: ${this._shapeBlend}`;
 				else SVGContext2D._warnOnce(`composite-${this._shapeBlend}`, `composite operation "${this._shapeBlend}" has no SVG equivalent`);
 			}
 			const prev = this._runs[this._runs.length - 1];
@@ -7166,6 +7331,30 @@ See https://github.com/williamngan/pts for details. */
 			}
 			return DOMSpace.setAttr(elem, { style: st.join(";") });
 		}
+		static point(ctx, pt, radius = 5, shape = "square") {
+			return "style" in ctx ? SVGForm.pointElement(ctx, pt, radius, shape) : CanvasForm.point(ctx, pt, radius, shape);
+		}
+		static circle(ctx, pt, radius = 10) {
+			return "style" in ctx ? SVGForm.circleElement(ctx, pt, radius) : CanvasForm.circle(ctx, pt, radius);
+		}
+		static arc(ctx, pt, radius, startAngle, endAngle, cc) {
+			return "style" in ctx ? SVGForm.arcElement(ctx, pt, radius, startAngle, endAngle, cc) : CanvasForm.arc(ctx, pt, radius, startAngle, endAngle, cc);
+		}
+		static square(ctx, pt, halfsize) {
+			return "style" in ctx ? SVGForm.squareElement(ctx, pt, halfsize) : CanvasForm.square(ctx, pt, halfsize);
+		}
+		static line(ctx, pts) {
+			return "style" in ctx ? SVGForm.lineElement(ctx, pts) : CanvasForm.line(ctx, pts);
+		}
+		static polygon(ctx, pts) {
+			return "style" in ctx ? SVGForm.polygonElement(ctx, pts) : CanvasForm.polygon(ctx, pts);
+		}
+		static rect(ctx, pts) {
+			return "style" in ctx ? SVGForm.rectElement(ctx, pts) : CanvasForm.rect(ctx, pts);
+		}
+		static text(ctx, pt, txt, maxWidth) {
+			return "style" in ctx ? SVGForm.textElement(ctx, pt, txt) : CanvasForm.text(ctx, pt, txt, maxWidth);
+		}
 		static pointElement(ctx, pt, radius = 5, shape = "square") {
 			if (shape === "circle") return SVGForm.circleElement(ctx, pt, radius);
 			else return SVGForm.squareElement(ctx, pt, radius);
@@ -7300,6 +7489,7 @@ See https://github.com/williamngan/pts for details. */
 			this._pnames = [];
 			this._bnames = [];
 			this._frictionStep = 1;
+			this._lastStep = 0;
 			this._hashKeys = /* @__PURE__ */ new Uint32Array(0);
 			this._cellStart = /* @__PURE__ */ new Uint32Array(0);
 			this._cellEntries = /* @__PURE__ */ new Uint32Array(0);
@@ -7381,6 +7571,7 @@ See https://github.com/williamngan/pts for details. */
 				for (let s = 0; s < n; s++) {
 					this._updateParticles(h);
 					this._updateBodies(h);
+					this._lastStep = h;
 				}
 				this._clearForces();
 			}
@@ -7456,14 +7647,14 @@ See https://github.com/williamngan/pts for details. */
 				p[1] = ny;
 			}
 		}
-		integrate(p, dt, prevDt) {
+		integrate(p, dt, prevDt = this._lastStep) {
 			if (p.lock) {
 				p.verlet(dt, this._frictionStep, prevDt);
 				return p;
 			}
 			const prev = p.previous;
 			const force = p.force;
-			const f = this._frictionStep;
+			const f = this._frictionStep * (prevDt > 0 ? dt / prevDt : 1);
 			const dtSq = dt * dt;
 			const px = p[0];
 			const py = p[1];
@@ -8118,11 +8309,13 @@ See https://github.com/williamngan/pts for details. */
 			this._node = this._ctx.createOscillator();
 			this._generated = true;
 			const osc = this._node;
-			osc.type = type;
 			if (type === "custom") {
 				this._wave = val;
 				osc.setPeriodicWave(this._wave);
-			} else osc.frequency.value = val;
+			} else {
+				osc.type = type;
+				osc.frequency.value = val;
+			}
 			return this;
 		}
 		static input(constraint) {
@@ -8331,6 +8524,7 @@ See https://github.com/williamngan/pts for details. */
 			return this;
 		}
 		dispose() {
+			if (!this._playing && this._stream) this._stream.getAudioTracks().forEach((track) => track.stop());
 			this.reset();
 			if (this.analyzer) {
 				this.analyzer.node.disconnect();

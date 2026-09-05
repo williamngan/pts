@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Image.ts",
-          48,
+          49,
           2
         ]
       ],
@@ -63,7 +63,7 @@
       "source": [
         [
           "src/Image.ts",
-          648,
+          662,
           6
         ]
       ],
@@ -81,7 +81,7 @@
       "source": [
         [
           "src/Image.ts",
-          695,
+          709,
           6
         ]
       ],
@@ -99,7 +99,7 @@
       "source": [
         [
           "src/Image.ts",
-          663,
+          677,
           6
         ]
       ],
@@ -117,7 +117,7 @@
       "source": [
         [
           "src/Image.ts",
-          634,
+          648,
           6
         ]
       ],
@@ -135,7 +135,7 @@
       "source": [
         [
           "src/Image.ts",
-          655,
+          669,
           6
         ]
       ],
@@ -153,7 +153,7 @@
       "source": [
         [
           "src/Image.ts",
-          641,
+          655,
           6
         ]
       ],
@@ -171,7 +171,7 @@
       "source": [
         [
           "src/Image.ts",
-          684,
+          698,
           6
         ]
       ],
@@ -189,7 +189,7 @@
       "source": [
         [
           "src/Image.ts",
-          670,
+          684,
           6
         ]
       ],
@@ -207,7 +207,7 @@
       "source": [
         [
           "src/Image.ts",
-          677,
+          691,
           6
         ]
       ],
@@ -225,7 +225,7 @@
       "source": [
         [
           "src/Image.ts",
-          704,
+          718,
           6
         ]
       ],
@@ -245,7 +245,7 @@
       "source": [
         [
           "src/Image.ts",
-          280,
+          284,
           2
         ]
       ],
@@ -274,7 +274,7 @@
       "source": [
         [
           "src/Image.ts",
-          547,
+          561,
           2
         ]
       ],
@@ -301,7 +301,7 @@
       "source": [
         [
           "src/Image.ts",
-          496,
+          502,
           2
         ]
       ],
@@ -330,7 +330,7 @@
       "source": [
         [
           "src/Image.ts",
-          527,
+          533,
           2
         ]
       ],
@@ -339,7 +339,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Dispose of the elements, data, and any object URL associated with this Img.",
+          "comment": "Dispose of the elements, data, and any object URL associated with this Img. Pending loads reject; the instance should not be reused.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [],
@@ -352,7 +352,7 @@
       "source": [
         [
           "src/Image.ts",
-          510,
+          516,
           2
         ]
       ],
@@ -381,7 +381,7 @@
       "source": [
         [
           "src/Image.ts",
-          624,
+          638,
           2
         ]
       ],
@@ -403,7 +403,7 @@
       "source": [
         [
           "src/Image.ts",
-          234,
+          238,
           2
         ]
       ],
@@ -444,7 +444,7 @@
       "source": [
         [
           "src/Image.ts",
-          136,
+          137,
           2
         ]
       ],
@@ -473,7 +473,7 @@
       "source": [
         [
           "src/Image.ts",
-          407,
+          413,
           2
         ]
       ],
@@ -495,7 +495,7 @@
       "source": [
         [
           "src/Image.ts",
-          292,
+          296,
           2
         ]
       ],
@@ -530,7 +530,7 @@
       "source": [
         [
           "src/Image.ts",
-          364,
+          370,
           2
         ]
       ],
@@ -565,7 +565,7 @@
       "source": [
         [
           "src/Image.ts",
-          465,
+          471,
           2
         ]
       ],
@@ -600,7 +600,7 @@
       "source": [
         [
           "src/Image.ts",
-          383,
+          389,
           2
         ]
       ],
@@ -641,7 +641,7 @@
       "source": [
         [
           "src/Image.ts",
-          314,
+          318,
           8
         ]
       ],
@@ -663,7 +663,7 @@
       "source": [
         [
           "src/Image.ts",
-          608,
+          622,
           2
         ]
       ],
@@ -685,7 +685,7 @@
       "source": [
         [
           "src/Image.ts",
-          615,
+          629,
           2
         ]
       ],
@@ -707,7 +707,7 @@
       "source": [
         [
           "src/Image.ts",
-          420,
+          426,
           2
         ]
       ],
@@ -729,7 +729,7 @@
       "source": [
         [
           "src/Image.ts",
-          124,
+          125,
           9
         ]
       ],
@@ -772,7 +772,7 @@
       "source": [
         [
           "src/Image.ts",
-          556,
+          570,
           9
         ]
       ],
@@ -815,7 +815,7 @@
       "source": [
         [
           "src/Image.ts",
-          436,
+          442,
           9
         ]
       ],
@@ -852,7 +852,7 @@
       "source": [
         [
           "src/Image.ts",
-          586,
+          600,
           9
         ]
       ],
@@ -883,7 +883,7 @@
       "source": [
         [
           "src/Image.ts",
-          73,
+          74,
           9
         ]
       ],
@@ -937,7 +937,7 @@
       "source": [
         [
           "src/Image.ts",
-          92,
+          93,
           15
         ]
       ],
@@ -985,7 +985,7 @@
       "source": [
         [
           "src/Image.ts",
-          108,
+          109,
           15
         ]
       ],

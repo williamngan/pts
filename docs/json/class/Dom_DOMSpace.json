@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Dom.ts",
-          53,
+          54,
           2
         ]
       ],
@@ -57,12 +57,12 @@
       "source": [
         [
           "src/Dom.ts",
-          163,
+          164,
           6
         ],
         [
           "src/Dom.ts",
-          173,
+          174,
           6
         ]
       ],
@@ -88,12 +88,12 @@
       "source": [
         [
           "src/Dom.ts",
-          247,
+          248,
           6
         ],
         [
           "src/Dom.ts",
-          251,
+          252,
           6
         ]
       ],
@@ -119,7 +119,7 @@
       "source": [
         [
           "src/Space.ts",
-          287,
+          301,
           6
         ]
       ],
@@ -137,12 +137,12 @@
       "source": [
         [
           "src/Space.ts",
-          249,
+          263,
           6
         ],
         [
           "src/Space.ts",
-          252,
+          266,
           6
         ]
       ],
@@ -168,7 +168,7 @@
       "source": [
         [
           "src/Dom.ts",
-          215,
+          216,
           6
         ]
       ],
@@ -186,7 +186,7 @@
       "source": [
         [
           "src/Space.ts",
-          301,
+          315,
           6
         ]
       ],
@@ -204,7 +204,7 @@
       "source": [
         [
           "src/Space.ts",
-          273,
+          287,
           13
         ]
       ],
@@ -224,7 +224,7 @@
       "source": [
         [
           "src/Space.ts",
-          259,
+          273,
           6
         ]
       ],
@@ -242,7 +242,7 @@
       "source": [
         [
           "src/Space.ts",
-          266,
+          280,
           6
         ]
       ],
@@ -260,7 +260,7 @@
       "source": [
         [
           "src/Dom.ts",
-          222,
+          223,
           6
         ]
       ],
@@ -278,7 +278,7 @@
       "source": [
         [
           "src/Space.ts",
-          381,
+          395,
           13
         ]
       ],
@@ -298,7 +298,7 @@
       "source": [
         [
           "src/Dom.ts",
-          229,
+          230,
           6
         ]
       ],
@@ -316,7 +316,7 @@
       "source": [
         [
           "src/Space.ts",
-          280,
+          294,
           6
         ]
       ],
@@ -334,7 +334,7 @@
       "source": [
         [
           "src/Space.ts",
-          294,
+          308,
           6
         ]
       ],
@@ -354,7 +354,7 @@
       "source": [
         [
           "src/Space.ts",
-          66,
+          67,
           2
         ]
       ],
@@ -383,7 +383,7 @@
       "source": [
         [
           "src/Space.ts",
-          394,
+          408,
           2
         ]
       ],
@@ -430,7 +430,7 @@
       "source": [
         [
           "src/Space.ts",
-          421,
+          435,
           2
         ]
       ],
@@ -471,7 +471,7 @@
       "source": [
         [
           "src/Space.ts",
-          530,
+          544,
           2
         ]
       ],
@@ -506,7 +506,7 @@
       "source": [
         [
           "src/Space.ts",
-          441,
+          455,
           2
         ]
       ],
@@ -546,7 +546,7 @@
       "source": [
         [
           "src/Space.ts",
-          481,
+          495,
           2
         ]
       ],
@@ -592,7 +592,7 @@
       "source": [
         [
           "src/Dom.ts",
-          237,
+          238,
           2
         ]
       ],
@@ -621,7 +621,7 @@
       "source": [
         [
           "src/Dom.ts",
-          315,
+          316,
           2
         ]
       ],
@@ -643,7 +643,7 @@
       "source": [
         [
           "src/Dom.ts",
-          155,
+          156,
           2
         ]
       ],
@@ -665,7 +665,7 @@
       "source": [
         [
           "src/Space.ts",
-          52,
+          53,
           2
         ]
       ],
@@ -694,7 +694,7 @@
       "source": [
         [
           "src/Space.ts",
-          192,
+          206,
           2
         ]
       ],
@@ -723,7 +723,7 @@
       "source": [
         [
           "src/Space.ts",
-          106,
+          107,
           2
         ]
       ],
@@ -752,7 +752,7 @@
       "source": [
         [
           "src/Space.ts",
-          165,
+          179,
           12
         ]
       ],
@@ -783,7 +783,7 @@
       "source": [
         [
           "src/Space.ts",
-          231,
+          245,
           2
         ]
       ],
@@ -812,7 +812,7 @@
       "source": [
         [
           "src/Space.ts",
-          43,
+          44,
           2
         ]
       ],
@@ -841,7 +841,7 @@
       "source": [
         [
           "src/Space.ts",
-          88,
+          89,
           2
         ]
       ],
@@ -870,16 +870,16 @@
       "source": [
         [
           "src/Space.ts",
-          96,
+          581,
           2
         ]
       ],
       "flags": {},
       "overrides": false,
-      "inherits": "Space.removeAll",
+      "inherits": "MultiTouchSpace.removeAll",
       "signatures": [
         {
-          "comment": "Remove all players from this Space.",
+          "comment": "Remove all players and the UI registrations forwarded by them.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [],
@@ -892,7 +892,7 @@
       "source": [
         [
           "src/Space.ts",
-          241,
+          255,
           12
         ]
       ],
@@ -923,7 +923,7 @@
       "source": [
         [
           "src/Space.ts",
-          156,
+          170,
           2
         ]
       ],
@@ -945,7 +945,7 @@
       "source": [
         [
           "src/Dom.ts",
-          182,
+          183,
           2
         ]
       ],
@@ -980,7 +980,7 @@
       "source": [
         [
           "src/Space.ts",
-          200,
+          214,
           2
         ]
       ],
@@ -1002,7 +1002,7 @@
       "source": [
         [
           "src/Dom.ts",
-          142,
+          143,
           2
         ]
       ],
@@ -1036,7 +1036,7 @@
       "source": [
         [
           "src/Space.ts",
-          209,
+          223,
           2
         ]
       ],
@@ -1065,7 +1065,7 @@
       "source": [
         [
           "src/Dom.ts",
-          261,
+          262,
           2
         ]
       ],
@@ -1106,7 +1106,7 @@
       "source": [
         [
           "src/Dom.ts",
-          273,
+          274,
           2
         ]
       ],
@@ -1141,7 +1141,7 @@
       "source": [
         [
           "src/Space.ts",
-          614,
+          635,
           2
         ]
       ],
@@ -1176,7 +1176,7 @@
       "source": [
         [
           "src/Space.ts",
-          574,
+          595,
           2
         ]
       ],
@@ -1205,7 +1205,7 @@
       "source": [
         [
           "src/Space.ts",
-          411,
+          425,
           2
         ]
       ],
@@ -1252,7 +1252,7 @@
       "source": [
         [
           "src/Space.ts",
-          427,
+          441,
           2
         ]
       ],
@@ -1293,7 +1293,7 @@
       "source": [
         [
           "src/Space.ts",
-          595,
+          616,
           2
         ]
       ],
@@ -1322,7 +1322,7 @@
       "source": [
         [
           "src/Dom.ts",
-          98,
+          100,
           9
         ]
       ],
@@ -1365,7 +1365,7 @@
       "source": [
         [
           "src/Dom.ts",
-          300,
+          301,
           9
         ]
       ],
@@ -1401,7 +1401,7 @@
       "source": [
         [
           "src/Dom.ts",
-          286,
+          287,
           9
         ]
       ],

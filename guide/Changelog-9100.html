@@ -31,7 +31,7 @@
 <h3>New capabilities</h3>
 <ul>
 <li><strong>Modern color spaces.</strong> <code>Color</code> now supports Oklab and Oklch, alongside corrected conversions for RGB, HSL, HSB, XYZ, LAB, LCH, and LUV. Hex colors now handle alpha correctly too.</li>
-<li><strong>A complete SVG renderer.</strong> <code>SVGForm</code> now follows the Canvas drawing API and automatically keeps SVG elements in sync between frames. It can also serve as a reference for custom renderers.</li>
+<li><strong>A new SVG renderer.</strong> <code>SVGForm</code> now follows the supported subset of the Canvas drawing API and automatically keeps SVG elements in sync between frames. It can also serve as a reference for custom renderers.</li>
 <li><strong>Simpler UI interactions.</strong> Spaces can track and untrack UI elements directly. UI also gains custom shape registration, line and polyline hit testing, typed actions, state helpers, and one-time or abortable handlers.</li>
 <li><strong>Improved image handling.</strong> <code>Img.load</code> is now promise-based, images clean up through <code>dispose</code>, and loading, cropping, scaling, pixel access, and canvas drawing are more reliable.</li>
 <li><strong>Stronger sound controls.</strong> Sound sources share audio contexts when appropriate, can be restarted safely, expose volume and cleanup controls, and report loading or input failures consistently.</li>
@@ -73,6 +73,8 @@
 <p>The repository also gained consistent formatting and line-ending rules, cleaner package metadata, documented implementation plans, and repeatable generation scripts for builds, docs, guides, and the editor.</p>
 <h3>Compatibility notes</h3>
 <p>Most API changes are additive, but corrected bugs may produce different results when old code depended on incorrect behavior. TypeScript users may also see new compile errors where a function can legitimately return <code>undefined</code>; check the result before using it.</p>
+<p><code>Img.load</code> now returns a Promise instead of an <code>Img</code>: use <code>const img = await Img.load(url)</code>, or use <code>.then(...)</code>. If you need the instance before loading finishes, use <code>const img = new Img()</code> and then <code>await img.load(url)</code>.</p>
+<p>The original SVG static drawing helpers still accept a legacy DOM context; the explicit <code>*Element</code> names are available too, such as <code>SVGForm.circleElement(ctx, pt, radius)</code>. <code>SVGForm.styleTo</code> is no longer available: use the form's <code>fill</code>, <code>stroke</code>, <code>alpha</code>, and <code>font</code> methods. Use <code>form.text([10, 14], message)</code> instead of <code>form.log(message)</code>.</p>
 <p>The following older APIs remain available but are deprecated:</p>
 <ul>
 <li><code>HTMLSpace</code> and <code>HTMLForm</code>: use <code>SVGSpace</code> and <code>SVGForm</code>.</li>

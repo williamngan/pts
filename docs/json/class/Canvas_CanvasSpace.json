@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          52,
+          54,
           2
         ]
       ],
@@ -57,12 +57,12 @@
       "source": [
         [
           "src/Canvas.ts",
-          206,
+          210,
           6
         ],
         [
           "src/Canvas.ts",
-          223,
+          227,
           6
         ]
       ],
@@ -88,12 +88,12 @@
       "source": [
         [
           "src/Canvas.ts",
-          309,
+          313,
           6
         ],
         [
           "src/Canvas.ts",
-          312,
+          316,
           6
         ]
       ],
@@ -119,7 +119,7 @@
       "source": [
         [
           "src/Space.ts",
-          287,
+          301,
           6
         ]
       ],
@@ -137,7 +137,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          377,
+          381,
           13
         ]
       ],
@@ -157,12 +157,12 @@
       "source": [
         [
           "src/Space.ts",
-          249,
+          263,
           6
         ],
         [
           "src/Space.ts",
-          252,
+          266,
           6
         ]
       ],
@@ -188,7 +188,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          355,
+          359,
           6
         ]
       ],
@@ -206,7 +206,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          326,
+          330,
           13
         ]
       ],
@@ -226,7 +226,7 @@
       "source": [
         [
           "src/Space.ts",
-          301,
+          315,
           6
         ]
       ],
@@ -244,7 +244,7 @@
       "source": [
         [
           "src/Space.ts",
-          273,
+          287,
           13
         ]
       ],
@@ -264,7 +264,7 @@
       "source": [
         [
           "src/Space.ts",
-          259,
+          273,
           6
         ]
       ],
@@ -282,7 +282,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          340,
+          344,
           13
         ]
       ],
@@ -302,7 +302,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          333,
+          337,
           13
         ]
       ],
@@ -322,7 +322,7 @@
       "source": [
         [
           "src/Space.ts",
-          266,
+          280,
           6
         ]
       ],
@@ -340,7 +340,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          362,
+          366,
           6
         ]
       ],
@@ -358,7 +358,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          319,
+          323,
           13
         ]
       ],
@@ -378,7 +378,7 @@
       "source": [
         [
           "src/Space.ts",
-          381,
+          395,
           13
         ]
       ],
@@ -398,7 +398,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          369,
+          373,
           6
         ]
       ],
@@ -416,7 +416,7 @@
       "source": [
         [
           "src/Space.ts",
-          280,
+          294,
           6
         ]
       ],
@@ -434,7 +434,7 @@
       "source": [
         [
           "src/Space.ts",
-          294,
+          308,
           6
         ]
       ],
@@ -454,7 +454,7 @@
       "source": [
         [
           "src/Space.ts",
-          66,
+          67,
           2
         ]
       ],
@@ -483,7 +483,7 @@
       "source": [
         [
           "src/Space.ts",
-          394,
+          408,
           2
         ]
       ],
@@ -530,7 +530,7 @@
       "source": [
         [
           "src/Space.ts",
-          421,
+          435,
           2
         ]
       ],
@@ -571,7 +571,7 @@
       "source": [
         [
           "src/Space.ts",
-          530,
+          544,
           2
         ]
       ],
@@ -606,7 +606,7 @@
       "source": [
         [
           "src/Space.ts",
-          441,
+          455,
           2
         ]
       ],
@@ -646,7 +646,7 @@
       "source": [
         [
           "src/Space.ts",
-          481,
+          495,
           2
         ]
       ],
@@ -692,7 +692,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          385,
+          389,
           2
         ]
       ],
@@ -721,7 +721,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          427,
+          431,
           2
         ]
       ],
@@ -750,7 +750,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          472,
+          476,
           2
         ]
       ],
@@ -772,7 +772,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          348,
+          352,
           9
         ]
       ],
@@ -801,7 +801,7 @@
       "source": [
         [
           "src/Space.ts",
-          52,
+          53,
           2
         ]
       ],
@@ -830,7 +830,7 @@
       "source": [
         [
           "src/Space.ts",
-          192,
+          206,
           2
         ]
       ],
@@ -859,7 +859,7 @@
       "source": [
         [
           "src/Space.ts",
-          106,
+          107,
           2
         ]
       ],
@@ -888,7 +888,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          454,
+          458,
           12
         ]
       ],
@@ -919,7 +919,7 @@
       "source": [
         [
           "src/Space.ts",
-          231,
+          245,
           2
         ]
       ],
@@ -948,7 +948,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          504,
+          511,
           2
         ]
       ],
@@ -994,7 +994,7 @@
       "source": [
         [
           "src/Space.ts",
-          43,
+          44,
           2
         ]
       ],
@@ -1023,7 +1023,7 @@
       "source": [
         [
           "src/Space.ts",
-          88,
+          89,
           2
         ]
       ],
@@ -1052,16 +1052,16 @@
       "source": [
         [
           "src/Space.ts",
-          96,
+          581,
           2
         ]
       ],
       "flags": {},
       "overrides": false,
-      "inherits": "Space.removeAll",
+      "inherits": "MultiTouchSpace.removeAll",
       "signatures": [
         {
-          "comment": "Remove all players from this Space.",
+          "comment": "Remove all players and the UI registrations forwarded by them.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [],
@@ -1074,7 +1074,7 @@
       "source": [
         [
           "src/Space.ts",
-          241,
+          255,
           12
         ]
       ],
@@ -1105,7 +1105,7 @@
       "source": [
         [
           "src/Space.ts",
-          156,
+          170,
           2
         ]
       ],
@@ -1127,7 +1127,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          233,
+          237,
           2
         ]
       ],
@@ -1167,7 +1167,7 @@
       "source": [
         [
           "src/Space.ts",
-          200,
+          214,
           2
         ]
       ],
@@ -1189,7 +1189,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          174,
+          178,
           2
         ]
       ],
@@ -1223,7 +1223,7 @@
       "source": [
         [
           "src/Space.ts",
-          209,
+          223,
           2
         ]
       ],
@@ -1252,7 +1252,7 @@
       "source": [
         [
           "src/Space.ts",
-          614,
+          635,
           2
         ]
       ],
@@ -1287,7 +1287,7 @@
       "source": [
         [
           "src/Space.ts",
-          574,
+          595,
           2
         ]
       ],
@@ -1316,7 +1316,7 @@
       "source": [
         [
           "src/Space.ts",
-          411,
+          425,
           2
         ]
       ],
@@ -1363,7 +1363,7 @@
       "source": [
         [
           "src/Space.ts",
-          427,
+          441,
           2
         ]
       ],
@@ -1404,7 +1404,7 @@
       "source": [
         [
           "src/Space.ts",
-          595,
+          616,
           2
         ]
       ],

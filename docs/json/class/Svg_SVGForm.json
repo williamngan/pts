@@ -3,19 +3,19 @@
   "source": [
     [
       "src/Svg.ts",
-      939,
+      956,
       13
     ]
   ],
   "kind": "Class",
-  "comment": "SVGForm is a [`CanvasForm`](#link) rendered through a [`SVGContext2D`](#link): it inherits\nthe complete canvas drawing API — shapes, gradients, dashes, images, `textBox` — with SVG\noutput, so a sketch can swap between `CanvasSpace` and `SVGSpace` without changing any\ndrawing code. The legacy per-element static helpers and `scope()` workflow are retained\nfor compatibility but are no longer needed.",
+  "comment": "SVGForm is a [`CanvasForm`](#link) rendered through a [`SVGContext2D`](#link): it inherits\nthe canvas drawing API — shapes, gradients, dashes, images, `textBox` — with SVG\noutput, subject to the capability notes in `SVGContext2D`. Sketches using this subset\ncan swap between `CanvasSpace` and `SVGSpace`. The legacy per-element static helpers and `scope()` workflow are retained\nfor compatibility but are no longer needed.",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
           "src/Svg.ts",
-          971,
+          988,
           2
         ]
       ],
@@ -46,7 +46,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          667,
+          674,
           6
         ]
       ],
@@ -131,7 +131,7 @@
       "source": [
         [
           "src/Svg.ts",
-          988,
+          1005,
           6
         ]
       ],
@@ -180,7 +180,7 @@
       "source": [
         [
           "src/Svg.ts",
-          995,
+          1012,
           6
         ]
       ],
@@ -198,12 +198,12 @@
       "source": [
         [
           "src/Svg.ts",
-          960,
+          977,
           13
         ],
         [
           "src/Svg.ts",
-          963,
+          980,
           13
         ]
       ],
@@ -231,12 +231,12 @@
       "source": [
         [
           "src/Svg.ts",
-          954,
+          971,
           13
         ],
         [
           "src/Svg.ts",
-          957,
+          974,
           13
         ]
       ],
@@ -266,7 +266,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1588,
+          1595,
           2
         ]
       ],
@@ -301,7 +301,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          707,
+          714,
           2
         ]
       ],
@@ -335,7 +335,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          799,
+          806,
           2
         ]
       ],
@@ -381,7 +381,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1208,
+          1215,
           2
         ]
       ],
@@ -434,7 +434,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1108,
+          1115,
           2
         ]
       ],
@@ -492,7 +492,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          882,
+          889,
           2
         ]
       ],
@@ -514,7 +514,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1005,
+          1022,
           2
         ]
       ],
@@ -548,7 +548,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          874,
+          881,
           2
         ]
       ],
@@ -577,7 +577,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          893,
+          900,
           2
         ]
       ],
@@ -617,7 +617,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1157,
+          1164,
           2
         ]
       ],
@@ -676,7 +676,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          718,
+          725,
           2
         ]
       ],
@@ -710,7 +710,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          733,
+          740,
           2
         ]
       ],
@@ -739,7 +739,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          924,
+          931,
           2
         ]
       ],
@@ -797,7 +797,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          953,
+          960,
           2
         ]
       ],
@@ -826,7 +826,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          973,
+          980,
           2
         ]
       ],
@@ -855,7 +855,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          823,
+          830,
           2
         ]
       ],
@@ -889,7 +889,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1400,
+          1407,
           2
         ]
       ],
@@ -930,7 +930,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1450,
+          1457,
           2
         ]
       ],
@@ -965,7 +965,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1291,
+          1298,
           2
         ]
       ],
@@ -1023,7 +1023,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1605,
+          1612,
           2
         ]
       ],
@@ -1052,7 +1052,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1039,
+          1056,
           2
         ]
       ],
@@ -1079,7 +1079,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1514,
+          1521,
           2
         ]
       ],
@@ -1132,7 +1132,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1085,
+          1092,
           2
         ]
       ],
@@ -1219,7 +1219,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1312,
+          1319,
           2
         ]
       ],
@@ -1277,7 +1277,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1338,
+          1345,
           2
         ]
       ],
@@ -1335,7 +1335,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          690,
+          697,
           2
         ]
       ],
@@ -1364,7 +1364,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1036,
+          1043,
           2
         ]
       ],
@@ -1386,7 +1386,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1030,
+          1047,
           2
         ]
       ],
@@ -1420,7 +1420,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1247,
+          1254,
           2
         ]
       ],
@@ -1484,7 +1484,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          746,
+          753,
           2
         ]
       ],
@@ -1536,7 +1536,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          781,
+          788,
           2
         ]
       ],
@@ -1583,7 +1583,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1478,
+          1485,
           2
         ]
       ],
@@ -1624,7 +1624,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1491,
+          1498,
           2
         ]
       ],
@@ -1677,7 +1677,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1018,
+          1035,
           2
         ]
       ],
@@ -1717,7 +1717,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          676,
+          683,
           2
         ]
       ],
@@ -1751,55 +1751,109 @@
       "name": "arc",
       "source": [
         [
-          "src/Canvas.ts",
-          1187,
+          "src/Svg.ts",
+          1152,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1160,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1168,
           9
         ]
       ],
       "flags": {
         "isStatic": true
       },
-      "overrides": false,
-      "inherits": "CanvasForm.arc",
+      "overrides": "CanvasForm.arc",
+      "inherits": false,
       "signatures": [
         {
-          "comment": "A static function to draw an arc.",
-          "returns": "void",
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "SVGElement",
           "returns_comment": false,
           "parameters": [
             {
               "name": "ctx",
-              "comment": "canvas rendering context",
-              "type": "RenderingContext2D",
+              "comment": "",
+              "type": "DOMFormContext",
               "default": false
             },
             {
               "name": "pt",
-              "comment": "center position",
+              "comment": "",
               "type": "PtLike",
               "default": false
             },
             {
               "name": "radius",
-              "comment": "radius of the arc circle",
+              "comment": "",
               "type": "number",
               "default": false
             },
             {
               "name": "startAngle",
-              "comment": "start angle of the arc",
+              "comment": "",
               "type": "number",
               "default": false
             },
             {
               "name": "endAngle",
-              "comment": "end angle of the arc",
+              "comment": "",
               "type": "number",
               "default": false
             },
             {
               "name": "cc",
-              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.",
+              "comment": "",
+              "type": "boolean",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "",
+              "type": "RenderingContext2D",
+              "default": false
+            },
+            {
+              "name": "pt",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "startAngle",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "endAngle",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "cc",
+              "comment": "",
               "type": "boolean",
               "default": false
             }
@@ -1813,7 +1867,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1151,
+          1297,
           9
         ]
       ],
@@ -1873,39 +1927,75 @@
       "name": "circle",
       "source": [
         [
-          "src/Canvas.ts",
-          1097,
+          "src/Svg.ts",
+          1139,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1140,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1141,
           9
         ]
       ],
       "flags": {
         "isStatic": true
       },
-      "overrides": false,
-      "inherits": "CanvasForm.circle",
+      "overrides": "CanvasForm.circle",
+      "inherits": false,
       "signatures": [
         {
-          "comment": "A static function to draw a circle.",
-          "returns": "void",
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "SVGElement",
           "returns_comment": false,
           "parameters": [
             {
               "name": "ctx",
-              "comment": "canvas rendering context",
-              "type": "RenderingContext2D",
+              "comment": "",
+              "type": "DOMFormContext",
               "default": false
             },
             {
               "name": "pt",
-              "comment": "center position of the circle",
+              "comment": "",
               "type": "PtLike",
               "default": false
             },
             {
               "name": "radius",
-              "comment": "radius of the circle",
+              "comment": "",
               "type": "number",
-              "default": "10"
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "",
+              "type": "RenderingContext2D",
+              "default": false
+            },
+            {
+              "name": "pt",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "",
+              "type": "number",
+              "default": false
             }
           ],
           "tags": []
@@ -1917,7 +2007,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1124,
+          1270,
           9
         ]
       ],
@@ -1960,7 +2050,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1125,
+          1132,
           9
         ]
       ],
@@ -2027,7 +2117,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1049,
+          1066,
           9
         ]
       ],
@@ -2058,7 +2148,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1351,
+          1358,
           9
         ]
       ],
@@ -2107,7 +2197,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1421,
+          1428,
           9
         ]
       ],
@@ -2149,31 +2239,61 @@
       "name": "line",
       "source": [
         [
-          "src/Canvas.ts",
-          1258,
+          "src/Svg.ts",
+          1195,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1196,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1197,
           9
         ]
       ],
       "flags": {
         "isStatic": true
       },
-      "overrides": false,
-      "inherits": "CanvasForm.line",
+      "overrides": "CanvasForm.line",
+      "inherits": false,
       "signatures": [
         {
-          "comment": "A static function to draw a line or polyline.",
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "SVGElement | undefined",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "",
+              "type": "DOMFormContext",
+              "default": false
+            },
+            {
+              "name": "pts",
+              "comment": "",
+              "type": "PtLikeIterable",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
             {
               "name": "ctx",
-              "comment": "canvas rendering context",
+              "comment": "",
               "type": "RenderingContext2D",
               "default": false
             },
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike> representing a line",
+              "comment": "",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -2187,7 +2307,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1202,
+          1348,
           9
         ]
       ],
@@ -2223,53 +2343,90 @@
       "name": "point",
       "source": [
         [
-          "src/Canvas.ts",
-          1066,
+          "src/Svg.ts",
+          1115,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1121,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1127,
           9
         ]
       ],
       "flags": {
         "isStatic": true
       },
-      "overrides": false,
-      "inherits": "CanvasForm.point",
+      "overrides": "CanvasForm.point",
+      "inherits": false,
       "signatures": [
         {
-          "comment": "A static function to draw a point.",
-          "returns": "void",
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "SVGElement",
           "returns_comment": false,
           "parameters": [
             {
               "name": "ctx",
-              "comment": "canvas rendering context",
-              "type": "RenderingContext2D",
+              "comment": "",
+              "type": "DOMFormContext",
               "default": false
             },
             {
-              "name": "p",
-              "comment": "a Pt object",
+              "name": "pt",
+              "comment": "",
               "type": "PtLike",
               "default": false
             },
             {
               "name": "radius",
-              "comment": "radius of the point. Default is 5.",
+              "comment": "",
               "type": "number",
-              "default": "5"
+              "default": false
             },
             {
               "name": "shape",
-              "comment": "The shape of the point. Defaults to \"square\", but it can be \"circle\" or a custom shape function in your own implementation.",
+              "comment": "",
               "type": "string",
-              "default": "\"square\""
+              "default": false
             }
           ],
-          "tags": [
+          "tags": []
+        },
+        {
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
             {
-              "tag": "example",
-              "text": "`form.point( p )`, `form.point( p, 10, \"circle\" )`"
+              "name": "ctx",
+              "comment": "",
+              "type": "RenderingContext2D",
+              "default": false
+            },
+            {
+              "name": "pt",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "shape",
+              "comment": "",
+              "type": "string",
+              "default": false
             }
-          ]
+          ],
+          "tags": []
         }
       ]
     },
@@ -2278,7 +2435,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1105,
+          1251,
           9
         ]
       ],
@@ -2332,7 +2489,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1258,
+          1404,
           19
         ]
       ],
@@ -2363,31 +2520,61 @@
       "name": "polygon",
       "source": [
         [
-          "src/Canvas.ts",
-          1302,
+          "src/Svg.ts",
+          1204,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1205,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1206,
           9
         ]
       ],
       "flags": {
         "isStatic": true
       },
-      "overrides": false,
-      "inherits": "CanvasForm.polygon",
+      "overrides": "CanvasForm.polygon",
+      "inherits": false,
       "signatures": [
         {
-          "comment": "A static function to draw a polygon.",
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "SVGElement",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "",
+              "type": "DOMFormContext",
+              "default": false
+            },
+            {
+              "name": "pts",
+              "comment": "",
+              "type": "PtLikeIterable",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
             {
               "name": "ctx",
-              "comment": "canvas rendering context",
+              "comment": "",
               "type": "RenderingContext2D",
               "default": false
             },
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike> representing a polygon",
+              "comment": "",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -2401,7 +2588,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1276,
+          1422,
           9
         ]
       ],
@@ -2437,31 +2624,61 @@
       "name": "rect",
       "source": [
         [
-          "src/Canvas.ts",
-          1323,
+          "src/Svg.ts",
+          1216,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1217,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1218,
           9
         ]
       ],
       "flags": {
         "isStatic": true
       },
-      "overrides": false,
-      "inherits": "CanvasForm.rect",
+      "overrides": "CanvasForm.rect",
+      "inherits": false,
       "signatures": [
         {
-          "comment": "A static function to draw a rectangle.",
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "SVGElement | undefined",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "",
+              "type": "DOMFormContext",
+              "default": false
+            },
+            {
+              "name": "pts",
+              "comment": "",
+              "type": "PtLikeIterable",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
             {
               "name": "ctx",
-              "comment": "canvas rendering context",
+              "comment": "",
               "type": "RenderingContext2D",
               "default": false
             },
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.",
+              "comment": "",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -2475,7 +2692,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1286,
+          1432,
           9
         ]
       ],
@@ -2512,7 +2729,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          583,
+          590,
           9
         ]
       ],
@@ -2543,7 +2760,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1057,
+          1074,
           9
         ]
       ],
@@ -2573,37 +2790,73 @@
       "name": "square",
       "source": [
         [
-          "src/Canvas.ts",
-          1226,
+          "src/Svg.ts",
+          1182,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1183,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1184,
           9
         ]
       ],
       "flags": {
         "isStatic": true
       },
-      "overrides": false,
-      "inherits": "CanvasForm.square",
+      "overrides": "CanvasForm.square",
+      "inherits": false,
       "signatures": [
         {
-          "comment": "A static function to draw a square.",
-          "returns": "void",
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "SVGElement",
           "returns_comment": false,
           "parameters": [
             {
               "name": "ctx",
-              "comment": "canvas rendering context",
-              "type": "RenderingContext2D",
+              "comment": "",
+              "type": "DOMFormContext",
               "default": false
             },
             {
               "name": "pt",
-              "comment": "center position of the square",
+              "comment": "",
               "type": "PtLike",
               "default": false
             },
             {
               "name": "halfsize",
-              "comment": "half size of the square",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "",
+              "type": "RenderingContext2D",
+              "default": false
+            },
+            {
+              "name": "pt",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "halfsize",
+              "comment": "",
               "type": "number",
               "default": false
             }
@@ -2617,7 +2870,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1184,
+          1330,
           9
         ]
       ],
@@ -2660,7 +2913,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1073,
+          1090,
           9
         ]
       ],
@@ -2701,43 +2954,79 @@
       "name": "text",
       "source": [
         [
-          "src/Canvas.ts",
-          1462,
+          "src/Svg.ts",
+          1225,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1226,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1232,
           9
         ]
       ],
       "flags": {
         "isStatic": true
       },
-      "overrides": false,
-      "inherits": "CanvasForm.text",
+      "overrides": "CanvasForm.text",
+      "inherits": false,
       "signatures": [
         {
-          "comment": "A static function to draw text.",
-          "returns": "void",
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "SVGElement",
           "returns_comment": false,
           "parameters": [
             {
               "name": "ctx",
-              "comment": "canvas rendering context",
-              "type": "RenderingContext2D",
+              "comment": "",
+              "type": "DOMFormContext",
               "default": false
             },
             {
               "name": "pt",
-              "comment": "a Point object to specify the anchor point",
+              "comment": "",
               "type": "PtLike",
               "default": false
             },
             {
               "name": "txt",
-              "comment": "a string of text to draw",
+              "comment": "",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "",
+              "type": "RenderingContext2D",
+              "default": false
+            },
+            {
+              "name": "pt",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "txt",
+              "comment": "",
               "type": "string",
               "default": false
             },
             {
               "name": "maxWidth",
-              "comment": "specify a maximum width per line",
+              "comment": "",
               "type": "number",
               "default": false
             }
@@ -2751,7 +3040,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1314,
+          1460,
           9
         ]
       ],
