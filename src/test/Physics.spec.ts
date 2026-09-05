@@ -92,6 +92,40 @@ describe("World collections and configuration", () => {
 });
 
 describe("World constraints", () => {
+  it.each([1, 4])(
+    "preserves velocity across variable timesteps with %i substeps",
+    (substeps) => {
+      const world = new World(
+        Group.fromArray([
+          [-10000, -10000],
+          [10000, 10000],
+        ]),
+      );
+      world.substeps = substeps;
+      const particle = new Particle(0, 0).hit(10, 0);
+      const body = Body.fromGroup(Group.fromArray([[0, 100]]), 1, false, false);
+      (body[0] as Particle).hit(10, 0);
+      world.add(particle).add(body);
+      for (const [ms, expected] of [
+        [16, 10],
+        [16, 10],
+        [0, 0],
+        [1, 0.625],
+        [32, 20],
+      ]) {
+        const px = particle.x;
+        const bx = body[0].x;
+        world.update(ms);
+        expect(particle.x - px).toBeCloseTo(expected * substeps, 4);
+        expect(body[0].x - bx).toBeCloseTo(expected * substeps, 4);
+      }
+      const px = particle.x;
+      world.substeps = substeps * 2;
+      world.update(32);
+      expect(particle.x - px).toBeCloseTo(20 * substeps, 4);
+    },
+  );
+
   it("enforces precise and approximate edge distances", () => {
     const approximateA = new Particle(0, 0);
     const approximateB = new Particle(20, 0);

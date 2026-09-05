@@ -29,6 +29,7 @@ export class World {
 
   // substep-adjusted friction, computed once per update
   private _frictionStep: number = 1;
+  private _lastStep: number = 0;
 
   // spatial-hash and AABB scratch buffers, grown geometrically and reused
   private _hashKeys: Uint32Array = new Uint32Array(0);
@@ -206,6 +207,7 @@ export class World {
         // frame's correction at substep velocity, kicking bodies 4× harder than
         // intended. The scalarized SAT makes the extra narrow-phase passes cheap.
         this._updateBodies(h);
+        this._lastStep = h;
       }
       this._clearForces();
     }
@@ -383,9 +385,13 @@ export class World {
    * here — they persist across the substeps of one update and are cleared when it completes.
    * @param p particle
    * @param dt substep time in seconds
-   * @param prevDt unused; substeps are equal so no time-correction is needed. Kept for signature compatibility.
+   * @param prevDt previous substep time in seconds, used to preserve velocity when frame timing changes.
    */
-  protected integrate(p: Particle, dt: number, prevDt?: number): Particle {
+  protected integrate(
+    p: Particle,
+    dt: number,
+    prevDt: number = this._lastStep,
+  ): Particle {
     if (p.lock) {
       p.verlet(dt, this._frictionStep, prevDt); // re-pins to the lock point
       return p;
@@ -393,7 +399,7 @@ export class World {
 
     const prev = p.previous;
     const force = p.force;
-    const f = this._frictionStep;
+    const f = this._frictionStep * (prevDt > 0 ? dt / prevDt : 1);
     const dtSq = dt * dt;
     const px = p[0];
     const py = p[1];
