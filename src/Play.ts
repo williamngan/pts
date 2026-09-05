@@ -838,6 +838,10 @@ export class Sound {
    * The instance should not be used after calling this. Note that this never closes an `AudioContext`: the shared context lives for the page, and a context you provided is yours to close.
    */
   dispose(): this {
+    // Input tracks are live as soon as they are acquired, even without start().
+    if (!this._playing && this._stream) {
+      this._stream.getAudioTracks().forEach((track) => track.stop());
+    }
     this.reset();
     if (this.analyzer) {
       this.analyzer.node.disconnect();

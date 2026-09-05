@@ -675,6 +675,21 @@ describe("Sound file and buffer sources", () => {
 });
 
 describe("Sound input", () => {
+  it("releases input tracks when disposed without starting playback", async () => {
+    const track = { stop: vi.fn() };
+    vi.stubGlobal("navigator", {
+      mediaDevices: {
+        getUserMedia: vi
+          .fn()
+          .mockResolvedValue({ getAudioTracks: () => [track] }),
+      },
+    });
+    const sound = await Sound.input();
+    sound.dispose().dispose();
+    expect(track.stop).toHaveBeenCalledOnce();
+    expect(sound.stream).toBeUndefined();
+  });
+
   it("opens, plays, and stops microphone streams with default constraints", async () => {
     const track = { stop: vi.fn() };
     const stream = {
