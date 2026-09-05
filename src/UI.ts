@@ -80,6 +80,7 @@ export type UIPointerAction =
  * Extend this class to create custom UI elements.
  */
 export class UI {
+  private _abortCleanup: { [type: string]: Map<number, () => void> } = {};
   _group: Group;
   _shape: string;
 
@@ -253,9 +254,13 @@ export class UI {
     }
     id = UI._addHandler(this._actions[type], handler);
     if (options?.signal) {
-      options.signal.addEventListener("abort", () => this.off(type, id), {
-        once: true,
-      });
+      const signal = options.signal;
+      const abort = () => this.off(type, id);
+      signal.addEventListener("abort", abort, { once: true });
+      if (!this._abortCleanup[type]) this._abortCleanup[type] = new Map();
+      this._abortCleanup[type].set(id, () =>
+        signal.removeEventListener("abort", abort),
+      );
     }
     return id;
   }
@@ -268,9 +273,13 @@ export class UI {
   off(type: UIPointerAction | (string & {}), which?: number): boolean {
     if (!this._actions[type]) return false;
     if (which === undefined) {
+      this._abortCleanup[type]?.forEach((cleanup) => cleanup());
+      delete this._abortCleanup[type];
       delete this._actions[type];
       return true;
     } else {
+      this._abortCleanup[type]?.get(which)?.();
+      this._abortCleanup[type]?.delete(which);
       return UI._removeHandler(this._actions[type], which);
     }
   }

@@ -254,6 +254,34 @@ describe("UI correctness pins", () => {
 });
 
 describe("UI API modernization", () => {
+  it.each(["once", "off", "all"])(
+    "detaches stale abort listeners after %s removal",
+    (removal) => {
+      const ui = UI.fromRectangle(
+        [
+          [0, 0],
+          [20, 20],
+        ],
+        {},
+      );
+      const controller = new AbortController();
+      const detach = vi.spyOn(controller.signal, "removeEventListener");
+      const handler = vi.fn();
+      const id = ui.on("click", handler, {
+        once: removal === "once",
+        signal: controller.signal,
+      });
+      if (removal === "once") ui.listen("click", [10, 10], evt);
+      else ui.off("click", removal === "all" ? undefined : id);
+      expect(detach).toHaveBeenCalledOnce();
+      const replacement = vi.fn();
+      expect(ui.on("click", replacement)).toBe(id);
+      controller.abort();
+      ui.listen("click", [10, 10], evt);
+      expect(replacement).toHaveBeenCalledOnce();
+    },
+  );
+
   it("supports once and AbortSignal options on handlers", () => {
     const u = UI.fromRectangle(rect(), {});
     let onceCount = 0;
