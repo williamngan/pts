@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Op.ts",
-      681,
+      682,
       13
     ]
   ],
   "kind": "Class",
-  "comment": "Circle class provides static functions to create and operate on circles. A circle is usually represented as a Group of 2 Pts, where the first Pt specifies the center, and the second Pt specifies the radius.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
+  "comment": "Circle class provides static functions to create and operate on circles. A circle is usually represented as a Group of 2 Pts, where the first Pt specifies the center, and the second Pt specifies the radius.\nTo move a circle without changing its radius, move only its center, eg `circle[0].to(20, 20)`. Group transforms such as `circle.moveTo(20, 20)` affect both Pts, including the radius.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
   "methods": [
@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Op.ts",
-          724,
+          725,
           9
         ]
       ],
@@ -54,7 +54,7 @@
       "source": [
         [
           "src/Op.ts",
-          688,
+          689,
           9
         ]
       ],
@@ -91,7 +91,7 @@
       "source": [
         [
           "src/Op.ts",
-          707,
+          708,
           9
         ]
       ],
@@ -128,7 +128,7 @@
       "source": [
         [
           "src/Op.ts",
-          806,
+          807,
           9
         ]
       ],
@@ -165,7 +165,7 @@
       "source": [
         [
           "src/Op.ts",
-          786,
+          787,
           9
         ]
       ],
@@ -202,7 +202,7 @@
       "source": [
         [
           "src/Op.ts",
-          750,
+          751,
           9
         ]
       ],
@@ -239,7 +239,7 @@
       "source": [
         [
           "src/Op.ts",
-          846,
+          847,
           9
         ]
       ],
@@ -276,7 +276,7 @@
       "source": [
         [
           "src/Op.ts",
-          865,
+          866,
           9
         ]
       ],
@@ -313,7 +313,7 @@
       "source": [
         [
           "src/Op.ts",
-          882,
+          883,
           9
         ]
       ],
@@ -350,7 +350,7 @@
       "source": [
         [
           "src/Op.ts",
-          734,
+          735,
           9
         ]
       ],

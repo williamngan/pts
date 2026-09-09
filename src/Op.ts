@@ -675,6 +675,7 @@ export class Rectangle {
 
 /**
  * Circle class provides static functions to create and operate on circles. A circle is usually represented as a Group of 2 Pts, where the first Pt specifies the center, and the second Pt specifies the radius.
+ * To move a circle without changing its radius, move only its center, eg `circle[0].to(20, 20)`. Group transforms such as `circle.moveTo(20, 20)` affect both Pts, including the radius.
  * You can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.
  * See [Op guide](../guide/Op-0400.html) for details.
  */

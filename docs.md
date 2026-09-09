@@ -6164,9 +6164,10 @@ Convert any shaping functions into a series of steps.
 <a id="op-circle"></a>
 ### `Circle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:681`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L681)
+**Kind:** Class · **Source:** [`src/Op.ts:682`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L682)
 
 Circle class provides static functions to create and operate on circles. A circle is usually represented as a Group of 2 Pts, where the first Pt specifies the center, and the second Pt specifies the radius.
+To move a circle without changing its radius, move only its center, eg `circle[0].to(20, 20)`. Group transforms such as `circle.moveTo(20, 20)` affect both Pts, including the radius.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
 See [Op guide](https://ptsjs.org/guide/Op-0400.html) for details.
 
@@ -6353,7 +6354,7 @@ Check if a point is within a circle.
 <a id="op-curve"></a>
 ### `Curve`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1699`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1699)
+**Kind:** Class · **Source:** [`src/Op.ts:1700`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1700)
 
 Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -6944,7 +6945,7 @@ Convert this line to a new rectangle representation.
 <a id="op-polygon"></a>
 ### `Polygon`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1062`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1062)
+**Kind:** Class · **Source:** [`src/Op.ts:1063`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1063)
 
 Polygon class provides static functions to create and operate on polygons. A polygon is usually represented as a Group of 3 or more Pts.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -7560,7 +7561,7 @@ Check if a point is within a rectangle.
 <a id="op-triangle"></a>
 ### `Triangle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:904`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L904)
+**Kind:** Class · **Source:** [`src/Op.ts:905`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L905)
 
 Triangle class provides static functions to create and operate on trianges. A triange is a polygon represented as a Group of 3 Pts.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.

@@ -629,6 +629,8 @@ There are also a couple additional functions in Group that let you work with arr
 
 Similar to transformations in Pt, you can use [`scale`](https://ptsjs.org/docs.md#pt-group), [`rotate2D`](https://ptsjs.org/docs.md#pt-group) etc to transform a Group of Pts. There are also [`moveBy`](https://ptsjs.org/docs.md#pt-group) and [`moveTo`](https://ptsjs.org/docs.md#pt-group) to translate its positions. Basic arithmetics like [`add`](https://ptsjs.org/docs.md#pt-group) and [`multiply`](https://ptsjs.org/docs.md#pt-group) are also included.
 
+These functions affect every Pt in the Group. For a [circle](https://ptsjs.org/guide/Op-0400.html), move only its center (`circle[0]`) to keep its radius unchanged.
+
 Furthermore, you may use [`$matrixAdd`](https://ptsjs.org/docs.md#pt-group) and [`$matrixMultiply`](https://ptsjs.org/docs.md#pt-group) to do advanced matrix calculations.
 
 #### Cheat sheet
@@ -888,6 +890,15 @@ Circle.fromRect( rect );
 Circle.toRect( c1 );
 Circle.intersectCircle2D( c1, c2 );
 ```
+
+A circle is a Group of two Pts: its center and its radius. To move it without changing its radius, move only the first Pt:
+
+```
+let c = Circle.fromCenter( [10, 10], 5 );
+c[0].to( 20, 20 );
+```
+
+Calling `c.moveTo(20, 20)` would move both Pts, changing the radius too.
 
 [`Triangle`](https://ptsjs.org/docs.md#op-triangle) from "Op" module helps you create and work with triangles.
 

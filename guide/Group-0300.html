@@ -72,6 +72,7 @@ g.forEachPt( &quot;dot&quot;, new Pt(1,2) ); // Error, dot() doesn't return Pt
 <h5>In this demo, we keep track of the last 50 positions of the pointer in a Group, and draw one circle for every 5 segments. Take a look at the source code and note the use of common Array functions like <code>push</code> and <code>map</code> along with Group functions like <code>segments</code>.</h5>
 <h3>Transformations</h3>
 <p>Similar to transformations in Pt, you can use <a href="../docs/?p=Pt_Group#function_scale"><code>scale</code></a>, <a href="../docs/?p=Pt_Group#function_rotate2D"><code>rotate2D</code></a> etc to transform a Group of Pts. There are also <a href="../docs/?p=Pt_Group#function_moveBy"><code>moveBy</code></a> and <a href="../docs/?p=Pt_Group#function_moveTo"><code>moveTo</code></a> to translate its positions. Basic arithmetics like <a href="../docs/?p=Pt_Group#function_add"><code>add</code></a> and <a href="../docs/?p=Pt_Group#function_multiply"><code>multiply</code></a> are also included.</p>
+<p>These functions affect every Pt in the Group. For a <a href="./Op-0400.html">circle</a>, move only its center (<code>circle[0]</code>) to keep its radius unchanged.</p>
 <p>Furthermore, you may use <a href="../docs/?p=Pt_Group#function_$matrixAdd"><code>$matrixAdd</code></a> and <a href="../docs/?p=Pt_Group#function_$matrixMultiply"><code>$matrixMultiply</code></a> to do advanced matrix calculations.</p>
 <h3>Cheat sheet</h3>
 <p>Creating and cloning</p>

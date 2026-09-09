@@ -252,6 +252,26 @@ describe("Rectangle", () => {
 });
 
 describe("Circle", () => {
+  it("moves the center without changing the encoded radius", () => {
+    const circle = Circle.fromCenter([10, 10], 5);
+    circle[0].to(20, 20);
+    expect(groupValues(circle)).toEqual([
+      [20, 20],
+      [5, 5],
+    ]);
+    circle[0].add(3, -2);
+    expect(groupValues(circle)).toEqual([
+      [23, 18],
+      [5, 5],
+    ]);
+    // Group transforms remain generic: both stored Pts are translated.
+    const wholeGroup = Circle.fromCenter([10, 10], 5).moveTo(20, 20);
+    expect(groupValues(wholeGroup)).toEqual([
+      [20, 20],
+      [15, 15],
+    ]);
+  });
+
   it("constructs circles from rectangles, triangles, and centers", () => {
     const rectangle = rect([0, 0], [20, 10]);
     expect(values(Circle.fromRect(rectangle, false)[1])).toEqual([5, 5]);

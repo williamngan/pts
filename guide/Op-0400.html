@@ -148,6 +148,11 @@ Circle.fromRect( rect );
 Circle.toRect( c1 );
 Circle.intersectCircle2D( c1, c2 );
 </code></pre>
+<p>A circle is a Group of two Pts: its center and its radius. To move it without changing its radius, move only the first Pt:</p>
+<pre tabindex="0"><code>let c = Circle.fromCenter( [10, 10], 5 );
+c[0].to( 20, 20 );
+</code></pre>
+<p>Calling <code>c.moveTo(20, 20)</code> would move both Pts, changing the radius too.</p>
 <p><a href="../docs/?p=Op_Triangle"><code>Triangle</code></a> from &quot;Op&quot; module helps you create and work with triangles.</p>
 <pre tabindex="0"><code>Triangle.fromCircle( c ); // equilateral triangle
 Triangle.fromRect( rect );

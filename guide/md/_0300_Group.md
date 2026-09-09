@@ -70,6 +70,8 @@ There are also a couple additional functions in Group that let you work with arr
 
 Similar to transformations in Pt, you can use [`scale`](#pt-group), [`rotate2D`](#pt-group) etc to transform a Group of Pts. There are also [`moveBy`](#pt-group) and [`moveTo`](#pt-group) to translate its positions. Basic arithmetics like [`add`](#pt-group) and [`multiply`](#pt-group) are also included.
 
+These functions affect every Pt in the Group. For a [circle](./Op-0400.html), move only its center (`circle[0]`) to keep its radius unchanged.
+
 Furthermore, you may use [`$matrixAdd`](#pt-group) and [`$matrixMultiply`](#pt-group) to do advanced matrix calculations.
 
 ### Cheat sheet
