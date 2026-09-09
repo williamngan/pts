@@ -4706,7 +4706,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			return this;
 		}
 		paragraphBox(box, txt, lineHeight = 1.2, verticalAlign = "top", crop = true) {
-			const b = Util.iterToArray(box);
+			const b = Group.fromArray(box);
 			const size = Rectangle.size(b);
 			this._ctx.textBaseline = "top";
 			const lstep = this._font.size * lineHeight;

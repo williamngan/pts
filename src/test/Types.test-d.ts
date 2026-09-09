@@ -13,13 +13,24 @@ import type {
 import { type Bound, type Group, type Pt } from "../Pt";
 import type { Space } from "../Space";
 import type { UI, UIPointerAction } from "../UI";
-import type { CanvasSpace } from "../Canvas";
+import type { CanvasForm, CanvasSpace } from "../Canvas";
+import type { SVGForm } from "../Svg";
 
 // Type-level pins for the public type contract. These run under vitest's
 // typecheck mode: a change that breaks downstream consumers' compiles
 // fails here first.
 
 describe("public type contract", () => {
+  it("paragraphBox accepts all PtLikeIterable inputs in both renderers", () => {
+    type CanvasInput = Parameters<CanvasForm["paragraphBox"]>[0];
+    type SVGInput = Parameters<SVGForm["paragraphBox"]>[0];
+    expectTypeOf<CanvasInput>().toEqualTypeOf<PtLikeIterable>();
+    expectTypeOf<SVGInput>().toEqualTypeOf<CanvasInput>();
+    expectTypeOf<number[][]>().toExtend<CanvasInput>();
+    expectTypeOf<Float32Array[]>().toExtend<CanvasInput>();
+    expectTypeOf<Generator<number[]>>().toExtend<CanvasInput>();
+  });
+
   it("CanvasSpace accepts an omitted or empty mount", () => {
     expectTypeOf<typeof CanvasSpace>().toBeConstructibleWith();
     expectTypeOf<ConstructorParameters<typeof CanvasSpace>[0]>().toEqualTypeOf<

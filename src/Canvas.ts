@@ -1525,7 +1525,7 @@ export class CanvasForm<
     verticalAlign: TextVerticalAlign = "top",
     crop: boolean = true,
   ): this {
-    const b = Util.iterToArray(box);
+    const b = Group.fromArray(box);
     const size = Rectangle.size(b);
     this._ctx.textBaseline = "top"; // override textBaseline
 
