@@ -2934,9 +2934,12 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 		constructor(group, shape, states = {}, id) {
 			super(group, shape, states, id);
 			this._draggingID = -1;
+			this._dragID = -1;
 			this._moveHoldID = -1;
+			this._dragHoldID = -1;
 			this._dropHoldID = -1;
 			this._upHoldID = -1;
+			this._outHoldID = -1;
 			if (states.dragging === void 0) this._states["dragging"] = false;
 			if (states.moved === void 0) this._states["moved"] = false;
 			if (states.offset === void 0) this._states["offset"] = new Pt();
@@ -2946,22 +2949,38 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 					this.state("dragging", true);
 					this.state("offset", new Pt(pt).subtract(target.group[0]));
 					this._moveHoldID = this.hold(UA.move);
+					this._dragHoldID = this.hold(UA.drag);
+					this._outHoldID = this.hold(UA.out);
 				}
 				if (this._dropHoldID === -1) this._dropHoldID = this.hold(UA.drop);
 				if (this._upHoldID === -1) this._upHoldID = this.hold(UA.up);
-				if (this._draggingID === -1) this._draggingID = this._sysOn(UA.move, (t, p, ty, e) => {
-					if (this.state("dragging")) {
-						UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag, e);
-						this.state("moved", true);
-					}
-				});
+				if (this._draggingID === -1) {
+					const drag = (t, p, ty, e) => {
+						const paired = ty === UA.drag && e === this._lastMoveEvent;
+						this._lastMoveEvent = ty === UA.move ? e : void 0;
+						if (paired) return;
+						if (this.state("dragging")) {
+							UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag, e);
+							this.state("moved", true);
+						}
+					};
+					this._draggingID = this._sysOn(UA.move, drag);
+					this._dragID = this._sysOn(UA.drag, drag);
+				}
 			});
 			const endDrag = (target, pt, type, evt) => {
 				this.state("dragging", false);
 				this._sysOff(UA.move, this._draggingID);
+				this._sysOff(UA.drag, this._dragID);
 				this._draggingID = -1;
+				this._dragID = -1;
+				this._lastMoveEvent = void 0;
 				this.unhold(this._moveHoldID);
 				this._moveHoldID = -1;
+				this.unhold(this._dragHoldID);
+				this._dragHoldID = -1;
+				this.unhold(this._outHoldID);
+				this._outHoldID = -1;
 				this.unhold(this._dropHoldID);
 				this._dropHoldID = -1;
 				this.unhold(this._upHoldID);
@@ -3204,6 +3223,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 				this.bindCanvas("pointerup", this._mouseUpBind, {}, customTarget);
 				this.bindCanvas("pointerover", this._mouseOverBind, {}, customTarget);
 				this.bindCanvas("pointerout", this._mouseOutBind, {}, customTarget);
+				this.bindCanvas("pointercancel", this._mouseOutBind, {}, customTarget);
 				this.bindCanvas("pointermove", this._mouseMoveBind, {}, customTarget);
 				this.bindCanvas("click", this._mouseClickBind, {}, customTarget);
 				this.bindCanvas("contextmenu", this._contextMenuBind, {}, customTarget);
@@ -3214,6 +3234,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 				this.unbindCanvas("pointerup", this._mouseUpBind, {}, target);
 				this.unbindCanvas("pointerover", this._mouseOverBind, {}, target);
 				this.unbindCanvas("pointerout", this._mouseOutBind, {}, target);
+				this.unbindCanvas("pointercancel", this._mouseOutBind, {}, target);
 				this.unbindCanvas("pointermove", this._mouseMoveBind, {}, target);
 				this.unbindCanvas("click", this._mouseClickBind, {}, target);
 				this.unbindCanvas("contextmenu", this._contextMenuBind, {}, target);
@@ -3326,16 +3347,20 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 					py = touch.pageY - topLeft.y;
 				}
 			}
-			for (const k in this.players) if (this.players.hasOwnProperty(k)) {
-				const v = this.players[k];
-				if (v.action) v.action(type, px, py, evt);
-			}
 			if (type) {
 				this._pointer.to(px, py);
 				this._pointer.id = type;
 			}
+			for (const k in this.players) if (this.players.hasOwnProperty(k)) {
+				const v = this.players[k];
+				if (v.action) v.action(type, px, py, evt);
+			}
+		}
+		_isTouchHandled(evt) {
+			return "pointerType" in evt && evt.pointerType === "touch" && this._hasTouch && evt.composedPath().includes(this._touchTarget || this._canvas);
 		}
 		_mouseDown(evt) {
+			if (this._isTouchHandled(evt)) return false;
 			this._mouseAction(UIPointerActions.down, evt);
 			this._mouseAction(UIPointerActions.pointerdown, evt);
 			this._pressed = true;
@@ -3343,15 +3368,17 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			return false;
 		}
 		_mouseUp(evt) {
+			if (this._isTouchHandled(evt)) return false;
 			this._mouseAction(UIPointerActions.pointerup, evt);
 			if (this._dragged) this._mouseAction(UIPointerActions.drop, evt);
 			else this._mouseAction(UIPointerActions.up, evt);
 			this._pressed = false;
 			this._dragged = false;
-			if (evt.target instanceof Element) evt.target.releasePointerCapture(evt.pointerId);
+			if (evt instanceof PointerEvent && evt.target instanceof Element && evt.target.hasPointerCapture(evt.pointerId)) evt.target.releasePointerCapture(evt.pointerId);
 			return false;
 		}
 		_mouseMove(evt) {
+			if (this._isTouchHandled(evt)) return false;
 			if (this._pressed) {
 				this._dragged = true;
 				this._mouseAction(UIPointerActions.drag, evt);
@@ -3359,12 +3386,15 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			return false;
 		}
 		_mouseOver(evt) {
+			if (this._isTouchHandled(evt)) return false;
 			this._mouseAction(UIPointerActions.over, evt);
 			return false;
 		}
 		_mouseOut(evt) {
+			if (this._isTouchHandled(evt)) return false;
 			this._mouseAction(UIPointerActions.out, evt);
 			if (this._dragged) this._mouseAction(UIPointerActions.drop, evt);
+			this._pressed = false;
 			this._dragged = false;
 			return false;
 		}

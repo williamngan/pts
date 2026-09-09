@@ -7,6 +7,8 @@ const browser = await chromium.launch({ headless: true });
 try {
   for (const file of ["pts.js", "pts.min.js"]) {
     const page = await browser.newPage();
+    const errors = [];
+    page.on("pageerror", (error) => errors.push(error.message));
     await page.setContent(`
       <!doctype html>
       <style>#container { width: 320px; height: 180px; }</style>
@@ -64,6 +66,124 @@ try {
     assert.equal(result.quickStart, "function");
     assert.equal(result.disposed, true);
 
+    // Exercise the native input bridge, not just synthetic UI.listen calls.
+    const setupDragger = async (tracking, binding) => {
+      await page.setContent(`<!doctype html>
+        <style>body { margin: 0; } #host { width: 320px; height: 180px; touch-action: none; }</style>
+        <div id="host"></div>`);
+      await page.evaluate(
+        async ({ tracking, binding }) => {
+          const { CanvasSpace, UIDragger, UI, Pt } = globalThis.Pts;
+          const space = new CanvasSpace("host").setup({ retina: false });
+          await new Promise((resolve) =>
+            space.element.addEventListener("ready", resolve, { once: true }),
+          );
+          const dragger = UIDragger.fromRectangle(
+            [
+              [20, 20],
+              [100, 100],
+            ],
+            {},
+          );
+          const state = {
+            drags: 0,
+            drops: 0,
+            touchMoves: 0,
+            pointerMatches: true,
+          };
+          dragger.onDrag((target, pt) => {
+            state.drags++;
+            state.pointerMatches &&= space.pointer.equals(pt);
+            target.group.moveTo(new Pt(pt).subtract(target.state("offset")));
+          });
+          dragger.onDrop(() => state.drops++);
+          if (tracking === "auto") space.track(dragger);
+          else
+            space.add({
+              animate: () => {},
+              action: (type, x, y, evt) =>
+                UI.track([dragger], type, new Pt(x, y), evt),
+            });
+          if (binding !== "touch") space.bindMouse();
+          if (binding === "separate") {
+            const touchTarget = document.createElement("div");
+            document.body.appendChild(touchTarget);
+            space.bindTouch(true, false, touchTarget);
+          } else if (binding !== "mouse") space.bindTouch();
+          space.element.addEventListener("touchmove", () => state.touchMoves++);
+          space.play();
+          globalThis.inputProbe = { space, dragger, state };
+        },
+        { tracking, binding },
+      );
+    };
+    const dragState = () =>
+      page.evaluate(() => ({
+        ...globalThis.inputProbe.state,
+        dragging: globalThis.inputProbe.dragger.state("dragging"),
+      }));
+    for (const tracking of ["auto", "manual"]) {
+      await setupDragger(tracking, "mouse");
+      await page.mouse.move(40, 40);
+      await page.mouse.down();
+      await page.mouse.move(350, 120, { steps: 4 }); // beyond the UI and canvas
+      await page.mouse.up();
+      assert.deepEqual(
+        await dragState(),
+        {
+          drags: 4,
+          drops: 1,
+          touchMoves: 0,
+          pointerMatches: true,
+          dragging: false,
+        },
+        `${file}: ${tracking} native mouse drag`,
+      );
+      await page.evaluate(() => globalThis.inputProbe.space.dispose());
+    }
+    for (const binding of ["touch", "both", "separate"]) {
+      await setupDragger("auto", binding);
+      const session = await page.context().newCDPSession(page);
+      const touch = (type, x, y) =>
+        session.send("Input.dispatchTouchEvent", {
+          type,
+          touchPoints: x === undefined ? [] : [{ x, y, id: 1 }],
+        });
+      await touch("touchStart", 40, 40);
+      await touch("touchMove", 100, 80);
+      await touch("touchMove", 150, 100);
+      await touch("touchEnd");
+      const state = await dragState();
+      assert.ok(state.touchMoves > 0);
+      assert.equal(
+        state.drags,
+        state.touchMoves,
+        `${file}: ${binding} must not duplicate touch drags`,
+      );
+      assert.equal(state.drops, 1);
+      assert.equal(state.dragging, false);
+      assert.equal(state.pointerMatches, true);
+      // Cancellation without moving must still release the dragger.
+      await touch("touchStart", 150, 100);
+      await touch("touchCancel");
+      assert.equal((await dragState()).dragging, false);
+      assert.equal((await dragState()).drops, 1);
+      await session.detach();
+      await page.evaluate(() => globalThis.inputProbe.space.dispose());
+    }
+    await setupDragger("auto", "mouse");
+    await page.mouse.move(40, 40);
+    await page.mouse.down();
+    await page.evaluate(() =>
+      globalThis.inputProbe.space.element.dispatchEvent(
+        new PointerEvent("pointercancel", { clientX: 300, clientY: 150 }),
+      ),
+    );
+    assert.equal((await dragState()).dragging, false);
+    await page.mouse.up();
+    assert.equal((await dragState()).drops, 0);
+    await page.evaluate(() => globalThis.inputProbe.space.dispose());
+
     for (const kind of ["canvas", "svg", "svg-container"]) {
       for (const argument of ["bare-id", "selector", "element"]) {
         await page.setContent(
@@ -98,6 +218,7 @@ try {
         assert.equal(mounted, true, `${file}: ${kind} mount using ${argument}`);
       }
     }
+    assert.deepEqual(errors, [], `${file}: unexpected browser errors`);
     await page.close();
   }
 } finally {

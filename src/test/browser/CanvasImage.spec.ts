@@ -229,7 +229,7 @@ describe("CanvasSpace and Space interaction", () => {
       .bindKeyboard();
     space.play();
 
-    expect(addCanvas).toHaveBeenCalledTimes(11);
+    expect(addCanvas).toHaveBeenCalledTimes(12);
     expect(addDocument).toHaveBeenCalledTimes(2);
     expect(space.isPlaying).toBe(true);
 
@@ -240,6 +240,7 @@ describe("CanvasSpace and Space interaction", () => {
       "pointerup",
       "pointerover",
       "pointerout",
+      "pointercancel",
       "pointermove",
       "click",
       "contextmenu",
@@ -266,7 +267,7 @@ describe("CanvasSpace and Space interaction", () => {
     expect(space.ready).toBe(false);
 
     space.dispose();
-    expect(removeCanvas).toHaveBeenCalledTimes(11);
+    expect(removeCanvas).toHaveBeenCalledTimes(12);
     expect(removeDocument).toHaveBeenCalledTimes(2);
   });
 

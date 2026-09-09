@@ -135,6 +135,32 @@ describe("UIButton", () => {
 });
 
 describe("UIDragger", () => {
+  it("accepts drag actions, deduplicates paired touch motion, and releases outside", () => {
+    const dragger = UIDragger.fromRectangle(rect(), {}) as UIDragger;
+    const drag = vi.fn();
+    const drop = vi.fn();
+    dragger.onDrag(drag);
+    dragger.onDrop(drop);
+    dragger.listen(Action.down, [2, 3], evt);
+    dragger.listen(Action.drag, [20, 30], evt);
+    dragger.listen(Action.drag, [30, 40], evt);
+    expect(drag).toHaveBeenCalledTimes(2);
+    dragger.listen(Action.move, [40, 50], evt);
+    dragger.listen(Action.drag, [40, 50], evt);
+    expect(drag).toHaveBeenCalledTimes(3);
+    dragger.listen(Action.out, [200, 300], evt);
+    expect(drop).toHaveBeenCalledOnce();
+    expect(dragger.state("dragging")).toBe(false);
+    dragger.listen(Action.drag, [300, 400], evt);
+    dragger.listen(Action.drop, [300, 400], evt);
+    expect(drag).toHaveBeenCalledTimes(3);
+    expect(drop).toHaveBeenCalledOnce();
+    dragger.listen(Action.down, [2, 3], evt);
+    dragger.listen(Action.up, [200, 300], evt);
+    expect(dragger.state("dragging")).toBe(false);
+    expect(drop).toHaveBeenCalledOnce();
+  });
+
   it("tracks a drag outside its bounds and emits drag/drop events", () => {
     const dragger = UIDragger.fromRectangle(rect(), {}) as UIDragger;
     const drag = vi.fn();

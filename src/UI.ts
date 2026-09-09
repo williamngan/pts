@@ -611,9 +611,13 @@ export class UIButton extends UI {
  */
 export class UIDragger extends UIButton {
   private _draggingID: number = -1;
+  private _dragID: number = -1;
   private _moveHoldID: number = -1;
+  private _dragHoldID: number = -1;
   private _dropHoldID: number = -1;
   private _upHoldID: number = -1;
+  private _outHoldID: number = -1;
+  private _lastMoveEvent: UIActionEvent | undefined;
 
   /**
    * Create a dragger which has all the states in UIButton, with additional "dragging" (a boolean indicating whether it's currently being dragged) and "offset" (a Pt representing the offset between this UI's position and the pointer's position when dragged) states. (See [`UI.state`](#link)) You may also create a new UIDragger using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).
@@ -651,6 +655,8 @@ export class UIDragger extends UIButton {
           this.state("dragging", true);
           this.state("offset", new Pt(pt).subtract(target.group[0]));
           this._moveHoldID = this.hold(UA.move); // keep hold of move
+          this._dragHoldID = this.hold(UA.drag);
+          this._outHoldID = this.hold(UA.out);
         }
         if (this._dropHoldID === -1) {
           this._dropHoldID = this.hold(UA.drop); // keep hold of drop (normal drag and drop)
@@ -659,15 +665,18 @@ export class UIDragger extends UIButton {
           this._upHoldID = this.hold(UA.up); // keep hold of up (cancel dragging if simple click)
         }
         if (this._draggingID === -1) {
-          this._draggingID = this._sysOn(
-            UA.move,
-            (t: UI, p: PtLike, ty: string, e: UIActionEvent) => {
-              if (this.state("dragging")) {
-                UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag, e);
-                this.state("moved", true);
-              }
-            },
-          );
+          const drag = (t: UI, p: PtLike, ty: string, e: UIActionEvent) => {
+            // Touch movement forwards both move and drag for the same event.
+            const paired = ty === UA.drag && e === this._lastMoveEvent;
+            this._lastMoveEvent = ty === UA.move ? e : undefined;
+            if (paired) return;
+            if (this.state("dragging")) {
+              UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag, e);
+              this.state("moved", true);
+            }
+          };
+          this._draggingID = this._sysOn(UA.move, drag);
+          this._dragID = this._sysOn(UA.drag, drag);
         }
       },
     );
@@ -682,10 +691,17 @@ export class UIDragger extends UIButton {
       this.state("dragging", false);
       // remove move listener
       this._sysOff(UA.move, this._draggingID);
+      this._sysOff(UA.drag, this._dragID);
       this._draggingID = -1;
+      this._dragID = -1;
+      this._lastMoveEvent = undefined;
       // stop keeping hold of move
       this.unhold(this._moveHoldID);
       this._moveHoldID = -1;
+      this.unhold(this._dragHoldID);
+      this._dragHoldID = -1;
+      this.unhold(this._outHoldID);
+      this._outHoldID = -1;
       // stop keeping hold of drop
       this.unhold(this._dropHoldID);
       this._dropHoldID = -1;

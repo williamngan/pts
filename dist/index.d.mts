@@ -134,9 +134,13 @@ declare class UIButton extends UI {
 }
 declare class UIDragger extends UIButton {
   private _draggingID;
+  private _dragID;
   private _moveHoldID;
+  private _dragHoldID;
   private _dropHoldID;
   private _upHoldID;
+  private _outHoldID;
+  private _lastMoveEvent;
   constructor(group: PtLikeIterable, shape: string, states?: {
     [key: string]: any;
   }, id?: string);
@@ -534,11 +538,12 @@ declare abstract class MultiTouchSpace extends Space {
   untrack(uis?: UI | UI[]): this;
   touchesToPoints(evt: TouchEvent, which?: TouchPointsKey): Pt[];
   protected _mouseAction(type: string, evt: MouseEvent | TouchEvent | PointerEvent): void;
+  private _isTouchHandled;
   protected _mouseDown(evt: PointerEvent): boolean;
-  protected _mouseUp(evt: PointerEvent): boolean;
+  protected _mouseUp(evt: PointerEvent | TouchEvent): boolean;
   protected _mouseMove(evt: PointerEvent): boolean;
   protected _mouseOver(evt: PointerEvent): boolean;
-  protected _mouseOut(evt: PointerEvent): boolean;
+  protected _mouseOut(evt: PointerEvent | TouchEvent): boolean;
   protected _mouseClick(evt: MouseEvent | TouchEvent): boolean;
   protected _contextMenu(evt: MouseEvent): boolean;
   protected _touchMove(evt: TouchEvent): boolean;

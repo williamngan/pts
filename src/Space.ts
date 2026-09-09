@@ -464,6 +464,7 @@ export abstract class MultiTouchSpace extends Space {
       this.bindCanvas("pointerup", this._mouseUpBind, {}, customTarget);
       this.bindCanvas("pointerover", this._mouseOverBind, {}, customTarget);
       this.bindCanvas("pointerout", this._mouseOutBind, {}, customTarget);
+      this.bindCanvas("pointercancel", this._mouseOutBind, {}, customTarget);
       this.bindCanvas("pointermove", this._mouseMoveBind, {}, customTarget);
       this.bindCanvas("click", this._mouseClickBind, {}, customTarget);
       this.bindCanvas("contextmenu", this._contextMenuBind, {}, customTarget);
@@ -474,6 +475,7 @@ export abstract class MultiTouchSpace extends Space {
       this.unbindCanvas("pointerup", this._mouseUpBind, {}, target);
       this.unbindCanvas("pointerover", this._mouseOverBind, {}, target);
       this.unbindCanvas("pointerout", this._mouseOutBind, {}, target);
+      this.unbindCanvas("pointercancel", this._mouseOutBind, {}, target);
       this.unbindCanvas("pointermove", this._mouseMoveBind, {}, target);
       this.unbindCanvas("click", this._mouseClickBind, {}, target);
       this.unbindCanvas("contextmenu", this._contextMenuBind, {}, target);
@@ -676,17 +678,28 @@ export abstract class MultiTouchSpace extends Space {
       }
     }
 
+    if (type) {
+      this._pointer.to(px, py);
+      this._pointer.id = type;
+    }
+
     for (const k in this.players) {
       if (this.players.hasOwnProperty(k)) {
         const v = this.players[k];
         if (v.action) v.action(type, px, py, evt);
       }
     }
+  }
 
-    if (type) {
-      this._pointer.to(px, py);
-      this._pointer.id = type;
-    }
+  // Ignore the duplicate pointer stream only when this event also reaches our
+  // touch listener. Mouse and touch bindings may use separate custom targets.
+  private _isTouchHandled(evt: PointerEvent | TouchEvent): boolean {
+    return (
+      "pointerType" in evt &&
+      evt.pointerType === "touch" &&
+      this._hasTouch &&
+      evt.composedPath().includes(this._touchTarget || this._canvas)
+    );
   }
 
   /**
@@ -694,6 +707,7 @@ export abstract class MultiTouchSpace extends Space {
    * @param evt
    */
   protected _mouseDown(evt: PointerEvent) {
+    if (this._isTouchHandled(evt)) return false;
     this._mouseAction(UIA.down, evt);
     this._mouseAction(UIA.pointerdown, evt);
     this._pressed = true;
@@ -707,7 +721,8 @@ export abstract class MultiTouchSpace extends Space {
    * MouseUp handler.
    * @param evt
    */
-  protected _mouseUp(evt: PointerEvent) {
+  protected _mouseUp(evt: PointerEvent | TouchEvent) {
+    if (this._isTouchHandled(evt)) return false;
     this._mouseAction(UIA.pointerup, evt);
     if (this._dragged) {
       this._mouseAction(UIA.drop, evt);
@@ -716,7 +731,11 @@ export abstract class MultiTouchSpace extends Space {
     }
     this._pressed = false;
     this._dragged = false;
-    if (evt.target instanceof Element) {
+    if (
+      evt instanceof PointerEvent &&
+      evt.target instanceof Element &&
+      evt.target.hasPointerCapture(evt.pointerId)
+    ) {
       evt.target.releasePointerCapture(evt.pointerId);
     }
     return false;
@@ -727,6 +746,7 @@ export abstract class MultiTouchSpace extends Space {
    * @param evt
    */
   protected _mouseMove(evt: PointerEvent) {
+    if (this._isTouchHandled(evt)) return false;
     if (this._pressed) {
       this._dragged = true;
       this._mouseAction(UIA.drag, evt);
@@ -741,6 +761,7 @@ export abstract class MultiTouchSpace extends Space {
    * @param evt
    */
   protected _mouseOver(evt: PointerEvent) {
+    if (this._isTouchHandled(evt)) return false;
     this._mouseAction(UIA.over, evt);
     return false;
   }
@@ -749,9 +770,11 @@ export abstract class MultiTouchSpace extends Space {
    * MouseOut handler.
    * @param evt
    */
-  protected _mouseOut(evt: PointerEvent) {
+  protected _mouseOut(evt: PointerEvent | TouchEvent) {
+    if (this._isTouchHandled(evt)) return false;
     this._mouseAction(UIA.out, evt);
     if (this._dragged) this._mouseAction(UIA.drop, evt);
+    this._pressed = false;
     this._dragged = false;
     return false;
   }
