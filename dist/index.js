@@ -3268,27 +3268,45 @@ var MultiTouchSpace = class extends Space {
 		}
 		return this;
 	}
+	_inputTransform() {
+		if (typeof Element !== "undefined" && this._canvas instanceof Element) {
+			const rect = this._canvas.getBoundingClientRect();
+			return [
+				rect.left,
+				rect.top,
+				rect.width ? this.width / rect.width : 1,
+				rect.height ? this.height / rect.height : 1
+			];
+		}
+		return [
+			this.bound.topLeft.x - (typeof window === "undefined" ? 0 : window.scrollX),
+			this.bound.topLeft.y - (typeof window === "undefined" ? 0 : window.scrollY),
+			1,
+			1
+		];
+	}
 	touchesToPoints(evt, which = "touches") {
 		if (!evt || !evt[which]) return [];
 		const ts = [];
+		const [left, top, scaleX, scaleY] = this._inputTransform();
 		for (let i = 0; i < evt[which].length; i++) {
 			const t = evt[which].item(i);
-			ts.push(new Pt(t.pageX - this.bound.topLeft.x, t.pageY - this.bound.topLeft.y));
+			ts.push(new Pt((t.clientX - left) * scaleX, (t.clientY - top) * scaleY));
 		}
 		return ts;
 	}
 	_mouseAction(type, evt) {
 		if (!this.isPlaying) return;
-		const topLeft = this.bound.topLeft;
+		const [left, top, scaleX, scaleY] = this._inputTransform();
 		let px = 0, py = 0;
 		if (evt instanceof MouseEvent) {
-			px = evt.pageX - topLeft.x;
-			py = evt.pageY - topLeft.y;
+			px = (evt.clientX - left) * scaleX;
+			py = (evt.clientY - top) * scaleY;
 		} else {
 			const touch = evt.changedTouches && evt.changedTouches.length > 0 ? evt.changedTouches.item(0) : null;
 			if (touch) {
-				px = touch.pageX - topLeft.x;
-				py = touch.pageY - topLeft.y;
+				px = (touch.clientX - left) * scaleX;
+				py = (touch.clientY - top) * scaleY;
 			}
 		}
 		if (type) {

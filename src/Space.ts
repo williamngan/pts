@@ -628,6 +628,29 @@ export abstract class MultiTouchSpace extends Space {
     return this;
   }
 
+  // Input is relative to the rendered element, not a cached container position
+  // or the event target (which may be an overlay). Read once per event.
+  private _inputTransform(): [number, number, number, number] {
+    if (typeof Element !== "undefined" && this._canvas instanceof Element) {
+      const rect = this._canvas.getBoundingClientRect();
+      return [
+        rect.left,
+        rect.top,
+        rect.width ? this.width / rect.width : 1,
+        rect.height ? this.height / rect.height : 1,
+      ];
+    }
+    // Non-DOM subclasses may supply their own EventTarget and explicit bounds.
+    return [
+      this.bound.topLeft.x -
+        (typeof window === "undefined" ? 0 : window.scrollX),
+      this.bound.topLeft.y -
+        (typeof window === "undefined" ? 0 : window.scrollY),
+      1,
+      1,
+    ];
+  }
+
   /**
    * A convenient method to convert the touch points in a touch event to an array of Pts.
    * @param evt a touch event which contains touches, changedTouches, and targetTouches list
@@ -637,11 +660,10 @@ export abstract class MultiTouchSpace extends Space {
   touchesToPoints(evt: TouchEvent, which: TouchPointsKey = "touches"): Pt[] {
     if (!evt || !evt[which]) return [];
     const ts = [];
+    const [left, top, scaleX, scaleY] = this._inputTransform();
     for (let i = 0; i < evt[which].length; i++) {
       const t = evt[which].item(i)!;
-      ts.push(
-        new Pt(t.pageX - this.bound.topLeft.x, t.pageY - this.bound.topLeft.y),
-      );
+      ts.push(new Pt((t.clientX - left) * scaleX, (t.clientY - top) * scaleY));
     }
     return ts;
   }
@@ -660,21 +682,21 @@ export abstract class MultiTouchSpace extends Space {
 
     // compute the event position once — not per player, and independent of
     // whether any player is registered (the pointer must track regardless)
-    const topLeft = this.bound.topLeft;
+    const [left, top, scaleX, scaleY] = this._inputTransform();
     let px = 0,
       py = 0;
 
     if (evt instanceof MouseEvent) {
-      px = evt.pageX - topLeft.x;
-      py = evt.pageY - topLeft.y;
+      px = (evt.clientX - left) * scaleX;
+      py = (evt.clientY - top) * scaleY;
     } else {
       const touch =
         evt.changedTouches && evt.changedTouches.length > 0
           ? evt.changedTouches.item(0)
           : null;
       if (touch) {
-        px = touch.pageX - topLeft.x;
-        py = touch.pageY - topLeft.y;
+        px = (touch.clientX - left) * scaleX;
+        py = (touch.clientY - top) * scaleY;
       }
     }
 

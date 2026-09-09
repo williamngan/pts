@@ -22,7 +22,8 @@ const bounds = (width = 200, height = 100) =>
 function host() {
   const element = document.createElement("div");
   element.id = `canvas-host-${Math.random().toString(36).slice(2)}`;
-  element.getBoundingClientRect = () => bounds();
+  element.style.cssText =
+    "position:absolute;left:10px;top:20px;width:200px;height:100px";
   document.body.appendChild(element);
   return element;
 }
@@ -181,8 +182,8 @@ describe("CanvasSpace and Space interaction", () => {
       length: 2,
       item: (index: number) =>
         [
-          { pageX: 20, pageY: 40 },
-          { pageX: 30, pageY: 50 },
+          { clientX: 20, clientY: 40 },
+          { clientX: 30, clientY: 50 },
         ][index],
     };
     expect(

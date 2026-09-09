@@ -1,30 +1,19 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { CanvasSpace } from "../../Canvas";
+import { SVGSpace } from "../../Svg";
 import { UIButton } from "../../UI";
-
-const bounds = (width = 200, height = 100) =>
-  ({
-    x: 10,
-    y: 20,
-    top: 20,
-    left: 10,
-    right: 10 + width,
-    bottom: 20 + height,
-    width,
-    height,
-    toJSON: () => ({}),
-  }) as DOMRect;
 
 function host() {
   const element = document.createElement("div");
   element.id = `space-host-${Math.random().toString(36).slice(2)}`;
-  element.getBoundingClientRect = () => bounds();
+  element.style.cssText =
+    "position:absolute;left:10px;top:20px;width:200px;height:100px";
   document.body.appendChild(element);
   return element;
 }
 
-async function ready(space: CanvasSpace) {
+async function ready(space: CanvasSpace | SVGSpace) {
   if (space.ready) return;
   await new Promise<void>((resolve) => {
     space.element.addEventListener("ready", () => resolve(), { once: true });
@@ -147,6 +136,84 @@ describe("Space animation loop", () => {
 });
 
 describe("MultiTouchSpace dispatch", () => {
+  it.each([
+    { name: "Canvas", SpaceType: CanvasSpace },
+    { name: "SVG", SpaceType: SVGSpace },
+  ])(
+    "uses current element coordinates after layout, scroll, and scale changes ($name)",
+    async ({ SpaceType }) => {
+      const container = document.createElement("div");
+      container.style.cssText =
+        "position:absolute;left:10px;top:20px;width:200px;height:100px";
+      document.body.appendChild(container);
+      const space = new SpaceType(container).setup({ resize: false });
+      await ready(space);
+      // Deliberately bind to an overlay whose position differs from the space.
+      const overlay = document.createElement("div");
+      document.body.appendChild(overlay);
+      space.bindMouse(true, overlay).bindTouch(true, false, overlay).play(10);
+      const action = vi.fn();
+      space.add({ animate: () => {}, action });
+      const move = () => {
+        const rect = space.element.getBoundingClientRect();
+        const clientX = rect.left + (20 * rect.width) / space.width;
+        const clientY = rect.top + (30 * rect.height) / space.height;
+        overlay.dispatchEvent(
+          new PointerEvent("pointermove", { clientX, clientY }),
+        );
+        expect(Array.from(space.pointer)).toEqual([20, 30]);
+        expect(action).toHaveBeenLastCalledWith(
+          "move",
+          20,
+          30,
+          expect.any(PointerEvent),
+        );
+        const touch = new Touch({
+          identifier: 1,
+          target: overlay,
+          clientX,
+          clientY,
+          pageX: clientX + window.scrollX,
+          pageY: clientY + window.scrollY,
+        });
+        const event = new TouchEvent("touchmove", {
+          touches: [touch],
+          changedTouches: [touch],
+          targetTouches: [touch],
+        });
+        for (const list of [
+          "touches",
+          "changedTouches",
+          "targetTouches",
+        ] as const) {
+          expect(
+            space.touchesToPoints(event, list).map((p) => Array.from(p)),
+          ).toEqual([[20, 30]]);
+        }
+        overlay.dispatchEvent(event);
+        expect(Array.from(space.pointer)).toEqual([20, 30]);
+      };
+      try {
+        move();
+        container.style.top = "170px"; // no size change or resize callback
+        move();
+        container.style.transformOrigin = "top left";
+        container.style.transform = "translate(30px, 40px) scale(2, 1.5)";
+        move();
+        document.body.style.minHeight = "3000px";
+        window.scrollTo(0, 100);
+        expect(window.scrollY).toBe(100);
+        move();
+        container.style.position = "fixed";
+        move();
+      } finally {
+        space.dispose();
+        window.scrollTo(0, 0);
+        document.body.style.minHeight = "";
+      }
+    },
+  );
+
   it("prevents default on non-passive touch but never on passive", async () => {
     const space = new CanvasSpace(host()).setup({ retina: false });
     await ready(space);

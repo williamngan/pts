@@ -536,6 +536,7 @@ declare abstract class MultiTouchSpace extends Space {
   removeAll(): this;
   track(uis: UI | UI[]): this;
   untrack(uis?: UI | UI[]): this;
+  private _inputTransform;
   touchesToPoints(evt: TouchEvent, which?: TouchPointsKey): Pt[];
   protected _mouseAction(type: string, evt: MouseEvent | TouchEvent | PointerEvent): void;
   private _isTouchHandled;
