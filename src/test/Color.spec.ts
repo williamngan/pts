@@ -13,6 +13,17 @@ function expectColor(
 }
 
 describe("Color construction and representation", () => {
+  it("converts HSL before formatting the documented rendering example", () => {
+    const color = Color.hsl(268, 0.37, 0.51);
+    const original = Array.from(color);
+    const rgb = Color.HSLtoRGB(color);
+    expect(rgb.rgb).toBe("rgb(126,83,176)");
+    expect(rgb.hex).toBe("#7e53b0");
+    expect(rgb.rgba).toBe("rgba(126,83,176,1)");
+    expect(color.mode).toBe("hsl");
+    expect(Array.from(color)).toEqual(original);
+  });
+
   it("constructs from partial values and every supported mode", () => {
     expectColor(Color.from(10, 20), [10, 20, 1, 1]);
     const constructors = {

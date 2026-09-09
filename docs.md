@@ -1184,11 +1184,12 @@ space.setup({ bgcolor: "#f00", retina: true, resize: true })
 <a id="color-color"></a>
 ### `Color`
 
-**Kind:** Class · **Source:** [`src/Color.ts:11`](https://github.com/williamngan/pts/blob/master/src/Color.ts#L11)
+**Kind:** Class · **Source:** [`src/Color.ts:17`](https://github.com/williamngan/pts/blob/master/src/Color.ts#L17)
 
 **Extends:** `Pt`
 
 Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.
+Convert non-RGB colors to RGB before using `.hex`, `.rgb`, or `.rgba` for rendering. These getters format the channels; they don't convert between color spaces.
 
 #### Constructors
 
@@ -1279,6 +1280,7 @@ get hex(): string
 ```
 
 Get a hex string such as "#FF0000". Same as `toString("hex")`.
+For non-RGB colors, convert to RGB first.
 
 <a id="color-color-l"></a>
 ##### `l`
@@ -1329,6 +1331,7 @@ get rgb(): string
 ```
 
 Get a rgb string such as "rgb(255,0,0)". Same as `toString("rgb")`.
+For non-RGB colors, convert to RGB first, eg `Color.HSLtoRGB(color).rgb`.
 
 <a id="color-color-rgba"></a>
 ##### `rgba`
@@ -1339,7 +1342,8 @@ Get a rgb string such as "rgb(255,0,0)". Same as `toString("rgb")`.
 get rgba(): string
 ```
 
-Get a rgba string such as "rgb(255,0,0,0.5)". Same as `toString("rgba")`.
+Get a rgba string such as "rgba(255,0,0,0.5)". Same as `toString("rgba")`.
+For non-RGB colors, convert to RGB first.
 
 <a id="color-color-s"></a>
 ##### `s`
@@ -1436,6 +1440,7 @@ toString(format: rgb | rgba | hex | mode = "mode"): string
 ```
 
 Convert this Color to a string. It can be used to get a hex or rgb string for use in rendering.
+This formats the current channels without converting color spaces. Convert to RGB before requesting "hex", "rgb", or "rgba". The default "mode" format is for inspecting values, not for CSS rendering.
 
 **Parameters**
 

@@ -3,19 +3,19 @@
   "source": [
     [
       "src/Color.ts",
-      11,
+      17,
       13
     ]
   ],
   "kind": "Class",
-  "comment": "Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.",
+  "comment": "Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.\nConvert non-RGB colors to RGB before using `.hex`, `.rgb`, or `.rgba` for rendering. These getters format the channels; they don't convert between color spaces.",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
           "src/Color.ts",
-          37,
+          43,
           2
         ]
       ],
@@ -46,12 +46,12 @@
       "source": [
         [
           "src/Color.ts",
-          313,
+          322,
           6
         ],
         [
           "src/Color.ts",
-          316,
+          325,
           6
         ]
       ],
@@ -77,12 +77,12 @@
       "source": [
         [
           "src/Color.ts",
-          353,
+          362,
           6
         ],
         [
           "src/Color.ts",
-          356,
+          365,
           6
         ]
       ],
@@ -108,12 +108,12 @@
       "source": [
         [
           "src/Color.ts",
-          269,
+          278,
           6
         ],
         [
           "src/Color.ts",
-          272,
+          281,
           6
         ]
       ],
@@ -139,12 +139,12 @@
       "source": [
         [
           "src/Color.ts",
-          323,
+          332,
           6
         ],
         [
           "src/Color.ts",
-          326,
+          335,
           6
         ]
       ],
@@ -170,12 +170,12 @@
       "source": [
         [
           "src/Color.ts",
-          259,
+          268,
           6
         ],
         [
           "src/Color.ts",
-          262,
+          271,
           6
         ]
       ],
@@ -201,12 +201,12 @@
       "source": [
         [
           "src/Color.ts",
-          280,
+          289,
           6
         ],
         [
           "src/Color.ts",
-          283,
+          292,
           6
         ]
       ],
@@ -232,7 +232,7 @@
       "source": [
         [
           "src/Color.ts",
-          160,
+          167,
           13
         ]
       ],
@@ -241,7 +241,7 @@
       },
       "overrides": false,
       "inherits": false,
-      "comment": "Get a hex string such as \"#FF0000\". Same as `toString(\"hex\")`.",
+      "comment": "Get a hex string such as \"#FF0000\". Same as `toString(\"hex\")`.\nFor non-RGB colors, convert to RGB first.",
       "getter": {
         "type": "string"
       },
@@ -283,12 +283,12 @@
       "source": [
         [
           "src/Color.ts",
-          301,
+          310,
           6
         ],
         [
           "src/Color.ts",
-          304,
+          313,
           6
         ]
       ],
@@ -314,7 +314,7 @@
       "source": [
         [
           "src/Color.ts",
-          241,
+          250,
           6
         ]
       ],
@@ -332,12 +332,12 @@
       "source": [
         [
           "src/Color.ts",
-          363,
+          372,
           6
         ],
         [
           "src/Color.ts",
-          366,
+          375,
           6
         ]
       ],
@@ -363,12 +363,12 @@
       "source": [
         [
           "src/Color.ts",
-          249,
+          258,
           6
         ],
         [
           "src/Color.ts",
-          252,
+          261,
           6
         ]
       ],
@@ -394,7 +394,7 @@
       "source": [
         [
           "src/Color.ts",
-          167,
+          175,
           13
         ]
       ],
@@ -403,7 +403,7 @@
       },
       "overrides": false,
       "inherits": false,
-      "comment": "Get a rgb string such as \"rgb(255,0,0)\". Same as `toString(\"rgb\")`.",
+      "comment": "Get a rgb string such as \"rgb(255,0,0)\". Same as `toString(\"rgb\")`.\nFor non-RGB colors, convert to RGB first, eg `Color.HSLtoRGB(color).rgb`.",
       "getter": {
         "type": "string"
       },
@@ -414,7 +414,7 @@
       "source": [
         [
           "src/Color.ts",
-          174,
+          183,
           13
         ]
       ],
@@ -423,7 +423,7 @@
       },
       "overrides": false,
       "inherits": false,
-      "comment": "Get a rgba string such as \"rgb(255,0,0,0.5)\". Same as `toString(\"rgba\")`.",
+      "comment": "Get a rgba string such as \"rgba(255,0,0,0.5)\". Same as `toString(\"rgba\")`.\nFor non-RGB colors, convert to RGB first.",
       "getter": {
         "type": "string"
       },
@@ -434,12 +434,12 @@
       "source": [
         [
           "src/Color.ts",
-          291,
+          300,
           6
         ],
         [
           "src/Color.ts",
-          294,
+          303,
           6
         ]
       ],
@@ -465,12 +465,12 @@
       "source": [
         [
           "src/Color.ts",
-          333,
+          342,
           6
         ],
         [
           "src/Color.ts",
-          336,
+          345,
           6
         ]
       ],
@@ -496,12 +496,12 @@
       "source": [
         [
           "src/Color.ts",
-          343,
+          352,
           6
         ],
         [
           "src/Color.ts",
-          346,
+          355,
           6
         ]
       ],
@@ -951,7 +951,7 @@
       "source": [
         [
           "src/Color.ts",
-          395,
+          404,
           2
         ]
       ],
@@ -1284,7 +1284,7 @@
       "source": [
         [
           "src/Color.ts",
-          181,
+          190,
           2
         ]
       ],
@@ -1929,7 +1929,7 @@
       "source": [
         [
           "src/Color.ts",
-          374,
+          383,
           2
         ]
       ],
@@ -2790,7 +2790,7 @@
       "source": [
         [
           "src/Color.ts",
-          224,
+          233,
           2
         ]
       ],
@@ -2825,7 +2825,7 @@
       "source": [
         [
           "src/Color.ts",
-          403,
+          413,
           2
         ]
       ],
@@ -2834,7 +2834,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Convert this Color to a string. It can be used to get a hex or rgb string for use in rendering.",
+          "comment": "Convert this Color to a string. It can be used to get a hex or rgb string for use in rendering.\nThis formats the current channels without converting color spaces. Convert to RGB before requesting \"hex\", \"rgb\", or \"rgba\". The default \"mode\" format is for inspecting values, not for CSS rendering.",
           "returns": "string",
           "returns_comment": false,
           "parameters": [
@@ -2905,7 +2905,7 @@
       "source": [
         [
           "src/Color.ts",
-          45,
+          51,
           9
         ]
       ],
@@ -2936,7 +2936,7 @@
       "source": [
         [
           "src/Color.ts",
-          58,
+          64,
           9
         ]
       ],
@@ -2967,7 +2967,7 @@
       "source": [
         [
           "src/Color.ts",
-          96,
+          102,
           9
         ]
       ],
@@ -2998,7 +2998,7 @@
       "source": [
         [
           "src/Color.ts",
-          556,
+          566,
           9
         ]
       ],
@@ -3041,7 +3041,7 @@
       "source": [
         [
           "src/Color.ts",
-          88,
+          94,
           9
         ]
       ],
@@ -3072,7 +3072,7 @@
       "source": [
         [
           "src/Color.ts",
-          471,
+          481,
           9
         ]
       ],
@@ -3115,7 +3115,7 @@
       "source": [
         [
           "src/Color.ts",
-          104,
+          110,
           9
         ]
       ],
@@ -3146,7 +3146,7 @@
       "source": [
         [
           "src/Color.ts",
-          909,
+          919,
           9
         ]
       ],
@@ -3189,7 +3189,7 @@
       "source": [
         [
           "src/Color.ts",
-          611,
+          621,
           9
         ]
       ],
@@ -3232,7 +3232,7 @@
       "source": [
         [
           "src/Color.ts",
-          793,
+          803,
           9
         ]
       ],
@@ -3275,7 +3275,7 @@
       "source": [
         [
           "src/Color.ts",
-          112,
+          118,
           9
         ]
       ],
@@ -3306,7 +3306,7 @@
       "source": [
         [
           "src/Color.ts",
-          932,
+          942,
           9
         ]
       ],
@@ -3349,7 +3349,7 @@
       "source": [
         [
           "src/Color.ts",
-          643,
+          653,
           9
         ]
       ],
@@ -3392,7 +3392,7 @@
       "source": [
         [
           "src/Color.ts",
-          120,
+          126,
           9
         ]
       ],
@@ -3423,7 +3423,7 @@
       "source": [
         [
           "src/Color.ts",
-          675,
+          685,
           9
         ]
       ],
@@ -3466,7 +3466,7 @@
       "source": [
         [
           "src/Color.ts",
-          866,
+          876,
           9
         ]
       ],
@@ -3552,7 +3552,7 @@
       "source": [
         [
           "src/Color.ts",
-          153,
+          159,
           9
         ]
       ],
@@ -3588,7 +3588,7 @@
       "source": [
         [
           "src/Color.ts",
-          136,
+          142,
           9
         ]
       ],
@@ -3619,7 +3619,7 @@
       "source": [
         [
           "src/Color.ts",
-          1061,
+          1071,
           9
         ]
       ],
@@ -3662,7 +3662,7 @@
       "source": [
         [
           "src/Color.ts",
-          988,
+          998,
           9
         ]
       ],
@@ -3705,7 +3705,7 @@
       "source": [
         [
           "src/Color.ts",
-          144,
+          150,
           9
         ]
       ],
@@ -3736,7 +3736,7 @@
       "source": [
         [
           "src/Color.ts",
-          1084,
+          1094,
           9
         ]
       ],
@@ -3779,7 +3779,7 @@
       "source": [
         [
           "src/Color.ts",
-          1045,
+          1055,
           9
         ]
       ],
@@ -3822,7 +3822,7 @@
       "source": [
         [
           "src/Color.ts",
-          80,
+          86,
           9
         ]
       ],
@@ -3853,7 +3853,7 @@
       "source": [
         [
           "src/Color.ts",
-          520,
+          530,
           9
         ]
       ],
@@ -3896,7 +3896,7 @@
       "source": [
         [
           "src/Color.ts",
-          429,
+          439,
           9
         ]
       ],
@@ -3939,7 +3939,7 @@
       "source": [
         [
           "src/Color.ts",
-          595,
+          605,
           9
         ]
       ],
@@ -3982,7 +3982,7 @@
       "source": [
         [
           "src/Color.ts",
-          627,
+          637,
           9
         ]
       ],
@@ -4025,7 +4025,7 @@
       "source": [
         [
           "src/Color.ts",
-          659,
+          669,
           9
         ]
       ],
@@ -4068,7 +4068,7 @@
       "source": [
         [
           "src/Color.ts",
-          955,
+          965,
           9
         ]
       ],
@@ -4111,7 +4111,7 @@
       "source": [
         [
           "src/Color.ts",
-          1029,
+          1039,
           9
         ]
       ],
@@ -4154,7 +4154,7 @@
       "source": [
         [
           "src/Color.ts",
-          691,
+          701,
           9
         ]
       ],
@@ -4197,7 +4197,7 @@
       "source": [
         [
           "src/Color.ts",
-          128,
+          134,
           9
         ]
       ],
@@ -4228,7 +4228,7 @@
       "source": [
         [
           "src/Color.ts",
-          762,
+          772,
           9
         ]
       ],
@@ -4271,7 +4271,7 @@
       "source": [
         [
           "src/Color.ts",
-          827,
+          837,
           9
         ]
       ],
@@ -4314,7 +4314,7 @@
       "source": [
         [
           "src/Color.ts",
-          721,
+          731,
           9
         ]
       ],
@@ -4445,7 +4445,7 @@
       "source": [
         [
           "src/Color.ts",
-          21,
+          27,
           9
         ]
       ],
