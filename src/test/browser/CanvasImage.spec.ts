@@ -42,6 +42,35 @@ afterEach(() => {
 });
 
 describe("CanvasSpace and Space interaction", () => {
+  it.each([undefined, null, ""])(
+    "creates the documented default canvas for %s",
+    async (input) => {
+      const callback = vi.fn();
+      const space = new CanvasSpace(input, callback).setup({ retina: false });
+      await ready(space);
+      expect(space.id).toBe("pt");
+      expect(space.element).toBe(
+        document.querySelector("#pt_container > canvas#pt"),
+      );
+      expect(callback).toHaveBeenCalledOnce();
+      expect(callback).toHaveBeenCalledWith(expect.any(Bound), space.element);
+      space.dispose();
+      expect(document.getElementById("pt_container")).toBeNull();
+    },
+  );
+
+  it("allows omitting the argument and reuses an existing default canvas", async () => {
+    const canvas = document.createElement("canvas");
+    canvas.id = "pt";
+    document.body.appendChild(canvas);
+    const space = new CanvasSpace();
+    await ready(space);
+    expect(space.element).toBe(canvas);
+    expect(document.querySelectorAll("#pt")).toHaveLength(1);
+    space.dispose();
+    expect(canvas.isConnected).toBe(true);
+  });
+
   it("removes owned canvases on disposal without removing caller-owned hosts", async () => {
     const container = host();
     const sibling = document.createElement("span");

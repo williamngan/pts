@@ -52,7 +52,7 @@ export class CanvasSpace extends MultiTouchSpace {
    * @example `new CanvasSpace( "#myElementID" )`
    */
   constructor(
-    elem: string | Element,
+    elem: string | Element | null = "pt",
     callback?: (bound: Bound, elem: EventTarget) => void,
   ) {
     super();
@@ -66,8 +66,8 @@ export class CanvasSpace extends MultiTouchSpace {
       _selector = elem;
       this.id = _selector.id || this.id;
     } else {
-      let id = <string>elem;
-      id = elem[0] === "#" || elem[0] === "." ? elem : "#" + elem;
+      const target = elem || "pt";
+      const id = target[0] === "#" || target[0] === "." ? target : "#" + target;
       _selector = document.querySelector(id);
       this.id = id.substr(1);
     }

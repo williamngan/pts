@@ -4066,7 +4066,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 		CanvasSpace: () => CanvasSpace
 	});
 	var CanvasSpace = class extends MultiTouchSpace {
-		constructor(elem, callback) {
+		constructor(elem = "pt", callback) {
 			super();
 			this._pixelScale = 1;
 			this._bgcolor = "#e1e9f0";
@@ -4083,8 +4083,8 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 				_selector = elem;
 				this.id = _selector.id || this.id;
 			} else {
-				let id = elem;
-				id = elem[0] === "#" || elem[0] === "." ? elem : "#" + elem;
+				const target = elem || "pt";
+				const id = target[0] === "#" || target[0] === "." ? target : "#" + target;
 				_selector = document.querySelector(id);
 				this.id = id.substr(1);
 			}

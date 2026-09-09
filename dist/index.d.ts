@@ -688,7 +688,7 @@ declare class CanvasSpace extends MultiTouchSpace {
   private _disposed;
   private _ownsCanvas;
   private _ownsContainer;
-  constructor(elem: string | Element, callback?: (bound: Bound, elem: EventTarget) => void);
+  constructor(elem?: string | Element | null, callback?: (bound: Bound, elem: EventTarget) => void);
   protected _createElement(elem: string | undefined, id: string): HTMLElement;
   private _ready;
   setup(opt: CanvasSpaceOptions): this;

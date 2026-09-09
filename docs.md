@@ -928,14 +928,14 @@ Learn more about the concept of Space in [this guide](https://ptsjs.org/guide/Sp
 ##### Constructor
 
 ```ts
-new CanvasSpace(elem: string | Element, callback:  Fn(bound:Bound, elem:EventTarget)): CanvasSpace
+new CanvasSpace(elem: string | Element | null = "pt", callback:  Fn(bound:Bound, elem:EventTarget)): CanvasSpace
 ```
 
 Create a CanvasSpace which represents a HTML Canvas Space
 
 **Parameters**
 
-- `elem` (`string | Element`) — Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<canvas>`, or a `<div>` container in which a new `<canvas>` will be created. If left empty, a `<div id="pt_container"><canvas id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
+- `elem` (`string | Element | null`; default `"pt"`) — Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<canvas>`, or a `<div>` container in which a new `<canvas>` will be created. If left empty, a `<div id="pt_container"><canvas id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
 - `callback` (` Fn(bound:Bound, elem:EventTarget)`) — an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a "ready" event will also be fired from the `<canvas>` element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener("ready")`
 
 **Example**

@@ -13,12 +13,20 @@ import type {
 import { type Bound, type Group, type Pt } from "../Pt";
 import type { Space } from "../Space";
 import type { UI, UIPointerAction } from "../UI";
+import type { CanvasSpace } from "../Canvas";
 
 // Type-level pins for the public type contract. These run under vitest's
 // typecheck mode: a change that breaks downstream consumers' compiles
 // fails here first.
 
 describe("public type contract", () => {
+  it("CanvasSpace accepts an omitted or empty mount", () => {
+    expectTypeOf<typeof CanvasSpace>().toBeConstructibleWith();
+    expectTypeOf<ConstructorParameters<typeof CanvasSpace>[0]>().toEqualTypeOf<
+      string | Element | null | undefined
+    >();
+  });
+
   it("PtLike accepts Pt, Float32Array, and number[]", () => {
     expectTypeOf<Pt>().toExtend<PtLike>();
     expectTypeOf<Float32Array>().toExtend<PtLike>();
