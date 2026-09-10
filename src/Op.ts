@@ -1019,6 +1019,9 @@ export class Triangle {
     let area = Polygon.area(_pts);
     let perim = Polygon.perimeter(_pts, true);
     let r = (2 * area) / perim.total;
+    // incenter can still resolve for some collinear orderings; a zero-area
+    // triangle has no incircle regardless of point order
+    if (!(r > 0)) return undefined;
     return Circle.fromCenter(c, r);
   }
 
