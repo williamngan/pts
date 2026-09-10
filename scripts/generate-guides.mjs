@@ -202,6 +202,32 @@ function renderMenu(guides) {
   return `<nav id="menu" aria-label="Guide chapters"><a id="close" href="#" aria-label="Close guide menu">&times;</a><ol>${links}</ol></nav>`;
 }
 
+// Guide pages that were published under these names before 1.0. Inbound links
+// from outside the site still resolve, to the page that replaced them.
+const movedPages = {
+  "Extensions-8000.html": "Ecosystem-8000.html",
+  "Technical-notes-9000.html": "Changelog-9100.html",
+};
+
+function renderRedirect(guide) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+\t<title>Pts</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="./${guide.output}">
+  <meta http-equiv="refresh" content="0; url=./${guide.output}">
+</head>
+
+<body>
+  <p>This page has moved. Continue to <a href="./${guide.output}">${escapeHtml(guide.title)}</a>.</p>
+</body>
+</html>
+`;
+}
+
 function renderIndex(firstGuide) {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -249,6 +275,15 @@ async function expectedOutputs() {
     outputs.set(guide.output, page);
   }
   outputs.set("index.html", renderIndex(guides[0]));
+  for (const [legacy, current] of Object.entries(movedPages)) {
+    const target = guides.find((guide) => guide.output === current);
+    assert.ok(
+      target,
+      `Moved page ${legacy} points at missing guide ${current}`,
+    );
+    assert.equal(outputs.has(legacy), false, `${legacy} is a current guide`);
+    outputs.set(legacy, renderRedirect(target));
+  }
   return { guides, outputs };
 }
 
