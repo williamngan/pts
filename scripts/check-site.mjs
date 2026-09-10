@@ -373,6 +373,29 @@ async function checkGuideChapterMenu() {
         await page.locator("#menu").evaluate((element) => element.inert),
         true,
       );
+      // ARIA state alone is not enough: the drawer used to stay painted
+      // because Chromium keeps :target matching after history.replaceState
+      await page.waitForFunction(
+        () => getComputedStyle(document.getElementById("menu")).left !== "0px",
+      );
+      assert.equal(
+        await menu.isVisible(),
+        false,
+        `drawer painted after Escape at ${width}px`,
+      );
+      await toc.click();
+      await page.waitForFunction(
+        () => getComputedStyle(document.getElementById("menu")).left === "0px",
+      );
+      await page.getByRole("link", { name: "Close guide menu" }).click();
+      await page.waitForFunction(
+        () => getComputedStyle(document.getElementById("menu")).left !== "0px",
+      );
+      assert.equal(
+        await menu.isVisible(),
+        false,
+        `drawer painted after close at ${width}px`,
+      );
     }
     for (const width of [1024, 1440]) {
       await page.setViewportSize({ width, height: 900 });
@@ -387,7 +410,7 @@ async function checkGuideChapterMenu() {
   } finally {
     await page.close();
   }
-  return "chapter labels fit at 320–768px, Escape restores focus, and desktop navigation stays accessible";
+  return "chapter labels fit at 320–768px, Escape and the close button hide the drawer, and desktop navigation stays accessible";
 }
 
 async function checkPoseNetIsRetired() {

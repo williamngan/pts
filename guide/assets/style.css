@@ -698,7 +698,11 @@ p {
     text-decoration: none;
   }
 
-  #menu:target {
+  /* The menu opens via the #menu hash without JavaScript; with JavaScript, the
+     `open` class is the only authority (Chromium keeps :target matching after
+     history.replaceState, so the class must win once scripts run). */
+  #menu.open,
+  html:not(.js) #menu:target {
     visibility: visible;
     background: #42e;
     transition: left 0.3s;

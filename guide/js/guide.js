@@ -32,12 +32,14 @@ Pts.namespace(this);
   const toc = document.getElementById("toc");
   const close = document.getElementById("close");
   if (menu && toc && close) {
+    document.documentElement.classList.add("js");
     let previousHash = location.hash === "#menu" ? "" : location.hash;
     const syncMenu = function () {
       const mobile = getComputedStyle(toc).display !== "none";
       const open = mobile && location.hash === "#menu";
       toc.setAttribute("aria-expanded", String(open));
       toc.setAttribute("aria-controls", "menu");
+      menu.classList.toggle("open", open);
       menu.inert = mobile && !open;
       menu.setAttribute("aria-hidden", String(mobile && !open));
       if (open) close.focus({ preventScroll: true });
