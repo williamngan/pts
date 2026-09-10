@@ -114,6 +114,22 @@ describe("CanvasForm rendering pins", () => {
     expect(fresh).toBe(14);
   });
 
+  it("maps box alignments to canvas baselines in textBox", () => {
+    const { form } = makeForm();
+    const box = Group.fromArray([
+      [0, 0],
+      [100, 50],
+    ]);
+    form.textBox(box, "hi", "center");
+    expect(form.ctx.textBaseline).toBe("middle");
+    form.textBox(box, "hi", "start");
+    expect(form.ctx.textBaseline).toBe("top");
+    form.textBox(box, "hi", "end");
+    expect(form.ctx.textBaseline).toBe("bottom");
+    form.textBox(box, "hi", "bottom");
+    expect(form.ctx.textBaseline).toBe("bottom");
+  });
+
   it("fills a paragraph box to its exact line capacity", () => {
     const { form, calls } = makeForm();
     form.font(10);

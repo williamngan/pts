@@ -1502,8 +1502,18 @@ export class CanvasForm<
     tail: string = "",
     overrideBaseline: boolean = true,
   ): this {
-    // @ts-expect-error legacy DOM lib types omit these vendor/optional members
-    if (overrideBaseline) this._ctx.textBaseline = verticalAlign;
+    // "center", "start", and "end" are box alignments, not canvas baselines;
+    // assigning them to textBaseline is silently ignored by the context
+    if (overrideBaseline) {
+      this._ctx.textBaseline =
+        verticalAlign === "center"
+          ? "middle"
+          : verticalAlign === "start"
+            ? "top"
+            : verticalAlign === "end"
+              ? "bottom"
+              : verticalAlign;
+    }
     const size = Rectangle.size(box);
     const t = this._textTruncate(txt, size[0], tail);
     this.text(this._textAlign(box, verticalAlign)!, t[0]);
