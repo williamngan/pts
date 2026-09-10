@@ -229,6 +229,31 @@ describe("HTMLSpace and HTMLForm", () => {
     expect(parent.contains(space.element)).toBe(true);
   });
 
+  it("keeps two forms scoped to one player apart, even when created late", async () => {
+    const { element } = mount();
+    const space = new HTMLSpace(element);
+    const player = {
+      animate: vi.fn(),
+      animateID: undefined as unknown as string,
+    };
+    space.add(player);
+    const first = space.getForm() as HTMLForm;
+    await ready(space);
+    // a form created after readiness initializes immediately instead of
+    // waiting for a start callback that will never run
+    const second = space.getForm() as HTMLForm;
+    first.scope(player);
+    first.fill("#f00").circle([
+      [20, 20],
+      [5, 5],
+    ]);
+    second.scope(player);
+    expect(() => second.fill("#00f").text([5, 70], "hello")).not.toThrow();
+    expect(element.querySelectorAll(".pts-form")).toHaveLength(2);
+    expect(element.textContent).toContain("hello");
+    space.dispose();
+  });
+
   it("exercises the static style and drawing helpers", () => {
     const group = document.createElement("div");
     document.body.appendChild(group);

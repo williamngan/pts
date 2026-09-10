@@ -467,6 +467,7 @@ export class HTMLForm extends VisualForm {
 
   protected _space: HTMLSpace;
   protected _ready: boolean = false;
+  protected _formID: number = 0;
 
   /**
    * Create a new `HTMLForm`. Alternatively, you can use [`HTMLSpace.getForm`](#link) function to get an instance of HTMLForm.
@@ -475,15 +476,18 @@ export class HTMLForm extends VisualForm {
   constructor(space: HTMLSpace) {
     super();
     this._space = space;
+    this._formID = HTMLForm.groupID++;
 
-    this._space.add({
-      start: () => {
-        this._ctx.group = this._space.element;
-        this._ctx.groupID = "pts_dom_" + HTMLForm.groupID++;
-        this._ctx.style = Object.assign({}, this._style);
-        this._ready = true;
-      },
-    });
+    const init = () => {
+      this._ctx.group = this._space.element;
+      this._ctx.groupID = `pts_dom_${this._formID}`;
+      this._ctx.style = Object.assign({}, this._style);
+      this._ready = true;
+    };
+    // a form created after the space is ready would otherwise never
+    // initialize, since start callbacks only run at readiness
+    if (this._space.ready) init();
+    else this._space.add({ start: init });
   }
 
   /**
@@ -645,7 +649,11 @@ export class HTMLForm extends VisualForm {
   scope(item: IPlayer) {
     if (!item || item.animateID == null)
       throw new Error("item not defined or not yet added to Space");
-    return this.updateScope(HTMLForm.scopeID(item), this.space.element);
+    // two forms scoped to the same player must not generate the same ids
+    return this.updateScope(
+      `${HTMLForm.scopeID(item)}-f${this._formID}`,
+      this.space.element,
+    );
   }
 
   /**

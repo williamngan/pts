@@ -985,6 +985,7 @@ const _legacyStyleKeys: Record<string, string> = {
 export class SVGForm extends CanvasForm<SVGSpace> {
   protected _svgSpace: SVGSpace;
   protected _svgCtx: SVGContext2D;
+  protected _formID: number = _svgFormGroupID++;
 
   protected _legacyCtx: DOMFormContext = {
     group: null,
@@ -1137,7 +1138,11 @@ export class SVGForm extends CanvasForm<SVGSpace> {
   scope(item: IPlayer) {
     if (!item || item.animateID == null)
       throw new Error("item not defined or not yet added to Space");
-    return this.updateScope(SVGForm.scopeID(item), this._svgSpace.element);
+    // two forms scoped to the same player must not generate the same ids
+    return this.updateScope(
+      `${SVGForm.scopeID(item)}-f${this._formID}`,
+      this._svgSpace.element,
+    );
   }
 
   /**
