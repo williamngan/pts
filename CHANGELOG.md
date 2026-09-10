@@ -28,11 +28,22 @@ review pass live in the `plans/` directory.
 - `Img.load(url)` now returns `Promise<Img>`, not an immediately available
   `Img`. Use `const img = await Img.load(url)` or `.then(...)`. To retain an
   instance while loading, use `const img = new Img(); await img.load(url)`.
-- `SVGForm.styleTo` and `SVGForm.log` are no longer available. Use the form's
-  `fill`, `stroke`, `alpha`, and `font` methods for styles, and
-  `form.text([10, 14], message)` for a debug label. Original static drawing
-  names still accept legacy DOM contexts; the explicit `*Element` names
-  are also available, for example `SVGForm.circleElement(ctx, pt, radius)`.
+- The static helpers `SVGForm.styleTo` and `SVGForm.log` are no longer
+  available. Use the form's `fill`, `stroke`, `alpha`, and `font` methods for
+  styles, and `form.log(message)` or `form.text([10, 14], message)` for a
+  debug label. Original static drawing names still accept legacy DOM
+  contexts; the explicit `*Element` names are also available, for example
+  `SVGForm.circleElement(ctx, pt, radius)`.
+- `SVGForm` now extends `CanvasForm` (which became generic in its space
+  type) and inherits its full drawing API. `SVGForm` fills accept the same
+  values as `CanvasForm`, but SVG output supports only colors and
+  gradients; a `CanvasPattern` fill warns once and renders as none.
+- `Pts.quickStart(id)` creates an `SVGSpace` when the target is, or
+  contains, an `<svg>` element; it still creates a `CanvasSpace` otherwise.
+- `Img.sync()` returns `Promise<Img>` (was `void`).
+- The package `exports` map exposes `pts`, `pts/dist/*`, and
+  `pts/package.json` only. Deep imports of `pts/src/...` are no longer
+  resolvable; import from `pts`.
 - SVG supports a subset of Canvas drawing. Clipping, image-data writes,
   source-cropped image drawing, canvas offscreen buffers, and Porter-Duff
   composites require Canvas output. See the Space guide for details.
@@ -54,6 +65,28 @@ the buggy output will see different (correct) values:
   `TypeError`.
 - `Bound.update()` recomputes from the existing corner Pts in place; it
   no longer replaces them with fresh Pt instances.
+- `Num.mapToRange` and `Range.mapTo` map a reversed target range
+  directionally instead of sorting it: `Num.mapToRange(2, 0, 10, 100, 0)`
+  is now 80 (was 20), so `range.mapTo(height, 0)` flips an axis as
+  written. Values outside the source range are no longer clamped.
+  (`Num.normalizeValue` still reorients its range.)
+- Geometry fixes that change numbers: `Line.collinear` uses a
+  sine-of-angle threshold (a point 0.4 off a unit segment is no longer
+  collinear); `Circle.toRect(c, true)` returns the inscribed square
+  (half-side `r/√2`, was `r/2`); `Geom.isPerpendicular` uses a relative
+  epsilon instead of exact zero; `Mat.scale2D([0, s])` and
+  `Mat.shear2D([s, 0])` honor a zero component; the `Bound.center` setter
+  no longer double-applies its offset; `Rectangle.boundingBox` returns
+  real values; `Group.moveTo` on an empty group is a no-op.
+- Delaunay triangulation is a port of Delaunator (see
+  `THIRD-PARTY-NOTICES.txt`): triangle order and tie-breaking on
+  cocircular inputs differ from 0.12. `Delaunay.voronoi(bound?)` accepts
+  a bound and constructs complete hull cells; fewer than three or
+  collinear sites yield empty cells instead of throwing.
+- Sound: every `Sound` shares one `AudioContext` (0.12 created one per
+  instance), so closing a sound's `ctx` silences all sounds — use
+  `sound.stop()` / `sound.dispose()` instead. `Sound.load` rejects with
+  an `Error` rather than a string. `Sound.createBuffer` is public.
 - Perlin noise (`Create.noise2D`, `noisePts`) is fixed — the old
   gradient hash skipped the permutation table, producing exact
   period-12 repetition. Same API and seeding, different (correct)
@@ -101,8 +134,7 @@ always did:
 - Functions that could always return `undefined` now say so. Affected:
   `Line.slope`, `Line.intercept`, `Line.perpendicularFromPt`,
   `Line.intersectRay2D`, `Line.intersectLine2D`,
-  `Line.intersectLineWithRay2D`, `Line.crop`,
-  `Rectangle.intersectRay2D`, `Polygon.intersectPolygon2D`,
+  `Line.intersectLineWithRay2D`, `Line.intersectPolygon2D`, `Line.crop`,
   `Polygon.bisector`, `Triangle.incircle`, `Triangle.circumcircle`,
   `Triangle.incenter`, `Triangle.orthocenter`, `Triangle.circumcenter`,
   `Circle.fromTriangle`, `Img.getForm`, `Range.calc`, and

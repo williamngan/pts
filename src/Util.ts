@@ -189,6 +189,7 @@ export class Util {
 
   /**
    * Get a random integer. This can be useful for selecting a random index in an array.
+   * @deprecated Use [`Num.randomRange`](#link) instead, for example `Math.floor( Num.randomRange( start, start + range ) )`.
    * @param range value range
    * @param start Optional starting value
    */
