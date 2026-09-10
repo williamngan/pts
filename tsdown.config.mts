@@ -14,7 +14,9 @@ export default defineConfig([
     platform: "neutral",
     target: "es2015",
     clean: true,
-    dts: { sourcemap: true },
+    // keep doc comments in the declarations: editors show them, and the
+    // @deprecated tags the changelog relies on only reach consumers this way
+    dts: { sourcemap: true, compilerOptions: { removeComments: false } },
     sourcemap: true,
     minify: false,
     outputOptions: {
