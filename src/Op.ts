@@ -1244,9 +1244,9 @@ export class Polygon {
    * Find the area of a simple (non-self-intersecting) polygon using the shoelace formula.
    * @param pts a Group or an Iterable<PtLike> representing a polygon
    */
-  static area(pts: PtLikeIterable) {
+  static area(pts: PtLikeIterable): number {
     let _pts = Util.iterToArray(pts);
-    if (_pts.length < 3) return _errorLength(new Group(), 3);
+    if (_pts.length < 3) return _errorLength(0, 3);
     // determinant
     let det = (a: PtLike, b: PtLike) => a[0] * b[1] - a[1] * b[0];
 
