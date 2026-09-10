@@ -105,11 +105,45 @@ describe("DOMSpace", () => {
     space.dispose();
   });
 
+  it("creates the documented default mount for empty or missing targets", async () => {
+    // documented: `<div id="pt_container"><div id="pt" /></div>` when left empty
+    for (const arg of [undefined, null, ""] as const) {
+      const space = arg === undefined ? new DOMSpace() : new DOMSpace(arg);
+      await ready(space);
+      expect(space.element.id).toBe("pt");
+      expect(space.element.parentElement?.id).toBe("pt_container");
+      expect(space.ready).toBe(true);
+      space.dispose();
+      // dispose removes what the space created, and readiness resets
+      expect(document.querySelector("#pt_container")).toBeNull();
+      expect(space.ready).toBe(false);
+    }
+
+    // an SVG space creates the svg itself, not a div wrapping one
+    const svg = new SVGSpace();
+    await ready(svg);
+    expect(svg.element.nodeName.toLowerCase()).toBe("svg");
+    expect(svg.element.id).toBe("pt");
+    expect(svg.element.parentElement?.id).toBe("pt_container");
+    svg.dispose();
+    expect(document.querySelector("#pt_container")).toBeNull();
+
+    // a bare id works like a selector, and a user-owned host is never removed
+    const host = document.createElement("div");
+    host.id = "owned-host";
+    document.body.appendChild(host);
+    const owned = new SVGSpace("owned-host");
+    await ready(owned);
+    expect(owned.element.parentElement).toBe(host);
+    owned.dispose();
+    expect(document.querySelector("#owned-host")).toBe(host);
+  });
+
   it("creates missing targets and provides static DOM helpers", async () => {
     const space = new DOMSpace("#missing-target");
     await ready(space);
-    expect(space.element.id).toBe("pts_element");
-    expect(document.querySelector("#pts_container")).not.toBeNull();
+    expect(space.element.id).toBe("missing-target");
+    expect(document.querySelector("#missing-target_container")).not.toBeNull();
 
     const root = document.createElement("section");
     const child = DOMSpace.createElement("article", "created", root);

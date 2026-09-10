@@ -40,6 +40,8 @@ export class DOMSpace extends MultiTouchSpace {
   protected _css = {};
   private _domDisposed = false;
   private _readyTimer: ReturnType<typeof setTimeout>;
+  // elements this space created for a missing target, removed on dispose
+  private _ownsContainer = false;
 
   // one stable bound reference, so removeEventListener actually removes the
   // listener that addEventListener added (and double-adds dedupe)
@@ -47,19 +49,18 @@ export class DOMSpace extends MultiTouchSpace {
 
   /**
    * Create a DOMSpace for HTML DOM elements
-   * @param elem Specify an element by its "id" attribute as string, or by the element object itself. Use css to customize its appearance if needed.
+   * @param elem Specify an element by its "id" attribute as string, or by the element object itself. If left empty, a `<div id="pt_container"><div id="pt" /></div>` will be added to DOM; a missing id is created the same way. Use css to customize its appearance if needed.
    * @param callback an optional callback `function(boundingBox, spaceElement)` to be called when element is appended and ready. Alternatively, a "ready" event will also be fired from the element when it's appended, which can be traced with `spaceInstance.element.addEventListener("ready")`
    * @example `new DOMSpace( "#myElementID" )`
    */
   constructor(
-    elem: string | Element,
+    elem: string | Element | null = "pt",
     callback?: (bound: Bound, elem: Element) => void,
   ) {
     super();
     this.refresh(false); // DOM elements persist unless a renderer opts into refreshing.
 
     let _selector: Element | null = null;
-    let _existed = false;
     this.id = "pts";
 
     // check element or element id string
@@ -67,21 +68,18 @@ export class DOMSpace extends MultiTouchSpace {
       _selector = elem;
       this.id = "pts_existing_space";
     } else {
-      _selector = document.querySelector(<string>elem);
-      _existed = true;
-      this.id = elem.substr(1);
+      const target = elem || "pt";
+      const id = target[0] === "#" || target[0] === "." ? target : "#" + target;
+      _selector = document.querySelector(id);
+      this.id = id.substr(1);
     }
 
-    // if selector is not defined, create a canvas
+    // if selector is not defined, create the elements
     if (!_selector) {
-      this._container = DOMSpace.createElement("div", "pts_container");
-      this._canvas = DOMSpace.createElement(
-        "div",
-        "pts_element",
-      ) as HTMLElement;
-      this._container.appendChild(this._canvas);
+      this._container = DOMSpace.createElement("div", this.id + "_container");
+      this._canvas = this._createDefaultElement(this._container, this.id);
       document.body.appendChild(this._container);
-      _existed = false;
+      this._ownsContainer = true;
     } else {
       this._canvas = _selector as HTMLElement;
       this._container = _selector.parentElement!;
@@ -89,6 +87,19 @@ export class DOMSpace extends MultiTouchSpace {
 
     // no mutation observer, so we set a timeout for ready event
     this._readyTimer = setTimeout(this._ready.bind(this, callback), 50);
+  }
+
+  /**
+   * Create the drawing element for a target that does not exist yet, inside the created container.
+   * Subclasses that draw into a specific element type override this.
+   * @param container the created container
+   * @param id the id for the new element
+   */
+  protected _createDefaultElement(
+    container: Element,
+    id: string,
+  ): HTMLElement | SVGElement {
+    return DOMSpace.createElement("div", id, container) as HTMLElement;
   }
 
   /**
@@ -326,6 +337,9 @@ export class DOMSpace extends MultiTouchSpace {
     // disposing must release resources, never destroy a user-owned host
     // element's contents (a re-mount on the same element must work).
     MultiTouchSpace.prototype.removeAll.call(this);
+    this._isReady = false;
+    // elements created for a missing target are this space's own
+    if (this._ownsContainer) this._container.remove();
 
     return this;
   }

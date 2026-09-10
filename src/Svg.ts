@@ -724,7 +724,7 @@ export class SVGSpace extends DOMSpace {
    * @example `new SVGSpace( "#myElementID" )`
    */
   constructor(
-    elem: string | Element,
+    elem: string | Element | null = "pt",
     callback?: (bound: Bound, elem: Element) => void,
   ) {
     super(elem, callback);
@@ -737,6 +737,13 @@ export class SVGSpace extends DOMSpace {
 
     // immediate-mode cycle like canvas: redraw and reconcile every frame
     this.refresh(true);
+  }
+
+  /**
+   * For a missing target, create the documented `<svg id="pt">` inside the created container.
+   */
+  protected _createDefaultElement(container: Element, id: string): SVGElement {
+    return SVGSpace.svgElement(container, "svg", id);
   }
 
   /**

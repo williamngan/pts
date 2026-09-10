@@ -102,6 +102,11 @@ the buggy output will see different (correct) values:
   early, `imageData` rect no longer double-offsets, `SVGSpace.removeAll`
   no longer wipes its own mount element, and the SVG reconciler removes
   stale attributes between frames.
+- `CanvasSpace`, `SVGSpace`, and `DOMSpace` honor their documented empty
+  mount: `new SVGSpace()`, or an empty or missing id, creates
+  `<div id="pt_container"><svg id="pt">` (a `<canvas>` or `<div>` for the
+  other spaces; a missing id names the created element). `dispose()`
+  removes the elements a space created and resets `ready`.
 - Physics: `Body.linkAll` no longer creates duplicate and self links on
   odd-sized bodies.
 - Physics is now frame-rate independent. `World.update(ms)` solves in
