@@ -964,6 +964,24 @@ export class SVGSpace extends DOMSpace {
 let _svgFormGroupID = 0;
 let _svgFormDomID = 0;
 
+// rendering-context style keys and their legacy inline-style names
+const _legacyStyleKeys: Record<string, string> = {
+  fillStyle: "fill",
+  strokeStyle: "stroke",
+  lineWidth: "stroke-width",
+  lineJoin: "stroke-linejoin",
+  lineCap: "stroke-linecap",
+  globalAlpha: "opacity",
+  font: "font",
+};
+
+/**
+ * SVGForm is a [`CanvasForm`](#link) rendered through a [`SVGContext2D`](#link): it inherits
+ * the canvas drawing API — shapes, gradients, dashes, images, `textBox` — with SVG
+ * output, subject to the capability notes in `SVGContext2D`. Sketches using this subset
+ * can swap between `CanvasSpace` and `SVGSpace`. The legacy per-element static helpers and `scope()` workflow are retained
+ * for compatibility but are no longer needed.
+ */
 export class SVGForm extends CanvasForm<SVGSpace> {
   protected _svgSpace: SVGSpace;
   protected _svgCtx: SVGContext2D;
@@ -1016,6 +1034,38 @@ export class SVGForm extends CanvasForm<SVGSpace> {
   }
 
   /**
+   * Mirror style writes into the legacy scope context, so the static per-element helpers
+   * (`SVGForm.circle( form.scope(player), ... )`) draw with the form's current fill, stroke,
+   * alpha, and font as they did before the rendering-context path existed.
+   */
+  protected _set(key: string, value: unknown): void {
+    const legacy = _legacyStyleKeys[key];
+    if (legacy) {
+      // gradient and pattern objects have no inline-style form; keep the last color
+      if (typeof value === "string" || typeof value === "number") {
+        this._legacyCtx.style[legacy] = value;
+      }
+    }
+    super._set(key, value);
+  }
+
+  get filled(): boolean {
+    return this._filled;
+  }
+  set filled(b: boolean) {
+    this._filled = b;
+    this._legacyCtx.style.filled = b;
+  }
+
+  get stroked(): boolean {
+    return this._stroked;
+  }
+  set stroked(b: boolean) {
+    this._stroked = b;
+    this._legacyCtx.style.stroked = b;
+  }
+
+  /**
    * Get the [`SVGSpace`](#link) instance that this form is associated with.
    */
   get space(): SVGSpace {
@@ -1048,7 +1098,7 @@ export class SVGForm extends CanvasForm<SVGSpace> {
    * @deprecated No longer needed: elements are reconciled automatically each frame. Kept
    * for compatibility with code that pairs it with the legacy static helpers.
    */
-  updateScope(group_id: string, group?: Element): object {
+  updateScope(group_id: string, group?: Element): DOMFormContext {
     this._legacyCtx.group = group;
     this._legacyCtx.groupID = group_id;
     this._legacyCtx.groupCount = 0;

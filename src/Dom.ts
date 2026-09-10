@@ -629,7 +629,7 @@ export class HTMLForm extends VisualForm {
    * @param group Optional DOM element to define this group's parent element
    * @returns this form's context
    */
-  updateScope(group_id: string, group?: Element): object {
+  updateScope(group_id: string, group?: Element): DOMFormContext {
     this._ctx.group = group;
     this._ctx.groupID = group_id;
     this._ctx.groupCount = 0;

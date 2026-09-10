@@ -875,6 +875,36 @@ describe("SVGSpace and SVGForm", () => {
     expect(regrown!.querySelectorAll("path").length).toBe(1);
   });
 
+  it("mirrors form styles into the legacy scope context", async () => {
+    const { element } = mount();
+    const space = new SVGSpace(element);
+    const player = {
+      animate: vi.fn(),
+      animateID: undefined as unknown as string,
+    };
+    space.add(player);
+    const form = space.getForm();
+    form.fill("#f00").stroke("#00f", 2, "round", "square").alpha(0.5).font(20);
+    const ctx = form.scope(player);
+    expect(ctx.style).toMatchObject({
+      filled: true,
+      stroked: true,
+      fill: "#f00",
+      stroke: "#00f",
+      "stroke-width": 2,
+      "stroke-linejoin": "round",
+      "stroke-linecap": "square",
+      opacity: 0.5,
+    });
+    expect(String(ctx.style.font)).toContain("20px");
+    const circle = SVGForm.circle(ctx, [10, 10], 5) as SVGElement;
+    expect(circle.getAttribute("style")).toContain("fill: #f00");
+    expect(circle.getAttribute("style")).toContain("stroke-width: 2");
+    form.fill(false);
+    expect(form.scope(player).style.filled).toBe(false);
+    space.dispose();
+  });
+
   it("covers SVG static helpers, invalid inputs, reuse, and style suppression", () => {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     document.body.appendChild(svg);
