@@ -616,7 +616,16 @@ export class SVGContext2D {
       }
       return style.materialize(this._defs);
     }
-    return style as string;
+    if (typeof style !== "string") {
+      // a CanvasPattern (or other canvas paint object) has no SVG equivalent;
+      // "[object CanvasPattern]" would otherwise be emitted as an invalid paint
+      SVGContext2D._warnOnce(
+        "pattern",
+        "canvas patterns are not supported in SVG output; use CanvasSpace",
+      );
+      return "none";
+    }
+    return style;
   }
 
   /** Add class, alpha, and blend attributes shared by all run kinds. */

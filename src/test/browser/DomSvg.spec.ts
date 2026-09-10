@@ -505,6 +505,26 @@ describe("SVGContext2D", () => {
     expect(style).toContain("mix-blend-mode: multiply");
   });
 
+  it("renders canvas paint objects as none with a single warning", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    Util.warnLevel("warn");
+    const { host, ctx } = makeCtx();
+    ctx.beginFrame();
+    // a CanvasPattern has no SVG equivalent; it must not serialize as
+    // "[object CanvasPattern]"
+    ctx.fillStyle = {} as unknown as string;
+    ctx.beginPath();
+    ctx.rect(0, 0, 10, 10);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.rect(20, 0, 10, 10);
+    ctx.fill();
+    ctx.commitFrame();
+    expect(host.querySelector("path")!.getAttribute("fill")).toBe("none");
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(String(warn.mock.calls[0][0])).toContain("patterns");
+  });
+
   it("saves and restores state, tracks dashes, and maps blend composites", () => {
     const { ctx } = makeCtx();
     ctx.beginFrame();

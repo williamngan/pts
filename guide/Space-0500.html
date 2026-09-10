@@ -115,7 +115,7 @@ const form = space.getForm();
 // ... the same drawing code as canvas
 </code></pre>
 <p>If you use <a href="../demo/?name=pts.quickStart"><code>quickStart</code></a>, it picks the space for you: mount on an <code>&lt;svg&gt;</code> element and you get an <code>SVGSpace</code>; mount on a <code>&lt;canvas&gt;</code> or <code>&lt;div&gt;</code> and you get a <code>CanvasSpace</code>.</p>
-<p>SVG does not currently support clipping, image-data writes, source-cropped image drawing, canvas offscreen buffers, or Porter-Duff composites such as <code>source-in</code>. Use <code>CanvasSpace</code> if your sketch needs these functions.</p>
+<p>SVG does not currently support clipping, image-data writes, source-cropped image drawing, canvas patterns (<code>Img.pattern</code>), canvas offscreen buffers, or Porter-Duff composites such as <code>source-in</code>. Each warns once and draws nothing. Use <code>CanvasSpace</code> if your sketch needs these functions.</p>
 <p>Under the hood, consecutive shapes that share styles are merged into single svg elements per frame, so the output stays fast and compact. To export the current frame as an svg file, use <a href="../docs/?p=Svg_SVGSpace#function_toSVG"><code>SVGSpace.toSVG</code></a> — pass <code>true</code> to get one element per shape, which is easier to edit in vector graphics tools.</p>
 <p>(In earlier versions of Pts, SVG rendering required a <code>form.scope(this)</code> call in each animate callback. This is no longer needed — existing code that calls it will still run, as the function is kept as a harmless no-op.)</p>
 <h3>HTML Space</h3>

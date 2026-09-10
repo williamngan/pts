@@ -1063,7 +1063,7 @@ const form = space.getForm();
 
 If you use [`quickStart`](#demo-pts-quick-start), it picks the space for you: mount on an `<svg>` element and you get an `SVGSpace`; mount on a `<canvas>` or `<div>` and you get a `CanvasSpace`.
 
-SVG does not currently support clipping, image-data writes, source-cropped image drawing, canvas offscreen buffers, or Porter-Duff composites such as `source-in`. Use `CanvasSpace` if your sketch needs these functions.
+SVG does not currently support clipping, image-data writes, source-cropped image drawing, canvas patterns (`Img.pattern`), canvas offscreen buffers, or Porter-Duff composites such as `source-in`. Each warns once and draws nothing. Use `CanvasSpace` if your sketch needs these functions.
 
 Under the hood, consecutive shapes that share styles are merged into single svg elements per frame, so the output stays fast and compact. To export the current frame as an svg file, use [`SVGSpace.toSVG`](https://ptsjs.org/docs.md#svg-svgspace) — pass `true` to get one element per shape, which is easier to edit in vector graphics tools.
 
