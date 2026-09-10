@@ -52,7 +52,7 @@
     "bench:compare": "node --expose-gc scripts/bench.mjs --compare",
     "bench:check": "node scripts/bench-dryrun.mjs",
     "check:artifacts": "node scripts/check-artifacts.mjs",
-    "check:docs": "node scripts/build-docs-runtime.mjs --check && node scripts/generate-docs.mjs --check && node scripts/generate-guides.mjs --check && node scripts/generate-markdown-docs.mjs --check && pnpm test:docs",
+    "check:docs": "node scripts/build-docs-runtime.mjs --check && node scripts/generate-docs.mjs --check && node scripts/generate-guides.mjs --check && node scripts/generate-markdown-docs.mjs --check && node scripts/build-editor.mjs --check && pnpm test:docs",
     "check:package": "node scripts/check-package.mjs",
     "check:publishing": "publint && attw --pack .",
     "lint": "eslint assets/cover.js bench demo guide/js/guide.js guide/js/examples src scripts test/integrations test/visual *.config.*",
