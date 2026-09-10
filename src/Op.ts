@@ -1533,6 +1533,36 @@ export class Polygon {
 
     if (!minEdge) return null;
 
+    // Edge normals alone miss the case where the circle sits past a vertex:
+    // the separating axis there runs from the nearest vertex to the center.
+    let vx = 0;
+    let vy = 0;
+    let vd = Infinity;
+    for (let i = 0, len = _poly.length; i < len; i++) {
+      const dx = c[0] - _poly[i][0];
+      const dy = c[1] - _poly[i][1];
+      const d = dx * dx + dy * dy;
+      if (d < vd) {
+        vd = d;
+        vx = dx;
+        vy = dy;
+      }
+    }
+    if (vd > 0) {
+      const vlen = Math.sqrt(vd);
+      vx /= vlen;
+      vy /= vlen;
+      let minP = Infinity;
+      let maxP = -Infinity;
+      for (let i = 0, len = _poly.length; i < len; i++) {
+        const d = vx * _poly[i][0] + vy * _poly[i][1];
+        if (d < minP) minP = d;
+        if (d > maxP) maxP = d;
+      }
+      const dotC = vx * c[0] + vy * c[1];
+      if (dotC - r > maxP || dotC + r < minP) return null;
+    }
+
     // direction
     const centroid = Polygon.centroid(_poly);
     if (minAx * (c[0] - centroid[0]) + minAy * (c[1] - centroid[1]) < 0) {

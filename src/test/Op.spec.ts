@@ -454,6 +454,19 @@ describe("Polygon", () => {
     expect(
       Polygon.hasIntersectCircle(square(), Circle.fromCenter([30, 5], 3)),
     ).toBeNull();
+    // a circle past a vertex, inside every edge normal's projection but
+    // farther than its radius from the polygon: the vertex axis separates it
+    const wedge = Group.fromArray([
+      [2.88, 1.26],
+      [-1.2, 4.69],
+      [-1.09, -1.28],
+    ]);
+    expect(
+      Polygon.hasIntersectCircle(wedge, Circle.fromCenter([6.16, -0.69], 3.52)),
+    ).toBeNull();
+    expect(
+      Polygon.hasIntersectCircle(wedge, Circle.fromCenter([6.16, -0.69], 3.9)),
+    ).toBeTruthy();
     expect(
       Polygon.hasIntersectPolygon(
         square(),
