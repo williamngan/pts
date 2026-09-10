@@ -905,6 +905,20 @@ describe("SVGSpace and SVGForm", () => {
     space.dispose();
   });
 
+  it("ignores offscreen buffers with one warning", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    Util.warnLevel("warn");
+    const { element } = mount();
+    const space = new SVGSpace(element);
+    const form = space.getForm();
+    expect(form.useOffscreen()).toBe(form);
+    expect(() => form.renderOffscreen()).not.toThrow();
+    form.useOffscreen(false);
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(form.fill("#123").point([1, 1], 2)).toBe(form);
+    space.dispose();
+  });
+
   it("covers SVG static helpers, invalid inputs, reuse, and style suppression", () => {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     document.body.appendChild(svg);

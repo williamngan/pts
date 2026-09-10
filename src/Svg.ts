@@ -1066,6 +1066,30 @@ export class SVGForm extends CanvasForm<SVGSpace> {
   }
 
   /**
+   * Offscreen buffers require Canvas output. In SVG this warns once and draws directly.
+   */
+  useOffscreen(_off: boolean = true, _clear: boolean | string = false): this {
+    SVGForm._warnOffscreen();
+    return this;
+  }
+
+  /**
+   * Offscreen buffers require Canvas output. In SVG this warns once and does nothing.
+   */
+  renderOffscreen(_offset: PtLike = [0, 0]): void {
+    SVGForm._warnOffscreen();
+  }
+
+  private static _offscreenWarned = false;
+  private static _warnOffscreen() {
+    if (SVGForm._offscreenWarned) return;
+    SVGForm._offscreenWarned = true;
+    Util.warn(
+      "offscreen canvases are not supported in SVG output; use CanvasSpace",
+    );
+  }
+
+  /**
    * Get the [`SVGSpace`](#link) instance that this form is associated with.
    */
   get space(): SVGSpace {
