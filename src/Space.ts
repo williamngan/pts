@@ -734,7 +734,12 @@ export abstract class MultiTouchSpace extends Space {
     this._mouseAction(UIA.pointerdown, evt);
     this._pressed = true;
     if (evt.target instanceof Element) {
-      evt.target.setPointerCapture(evt.pointerId);
+      try {
+        evt.target.setPointerCapture(evt.pointerId);
+      } catch {
+        // a synthetic or re-dispatched event has no active pointer to capture;
+        // dragging still works through the element's own move/up listeners
+      }
     }
     return false;
   }
