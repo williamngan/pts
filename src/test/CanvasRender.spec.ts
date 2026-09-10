@@ -114,6 +114,24 @@ describe("CanvasForm rendering pins", () => {
     expect(fresh).toBe(14);
   });
 
+  it("keeps a line that ends exactly at a word boundary", () => {
+    const { form, calls } = makeForm();
+    form.font(10); // 10px per character in this harness
+    form.paragraphBox(
+      Group.fromArray([
+        [0, 0],
+        [110, 100],
+      ]),
+      "hello world foo bar",
+      1,
+      "top",
+      true,
+    );
+    const texts = calls.filter((c) => c[0] === "fillText").map((c) => c[1]);
+    // "hello world" is exactly 110px wide; it used to wrap before "world"
+    expect(texts).toEqual(["hello world", "foo bar"]);
+  });
+
   it("maps box alignments to canvas baselines in textBox", () => {
     const { form } = makeForm();
     const box = Group.fromArray([

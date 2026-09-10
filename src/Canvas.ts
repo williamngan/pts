@@ -1566,8 +1566,17 @@ export class CanvasForm<
 
       // word wrap
       const consumedAll = t[1] === sub.length;
-      let dt: number | undefined = t[0].lastIndexOf(" ") + 1;
-      if (dt <= 0 || consumedAll) dt = undefined;
+      let dt: number | undefined;
+      if (consumedAll) {
+        dt = undefined;
+      } else if (sub[t[1]] === " ") {
+        // the line ends exactly at a word boundary: keep the whole line and
+        // drop the space, instead of wrapping before its last word
+        dt = t[1] + 1;
+      } else {
+        dt = t[0].lastIndexOf(" ") + 1;
+        if (dt <= 0) dt = undefined;
+      }
       lines.push(dt === undefined ? t[0] : t[0].slice(0, dt));
 
       if (t[1] <= 0 || consumedAll) break;
