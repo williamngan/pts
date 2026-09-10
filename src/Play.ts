@@ -813,7 +813,8 @@ export class Sound {
       }
     } else if (this._type === "gen") {
       if (this._generated) (this._node as OscillatorNode).stop();
-    } else if (this._type === "input") {
+    } else if (this._type === "input" && this._stream) {
+      // an input created from a node without its MediaStream has no tracks to stop
       this._stream.getAudioTracks().forEach((track) => track.stop());
     }
 

@@ -435,6 +435,22 @@ describe("Sound construction and generated audio", () => {
     expect(from.stream).toBe(stream);
   });
 
+  it("stops and disposes an input created without a stream", () => {
+    const node = new FakeNode();
+    const context = new FakeAudioContext();
+    const input = Sound.from(
+      node as unknown as AudioNode,
+      context as unknown as AudioContext,
+      "input",
+    );
+    input.start();
+    expect(input.playing).toBe(true);
+    // the optional stream is absent: nothing to stop, and no TypeError
+    expect(() => input.stop()).not.toThrow();
+    expect(input.playing).toBe(false);
+    expect(() => input.dispose()).not.toThrow();
+  });
+
   it("disposes nodes and references without closing the context", () => {
     const sound = Sound.generate("sine", 440).analyze(4);
     const output = new FakeNode();
