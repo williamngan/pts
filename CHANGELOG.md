@@ -71,6 +71,16 @@ the buggy output will see different (correct) values:
   stale attributes between frames.
 - Physics: `Body.linkAll` no longer creates duplicate and self links on
   odd-sized bodies.
+- Physics is now frame-rate independent. `World.update(ms)` solves in
+  substeps of about `1 / (60 × substeps)` s, so a slow frame runs more
+  substeps rather than larger ones, and velocity is preserved exactly when
+  frame timing changes (a resting body no longer gains energy under
+  alternating frame times). `Particle.hit`, drag deltas via the `position`
+  setter, `Particle.changed`, `World.friction`, and body stiffness are all
+  expressed per 60 Hz frame at any `substeps` setting — the same numbers a
+  0.12 sketch used at 60 fps. Updates shorter than 2 ms are carried into
+  the next call. `Particle.timeStep` exposes the time spanned by a
+  particle's current displacement.
 - Space: `play(t)` no longer stacks parallel animation-frame chains;
   first-frame and resume no longer produce a frame-time spike; touch
   `preventDefault` paths work as documented.

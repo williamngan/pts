@@ -106,25 +106,99 @@ describe("World constraints", () => {
       const body = Body.fromGroup(Group.fromArray([[0, 100]]), 1, false, false);
       (body[0] as Particle).hit(10, 0);
       world.add(particle).add(body);
+      // an impulse of 10 is 10 px per 60 Hz frame, at any substep setting;
+      // a 1 ms update is carried into the next one
+      const perMs = 10 / (1000 / 60);
       for (const [ms, expected] of [
-        [16, 10],
-        [16, 10],
+        [16, 16 * perMs],
+        [16, 16 * perMs],
         [0, 0],
-        [1, 0.625],
-        [32, 20],
+        [1, 0],
+        [32, 33 * perMs],
       ]) {
         const px = particle.x;
         const bx = body[0].x;
         world.update(ms);
-        expect(particle.x - px).toBeCloseTo(expected * substeps, 4);
-        expect(body[0].x - bx).toBeCloseTo(expected * substeps, 4);
+        expect(particle.x - px).toBeCloseTo(expected, 4);
+        expect(body[0].x - bx).toBeCloseTo(expected, 4);
       }
       const px = particle.x;
       world.substeps = substeps * 2;
       world.update(32);
-      expect(particle.x - px).toBeCloseTo(20 * substeps, 4);
+      expect(particle.x - px).toBeCloseTo(32 * perMs, 4);
+      expect(particle.changed.x).toBeCloseTo(10, 4);
     },
   );
+
+  it("keeps a resting body at rest under alternating frame times", () => {
+    const perimeter = (b: Body) => {
+      let total = 0;
+      for (let i = 0; i < b.length; i++) {
+        total += b[i].$subtract(b[(i + 1) % b.length]).magnitude();
+      }
+      return total;
+    };
+    for (const [a, b] of [
+      [12, 33],
+      [4, 16],
+      [5, 30],
+      [1, 16],
+    ]) {
+      const world = new World(
+        Group.fromArray([
+          [50, 50],
+          [650, 450],
+        ]),
+        0.99,
+        800,
+      );
+      const body = Body.fromGroup(
+        Polygon.fromCenter(new Pt(350, 300), 40, 6),
+        0.5,
+      );
+      world.add(body);
+      const rest = perimeter(body);
+      let maxDeviation = 0;
+      for (let i = 0; i < 600; i++) {
+        world.update(i % 2 ? b : a);
+        maxDeviation = Math.max(maxDeviation, Math.abs(perimeter(body) - rest));
+      }
+      // a large step-size ratio used to amplify contact corrections into
+      // deviations in the hundreds
+      expect(maxDeviation).toBeLessThan(5);
+      let energy = 0;
+      for (const p of body) energy += (p as Particle).changed.magnitudeSq();
+      expect(energy).toBeLessThan(1);
+    }
+  });
+
+  it("stores drag deltas as per-frame velocity and rescales them per substep", () => {
+    const world = new World(
+      Group.fromArray([
+        [0, 0],
+        [1000, 1000],
+      ]),
+      1,
+      0,
+    );
+    const dragged = new Particle(100, 100).size(10);
+    dragged.lock = true;
+    world.add(dragged);
+    dragged.position = new Pt(110, 100);
+    expect(dragged.timeStep).toBeCloseTo(1 / 60, 8);
+    expect(dragged.changed.x).toBeCloseTo(10, 4);
+    world.update(16);
+    // four 4 ms substeps: collisions read a quarter of the drag per substep
+    expect(dragged.timeStep).toBeCloseTo(0.004, 8);
+    expect(dragged.x - dragged.previous.x).toBeCloseTo(2.4, 4);
+    expect(dragged.changed.x).toBeCloseTo(10, 4);
+    // a hit adds to the existing velocity in the same per-frame unit
+    const moving = new Particle(0, 0).hit(10, 0);
+    world.add(moving);
+    world.update(16);
+    moving.hit(5, 0);
+    expect(moving.changed.x).toBeCloseTo(15, 4);
+  });
 
   it("enforces precise and approximate edge distances", () => {
     const approximateA = new Particle(0, 0);

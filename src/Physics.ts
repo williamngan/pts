@@ -10,6 +10,14 @@ import { type PtLike, type PtIterable } from "./Types";
  * It advances with a substepped position-based (XPBD-style) solver and a spatial-hash broad phase.
  * See a [Particle demo](https://ptsjs.org/demo/?name=physics.particles) and a [Body demo](https://ptsjs.org/demo/?name=physics.shapes) on the demo page.
  */
+// Velocities are expressed per 60 Hz frame: `hit`, drag deltas, `changed`, friction, and
+// stiffness all use this unit, so a sketch behaves the same at any display refresh rate.
+const FRAME = 1 / 60; // seconds
+const FRAME_MS = 1000 / 60;
+// Elapsed times below this are carried into the next update rather than solved as a
+// tiny step (a duplicate RAF timestamp would otherwise produce a 10× step-size jump).
+const MIN_STEP_MS = 2;
+
 export class World {
   protected _gravity: Pt = new Pt();
   protected _friction: number = 1; // general friction
@@ -29,7 +37,8 @@ export class World {
 
   // substep-adjusted friction, computed once per update
   private _frictionStep: number = 1;
-  private _lastStep: number = 0;
+  // elapsed time too short to solve, carried into the next update
+  private _carry: number = 0;
 
   // spatial-hash and AABB scratch buffers, grown geometrically and reused
   private _hashKeys: Uint32Array = new Uint32Array(0);
@@ -107,8 +116,10 @@ export class World {
   }
 
   /**
-   * Number of solver substeps per [`World.update`](#link) call. More substeps produce a more
-   * stable and accurate simulation at a linear cost. Default is 4.
+   * Target number of solver substeps per 60 Hz frame (16.7 ms). Each [`World.update`](#link)
+   * runs enough substeps of about that size to cover its elapsed time, so a 30 Hz frame solves
+   * twice as many substeps as a 60 Hz frame rather than larger ones. More substeps produce a
+   * more stable and accurate simulation at a linear cost. Default is 4.
    */
   get substeps(): number {
     return this._substeps;
@@ -186,20 +197,26 @@ export class World {
   }
 
   /**
-   * Advance this world by an amount of time, solved in [`World.substeps`](#link) substeps.
-   * The time is clamped to [`World.maxTimeStep`](#link). Draw callbacks fire once per call,
+   * Advance this world by an amount of time, solved in substeps sized by
+   * [`World.substeps`](#link). The time is clamped to [`World.maxTimeStep`](#link), and an
+   * elapsed time under 2 ms is carried into the next call. Draw callbacks fire once per call,
    * after the solve completes.
    * @param ms change in time in milliseconds
    */
   update(ms: number) {
-    const clamped = Math.min(ms, this._maxTimeStep);
-    if (clamped > 0) {
-      const n = this._substeps;
-      const h = clamped / 1000 / n;
-      // friction is a per-update drag; compound it across substeps
-      this._frictionStep =
-        n === 1 ? this._friction : Math.pow(this._friction, 1 / n);
-      for (let s = 0; s < n; s++) {
+    const elapsed = Math.min(ms, this._maxTimeStep) + this._carry;
+    this._carry = 0;
+    if (elapsed >= MIN_STEP_MS) {
+      // The substep count follows the elapsed time, so the substep length stays
+      // near its target regardless of frame timing. A step-size jump between
+      // substeps is what the time-corrected integrator scales velocity by, and
+      // a large ratio also amplifies contact corrections — enough to launch a
+      // body that is merely resting on the floor.
+      const k = Math.max(1, Math.round((elapsed * this._substeps) / FRAME_MS));
+      const h = elapsed / 1000 / k;
+      // friction is a per-frame drag; compound it per substep
+      this._frictionStep = Math.pow(this._friction, h / FRAME);
+      for (let s = 0; s < k; s++) {
         this._updateParticles(h);
         // Body contacts resolve every substep: penetrations are detected while
         // still shallow, and each positional push stays at the scale of one
@@ -207,9 +224,10 @@ export class World {
         // frame's correction at substep velocity, kicking bodies 4× harder than
         // intended. The scalarized SAT makes the extra narrow-phase passes cheap.
         this._updateBodies(h);
-        this._lastStep = h;
       }
       this._clearForces();
+    } else if (elapsed > 0) {
+      this._carry = elapsed;
     }
 
     if (this._drawParticles) {
@@ -385,21 +403,30 @@ export class World {
    * here — they persist across the substeps of one update and are cleared when it completes.
    * @param p particle
    * @param dt substep time in seconds
-   * @param prevDt previous substep time in seconds, used to preserve velocity when frame timing changes.
+   * @param prevDt time in seconds spanned by the particle's current displacement (see [`Particle.timeStep`](#link)); the velocity is rescaled to `dt` so that it is preserved when the step size changes.
    */
   protected integrate(
     p: Particle,
     dt: number,
-    prevDt: number = this._lastStep,
+    prevDt: number = p.timeStep || FRAME,
   ): Particle {
+    const prev = p.previous;
+    const ratio = prevDt > 0 ? dt / prevDt : 1;
+
     if (p.lock) {
-      p.verlet(dt, this._frictionStep, prevDt); // re-pins to the lock point
+      // A dragged lock stores its per-frame drag delta as velocity for collisions
+      // to read; express it per substep so it is applied once over the frame.
+      if (ratio !== 1) {
+        prev[0] = p[0] - (p[0] - prev[0]) * ratio;
+        prev[1] = p[1] - (p[1] - prev[1]) * ratio;
+      }
+      p.timeStep = dt;
+      p.verlet(dt, this._frictionStep, dt); // re-pins to the lock point
       return p;
     }
 
-    const prev = p.previous;
     const force = p.force;
-    const f = this._frictionStep * (prevDt > 0 ? dt / prevDt : 1);
+    const f = this._frictionStep * ratio;
     const dtSq = dt * dt;
     const px = p[0];
     const py = p[1];
@@ -409,6 +436,7 @@ export class World {
     prev[1] = py;
     p[0] = nx;
     p[1] = ny;
+    p.timeStep = dt;
     return p;
   }
 
@@ -656,6 +684,7 @@ export class Particle extends Pt {
   protected _radius: number = 0;
   protected _force: Pt = new Pt();
   protected _prev: Pt = new Pt();
+  protected _prevDt: number = 0; // seconds spanned by the `_prev` displacement; 0 = one frame
 
   protected _body!: Body;
   protected _lock: boolean = false;
@@ -736,17 +765,37 @@ export class Particle extends Pt {
   }
 
   /**
-   * Get the change in position since last time step.
+   * Get the change in position per 60 Hz frame, ie, the current velocity in the same unit
+   * as [`Particle.hit`](#link). The raw displacement since the last step is
+   * `particle.$subtract( particle.previous )`.
    */
   get changed(): Pt {
-    return this.$subtract(this._prev);
+    const d = this.$subtract(this._prev);
+    return this._prevDt > 0 && this._prevDt !== FRAME
+      ? d.multiply(FRAME / this._prevDt)
+      : d;
   }
 
   /**
-   * Set a new position, and update previous and lock states if needed.
+   * The time in seconds spanned by the displacement from [`Particle.previous`](#link) to the
+   * current position. A [`World`](#link) sets it to the substep length on every step, and
+   * [`Particle.hit`](#link) and the `position` setter reset it to one 60 Hz frame (1/60),
+   * which is the unit of their velocities. 0 means unknown and is treated as one frame.
+   */
+  get timeStep(): number {
+    return this._prevDt;
+  }
+  set timeStep(t: number) {
+    this._prevDt = t;
+  }
+
+  /**
+   * Set a new position, and update previous and lock states if needed. The move is stored as
+   * this particle's velocity per frame, so dragging a locked particle knocks others away.
    */
   set position(p: Pt) {
     this.previous.to(this);
+    this._prevDt = FRAME;
     if (this._lock) this._lockPt = p;
     this.to(p);
   }
@@ -772,9 +821,9 @@ export class Particle extends Pt {
 
   /**
    * Verlet integration.
-   * @param dt change in time
+   * @param dt change in time in seconds
    * @param friction friction from 0 to 1, where 1 means no friction
-   * @param lastDt optional last change in time
+   * @param lastDt optional last change in time in seconds. Default is [`Particle.timeStep`](#link), or `dt` if unknown.
    */
   verlet(dt: number, friction: number, lastDt?: number): this {
     // Positional verlet: curr + (curr - prev) + a * dt * dt
@@ -788,7 +837,7 @@ export class Particle extends Pt {
       this.to(this._lockPt);
     } else {
       // time corrected (https://en.wikipedia.org/wiki/Verlet_integration#Non-constant_time_differences)
-      const lt = lastDt ? lastDt : dt;
+      const lt = lastDt ? lastDt : this._prevDt || dt;
       const adt = (dt * (dt + lt)) / 2;
       const f = (friction * dt) / lt;
       const force = this._force;
@@ -800,17 +849,28 @@ export class Particle extends Pt {
         this[i] = cur + v;
       }
       force.fill(0);
+      this._prevDt = dt;
     }
     return this;
   }
 
   /**
-   * Hit this particle with an impulse. The impulse is scaled by 1/√mass, so a heavier particle moves less from the same hit.
+   * Hit this particle with an impulse, in pixels per 60 Hz frame. The impulse is scaled by 1/√mass, so a heavier particle moves less from the same hit.
+   * The result is the same at any frame rate and any [`World.substeps`](#link) setting.
    * @param args an impulse vector defined by either a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    * @example `hit(10, 20)`, `hit( new Pt(5, 9) )`
    */
   hit(...args: any[]): this {
-    this._prev.subtract(new Pt(...args).$divide(Math.sqrt(this._mass)));
+    // express the current velocity per frame, then add the impulse in the same unit
+    const prev = this._prev;
+    if (this._prevDt > 0 && this._prevDt !== FRAME) {
+      const r = FRAME / this._prevDt;
+      for (let i = 0, len = this.length; i < len; i++) {
+        prev[i] = this[i] - (this[i] - prev[i]) * r;
+      }
+    }
+    this._prevDt = FRAME;
+    prev.subtract(new Pt(...args).$divide(Math.sqrt(this._mass)));
     return this;
   }
 
@@ -1165,7 +1225,8 @@ export class Body extends Group {
       eg[0].subtract(cv.$multiply((mr0 * (1 - t) * lambda) / 2));
       eg[1].subtract(cv.$multiply((mr0 * t * lambda) / 2));
 
-      let c1 = b.changed.add(cv.$multiply(mr1));
+      // raw displacement (not `changed`, which is per frame)
+      let c1 = b.$subtract(b.previous).add(cv.$multiply(mr1));
       b.previous = b.$subtract(c1);
     }
   }
