@@ -20,6 +20,7 @@ export abstract class Space {
   protected bound: Bound = new Bound();
 
   protected _time: ITimer = { prev: 0, diff: 0, end: -1, min: 0 };
+  private _stopAfter = -1; // a stop(t) period awaiting the next frame's clock
   protected players: ISpacePlayers = {};
   protected playerCount = 0;
   protected _ctx: any;
@@ -190,6 +191,12 @@ export abstract class Space {
       }
     }
 
+    // resolve a stop period against the frame clock
+    if (this._stopAfter >= 0) {
+      this._time.end = time + this._stopAfter;
+      this._stopAfter = -1;
+    }
+
     // stop if time ended
     if (this._time.end >= 0 && time > this._time.end) {
       cancelAnimationFrame(this._animID);
@@ -218,10 +225,14 @@ export abstract class Space {
 
   /**
    * Specify when the animation should stop: immediately, after a time period, or never stops.
+   * After stopping, use [`Space.replay`](#link) to play again.
    * @param t a value in millisecond to specify a time period to play before stopping, or `-1` to play forever, or `0` to end immediately. Default is 0 which will stop the animation immediately.
    */
   stop(t = 0): this {
-    this._time.end = t;
+    // a period is measured from the next frame's clock, since frame
+    // timestamps are absolute and not comparable with a duration
+    this._stopAfter = t > 0 ? t : -1;
+    this._time.end = t > 0 ? -1 : t;
     return this;
   }
 

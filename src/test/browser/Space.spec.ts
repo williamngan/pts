@@ -305,6 +305,33 @@ describe("Space UI tracking", () => {
     space.dispose();
   });
 
+  it("stops a period after the frame it was requested on", async () => {
+    const space = new CanvasSpace(host()).setup({ retina: false });
+    await ready(space);
+    let frames = 0;
+    space.add(() => {
+      frames++;
+    });
+    // frame timestamps are absolute; a 120 ms period must still mean 120 ms
+    space.playOnce(120);
+    await new Promise((resolve) => setTimeout(resolve, 60));
+    expect(space.isPlaying).toBe(true);
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    expect(space.isPlaying).toBe(false);
+    expect(frames).toBeGreaterThan(2);
+
+    // stop(0) still ends after the next frame
+    const before = frames;
+    space.replay();
+    space.stop();
+    await raf();
+    await raf();
+    await raf();
+    expect(space.isPlaying).toBe(false);
+    expect(frames - before).toBeLessThanOrEqual(2);
+    space.dispose();
+  });
+
   it("tracks UIs through space.track without manual wiring", async () => {
     const space = new CanvasSpace(host()).setup({ retina: false });
     await ready(space);
