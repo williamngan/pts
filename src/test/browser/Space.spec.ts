@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { CanvasSpace } from "../../Canvas";
 import { SVGSpace } from "../../Svg";
-import { UIButton } from "../../UI";
+import { UIButton, UIDragger } from "../../UI";
 
 function host() {
   const element = document.createElement("div");
@@ -302,6 +302,45 @@ describe("Space UI tracking", () => {
     space.removeAll().track(second);
     send();
     expect(secondAction).toHaveBeenCalledTimes(2);
+    space.dispose();
+  });
+
+  it("ends an active drag when its dragger is untracked", async () => {
+    const space = new CanvasSpace(host()).setup({ retina: false });
+    await ready(space);
+    space.bindMouse();
+    space.play(10);
+    const dragger = UIDragger.fromRectangle(
+      [
+        [0, 0],
+        [50, 50],
+      ],
+      {},
+    ) as UIDragger;
+    const dropped = vi.fn();
+    dragger.onDrop(dropped);
+    space.track(dragger);
+    // the host sits at (10, 20): client (40, 45) is space (30, 25)
+    space.element.dispatchEvent(
+      new PointerEvent("pointerdown", { clientX: 40, clientY: 45 }),
+    );
+    space.element.dispatchEvent(
+      new PointerEvent("pointermove", { clientX: 45, clientY: 50 }),
+    );
+    expect(dragger.state("dragging")).toBe(true);
+
+    space.untrack(dragger);
+    expect(dragger.state("dragging")).toBe(false);
+    expect(dropped).toHaveBeenCalledOnce();
+
+    // re-tracking does not resume the old drag on the first move
+    const moved = vi.fn();
+    dragger.onDrag(moved);
+    space.track(dragger);
+    space.element.dispatchEvent(
+      new PointerEvent("pointermove", { clientX: 50, clientY: 55 }),
+    );
+    expect(moved).not.toHaveBeenCalled();
     space.dispose();
   });
 

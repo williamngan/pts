@@ -9,6 +9,7 @@ import {
   type IPlayer,
   type AnimateCallbackFn,
   type TouchPointsKey,
+  type UIActionEvent,
 } from "./Types";
 
 /**
@@ -627,14 +628,25 @@ export abstract class MultiTouchSpace extends Space {
    * @param uis a UI or an array of UIs to remove from tracking, or omit to stop tracking all
    */
   untrack(uis?: UI | UI[]): this {
-    if (uis === undefined) {
-      this._trackedUIs.length = 0;
-      return this;
-    }
-    const list = Array.isArray(uis) ? uis : [uis];
+    const list =
+      uis === undefined
+        ? this._trackedUIs.slice()
+        : Array.isArray(uis)
+          ? uis
+          : [uis];
     for (let i = 0, len = list.length; i < len; i++) {
       const at = this._trackedUIs.indexOf(list[i]);
-      if (at >= 0) this._trackedUIs.splice(at, 1);
+      if (at < 0) continue;
+      this._trackedUIs.splice(at, 1);
+      // a dragger removed mid-drag would otherwise stay "dragging" and
+      // resume on its next move without a press; end the drag as a drop
+      if (list[i].state("dragging")) {
+        list[i].listen(
+          UIA.drop,
+          this._pointer,
+          new Event("pointercancel") as unknown as UIActionEvent,
+        );
+      }
     }
     return this;
   }
