@@ -109,6 +109,35 @@ describe("canvas-svg rendering parity", () => {
     host.remove();
   });
 
+  it("starts with the same default text style as CanvasForm", async () => {
+    const canvasElem = document.createElement("canvas");
+    document.body.appendChild(canvasElem);
+    const cSpace = new CanvasSpace(canvasElem);
+    await ready(cSpace as any);
+    const cForm = cSpace.getForm();
+
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const sSpace = new SVGSpace(host);
+    await ready(sSpace as any);
+    const sForm = sSpace.getForm();
+
+    // the SVG context's own default is 10px; the form must apply its 14px font
+    expect(sForm.ctx.font).toContain("14px");
+    expect(sForm.getTextWidth("hello")).toBeCloseTo(
+      cForm.getTextWidth("hello"),
+      0,
+    );
+    sForm.text([10, 20], "hello");
+    sForm.svgContext.commitFrame();
+    expect(sSpace.toSVG()).toContain("14px");
+
+    cSpace.dispose();
+    sSpace.dispose();
+    canvasElem.remove();
+    host.remove();
+  });
+
   it("exports expanded SVG with one element per shape", () => {
     const host = document.createElement("div");
     document.body.appendChild(host);

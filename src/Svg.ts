@@ -992,8 +992,13 @@ export class SVGForm extends CanvasForm<SVGSpace> {
     space.registerContext(this._svgCtx);
 
     this._ctx = this._svgCtx as unknown as RenderingContext2D;
-    this._ctx.fillStyle = "#f03";
-    this._ctx.strokeStyle = "#fff";
+    // Same initial state as CanvasForm, so a sketch renders alike on both:
+    // in particular, text without an explicit font() is 14px, not the
+    // context's 10px default.
+    this._set("fillStyle", this._style.fillStyle);
+    this._set("strokeStyle", this._style.strokeStyle);
+    this._set("lineJoin", "bevel");
+    this._set("font", this._font.value);
     this._ready = true;
 
     this._legacyCtx.group = space.element;
