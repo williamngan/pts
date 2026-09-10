@@ -579,6 +579,15 @@ describe("Pt, Group, and Bound correctness pins", () => {
     expect(b.width).toBe(98);
   });
 
+  it("inserts a group into itself from a snapshot", () => {
+    const g = Group.fromArray([[1], [2], [3]]);
+    g.insert(g, 1);
+    expect(g.map((p) => p[0])).toEqual([1, 1, 2, 3, 2, 3]);
+    const h = Group.fromArray([[1], [2], [3]]);
+    h.insert(h, -1);
+    expect(h.map((p) => p[0])).toEqual([1, 2, 1, 2, 3, 3]);
+  });
+
   it("inserts very large groups without an arguments overflow", () => {
     const big = Group.fromArray(
       Array.from({ length: 200000 }, (_, i) => [i, i]),

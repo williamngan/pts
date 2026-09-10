@@ -718,7 +718,10 @@ export class Group extends Array<Pt> {
    * @param index the index position to insert into
    */
   insert(pts: PtIterable, index = 0): this {
-    const _pts = Util.iterToArray(pts);
+    // iterToArray returns an array input as-is; inserting a group into itself
+    // must read a snapshot, not the tail it is about to shift
+    let _pts = Util.iterToArray(pts);
+    if ((_pts as unknown) === this) _pts = _pts.slice();
     const len = this.length;
     const n = _pts.length;
     if (n === 0) return this;
