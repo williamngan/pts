@@ -206,7 +206,10 @@ keyboard. `on()` supports `{ once, signal }`. Custom shapes:
   `visual` (PNG baselines; update with `pnpm test:visual:update`).
   Type-level pins live in `src/test/Types.test-d.ts`.
 
-# TODO
+# Ecosystem
 
-- react-pts-canvas
-- pts-cli
+- `react-pts-canvas` (separate repository) wraps a Pts space in a React
+  component. Its published release pins `pts ^0.12.8`; a release that accepts
+  1.0 is prepared separately and must ship before, or with, Pts 1.0.0.
+- `pts-cli` is not published yet. Do not tell users to install it; the
+  Ecosystem guide describes it as forthcoming.

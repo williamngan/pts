@@ -17,7 +17,7 @@ Install it from [npm](https://www.npmjs.com/package/react-pts-canvas).
 
 ### pts-cli
 
-`pts-cli` is a command-line version of Pts for working with Pts projects from the terminal. Installation and usage details will be added here with its public release.
+`pts-cli` is a command-line version of Pts for working with Pts projects from the terminal. It is not published yet, so there is nothing to install today. Installation and usage details will be added here with its public release.
 
 ### Your contribution
 
