@@ -629,7 +629,9 @@ export class SVGContext2D {
     const op = this.globalCompositeOperation;
     if (op !== "source-over") {
       if (BLEND_MODES.has(op)) {
-        attrs.style = `mix-blend-mode: ${op}`;
+        // text runs already carry their font in `style`; append, never replace
+        const blend = `mix-blend-mode: ${op}`;
+        attrs.style = attrs.style ? `${attrs.style}; ${blend}` : blend;
       } else {
         SVGContext2D._warnOnce(
           `composite-${op}`,
@@ -953,13 +955,6 @@ export class SVGSpace extends DOMSpace {
 let _svgFormGroupID = 0;
 let _svgFormDomID = 0;
 
-/**
- * SVGForm is a [`CanvasForm`](#link) rendered through a [`SVGContext2D`](#link): it inherits
- * the canvas drawing API — shapes, gradients, dashes, images, `textBox` — with SVG
- * output, subject to the capability notes in `SVGContext2D`. Sketches using this subset
- * can swap between `CanvasSpace` and `SVGSpace`. The legacy per-element static helpers and `scope()` workflow are retained
- * for compatibility but are no longer needed.
- */
 export class SVGForm extends CanvasForm<SVGSpace> {
   protected _svgSpace: SVGSpace;
   protected _svgCtx: SVGContext2D;

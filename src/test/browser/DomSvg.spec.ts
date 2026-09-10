@@ -494,6 +494,17 @@ describe("SVGContext2D", () => {
     expect(images[1].getAttribute("href")).toContain("data:image/png");
   });
 
+  it("keeps the font when a blend mode is applied to text", () => {
+    const { ctx } = makeCtx();
+    ctx.beginFrame();
+    ctx.font = "30px serif";
+    ctx.globalCompositeOperation = "multiply";
+    ctx.fillText("blend", 5, 5);
+    const style = String(ctx.runs[0].attrs.style);
+    expect(style).toContain("font: 30px serif");
+    expect(style).toContain("mix-blend-mode: multiply");
+  });
+
   it("saves and restores state, tracks dashes, and maps blend composites", () => {
     const { ctx } = makeCtx();
     ctx.beginFrame();
