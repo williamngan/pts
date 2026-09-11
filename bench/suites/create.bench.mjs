@@ -124,6 +124,26 @@ export default defineSuite("create", (b, { Pts, fx }) => {
     },
   });
 
+  // larger and structured inputs: a random set, and a grid whose points are
+  // all cocircular in fours, which exercises the exact in-circle decisions
+  b.case("Create.delaunay (2000 random)", {
+    batch: 2000,
+    setupOnce: () => fx.group("create:delaunay-2000", 2000, 2, 0, 1000),
+    setup: (source) => Create.delaunay(source),
+    run: (delaunay) => {
+      sink(delaunay.delaunay().length);
+    },
+  });
+
+  b.case("Create.delaunay (40×40 grid)", {
+    batch: 1600,
+    setupOnce: () => Create.gridPts(fx.bound(), 40, 40),
+    setup: (source) => Create.delaunay(source),
+    run: (delaunay) => {
+      sink(delaunay.delaunay().length);
+    },
+  });
+
   // `voronoi`, `mesh` and `neighborPts` all read the mesh that `delaunay()`
   // builds, and quietly return nothing if it was never called — so these cases
   // triangulate in the untimed setup and measure only the read.
