@@ -78,11 +78,17 @@ the buggy output will see different (correct) values:
   `Mat.shear2D([s, 0])` honor a zero component; the `Bound.center` setter
   no longer double-applies its offset; `Rectangle.boundingBox` returns
   real values; `Group.moveTo` on an empty group is a no-op.
-- Delaunay triangulation is a port of Delaunator (see
-  `THIRD-PARTY-NOTICES.txt`): triangle order and tie-breaking on
-  cocircular inputs differ from 0.12. `Delaunay.voronoi(bound?)` accepts
-  a bound and constructs complete hull cells; fewer than three or
-  collinear sites yield empty cells instead of throwing.
+- Delaunay triangulation is a new implementation: incremental insertion
+  in Hilbert-curve order with exact orientation and in-circle tests, so
+  cocircular grids, collinear runs, points on edges, and duplicate points
+  never produce degenerate triangles. It is faster than 0.12 at every
+  size, and triangle order and tie-breaking on cocircular inputs differ.
+  The mesh cache behind `mesh()`, `neighbors()`, and `neighborPts()` is
+  built on first use instead of inside `delaunay()`.
+  `Delaunay.voronoi(bound?)` accepts a bound and constructs complete hull
+  cells; fewer than three or collinear sites yield empty cells instead of
+  throwing. Pts contains no third-party code and ships no third-party
+  notices.
 - Sound: every `Sound` shares one `AudioContext` (0.12 created one per
   instance), so closing a sound's `ctx` silences all sounds — use
   `sound.stop()` / `sound.dispose()` instead. `Sound.load` rejects with

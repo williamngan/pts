@@ -47,8 +47,9 @@ the state before those commits.
   `Polygon.hasIntersectCircle` vertex-axis separation, `Polygon.area`'s
   type, and `Triangle.incircle` on collinear input are fixed with tests.
 
-The Delaunator notice year was not changed: the upstream license file
-itself reads 2026.
+The Delaunator-derived triangulation was then replaced by an original
+implementation (`src/_triangulate.ts`), and the third-party notice removed
+with it.
 
 ## Verdict
 

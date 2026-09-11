@@ -3,6 +3,13 @@
 September 5, 2026. Baseline reviewed: `revamp` at `8f59499`, compared with
 `master` and the earlier package/source history.
 
+> **Update, September 11, 2026.** The Delaunator-derived triangulation described
+> below was replaced by an original implementation in `src/_triangulate.ts`
+> (incremental insertion in Hilbert order, ghost triangles for the hull, exact
+> predicates with an integer fast path and a BigInt fallback). No adapted code
+> remains, so `THIRD-PARTY-NOTICES.txt` and the bundle notice were removed.
+> The rest of this document is kept as the record of the audit at the time.
+
 ## What entered Pts, and when?
 
 The Delaunator-derived triangulation entered in **`1617142` on August 14,

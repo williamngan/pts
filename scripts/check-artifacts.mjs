@@ -78,9 +78,6 @@ const sizeLimits = {
   "pts.min.js": 156700,
 };
 const banner = "Copyright © 2017-present William Ngan and contributors.";
-const thirdPartyNotice = (
-  await readFile(new URL("../THIRD-PARTY-NOTICES.txt", import.meta.url), "utf8")
-).trim();
 
 assert.deepEqual(
   (await readdir(dist)).sort(),
@@ -132,10 +129,6 @@ for (const [file, limit] of Object.entries(sizeLimits)) {
 
 for (const file of ["index.js", "index.mjs", "pts.js", "pts.min.js"]) {
   const source = await readFile(new URL(file, dist), "utf8");
-  assert.ok(
-    source.includes(thirdPartyNotice),
-    `${file} lost third-party notices`,
-  );
   assert.ok(
     source.includes(banner),
     `${file} is missing the stable license banner`,

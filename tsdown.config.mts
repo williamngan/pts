@@ -1,10 +1,8 @@
 import { defineConfig } from "tsdown";
-import { readFileSync } from "node:fs";
 
 const banner = `/*! Copyright © 2017-present William Ngan and contributors.
 Licensed under Apache 2.0 License.
-See https://github.com/williamngan/pts for details. */
-/*! ${readFileSync(new URL("./THIRD-PARTY-NOTICES.txt", import.meta.url), "utf8").trim()} */`;
+See https://github.com/williamngan/pts for details. */`;
 
 export default defineConfig([
   {

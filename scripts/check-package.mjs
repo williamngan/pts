@@ -100,7 +100,6 @@ try {
     "dist/pts.js.map",
     "dist/pts.min.js",
     "dist/pts.min.js.map",
-    "THIRD-PARTY-NOTICES.txt",
     "package.json",
     "src/Canvas.ts",
     "src/Color.ts",
@@ -132,7 +131,7 @@ try {
   );
   assert.ok(
     // Approximately 2% above the 1.0 archive (1,246,175 bytes), whose
-    // declarations keep their doc comments and third-party notices.
+    // declarations keep their doc comments.
     dryRun.size < 1_272_000,
     `packed tarball is unexpectedly large: ${dryRun.size} bytes`,
   );
