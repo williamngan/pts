@@ -329,7 +329,8 @@ const HI = _words[1] === 0x3ff00000 ? 1 : 0;
 const LO = HI ^ 1;
 const _mant = new Float64Array(8);
 const _expo = new Int32Array(8);
-const ZERO = BigInt(0);
+// BigInt is only touched inside the exact fallback, so loading this module
+// never requires it
 
 function _scaled(values: Float64Array, count: number): bigint[] {
   let minExpo = 0x7fffffff;
@@ -350,7 +351,9 @@ function _scaled(values: Float64Array, count: number): bigint[] {
   const out: bigint[] = [];
   for (let i = 0; i < count; i++) {
     out.push(
-      _mant[i] === 0 ? ZERO : BigInt(_mant[i]) << BigInt(_expo[i] - minExpo),
+      _mant[i] === 0
+        ? BigInt(0)
+        : BigInt(_mant[i]) << BigInt(_expo[i] - minExpo),
     );
   }
   return out;
@@ -373,7 +376,8 @@ export function orient2dExact(
   _input[5] = cy;
   const s = _scaled(_input, 6);
   const det = (s[0] - s[4]) * (s[3] - s[5]) - (s[1] - s[5]) * (s[2] - s[4]);
-  return det > ZERO ? 1 : det < ZERO ? -1 : 0;
+  const zero = BigInt(0);
+  return det > zero ? 1 : det < zero ? -1 : 0;
 }
 
 /** Exact in-circle test, evaluated in BigInt. Used when the fast filter cannot decide. */
@@ -406,7 +410,8 @@ export function incircleExact(
     (adx * adx + ady * ady) * (bdx * cdy - cdx * bdy) +
     (bdx * bdx + bdy * bdy) * (cdx * ady - adx * cdy) +
     (cdx * cdx + cdy * cdy) * (adx * bdy - bdx * ady);
-  return det > ZERO ? 1 : det < ZERO ? -1 : 0;
+  const zero = BigInt(0);
+  return det > zero ? 1 : det < zero ? -1 : 0;
 }
 
 // ----------------------------------------------------------- insertion order
