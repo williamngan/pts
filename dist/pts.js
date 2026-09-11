@@ -4953,7 +4953,6 @@ See https://github.com/williamngan/pts for details. */
 	const LO = HI ^ 1;
 	const _mant = /* @__PURE__ */ new Float64Array(8);
 	const _expo = /* @__PURE__ */ new Int32Array(8);
-	const ZERO = BigInt(0);
 	function _scaled(values, count) {
 		let minExpo = 2147483647;
 		for (let i = 0; i < count; i++) {
@@ -4971,7 +4970,7 @@ See https://github.com/williamngan/pts for details. */
 			if (m !== 0 && e < minExpo) minExpo = e;
 		}
 		const out = [];
-		for (let i = 0; i < count; i++) out.push(_mant[i] === 0 ? ZERO : BigInt(_mant[i]) << BigInt(_expo[i] - minExpo));
+		for (let i = 0; i < count; i++) out.push(_mant[i] === 0 ? BigInt(0) : BigInt(_mant[i]) << BigInt(_expo[i] - minExpo));
 		return out;
 	}
 	function orient2dExact(ax, ay, bx, by, cx, cy) {
@@ -4983,7 +4982,8 @@ See https://github.com/williamngan/pts for details. */
 		_input[5] = cy;
 		const s = _scaled(_input, 6);
 		const det = (s[0] - s[4]) * (s[3] - s[5]) - (s[1] - s[5]) * (s[2] - s[4]);
-		return det > ZERO ? 1 : det < ZERO ? -1 : 0;
+		const zero = BigInt(0);
+		return det > zero ? 1 : det < zero ? -1 : 0;
 	}
 	function incircleExact(ax, ay, bx, by, cx, cy, dx, dy) {
 		_input[0] = ax;
@@ -5002,7 +5002,8 @@ See https://github.com/williamngan/pts for details. */
 		const cdx = s[4] - s[6];
 		const cdy = s[5] - s[7];
 		const det = (adx * adx + ady * ady) * (bdx * cdy - cdx * bdy) + (bdx * bdx + bdy * bdy) * (cdx * ady - adx * cdy) + (cdx * cdx + cdy * cdy) * (adx * bdy - bdx * ady);
-		return det > ZERO ? 1 : det < ZERO ? -1 : 0;
+		const zero = BigInt(0);
+		return det > zero ? 1 : det < zero ? -1 : 0;
 	}
 	function hilbertIndex(order, x, y) {
 		const n = 1 << order;
