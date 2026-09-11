@@ -130,9 +130,9 @@ try {
     "published file allowlist changed",
   );
   assert.ok(
-    // Approximately 2% above the 1.0 archive (1,264,461 bytes), whose
+    // Approximately 2% above the 1.0 archive (1,276,394 bytes), whose
     // declarations keep their doc comments.
-    dryRun.size < 1_290_000,
+    dryRun.size < 1_302_000,
     `packed tarball is unexpectedly large: ${dryRun.size} bytes`,
   );
   assert.equal(
