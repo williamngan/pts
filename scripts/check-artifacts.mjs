@@ -68,14 +68,14 @@ const expectedExports = [
   "World",
 ];
 const sizeLimits = {
-  // The declarations keep their doc comments since 1.0; the physics and SVG
-  // fixes add code. Keep approximately 2% headroom above the measured build.
-  "index.d.mts": 288600,
-  "index.d.ts": 288600,
-  "index.js": 254400,
-  "index.mjs": 253600,
-  "pts.js": 265900,
-  "pts.min.js": 156700,
+  // The declarations keep their doc comments since 1.0, and the triangulation
+  // is a full implementation. Keep approximately 2% headroom above the measured build.
+  "index.d.mts": 287300,
+  "index.d.ts": 287300,
+  "index.js": 257600,
+  "index.mjs": 256700,
+  "pts.js": 269200,
+  "pts.min.js": 157600,
 };
 const banner = "Copyright © 2017-present William Ngan and contributors.";
 

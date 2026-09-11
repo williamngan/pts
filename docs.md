@@ -2112,7 +2112,7 @@ Value range for each color space
 <a id="create-create"></a>
 ### `Create`
 
-**Kind:** Class · **Source:** [`src/Create.ts:18`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L18)
+**Kind:** Class · **Source:** [`src/Create.ts:19`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L19)
 
 The `Create` class helps you create structures from sets of points.
 
@@ -2247,14 +2247,14 @@ Create a set of Pts around a circular path.
 <a id="create-delaunay"></a>
 ### `Delaunay`
 
-**Kind:** Class · **Source:** [`src/Create.ts:962`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L962)
+**Kind:** Class · **Source:** [`src/Create.ts:478`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L478)
 
 **Extends:** `Group`
 
 Delaunay is a [`Group`](#pt-group) of Pts that generates Delaunay and Voronoi tessellations.
-The triangulation core is adapted from [Delaunator](https://github.com/mapbox/delaunator)
-(ISC License, © Mapbox); earlier versions were based on
-[Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/).
+Points are triangulated by incremental insertion in Hilbert-curve order with exact
+orientation and in-circle tests, so grids, collinear runs, points on edges, and duplicate
+points are handled without degenerate triangles.
 
 #### Methods
 
@@ -2338,7 +2338,7 @@ Generate Voronoi cells. `delaunay()` must be called before calling this function
 <a id="create-noise"></a>
 ### `Noise`
 
-**Kind:** Class · **Source:** [`src/Create.ts:246`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L246)
+**Kind:** Class · **Source:** [`src/Create.ts:247`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L247)
 
 **Extends:** `Pt`
 

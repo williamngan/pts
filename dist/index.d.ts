@@ -1,39 +1,6 @@
 /*! Copyright © 2017-present William Ngan and contributors.
 Licensed under Apache 2.0 License.
 See https://github.com/williamngan/pts for details. */
-/*! Pts has no runtime package dependencies. Its source includes the following
-attributed implementations. This notice does not change the Apache-2.0
-license of the rest of Pts.
-
-Delaunator — adapted triangulation implementation in src/Create.ts
-https://github.com/mapbox/delaunator
-
-ISC License
-
-Copyright (c) 2026, Mapbox
-
-Permission to use, copy, modify, and/or distribute this software for any purpose
-with or without fee is hereby granted, provided that the above copyright notice
-and this permission notice appear in all copies.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
-FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
-OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
-TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
-THIS SOFTWARE.
-
-UHEPRNG — TypeScript port in src/uheprng.ts, introduced in 2021
-https://www.grc.com/otg/uheprng.htm
-
-Steve Gibson / Gibson Research Corporation released this implementation
-into the public domain. The original public-domain declaration and port
-notes are retained in src/uheprng.ts.
-
-The website's third-party software is separate from the Pts runtime. Its
-notices are generated in docs/js/THIRD-PARTY-NOTICES.txt and
-demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 //#region src/UI.d.ts
 /** A hit-test function for a UI shape: given the UI's group, a point, and the UI's states, return whether the point is within the shape. */
 type UIShapeTest = (group: Group, pt: PtLike, states: {
@@ -2726,14 +2693,15 @@ declare class Noise extends Pt {
 }
 /**
  * Delaunay is a [`Group`](#link) of Pts that generates Delaunay and Voronoi tessellations.
- * The triangulation core is adapted from [Delaunator](https://github.com/mapbox/delaunator)
- * (ISC License, © Mapbox); earlier versions were based on
- * [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/).
+ * Points are triangulated by incremental insertion in Hilbert-curve order with exact
+ * orientation and in-circle tests, so grids, collinear runs, points on edges, and duplicate
+ * points are handled without degenerate triangles.
  */
 declare class Delaunay extends Group {
   private _mesh;
-  private _triangles;
-  private _halfedges;
+  private _meshBuilt;
+  private _count;
+  private _tri;
   private _shapes;
   /**
    * Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`. See a [Delaunay demo here](https://ptsjs.org/demo/?name=create.delaunay).
@@ -2741,6 +2709,11 @@ declare class Delaunay extends Group {
    * @returns an array of Groups or an array of DelaunayShapes `{i, j, k, triangle, circle}` which records the indices of the vertices, and the calculated triangles and circumcircles
    */
   delaunay(triangleOnly?: boolean): GroupLike[] | DelaunayShape[];
+  /**
+   * The per-point mesh cache is keyed by neighbor-pair strings, which costs
+   * more than the triangulation itself; build it the first time it is read.
+   */
+  private _ensureMesh;
   /**
    * Generate Voronoi cells. `delaunay()` must be called before calling this function. See a [Voronoi demo here](https://ptsjs.org/demo/?name=create.delaunay).
    * @param bound Optionally provide a rectangular bound (eg, `space.innerBound`) to clip the cells against, including the unbounded cells on the convex hull.
