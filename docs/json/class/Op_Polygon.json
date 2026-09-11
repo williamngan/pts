@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Op.ts",
-      1063,
+      1066,
       13
     ]
   ],
@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Op.ts",
-          1165,
+          1168,
           9
         ]
       ],
@@ -60,7 +60,7 @@
       "source": [
         [
           "src/Op.ts",
-          1244,
+          1247,
           9
         ]
       ],
@@ -72,7 +72,7 @@
       "signatures": [
         {
           "comment": "Find the area of a simple (non-self-intersecting) polygon using the shoelace formula.",
-          "returns": "any",
+          "returns": "number",
           "returns_comment": false,
           "parameters": [
             {
@@ -91,7 +91,7 @@
       "source": [
         [
           "src/Op.ts",
-          1193,
+          1196,
           9
         ]
       ],
@@ -128,7 +128,7 @@
       "source": [
         [
           "src/Op.ts",
-          1068,
+          1071,
           9
         ]
       ],
@@ -159,7 +159,7 @@
       "source": [
         [
           "src/Op.ts",
-          1267,
+          1270,
           9
         ]
       ],
@@ -196,7 +196,7 @@
       "source": [
         [
           "src/Op.ts",
-          1092,
+          1095,
           9
         ]
       ],
@@ -239,7 +239,7 @@
       "source": [
         [
           "src/Op.ts",
-          1458,
+          1461,
           9
         ]
       ],
@@ -276,7 +276,7 @@
       "source": [
         [
           "src/Op.ts",
-          1433,
+          1436,
           9
         ]
       ],
@@ -313,7 +313,7 @@
       "source": [
         [
           "src/Op.ts",
-          1555,
+          1588,
           9
         ]
       ],
@@ -350,7 +350,7 @@
       "source": [
         [
           "src/Op.ts",
-          1666,
+          1699,
           9
         ]
       ],
@@ -387,7 +387,7 @@
       "source": [
         [
           "src/Op.ts",
-          1108,
+          1111,
           9
         ]
       ],
@@ -424,7 +424,7 @@
       "source": [
         [
           "src/Op.ts",
-          1124,
+          1127,
           9
         ]
       ],
@@ -461,7 +461,7 @@
       "source": [
         [
           "src/Op.ts",
-          1146,
+          1149,
           9
         ]
       ],
@@ -504,7 +504,7 @@
       "source": [
         [
           "src/Op.ts",
-          1350,
+          1353,
           9
         ]
       ],
@@ -541,7 +541,7 @@
       "source": [
         [
           "src/Op.ts",
-          1335,
+          1338,
           9
         ]
       ],
@@ -578,7 +578,7 @@
       "source": [
         [
           "src/Op.ts",
-          1210,
+          1213,
           9
         ]
       ],
@@ -615,7 +615,7 @@
       "source": [
         [
           "src/Op.ts",
-          1373,
+          1376,
           9
         ]
       ],
@@ -652,7 +652,7 @@
       "source": [
         [
           "src/Op.ts",
-          1078,
+          1081,
           9
         ]
       ],
@@ -695,7 +695,7 @@
       "source": [
         [
           "src/Op.ts",
-          1683,
+          1716,
           9
         ]
       ],

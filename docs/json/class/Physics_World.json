@@ -3,19 +3,19 @@
   "source": [
     [
       "src/Physics.ts",
-      13,
+      21,
       13
     ]
   ],
   "kind": "Class",
-  "comment": "A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation.\nIt advances with a substepped position-based (XPBD-style) solver and a spatial-hash broad phase.\nSee a [Particle demo](https://ptsjs.org/demo/?name=physics.particles) and a [Body demo](https://ptsjs.org/demo/?name=physics.shapes) on the demo page.",
+  "comment": "",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
           "src/Physics.ts",
-          47,
+          56,
           2
         ]
       ],
@@ -58,7 +58,7 @@
       "source": [
         [
           "src/Physics.ts",
-          135,
+          146,
           6
         ]
       ],
@@ -76,12 +76,12 @@
       "source": [
         [
           "src/Physics.ts",
-          62,
+          71,
           6
         ],
         [
           "src/Physics.ts",
-          65,
+          74,
           6
         ]
       ],
@@ -107,12 +107,12 @@
       "source": [
         [
           "src/Physics.ts",
-          92,
+          101,
           6
         ],
         [
           "src/Physics.ts",
-          95,
+          104,
           6
         ]
       ],
@@ -138,12 +138,12 @@
       "source": [
         [
           "src/Physics.ts",
-          82,
+          91,
           6
         ],
         [
           "src/Physics.ts",
-          85,
+          94,
           6
         ]
       ],
@@ -169,12 +169,12 @@
       "source": [
         [
           "src/Physics.ts",
-          72,
+          81,
           6
         ],
         [
           "src/Physics.ts",
-          75,
+          84,
           6
         ]
       ],
@@ -200,12 +200,12 @@
       "source": [
         [
           "src/Physics.ts",
-          102,
+          111,
           6
         ],
         [
           "src/Physics.ts",
-          105,
+          114,
           6
         ]
       ],
@@ -231,12 +231,12 @@
       "source": [
         [
           "src/Physics.ts",
-          125,
+          136,
           6
         ],
         [
           "src/Physics.ts",
-          128,
+          139,
           6
         ]
       ],
@@ -262,7 +262,7 @@
       "source": [
         [
           "src/Physics.ts",
-          142,
+          153,
           6
         ]
       ],
@@ -280,19 +280,19 @@
       "source": [
         [
           "src/Physics.ts",
-          113,
+          124,
           6
         ],
         [
           "src/Physics.ts",
-          116,
+          127,
           6
         ]
       ],
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "Number of solver substeps per [`World.update`](#link) call. More substeps produce a more\nstable and accurate simulation at a linear cost. Default is 4.",
+      "comment": "Target number of solver substeps per 60 Hz frame (16.7 ms). Each [`World.update`](#link)\nruns enough substeps of about that size to cover its elapsed time, so a 30 Hz frame solves\ntwice as many substeps as a 60 Hz frame rather than larger ones. More substeps produce a\nmore stable and accurate simulation at a linear cost. Default is 4.",
       "getter": {
         "type": "number"
       },
@@ -313,7 +313,7 @@
       "source": [
         [
           "src/Physics.ts",
-          248,
+          266,
           2
         ]
       ],
@@ -348,7 +348,7 @@
       "source": [
         [
           "src/Physics.ts",
-          151,
+          162,
           2
         ]
       ],
@@ -377,7 +377,7 @@
       "source": [
         [
           "src/Physics.ts",
-          175,
+          186,
           2
         ]
       ],
@@ -406,7 +406,7 @@
       "source": [
         [
           "src/Physics.ts",
-          239,
+          257,
           2
         ]
       ],
@@ -435,7 +435,7 @@
       "source": [
         [
           "src/Physics.ts",
-          231,
+          249,
           2
         ]
       ],
@@ -464,7 +464,7 @@
       "source": [
         [
           "src/Physics.ts",
-          390,
+          408,
           12
         ]
       ],
@@ -493,7 +493,7 @@
             },
             {
               "name": "prevDt",
-              "comment": "previous substep time in seconds, used to preserve velocity when frame timing changes.",
+              "comment": "time in seconds spanned by the particle's current displacement (see [`Particle.timeStep`](#link)); the velocity is rescaled to `dt` so that it is preserved when the step size changes.",
               "type": "number",
               "default": "..."
             }
@@ -507,7 +507,7 @@
       "source": [
         [
           "src/Physics.ts",
-          163,
+          174,
           2
         ]
       ],
@@ -536,7 +536,7 @@
       "source": [
         [
           "src/Physics.ts",
-          184,
+          195,
           2
         ]
       ],
@@ -565,7 +565,7 @@
       "source": [
         [
           "src/Physics.ts",
-          278,
+          296,
           2
         ]
       ],
@@ -600,7 +600,7 @@
       "source": [
         [
           "src/Physics.ts",
-          291,
+          309,
           2
         ]
       ],
@@ -635,7 +635,7 @@
       "source": [
         [
           "src/Physics.ts",
-          194,
+          206,
           2
         ]
       ],
@@ -644,7 +644,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Advance this world by an amount of time, solved in [`World.substeps`](#link) substeps.\nThe time is clamped to [`World.maxTimeStep`](#link). Draw callbacks fire once per call,\nafter the solve completes.",
+          "comment": "Advance this world by an amount of time, solved in substeps sized by\n[`World.substeps`](#link). The time is clamped to [`World.maxTimeStep`](#link), and an\nelapsed time under 2 ms is carried into the next call. Draw callbacks fire once per call,\nafter the solve completes.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
@@ -664,7 +664,7 @@
       "source": [
         [
           "src/Physics.ts",
-          337,
+          355,
           9
         ]
       ],
@@ -707,7 +707,7 @@
       "source": [
         [
           "src/Physics.ts",
-          307,
+          325,
           9
         ]
       ],

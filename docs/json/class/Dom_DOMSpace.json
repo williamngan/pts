@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Dom.ts",
-          54,
+          56,
           2
         ]
       ],
@@ -30,9 +30,9 @@
           "parameters": [
             {
               "name": "elem",
-              "comment": "Specify an element by its \"id\" attribute as string, or by the element object itself. Use css to customize its appearance if needed.",
-              "type": "string | Element",
-              "default": false
+              "comment": "Specify an element by its \"id\" attribute as string, or by the element object itself. If left empty, a `<div id=\"pt_container\"><div id=\"pt\" /></div>` will be added to DOM; a missing id is created the same way. Use css to customize its appearance if needed.",
+              "type": "string | Element | null",
+              "default": "\"pt\""
             },
             {
               "name": "callback",
@@ -57,12 +57,12 @@
       "source": [
         [
           "src/Dom.ts",
-          164,
+          175,
           6
         ],
         [
           "src/Dom.ts",
-          174,
+          185,
           6
         ]
       ],
@@ -88,12 +88,12 @@
       "source": [
         [
           "src/Dom.ts",
-          248,
+          259,
           6
         ],
         [
           "src/Dom.ts",
-          252,
+          263,
           6
         ]
       ],
@@ -119,7 +119,7 @@
       "source": [
         [
           "src/Space.ts",
-          301,
+          313,
           6
         ]
       ],
@@ -137,12 +137,12 @@
       "source": [
         [
           "src/Space.ts",
-          263,
+          275,
           6
         ],
         [
           "src/Space.ts",
-          266,
+          278,
           6
         ]
       ],
@@ -168,7 +168,7 @@
       "source": [
         [
           "src/Dom.ts",
-          216,
+          227,
           6
         ]
       ],
@@ -186,7 +186,7 @@
       "source": [
         [
           "src/Space.ts",
-          315,
+          327,
           6
         ]
       ],
@@ -204,7 +204,7 @@
       "source": [
         [
           "src/Space.ts",
-          287,
+          299,
           13
         ]
       ],
@@ -224,7 +224,7 @@
       "source": [
         [
           "src/Space.ts",
-          273,
+          285,
           6
         ]
       ],
@@ -242,7 +242,7 @@
       "source": [
         [
           "src/Space.ts",
-          280,
+          292,
           6
         ]
       ],
@@ -260,7 +260,7 @@
       "source": [
         [
           "src/Dom.ts",
-          223,
+          234,
           6
         ]
       ],
@@ -278,7 +278,7 @@
       "source": [
         [
           "src/Space.ts",
-          395,
+          407,
           13
         ]
       ],
@@ -298,7 +298,7 @@
       "source": [
         [
           "src/Dom.ts",
-          230,
+          241,
           6
         ]
       ],
@@ -316,7 +316,7 @@
       "source": [
         [
           "src/Space.ts",
-          294,
+          306,
           6
         ]
       ],
@@ -334,7 +334,7 @@
       "source": [
         [
           "src/Space.ts",
-          308,
+          320,
           6
         ]
       ],
@@ -354,7 +354,7 @@
       "source": [
         [
           "src/Space.ts",
-          67,
+          69,
           2
         ]
       ],
@@ -383,7 +383,7 @@
       "source": [
         [
           "src/Space.ts",
-          408,
+          420,
           2
         ]
       ],
@@ -430,7 +430,7 @@
       "source": [
         [
           "src/Space.ts",
-          435,
+          447,
           2
         ]
       ],
@@ -471,7 +471,7 @@
       "source": [
         [
           "src/Space.ts",
-          546,
+          558,
           2
         ]
       ],
@@ -506,7 +506,7 @@
       "source": [
         [
           "src/Space.ts",
-          455,
+          467,
           2
         ]
       ],
@@ -546,7 +546,7 @@
       "source": [
         [
           "src/Space.ts",
-          497,
+          509,
           2
         ]
       ],
@@ -592,7 +592,7 @@
       "source": [
         [
           "src/Dom.ts",
-          238,
+          249,
           2
         ]
       ],
@@ -621,7 +621,7 @@
       "source": [
         [
           "src/Dom.ts",
-          316,
+          327,
           2
         ]
       ],
@@ -643,7 +643,7 @@
       "source": [
         [
           "src/Dom.ts",
-          156,
+          167,
           2
         ]
       ],
@@ -665,7 +665,7 @@
       "source": [
         [
           "src/Space.ts",
-          53,
+          55,
           2
         ]
       ],
@@ -694,7 +694,7 @@
       "source": [
         [
           "src/Space.ts",
-          206,
+          214,
           2
         ]
       ],
@@ -723,7 +723,7 @@
       "source": [
         [
           "src/Space.ts",
-          107,
+          109,
           2
         ]
       ],
@@ -752,7 +752,7 @@
       "source": [
         [
           "src/Space.ts",
-          179,
+          181,
           12
         ]
       ],
@@ -783,7 +783,7 @@
       "source": [
         [
           "src/Space.ts",
-          245,
+          257,
           2
         ]
       ],
@@ -812,7 +812,7 @@
       "source": [
         [
           "src/Space.ts",
-          44,
+          46,
           2
         ]
       ],
@@ -841,7 +841,7 @@
       "source": [
         [
           "src/Space.ts",
-          89,
+          91,
           2
         ]
       ],
@@ -870,7 +870,7 @@
       "source": [
         [
           "src/Space.ts",
-          583,
+          595,
           2
         ]
       ],
@@ -892,7 +892,7 @@
       "source": [
         [
           "src/Space.ts",
-          255,
+          267,
           12
         ]
       ],
@@ -923,7 +923,7 @@
       "source": [
         [
           "src/Space.ts",
-          170,
+          172,
           2
         ]
       ],
@@ -945,7 +945,7 @@
       "source": [
         [
           "src/Dom.ts",
-          183,
+          194,
           2
         ]
       ],
@@ -980,7 +980,7 @@
       "source": [
         [
           "src/Space.ts",
-          214,
+          222,
           2
         ]
       ],
@@ -1002,7 +1002,7 @@
       "source": [
         [
           "src/Dom.ts",
-          143,
+          154,
           2
         ]
       ],
@@ -1036,7 +1036,7 @@
       "source": [
         [
           "src/Space.ts",
-          223,
+          232,
           2
         ]
       ],
@@ -1045,7 +1045,7 @@
       "inherits": "Space.stop",
       "signatures": [
         {
-          "comment": "Specify when the animation should stop: immediately, after a time period, or never stops.",
+          "comment": "Specify when the animation should stop: immediately, after a time period, or never stops.\nAfter stopping, use [`Space.replay`](#link) to play again.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
@@ -1065,7 +1065,7 @@
       "source": [
         [
           "src/Dom.ts",
-          262,
+          273,
           2
         ]
       ],
@@ -1106,7 +1106,7 @@
       "source": [
         [
           "src/Dom.ts",
-          274,
+          285,
           2
         ]
       ],
@@ -1141,7 +1141,7 @@
       "source": [
         [
           "src/Space.ts",
-          660,
+          683,
           2
         ]
       ],
@@ -1176,7 +1176,7 @@
       "source": [
         [
           "src/Space.ts",
-          597,
+          609,
           2
         ]
       ],
@@ -1205,7 +1205,7 @@
       "source": [
         [
           "src/Space.ts",
-          425,
+          437,
           2
         ]
       ],
@@ -1252,7 +1252,7 @@
       "source": [
         [
           "src/Space.ts",
-          441,
+          453,
           2
         ]
       ],
@@ -1293,7 +1293,7 @@
       "source": [
         [
           "src/Space.ts",
-          618,
+          630,
           2
         ]
       ],
@@ -1322,7 +1322,7 @@
       "source": [
         [
           "src/Dom.ts",
-          100,
+          111,
           9
         ]
       ],
@@ -1365,7 +1365,7 @@
       "source": [
         [
           "src/Dom.ts",
-          301,
+          312,
           9
         ]
       ],
@@ -1401,7 +1401,7 @@
       "source": [
         [
           "src/Dom.ts",
-          287,
+          298,
           9
         ]
       ],
@@ -1441,7 +1441,7 @@
       "source": [
         [
           "src/Space.ts",
-          20,
+          21,
           12
         ]
       ],
@@ -1473,7 +1473,7 @@
       "source": [
         [
           "src/Space.ts",
-          24,
+          26,
           12
         ]
       ],
@@ -1490,7 +1490,7 @@
       "source": [
         [
           "src/Space.ts",
-          23,
+          25,
           12
         ]
       ],

@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Svg.ts",
-      956,
+      985,
       13
     ]
   ],
@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Svg.ts",
-          988,
+          1018,
           2
         ]
       ],
@@ -81,19 +81,19 @@
       "name": "filled",
       "source": [
         [
-          "src/Form.ts",
-          33,
+          "src/Svg.ts",
+          1053,
           6
         ],
         [
-          "src/Form.ts",
-          36,
+          "src/Svg.ts",
+          1056,
           6
         ]
       ],
       "flags": {},
-      "overrides": false,
-      "inherits": "CanvasForm.filled",
+      "overrides": "CanvasForm.filled",
+      "inherits": false,
       "comment": "Check whether this form currently has fill style.",
       "getter": {
         "type": "boolean"
@@ -131,7 +131,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1005,
+          1096,
           6
         ]
       ],
@@ -148,19 +148,19 @@
       "name": "stroked",
       "source": [
         [
-          "src/Form.ts",
-          43,
+          "src/Svg.ts",
+          1061,
           6
         ],
         [
-          "src/Form.ts",
-          46,
+          "src/Svg.ts",
+          1064,
           6
         ]
       ],
       "flags": {},
-      "overrides": false,
-      "inherits": "CanvasForm.stroked",
+      "overrides": "CanvasForm.stroked",
+      "inherits": false,
       "comment": "Check whether this form currently has stroke style.",
       "getter": {
         "type": "boolean"
@@ -180,7 +180,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1012,
+          1103,
           6
         ]
       ],
@@ -198,12 +198,12 @@
       "source": [
         [
           "src/Svg.ts",
-          977,
+          1007,
           13
         ],
         [
           "src/Svg.ts",
-          980,
+          1010,
           13
         ]
       ],
@@ -231,12 +231,12 @@
       "source": [
         [
           "src/Svg.ts",
-          971,
+          1001,
           13
         ],
         [
           "src/Svg.ts",
-          974,
+          1004,
           13
         ]
       ],
@@ -266,7 +266,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1595,
+          1614,
           2
         ]
       ],
@@ -514,7 +514,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1022,
+          1113,
           2
         ]
       ],
@@ -1023,7 +1023,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1612,
+          1631,
           2
         ]
       ],
@@ -1052,7 +1052,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1056,
+          1151,
           2
         ]
       ],
@@ -1079,7 +1079,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1521,
+          1531,
           2
         ]
       ],
@@ -1334,23 +1334,23 @@
       "name": "renderOffscreen",
       "source": [
         [
-          "src/Canvas.ts",
-          697,
+          "src/Svg.ts",
+          1080,
           2
         ]
       ],
       "flags": {},
-      "overrides": false,
-      "inherits": "CanvasForm.renderOffscreen",
+      "overrides": "CanvasForm.renderOffscreen",
+      "inherits": false,
       "signatures": [
         {
-          "comment": "Render the offscreen canvas's content on the visible canvas",
+          "comment": "Offscreen buffers require Canvas output. In SVG this warns once and does nothing.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
             {
-              "name": "offset",
-              "comment": "Optional offset on the top-left position when drawing on the visible canvas",
+              "name": "_offset",
+              "comment": "",
               "type": "PtLike",
               "default": "..."
             }
@@ -1386,7 +1386,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1047,
+          1138,
           2
         ]
       ],
@@ -1396,7 +1396,7 @@
       "signatures": [
         {
           "comment": "",
-          "returns": "object",
+          "returns": "DOMFormContext",
           "returns_comment": false,
           "parameters": [
             {
@@ -1677,7 +1677,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1035,
+          1126,
           2
         ]
       ],
@@ -1687,7 +1687,7 @@
       "signatures": [
         {
           "comment": "",
-          "returns": "object",
+          "returns": "DOMFormContext",
           "returns_comment": false,
           "parameters": [
             {
@@ -1716,29 +1716,29 @@
       "name": "useOffscreen",
       "source": [
         [
-          "src/Canvas.ts",
-          683,
+          "src/Svg.ts",
+          1072,
           2
         ]
       ],
       "flags": {},
-      "overrides": false,
-      "inherits": "CanvasForm.useOffscreen",
+      "overrides": "CanvasForm.useOffscreen",
+      "inherits": false,
       "signatures": [
         {
-          "comment": "Toggle whether to draw on offscreen canvas (if offscreen is set in CanvasSpace)",
-          "returns": "SVGForm",
+          "comment": "Offscreen buffers require Canvas output. In SVG this warns once and draws directly.",
+          "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
-              "name": "off",
-              "comment": "if `true`, draw on offscreen canvas instead of the visible canvas. Default is `true`",
+              "name": "_off",
+              "comment": "",
               "type": "boolean",
               "default": "true"
             },
             {
-              "name": "clear",
-              "comment": "optionally provide a valid color string to fill a bg color. see CanvasSpace's `clearOffscreen` function.",
+              "name": "_clear",
+              "comment": "",
               "type": "string | boolean",
               "default": "false"
             }
@@ -1752,17 +1752,17 @@
       "source": [
         [
           "src/Svg.ts",
-          1152,
+          1247,
           9
         ],
         [
           "src/Svg.ts",
-          1160,
+          1255,
           9
         ],
         [
           "src/Svg.ts",
-          1168,
+          1263,
           9
         ]
       ],
@@ -1867,7 +1867,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1297,
+          1392,
           9
         ]
       ],
@@ -1928,17 +1928,17 @@
       "source": [
         [
           "src/Svg.ts",
-          1139,
+          1234,
           9
         ],
         [
           "src/Svg.ts",
-          1140,
+          1235,
           9
         ],
         [
           "src/Svg.ts",
-          1141,
+          1236,
           9
         ]
       ],
@@ -2007,7 +2007,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1270,
+          1365,
           9
         ]
       ],
@@ -2117,7 +2117,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1066,
+          1161,
           9
         ]
       ],
@@ -2240,17 +2240,17 @@
       "source": [
         [
           "src/Svg.ts",
-          1195,
+          1290,
           9
         ],
         [
           "src/Svg.ts",
-          1196,
+          1291,
           9
         ],
         [
           "src/Svg.ts",
-          1197,
+          1292,
           9
         ]
       ],
@@ -2307,7 +2307,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1348,
+          1443,
           9
         ]
       ],
@@ -2344,17 +2344,17 @@
       "source": [
         [
           "src/Svg.ts",
-          1115,
+          1210,
           9
         ],
         [
           "src/Svg.ts",
-          1121,
+          1216,
           9
         ],
         [
           "src/Svg.ts",
-          1127,
+          1222,
           9
         ]
       ],
@@ -2435,7 +2435,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1251,
+          1346,
           9
         ]
       ],
@@ -2489,7 +2489,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1404,
+          1499,
           19
         ]
       ],
@@ -2521,17 +2521,17 @@
       "source": [
         [
           "src/Svg.ts",
-          1204,
+          1299,
           9
         ],
         [
           "src/Svg.ts",
-          1205,
+          1300,
           9
         ],
         [
           "src/Svg.ts",
-          1206,
+          1301,
           9
         ]
       ],
@@ -2588,7 +2588,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1422,
+          1517,
           9
         ]
       ],
@@ -2625,17 +2625,17 @@
       "source": [
         [
           "src/Svg.ts",
-          1216,
+          1311,
           9
         ],
         [
           "src/Svg.ts",
-          1217,
+          1312,
           9
         ],
         [
           "src/Svg.ts",
-          1218,
+          1313,
           9
         ]
       ],
@@ -2692,7 +2692,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1432,
+          1527,
           9
         ]
       ],
@@ -2760,7 +2760,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1074,
+          1169,
           9
         ]
       ],
@@ -2791,17 +2791,17 @@
       "source": [
         [
           "src/Svg.ts",
-          1182,
+          1277,
           9
         ],
         [
           "src/Svg.ts",
-          1183,
+          1278,
           9
         ],
         [
           "src/Svg.ts",
-          1184,
+          1279,
           9
         ]
       ],
@@ -2870,7 +2870,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1330,
+          1425,
           9
         ]
       ],
@@ -2913,7 +2913,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1090,
+          1185,
           9
         ]
       ],
@@ -2955,17 +2955,17 @@
       "source": [
         [
           "src/Svg.ts",
-          1225,
+          1320,
           9
         ],
         [
           "src/Svg.ts",
-          1226,
+          1321,
           9
         ],
         [
           "src/Svg.ts",
-          1232,
+          1327,
           9
         ]
       ],
@@ -3040,7 +3040,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1460,
+          1555,
           9
         ]
       ],

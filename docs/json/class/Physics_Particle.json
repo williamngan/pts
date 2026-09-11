@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Physics.ts",
-      654,
+      682,
       13
     ]
   ],
@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Physics.ts",
-          668,
+          697,
           2
         ]
       ],
@@ -46,12 +46,12 @@
       "source": [
         [
           "src/Physics.ts",
-          716,
+          745,
           6
         ],
         [
           "src/Physics.ts",
-          719,
+          748,
           6
         ]
       ],
@@ -77,14 +77,14 @@
       "source": [
         [
           "src/Physics.ts",
-          741,
+          772,
           6
         ]
       ],
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "Get the change in position since last time step.",
+      "comment": "Get the change in position per 60 Hz frame, ie, the current velocity in the same unit\nas [`Particle.hit`](#link). The raw displacement since the last step is\n`particle.$subtract( particle.previous )`.",
       "getter": {
         "type": "Pt"
       },
@@ -95,12 +95,12 @@
       "source": [
         [
           "src/Physics.ts",
-          706,
+          735,
           6
         ],
         [
           "src/Physics.ts",
-          709,
+          738,
           6
         ]
       ],
@@ -157,12 +157,12 @@
       "source": [
         [
           "src/Physics.ts",
-          726,
+          755,
           6
         ],
         [
           "src/Physics.ts",
-          729,
+          758,
           6
         ]
       ],
@@ -188,12 +188,12 @@
       "source": [
         [
           "src/Physics.ts",
-          676,
+          705,
           6
         ],
         [
           "src/Physics.ts",
-          679,
+          708,
           6
         ]
       ],
@@ -219,14 +219,14 @@
       "source": [
         [
           "src/Physics.ts",
-          748,
+          796,
           6
         ]
       ],
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "Set a new position, and update previous and lock states if needed.",
+      "comment": "Set a new position, and update previous and lock states if needed. The move is stored as\nthis particle's velocity per frame, so dragging a locked particle knocks others away.",
       "getter": false,
       "setter": {
         "type": "void",
@@ -243,12 +243,12 @@
       "source": [
         [
           "src/Physics.ts",
-          696,
+          725,
           6
         ],
         [
           "src/Physics.ts",
-          699,
+          728,
           6
         ]
       ],
@@ -274,12 +274,12 @@
       "source": [
         [
           "src/Physics.ts",
-          686,
+          715,
           6
         ],
         [
           "src/Physics.ts",
-          689,
+          718,
           6
         ]
       ],
@@ -294,6 +294,37 @@
         "type": "void",
         "parameters": {
           "name": "f",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "timeStep",
+      "source": [
+        [
+          "src/Physics.ts",
+          785,
+          6
+        ],
+        [
+          "src/Physics.ts",
+          788,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "The time in seconds spanned by the displacement from [`Particle.previous`](#link) to the\ncurrent position. A [`World`](#link) sets it to the substep length on every step, and\n[`Particle.hit`](#link) and the `position` setter reset it to one 60 Hz frame (1/60),\nwhich is the unit of their velocities. 0 means unknown and is treated as one frame.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "t",
           "comment": "",
           "type": "number",
           "default": false
@@ -947,7 +978,7 @@
       "source": [
         [
           "src/Physics.ts",
-          768,
+          817,
           2
         ]
       ],
@@ -1084,7 +1115,7 @@
       "source": [
         [
           "src/Physics.ts",
-          822,
+          882,
           2
         ]
       ],
@@ -1491,7 +1522,7 @@
       "source": [
         [
           "src/Physics.ts",
-          812,
+          863,
           2
         ]
       ],
@@ -1500,7 +1531,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Hit this particle with an impulse. The impulse is scaled by 1/√mass, so a heavier particle moves less from the same hit.",
+          "comment": "Hit this particle with an impulse, in pixels per 60 Hz frame. The impulse is scaled by 1/√mass, so a heavier particle moves less from the same hit.\nThe result is the same at any frame rate and any [`World.substeps`](#link) setting.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
@@ -2262,7 +2293,7 @@
       "source": [
         [
           "src/Physics.ts",
-          758,
+          807,
           2
         ]
       ],
@@ -2637,7 +2668,7 @@
       "source": [
         [
           "src/Physics.ts",
-          882,
+          942,
           2
         ]
       ],
@@ -2710,7 +2741,7 @@
       "source": [
         [
           "src/Physics.ts",
-          779,
+          828,
           2
         ]
       ],
@@ -2725,7 +2756,7 @@
           "parameters": [
             {
               "name": "dt",
-              "comment": "change in time",
+              "comment": "change in time in seconds",
               "type": "number",
               "default": false
             },
@@ -2737,7 +2768,7 @@
             },
             {
               "name": "lastDt",
-              "comment": "optional last change in time",
+              "comment": "optional last change in time in seconds. Default is [`Particle.timeStep`](#link), or `dt` if unknown.",
               "type": "number",
               "default": false
             }

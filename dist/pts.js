@@ -496,6 +496,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			let area = Polygon.area(_pts);
 			let perim = Polygon.perimeter(_pts, true);
 			let r = 2 * area / perim.total;
+			if (!(r > 0)) return void 0;
 			return Circle.fromCenter(c, r);
 		}
 		static circumcenter(tri) {
@@ -601,7 +602,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 		}
 		static area(pts) {
 			let _pts = Util.iterToArray(pts);
-			if (_pts.length < 3) return _errorLength(new Group(), 3);
+			if (_pts.length < 3) return _errorLength(0, 3);
 			let det = (a, b) => a[0] * b[1] - a[1] * b[0];
 			let area = 0;
 			for (let i = 0, len = _pts.length; i < len; i++) if (i < _pts.length - 1) area += det(_pts[i], _pts[i + 1]);
@@ -765,6 +766,33 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 				}
 			}
 			if (!minEdge) return null;
+			let vx = 0;
+			let vy = 0;
+			let vd = Infinity;
+			for (let i = 0, len = _poly.length; i < len; i++) {
+				const dx = c[0] - _poly[i][0];
+				const dy = c[1] - _poly[i][1];
+				const d = dx * dx + dy * dy;
+				if (d < vd) {
+					vd = d;
+					vx = dx;
+					vy = dy;
+				}
+			}
+			if (vd > 0) {
+				const vlen = Math.sqrt(vd);
+				vx /= vlen;
+				vy /= vlen;
+				let minP = Infinity;
+				let maxP = -Infinity;
+				for (let i = 0, len = _poly.length; i < len; i++) {
+					const d = vx * _poly[i][0] + vy * _poly[i][1];
+					if (d < minP) minP = d;
+					if (d > maxP) maxP = d;
+				}
+				const dotC = vx * c[0] + vy * c[1];
+				if (dotC - r > maxP || dotC + r < minP) return null;
+			}
 			const centroid = Polygon.centroid(_poly);
 			if (minAx * (c[0] - centroid[0]) + minAy * (c[1] - centroid[1]) < 0) {
 				minAx = -minAx;
@@ -2325,7 +2353,8 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			return chunks;
 		}
 		insert(pts, index = 0) {
-			const _pts = Util.iterToArray(pts);
+			let _pts = Util.iterToArray(pts);
+			if (_pts === this) _pts = _pts.slice();
 			const len = this.length;
 			const n = _pts.length;
 			if (n === 0) return this;
@@ -3024,6 +3053,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 				end: -1,
 				min: 0
 			};
+			this._stopAfter = -1;
 			this.players = {};
 			this.playerCount = 0;
 			this._animID = -1;
@@ -3109,6 +3139,10 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			if (this._isReady) {
 				for (const k in this.players) if (this.players[k].animate) this.players[k].animate(time, this._time.diff, this);
 			}
+			if (this._stopAfter >= 0) {
+				this._time.end = time + this._stopAfter;
+				this._stopAfter = -1;
+			}
 			if (this._time.end >= 0 && time > this._time.end) {
 				cancelAnimationFrame(this._animID);
 				this._animID = -1;
@@ -3125,7 +3159,8 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			return this;
 		}
 		stop(t = 0) {
-			this._time.end = t;
+			this._stopAfter = t > 0 ? t : -1;
+			this._time.end = t > 0 ? -1 : t;
 			return this;
 		}
 		_cancelAnimation() {
@@ -3313,14 +3348,12 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			return this;
 		}
 		untrack(uis) {
-			if (uis === void 0) {
-				this._trackedUIs.length = 0;
-				return this;
-			}
-			const list = Array.isArray(uis) ? uis : [uis];
+			const list = uis === void 0 ? this._trackedUIs.slice() : Array.isArray(uis) ? uis : [uis];
 			for (let i = 0, len = list.length; i < len; i++) {
 				const at = this._trackedUIs.indexOf(list[i]);
-				if (at >= 0) this._trackedUIs.splice(at, 1);
+				if (at < 0) continue;
+				this._trackedUIs.splice(at, 1);
+				if (list[i].state("dragging")) list[i].listen(UIPointerActions.drop, this._pointer, new Event("pointercancel"));
 			}
 			return this;
 		}
@@ -3382,7 +3415,9 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			this._mouseAction(UIPointerActions.down, evt);
 			this._mouseAction(UIPointerActions.pointerdown, evt);
 			this._pressed = true;
-			if (evt.target instanceof Element) evt.target.setPointerCapture(evt.pointerId);
+			if (evt.target instanceof Element) try {
+				evt.target.setPointerCapture(evt.pointerId);
+			} catch (_unused) {}
 			return false;
 		}
 		_mouseUp(evt) {
@@ -4699,7 +4734,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			return this;
 		}
 		textBox(box, txt, verticalAlign = "middle", tail = "", overrideBaseline = true) {
-			if (overrideBaseline) this._ctx.textBaseline = verticalAlign;
+			if (overrideBaseline) this._ctx.textBaseline = verticalAlign === "center" ? "middle" : verticalAlign === "start" ? "top" : verticalAlign === "end" ? "bottom" : verticalAlign;
 			const size = Rectangle.size(box);
 			const t = this._textTruncate(txt, size[0], tail);
 			this.text(this._textAlign(box, verticalAlign), t[0]);
@@ -4725,8 +4760,13 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 					continue;
 				}
 				const consumedAll = t[1] === sub.length;
-				let dt = t[0].lastIndexOf(" ") + 1;
-				if (dt <= 0 || consumedAll) dt = void 0;
+				let dt;
+				if (consumedAll) dt = void 0;
+				else if (sub[t[1]] === " ") dt = t[1] + 1;
+				else {
+					dt = t[0].lastIndexOf(" ") + 1;
+					if (dt <= 0) dt = void 0;
+				}
 				lines.push(dt === void 0 ? t[0] : t[0].slice(0, dt));
 				if (t[1] <= 0 || consumedAll) break;
 				sub = sub.slice((_dt = dt) !== null && _dt !== void 0 ? _dt : t[1]);
@@ -6311,13 +6351,14 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 		HTMLSpace: () => HTMLSpace
 	});
 	var DOMSpace = class DOMSpace extends MultiTouchSpace {
-		constructor(elem, callback) {
+		constructor(elem = "pt", callback) {
 			super();
 			this.id = "domspace";
 			this._autoResize = true;
 			this._bgcolor = "#e1e9f0";
 			this._css = {};
 			this._domDisposed = false;
+			this._ownsContainer = false;
 			this._resizeHandlerBound = this._resizeHandler.bind(this);
 			this.refresh(false);
 			let _selector = null;
@@ -6326,19 +6367,24 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 				_selector = elem;
 				this.id = "pts_existing_space";
 			} else {
-				_selector = document.querySelector(elem);
-				this.id = elem.substr(1);
+				const target = elem || "pt";
+				const id = target[0] === "#" || target[0] === "." ? target : "#" + target;
+				_selector = document.querySelector(id);
+				this.id = id.substr(1);
 			}
 			if (!_selector) {
-				this._container = DOMSpace.createElement("div", "pts_container");
-				this._canvas = DOMSpace.createElement("div", "pts_element");
-				this._container.appendChild(this._canvas);
+				this._container = DOMSpace.createElement("div", this.id + "_container");
+				this._canvas = this._createDefaultElement(this._container, this.id);
 				document.body.appendChild(this._container);
+				this._ownsContainer = true;
 			} else {
 				this._canvas = _selector;
 				this._container = _selector.parentElement;
 			}
 			this._readyTimer = setTimeout(this._ready.bind(this, callback), 50);
+		}
+		_createDefaultElement(container, id) {
+			return DOMSpace.createElement("div", id, container);
 		}
 		static createElement(elem = "div", id, appendTo) {
 			let d = document.createElement(elem);
@@ -6452,6 +6498,8 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			this._unbindAll();
 			this._cancelAnimation();
 			MultiTouchSpace.prototype.removeAll.call(this);
+			this._isReady = false;
+			if (this._ownsContainer) this._container.remove();
 			return this;
 		}
 	};
@@ -6524,13 +6572,17 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 				style: {}
 			};
 			this._ready = false;
+			this._formID = 0;
 			this._space = space;
-			this._space.add({ start: () => {
+			this._formID = HTMLForm.groupID++;
+			const init = () => {
 				this._ctx.group = this._space.element;
-				this._ctx.groupID = "pts_dom_" + HTMLForm.groupID++;
+				this._ctx.groupID = `pts_dom_${this._formID}`;
 				this._ctx.style = Object.assign({}, this._style);
 				this._ready = true;
-			} });
+			};
+			if (this._space.ready) init();
+			else this._space.add({ start: init });
 		}
 		get space() {
 			return this._space;
@@ -6599,7 +6651,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 		}
 		scope(item) {
 			if (!item || item.animateID == null) throw new Error("item not defined or not yet added to Space");
-			return this.updateScope(HTMLForm.scopeID(item), this.space.element);
+			return this.updateScope(`${HTMLForm.scopeID(item)}-f${this._formID}`, this.space.element);
 		}
 		nextID() {
 			this._ctx.groupCount++;
@@ -7111,6 +7163,10 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 				}
 				return style.materialize(this._defs);
 			}
+			if (typeof style !== "string") {
+				SVGContext2D._warnOnce("pattern", "canvas patterns are not supported in SVG output; use CanvasSpace");
+				return "none";
+			}
 			return style;
 		}
 		_applyCommon(attrs) {
@@ -7119,8 +7175,10 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			else attrs.opacity = 1;
 			const op = this.globalCompositeOperation;
 			if (op !== "source-over") {
-				if (BLEND_MODES.has(op)) attrs.style = `mix-blend-mode: ${op}`;
-				else SVGContext2D._warnOnce(`composite-${op}`, `composite operation "${op}" has no SVG equivalent`);
+				if (BLEND_MODES.has(op)) {
+					const blend = `mix-blend-mode: ${op}`;
+					attrs.style = attrs.style ? `${attrs.style}; ${blend}` : blend;
+				} else SVGContext2D._warnOnce(`composite-${op}`, `composite operation "${op}" has no SVG equivalent`);
 			}
 		}
 		_flushShape() {
@@ -7170,7 +7228,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 		return true;
 	}
 	var SVGSpace = class SVGSpace extends DOMSpace {
-		constructor(elem, callback) {
+		constructor(elem = "pt", callback) {
 			super(elem, callback);
 			this._bgcolor = "#999";
 			this._svgContexts = [];
@@ -7182,6 +7240,9 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 				this._canvas = s;
 			}
 			this.refresh(true);
+		}
+		_createDefaultElement(container, id) {
+			return SVGSpace.svgElement(container, "svg", id);
 		}
 		getForm() {
 			return new SVGForm(this);
@@ -7299,6 +7360,15 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 	};
 	let _svgFormGroupID = 0;
 	let _svgFormDomID = 0;
+	const _legacyStyleKeys = {
+		fillStyle: "fill",
+		strokeStyle: "stroke",
+		lineWidth: "stroke-width",
+		lineJoin: "stroke-linejoin",
+		lineCap: "stroke-linecap",
+		globalAlpha: "opacity",
+		font: "font"
+	};
 	var SVGForm = class SVGForm extends CanvasForm {
 		static get groupID() {
 			return _svgFormGroupID;
@@ -7314,6 +7384,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 		}
 		constructor(space) {
 			super();
+			this._formID = _svgFormGroupID++;
 			this._legacyCtx = {
 				group: null,
 				groupID: "pts",
@@ -7326,10 +7397,45 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			this._svgCtx = new SVGContext2D(space.element);
 			space.registerContext(this._svgCtx);
 			this._ctx = this._svgCtx;
-			this._ctx.fillStyle = "#f03";
-			this._ctx.strokeStyle = "#fff";
+			this._set("fillStyle", this._style.fillStyle);
+			this._set("strokeStyle", this._style.strokeStyle);
+			this._set("lineJoin", "bevel");
+			this._set("font", this._font.value);
 			this._ready = true;
 			this._legacyCtx.group = space.element;
+		}
+		_set(key, value) {
+			const legacy = _legacyStyleKeys[key];
+			if (legacy) {
+				if (typeof value === "string" || typeof value === "number") this._legacyCtx.style[legacy] = value;
+			}
+			super._set(key, value);
+		}
+		get filled() {
+			return this._filled;
+		}
+		set filled(b) {
+			this._filled = b;
+			this._legacyCtx.style.filled = b;
+		}
+		get stroked() {
+			return this._stroked;
+		}
+		set stroked(b) {
+			this._stroked = b;
+			this._legacyCtx.style.stroked = b;
+		}
+		useOffscreen(_off = true, _clear = false) {
+			SVGForm._warnOffscreen();
+			return this;
+		}
+		renderOffscreen(_offset = [0, 0]) {
+			SVGForm._warnOffscreen();
+		}
+		static _warnOffscreen() {
+			if (SVGForm._offscreenWarned) return;
+			SVGForm._offscreenWarned = true;
+			Util.warn("offscreen canvases are not supported in SVG output; use CanvasSpace");
 		}
 		get space() {
 			return this._svgSpace;
@@ -7352,7 +7458,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 		}
 		scope(item) {
 			if (!item || item.animateID == null) throw new Error("item not defined or not yet added to Space");
-			return this.updateScope(SVGForm.scopeID(item), this._svgSpace.element);
+			return this.updateScope(`${SVGForm.scopeID(item)}-f${this._formID}`, this._svgSpace.element);
 		}
 		nextID() {
 			this._legacyCtx.groupCount++;
@@ -7516,6 +7622,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			return elem;
 		}
 	};
+	SVGForm._offscreenWarned = false;
 
 //#endregion
 //#region src/Physics.ts
@@ -7524,6 +7631,9 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 		Particle: () => Particle,
 		World: () => World
 	});
+	const FRAME = 1 / 60;
+	const FRAME_MS = 1e3 / 60;
+	const MIN_STEP_MS = 2;
 	var World = class World {
 		constructor(bound, friction = 1, gravity = 0) {
 			this._gravity = new Pt();
@@ -7537,7 +7647,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			this._pnames = [];
 			this._bnames = [];
 			this._frictionStep = 1;
-			this._lastStep = 0;
+			this._carry = 0;
 			this._hashKeys = /* @__PURE__ */ new Uint32Array(0);
 			this._cellStart = /* @__PURE__ */ new Uint32Array(0);
 			this._cellEntries = /* @__PURE__ */ new Uint32Array(0);
@@ -7611,18 +7721,18 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			return this._pnames.indexOf(name);
 		}
 		update(ms) {
-			const clamped = Math.min(ms, this._maxTimeStep);
-			if (clamped > 0) {
-				const n = this._substeps;
-				const h = clamped / 1e3 / n;
-				this._frictionStep = n === 1 ? this._friction : Math.pow(this._friction, 1 / n);
-				for (let s = 0; s < n; s++) {
+			const elapsed = Math.min(ms, this._maxTimeStep) + this._carry;
+			this._carry = 0;
+			if (elapsed >= MIN_STEP_MS) {
+				const k = Math.max(1, Math.round(elapsed * this._substeps / FRAME_MS));
+				const h = elapsed / 1e3 / k;
+				this._frictionStep = Math.pow(this._friction, h / FRAME);
+				for (let s = 0; s < k; s++) {
 					this._updateParticles(h);
 					this._updateBodies(h);
-					this._lastStep = h;
 				}
 				this._clearForces();
-			}
+			} else if (elapsed > 0) this._carry = elapsed;
 			if (this._drawParticles) for (let i = 0, len = this._particles.length; i < len; i++) this._drawParticles(this._particles[i], i);
 			if (this._drawBodies) for (let i = 0, len = this._bodies.length; i < len; i++) this._drawBodies(this._bodies[i], i);
 		}
@@ -7695,14 +7805,20 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 				p[1] = ny;
 			}
 		}
-		integrate(p, dt, prevDt = this._lastStep) {
+		integrate(p, dt, prevDt = p.timeStep || FRAME) {
+			const prev = p.previous;
+			const ratio = prevDt > 0 ? dt / prevDt : 1;
 			if (p.lock) {
-				p.verlet(dt, this._frictionStep, prevDt);
+				if (ratio !== 1) {
+					prev[0] = p[0] - (p[0] - prev[0]) * ratio;
+					prev[1] = p[1] - (p[1] - prev[1]) * ratio;
+				}
+				p.timeStep = dt;
+				p.verlet(dt, this._frictionStep, dt);
 				return p;
 			}
-			const prev = p.previous;
 			const force = p.force;
-			const f = this._frictionStep * (prevDt > 0 ? dt / prevDt : 1);
+			const f = this._frictionStep * ratio;
 			const dtSq = dt * dt;
 			const px = p[0];
 			const py = p[1];
@@ -7712,6 +7828,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			prev[1] = py;
 			p[0] = nx;
 			p[1] = ny;
+			p.timeStep = dt;
 			return p;
 		}
 		_updateParticles(dt) {
@@ -7869,6 +7986,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			this._radius = 0;
 			this._force = new Pt();
 			this._prev = new Pt();
+			this._prevDt = 0;
 			this._lock = false;
 			this._prev = this.clone();
 		}
@@ -7911,10 +8029,18 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 			this._lockPt = new Pt(this);
 		}
 		get changed() {
-			return this.$subtract(this._prev);
+			const d = this.$subtract(this._prev);
+			return this._prevDt > 0 && this._prevDt !== FRAME ? d.multiply(FRAME / this._prevDt) : d;
+		}
+		get timeStep() {
+			return this._prevDt;
+		}
+		set timeStep(t) {
+			this._prevDt = t;
 		}
 		set position(p) {
 			this.previous.to(this);
+			this._prevDt = FRAME;
 			if (this._lock) this._lockPt = p;
 			this.to(p);
 		}
@@ -7930,7 +8056,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 		verlet(dt, friction, lastDt) {
 			if (this._lock) this.to(this._lockPt);
 			else {
-				const lt = lastDt ? lastDt : dt;
+				const lt = lastDt ? lastDt : this._prevDt || dt;
 				const adt = dt * (dt + lt) / 2;
 				const f = friction * dt / lt;
 				const force = this._force;
@@ -7942,11 +8068,18 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 					this[i] = cur + v;
 				}
 				force.fill(0);
+				this._prevDt = dt;
 			}
 			return this;
 		}
 		hit(...args) {
-			this._prev.subtract(new Pt(...args).$divide(Math.sqrt(this._mass)));
+			const prev = this._prev;
+			if (this._prevDt > 0 && this._prevDt !== FRAME) {
+				const r = FRAME / this._prevDt;
+				for (let i = 0, len = this.length; i < len; i++) prev[i] = this[i] - (this[i] - prev[i]) * r;
+			}
+			this._prevDt = FRAME;
+			prev.subtract(new Pt(...args).$divide(Math.sqrt(this._mass)));
 			return this;
 		}
 		collide(p2, damp = 1) {
@@ -8154,7 +8287,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 				let mr1 = m1 / (m0 + m1);
 				eg[0].subtract(cv.$multiply(mr0 * (1 - t) * lambda / 2));
 				eg[1].subtract(cv.$multiply(mr0 * t * lambda / 2));
-				let c1 = b.changed.add(cv.$multiply(mr1));
+				let c1 = b.$subtract(b.previous).add(cv.$multiply(mr1));
 				b.previous = b.$subtract(c1);
 			}
 		}
@@ -8562,7 +8695,7 @@ demo/edit/vs/THIRD-PARTY-NOTICES.md. */
 				} else this._source.pause();
 			} else if (this._type === "gen") {
 				if (this._generated) this._node.stop();
-			} else if (this._type === "input") this._stream.getAudioTracks().forEach((track) => track.stop());
+			} else if (this._type === "input" && this._stream) this._stream.getAudioTracks().forEach((track) => track.stop());
 			this._playing = false;
 			return this;
 		}

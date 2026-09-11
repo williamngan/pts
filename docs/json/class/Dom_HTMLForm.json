@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Dom.ts",
-      409,
+      423,
       13
     ]
   ],
@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Dom.ts",
-          461,
+          476,
           2
         ]
       ],
@@ -113,7 +113,7 @@
       "source": [
         [
           "src/Dom.ts",
-          478,
+          496,
           6
         ]
       ],
@@ -162,12 +162,12 @@
       "source": [
         [
           "src/Dom.ts",
-          447,
+          461,
           13
         ],
         [
           "src/Dom.ts",
-          450,
+          464,
           13
         ]
       ],
@@ -195,12 +195,12 @@
       "source": [
         [
           "src/Dom.ts",
-          441,
+          455,
           13
         ],
         [
           "src/Dom.ts",
-          444,
+          458,
           13
         ]
       ],
@@ -230,7 +230,7 @@
       "source": [
         [
           "src/Dom.ts",
-          499,
+          517,
           2
         ]
       ],
@@ -264,7 +264,7 @@
       "source": [
         [
           "src/Dom.ts",
-          891,
+          913,
           2
         ]
       ],
@@ -317,7 +317,7 @@
       "source": [
         [
           "src/Dom.ts",
-          784,
+          806,
           2
         ]
       ],
@@ -380,7 +380,7 @@
       "source": [
         [
           "src/Dom.ts",
-          560,
+          578,
           2
         ]
       ],
@@ -414,7 +414,7 @@
       "source": [
         [
           "src/Dom.ts",
-          509,
+          527,
           2
         ]
       ],
@@ -477,7 +477,7 @@
       "source": [
         [
           "src/Dom.ts",
-          550,
+          568,
           2
         ]
       ],
@@ -511,7 +511,7 @@
       "source": [
         [
           "src/Dom.ts",
-          578,
+          596,
           2
         ]
       ],
@@ -569,7 +569,7 @@
       "source": [
         [
           "src/Dom.ts",
-          905,
+          927,
           2
         ]
       ],
@@ -627,7 +627,7 @@
       "source": [
         [
           "src/Dom.ts",
-          883,
+          905,
           2
         ]
       ],
@@ -656,7 +656,7 @@
       "source": [
         [
           "src/Dom.ts",
-          641,
+          663,
           2
         ]
       ],
@@ -678,7 +678,7 @@
       "source": [
         [
           "src/Dom.ts",
-          751,
+          773,
           2
         ]
       ],
@@ -765,7 +765,7 @@
       "source": [
         [
           "src/Dom.ts",
-          914,
+          936,
           2
         ]
       ],
@@ -823,7 +823,7 @@
       "source": [
         [
           "src/Dom.ts",
-          843,
+          865,
           2
         ]
       ],
@@ -881,7 +881,7 @@
       "source": [
         [
           "src/Dom.ts",
-          603,
+          621,
           2
         ]
       ],
@@ -903,7 +903,7 @@
       "source": [
         [
           "src/Dom.ts",
-          631,
+          649,
           2
         ]
       ],
@@ -913,7 +913,7 @@
       "signatures": [
         {
           "comment": "Set the current group scope to an item added into space, in order to keep track of any point, circle, etc created within it. The item must have an `animateID` property, so that elements created within the item will have generated IDs like \"item-{animateID}-{count}\".",
-          "returns": "object",
+          "returns": "DOMFormContext",
           "returns_comment": "this form's context",
           "parameters": [
             {
@@ -932,7 +932,7 @@
       "source": [
         [
           "src/Dom.ts",
-          816,
+          838,
           2
         ]
       ],
@@ -996,7 +996,7 @@
       "source": [
         [
           "src/Dom.ts",
-          528,
+          546,
           2
         ]
       ],
@@ -1095,7 +1095,7 @@
       "source": [
         [
           "src/Dom.ts",
-          488,
+          506,
           12
         ]
       ],
@@ -1138,7 +1138,7 @@
       "source": [
         [
           "src/Dom.ts",
-          873,
+          895,
           2
         ]
       ],
@@ -1173,7 +1173,7 @@
       "source": [
         [
           "src/Dom.ts",
-          618,
+          636,
           2
         ]
       ],
@@ -1183,7 +1183,7 @@
       "signatures": [
         {
           "comment": "Set this form's group scope by an ID, and optionally define the group's parent element. A group scope keeps track of elements by their generated IDs, and updates their properties as needed. See also `scope()`.",
-          "returns": "object",
+          "returns": "DOMFormContext",
           "returns_comment": "this form's context",
           "parameters": [
             {
@@ -1208,7 +1208,7 @@
       "source": [
         [
           "src/Dom.ts",
-          765,
+          787,
           9
         ]
       ],
@@ -1251,7 +1251,7 @@
       "source": [
         [
           "src/Dom.ts",
-          651,
+          673,
           9
         ]
       ],
@@ -1282,7 +1282,7 @@
       "source": [
         [
           "src/Dom.ts",
-          731,
+          753,
           9
         ]
       ],
@@ -1336,7 +1336,7 @@
       "source": [
         [
           "src/Dom.ts",
-          828,
+          850,
           9
         ]
       ],
@@ -1373,7 +1373,7 @@
       "source": [
         [
           "src/Dom.ts",
-          700,
+          722,
           9
         ]
       ],
@@ -1416,7 +1416,7 @@
       "source": [
         [
           "src/Dom.ts",
-          659,
+          681,
           9
         ]
       ],
@@ -1447,7 +1447,7 @@
       "source": [
         [
           "src/Dom.ts",
-          797,
+          819,
           9
         ]
       ],
@@ -1490,7 +1490,7 @@
       "source": [
         [
           "src/Dom.ts",
-          670,
+          692,
           9
         ]
       ],
@@ -1532,7 +1532,7 @@
       "source": [
         [
           "src/Dom.ts",
-          856,
+          878,
           9
         ]
       ],
@@ -1575,7 +1575,7 @@
       "source": [
         [
           "src/Dom.ts",
-          717,
+          739,
           9
         ]
       ],

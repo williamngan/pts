@@ -68,14 +68,14 @@ const expectedExports = [
   "World",
 ];
 const sizeLimits = {
-  // Launch fixes add legacy SVG overloads, complete hull cells, and retained
-  // license notices. Keep approximately 2% headroom above the measured build.
-  "index.d.mts": 68800,
-  "index.d.ts": 68800,
-  "index.js": 248100,
-  "index.mjs": 247200,
-  "pts.js": 259300,
-  "pts.min.js": 152600,
+  // The declarations keep their doc comments since 1.0; the physics and SVG
+  // fixes add code. Keep approximately 2% headroom above the measured build.
+  "index.d.mts": 288600,
+  "index.d.ts": 288600,
+  "index.js": 254400,
+  "index.mjs": 253600,
+  "pts.js": 265900,
+  "pts.min.js": 156700,
 };
 const banner = "Copyright © 2017-present William Ngan and contributors.";
 const thirdPartyNotice = (

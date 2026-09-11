@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Space.ts",
-      18,
+      19,
       22
     ]
   ],
@@ -16,7 +16,7 @@
       "source": [
         [
           "src/Space.ts",
-          301,
+          313,
           6
         ]
       ],
@@ -34,12 +34,12 @@
       "source": [
         [
           "src/Space.ts",
-          263,
+          275,
           6
         ],
         [
           "src/Space.ts",
-          266,
+          278,
           6
         ]
       ],
@@ -65,7 +65,7 @@
       "source": [
         [
           "src/Space.ts",
-          315,
+          327,
           6
         ]
       ],
@@ -83,7 +83,7 @@
       "source": [
         [
           "src/Space.ts",
-          287,
+          299,
           13
         ]
       ],
@@ -103,7 +103,7 @@
       "source": [
         [
           "src/Space.ts",
-          273,
+          285,
           6
         ]
       ],
@@ -121,7 +121,7 @@
       "source": [
         [
           "src/Space.ts",
-          280,
+          292,
           6
         ]
       ],
@@ -139,7 +139,7 @@
       "source": [
         [
           "src/Space.ts",
-          294,
+          306,
           6
         ]
       ],
@@ -157,7 +157,7 @@
       "source": [
         [
           "src/Space.ts",
-          308,
+          320,
           6
         ]
       ],
@@ -177,7 +177,7 @@
       "source": [
         [
           "src/Space.ts",
-          67,
+          69,
           2
         ]
       ],
@@ -206,7 +206,7 @@
       "source": [
         [
           "src/Space.ts",
-          329,
+          341,
           11
         ]
       ],
@@ -230,7 +230,7 @@
       "source": [
         [
           "src/Space.ts",
-          334,
+          346,
           11
         ]
       ],
@@ -254,7 +254,7 @@
       "source": [
         [
           "src/Space.ts",
-          53,
+          55,
           2
         ]
       ],
@@ -283,7 +283,7 @@
       "source": [
         [
           "src/Space.ts",
-          206,
+          214,
           2
         ]
       ],
@@ -312,7 +312,7 @@
       "source": [
         [
           "src/Space.ts",
-          107,
+          109,
           2
         ]
       ],
@@ -341,7 +341,7 @@
       "source": [
         [
           "src/Space.ts",
-          179,
+          181,
           12
         ]
       ],
@@ -372,7 +372,7 @@
       "source": [
         [
           "src/Space.ts",
-          245,
+          257,
           2
         ]
       ],
@@ -401,7 +401,7 @@
       "source": [
         [
           "src/Space.ts",
-          44,
+          46,
           2
         ]
       ],
@@ -430,7 +430,7 @@
       "source": [
         [
           "src/Space.ts",
-          89,
+          91,
           2
         ]
       ],
@@ -459,7 +459,7 @@
       "source": [
         [
           "src/Space.ts",
-          97,
+          99,
           2
         ]
       ],
@@ -481,7 +481,7 @@
       "source": [
         [
           "src/Space.ts",
-          255,
+          267,
           12
         ]
       ],
@@ -512,7 +512,7 @@
       "source": [
         [
           "src/Space.ts",
-          170,
+          172,
           2
         ]
       ],
@@ -534,7 +534,7 @@
       "source": [
         [
           "src/Space.ts",
-          324,
+          336,
           11
         ]
       ],
@@ -571,7 +571,7 @@
       "source": [
         [
           "src/Space.ts",
-          214,
+          222,
           2
         ]
       ],
@@ -593,7 +593,7 @@
       "source": [
         [
           "src/Space.ts",
-          223,
+          232,
           2
         ]
       ],
@@ -602,7 +602,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Specify when the animation should stop: immediately, after a time period, or never stops.",
+          "comment": "Specify when the animation should stop: immediately, after a time period, or never stops.\nAfter stopping, use [`Space.replay`](#link) to play again.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
@@ -625,7 +625,7 @@
       "source": [
         [
           "src/Space.ts",
-          20,
+          21,
           12
         ]
       ],
@@ -642,7 +642,7 @@
       "source": [
         [
           "src/Space.ts",
-          19,
+          20,
           2
         ]
       ],
@@ -657,7 +657,7 @@
       "source": [
         [
           "src/Space.ts",
-          24,
+          26,
           12
         ]
       ],
@@ -674,7 +674,7 @@
       "source": [
         [
           "src/Space.ts",
-          23,
+          25,
           12
         ]
       ],

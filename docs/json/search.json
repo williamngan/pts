@@ -5664,6 +5664,12 @@
     6
   ],
   [
+    "Physics_Particle#accessor_timeStep",
+    "Particle.timeStep",
+    "Accessor",
+    6
+  ],
+  [
     "Physics_Particle#accessor_w",
     "Particle.w",
     "Accessor",

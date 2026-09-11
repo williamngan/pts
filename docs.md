@@ -2468,14 +2468,14 @@ Dispose is idempotent, and a new Space can be mounted on the same element afterw
 ##### Constructor
 
 ```ts
-new DOMSpace(elem: string | Element, callback:  Fn(bound:Bound, elem:Element)): DOMSpace
+new DOMSpace(elem: string | Element | null = "pt", callback:  Fn(bound:Bound, elem:Element)): DOMSpace
 ```
 
 Create a DOMSpace for HTML DOM elements
 
 **Parameters**
 
-- `elem` (`string | Element`) — Specify an element by its "id" attribute as string, or by the element object itself. Use css to customize its appearance if needed.
+- `elem` (`string | Element | null`; default `"pt"`) — Specify an element by its "id" attribute as string, or by the element object itself. If left empty, a `<div id="pt_container"><div id="pt" /></div>` will be added to DOM; a missing id is created the same way. Use css to customize its appearance if needed.
 - `callback` (` Fn(bound:Bound, elem:Element)`) — an optional callback `function(boundingBox, spaceElement)` to be called when element is appended and ready. Alternatively, a "ready" event will also be fired from the element when it's appended, which can be traced with `spaceInstance.element.addEventListener("ready")`
 
 **Example**
@@ -2713,7 +2713,7 @@ id: string
 <a id="dom-htmlform"></a>
 ### `HTMLForm`
 
-**Kind:** Class · **Source:** [`src/Dom.ts:409`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L409)
+**Kind:** Class · **Source:** [`src/Dom.ts:423`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L423)
 
 **Extends:** `VisualForm`
 
@@ -3013,7 +3013,7 @@ Reset the context's common styles to this form's styles. This supports using mul
 ##### `scope`
 
 ```ts
-scope(item: IPlayer): object
+scope(item: IPlayer): DOMFormContext
 ```
 
 Set the current group scope to an item added into space, in order to keep track of any point, circle, etc created within it. The item must have an `animateID` property, so that elements created within the item will have generated IDs like "item-{animateID}-{count}".
@@ -3099,7 +3099,7 @@ Draw text in a DOM element.
 ##### `updateScope`
 
 ```ts
-updateScope(group_id: string, group: Element): object
+updateScope(group_id: string, group: Element): DOMFormContext
 ```
 
 Set this form's group scope by an ID, and optionally define the group's parent element. A group scope keeps track of elements by their generated IDs, and updates their properties as needed. See also `scope()`.
@@ -3297,7 +3297,7 @@ A helper function to set the top and left position styling of text DOM context.
 <a id="dom-htmlspace"></a>
 ### `HTMLSpace`
 
-**Kind:** Class · **Source:** [`src/Dom.ts:338`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L338)
+**Kind:** Class · **Source:** [`src/Dom.ts:352`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L352)
 
 **Extends:** `DOMSpace`
 
@@ -6354,7 +6354,7 @@ Check if a point is within a circle.
 <a id="op-curve"></a>
 ### `Curve`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1700`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1700)
+**Kind:** Class · **Source:** [`src/Op.ts:1733`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1733)
 
 Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -6945,7 +6945,7 @@ Convert this line to a new rectangle representation.
 <a id="op-polygon"></a>
 ### `Polygon`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1063`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1063)
+**Kind:** Class · **Source:** [`src/Op.ts:1066`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1066)
 
 Polygon class provides static functions to create and operate on polygons. A polygon is usually represented as a Group of 3 or more Pts.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -6976,7 +6976,7 @@ Given a Pt in the polygon group, the adjacent sides are the two sides which the 
 *static*
 
 ```ts
-static area(pts: PtLikeIterable): any
+static area(pts: PtLikeIterable): number
 ```
 
 Find the area of a simple (non-self-intersecting) polygon using the shoelace formula.
@@ -7757,7 +7757,7 @@ Get orthocenter, which is the intersection point of a triangle's 3 altitudes (th
 <a id="physics-body"></a>
 ### `Body`
 
-**Kind:** Class · **Source:** [`src/Physics.ts:891`](https://github.com/williamngan/pts/blob/master/src/Physics.ts#L891)
+**Kind:** Class · **Source:** [`src/Physics.ts:951`](https://github.com/williamngan/pts/blob/master/src/Physics.ts#L951)
 
 **Extends:** `Group`
 
@@ -7936,7 +7936,7 @@ Create and populate a body.
 <a id="physics-particle"></a>
 ### `Particle`
 
-**Kind:** Class · **Source:** [`src/Physics.ts:654`](https://github.com/williamngan/pts/blob/master/src/Physics.ts#L654)
+**Kind:** Class · **Source:** [`src/Physics.ts:682`](https://github.com/williamngan/pts/blob/master/src/Physics.ts#L682)
 
 **Extends:** `Pt`
 
@@ -7979,7 +7979,9 @@ Get the body of this particle, if any.
 get changed(): Pt
 ```
 
-Get the change in position since last time step.
+Get the change in position per 60 Hz frame, ie, the current velocity in the same unit
+as [`Particle.hit`](#physics-particle-hit). The raw displacement since the last step is
+`particle.$subtract( particle.previous )`.
 
 <a id="physics-particle-force"></a>
 ##### `force`
@@ -8018,7 +8020,8 @@ Mass of this particle.
 set position(p: Pt): void
 ```
 
-Set a new position, and update previous and lock states if needed.
+Set a new position, and update previous and lock states if needed. The move is stored as
+this particle's velocity per frame, so dragging a locked particle knocks others away.
 
 <a id="physics-particle-previous"></a>
 ##### `previous`
@@ -8039,6 +8042,19 @@ set radius(f: number): void
 ```
 
 Radius of this particle.
+
+<a id="physics-particle-time-step"></a>
+##### `timeStep`
+
+```ts
+get timeStep(): number
+set timeStep(t: number): void
+```
+
+The time in seconds spanned by the displacement from [`Particle.previous`](#physics-particle-previous) to the
+current position. A [`World`](#physics-world) sets it to the substep length on every step, and
+[`Particle.hit`](#physics-particle-hit) and the `position` setter reset it to one 60 Hz frame (1/60),
+which is the unit of their velocities. 0 means unknown and is treated as one frame.
 
 #### Methods
 
@@ -8076,7 +8092,8 @@ Check and respoond to collisions between this and another particle.
 hit(args: any[]): this
 ```
 
-Hit this particle with an impulse. The impulse is scaled by 1/√mass, so a heavier particle moves less from the same hit.
+Hit this particle with an impulse, in pixels per 60 Hz frame. The impulse is scaled by 1/√mass, so a heavier particle moves less from the same hit.
+The result is the same at any frame rate and any [`World.substeps`](#physics-world-substeps) setting.
 
 **Parameters**
 
@@ -8123,9 +8140,9 @@ Verlet integration.
 
 **Parameters**
 
-- `dt` (`number`) — change in time
+- `dt` (`number`) — change in time in seconds
 - `friction` (`number`) — friction from 0 to 1, where 1 means no friction
-- `lastDt` (`number`) — optional last change in time
+- `lastDt` (`number`) — optional last change in time in seconds. Default is [`Particle.timeStep`](#physics-particle-time-step), or `dt` if unknown.
 
 #### Inherited API
 
@@ -8135,11 +8152,7 @@ Verlet integration.
 <a id="physics-world"></a>
 ### `World`
 
-**Kind:** Class · **Source:** [`src/Physics.ts:13`](https://github.com/williamngan/pts/blob/master/src/Physics.ts#L13)
-
-A `World` stores and manages [`Body`](#physics-body) and [`Particle`](#physics-particle) for 2D physics simulation.
-It advances with a substepped position-based (XPBD-style) solver and a spatial-hash broad phase.
-See a [Particle demo](https://ptsjs.org/demo/?name=physics.particles) and a [Body demo](https://ptsjs.org/demo/?name=physics.shapes) on the demo page.
+**Kind:** Class · **Source:** [`src/Physics.ts:21`](https://github.com/williamngan/pts/blob/master/src/Physics.ts#L21)
 
 #### Constructors
 
@@ -8248,8 +8261,10 @@ get substeps(): number
 set substeps(n: number): void
 ```
 
-Number of solver substeps per [`World.update`](#physics-world-update) call. More substeps produce a more
-stable and accurate simulation at a linear cost. Default is 4.
+Target number of solver substeps per 60 Hz frame (16.7 ms). Each [`World.update`](#physics-world-update)
+runs enough substeps of about that size to cover its elapsed time, so a 30 Hz frame solves
+twice as many substeps as a 60 Hz frame rather than larger ones. More substeps produce a
+more stable and accurate simulation at a linear cost. Default is 4.
 
 #### Methods
 
@@ -8340,7 +8355,7 @@ here — they persist across the substeps of one update and are cleared when it 
 
 - `p` (`Particle`) — particle
 - `dt` (`number`) — substep time in seconds
-- `prevDt` (`number`; default `...`) — previous substep time in seconds, used to preserve velocity when frame timing changes.
+- `prevDt` (`number`; default `...`) — time in seconds spanned by the particle's current displacement (see [`Particle.timeStep`](#physics-particle-time-step)); the velocity is rescaled to `dt` so that it is preserved when the step size changes.
 
 <a id="physics-world-particle"></a>
 ##### `particle`
@@ -8407,8 +8422,9 @@ Remove particles from this world. Support removing a range and negative index.
 update(ms: number): void
 ```
 
-Advance this world by an amount of time, solved in [`World.substeps`](#physics-world-substeps) substeps.
-The time is clamped to [`World.maxTimeStep`](#physics-world-max-time-step). Draw callbacks fire once per call,
+Advance this world by an amount of time, solved in substeps sized by
+[`World.substeps`](#physics-world-substeps). The time is clamped to [`World.maxTimeStep`](#physics-world-max-time-step), and an
+elapsed time under 2 ms is carried into the next call. Draw callbacks fire once per call,
 after the solve completes.
 
 **Parameters**
@@ -9089,7 +9105,7 @@ animateID: string
 <a id="pt-bound"></a>
 ### `Bound`
 
-**Kind:** Class · **Source:** [`src/Pt.ts:1057`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L1057)
+**Kind:** Class · **Source:** [`src/Pt.ts:1060`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L1060)
 
 **Extends:** `Group`
 
@@ -10576,7 +10592,7 @@ Create an n-dimensional Pt with either default value or random values.
 <a id="space-multitouchspace"></a>
 ### `MultiTouchSpace`
 
-**Kind:** Class · **Source:** [`src/Space.ts:341`](https://github.com/williamngan/pts/blob/master/src/Space.ts#L341)
+**Kind:** Class · **Source:** [`src/Space.ts:353`](https://github.com/williamngan/pts/blob/master/src/Space.ts#L353)
 
 **Extends:** `Space`
 
@@ -10772,7 +10788,7 @@ Stop tracking one or more [`UI`](#ui-ui) elements added via [`MultiTouchSpace.tr
 <a id="space-space"></a>
 ### `Space`
 
-**Kind:** Class · **Source:** [`src/Space.ts:18`](https://github.com/williamngan/pts/blob/master/src/Space.ts#L18)
+**Kind:** Class · **Source:** [`src/Space.ts:19`](https://github.com/williamngan/pts/blob/master/src/Space.ts#L19)
 
 Space is an abstract class that represents a general context for expressing Pts. It's extended through subclasses such as [`CanvasSpace`](#canvas-canvasspace) and [`SVGSpace`](#svg-svgspace). You can also create your own extension of Space.
 See [Space guide](https://ptsjs.org/guide/Space-0500.html) for details.
@@ -11057,6 +11073,7 @@ stop(t: number = 0): this
 ```
 
 Specify when the animation should stop: immediately, after a time period, or never stops.
+After stopping, use [`Space.replay`](#space-space-replay) to play again.
 
 **Parameters**
 
@@ -11587,7 +11604,7 @@ textBaseline: string
 <a id="svg-svgform"></a>
 ### `SVGForm`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:956`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L956)
+**Kind:** Class · **Source:** [`src/Svg.ts:985`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L985)
 
 **Extends:** `CanvasForm`
 
@@ -11616,6 +11633,18 @@ Create a new SVGForm. You may also use [`SVGSpace.getForm`](#svg-svgspace-get-fo
 
 #### Accessors
 
+<a id="svg-svgform-filled"></a>
+##### `filled`
+
+*overrides `CanvasForm.filled`*
+
+```ts
+get filled(): boolean
+set filled(b: boolean): void
+```
+
+Check whether this form currently has fill style.
+
 <a id="svg-svgform-space"></a>
 ##### `space`
 
@@ -11626,6 +11655,18 @@ get space(): SVGSpace
 ```
 
 Get the [`SVGSpace`](#svg-svgspace) instance that this form is associated with.
+
+<a id="svg-svgform-stroked"></a>
+##### `stroked`
+
+*overrides `CanvasForm.stroked`*
+
+```ts
+get stroked(): boolean
+set stroked(b: boolean): void
+```
+
+Check whether this form currently has stroke style.
 
 <a id="svg-svgform-svg-context"></a>
 ##### `svgContext`
@@ -11687,11 +11728,26 @@ nextID(): string
 
 **deprecated:** Part of the legacy scope workflow.
 
+<a id="svg-svgform-render-offscreen"></a>
+##### `renderOffscreen`
+
+*overrides `CanvasForm.renderOffscreen`*
+
+```ts
+renderOffscreen(_offset: PtLike = ...): void
+```
+
+Offscreen buffers require Canvas output. In SVG this warns once and does nothing.
+
+**Parameters**
+
+- `_offset` (`PtLike`; default `...`)
+
 <a id="svg-svgform-scope"></a>
 ##### `scope`
 
 ```ts
-scope(item: IPlayer): object
+scope(item: IPlayer): DOMFormContext
 ```
 
 **Parameters**
@@ -11705,7 +11761,7 @@ for compatibility; returns the legacy context used by the static helpers.
 ##### `updateScope`
 
 ```ts
-updateScope(group_id: string, group: Element): object
+updateScope(group_id: string, group: Element): DOMFormContext
 ```
 
 **Parameters**
@@ -11715,6 +11771,22 @@ updateScope(group_id: string, group: Element): object
 
 **deprecated:** No longer needed: elements are reconciled automatically each frame. Kept
 for compatibility with code that pairs it with the legacy static helpers.
+
+<a id="svg-svgform-use-offscreen"></a>
+##### `useOffscreen`
+
+*overrides `CanvasForm.useOffscreen`*
+
+```ts
+useOffscreen(_off: boolean = true, _clear: string | boolean = false): this
+```
+
+Offscreen buffers require Canvas output. In SVG this warns once and draws directly.
+
+**Parameters**
+
+- `_off` (`boolean`; default `true`)
+- `_clear` (`string | boolean`; default `false`)
 
 <a id="svg-svgform-static-arc"></a>
 ##### `arc`
@@ -12200,14 +12272,14 @@ A static function to draw a text element.
 
 #### Inherited API
 
-- From [`CanvasForm`](#canvas-canvasform): [`ctx`](#canvas-canvasform-ctx), [`filled`](#form-visualform-filled), [`stroked`](#form-visualform-stroked), [`alignText`](#canvas-canvasform-align-text), [`alpha`](#canvas-canvasform-alpha), [`applyFillStroke`](#canvas-canvasform-apply-fill-stroke), [`arc`](#canvas-canvasform-arc), [`circle`](#canvas-canvasform-circle), [`clip`](#canvas-canvasform-clip), [`composite`](#canvas-canvasform-composite), [`dash`](#canvas-canvasform-dash), [`ellipse`](#canvas-canvasform-ellipse), [`fill`](#canvas-canvasform-fill), [`fillOnly`](#canvas-canvasform-fill-only), [`font`](#canvas-canvasform-font), [`fontWidthEstimate`](#canvas-canvasform-font-width-estimate), [`getTextWidth`](#canvas-canvasform-get-text-width), [`gradient`](#canvas-canvasform-gradient), [`image`](#canvas-canvasform-image), [`imageData`](#canvas-canvasform-image-data), [`line`](#canvas-canvasform-line), [`log`](#canvas-canvasform-log), [`paragraphBox`](#canvas-canvasform-paragraph-box), [`point`](#canvas-canvasform-point), [`polygon`](#canvas-canvasform-polygon), [`rect`](#canvas-canvasform-rect), [`renderOffscreen`](#canvas-canvasform-render-offscreen), [`reset`](#canvas-canvasform-reset), [`square`](#canvas-canvasform-square), [`stroke`](#canvas-canvasform-stroke), [`strokeOnly`](#canvas-canvasform-stroke-only), [`text`](#canvas-canvasform-text), [`textBox`](#canvas-canvasform-text-box), [`useOffscreen`](#canvas-canvasform-use-offscreen), [`ellipse`](#canvas-canvasform-ellipse), [`image`](#canvas-canvasform-image), [`imageData`](#canvas-canvasform-image-data), [`resetStyleCache`](#canvas-canvasform-static-reset-style-cache).
+- From [`CanvasForm`](#canvas-canvasform): [`ctx`](#canvas-canvasform-ctx), [`alignText`](#canvas-canvasform-align-text), [`alpha`](#canvas-canvasform-alpha), [`applyFillStroke`](#canvas-canvasform-apply-fill-stroke), [`arc`](#canvas-canvasform-arc), [`circle`](#canvas-canvasform-circle), [`clip`](#canvas-canvasform-clip), [`composite`](#canvas-canvasform-composite), [`dash`](#canvas-canvasform-dash), [`ellipse`](#canvas-canvasform-ellipse), [`fill`](#canvas-canvasform-fill), [`fillOnly`](#canvas-canvasform-fill-only), [`font`](#canvas-canvasform-font), [`fontWidthEstimate`](#canvas-canvasform-font-width-estimate), [`getTextWidth`](#canvas-canvasform-get-text-width), [`gradient`](#canvas-canvasform-gradient), [`image`](#canvas-canvasform-image), [`imageData`](#canvas-canvasform-image-data), [`line`](#canvas-canvasform-line), [`log`](#canvas-canvasform-log), [`paragraphBox`](#canvas-canvasform-paragraph-box), [`point`](#canvas-canvasform-point), [`polygon`](#canvas-canvasform-polygon), [`rect`](#canvas-canvasform-rect), [`reset`](#canvas-canvasform-reset), [`square`](#canvas-canvasform-square), [`stroke`](#canvas-canvasform-stroke), [`strokeOnly`](#canvas-canvasform-stroke-only), [`text`](#canvas-canvasform-text), [`textBox`](#canvas-canvasform-text-box), [`ellipse`](#canvas-canvasform-ellipse), [`image`](#canvas-canvasform-image), [`imageData`](#canvas-canvasform-image-data), [`resetStyleCache`](#canvas-canvasform-static-reset-style-cache).
 - From [`VisualForm`](#form-visualform): [`currentFont`](#form-visualform-current-font), [`circles`](#form-visualform-circles), [`lines`](#form-visualform-lines), [`points`](#form-visualform-points), [`polygons`](#form-visualform-polygons), [`rects`](#form-visualform-rects), [`squares`](#form-visualform-squares).
 - From [`Form`](#form-form): [`ready`](#form-form-ready).
 
 <a id="svg-svgspace"></a>
 ### `SVGSpace`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:714`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L714)
+**Kind:** Class · **Source:** [`src/Svg.ts:725`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L725)
 
 **Extends:** `DOMSpace`
 
@@ -12223,14 +12295,14 @@ canvas can run on SVG with the supported subset. Check out the [Space guide](htt
 *overrides `DOMSpace.__constructor`*
 
 ```ts
-new SVGSpace(elem: string | Element, callback:  Fn(bound:Bound, elem:Element)): SVGSpace
+new SVGSpace(elem: string | Element | null = "pt", callback:  Fn(bound:Bound, elem:Element)): SVGSpace
 ```
 
 Create a SVGSpace which represents a Space for SVG elements.
 
 **Parameters**
 
-- `elem` (`string | Element`) — Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<svg>`, or a `<div>` container in which a new `<svg>` will be created. If left empty, a `<div id="pt_container"><svg id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
+- `elem` (`string | Element | null`; default `"pt"`) — Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<svg>`, or a `<div>` container in which a new `<svg>` will be created. If left empty, a `<div id="pt_container"><svg id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
 - `callback` (` Fn(bound:Bound, elem:Element)`) — an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a "ready" event will also be fired from the `<svg>` element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener("ready")`
 
 **Example**
@@ -13522,6 +13594,8 @@ Get a random integer. This can be useful for selecting a random index in an arra
 
 - `range` (`number`) — value range
 - `start` (`number`; default `0`) — Optional starting value
+
+**deprecated:** Use [`Num.randomRange`](#num-num-static-random-range) instead, for example `Math.floor( Num.randomRange( start, start + range ) )`.
 
 <a id="util-util-static-split"></a>
 ##### `split`
