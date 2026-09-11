@@ -680,8 +680,12 @@ async function sourceEntryPoints() {
 async function buildOutput() {
   const app = await Application.bootstrap({
     // The 2022 site used the ES2016-era collection surface. Pinning this input
-    // avoids unrelated docs churn when the library build target changes.
-    compilerOptions: { lib: ["es2016", "dom", "dom.iterable"] },
+    // avoids unrelated docs churn when the library build target changes. The
+    // BigInt library only types the exact-arithmetic fallback of the
+    // triangulation, which is internal and not documented.
+    compilerOptions: {
+      lib: ["es2016", "es2020.bigint", "dom", "dom.iterable"],
+    },
     entryPoints: await sourceEntryPoints(),
     entryPointStrategy: EntryPointStrategy.Resolve,
     logLevel: "Warn",

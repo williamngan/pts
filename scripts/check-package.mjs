@@ -88,7 +88,6 @@ try {
   const expectedPackedFiles = [
     "LICENSE",
     "README.md",
-    "THIRD-PARTY-NOTICES.txt",
     "dist/index.d.mts",
     "dist/index.d.mts.map",
     "dist/index.d.ts",
@@ -101,6 +100,7 @@ try {
     "dist/pts.js.map",
     "dist/pts.min.js",
     "dist/pts.min.js.map",
+    "THIRD-PARTY-NOTICES.txt",
     "package.json",
     "src/Canvas.ts",
     "src/Color.ts",
@@ -122,6 +122,7 @@ try {
     "src/Util.ts",
     "src/_module.ts",
     "src/_script.ts",
+    "src/_triangulate.ts",
     "src/uheprng.ts",
   ];
   assert.deepEqual(

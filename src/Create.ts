@@ -4,6 +4,7 @@ import { Pt, Group, type Bound } from "./Pt";
 import { Line, Triangle } from "./Op";
 import { Const, Util } from "./Util";
 import { Num, Geom } from "./Num";
+import { triangulate, type Triangulation } from "./_triangulate";
 import {
   type PtLike,
   type GroupLike,
@@ -324,512 +325,6 @@ export class Noise extends Pt {
   }
 }
 
-// ------------------------------------------------------------------------
-// Incremental half-edge Delaunay triangulation, adapted from Delaunator
-// (https://github.com/mapbox/delaunator), ISC License, Copyright © Mapbox.
-// Full copyright and permission notice: ../THIRD-PARTY-NOTICES.txt.
-// Points are inserted in order of distance from a seed circumcenter onto an
-// advancing convex hull (with an angular hash for O(1) edge lookup), and new
-// edges are legalized with in-circle flips.
-
-const _DELAUNAY_EPSILON = Math.pow(2, -52);
-const _delaunayEdgeStack = new Uint32Array(512);
-
-function _pseudoAngle(dx: number, dy: number): number {
-  const p = dx / (Math.abs(dx) + Math.abs(dy));
-  return (dy > 0 ? 3 - p : 1 + p) / 4; // [0..1]
-}
-
-function _sqDist(ax: number, ay: number, bx: number, by: number): number {
-  const dx = ax - bx;
-  const dy = ay - by;
-  return dx * dx + dy * dy;
-}
-
-/** Error-bounded orientation test with symbolic fallback: > 0 if clockwise. */
-function _orientIfSure(
-  px: number,
-  py: number,
-  rx: number,
-  ry: number,
-  qx: number,
-  qy: number,
-): number {
-  const l = (ry - py) * (qx - px);
-  const r = (rx - px) * (qy - py);
-  return Math.abs(l - r) >= 3.3306690738754716e-16 * Math.abs(l + r)
-    ? l - r
-    : 0;
-}
-
-function _orient(
-  rx: number,
-  ry: number,
-  qx: number,
-  qy: number,
-  px: number,
-  py: number,
-): boolean {
-  return (
-    (_orientIfSure(px, py, rx, ry, qx, qy) ||
-      _orientIfSure(rx, ry, qx, qy, px, py) ||
-      _orientIfSure(qx, qy, px, py, rx, ry)) < 0
-  );
-}
-
-function _inCircle(
-  ax: number,
-  ay: number,
-  bx: number,
-  by: number,
-  cx: number,
-  cy: number,
-  px: number,
-  py: number,
-): boolean {
-  const dx = ax - px;
-  const dy = ay - py;
-  const ex = bx - px;
-  const ey = by - py;
-  const fx = cx - px;
-  const fy = cy - py;
-  const ap = dx * dx + dy * dy;
-  const bp = ex * ex + ey * ey;
-  const cp = fx * fx + fy * fy;
-  return (
-    dx * (ey * cp - bp * fy) -
-      dy * (ex * cp - bp * fx) +
-      ap * (ex * fy - ey * fx) <
-    0
-  );
-}
-
-function _circumradiusSq(
-  ax: number,
-  ay: number,
-  bx: number,
-  by: number,
-  cx: number,
-  cy: number,
-): number {
-  const dx = bx - ax;
-  const dy = by - ay;
-  const ex = cx - ax;
-  const ey = cy - ay;
-  const bl = dx * dx + dy * dy;
-  const cl = ex * ex + ey * ey;
-  const d = 0.5 / (dx * ey - dy * ex);
-  const x = (ey * bl - dy * cl) * d;
-  const y = (dx * cl - ex * bl) * d;
-  return x * x + y * y;
-}
-
-function _circumcenterX(
-  ax: number,
-  ay: number,
-  bx: number,
-  by: number,
-  cx: number,
-  cy: number,
-): number {
-  const dx = bx - ax;
-  const dy = by - ay;
-  const ex = cx - ax;
-  const ey = cy - ay;
-  const bl = dx * dx + dy * dy;
-  const cl = ex * ex + ey * ey;
-  const d = 0.5 / (dx * ey - dy * ex);
-  return ax + (ey * bl - dy * cl) * d;
-}
-
-function _circumcenterY(
-  ax: number,
-  ay: number,
-  bx: number,
-  by: number,
-  cx: number,
-  cy: number,
-): number {
-  const dx = bx - ax;
-  const dy = by - ay;
-  const ex = cx - ax;
-  const ey = cy - ay;
-  const bl = dx * dx + dy * dy;
-  const cl = ex * ex + ey * ey;
-  const d = 0.5 / (dx * ey - dy * ex);
-  return ay + (dx * cl - ex * bl) * d;
-}
-
-function _quicksortIds(
-  ids: Uint32Array,
-  dists: Float64Array,
-  left: number,
-  right: number,
-): void {
-  if (right - left <= 20) {
-    for (let i = left + 1; i <= right; i++) {
-      const temp = ids[i];
-      const tempDist = dists[temp];
-      let j = i - 1;
-      while (j >= left && dists[ids[j]] > tempDist) ids[j + 1] = ids[j--];
-      ids[j + 1] = temp;
-    }
-    return;
-  }
-  const median = (left + right) >> 1;
-  let i = left + 1;
-  let j = right;
-  _swapIds(ids, median, i);
-  if (dists[ids[left]] > dists[ids[right]]) _swapIds(ids, left, right);
-  if (dists[ids[i]] > dists[ids[right]]) _swapIds(ids, i, right);
-  if (dists[ids[left]] > dists[ids[i]]) _swapIds(ids, left, i);
-
-  const temp = ids[i];
-  const tempDist = dists[temp];
-  while (true) {
-    do i++;
-    while (dists[ids[i]] < tempDist);
-    do j--;
-    while (dists[ids[j]] > tempDist);
-    if (j < i) break;
-    _swapIds(ids, i, j);
-  }
-  ids[left + 1] = ids[j];
-  ids[j] = temp;
-
-  if (right - i + 1 >= j - left) {
-    _quicksortIds(ids, dists, i, right);
-    _quicksortIds(ids, dists, left, j - 1);
-  } else {
-    _quicksortIds(ids, dists, left, j - 1);
-    _quicksortIds(ids, dists, i, right);
-  }
-}
-
-function _swapIds(arr: Uint32Array, i: number, j: number): void {
-  const tmp = arr[i];
-  arr[i] = arr[j];
-  arr[j] = tmp;
-}
-
-/**
- * Triangulate a flat [x0, y0, x1, y1, ...] coordinate array. Returns the
- * triangle vertex indices (3 per triangle) with the half-edge adjacency
- * array, or null if the input is degenerate (fewer than 3 distinct
- * non-collinear points).
- */
-function _triangulate(
-  coords: Float64Array,
-): { triangles: Uint32Array; halfedges: Int32Array } | null {
-  const n = coords.length >> 1;
-
-  // seed selection: the point closest to the bounding-box center, its nearest
-  // neighbor, and the third point minimizing the circumradius
-  let minX = Infinity;
-  let minY = Infinity;
-  let maxX = -Infinity;
-  let maxY = -Infinity;
-  const ids = new Uint32Array(n);
-  for (let i = 0; i < n; i++) {
-    const x = coords[2 * i];
-    const y = coords[2 * i + 1];
-    if (x < minX) minX = x;
-    if (y < minY) minY = y;
-    if (x > maxX) maxX = x;
-    if (y > maxY) maxY = y;
-    ids[i] = i;
-  }
-  const bcx = (minX + maxX) / 2;
-  const bcy = (minY + maxY) / 2;
-
-  let i0 = 0;
-  let i1 = -1;
-  let i2 = -1;
-  let minDist = Infinity;
-  for (let i = 0; i < n; i++) {
-    const d = _sqDist(bcx, bcy, coords[2 * i], coords[2 * i + 1]);
-    if (d < minDist) {
-      i0 = i;
-      minDist = d;
-    }
-  }
-  let i0x = coords[2 * i0];
-  let i0y = coords[2 * i0 + 1];
-
-  minDist = Infinity;
-  for (let i = 0; i < n; i++) {
-    if (i === i0) continue;
-    const d = _sqDist(i0x, i0y, coords[2 * i], coords[2 * i + 1]);
-    if (d < minDist && d > 0) {
-      i1 = i;
-      minDist = d;
-    }
-  }
-  if (i1 === -1) return null; // all points coincident
-  let i1x = coords[2 * i1];
-  let i1y = coords[2 * i1 + 1];
-
-  let minRadius = Infinity;
-  for (let i = 0; i < n; i++) {
-    if (i === i0 || i === i1) continue;
-    const r = _circumradiusSq(
-      i0x,
-      i0y,
-      i1x,
-      i1y,
-      coords[2 * i],
-      coords[2 * i + 1],
-    );
-    if (r < minRadius) {
-      i2 = i;
-      minRadius = r;
-    }
-  }
-  if (i2 === -1 || minRadius === Infinity) return null; // all collinear
-  let i2x = coords[2 * i2];
-  let i2y = coords[2 * i2 + 1];
-
-  if (_orient(i0x, i0y, i1x, i1y, i2x, i2y)) {
-    const i = i1;
-    const x = i1x;
-    const y = i1y;
-    i1 = i2;
-    i1x = i2x;
-    i1y = i2y;
-    i2 = i;
-    i2x = x;
-    i2y = y;
-  }
-
-  const cx = _circumcenterX(i0x, i0y, i1x, i1y, i2x, i2y);
-  const cy = _circumcenterY(i0x, i0y, i1x, i1y, i2x, i2y);
-  const dists = new Float64Array(n);
-  for (let i = 0; i < n; i++) {
-    dists[i] = _sqDist(coords[2 * i], coords[2 * i + 1], cx, cy);
-  }
-  _quicksortIds(ids, dists, 0, n - 1);
-
-  // advancing convex hull with an angular hash
-  const hashSize = Math.ceil(Math.sqrt(n));
-  const hullPrev = new Uint32Array(n);
-  const hullNext = new Uint32Array(n);
-  const hullTri = new Uint32Array(n);
-  const hullHash = new Int32Array(hashSize).fill(-1);
-  const hashKey = (x: number, y: number) =>
-    Math.floor(_pseudoAngle(x - cx, y - cy) * hashSize) % hashSize;
-
-  let hullStart = i0;
-  hullNext[i0] = hullPrev[i2] = i1;
-  hullNext[i1] = hullPrev[i0] = i2;
-  hullNext[i2] = hullPrev[i1] = i0;
-  hullTri[i0] = 0;
-  hullTri[i1] = 1;
-  hullTri[i2] = 2;
-  hullHash[hashKey(i0x, i0y)] = i0;
-  hullHash[hashKey(i1x, i1y)] = i1;
-  hullHash[hashKey(i2x, i2y)] = i2;
-
-  const maxTriangles = Math.max(2 * n - 5, 0);
-  const triangles = new Uint32Array(maxTriangles * 3);
-  const halfedges = new Int32Array(maxTriangles * 3);
-  let trianglesLen = 0;
-
-  const link = (a: number, b: number) => {
-    halfedges[a] = b;
-    if (b !== -1) halfedges[b] = a;
-  };
-
-  const addTriangle = (
-    t0: number,
-    t1: number,
-    t2: number,
-    a: number,
-    b: number,
-    c: number,
-  ) => {
-    const t = trianglesLen;
-    triangles[t] = t0;
-    triangles[t + 1] = t1;
-    triangles[t + 2] = t2;
-    link(t, a);
-    link(t + 1, b);
-    link(t + 2, c);
-    trianglesLen += 3;
-    return t;
-  };
-
-  const legalize = (a: number) => {
-    let i = 0;
-    let ar = 0;
-    while (true) {
-      const b = halfedges[a];
-      if (b === -1) {
-        if (i === 0) break;
-        a = _delaunayEdgeStack[--i];
-        continue;
-      }
-      const a0 = a - (a % 3);
-      ar = a0 + ((a + 2) % 3);
-      const al = a0 + ((a + 1) % 3);
-      const b0 = b - (b % 3);
-      const bl = b0 + ((b + 2) % 3);
-      const p0 = triangles[ar];
-      const pr = triangles[a];
-      const pl = triangles[al];
-      const p1 = triangles[bl];
-
-      const illegal = _inCircle(
-        coords[2 * p0],
-        coords[2 * p0 + 1],
-        coords[2 * pr],
-        coords[2 * pr + 1],
-        coords[2 * pl],
-        coords[2 * pl + 1],
-        coords[2 * p1],
-        coords[2 * p1 + 1],
-      );
-
-      if (illegal) {
-        triangles[a] = p1;
-        triangles[b] = p0;
-
-        const hbl = halfedges[bl];
-        if (hbl === -1) {
-          // the flipped edge lies on the convex hull; fix the hull reference
-          let e = hullStart;
-          do {
-            if (hullTri[e] === bl) {
-              hullTri[e] = a;
-              break;
-            }
-            e = hullPrev[e];
-          } while (e !== hullStart);
-        }
-        link(a, hbl);
-        link(b, halfedges[ar]);
-        link(ar, bl);
-
-        const br = b0 + ((b + 1) % 3);
-        if (i < _delaunayEdgeStack.length) _delaunayEdgeStack[i++] = br;
-      } else {
-        if (i === 0) break;
-        a = _delaunayEdgeStack[--i];
-      }
-    }
-    return ar;
-  };
-
-  addTriangle(i0, i1, i2, -1, -1, -1);
-
-  let xp = 0;
-  let yp = 0;
-  for (let k = 0; k < n; k++) {
-    const i = ids[k];
-    const x = coords[2 * i];
-    const y = coords[2 * i + 1];
-
-    // skip near-duplicates
-    if (
-      k > 0 &&
-      Math.abs(x - xp) <= _DELAUNAY_EPSILON &&
-      Math.abs(y - yp) <= _DELAUNAY_EPSILON
-    ) {
-      continue;
-    }
-    xp = x;
-    yp = y;
-    if (i === i0 || i === i1 || i === i2) continue;
-
-    // find a visible edge on the convex hull via the angular hash
-    let start = 0;
-    for (let j = 0, key = hashKey(x, y); j < hashSize; j++) {
-      start = hullHash[(key + j) % hashSize];
-      if (start !== -1 && start !== hullNext[start]) break;
-    }
-
-    start = hullPrev[start];
-    let e = start;
-    let q = hullNext[e];
-    while (
-      !_orient(
-        x,
-        y,
-        coords[2 * e],
-        coords[2 * e + 1],
-        coords[2 * q],
-        coords[2 * q + 1],
-      )
-    ) {
-      e = q;
-      if (e === start) {
-        e = -1;
-        break;
-      }
-      q = hullNext[e];
-    }
-    if (e === -1) continue; // likely a near-duplicate; skip
-
-    // add the first triangle from this point
-    let t = addTriangle(e, i, hullNext[e], -1, -1, hullTri[e]);
-    hullTri[i] = legalize(t + 2);
-    hullTri[e] = t;
-
-    // walk forward through the hull, adding triangles
-    let next = hullNext[e];
-    q = hullNext[next];
-    while (
-      _orient(
-        x,
-        y,
-        coords[2 * next],
-        coords[2 * next + 1],
-        coords[2 * q],
-        coords[2 * q + 1],
-      )
-    ) {
-      t = addTriangle(next, i, q, hullTri[i], -1, hullTri[next]);
-      hullTri[i] = legalize(t + 2);
-      hullNext[next] = next; // mark as removed
-      next = q;
-      q = hullNext[next];
-    }
-
-    // walk backward from the other side
-    if (e === start) {
-      q = hullPrev[e];
-      while (
-        _orient(
-          x,
-          y,
-          coords[2 * q],
-          coords[2 * q + 1],
-          coords[2 * e],
-          coords[2 * e + 1],
-        )
-      ) {
-        t = addTriangle(q, i, e, -1, hullTri[e], hullTri[q]);
-        legalize(t + 2);
-        hullTri[q] = t;
-        hullNext[e] = e; // mark as removed
-        e = q;
-        q = hullPrev[e];
-      }
-    }
-
-    // update hull indices and hash
-    hullStart = hullPrev[i] = e;
-    hullNext[e] = hullPrev[next] = i;
-    hullNext[i] = next;
-    hullHash[hashKey(x, y)] = i;
-    hullHash[hashKey(coords[2 * e], coords[2 * e + 1])] = e;
-  }
-
-  return {
-    triangles: triangles.subarray(0, trianglesLen) as Uint32Array,
-    halfedges: halfedges.subarray(0, trianglesLen) as Int32Array,
-  };
-}
-
 /**
  * Clip a convex cell polygon against an axis-aligned rectangle
  * (Sutherland–Hodgman). Returns the input Group unchanged (shared Pt
@@ -953,16 +448,36 @@ function _clipCellToBisector(cell: Group, a: Pt, b: Pt): Group {
   return out;
 }
 
+/** Circumcenter and radius of a triangle, as `[x, y, r]`. */
+function _circumcircle(
+  ax: number,
+  ay: number,
+  bx: number,
+  by: number,
+  cx: number,
+  cy: number,
+): [number, number, number] {
+  const bx2 = bx - ax;
+  const by2 = by - ay;
+  const cx2 = cx - ax;
+  const cy2 = cy - ay;
+  const d = 2 * (bx2 * cy2 - by2 * cx2);
+  const bl = bx2 * bx2 + by2 * by2;
+  const cl = cx2 * cx2 + cy2 * cy2;
+  const ux = (cy2 * bl - by2 * cl) / d;
+  const uy = (bx2 * cl - cx2 * bl) / d;
+  return [ax + ux, ay + uy, Math.sqrt(ux * ux + uy * uy)];
+}
+
 /**
  * Delaunay is a [`Group`](#link) of Pts that generates Delaunay and Voronoi tessellations.
- * The triangulation core is adapted from [Delaunator](https://github.com/mapbox/delaunator)
- * (ISC License, © Mapbox); earlier versions were based on
- * [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/).
+ * Points are triangulated by incremental insertion in Hilbert-curve order with exact
+ * orientation and in-circle tests, so grids, collinear runs, points on edges, and duplicate
+ * points are handled without degenerate triangles.
  */
 export class Delaunay extends Group {
   private _mesh: DelaunayMesh = [];
-  private _triangles: Uint32Array | null = null;
-  private _halfedges: Int32Array | null = null;
+  private _tri: Triangulation | null = null;
   private _shapes: DelaunayShape[] | null = null;
 
   /**
@@ -974,8 +489,7 @@ export class Delaunay extends Group {
     const n = this.length;
     this._mesh = [];
     for (let i = 0; i < n; i++) this._mesh[i] = {};
-    this._triangles = null;
-    this._halfedges = null;
+    this._tri = null;
     this._shapes = null;
     if (n < 3) return [];
 
@@ -985,41 +499,27 @@ export class Delaunay extends Group {
       coords[2 * i + 1] = this[i][1];
     }
 
-    const result = _triangulate(coords);
-    this._triangles = result ? result.triangles : null;
-    this._halfedges = result ? result.halfedges : null;
-    this._shapes = null;
-    if (!result) return [];
-    const triIndices = result.triangles;
+    const tri = triangulate(coords, n);
+    if (tri.triangles.length === 0) return [];
+    this._tri = tri;
+    const indices = tri.triangles;
 
     const shapes: DelaunayShape[] = [];
     const tris: GroupLike[] = [];
-    for (let t = 0, len = triIndices.length; t < len; t += 3) {
-      const i = triIndices[t];
-      const j = triIndices[t + 1];
-      const k = triIndices[t + 2];
+    for (let t = 0, len = indices.length; t < len; t += 3) {
+      const i = indices[t];
+      const j = indices[t + 1];
+      const k = indices[t + 2];
       const triangle = this._triangle(i, j, k);
-
       // scalar circumcircle, matching the shape of `Triangle.circumcircle`
-      const ax = coords[2 * i];
-      const ay = coords[2 * i + 1];
-      const ccx = _circumcenterX(
-        ax,
-        ay,
+      const [ccx, ccy, r] = _circumcircle(
+        coords[2 * i],
+        coords[2 * i + 1],
         coords[2 * j],
         coords[2 * j + 1],
         coords[2 * k],
         coords[2 * k + 1],
       );
-      const ccy = _circumcenterY(
-        ax,
-        ay,
-        coords[2 * j],
-        coords[2 * j + 1],
-        coords[2 * k],
-        coords[2 * k + 1],
-      );
-      const r = Math.sqrt(_sqDist(ax, ay, ccx, ccy));
       const circle = new Group(new Pt(ccx, ccy), new Pt(r, r));
 
       const shape: DelaunayShape = { i, j, k, triangle, circle };
@@ -1049,14 +549,7 @@ export class Delaunay extends Group {
     const x1 = _bound[1][0];
     const y1 = _bound[1][1];
     const hull = new Set<number>();
-    if (this._triangles && this._halfedges) {
-      for (let e = 0; e < this._halfedges.length; e++) {
-        if (this._halfedges[e] === -1) {
-          hull.add(this._triangles[e]);
-          hull.add(this._triangles[e % 3 === 2 ? e - 2 : e + 1]);
-        }
-      }
-    }
+    if (this._tri) for (const i of this._tri.hull) hull.add(i);
     const seen = new Set<string>();
     for (let i = 0, len = cells.length; i < len; i++) {
       const key = `${this[i][0]},${this[i][1]}`;
@@ -1098,42 +591,44 @@ export class Delaunay extends Group {
 
   /** Assemble unclipped Voronoi cells. */
   private _voronoiCells(): Group[] {
-    // walk the half-edge structure so each cell's circumcenters come out
-    // already in polygon order — no per-cell angle sort needed
-    const triangles = this._triangles;
-    const halfedges = this._halfedges;
+    const tri = this._tri;
     const shapes = this._shapes;
-    if (!triangles || !halfedges || !shapes) {
+    if (!tri || !shapes) {
       // fallback (eg, subclasses bypassing delaunay()): sort per cell
-      let vs: Group[] = [];
-      let n = this._mesh;
+      const vs: Group[] = [];
+      const n = this._mesh;
       for (let i = 0, len = n.length; i < len; i++) {
         vs.push(this.neighborPts(i, true) as Group);
       }
       return vs;
     }
 
+    // Walk the triangles around each point counterclockwise, so its
+    // circumcenters come out already in polygon order. A hull point's fan is
+    // open: start it at the triangle whose outgoing edge is on the hull.
     const n = this._mesh.length;
-    // one incoming half-edge per point; prefer hull edges so a boundary
-    // point's walk starts at the open end of its fan and covers all of it
-    const inedges = new Int32Array(n).fill(-1);
-    for (let e = 0, len = triangles.length; e < len; e++) {
-      const p = triangles[e % 3 === 2 ? e - 2 : e + 1];
-      if (halfedges[e] === -1 || inedges[p] === -1) inedges[p] = e;
+    const triangles = tri.triangles;
+    const neighbors = tri.neighbors;
+    const start = new Int32Array(n).fill(-1);
+    for (let h = 0, len = triangles.length; h < len; h++) {
+      const p = triangles[h];
+      if (neighbors[h] === -1 || start[p] === -1) start[p] = h;
     }
 
     const vs: Group[] = [];
     for (let i = 0; i < n; i++) {
       const cell = new Group();
-      const e0 = inedges[i];
-      if (e0 !== -1) {
-        let e = e0;
-        do {
-          cell.push(shapes[Math.floor(e / 3)].circle[0]);
-          const next = e % 3 === 2 ? e - 2 : e + 1;
-          if (triangles[next] !== i) break; // degenerate-case guard
-          e = halfedges[next];
-        } while (e !== -1 && e !== e0);
+      let h = start[i];
+      if (h !== -1) {
+        const first = (h / 3) | 0;
+        for (;;) {
+          const t = (h / 3) | 0;
+          cell.push(shapes[t].circle[0]);
+          // the edge entering this point leads to the next triangle around it
+          const twin = neighbors[3 * t + ((h + 2) % 3)];
+          if (twin === -1 || ((twin / 3) | 0) === first) break;
+          h = twin;
+        }
       }
       vs.push(cell);
     }
