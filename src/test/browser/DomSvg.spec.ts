@@ -922,11 +922,16 @@ describe("SVGSpace and SVGForm", () => {
       opacity: 0.5,
     });
     expect(String(ctx.style.font)).toContain("20px");
+    expect(form.filled).toBe(true);
+    expect(form.stroked).toBe(true);
     const circle = SVGForm.circle(ctx, [10, 10], 5) as SVGElement;
     expect(circle.getAttribute("style")).toContain("fill: #f00");
     expect(circle.getAttribute("style")).toContain("stroke-width: 2");
-    form.fill(false);
+    form.fill(false).stroke(false);
+    expect(form.filled).toBe(false);
+    expect(form.stroked).toBe(false);
     expect(form.scope(player).style.filled).toBe(false);
+    expect(form.scope(player).style.stroked).toBe(false);
     space.dispose();
   });
 
