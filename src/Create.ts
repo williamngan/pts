@@ -477,6 +477,8 @@ function _circumcircle(
  */
 export class Delaunay extends Group {
   private _mesh: DelaunayMesh = [];
+  private _meshBuilt = true;
+  private _count = 0;
   private _tri: Triangulation | null = null;
   private _shapes: DelaunayShape[] | null = null;
 
@@ -487,8 +489,9 @@ export class Delaunay extends Group {
    */
   delaunay(triangleOnly: boolean = true): GroupLike[] | DelaunayShape[] {
     const n = this.length;
+    this._count = n;
     this._mesh = [];
-    for (let i = 0; i < n; i++) this._mesh[i] = {};
+    this._meshBuilt = false;
     this._tri = null;
     this._shapes = null;
     if (n < 3) return [];
@@ -522,14 +525,30 @@ export class Delaunay extends Group {
       );
       const circle = new Group(new Pt(ccx, ccy), new Pt(r, r));
 
-      const shape: DelaunayShape = { i, j, k, triangle, circle };
-      this._cache(shape);
-      shapes.push(shape);
+      shapes.push({ i, j, k, triangle, circle });
       tris.push(triangle);
     }
     this._shapes = shapes;
 
     return triangleOnly ? tris : shapes;
+  }
+
+  /**
+   * The per-point mesh cache is keyed by neighbor-pair strings, which costs
+   * more than the triangulation itself; build it the first time it is read.
+   */
+  private _ensureMesh(): DelaunayMesh {
+    if (!this._meshBuilt) {
+      this._meshBuilt = true;
+      this._mesh = [];
+      for (let i = 0; i < this._count; i++) this._mesh[i] = {};
+      if (this._shapes) {
+        for (let s = 0, len = this._shapes.length; s < len; s++) {
+          this._cache(this._shapes[s]);
+        }
+      }
+    }
+    return this._mesh;
   }
 
   /**
@@ -596,7 +615,7 @@ export class Delaunay extends Group {
     if (!tri || !shapes) {
       // fallback (eg, subclasses bypassing delaunay()): sort per cell
       const vs: Group[] = [];
-      const n = this._mesh;
+      const n = this._ensureMesh();
       for (let i = 0, len = n.length; i < len; i++) {
         vs.push(this.neighborPts(i, true) as Group);
       }
@@ -606,7 +625,7 @@ export class Delaunay extends Group {
     // Walk the triangles around each point counterclockwise, so its
     // circumcenters come out already in polygon order. A hull point's fan is
     // open: start it at the triangle whose outgoing edge is on the hull.
-    const n = this._mesh.length;
+    const n = this._count;
     const triangles = tri.triangles;
     const neighbors = tri.neighbors;
     const start = new Int32Array(n).fill(-1);
@@ -640,7 +659,7 @@ export class Delaunay extends Group {
    * @return an array of objects that store a series of DelaunayShapes
    */
   mesh(): DelaunayMesh {
-    return this._mesh;
+    return this._ensureMesh();
   }
 
   /**
@@ -651,7 +670,7 @@ export class Delaunay extends Group {
    */
   neighborPts(i: number, sort = false): GroupLike {
     let cs = new Group();
-    let n = this._mesh;
+    let n = this._ensureMesh();
     for (let k in n[i]) {
       if (n[i].hasOwnProperty(k)) cs.push(n[i][k].circle[0]);
     }
@@ -665,7 +684,7 @@ export class Delaunay extends Group {
    */
   neighbors(i: number): DelaunayShape[] {
     let cs = [];
-    let n = this._mesh;
+    let n = this._ensureMesh();
     for (let k in n[i]) {
       if (n[i].hasOwnProperty(k)) cs.push(n[i][k]);
     }
