@@ -25,7 +25,7 @@ window.demoDescription = "B-spline demo in Op guide.";
     // draw the B-spline curve
     let curve = Curve.bspline( pts );
     form.fill("#0ca").stroke("#fff", 5).polygon( curve );
-    form.stroke("rgba(0,0,0,.2", 1).lines( corners.map( (p) => [p, space.center]) );
+    form.stroke("rgba(0,0,0,.2)", 1).lines( corners.map( (p) => [p, space.center]) );
     form.fillOnly("#f05").points( pts, 3, "circle" );
   });
 

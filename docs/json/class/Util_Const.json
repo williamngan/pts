@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Util.ts",
-      12,
-      18
+      11,
+      13
     ]
   ],
   "kind": "Objectliteral",
-  "id": 1812,
   "comment": "Various constant values for enumerations and calculations.",
   "constructor": [],
   "accessors": [],
@@ -19,11 +18,10 @@
       "source": [
         [
           "src/Util.ts",
-          42,
-          8
+          40,
+          2
         ]
       ],
-      "id": 1822,
       "flags": {},
       "type": "bottom",
       "overrides": false,
@@ -35,11 +33,10 @@
       "source": [
         [
           "src/Util.ts",
-          45,
-          13
+          43,
+          2
         ]
       ],
-      "id": 1823,
       "flags": {},
       "type": "bottom_left",
       "overrides": false,
@@ -51,11 +48,10 @@
       "source": [
         [
           "src/Util.ts",
-          39,
-          14
+          37,
+          2
         ]
       ],
-      "id": 1821,
       "flags": {},
       "type": "bottom_right",
       "overrides": false,
@@ -67,11 +63,10 @@
       "source": [
         [
           "src/Util.ts",
-          87,
-          12
+          85,
+          2
         ]
       ],
-      "id": 1837,
       "flags": {},
       "type": "deg_to_rad",
       "overrides": false,
@@ -83,11 +78,10 @@
       "source": [
         [
           "src/Util.ts",
-          60,
-          9
+          58,
+          2
         ]
       ],
-      "id": 1828,
       "flags": {},
       "type": "epsilon",
       "overrides": false,
@@ -99,11 +93,10 @@
       "source": [
         [
           "src/Util.ts",
-          96,
-          10
+          94,
+          2
         ]
       ],
-      "id": 1840,
       "flags": {},
       "type": "gaussian",
       "overrides": false,
@@ -115,11 +108,10 @@
       "source": [
         [
           "src/Util.ts",
-          90,
-          9
+          88,
+          2
         ]
       ],
-      "id": 1838,
       "flags": {},
       "type": "gravity",
       "overrides": false,
@@ -131,27 +123,25 @@
       "source": [
         [
           "src/Util.ts",
-          75,
-          9
+          73,
+          2
         ]
       ],
-      "id": 1833,
       "flags": {},
       "type": "half_pi",
       "overrides": false,
       "inherits": false,
-      "comment": "Half \u03c0 radian (90deg)"
+      "comment": "Half π radian (90deg)"
     },
     {
       "name": "horizontal",
       "source": [
         [
           "src/Util.ts",
-          27,
-          12
+          25,
+          2
         ]
       ],
-      "id": 1817,
       "flags": {},
       "type": "horizontal",
       "overrides": false,
@@ -163,11 +153,10 @@
       "source": [
         [
           "src/Util.ts",
-          33,
-          11
+          31,
+          2
         ]
       ],
-      "id": 1819,
       "flags": {},
       "type": "identical",
       "overrides": false,
@@ -179,11 +168,10 @@
       "source": [
         [
           "src/Util.ts",
-          48,
-          6
+          46,
+          2
         ]
       ],
-      "id": 1824,
       "flags": {},
       "type": "left",
       "overrides": false,
@@ -195,43 +183,40 @@
       "source": [
         [
           "src/Util.ts",
-          63,
-          5
+          61,
+          2
         ]
       ],
-      "id": 1829,
       "flags": {},
       "type": "max",
       "overrides": false,
       "inherits": false,
-      "comment": "Represents Number.MAX_VALUE"
+      "comment": "Represents Number.MAX_VALUE. Note: as a Float32 Pt value this overflows to Infinity."
     },
     {
       "name": "min",
       "source": [
         [
           "src/Util.ts",
-          66,
-          5
+          64,
+          2
         ]
       ],
-      "id": 1830,
       "flags": {},
       "type": "min",
       "overrides": false,
       "inherits": false,
-      "comment": "Represents Number.MIN_VALUE"
+      "comment": "Represents Number.MIN_VALUE, the smallest *positive* number (5e-324) — not the most negative number. Do not use it to initialize a running maximum; use -Infinity instead. As a Float32 Pt value this flushes to 0."
     },
     {
       "name": "newton",
       "source": [
         [
           "src/Util.ts",
-          93,
-          8
+          91,
+          2
         ]
       ],
-      "id": 1839,
       "flags": {},
       "type": "newton",
       "overrides": false,
@@ -243,59 +228,55 @@
       "source": [
         [
           "src/Util.ts",
-          81,
-          12
+          79,
+          2
         ]
       ],
-      "id": 1835,
       "flags": {},
       "type": "one_degree",
       "overrides": false,
       "inherits": false,
-      "comment": "\u03c0/180 or 1 degree in radian"
+      "comment": "π/180 or 1 degree in radian"
     },
     {
       "name": "pi",
       "source": [
         [
           "src/Util.ts",
-          69,
-          4
+          67,
+          2
         ]
       ],
-      "id": 1831,
       "flags": {},
       "type": "pi",
       "overrides": false,
       "inherits": false,
-      "comment": "\u03c0 radian (180 deg)"
+      "comment": "π radian (180 deg)"
     },
     {
       "name": "quarter_pi",
       "source": [
         [
           "src/Util.ts",
-          78,
-          12
+          76,
+          2
         ]
       ],
-      "id": 1834,
       "flags": {},
       "type": "quarter_pi",
       "overrides": false,
       "inherits": false,
-      "comment": "\u03c0/4 radian (45deg)"
+      "comment": "π/4 radian (45deg)"
     },
     {
       "name": "rad_to_deg",
       "source": [
         [
           "src/Util.ts",
-          84,
-          12
+          82,
+          2
         ]
       ],
-      "id": 1836,
       "flags": {},
       "type": "rad_to_deg",
       "overrides": false,
@@ -307,11 +288,10 @@
       "source": [
         [
           "src/Util.ts",
-          36,
-          7
+          34,
+          2
         ]
       ],
-      "id": 1820,
       "flags": {},
       "type": "right",
       "overrides": false,
@@ -323,11 +303,10 @@
       "source": [
         [
           "src/Util.ts",
-          54,
-          5
+          52,
+          2
         ]
       ],
-      "id": 1826,
       "flags": {},
       "type": "top",
       "overrides": false,
@@ -339,11 +318,10 @@
       "source": [
         [
           "src/Util.ts",
-          51,
-          10
+          49,
+          2
         ]
       ],
-      "id": 1825,
       "flags": {},
       "type": "top_left",
       "overrides": false,
@@ -355,11 +333,10 @@
       "source": [
         [
           "src/Util.ts",
-          57,
-          11
+          55,
+          2
         ]
       ],
-      "id": 1827,
       "flags": {},
       "type": "top_right",
       "overrides": false,
@@ -371,27 +348,25 @@
       "source": [
         [
           "src/Util.ts",
-          72,
-          8
+          70,
+          2
         ]
       ],
-      "id": 1832,
       "flags": {},
       "type": "two_pi",
       "overrides": false,
       "inherits": false,
-      "comment": "Two \u03c0 radian (360deg)"
+      "comment": "Two π radian (360deg)"
     },
     {
       "name": "vertical",
       "source": [
         [
           "src/Util.ts",
-          30,
-          10
+          28,
+          2
         ]
       ],
-      "id": 1818,
       "flags": {},
       "type": "vertical",
       "overrides": false,
@@ -403,11 +378,10 @@
       "source": [
         [
           "src/Util.ts",
-          15,
-          4
+          13,
+          2
         ]
       ],
-      "id": 1813,
       "flags": {},
       "type": "xy",
       "overrides": false,
@@ -419,11 +393,10 @@
       "source": [
         [
           "src/Util.ts",
-          24,
-          5
+          22,
+          2
         ]
       ],
-      "id": 1816,
       "flags": {},
       "type": "xyz",
       "overrides": false,
@@ -435,11 +408,10 @@
       "source": [
         [
           "src/Util.ts",
-          21,
-          4
+          19,
+          2
         ]
       ],
-      "id": 1815,
       "flags": {},
       "type": "xz",
       "overrides": false,
@@ -451,11 +423,10 @@
       "source": [
         [
           "src/Util.ts",
-          18,
-          4
+          16,
+          2
         ]
       ],
-      "id": 1814,
       "flags": {},
       "type": "yz",
       "overrides": false,

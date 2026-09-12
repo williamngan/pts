@@ -1,0 +1,26 @@
+{
+  "name": "FlockBoundary",
+  "source": [
+    [
+      "src/Types.ts",
+      151,
+      12
+    ]
+  ],
+  "kind": "Typealias",
+  "comment": "Typescript type: FlockBoundary is how a [`Flock`](#link) treats the edges of its bound:\n`\"steer\"` turns agents back within a margin, `\"wrap\"` moves them to the opposite edge,\n`\"bounce\"` reflects them, and `\"none\"` lets them leave.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    "steer",
+    "wrap",
+    "bounce",
+    "none"
+  ]
+}

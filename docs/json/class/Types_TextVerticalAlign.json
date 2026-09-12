@@ -1,0 +1,28 @@
+{
+  "name": "TextVerticalAlign",
+  "source": [
+    [
+      "src/Types.ts",
+      47,
+      12
+    ]
+  ],
+  "kind": "Typealias",
+  "comment": "Typescript type: TextVerticalAlign represents the vertical alignment options accepted by [`CanvasForm.textBox`](#link) and [`CanvasForm.paragraphBox`](#link).",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    "top",
+    "start",
+    "middle",
+    "center",
+    "bottom",
+    "end"
+  ]
+}

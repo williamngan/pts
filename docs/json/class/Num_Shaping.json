@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Num.ts",
-      519,
-      20
+      575,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 1557,
   "comment": "Shaping provides shaping functions to interpolate a value. These are useful for easing and transitions.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +17,10 @@
       "source": [
         [
           "src/Num.ts",
-          721,
-          17
+          793,
+          9
         ]
       ],
-      "id": 1639,
       "flags": {
         "isStatic": true
       },
@@ -42,7 +40,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -56,11 +54,10 @@
       "source": [
         [
           "src/Num.ts",
-          750,
-          20
+          822,
+          9
         ]
       ],
-      "id": 1647,
       "flags": {
         "isStatic": true
       },
@@ -80,7 +77,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -94,11 +91,10 @@
       "source": [
         [
           "src/Num.ts",
-          730,
-          18
+          802,
+          9
         ]
       ],
-      "id": 1643,
       "flags": {
         "isStatic": true
       },
@@ -118,7 +114,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -132,11 +128,10 @@
       "source": [
         [
           "src/Num.ts",
-          651,
-          19
+          708,
+          9
         ]
       ],
-      "id": 1612,
       "flags": {
         "isStatic": true
       },
@@ -156,7 +151,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -170,11 +165,10 @@
       "source": [
         [
           "src/Num.ts",
-          670,
-          22
+          727,
+          9
         ]
       ],
-      "id": 1620,
       "flags": {
         "isStatic": true
       },
@@ -194,7 +188,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -208,11 +202,10 @@
       "source": [
         [
           "src/Num.ts",
-          660,
-          20
+          717,
+          9
         ]
       ],
-      "id": 1616,
       "flags": {
         "isStatic": true
       },
@@ -232,7 +225,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -246,11 +239,10 @@
       "source": [
         [
           "src/Num.ts",
-          850,
-          14
+          938,
+          9
         ]
       ],
-      "id": 1682,
       "flags": {
         "isStatic": true
       },
@@ -276,7 +268,7 @@
             },
             {
               "name": "p",
-              "comment": "usually a value between 0 to 1, which specify the Pt to \"jump\". Default is 0.5 which is in the middle.\n",
+              "comment": "usually a value between 0 to 1, which specify the Pt to \"jump\". Default is 0.5 which is in the middle.",
               "type": "number",
               "default": "0.5"
             }
@@ -290,11 +282,10 @@
       "source": [
         [
           "src/Num.ts",
-          639,
-          21
+          696,
+          9
         ]
       ],
-      "id": 1608,
       "flags": {
         "isStatic": true
       },
@@ -314,7 +305,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -328,11 +319,10 @@
       "source": [
         [
           "src/Num.ts",
-          822,
-          20
+          897,
+          9
         ]
       ],
-      "id": 1671,
       "flags": {
         "isStatic": true
       },
@@ -340,7 +330,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Cubic bezier curve. This reuses the bezier functions in Curve class.",
+          "comment": "Cubic bezier curve. This reuses the bezier functions in Curve class. Note that `t` is the curve parameter, not the x position: unlike CSS `cubic-bezier(...)`, this returns the curve's y value at parameter `t` rather than solving y at x = t.",
           "returns": "number",
           "returns_comment": false,
           "parameters": [
@@ -358,15 +348,15 @@
             },
             {
               "name": "p1",
-              "comment": "",
+              "comment": "` a Pt object specifying the first control Pt. Default is `Pt(0.1, 0.7).",
               "type": "PtLike",
-              "default": "[0.1, 0.7]"
+              "default": "..."
             },
             {
               "name": "p2",
-              "comment": "",
+              "comment": "` a Pt object specifying the second control Pt. Default is `Pt(0.9, 0.2).",
               "type": "PtLike",
-              "default": "[0.9, 0.2]"
+              "default": "..."
             }
           ],
           "tags": []
@@ -378,11 +368,10 @@
       "source": [
         [
           "src/Num.ts",
-          563,
-          16
+          618,
+          9
         ]
       ],
-      "id": 1574,
       "flags": {
         "isStatic": true
       },
@@ -402,7 +391,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -416,11 +405,10 @@
       "source": [
         [
           "src/Num.ts",
-          582,
-          19
+          637,
+          9
         ]
       ],
-      "id": 1582,
       "flags": {
         "isStatic": true
       },
@@ -440,7 +428,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -454,11 +442,10 @@
       "source": [
         [
           "src/Num.ts",
-          572,
-          17
+          627,
+          9
         ]
       ],
-      "id": 1578,
       "flags": {
         "isStatic": true
       },
@@ -478,7 +465,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -492,11 +479,10 @@
       "source": [
         [
           "src/Num.ts",
-          681,
-          18
+          740,
+          9
         ]
       ],
-      "id": 1624,
       "flags": {
         "isStatic": true
       },
@@ -522,7 +508,7 @@
             },
             {
               "name": "p",
-              "comment": "elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.7.\n",
+              "comment": "elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.7.",
               "type": "number",
               "default": "0.7"
             }
@@ -536,11 +522,10 @@
       "source": [
         [
           "src/Num.ts",
-          704,
-          21
+          767,
+          9
         ]
       ],
-      "id": 1634,
       "flags": {
         "isStatic": true
       },
@@ -566,7 +551,7 @@
             },
             {
               "name": "p",
-              "comment": "elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.6.\n",
+              "comment": "elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.6.",
               "type": "number",
               "default": "0.6"
             }
@@ -580,11 +565,10 @@
       "source": [
         [
           "src/Num.ts",
-          693,
-          19
+          754,
+          9
         ]
       ],
-      "id": 1629,
       "flags": {
         "isStatic": true
       },
@@ -610,7 +594,7 @@
             },
             {
               "name": "p",
-              "comment": "elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.7.\n",
+              "comment": "elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.7.",
               "type": "number",
               "default": "0.7"
             }
@@ -624,11 +608,10 @@
       "source": [
         [
           "src/Num.ts",
-          593,
-          22
+          650,
+          9
         ]
       ],
-      "id": 1586,
       "flags": {
         "isStatic": true
       },
@@ -654,7 +637,7 @@
             },
             {
               "name": "p",
-              "comment": "a value between 0 to 1 to control the curve. Default is 0.25.\n",
+              "comment": "a value between 0 to 1 to control the curve. Default is 0.25.",
               "type": "number",
               "default": "0.25"
             }
@@ -668,11 +651,10 @@
       "source": [
         [
           "src/Num.ts",
-          603,
-          23
+          660,
+          9
         ]
       ],
-      "id": 1591,
       "flags": {
         "isStatic": true
       },
@@ -698,7 +680,7 @@
             },
             {
               "name": "p",
-              "comment": "a value between 0 to 1 to control the curve. Default is 0.25.\n",
+              "comment": "a value between 0 to 1 to control the curve. Default is 0.25.",
               "type": "number",
               "default": "0.25"
             }
@@ -712,11 +694,10 @@
       "source": [
         [
           "src/Num.ts",
-          526,
-          15
+          581,
+          9
         ]
       ],
-      "id": 1558,
       "flags": {
         "isStatic": true
       },
@@ -736,7 +717,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -750,11 +731,10 @@
       "source": [
         [
           "src/Num.ts",
-          771,
-          19
+          845,
+          9
         ]
       ],
-      "id": 1656,
       "flags": {
         "isStatic": true
       },
@@ -780,7 +760,7 @@
             },
             {
               "name": "p",
-              "comment": "a parameter between 0 to 1 to control the steepness of the curve. Higher is steeper. Default is 0.7.\n",
+              "comment": "a parameter between 0 to 1 to control the steepness of the curve. Higher is steeper. Default is 0.7.",
               "type": "number",
               "default": "0.7"
             }
@@ -794,11 +774,10 @@
       "source": [
         [
           "src/Num.ts",
-          803,
-          24
+          875,
+          9
         ]
       ],
-      "id": 1666,
       "flags": {
         "isStatic": true
       },
@@ -824,9 +803,9 @@
             },
             {
               "name": "p",
-              "comment": "",
+              "comment": "a Pt object specifying the control Pt, or a value specifying its x position (its y position will default to 0.5). Default is `[0.05, 0.95]`.",
               "type": "number | PtLike",
-              "default": "[0.05, 0.95]"
+              "default": "..."
             }
           ],
           "tags": []
@@ -838,11 +817,10 @@
       "source": [
         [
           "src/Num.ts",
-          535,
-          20
+          590,
+          9
         ]
       ],
-      "id": 1562,
       "flags": {
         "isStatic": true
       },
@@ -862,7 +840,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -876,11 +854,10 @@
       "source": [
         [
           "src/Num.ts",
-          553,
-          23
+          608,
+          9
         ]
       ],
-      "id": 1570,
       "flags": {
         "isStatic": true
       },
@@ -900,7 +877,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -914,11 +891,10 @@
       "source": [
         [
           "src/Num.ts",
-          544,
-          21
+          599,
+          9
         ]
       ],
-      "id": 1566,
       "flags": {
         "isStatic": true
       },
@@ -938,7 +914,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -952,11 +928,10 @@
       "source": [
         [
           "src/Num.ts",
-          834,
-          24
+          919,
+          9
         ]
       ],
-      "id": 1677,
       "flags": {
         "isStatic": true
       },
@@ -982,9 +957,9 @@
             },
             {
               "name": "p1",
-              "comment": "",
+              "comment": "` a Pt object specifying the Pt to pass through. Default is `Pt(0.2, 0.35)",
               "type": "PtLike",
-              "default": "[0.2, 0.35]"
+              "default": "..."
             }
           ],
           "tags": []
@@ -996,11 +971,10 @@
       "source": [
         [
           "src/Num.ts",
-          788,
-          13
+          861,
+          9
         ]
       ],
-      "id": 1661,
       "flags": {
         "isStatic": true
       },
@@ -1026,7 +1000,7 @@
             },
             {
               "name": "p",
-              "comment": "a parameter between 0 to 1 to control the steepness of the curve. Higher is steeper. Default is 0.5.\n",
+              "comment": "a parameter between 0 to 1 to control the steepness of the curve. Higher is steeper. Default is 0.5.",
               "type": "number",
               "default": "0.5"
             }
@@ -1040,11 +1014,10 @@
       "source": [
         [
           "src/Num.ts",
-          760,
-          16
+          834,
+          9
         ]
       ],
-      "id": 1651,
       "flags": {
         "isStatic": true
       },
@@ -1070,7 +1043,7 @@
             },
             {
               "name": "p",
-              "comment": "the larger the value, the \"steeper\" the curve will be. Default is 10.\n",
+              "comment": "the larger the value, the \"steeper\" the curve will be. Default is 10.",
               "type": "number",
               "default": "10"
             }
@@ -1084,11 +1057,10 @@
       "source": [
         [
           "src/Num.ts",
-          612,
-          15
+          669,
+          9
         ]
       ],
-      "id": 1596,
       "flags": {
         "isStatic": true
       },
@@ -1108,7 +1080,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -1122,11 +1094,10 @@
       "source": [
         [
           "src/Num.ts",
-          630,
-          18
+          687,
+          9
         ]
       ],
-      "id": 1604,
       "flags": {
         "isStatic": true
       },
@@ -1146,7 +1117,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -1160,11 +1131,10 @@
       "source": [
         [
           "src/Num.ts",
-          621,
-          16
+          678,
+          9
         ]
       ],
-      "id": 1600,
       "flags": {
         "isStatic": true
       },
@@ -1184,7 +1154,7 @@
             },
             {
               "name": "c",
-              "comment": "the value to shape, default is 1\n",
+              "comment": "the value to shape, default is 1",
               "type": "number",
               "default": "1"
             }
@@ -1198,11 +1168,10 @@
       "source": [
         [
           "src/Num.ts",
-          862,
-          13
+          950,
+          9
         ]
       ],
-      "id": 1687,
       "flags": {
         "isStatic": true
       },
@@ -1211,13 +1180,13 @@
       "signatures": [
         {
           "comment": "Convert any shaping functions into a series of steps.",
-          "returns": "any",
+          "returns": "number",
           "returns_comment": false,
           "parameters": [
             {
               "name": "fn",
               "comment": "the original shaping function",
-              "type": "Function",
+              "type": " Fn(t:number, c:number, args:any[])",
               "default": false
             },
             {
@@ -1240,7 +1209,7 @@
             },
             {
               "name": "args",
-              "comment": "optional paramters to pass to original function\n",
+              "comment": "optional paramters to pass to original function",
               "type": "any[]",
               "default": false
             }

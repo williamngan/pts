@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Types.ts",
-      41,
-      26
+      37,
+      12
     ]
   ],
   "kind": "Typealias",
-  "id": 753,
   "comment": "Typescript type: PtLikeIterable is the most flexible way to represent an iterable list of point data. For example, it can be a Group, an iterable of Pt instances, or an array of numbers' arrays.\nIf you aren't sure what this type means, treat this as a [`Group`](#link) instance.",
   "constructor": [],
   "accessors": [],

@@ -20,12 +20,12 @@ window.demoDescription = "Demo in getting started guide.";
     tris.map( (t) => t.push( space.pointer ) );
     
     // circle
-    var circles = tris.map( (t) => Triangle.incircle( t ) );
+    var circles = tris.map( (t) => Triangle.incircle( t ) ).filter( Boolean );
     
     // drawing
     form.fillOnly("#123").polygon( poly );
     form.fill("#f05").circles( circles );
-    form.strokeOnly("#fff ", 3 ).polygons( tris );
+    form.strokeOnly("#fff", 3 ).polygons( tris );
     form.fill("#123").point( space.pointer, 5 );
   });
 

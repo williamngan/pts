@@ -1,0 +1,260 @@
+#!/usr/bin/env node
+/**
+ * Build the editor's Monaco bundle and its Pts completion data.
+ *
+ * Outputs are committed because the site is served statically from the
+ * repo:
+ *
+ *   demo/edit/vs/monaco.js   editor core + JavaScript tokenizer
+ *   demo/edit/vs/pts.css     editor styles
+ *   demo/edit/js/pts-api.js  completion data and the matching Pts browser bundle
+ *
+ * The bundle deliberately excludes Monaco's TypeScript, CSS, HTML and JSON
+ * language services. They were 4.2MB of the previous vendored copy and existed
+ * to serve completions for a hand-maintained `autocomplete.d.ts` that had gone
+ * stale — it was missing Img, Sound, Tempo and UIDragger entirely. Completions
+ * now come from the same generated docs the website uses, so they cannot drift
+ * from the library again.
+ */
+
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import { mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const root = new URL("../", import.meta.url);
+const classDir = new URL("docs/json/class/", root);
+const apiOut = new URL("demo/edit/js/pts-api.js", root);
+const editorIndex = new URL("demo/edit/index.html", root);
+
+// The sketch shell is not listed: it is embedded in edit.js (FRAME_SRCDOC),
+// precisely so it cannot be fetched, cached, or versioned separately. An
+// `.html` asset could not be safely query-versioned anyway — clean-URL static
+// servers 301-redirect `frame.html?v=...` to an extensionless URL, stripping
+// the version.
+const versionedAssets = [
+  "demo/edit/vs/monaco.js",
+  "demo/edit/vs/pts.css",
+  "demo/edit/css/style.css",
+  "demo/edit/js/pts-api.js",
+  "demo/edit/js/edit.js",
+];
+
+const versionedReferences = [
+  "./vs/pts.css",
+  "./css/style.css",
+  "./vs/monaco.js",
+  "./js/pts-api.js",
+  "./js/edit.js",
+];
+
+function run(command, args) {
+  const result = spawnSync(command, args, {
+    cwd: root.pathname,
+    stdio: ["ignore", "inherit", "inherit"],
+  });
+  if (result.status !== 0) {
+    throw new Error(`${command} ${args.join(" ")} failed (${result.status})`);
+  }
+}
+
+/** First sentence of a doc comment, with markdown links flattened. */
+function summarize(comment) {
+  if (!comment) return "";
+  const text = String(comment)
+    .replace(/\[`?([^\]`]+)`?\]\([^)]*\)/g, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
+  const stop = text.indexOf(". ");
+  return stop > 0 ? text.slice(0, stop + 1) : text;
+}
+
+function signatureLabel(name, signature) {
+  const params = (signature.parameters ?? [])
+    .map((p) => (p.optional ? `${p.name}?` : p.name))
+    .join(", ");
+  return `${name}(${params})`;
+}
+
+/** Monaco snippet body, so tabbing moves between arguments. */
+function snippet(name, signature) {
+  const params = signature.parameters ?? [];
+  if (params.length === 0) return `${name}()`;
+  const body = params.map((p, i) => `\${${i + 1}:${p.name}}`).join(", ");
+  return `${name}(${body})`;
+}
+
+async function buildApiData() {
+  const files = (await readdir(classDir)).filter((f) => f.endsWith(".json"));
+  const classes = [];
+
+  for (const file of files) {
+    const doc = JSON.parse(await readFile(new URL(file, classDir), "utf8"));
+    if (doc.kind !== "Class" || !doc.name) continue;
+
+    const members = [];
+    const push = (name, kind, signature, isStatic) => {
+      if (!name || name.startsWith("_") || name.startsWith("[")) return;
+      members.push({
+        n: name,
+        k: kind,
+        s: isStatic ? 1 : 0,
+        d: summarize(signature?.comment),
+        l: signature ? signatureLabel(name, signature) : name,
+        i: signature ? snippet(name, signature) : name,
+        r: signature?.returns ?? "",
+      });
+    };
+
+    for (const method of doc.methods ?? []) {
+      push(
+        method.name,
+        "method",
+        method.signatures?.[0],
+        Boolean(method.flags?.isStatic),
+      );
+    }
+    for (const accessor of doc.accessors ?? []) {
+      push(
+        accessor.name,
+        "property",
+        undefined,
+        Boolean(accessor.flags?.isStatic),
+      );
+    }
+    for (const property of doc.properties ?? []) {
+      push(
+        property.name,
+        "property",
+        undefined,
+        Boolean(property.flags?.isStatic),
+      );
+    }
+
+    classes.push({
+      name: doc.name,
+      comment: summarize(doc.comment),
+      members,
+    });
+  }
+
+  classes.sort((a, b) => a.name.localeCompare(b.name));
+
+  const payload = {
+    generated: "scripts/build-editor.mjs",
+    classes,
+    // Keep preview and downloaded HTML on exactly the same library build,
+    // even before the next npm release exists. This asset is content-versioned.
+    library: await readFile(new URL("dist/pts.min.js", root), "utf8"),
+  };
+
+  const members = classes.reduce((sum, c) => sum + c.members.length, 0);
+  return {
+    source:
+      "// Generated by scripts/build-editor.mjs from docs/json and dist/pts.min.js. Do not edit.\n" +
+      `window.PTS_API = ${JSON.stringify(payload)};\n`,
+    summary: `${classes.length} classes, ${members} members`,
+  };
+}
+
+/**
+ * Give every editor-owned asset one content-derived version.
+ *
+ * The editor used to publish a stable `monaco.js` that imported hashed chunks.
+ * A deployment removed the old chunks while browsers could still reuse the old
+ * entry, leaving the page blank. The bundle is self-contained now, but changing
+ * its contents without changing its URL does not rescue browsers that already
+ * cached that older split entry. Versioning the whole cooperating asset set also
+ * prevents a cached edit.js from running against a new bundle.
+ */
+async function versionedIndex() {
+  const hash = createHash("sha256");
+  for (const path of versionedAssets) {
+    hash.update(path);
+    hash.update(await readFile(new URL(path, root)));
+  }
+  const version = hash.digest("hex").slice(0, 12);
+
+  let html = await readFile(editorIndex, "utf8");
+  for (const reference of versionedReferences) {
+    const escaped = reference.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const pattern = new RegExp(`${escaped}(?:\\?v=[a-f0-9]+)?`, "g");
+    const matches = html.match(pattern) ?? [];
+    if (matches.length !== 1) {
+      throw new Error(
+        `expected one versionable reference to ${reference}, found ${matches.length}`,
+      );
+    }
+    html = html.replace(pattern, `${reference}?v=${version}`);
+  }
+
+  return { html, version };
+}
+
+// `--check` rebuilds into a temporary directory and compares every generated
+// asset with the committed one, so the gate catches an editor that was not
+// rebuilt after a library or documentation change. The Monaco build is
+// deterministic, which makes a byte comparison meaningful.
+const check = process.argv.includes("--check");
+const bundleDir = check
+  ? await mkdtemp(join(tmpdir(), "pts-editor-"))
+  : fileURLToPath(new URL("demo/edit/vs/", root));
+run("npx", [
+  "vite",
+  "build",
+  "--config",
+  "vite.monaco.config.mjs",
+  "--outDir",
+  bundleDir,
+]);
+const upstreamNotices =
+  "\n\n## Upstream Monaco distribution notices\n\nOptional components listed below may be omitted from this editor build.\n\n```text\n" +
+  (await readFile(
+    new URL("node_modules/monaco-editor/ThirdPartyNotices.txt", root),
+    "utf8",
+  )) +
+  "\n```\n";
+const api = await buildApiData();
+const generated = [
+  ["demo/edit/vs/monaco.js", await readFile(join(bundleDir, "monaco.js"))],
+  ["demo/edit/vs/pts.css", await readFile(join(bundleDir, "pts.css"))],
+  [
+    "demo/edit/vs/THIRD-PARTY-NOTICES.md",
+    (await readFile(join(bundleDir, "THIRD-PARTY-NOTICES.md"), "utf8")) +
+      upstreamNotices,
+  ],
+  ["demo/edit/js/pts-api.js", api.source],
+];
+if (check) {
+  await rm(bundleDir, { recursive: true, force: true });
+  const stale = [];
+  for (const [path, expected] of generated) {
+    const actual = await readFile(new URL(path, root)).catch(() => null);
+    if (!actual || !Buffer.from(expected).equals(actual)) stale.push(path);
+  }
+  if (stale.length === 0) {
+    const { html } = await versionedIndex();
+    if (html !== (await readFile(editorIndex, "utf8"))) {
+      stale.push("demo/edit/index.html");
+    }
+  }
+  assert.equal(
+    stale.length,
+    0,
+    `Editor assets are stale; run 'pnpm build:editor'. Changed files:\n${stale.map((file) => `- ${file}`).join("\n")}`,
+  );
+  process.stdout.write(
+    `Validated editor bundle, notices, and completion data (${api.summary})\n`,
+  );
+} else {
+  for (const [path, content] of generated) {
+    await writeFile(new URL(path, root), content);
+  }
+  process.stdout.write(`wrote ${apiOut.pathname} (${api.summary})\n`);
+  const { html, version } = await versionedIndex();
+  await writeFile(editorIndex, html);
+  process.stdout.write(`versioned editor assets (${version})\n`);
+}

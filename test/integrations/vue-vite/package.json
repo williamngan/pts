@@ -1,0 +1,19 @@
+{
+  "name": "@pts-integrations/vue-vite",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vue-tsc --noEmit && vite build"
+  },
+  "dependencies": {
+    "pts": "file:../../..",
+    "vue": "3.5.41"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "6.0.8",
+    "typescript": "5.9.3",
+    "vite": "8.2.1",
+    "vue-tsc": "3.3.9"
+  }
+}

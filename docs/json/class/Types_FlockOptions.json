@@ -1,0 +1,23 @@
+{
+  "name": "FlockOptions",
+  "source": [
+    [
+      "src/Types.ts",
+      158,
+      12
+    ]
+  ],
+  "kind": "Typealias",
+  "comment": "Typescript type: FlockOptions are the settings accepted by [`Create.flock`](#link) and\n[`Flock.setup`](#link). Every field is optional; see the matching [`Flock`](#link) accessor\nfor its meaning and default.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    "{ alignWeight:`number`, bound:`GroupLike`, boundary:`FlockBoundary`, cohesionWeight:`number`, initialSpeed:`number`, margin:`number`, maxForce:`number`, maxSpeed:`number`, maxTimeStep:`number`, minSpeed:`number`, perception:`number`, separateWeight:`number`, separation:`number` }"
+  ]
+}

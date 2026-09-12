@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Types.ts",
-      220,
-      28
+      285,
+      12
     ]
   ],
   "kind": "Typealias",
-  "id": 845,
   "comment": "Typescript type: DefaultFormStyle represents a default object for visual styles such as fill, stroke, line width, and others.",
   "constructor": [],
   "accessors": [],
@@ -21,7 +20,7 @@
   "type_alias": [
     "{ fillStyle:`string",
     "CanvasGradient",
-    "CanvasPattern`, globalAlpha:`number`, lineCap:`string`, lineJoin:`string`, lineWidth:`number`, strokeStyle:`string",
+    "CanvasPattern`, globalAlpha:`number`, lineCap:`CanvasLineCap`, lineJoin:`CanvasLineJoin`, lineWidth:`number`, strokeStyle:`string",
     "CanvasGradient",
     "CanvasPattern` }"
   ]

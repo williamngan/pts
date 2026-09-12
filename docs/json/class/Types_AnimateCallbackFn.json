@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Types.ts",
-      47,
-      29
+      53,
+      12
     ]
   ],
   "kind": "Typealias",
-  "id": 754,
   "comment": "Typescript type: AnimateCallbackFn represents a callback function for animation. It accepts parameters to keep track of current time, current frame-time, and current space instance.",
   "constructor": [],
   "accessors": [],
@@ -19,6 +18,6 @@
   "extends": [],
   "implements": [],
   "type_alias": [
-    " Fn(time:number, frameTime:number, currentSpace:any)"
+    " Fn(time:number, frameTime:number, currentSpace:Space)"
   ]
 }

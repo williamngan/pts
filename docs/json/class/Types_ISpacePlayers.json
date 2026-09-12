@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Types.ts",
-      65,
-      30
+      79,
+      17
     ]
   ],
   "kind": "Interface",
-  "id": 456,
   "comment": "Typescript interface: ISpacePlayers represents a map of IPlayer instances.",
   "constructor": [],
   "accessors": [],

@@ -13,18 +13,19 @@ Pts.quickStart( "#pt", "#123" );
   var triangles = []; // store the delaunay triangles
   var cells = []; // store the voronoi cells
   var lastPt = new Pt();
+  var needsUpdate = false; // rebuild tessellations at most once per frame
 
 
   // A simple function to repel the points if they are too close
   let repel = (size) => {
+    let sizeSq = size*size;
     for (let k=0, len=de.length; k<len; k++) {
-      for (let i=0, len=de.length; i<len; i++) {
-        if ( i !== k ) {
-          let d =  de[k].$subtract( de[i] );
-          if ( d.magnitudeSq() < size*size ) {
-            de[k].subtract( d.$divide( -size/3 ) );
-            de[i].subtract( d.$divide( size/3 ) );
-          }
+      for (let i=k+1; i<len; i++) {
+        let d = de[k].$subtract( de[i] );
+        if ( d.magnitudeSq() < sizeSq ) {
+          let push = d.$divide( size/6 );
+          de[k].add( push );
+          de[i].subtract( push );
         }
       }
     }
@@ -38,7 +39,7 @@ Pts.quickStart( "#pt", "#123" );
       // Create 20 random points and generate initial tessellations
       de = Create.delaunay( Create.distributeRandom( space.innerBound, 20 ) );
       triangles = de.delaunay();
-      cells= de.voronoi();
+      cells= de.voronoi( space.innerBound );
     },
 
     animate: (time, ftime) => {
@@ -53,15 +54,22 @@ Pts.quickStart( "#pt", "#123" );
         de[de.length-1] = space.pointer;
         repel( 50 );
         triangles = de.delaunay();
-        cells= de.voronoi();
+        cells= de.voronoi( space.innerBound );
 
         // Guides: Show the neighbor cells of the point nearest to pointer
         let nearIndex = Polygon.nearestPt( de, space.pointer );
-        de.neighbors( nearIndex, true ).map( (n) => {
+        de.neighbors( nearIndex, true ).forEach( (n) => {
           form.strokeOnly("rgba(255,255,0, .9)", 3).polygon( n.triangle );
           form.strokeOnly("rgba(255,255,0,.3)", 1).circle( n.circle );
           form.fillOnly("#fe6", 1).point( n.circle[0], 2 );
         });
+
+      } else if (needsUpdate) {
+        // rebuild once per frame while points are being added, rather than
+        // once per pointer event
+        triangles = de.delaunay();
+        cells = de.voronoi( space.innerBound );
+        needsUpdate = false;
       }
 
     },
@@ -74,8 +82,7 @@ Pts.quickStart( "#pt", "#123" );
         if (lastPt.$subtract(p).magnitudeSq() > 400) {
           lastPt = p;
           de.push( p );
-          triangles = de.delaunay();
-          cells= de.voronoi();
+          needsUpdate = true;
         }
       }
     }

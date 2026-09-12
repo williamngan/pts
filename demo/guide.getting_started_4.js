@@ -21,7 +21,7 @@ window.demoDescription = "Demo in getting started guide.";
     
     // drawing
     form.fillOnly("#123").polygon( poly );
-    form.strokeOnly("#fff ", 3 ).polygons( tris );
+    form.strokeOnly("#fff", 3 ).polygons( tris );
     form.fill("#123").point( space.pointer, 5 );
   });
 

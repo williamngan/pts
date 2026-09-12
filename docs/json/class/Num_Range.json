@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Num.ts",
-      875,
-      18
+      967,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 1694,
   "comment": "Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension.\nIt also provides convenient functions such as mapping the Group to another range. This class may be useful for visualizing data in charts.",
   "constructor": [
     {
@@ -16,11 +15,10 @@
       "source": [
         [
           "src/Num.ts",
-          881,
-          29
+          978,
+          2
         ]
       ],
-      "id": 1700,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -32,7 +30,7 @@
           "parameters": [
             {
               "name": "g",
-              "comment": "a Group or an Iterable<Pt>\n",
+              "comment": "a Group or an Iterable<Pt>",
               "type": "PtIterable",
               "default": false
             }
@@ -48,11 +46,10 @@
       "source": [
         [
           "src/Num.ts",
-          906,
-          15
+          1000,
+          6
         ]
       ],
-      "id": 1707,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -67,11 +64,10 @@
       "source": [
         [
           "src/Num.ts",
-          896,
-          9
+          986,
+          6
         ]
       ],
-      "id": 1703,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -86,11 +82,10 @@
       "source": [
         [
           "src/Num.ts",
-          901,
-          9
+          993,
+          6
         ]
       ],
-      "id": 1705,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -107,11 +102,10 @@
       "source": [
         [
           "src/Num.ts",
-          965,
-          8
+          1064,
+          2
         ]
       ],
-      "id": 1716,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -129,7 +123,7 @@
             },
             {
               "name": "update",
-              "comment": "Optional. Set the parameter to `false` if you want to append without immediately updating this Range's min and max values. Default is `true`.\n",
+              "comment": "Optional. Set the parameter to `false` if you want to append without immediately updating this Range's min and max values. Default is `true`.",
               "type": "boolean",
               "default": "true"
             }
@@ -143,18 +137,17 @@
       "source": [
         [
           "src/Num.ts",
-          912,
-          6
+          1007,
+          2
         ]
       ],
-      "id": 1709,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Go through the group and find its min and max values. Usually you don't need to call this function directly.",
-          "returns": "this",
+          "returns": "Range | undefined",
           "returns_comment": false,
           "parameters": [],
           "tags": []
@@ -166,11 +159,10 @@
       "source": [
         [
           "src/Num.ts",
-          946,
-          7
+          1043,
+          2
         ]
       ],
-      "id": 1711,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -194,7 +186,7 @@
             },
             {
               "name": "exclude",
-              "comment": "Optional boolean array where `true` means excluding the conversion in that specific dimension.\n",
+              "comment": "Optional boolean array where `true` means excluding the conversion in that specific dimension.",
               "type": "boolean[]",
               "default": false
             }
@@ -208,11 +200,10 @@
       "source": [
         [
           "src/Num.ts",
-          978,
-          7
+          1079,
+          2
         ]
       ],
-      "id": 1720,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -224,7 +215,7 @@
           "parameters": [
             {
               "name": "count",
-              "comment": "number of subdivision. For example, 10 subdivision will return 11 tick values, which include first(min) and last(max) values.\n",
+              "comment": "number of subdivision. For example, 10 subdivision will return 11 tick values, which include first(min) and last(max) values.",
               "type": "number",
               "default": false
             }

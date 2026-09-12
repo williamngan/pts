@@ -1,0 +1,23 @@
+{
+  "name": "ImgOptions",
+  "source": [
+    [
+      "src/Image.ts",
+      11,
+      12
+    ]
+  ],
+  "kind": "Typealias",
+  "comment": "Options for creating an [`Img`](#link).",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    "{ crossOrigin:`boolean`, editable:`boolean`, pixelScale:`number`, space:`CanvasSpace` }"
+  ]
+}

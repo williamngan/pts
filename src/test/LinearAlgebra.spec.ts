@@ -1,205 +1,303 @@
-import chai = require('chai');
-import mocha = require('mocha');
-import {Pt, Group} from '../Pt';
-import {Util} from '../Util';
-import {Vec, Mat} from '../LinearAlgebra';
-import {Num, Geom} from '../Num';
+import { describe, expect, it, vi } from "vitest";
+import { Mat, Vec } from "../LinearAlgebra";
+import { Group, Pt } from "../Pt";
 
-var {assert} = chai;
-var {describe, it} = mocha;
+function values(value: ArrayLike<number>) {
+  return Array.from(value);
+}
 
+function matrix(value: ArrayLike<ArrayLike<number>>) {
+  return Array.from(value, values);
+}
 
-describe('Linear Algebra: ', function() {
+describe("Vec", () => {
+  it.each([
+    ["add", Vec.add, 2, [3, 4, 5]],
+    ["subtract", Vec.subtract, 2, [-1, 0, 1]],
+    ["multiply", Vec.multiply, 2, [2, 4, 6]],
+    ["divide", Vec.divide, 2, [0.5, 1, 1.5]],
+  ])(
+    "%s mutates and returns its scalar input vector",
+    (_, operation, scalar, expected) => {
+      const point = new Pt(1, 2, 3);
+      expect(operation(point, scalar)).toBe(point);
+      expect(values(point)).toEqual(expected);
+    },
+  );
 
-  describe('Vector operations: ', function() {
-
-    it('can add vector with a scalar', function() {
-      let p = [5,4,3,2,1];
-      Vec.add( p, 5 );;
-      assert.isTrue( p[0] === 10 && p[4] === 6 );
-    });
-
-    it('can add vector with a vector', function() {
-      let p = [5,4,3,2,1];
-      Vec.add( p, [2,3,4] );
-      assert.isTrue( p[0] === 7 && p[2] === 7 && p[4] === 1 );
-    });
-
-    it('can subtract vector with a scalar', function() {
-      let p = [5,4,3,2,1];
-      Vec.subtract( p, 2 );
-      assert.isTrue( p[0] === 3 && p[4] === -1 );
-    });
-    
-    it('can subtract vector with a vector', function() {
-      let p = [5,4,3,2,1];
-      Vec.subtract( p, [2,3,4] );
-      assert.isTrue( p[0] === 3 && p[2] === -1 && p[4] === 1 );
-    });
-
-    it('can multiply vector with a scalar', function() {
-      let p = [5,4,3,2,1];
-      Vec.multiply( p, 5 );;
-      assert.isTrue( p[0] === 25 && p[4] === 5 );
-    });
-
-    it('can multiply vector with a vector', function() {
-      let p = [5,4,3,2,1];
-      Vec.multiply( p, [2,3,4,1,1] );
-      assert.isTrue( p[0] === 10 && p[2] === 12 && p[4] === 1 );
-    });
-
-    it('can divide vector with a scalar', function() {
-      let p = [5,4,3,2,1];
-      Vec.divide( p, 5 );;
-      assert.isTrue( p[0] === 1 && p[4] === 0.2 );
-    });
-
-    it('can divide vector with a vector', function() {
-      let p = [5,4,3,2,5];
-      Vec.divide( p, [5,2,4,1,1] );
-      assert.isTrue( p[0] === 1 && p[1] === 2 && p[4] === 5 );
-    });
-
-    it('can calculate dot product', function() {
-      assert.equal( Vec.dot( [5,4,3,2], [1,2,3,4] ), 30 );
-    });
-
-    it('can calculate cross product', function() {
-      let c = Vec.cross( [3,-3,1], [4,9,2] );
-      assert.isTrue( c[0] === -15 && c[1] === -2 && c[2] === 39 );
-    });
-
-    it('can calculate magnitude', function() {
-      assert.isTrue( Num.equals( Vec.magnitude( [2,3,4] ), 5.3851648 ) );
-    });
-
-    it('can calculate unit vector', function() {
-      let c = Vec.magnitude( Vec.unit( [3,4,1,2]) );
-      assert.isTrue( Num.equals(c, 1) );
-    });
-
-    it('can convert to absolute values', function() {
-      let c = Vec.abs( [-1, -999, 2] );
-      assert.isTrue( new Pt(1,999,2).equals( c ) );
-    });
-
-    it('can convert to floor values', function() {
-      let c = Vec.floor( [1.01, 55.91] );
-      assert.isTrue( new Pt(1,55).equals( c ) );
-    });
-
-    it('can convert to ceil values', function() {
-      let c = Vec.ceil( [1.01, 55.91] );
-      assert.isTrue( new Pt(2,56).equals( c ) );
-    });
-
-    it('can convert to round values', function() {
-      let c = Vec.round( [1.01, 55.91] );
-      assert.isTrue( new Pt(1,56).equals( c ) );
-    });
-
-    it('can find max value in dimensions', function() {
-      let c = Vec.max( [5,7,-1,3,7] );
-      assert.isTrue( c.value === 7 && c.index === 4 );
-    });
-    
-    it('can find min value in dimensions', function() {
-      let c = Vec.min( [5,7,-1,3,7] );
-      assert.isTrue( c.value === -1 && c.index === 2 );
-    });
-
-    it('can sum all dimensional values', function() {
-      let c = Vec.sum( [5,7,-1,3,7] );
-      assert.equal( c, 21 );
-    });
-
-    it('can map a custom function', function() {
-      let c = Vec.map( [5,7,-1,3,7], (n, i) => n*(i+1) );
-      assert.isTrue( c[0] === 5 && c[1] === 14 && c[4] === 35 );
-    });
-
+  it("performs vector arithmetic and preserves trailing dimensions for add/subtract", () => {
+    expect(values(Vec.add(new Pt(1, 2, 3), [4, 5]))).toEqual([5, 7, 3]);
+    expect(values(Vec.subtract(new Pt(5, 7, 3), [4, 5]))).toEqual([1, 2, 3]);
+    expect(values(Vec.multiply(new Pt(1, 2, 3), [4, 5, 6]))).toEqual([
+      4, 10, 18,
+    ]);
+    expect(values(Vec.divide(new Pt(4, 10, 18), [4, 5, 6]))).toEqual([1, 2, 3]);
   });
 
-
-  describe('Transform matrices: ', function() {
-
-    it(`can multiply matrix with a scalar`, function() {
-      let m = Mat.multiply( [ new Pt(1,2,3), new Pt(20,2,1) ], 10 );
-      assert.isTrue( m[0].equals( [10, 20, 30] ), m[1].equals( [200, 20, 10] ) );
-    }); 
-
-    it(`can multiply matrices element-wise`, function() {
-      let m = Mat.multiply( [ new Pt(1,2,3), new Pt(20,2,1) ], [ new Pt(3,2,10), new Pt(1,2,2) ], false, true );
-      assert.isTrue( m[0].equals( [3, 4, 30] ), m[1].equals( [ 20, 4, 2] ) );
-    }); 
-
-    it('can calculate a 2D transform', function() {
-      let m = Mat.transform2D( [1,2], [[1,0,0],[2,2,0],[10,10,1]] );
-      assert.isTrue( m.equals( [ 15, 14 ], 0.0001 ) );
-    });
-
-
-    it('can get a scale2D matrix', function() {
-      let m = Num.sum( Mat.scale2DMatrix( 0.5, 2 ) );
-      assert.isTrue( m.equals( [0.5,2,1], 0.00001) );
-    });
-
-    it('can get a rotate2D matrix', function() {
-      let cos =  Math.cos( Math.PI/3 );
-      let sin = Math.sin( Math.PI/3 );
-      let m = Num.sum( Mat.rotate2DMatrix( cos, sin ) );
-      assert.isTrue( m.equals( [cos-sin, sin+cos, 1], 0.00001 ) );
-    });
-
-    it('can get a shear2D matrix', function() {
-      let m = Num.sum( Mat.shear2DMatrix( 0.1, 0.3 ) );
-      assert.isTrue( m.equals( [1.3, 1.1, 1], 0.0001 ) );
-    });
-
-    it('can get a translate2D matrix', function() {
-      let m = Num.sum( Mat.translate2DMatrix( 10, 11 ) );
-      assert.isTrue( m.equals( [11,12,1], 0.0001 ) );
-    });
-
-    it('can get a scale2D matrix from anchor', function() {
-      let m = Num.sum( Mat.scaleAt2DMatrix( 0.5, 2, [10,9] ) );
-      assert.isTrue( m.equals( [5.5,-7,1], 0.00001) );
-    });
-
-    it('can get a rotate2D matrix from anchor', function() {
-      let cos =  Math.cos( Math.PI/3 );
-      let sin = Math.sin( Math.PI/3 );
-      let m = Num.sum( Mat.rotateAt2DMatrix( cos, sin, [10,9] ) );
-      let result = [
-        4.999999999999999 + 7.794228634059947 + cos - sin,
-        4.4999999999999999 - 8.660254037844386 + sin + cos,
-        1
-      ];
-      assert.isTrue( m.equals( result, 0.00001) );
-    });
-
-    it('can get a shear2D matrix from anchor', function() {
-      let m = Num.sum( Mat.shearAt2DMatrix( 0.1, 0.3, [10, 9] ) );
-      assert.isTrue( m.equals( [1.3 - 2.7, 1.1 - 1, 1], 0.0001 ) );
-    });
-
-    it('can reflect a group in 2D', function() {
-      let ps = [new Pt(218, 454), new Pt( 218, 404) ];
-      let reflect = Group.fromArray( [[230, 497], [268, 454]] )
-      Geom.reflect2D( ps, reflect );
-      assert.isTrue( Num.equals(ps[0].x, 274.14938) &&  Num.equals(ps[1].y, 497.4710) );
-    });
-
-    it('can reflect a group in 2D when there is no y-intercept', function() {
-      let ps = [new Pt(218, 454), new Pt( 250, 404) ];
-      let reflect = Group.fromArray( [[230, 497], [230, 454]] )
-      Geom.reflect2D( ps, reflect );
-      assert.isTrue( Num.equals(ps[0].x, 242) &&  Num.equals(ps[1].x, 210) );
-    });
-
-    
-
+  it("rejects invalid arithmetic dimensions and zero divisors", () => {
+    expect(() => Vec.multiply([1, 2], [1])).toThrow("lengths don't match");
+    expect(() => Vec.divide([1, 2], [1])).toThrow("lengths don't match");
+    expect(() => Vec.divide([1, 2], 0)).toThrow("divide by zero");
+    expect(() => Vec.dot([1], [1, 2])).toThrow("lengths don't match");
   });
 
+  it("calculates products, magnitudes, and units", () => {
+    expect(Vec.dot([5, 4, 3, 2], [1, 2, 3, 4])).toBe(30);
+    expect(Vec.cross2D([2, 3], [4, 5])).toBe(-2);
+    expect(values(Vec.cross([3, -3, 1], [4, 9, 2]))).toEqual([-15, -2, 39]);
+    expect(Vec.magnitude([3, 4])).toBe(5);
+    const unit = Vec.unit(new Pt(3, 4), 5);
+    expect(unit[0]).toBeCloseTo(0.6);
+    expect(unit[1]).toBeCloseTo(0.8);
+    expect(values(Vec.unit(new Pt(0, 0)))).toEqual([0, 0]);
+  });
+
+  it("maps numeric transforms and reductions", () => {
+    expect(values(Vec.abs(new Pt(-1, 2, -3)))).toEqual([1, 2, 3]);
+    expect(values(Vec.floor(new Pt(1.9, -1.1)))).toEqual([1, -2]);
+    expect(values(Vec.ceil(new Pt(1.1, -1.9)))).toEqual([2, -1]);
+    expect(values(Vec.round(new Pt(1.4, 1.6)))).toEqual([1, 2]);
+    expect(Vec.max([5, 7, -1, 3, 7])).toEqual({ value: 7, index: 4 });
+    expect(Vec.min([5, 7, -1, 3, -1])).toEqual({ value: -1, index: 4 });
+    expect(Vec.sum([5, 7, -1])).toBe(11);
+    const point = new Pt(2, 3, 4);
+    expect(Vec.map(point, (value, index) => value * index)).toBe(point);
+    expect(values(point)).toEqual([0, 3, 8]);
+  });
+});
+
+describe("Mat arithmetic", () => {
+  const left = Group.fromArray([
+    [1, 2, 3],
+    [4, 5, 6],
+  ]);
+
+  it("adds scalar and matrix operands", () => {
+    expect(matrix(Mat.add(left, 2))).toEqual([
+      [3, 4, 5],
+      [6, 7, 8],
+    ]);
+    expect(
+      matrix(
+        Mat.add(left, [
+          [6, 5, 4],
+          [3, 2, 1],
+        ]),
+      ),
+    ).toEqual([
+      [7, 7, 7],
+      [7, 7, 7],
+    ]);
+    expect(() =>
+      Mat.add(left, [
+        [1, 2],
+        [3, 4],
+      ]),
+    ).toThrow("size don't match");
+    expect(() => Mat.add(left, [[1, 2, 3]])).toThrow("size don't match");
+  });
+
+  it("multiplies scalar, element-wise, regular, and transposed operands", () => {
+    expect(matrix(Mat.multiply(left, 2))).toEqual([
+      [2, 4, 6],
+      [8, 10, 12],
+    ]);
+    expect(
+      matrix(
+        Mat.multiply(
+          left,
+          [
+            [2, 2, 2],
+            [3, 3, 3],
+          ],
+          false,
+          true,
+        ),
+      ),
+    ).toEqual([
+      [2, 4, 6],
+      [12, 15, 18],
+    ]);
+    expect(
+      matrix(
+        Mat.multiply(left, [
+          [1, 2],
+          [3, 4],
+          [5, 6],
+        ]),
+      ),
+    ).toEqual([
+      [22, 28],
+      [49, 64],
+    ]);
+    expect(
+      matrix(
+        Mat.multiply(
+          left,
+          [
+            [1, 3, 5],
+            [2, 4, 6],
+          ],
+          true,
+        ),
+      ),
+    ).toEqual([
+      [22, 28],
+      [49, 64],
+    ]);
+  });
+
+  it("rejects incompatible multiplication shapes", () => {
+    expect(() => Mat.multiply(left, [[1], [2]], false, true)).toThrow(
+      "lengths don't match",
+    );
+    expect(() =>
+      Mat.multiply(left, [
+        [1, 2],
+        [3, 4],
+      ]),
+    ).toThrow("rows in matrix-a");
+    expect(() =>
+      Mat.multiply(
+        left,
+        [
+          [1, 2],
+          [3, 4],
+        ],
+        true,
+      ),
+    ).toThrow("transposed");
+  });
+
+  it("zips ragged matrices with explicit fallback policies", () => {
+    const ragged = [[1, 2], [3], [4, 5, 6]];
+    expect(values(Mat.zipSlice(ragged, 0))).toEqual([1, 3, 4]);
+    expect(() => Mat.zipSlice(ragged, 1)).toThrow("out of bounds");
+    expect(values(Mat.zipSlice(ragged, 1, -1))).toEqual([2, -1, 5]);
+    expect(matrix(Mat.zip(ragged, -1, true))).toEqual([
+      [1, 3, 4],
+      [2, -1, 5],
+      [-1, -1, 6],
+    ]);
+    expect(
+      matrix(
+        Mat.transpose([
+          [1, 2],
+          [3, 4],
+        ]),
+      ),
+    ).toEqual([
+      [1, 3],
+      [2, 4],
+    ]);
+  });
+});
+
+describe("Mat 2D transformations", () => {
+  it("constructs and applies primitive matrices", () => {
+    expect(values(Mat.transform2D([2, 3], Mat.scale2DMatrix(4, 5)))).toEqual([
+      8, 15,
+    ]);
+    expect(
+      values(Mat.transform2D([2, 3], Mat.translate2DMatrix(4, 5))),
+    ).toEqual([6, 8]);
+    expect(values(Mat.transform2D([1, 0], Mat.rotate2DMatrix(0, 1)))).toEqual([
+      0, 1,
+    ]);
+    expect(values(Mat.transform2D([2, 3], Mat.shear2DMatrix(2, 3)))).toEqual([
+      11, 7,
+    ]);
+    expect(Mat.toDOMMatrix(Mat.translate2DMatrix(4, 5))).toEqual([
+      1, 0, 0, 1, 4, 5,
+    ]);
+  });
+
+  it("constructs scale, rotate, and shear matrices around anchors", () => {
+    expect(
+      values(Mat.transform2D([2, 2], Mat.scaleAt2DMatrix(2, 3, [1, 1]))),
+    ).toEqual([3, 4]);
+    expect(
+      values(Mat.transform2D([2, 1], Mat.rotateAt2DMatrix(0, 1, [1, 1]))),
+    ).toEqual([1, 2]);
+    expect(
+      values(Mat.transform2D([2, 2], Mat.shearAt2DMatrix(1, 2, [1, 1]))),
+    ).toEqual([4, 3]);
+  });
+
+  it("chains transformations, exposes a DOMMatrix, and resets", () => {
+    class FakeDOMMatrix {
+      constructor(public values: number[]) {}
+    }
+    vi.stubGlobal("DOMMatrix", FakeDOMMatrix);
+    const transform = new Mat();
+    expect(transform.scale2D([2, 3], [1, 1])).toBe(transform);
+    expect(transform.rotate2D(Math.PI / 2)).toBe(transform);
+    expect(transform.translate2D([5, 6])).toBe(transform);
+    expect(transform.shear2D([0.1, 0.2], [1, 2])).toBe(transform);
+    expect(transform.value).toHaveLength(3);
+    expect(
+      (transform.domMatrix as unknown as FakeDOMMatrix).values,
+    ).toHaveLength(6);
+    expect(transform.reset()).toBeUndefined();
+    expect(matrix(transform.value)).toEqual([
+      [1, 0, 0],
+      [0, 1, 0],
+      [0, 0, 1],
+    ]);
+  });
+
+  it("reflects across vertical, horizontal, and sloped lines", () => {
+    const vertical = Mat.reflectAt2DMatrix([2, 0], [2, 5]);
+    expect(values(Mat.transform2D([5, 3], vertical))).toEqual([-1, 3]);
+    const horizontal = Mat.reflectAt2DMatrix([0, 2], [5, 2]);
+    expect(values(Mat.transform2D([3, 5], horizontal))).toEqual([3, -1]);
+    const diagonal = Mat.reflectAt2DMatrix([0, 0], [2, 2]);
+    expect(values(Mat.transform2D([3, 1], diagonal))).toEqual([1, 3]);
+  });
+});
+
+describe("Vec and Mat correctness pins", () => {
+  it("finds max/min of all-negative vectors", () => {
+    expect(Vec.max([-5, -2])).toEqual({ value: -2, index: 1 });
+    expect(Vec.min([-5, -2])).toEqual({ value: -5, index: 0 });
+    expect(new Pt(-5, -2).maxValue()).toEqual({ value: -2, index: 1 });
+    // ties keep returning the last occurrence
+    expect(Vec.max([7, 5, 7])).toEqual({ value: 7, index: 2 });
+  });
+
+  it("returns the input vector from Vec.unit on a zero vector", () => {
+    const zero = new Pt(0, 0);
+    const u = Vec.unit(zero);
+    expect(u).toBe(zero);
+    expect(values(u)).toEqual([0, 0]);
+  });
+
+  it("treats explicit zeros as values in chained scale2D and shear2D", () => {
+    const sheared = new Mat().shear2D([0.5, 0]);
+    expect(sheared.value[0][1]).toBeCloseTo(Math.tan(0.5));
+    expect(sheared.value[1][0]).toBe(0); // no y-shear was requested
+    const scaled = new Mat().scale2D([0, 2]);
+    expect(scaled.value[0][0]).toBe(0);
+    expect(scaled.value[1][1]).toBe(2);
+  });
+
+  it("keeps zero values when zipping with a default", () => {
+    expect(
+      values(
+        Mat.zipSlice(
+          [
+            [0, 1],
+            [2, 3],
+          ],
+          0,
+          99,
+        ),
+      ),
+    ).toEqual([0, 2]);
+    expect(matrix(Mat.zip([[0, 2], [3]], 99))).toEqual([
+      [0, 3],
+      [2, 99],
+    ]);
+    expect(() => Mat.zipSlice([[1]], 5)).toThrow(Error);
+  });
 });

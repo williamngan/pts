@@ -1,0 +1,26 @@
+{
+  "name": "UIActionEvent",
+  "source": [
+    [
+      "src/Types.ts",
+      62,
+      12
+    ]
+  ],
+  "kind": "Typealias",
+  "comment": "Typescript type: UIActionEvent represents the DOM events a Space dispatches to players and UI handlers — pointer, mouse, touch, and keyboard.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    "MouseEvent",
+    "TouchEvent",
+    "PointerEvent",
+    "KeyboardEvent"
+  ]
+}

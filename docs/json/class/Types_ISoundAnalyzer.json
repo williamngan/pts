@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Types.ts",
-      204,
-      26
+      271,
+      12
     ]
   ],
   "kind": "Typealias",
-  "id": 839,
   "comment": "Typescript type: ISoundAnalyzer represents an object that stores the AnalyzerNode properties",
   "constructor": [],
   "accessors": [],

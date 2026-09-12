@@ -9,21 +9,27 @@ window.demoDescription = "A silly and elaborate character that responds to sound
 
   Pts.quickStart( "#pt", "#e2e6ef" );
 
-  // Note: use Sound.loadAsBuffer instead if you need support for Safari/iOS browser. (as of Apr 2019)
-  // See this example: http://ptsjs.org/demo/edit/?name=sound.freqDomain
-  
   var sound;
+  var bins = 256;
+  var status = "Loading...";
   Sound.load( "/assets/spacetravel.mp3" ).then( s => {
     sound = s.analyze(bins);
-  }).catch( e => console.error(e) );
+    status = "";
+  }).catch( e => {
+    status = "Could not load sound.";
+    console.error(e);
+  });
 
-  var bins = 256;
   var ctrls, radius;
   var colors = ["#f06", "#62e", "#fff", "#fe3", "#0c9"];
 
   // Draw play button
   function playButton() {
-    if (!sound || !sound.playing) {
+    if (!sound) {
+      form.fillOnly("#9ab").text( [20,30], status );
+      return;
+    }
+    if (!sound.playing) {
       form.fillOnly("#f06").rect( [[0,0], [50,50]] );
       form.fillOnly('#fff').polygon( Triangle.fromCenter( [25,25], 10 ).rotate2D( Const.half_pi, [25,25] ) );
     } else {
@@ -137,7 +143,7 @@ window.demoDescription = "A silly and elaborate character that responds to sound
 
     action: (type, x, y) => {
       if (type === "up" &&  Geom.withinBound( [x,y], [0,0], [50,50] )) {
-        sound.toggle();
+        if (sound) sound.toggle();
       }
     }
   });

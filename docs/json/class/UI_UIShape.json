@@ -3,12 +3,11 @@
   "source": [
     [
       "src/UI.ts",
-      11,
-      20
+      65,
+      13
     ]
   ],
   "kind": "Objectliteral",
-  "id": 410,
   "comment": "**[Experimental]** A set of string constatns to represent different UI types, for use in [`UI`](#link) instances.",
   "constructor": [],
   "accessors": [],
@@ -19,11 +18,10 @@
       "source": [
         [
           "src/UI.ts",
-          12,
-          32
+          67,
+          2
         ]
       ],
-      "id": 412,
       "flags": {},
       "type": "circle",
       "overrides": false,
@@ -35,11 +33,10 @@
       "source": [
         [
           "src/UI.ts",
-          12,
-          90
+          70,
+          2
         ]
       ],
-      "id": 415,
       "flags": {},
       "type": "line",
       "overrides": false,
@@ -51,11 +48,10 @@
       "source": [
         [
           "src/UI.ts",
-          12,
-          51
+          68,
+          2
         ]
       ],
-      "id": 413,
       "flags": {},
       "type": "polygon",
       "overrides": false,
@@ -67,11 +63,10 @@
       "source": [
         [
           "src/UI.ts",
-          12,
-          72
+          69,
+          2
         ]
       ],
-      "id": 414,
       "flags": {},
       "type": "polyline",
       "overrides": false,
@@ -83,11 +78,10 @@
       "source": [
         [
           "src/UI.ts",
-          12,
-          11
+          66,
+          2
         ]
       ],
-      "id": 411,
       "flags": {},
       "type": "rectangle",
       "overrides": false,

@@ -1,207 +1,271 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Pts.js Demos</title>
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Pts.js Demos</title>
 
-    <meta charset="UTF-8">
-	<script type="text/javascript" src="../dist/pts.min.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="description" content="Interactive demos of Pts. Pts is a javascript library that enables you to compose and visualize points in spaces.">
+    <meta charset="UTF-8" />
+    <script type="text/javascript" src="../dist/pts.min.js"></script>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <meta
+      name="description"
+      content="Interactive demos of Pts. Pts is a javascript library that enables you to compose and visualize points in spaces."
+    />
 
-    <meta name="thumbnail"           content="https://ptsjs.org/assets/thumbnail.png" />
-    <meta property="og:type"         content="website" />
-    <meta property="og:title"        content="Pts.js" />
-    <meta property="og:description"  content="Pts is a javascript library for visualization and creative-coding." />
-    <meta property="og:image"        content="https://ptsjs.org/assets/card_thumbnail.png" />
-    <meta property="og:image:width"  content="1200">
-    <meta property="og:image:height" content="630">
+    <meta name="thumbnail" content="https://ptsjs.org/assets/thumbnail.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Pts.js" />
+    <meta
+      property="og:description"
+      content="Pts is a javascript library for visualization and creative-coding."
+    />
+    <meta
+      property="og:image"
+      content="https://ptsjs.org/assets/card_thumbnail.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
-    <meta name="twitter:card"        content="summary_large_image" />
-    <meta name="twitter:creator"     content="@williamngan" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@williamngan" />
 
-	<link href="./css/style.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript">
+    <link href="/demo/css/style.css" rel="stylesheet" type="text/css" />
+    <script>
+      function validDemoName(value) {
+        return (
+          typeof value === "string" &&
+          value.length <= 50 &&
+          /^[a-zA-Z0-9_]+\.[a-zA-Z0-9_]+$/.test(value)
+        );
+      }
 
-        function mobileAndTabletcheck() {
-          var check = false;
-          (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))check = true})(navigator.userAgent||navigator.vendor||window.opera);
-          return check;
-        }
+      function showDemoError(message) {
+        var hint = document.querySelector("#hint");
+        var desc = document.querySelector("#description");
+        hint.textContent = message;
+        hint.classList.add("error");
+        desc.textContent = ": " + message;
+      }
 
-        function qs(name, limit) {
-            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-                results = regex.exec(location.search);
-            let q = (results === null) ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-            return clean_str( q, limit );
-        }
+      var params = new URLSearchParams(window.location.search);
+      var requested = params.get("name");
+      var qfile = requested;
+      var loadError = "";
+      var src = null;
 
-        function clean_str( str, limit ) {
-            if (limit) str = str.substr(0, limit);
-            return str.replace( /[^a-zA-Z0-9._]/g, "_" );
-        }
+      if (!requested) {
+        qfile = "circle.intersectCircle2D";
+        params.set("name", qfile);
+        window.history.replaceState(
+          null,
+          "",
+          window.location.pathname + "?" + params + window.location.hash,
+        );
+      } else if (!validDemoName(requested)) {
+        qfile = "";
+        loadError = "Invalid demo name.";
+      }
 
-        var src = null;
-        var qfile = qs("name", 50);
-        if (!qfile) qfile = "template";
-
-        if (qfile.indexOf("/") >= 0 || qfile.split(".").length > 2 ) qfile="";
-
-        src = document.createElement('script');
-        src.setAttribute("type", "text/javascript");
-        src.setAttribute("id", "src");
-        src.setAttribute("src", "../demo/" + qfile + ".js");
+      if (qfile) {
+        src = document.createElement("script");
+        src.id = "src";
+        src.src = "../demo/" + qfile + ".js";
 
         var link = document.createElement("a");
-        link.setAttribute("class", "source-code");
-        link.setAttribute("href", "./edit/?name=" + qfile);
-        // link.setAttribute("target", "pts_github");
+        var editUrl = new URL("edit/", src.src);
+        editUrl.searchParams.set("name", qfile);
+        link.className = "source-code";
+        link.href = editUrl.href;
         link.textContent = "► view/edit code";
 
         src.onload = function () {
-            var hint = document.querySelector("#hint");
-            hint.innerHTML = "";
-            hint.appendChild( link );
+          var hint = document.querySelector("#hint");
+          hint.replaceChildren(link);
+          hint.classList.remove("error");
 
-            var desc = document.querySelector("#description");
-            if (window.demoDescription) {
-                desc.textContent = ": "+window.demoDescription;
-            }
-            
+          if (window.demoDescription) {
+            document.querySelector("#description").textContent =
+              ": " + window.demoDescription;
+          }
         };
-    
 
-        function screenshot(w, h) {
-            var demo = document.querySelector( "#pt > canvas" );
-            var img = document.createElement( "img" );
-            img.setAttribute( "style", "position: absolute; top: 90vh; left: 0; z-index:1000; width: " + w + "px; height: " + h + "px;" );
-            var page = document.querySelector( "#page" );
-            page.appendChild( img );
-            img.src = demo.toDataURL();
-            var qf = qfile.split( "." );
-            qf.pop();
-            return qf.join( "." ) + ".png";
-        }
-
-
+        src.onerror = function () {
+          showDemoError("Could not load demo “" + qfile + "”.");
+        };
+      }
     </script>
+  </head>
+  <body>
+    <div id="header">
+      <div id="pts">
+        <a href="../">Pts<span>.</span></a
+        >demos
+      </div>
+      <div id="topmenu">
+        <a href="../demo/index.html">demos</a>
+        <a href="../guide/Get-started-0100.html">guides</a>
+        <a href="../docs/">docs</a>
+        <a href="https://github.com/williamngan/pts">github</a>
+      </div>
+    </div>
 
-</head>
-<body>
+    <div id="board">
+      <div id="pt"></div>
+    </div>
 
-<div id="header">
-  <div id="pts"><a href="../">Pts<span>.</span></a>demos</div>
-  <div id="topmenu">
-    <a href="../guide/Get-started-0100.html">guides</a>
-    <a href="../docs/">docs</a>
-    <a href="../study/index.html">studies</a>
-    <a href="https://github.com/williamngan/pts">github</a>
-  </div>
-</div>
+    <div id="page">
+      <h1><strong>Demo</strong><span id="description"></span></h1>
 
-
-<div id="board">
-    <div id="pt"></div>
-</div>
-
-<div id="page">
-
-    <h1><strong>Demo</strong><span id="description"></span></h1>
-
-    <div id="cover">
-
+      <div id="cover">
         <!-- <p class="section">core demos</p>
         <p class="section">&nbsp;</p> -->
-        
-        <p class="demo" data-src="pts.quickStart"><span>Pts.</span><strong>quickStart</strong></p>
-        <p class="demo" data-src="canvasspace.action"><span>CanvasSpace.</span><strong>action</strong></p>
-        <p class="demo" data-src="canvasspace.resize"><span>CanvasSpace.</span><strong>resize</strong></p>
-        <p class="demo" data-src="canvasform.textBox"><span>CanvasForm.</span><strong>textBox</strong></p>
-        <p class="demo" data-src="canvasform.gradient"><span>CanvasForm.</span><strong>gradient</strong></p>
-        <p class="demo" data-src="canvasform.composite"><span>CanvasForm.</span><strong>composite</strong></p>
-        <p class="demo" data-src="pt.extends"><span>Pt.</span><strong>extends</strong></p>
-        <p class="demo" data-src="pt.unit"><span>Pt.</span><strong>unit</strong></p>
-        <p class="demo" data-src="circle.intersectCircle2D"><span>Circle.</span><strong>intersectCircle2D</strong></p>
-        <p class="demo" data-src="circle.intersectLine2D"><span>Circle.</span><strong>intersectLine2D</strong></p>
-        <p class="demo" data-src="circle.withinBound"><span>Circle.</span><strong>withinBound</strong></p>
-        <p class="demo" data-src="color.HSLtoRGB"><span>Color.</span><strong>HSLtoRGB</strong></p>
-        <p class="demo" data-src="color.LABtoRGB"><span>Color.</span><strong>LABtoRGB</strong></p>
-        <p class="demo" data-src="curve.bezier"><span>Curve.</span><strong>bezier</strong></p>
-        <p class="demo" data-src="curve.cardinal"><span>Curve.</span><strong>cardinal</strong></p>
-        <p class="demo" data-src="curve.bspline"><span>Curve.</span><strong>bspline</strong></p>
-        <p class="demo" data-src="geom.interpolate"><span>Geom.</span><strong>interpolate</strong></p>
-        <p class="demo" data-src="geom.perpendicular"><span>Geom.</span><strong>perpendicular</strong></p>
-        <p class="demo" data-src="line.collinear"><span>Line.</span><strong>collinear</strong></p>
-        <p class="demo" data-src="line.perpendicularFromPt"><span>Line.</span><strong>perpendicularFromPt</strong></p>
-        <p class="demo" data-src="line.intersectLine2D"><span>Line.</span><strong>intersectLine2D</strong></p>
-        <p class="demo" data-src="polygon.convexHull"><span>Polygon.</span><strong>convexHull</strong></p>
-        <p class="demo" data-src="polygon.koch"><span>Polygon.</span><strong>koch</strong></p>
-        <p class="demo" data-src="triangle.incircle"><span>Triangle.</span><strong>incircle</strong></p>
-        <p class="demo" data-src="shaping.linear"><span>Shaping.</span><strong>linear</strong></p>
-        <p class="demo" data-src="create.gridcells"><span>Create.</span><strong>gridCells</strong></p>
-        <p class="demo" data-src="create.noisePts"><span>Create.</span><strong>noisePts</strong></p>
-        <p class="demo" data-src="create.delaunay"><span>Create.</span><strong>delaunay</strong></p>
-        <p class="demo" data-src="physics.particles"><span>Physics.</span><strong>particles</strong></p>
-        <p class="demo" data-src="physics.shapes"><span>Physics.</span><strong>shapes</strong></p>
-        <p class="demo" data-src="sound.analyze"><span>Sound.</span><strong>analyze</strong></p>
-        <p class="demo" data-src="sound.timeDomain"><span>Sound.</span><strong>timeDomain</strong></p>
-        <p class="demo" data-src="sound.freqDomain"><span>Sound.</span><strong>freqDomain</strong></p>
-        <p class="demo" data-src="ui.track"><span>UI.</span><strong>track</strong></p>
-        <p class="demo" data-src="img.pixel"><span>Img.</span><strong>pixel</strong></p>
-        <p class="demo" data-src="img.pattern"><span>Img.</span><strong>pattern</strong></p>
-        <p class="demo" data-src="svgform.scope"><span>SVGForm.</span><strong>scope</strong></p>
-        <p class="demo" data-src="htmlform.scope"><span>HTMLForm.</span><strong>scope</strong></p>
-        
-        
+
+        <a class="demo" href="?name=pts.quickStart">
+          <span>Pts.</span><strong>quickStart</strong>
+        </a>
+        <a class="demo" href="?name=canvasspace.action">
+          <span>CanvasSpace.</span><strong>action</strong>
+        </a>
+        <a class="demo" href="?name=canvasspace.resize">
+          <span>CanvasSpace.</span><strong>resize</strong>
+        </a>
+        <a class="demo" href="?name=canvasform.textBox">
+          <span>CanvasForm.</span><strong>textBox</strong>
+        </a>
+        <a class="demo" href="?name=canvasform.gradient">
+          <span>CanvasForm.</span><strong>gradient</strong>
+        </a>
+        <a class="demo" href="?name=canvasform.composite">
+          <span>CanvasForm.</span><strong>composite</strong>
+        </a>
+        <a class="demo" href="?name=pt.extends">
+          <span>Pt.</span><strong>extends</strong>
+        </a>
+        <a class="demo" href="?name=pt.unit">
+          <span>Pt.</span><strong>unit</strong>
+        </a>
+        <a class="demo" href="?name=circle.intersectCircle2D">
+          <span>Circle.</span><strong>intersectCircle2D</strong>
+        </a>
+        <a class="demo" href="?name=circle.intersectLine2D">
+          <span>Circle.</span><strong>intersectLine2D</strong>
+        </a>
+        <a class="demo" href="?name=circle.withinBound">
+          <span>Circle.</span><strong>withinBound</strong>
+        </a>
+        <a class="demo" href="?name=color.HSLtoRGB">
+          <span>Color.</span><strong>HSLtoRGB</strong>
+        </a>
+        <a class="demo" href="?name=color.LABtoRGB">
+          <span>Color.</span><strong>LABtoRGB</strong>
+        </a>
+        <a class="demo" href="?name=curve.bezier">
+          <span>Curve.</span><strong>bezier</strong>
+        </a>
+        <a class="demo" href="?name=curve.cardinal">
+          <span>Curve.</span><strong>cardinal</strong>
+        </a>
+        <a class="demo" href="?name=curve.bspline">
+          <span>Curve.</span><strong>bspline</strong>
+        </a>
+        <a class="demo" href="?name=geom.interpolate">
+          <span>Geom.</span><strong>interpolate</strong>
+        </a>
+        <a class="demo" href="?name=geom.perpendicular">
+          <span>Geom.</span><strong>perpendicular</strong>
+        </a>
+        <a class="demo" href="?name=line.collinear">
+          <span>Line.</span><strong>collinear</strong>
+        </a>
+        <a class="demo" href="?name=line.perpendicularFromPt">
+          <span>Line.</span><strong>perpendicularFromPt</strong>
+        </a>
+        <a class="demo" href="?name=line.intersectLine2D">
+          <span>Line.</span><strong>intersectLine2D</strong>
+        </a>
+        <a class="demo" href="?name=polygon.convexHull">
+          <span>Polygon.</span><strong>convexHull</strong>
+        </a>
+        <a class="demo" href="?name=polygon.koch">
+          <span>Polygon.</span><strong>koch</strong>
+        </a>
+        <a class="demo" href="?name=triangle.incircle">
+          <span>Triangle.</span><strong>incircle</strong>
+        </a>
+        <a class="demo" href="?name=shaping.linear">
+          <span>Shaping.</span><strong>linear</strong>
+        </a>
+        <a class="demo" href="?name=create.gridcells">
+          <span>Create.</span><strong>gridCells</strong>
+        </a>
+        <a class="demo" href="?name=create.noisePts">
+          <span>Create.</span><strong>noisePts</strong>
+        </a>
+        <a class="demo" href="?name=create.delaunay">
+          <span>Create.</span><strong>delaunay</strong>
+        </a>
+        <a class="demo" href="?name=create.flock">
+          <span>Create.</span><strong>flock</strong>
+        </a>
+        <a class="demo" href="?name=physics.particles">
+          <span>Physics.</span><strong>particles</strong>
+        </a>
+        <a class="demo" href="?name=physics.shapes">
+          <span>Physics.</span><strong>shapes</strong>
+        </a>
+        <a class="demo" href="?name=sound.analyze">
+          <span>Sound.</span><strong>analyze</strong>
+        </a>
+        <a class="demo" href="?name=sound.timeDomain">
+          <span>Sound.</span><strong>timeDomain</strong>
+        </a>
+        <a class="demo" href="?name=sound.freqDomain">
+          <span>Sound.</span><strong>freqDomain</strong>
+        </a>
+        <a class="demo" href="?name=ui.track">
+          <span>UI.</span><strong>track</strong>
+        </a>
+        <a class="demo" href="?name=img.pixel">
+          <span>Img.</span><strong>pixel</strong>
+        </a>
+        <a class="demo" href="?name=img.pattern">
+          <span>Img.</span><strong>pattern</strong>
+        </a>
+        <a class="demo" href="?name=svgform.scope">
+          <span>SVGForm.</span><strong>scope</strong>
+        </a>
+        <a class="demo" href="?name=htmlform.scope">
+          <span>HTMLForm.</span><strong>scope</strong>
+        </a>
+
         <p class="section">&nbsp;</p>
         <p class="section">Others</p>
 
-        <p class="demo" data-src="https://github.com/williamngan/pts-starter-kit"><span>↗ npm/yarn example</span></p>
-        <p class="demo" data-src="https://github.com/williamngan/pts-react-example"><span>↗ React example</span></p>
-        <p class="demo" data-src="https://github.com/williamngan/pts/blob/master/demo/more/tfjs_posenet/README.md"><span>↗ tensorflow.js example</span></p>
-        
-
+        <a
+          class="demo"
+          href="https://github.com/williamngan/pts-starter-kit"
+          target="_blank"
+          rel="noopener"
+        >
+          <span>↗ npm/yarn example</span>
+        </a>
+        <a
+          class="demo"
+          href="https://github.com/williamngan/pts-react-example"
+          target="_blank"
+          rel="noopener"
+        >
+          <span>↗ React example</span>
+        </a>
+      </div>
+      <div id="hint"></div>
     </div>
-    <div id="hint"></div>
-</div>
 
-
-<script type="text/javascript">
-
-    if (src) document.querySelector("body").appendChild( src );
-
-    var index = window.location.href.indexOf("?name");
-    if ( index < 0 ) {
-        window.location.href = window.location.origin+window.location.pathname+"?name=circle.intersectCircle2D";
-    }
-
-    var demos = document.querySelectorAll(".demo");
-
-	for (var i=0; i<demos.length; i++) {
-        var file = demos[i].getAttribute("data-src");
-		demos[i].addEventListener("click", function() {
-            var sel = this.getAttribute("data-src");
-            if (sel.indexOf("https://") === 0) {
-                window.open( sel, "pts_demo" );
-            } else {
-                window.location.href = window.location.origin+window.location.pathname+"?name="+sel;
-            }
-        }.bind( demos[i] ) );
-	}
-
-</script>
-
-<script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  
-    ga('create', 'UA-104913373-1', 'auto');
-    ga('send', 'pageview');
-  
-  </script>
-
-
-</body>
+    <script type="text/javascript">
+      if (loadError) showDemoError(loadError);
+      if (src) document.body.appendChild(src);
+    </script>
+  </body>
 </html>

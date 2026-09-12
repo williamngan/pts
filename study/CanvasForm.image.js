@@ -21,10 +21,10 @@ space.add( {
     form.stroke( false );
 
     if (img) {
-      form.image( img );
-      form.image( img, space.center );
-      form.image( img, rect1 );
-      form.image( img, rect2, new Group(new Pt(img.width/1.5,0), new Pt(img.width,img.height)) );
+      form.image( [0,0], img );
+      form.image( space.center, img );
+      form.image( rect1, img );
+      form.image( rect2, img, new Group(new Pt(img.width/1.5,0), new Pt(img.width,img.height)) );
       form.strokeOnly("#f00", 2).rect( rect1 );
       form.strokeOnly("#f0f", 2).rect( rect2 );
     }

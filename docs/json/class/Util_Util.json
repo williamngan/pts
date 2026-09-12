@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Util.ts",
-      105,
-      17
+      100,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 1724,
   "comment": "Util class provides static helper functions.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +17,10 @@
       "source": [
         [
           "src/Util.ts",
-          367,
-          19
+          422,
+          9
         ]
       ],
-      "id": 1803,
       "flags": {
         "isStatic": true
       },
@@ -42,7 +40,7 @@
             },
             {
               "name": "minRequired",
-              "comment": "minimum number of items required\n",
+              "comment": "minimum number of items required",
               "type": "number",
               "default": "2"
             }
@@ -56,11 +54,10 @@
       "source": [
         [
           "src/Util.ts",
-          232,
-          16
+          265,
+          9
         ]
       ],
-      "id": 1751,
       "flags": {
         "isStatic": true
       },
@@ -86,7 +83,7 @@
             },
             {
               "name": "op",
-              "comment": "a function that takes two parameters (a, b) and returns an object.\n",
+              "comment": "a function that takes two parameters (a, b) and returns an object.",
               "type": " Fn(a:T, b:T)",
               "default": false
             }
@@ -100,11 +97,10 @@
       "source": [
         [
           "src/Util.ts",
-          329,
-          17
+          374,
+          9
         ]
       ],
-      "id": 1792,
       "flags": {
         "isStatic": true
       },
@@ -136,7 +132,7 @@
             },
             {
               "name": "quality",
-              "comment": "a value between 0 to 1, if filetype is either \"jpg\" or \"png\"\n",
+              "comment": "a value between 0 to 1, if filetype is either \"jpg\" or \"png\"",
               "type": "number",
               "default": "1"
             }
@@ -150,11 +146,10 @@
       "source": [
         [
           "src/Util.ts",
-          220,
-          16
+          244,
+          9
         ]
       ],
-      "id": 1747,
       "flags": {
         "isStatic": true
       },
@@ -174,7 +169,7 @@
             },
             {
               "name": "flattenAsGroup",
-              "comment": "a boolean to specify whether the return type should be a Group or Array. Default is `true` which returns a Group.\n",
+              "comment": "a boolean to specify whether the return type should be a Group or Array. Default is `true` which returns a Group.",
               "type": "boolean",
               "default": "true"
             }
@@ -188,11 +183,10 @@
       "source": [
         [
           "src/Util.ts",
-          288,
-          17
+          324,
+          9
         ]
       ],
-      "id": 1775,
       "flags": {
         "isStatic": true
       },
@@ -202,7 +196,7 @@
         {
           "comment": "A convenient way to step through a range. Same as `for (i=0; i<range; i++)`, except this also stores the resulting return values at each step and return them as an array.",
           "returns": "any[]",
-          "returns_comment": "an array of returned values at each step\n",
+          "returns_comment": "an index-aligned array of returned values: entries sit at their step index, so with a non-zero `start` the positions below `start` are empty holes",
           "parameters": [
             {
               "name": "fn",
@@ -238,11 +232,10 @@
       "source": [
         [
           "src/Util.ts",
-          126,
-          16
+          118,
+          9
         ]
       ],
-      "id": 1729,
       "flags": {
         "isStatic": true
       },
@@ -251,12 +244,43 @@
       "signatures": [
         {
           "comment": "Convert different kinds of parameters (arguments, array, object) into an array of numbers.",
-          "returns": "Array",
+          "returns": "number[]",
           "returns_comment": false,
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "getPtLike",
+      "source": [
+        [
+          "src/Util.ts",
+          167,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Like [`Util.getArgs`](#link), but avoids copying when the arguments are already\na numeric array, a typed array (eg, a Pt), or a list of numbers. The result may be\nthe caller's own object, so it must be treated as read-only.",
+          "returns": "PtLike",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -270,11 +294,10 @@
       "source": [
         [
           "src/Util.ts",
-          388,
-          17
+          441,
+          9
         ]
       ],
-      "id": 1810,
       "flags": {
         "isStatic": true
       },
@@ -295,11 +318,10 @@
       "source": [
         [
           "src/Util.ts",
-          380,
-          20
+          434,
+          9
         ]
       ],
-      "id": 1807,
       "flags": {
         "isStatic": true
       },
@@ -313,7 +335,7 @@
           "parameters": [
             {
               "name": "it",
-              "comment": "an iterable\n",
+              "comment": "an iterable",
               "type": "Iterable",
               "default": false
             }
@@ -327,11 +349,10 @@
       "source": [
         [
           "src/Util.ts",
-          302,
-          13
+          342,
+          9
         ]
       ],
-      "id": 1784,
       "flags": {
         "isStatic": true
       },
@@ -351,7 +372,7 @@
             },
             {
               "name": "callback",
-              "comment": "a function to capture the data. It receives two parameters: a `response` as string, and a `success` status as boolean.\n",
+              "comment": "a function to capture the data. It receives two parameters: a `response` as string, and a `success` status as boolean.",
               "type": " Fn(response:string, success:boolean)",
               "default": false
             }
@@ -365,11 +386,10 @@
       "source": [
         [
           "src/Util.ts",
-          350,
-          20
+          405,
+          9
         ]
       ],
-      "id": 1798,
       "flags": {
         "isStatic": true
       },
@@ -378,8 +398,8 @@
       "signatures": [
         {
           "comment": "Estimate performance by checking how long it takes to render a frame",
-          "returns": "",
-          "returns_comment": "milliseconds per frame\n",
+          "returns": " ()",
+          "returns_comment": "milliseconds per frame",
           "parameters": [
             {
               "name": "avgFrames",
@@ -402,11 +422,10 @@
       "source": [
         [
           "src/Util.ts",
-          176,
-          18
+          196,
+          9
         ]
       ],
-      "id": 1736,
       "flags": {
         "isStatic": true
       },
@@ -426,12 +445,17 @@
             },
             {
               "name": "start",
-              "comment": "Optional starting value\n",
+              "comment": "Optional starting value",
               "type": "number",
               "default": "0"
             }
           ],
-          "tags": []
+          "tags": [
+            {
+              "tag": "deprecated",
+              "text": "Use [`Num.randomRange`](#link) instead, for example `Math.floor( Num.randomRange( start, start + range ) )`."
+            }
+          ]
         }
       ]
     },
@@ -440,11 +464,10 @@
       "source": [
         [
           "src/Util.ts",
-          190,
-          14
+          209,
+          9
         ]
       ],
-      "id": 1740,
       "flags": {
         "isStatic": true
       },
@@ -482,7 +505,7 @@
             },
             {
               "name": "matchSize",
-              "comment": "if `true`, all chunks's length must match `size`.\n",
+              "comment": "if `true`, all chunks's length must match `size`.",
               "type": "boolean",
               "default": "true"
             }
@@ -496,11 +519,10 @@
       "source": [
         [
           "src/Util.ts",
-          269,
-          16
+          300,
+          9
         ]
       ],
-      "id": 1764,
       "flags": {
         "isStatic": true
       },
@@ -509,12 +531,12 @@
       "signatures": [
         {
           "comment": "Create a convenient stepper. This returns a function which you can call repeatedly to step a counter.",
-          "returns": "",
-          "returns_comment": "a function which will increment the stepper and return its value at each call.\n",
+          "returns": " ()",
+          "returns_comment": "a function which will increment the stepper and return its value at each call.",
           "parameters": [
             {
               "name": "max",
-              "comment": "Maximum of the stepper range. The resulting stepper will return (min to max-1) values.",
+              "comment": "Maximum of the stepper range. The resulting stepper will return values within [min, max). Note that the first call returns `min + stride`, not `min`.",
               "type": "number",
               "default": false
             },
@@ -547,15 +569,76 @@
       ]
     },
     {
+      "name": "toNumericArray",
+      "source": [
+        [
+          "src/Util.ts",
+          150,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Copy an array or typed array of numbers into a fresh plain array.",
+          "returns": "number[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "an array or typed array",
+              "type": "ArrayLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "uniqueId",
+      "source": [
+        [
+          "src/Util.ts",
+          449,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Generate a time-based unique ID or a crypto-based ID.",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "useCrypto",
+              "comment": "",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "warn",
       "source": [
         [
           "src/Util.ts",
-          160,
-          13
+          181,
+          9
         ]
       ],
-      "id": 1732,
       "flags": {
         "isStatic": true
       },
@@ -575,7 +658,7 @@
             },
             {
               "name": "defaultReturn",
-              "comment": "optional return value\n",
+              "comment": "optional return value",
               "type": "any",
               "default": "undefined"
             }
@@ -589,11 +672,10 @@
       "source": [
         [
           "src/Util.ts",
-          114,
-          18
+          107,
+          9
         ]
       ],
-      "id": 1726,
       "flags": {
         "isStatic": true
       },
@@ -607,7 +689,7 @@
           "parameters": [
             {
               "name": "lv",
-              "comment": "a [`WarningType`](#link) option, where \"error\" will throw an error, \"warn\" will log in console, and \"mute\" will ignore the error.\n",
+              "comment": "a [`WarningType`](#link) option, where \"error\" will throw an error, \"warn\" will log in console, and \"mute\" will ignore the error.",
               "type": "WarningType",
               "default": false
             }
@@ -621,11 +703,10 @@
       "source": [
         [
           "src/Util.ts",
-          247,
-          12
+          279,
+          9
         ]
       ],
-      "id": 1761,
       "flags": {
         "isStatic": true
       },
@@ -634,13 +715,13 @@
       "signatures": [
         {
           "comment": "Zip arrays. eg, `[[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]`.",
-          "returns": "any[]",
+          "returns": "any[][]",
           "returns_comment": false,
           "parameters": [
             {
               "name": "arrays",
-              "comment": "an array of arrays\n",
-              "type": "Array[]",
+              "comment": "an array of arrays",
+              "type": "any[][]",
               "default": false
             }
           ],

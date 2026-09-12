@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Create.ts",
-      185,
-      18
+      271,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 4650,
   "comment": "Noise is a subclass of Pt that generates Perlin noise. Current implementation supports basic 2D noise.\nThis implementation is based on this [gist](https://gist.github.com/banksean/304522).",
   "constructor": [
     {
@@ -16,23 +15,22 @@
       "source": [
         [
           "src/Create.ts",
-          188,
-          37
+          279,
+          2
         ]
       ],
-      "id": 4653,
       "flags": {},
       "overrides": "Pt.__constructor",
       "inherits": false,
       "signatures": [
         {
-          "comment": "Create a Noise Pt that can generate noise continuously. See a [Noise demo here](../demo/index.html?name=create.noisePts).",
+          "comment": "Create a Noise Pt that can generate noise continuously. See a [Noise demo here](https://ptsjs.org/demo/?name=create.noisePts).",
           "returns": "Noise",
           "returns_comment": false,
           "parameters": [
             {
               "name": "args",
-              "comment": "a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties\n",
+              "comment": "a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -48,16 +46,15 @@
       "source": [
         [
           "src/Pt.ts",
-          51,
-          8
+          72,
+          6
         ],
         [
           "src/Pt.ts",
-          52,
-          8
+          75,
+          6
         ]
       ],
-      "id": 4674,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.id",
@@ -80,16 +77,15 @@
       "source": [
         [
           "src/Pt.ts",
-          75,
-          7
+          112,
+          6
         ],
         [
           "src/Pt.ts",
-          76,
-          7
+          115,
+          6
         ]
       ],
-      "id": 4690,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.w",
@@ -112,16 +108,15 @@
       "source": [
         [
           "src/Pt.ts",
-          57,
-          7
+          82,
+          6
         ],
         [
           "src/Pt.ts",
-          58,
-          7
+          85,
+          6
         ]
       ],
-      "id": 4678,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.x",
@@ -144,16 +139,15 @@
       "source": [
         [
           "src/Pt.ts",
-          63,
-          7
+          92,
+          6
         ],
         [
           "src/Pt.ts",
-          64,
-          7
+          95,
+          6
         ]
       ],
-      "id": 4682,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.y",
@@ -176,16 +170,15 @@
       "source": [
         [
           "src/Pt.ts",
-          69,
-          7
+          102,
+          6
         ],
         [
           "src/Pt.ts",
-          70,
-          7
+          105,
+          6
         ]
       ],
-      "id": 4686,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.z",
@@ -210,11 +203,10 @@
       "source": [
         [
           "src/Pt.ts",
-          334,
-          6
+          382,
+          2
         ]
       ],
-      "id": 4788,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$abs",
@@ -233,11 +225,10 @@
       "source": [
         [
           "src/Pt.ts",
-          200,
-          6
+          239,
+          2
         ]
       ],
-      "id": 4740,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$add",
@@ -249,7 +240,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -263,11 +254,10 @@
       "source": [
         [
           "src/Pt.ts",
-          368,
-          7
+          412,
+          2
         ]
       ],
-      "id": 4796,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$ceil",
@@ -286,11 +276,10 @@
       "source": [
         [
           "src/Pt.ts",
-          181,
-          9
+          220,
+          2
         ]
       ],
-      "id": 4734,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$concat",
@@ -302,7 +291,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt,  or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt,  or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -316,11 +305,10 @@
       "source": [
         [
           "src/Pt.ts",
-          300,
-          8
+          350,
+          2
         ]
       ],
-      "id": 4777,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$cross",
@@ -332,7 +320,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -346,11 +334,10 @@
       "source": [
         [
           "src/Pt.ts",
-          293,
-          10
+          342,
+          2
         ]
       ],
-      "id": 4774,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$cross2D",
@@ -362,7 +349,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -376,11 +363,10 @@
       "source": [
         [
           "src/Pt.ts",
-          251,
-          9
+          296,
+          2
         ]
       ],
-      "id": 4758,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$divide",
@@ -392,7 +378,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -406,11 +392,10 @@
       "source": [
         [
           "src/Pt.ts",
-          351,
-          8
+          397,
+          2
         ]
       ],
-      "id": 4792,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$floor",
@@ -429,11 +414,10 @@
       "source": [
         [
           "src/Pt.ts",
-          426,
-          6
+          464,
+          2
         ]
       ],
-      "id": 4815,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$max",
@@ -442,96 +426,6 @@
           "comment": "Get a new Pt that has the maximum dimensional values of this Pt and another Pt.",
           "returns": "Pt",
           "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "$min",
-      "source": [
-        [
-          "src/Pt.ts",
-          412,
-          6
-        ]
-      ],
-      "id": 4812,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.$min",
-      "signatures": [
-        {
-          "comment": "Get a new Pt that has the minimum dimensional values of this Pt and another Pt.",
-          "returns": "Pt",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "$multiply",
-      "source": [
-        [
-          "src/Pt.ts",
-          234,
-          11
-        ]
-      ],
-      "id": 4752,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.$multiply",
-      "signatures": [
-        {
-          "comment": "Like [`Pt.multiply`](#link), but returns result as a new Pt.",
-          "returns": "Pt",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "$project",
-      "source": [
-        [
-          "src/Pt.ts",
-          308,
-          10
-        ]
-      ],
-      "id": 4780,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.$project",
-      "signatures": [
-        {
-          "comment": "Calculate vector projection of this Pt on another Pt.",
-          "returns": "Pt",
-          "returns_comment": "the projection vector as a Pt\n",
           "parameters": [
             {
               "name": "args",
@@ -545,15 +439,101 @@
       ]
     },
     {
+      "name": "$min",
+      "source": [
+        [
+          "src/Pt.ts",
+          451,
+          2
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.$min",
+      "signatures": [
+        {
+          "comment": "Get a new Pt that has the minimum dimensional values of this Pt and another Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$multiply",
+      "source": [
+        [
+          "src/Pt.ts",
+          277,
+          2
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.$multiply",
+      "signatures": [
+        {
+          "comment": "Like [`Pt.multiply`](#link), but returns result as a new Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$project",
+      "source": [
+        [
+          "src/Pt.ts",
+          359,
+          2
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.$project",
+      "signatures": [
+        {
+          "comment": "Calculate the vector projection of another Pt onto this Pt — ie, the component of the other Pt along this Pt's direction. Note that this Pt must be non-zero.",
+          "returns": "Pt",
+          "returns_comment": "the projection vector as a Pt",
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "the other Pt, as either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "$round",
       "source": [
         [
           "src/Pt.ts",
-          385,
-          8
+          427,
+          2
         ]
       ],
-      "id": 4800,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$round",
@@ -572,11 +552,10 @@
       "source": [
         [
           "src/Pt.ts",
-          217,
-          11
+          258,
+          2
         ]
       ],
-      "id": 4746,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$subtract",
@@ -588,7 +567,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -602,11 +581,10 @@
       "source": [
         [
           "src/Pt.ts",
-          168,
-          7
+          208,
+          2
         ]
       ],
-      "id": 4731,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$take",
@@ -618,7 +596,7 @@
           "parameters": [
             {
               "name": "axis",
-              "comment": "a string such as \"xy\" (use Const.xy) or an array to specify indices\n",
+              "comment": "a string such as \"xy\" (use Const.xy) or an array to specify indices",
               "type": "string | number[]",
               "default": false
             }
@@ -632,11 +610,10 @@
       "source": [
         [
           "src/Pt.ts",
-          117,
-          5
+          155,
+          2
         ]
       ],
-      "id": 4703,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$to",
@@ -648,7 +625,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -662,11 +639,10 @@
       "source": [
         [
           "src/Pt.ts",
-          279,
-          7
+          326,
+          2
         ]
       ],
-      "id": 4768,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$unit",
@@ -679,7 +655,7 @@
             {
               "name": "magnitude",
               "comment": "",
-              "type": "number",
+              "type": "number | undefined",
               "default": "undefined"
             }
           ],
@@ -692,11 +668,10 @@
       "source": [
         [
           "src/Pt.ts",
-          325,
-          5
+          374,
+          2
         ]
       ],
-      "id": 4786,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.abs",
@@ -715,11 +690,10 @@
       "source": [
         [
           "src/Pt.ts",
-          190,
-          5
+          228,
+          2
         ]
       ],
-      "id": 4737,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.add",
@@ -731,7 +705,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -745,11 +719,10 @@
       "source": [
         [
           "src/Pt.ts",
-          440,
-          7
+          477,
+          2
         ]
       ],
-      "id": 4818,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.angle",
@@ -761,7 +734,7 @@
           "parameters": [
             {
               "name": "axis",
-              "comment": "a string such as \"xy\" (use Const.xy) or an array to specify index for two dimensions\n",
+              "comment": "a string such as \"xy\" (use Const.xy) or an array to specify index for two dimensions",
               "type": "string | number[]",
               "default": "Const.xy"
             }
@@ -775,17 +748,16 @@
       "source": [
         [
           "src/Pt.ts",
-          450,
-          14
+          486,
+          2
         ]
       ],
-      "id": 4821,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.angleBetween",
       "signatures": [
         {
-          "comment": "Get the angle between this and another Pt.",
+          "comment": "Get the signed angle between this and another Pt, normalized to [-π, π).",
           "returns": "number",
           "returns_comment": false,
           "parameters": [
@@ -797,7 +769,7 @@
             },
             {
               "name": "axis",
-              "comment": "a string such as \"xy\" (use Const.xy) or an array to specify index for two dimensions\n",
+              "comment": "a string such as \"xy\" (use Const.xy) or an array to specify index for two dimensions",
               "type": "string | number[]",
               "default": "Const.xy"
             }
@@ -811,11 +783,10 @@
       "source": [
         [
           "src/Pt.ts",
-          359,
-          6
+          404,
+          2
         ]
       ],
-      "id": 4794,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.ceil",
@@ -834,11 +805,10 @@
       "source": [
         [
           "src/Pt.ts",
-          82,
-          7
+          122,
+          2
         ]
       ],
-      "id": 4694,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.clone",
@@ -857,11 +827,10 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3836,
-          14
+          3882,
+          4
         ]
       ],
-      "id": 4855,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.copyWithin",
@@ -885,7 +854,7 @@
             },
             {
               "name": "end",
-              "comment": "If not specified, length of the this object is used as its default value.\n",
+              "comment": "If not specified, length of the this object is used as its default value.",
               "type": "number",
               "default": false
             }
@@ -899,11 +868,10 @@
       "source": [
         [
           "src/Pt.ts",
-          241,
-          8
+          285,
+          2
         ]
       ],
-      "id": 4755,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.divide",
@@ -915,7 +883,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -929,11 +897,10 @@
       "source": [
         [
           "src/Pt.ts",
-          286,
-          5
+          334,
+          2
         ]
       ],
-      "id": 4771,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.dot",
@@ -945,7 +912,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -959,17 +926,16 @@
       "source": [
         [
           "src/Pt.ts",
-          92,
-          8
+          131,
+          2
         ]
       ],
-      "id": 4696,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.equals",
       "signatures": [
         {
-          "comment": "Check if another Pt is equal to this Pt, within a threshold.",
+          "comment": "Check if another Pt is equal to this Pt, within a threshold. Every dimension of this Pt must be matched: a shorter Pt, or one with a NaN dimension, is not equal (following IEEE semantics, NaN never equals NaN).",
           "returns": "boolean",
           "returns_comment": false,
           "parameters": [
@@ -981,7 +947,7 @@
             },
             {
               "name": "threshold",
-              "comment": "a threshold value within which the two Pts are considered equal. Default is 0.000001.\n",
+              "comment": "a threshold value within which the two Pts are considered equal. Default is 0.000001.",
               "type": "number",
               "default": "0.000001"
             }
@@ -995,11 +961,10 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3846,
-          9
+          3892,
+          4
         ]
       ],
-      "id": 4860,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.every",
@@ -1012,12 +977,12 @@
             {
               "name": "predicate",
               "comment": "A function that accepts up to three arguments. The every method calls\nthe predicate function for each element in the array until the predicate returns a value\nwhich is coercible to the Boolean value false, or until the end of the array.",
-              "type": " Fn(value:number, index:number, array:Float32Array)",
+              "type": " Fn(value:number, index:number, array:this)",
               "default": false
             },
             {
               "name": "thisArg",
-              "comment": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.\n",
+              "comment": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.",
               "type": "any",
               "default": false
             }
@@ -1031,11 +996,10 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3856,
-          8
+          3902,
+          4
         ]
       ],
-      "id": 4869,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.fill",
@@ -1059,7 +1023,7 @@
             },
             {
               "name": "end",
-              "comment": "index to stop filling the array at. If end is negative, it is treated as\nlength+end.\n",
+              "comment": "index to stop filling the array at. If end is negative, it is treated as\nlength+end.",
               "type": "number",
               "default": false
             }
@@ -1073,11 +1037,10 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3865,
-          10
+          3911,
+          4
         ]
       ],
-      "id": 4874,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.filter",
@@ -1090,12 +1053,12 @@
             {
               "name": "predicate",
               "comment": "A function that accepts up to three arguments. The filter method calls\nthe predicate function one time for each element in the array.",
-              "type": " Fn(value:number, index:number, array:Float32Array)",
+              "type": " Fn(value:number, index:number, array:this)",
               "default": false
             },
             {
               "name": "thisArg",
-              "comment": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.\n",
+              "comment": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.",
               "type": "any",
               "default": false
             }
@@ -1109,11 +1072,10 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3876,
-          8
+          3922,
+          4
         ]
       ],
-      "id": 4883,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.find",
@@ -1126,12 +1088,12 @@
             {
               "name": "predicate",
               "comment": "find calls predicate once for each element of the array, in ascending\norder, until it finds one where predicate returns true. If such an element is found, find\nimmediately returns that element value. Otherwise, find returns undefined.",
-              "type": " Fn(value:number, index:number, obj:Float32Array)",
+              "type": " Fn(value:number, index:number, obj:this)",
               "default": false
             },
             {
               "name": "thisArg",
-              "comment": "If provided, it will be used as the this value for each invocation of\npredicate. If it is not provided, undefined is used instead.\n",
+              "comment": "If provided, it will be used as the this value for each invocation of\npredicate. If it is not provided, undefined is used instead.",
               "type": "any",
               "default": false
             }
@@ -1145,11 +1107,10 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3887,
-          13
+          3933,
+          4
         ]
       ],
-      "id": 4892,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.findIndex",
@@ -1162,12 +1123,12 @@
             {
               "name": "predicate",
               "comment": "find calls predicate once for each element of the array, in ascending\norder, until it finds one where predicate returns true. If such an element is found,\nfindIndex immediately returns that element index. Otherwise, findIndex returns -1.",
-              "type": " Fn(value:number, index:number, obj:Float32Array)",
+              "type": " Fn(value:number, index:number, obj:this)",
               "default": false
             },
             {
               "name": "thisArg",
-              "comment": "If provided, it will be used as the this value for each invocation of\npredicate. If it is not provided, undefined is used instead.\n",
+              "comment": "If provided, it will be used as the this value for each invocation of\npredicate. If it is not provided, undefined is used instead.",
               "type": "any",
               "default": false
             }
@@ -1181,11 +1142,10 @@
       "source": [
         [
           "src/Pt.ts",
-          342,
-          7
+          389,
+          2
         ]
       ],
-      "id": 4790,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.floor",
@@ -1204,11 +1164,10 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3896,
-          11
+          3942,
+          4
         ]
       ],
-      "id": 4901,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.forEach",
@@ -1221,12 +1180,12 @@
             {
               "name": "callbackfn",
               "comment": "A function that accepts up to three arguments. forEach calls the\ncallbackfn function one time for each element in the array.",
-              "type": " Fn(value:number, index:number, array:Float32Array)",
+              "type": " Fn(value:number, index:number, array:this)",
               "default": false
             },
             {
               "name": "thisArg",
-              "comment": "An object to which the this keyword can refer in the callbackfn function.\nIf thisArg is omitted, undefined is used as the this value.\n",
+              "comment": "An object to which the this keyword can refer in the callbackfn function.\nIf thisArg is omitted, undefined is used as the this value.",
               "type": "any",
               "default": false
             }
@@ -1240,17 +1199,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3904,
-          11
+          3950,
+          4
         ]
       ],
-      "id": 4910,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.indexOf",
       "signatures": [
         {
-          "comment": "Returns the index of the first occurrence of a value in an array.",
+          "comment": "Returns the index of the first occurrence of a value in an array, or -1 if it is not present.",
           "returns": "number",
           "returns_comment": false,
           "parameters": [
@@ -1262,7 +1220,7 @@
             },
             {
               "name": "fromIndex",
-              "comment": "The array index at which to begin the search. If fromIndex is omitted, the\n search starts at index 0.\n",
+              "comment": "The array index at which to begin the search. If fromIndex is omitted, the\nsearch starts at index 0.",
               "type": "number",
               "default": false
             }
@@ -1276,18 +1234,17 @@
       "source": [
         [
           "src/Create.ts",
-          207,
-          11
+          291,
+          2
         ]
       ],
-      "id": 4656,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Set the initial dimensional values of the noise.",
-          "returns": "this",
+          "returns": "Noise",
           "returns_comment": false,
           "parameters": [
             {
@@ -1300,7 +1257,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`noise.initNoise( 0.01, 0.1 )`\n"
+              "text": "`noise.initNoise( 0.01, 0.1 )`"
             }
           ]
         }
@@ -1311,11 +1268,10 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3911,
-          8
+          3957,
+          4
         ]
       ],
-      "id": 4914,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.join",
@@ -1327,7 +1283,7 @@
           "parameters": [
             {
               "name": "separator",
-              "comment": "A string used to separate one element of an array from the next in the\nresulting String. If omitted, the array elements are separated with a comma.\n",
+              "comment": "A string used to separate one element of an array from the next in the\nresulting String. If omitted, the array elements are separated with a comma.",
               "type": "string",
               "default": false
             }
@@ -1341,17 +1297,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3919,
-          15
+          3965,
+          4
         ]
       ],
-      "id": 4917,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.lastIndexOf",
       "signatures": [
         {
-          "comment": "Returns the index of the last occurrence of a value in an array.",
+          "comment": "Returns the index of the last occurrence of a value in an array, or -1 if it is not present.",
           "returns": "number",
           "returns_comment": false,
           "parameters": [
@@ -1363,7 +1318,7 @@
             },
             {
               "name": "fromIndex",
-              "comment": "The array index at which to begin the search. If fromIndex is omitted, the\nsearch starts at index 0.\n",
+              "comment": "The array index at which to begin the search. If fromIndex is omitted, the\nsearch starts at index 0.",
               "type": "number",
               "default": false
             }
@@ -1377,11 +1332,10 @@
       "source": [
         [
           "src/Pt.ts",
-          263,
-          11
+          310,
+          2
         ]
       ],
-      "id": 4763,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.magnitude",
@@ -1400,11 +1354,10 @@
       "source": [
         [
           "src/Pt.ts",
-          257,
-          13
+          303,
+          2
         ]
       ],
-      "id": 4761,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.magnitudeSq",
@@ -1423,11 +1376,10 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3934,
-          7
+          3980,
+          4
         ]
       ],
-      "id": 4922,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.map",
@@ -1440,12 +1392,12 @@
             {
               "name": "callbackfn",
               "comment": "A function that accepts up to three arguments. The map method calls the\ncallbackfn function one time for each element in the array.",
-              "type": " Fn(value:number, index:number, array:Float32Array)",
+              "type": " Fn(value:number, index:number, array:this)",
               "default": false
             },
             {
               "name": "thisArg",
-              "comment": "An object to which the this keyword can refer in the callbackfn function.\nIf thisArg is omitted, undefined is used as the this value.\n",
+              "comment": "An object to which the this keyword can refer in the callbackfn function.\nIf thisArg is omitted, undefined is used as the this value.",
               "type": "any",
               "default": false
             }
@@ -1459,11 +1411,10 @@
       "source": [
         [
           "src/Pt.ts",
-          403,
-          10
+          443,
+          2
         ]
       ],
-      "id": 4807,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.maxValue",
@@ -1471,7 +1422,7 @@
         {
           "comment": "Find the maximum value across all dimensions in this Pt.",
           "returns": "{ index:`number`, value:`number` }",
-          "returns_comment": "an object with `value` and `index` which returns the maximum value and its dimensional index\n",
+          "returns_comment": "an object with `value` and `index` which returns the maximum value and its dimensional index",
           "parameters": [],
           "tags": []
         }
@@ -1482,11 +1433,10 @@
       "source": [
         [
           "src/Pt.ts",
-          394,
-          10
+          435,
+          2
         ]
       ],
-      "id": 4802,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.minValue",
@@ -1494,7 +1444,7 @@
         {
           "comment": "Find the minimum value across all dimensions in this Pt.",
           "returns": "{ index:`number`, value:`number` }",
-          "returns_comment": "an object with `value` and `index` which returns the minimum value and its dimensional index\n",
+          "returns_comment": "an object with `value` and `index` which returns the minimum value and its dimensional index",
           "parameters": [],
           "tags": []
         }
@@ -1505,11 +1455,10 @@
       "source": [
         [
           "src/Pt.ts",
-          224,
-          10
+          266,
+          2
         ]
       ],
-      "id": 4749,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.multiply",
@@ -1521,7 +1470,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -1535,11 +1484,10 @@
       "source": [
         [
           "src/Create.ts",
-          245,
-          9
+          318,
+          2
         ]
       ],
-      "id": 4666,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1558,11 +1506,10 @@
       "source": [
         [
           "src/Pt.ts",
-          141,
-          4
+          181,
+          2
         ]
       ],
-      "id": 4711,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.op",
@@ -1570,7 +1517,7 @@
         {
           "comment": "Create an operation using this Pt, passing this Pt into a custom function's first parameter. See the [Op guide](../guide/Op-0400.html) for details.",
           "returns": " Fn(rest:any[])",
-          "returns_comment": "a resulting function that takes other parameters required in `fn`\n",
+          "returns_comment": "a resulting function that takes other parameters required in `fn`",
           "parameters": [
             {
               "name": "fn",
@@ -1593,24 +1540,23 @@
       "source": [
         [
           "src/Pt.ts",
-          155,
-          5
+          194,
+          2
         ]
       ],
-      "id": 4721,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.ops",
       "signatures": [
         {
           "comment": "This combines a series of operations into an array. See the [Op guide](../guide/Op-0400.html) for details.",
-          "returns": " Fn(rest:any[])",
-          "returns_comment": "an array of resulting functions\n",
+          "returns": " Fn(rest:any[])[]",
+          "returns_comment": "an array of resulting functions",
           "parameters": [
             {
               "name": "fns",
               "comment": "an array of functions for `op`",
-              "type": " Fn(p1:PtLike, rest:any[])",
+              "type": " Fn(p1:PtLike, rest:any[])[]",
               "default": false
             }
           ],
@@ -1628,23 +1574,22 @@
       "source": [
         [
           "src/Pt.ts",
-          317,
-          15
+          367,
+          2
         ]
       ],
-      "id": 4783,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.projectScalar",
       "signatures": [
         {
-          "comment": "Calculate scalar projection.",
+          "comment": "Calculate the scalar projection of another Pt onto this Pt — the signed length of the other Pt's component along this Pt's direction. Note that this Pt must be non-zero.",
           "returns": "number",
           "returns_comment": false,
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "the other Pt, as either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -1658,21 +1603,20 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3946,
-          10
+          3992,
+          4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3947,
-          10
+          3993,
+          4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3959,
-          10
+          4005,
+          4
         ]
       ],
-      "id": 4931,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduce",
@@ -1685,7 +1629,7 @@
             {
               "name": "callbackfn",
               "comment": "A function that accepts up to four arguments. The reduce method calls the\ncallbackfn function one time for each element in the array.",
-              "type": " Fn(previousValue:number, currentValue:number, currentIndex:number, array:Float32Array)",
+              "type": " Fn(previousValue:number, currentValue:number, currentIndex:number, array:this)",
               "default": false
             }
           ],
@@ -1699,7 +1643,7 @@
             {
               "name": "callbackfn",
               "comment": "",
-              "type": " Fn(previousValue:number, currentValue:number, currentIndex:number, array:Float32Array)",
+              "type": " Fn(previousValue:number, currentValue:number, currentIndex:number, array:this)",
               "default": false
             },
             {
@@ -1719,12 +1663,12 @@
             {
               "name": "callbackfn",
               "comment": "A function that accepts up to four arguments. The reduce method calls the\ncallbackfn function one time for each element in the array.",
-              "type": " Fn(previousValue:U, currentValue:number, currentIndex:number, array:Float32Array)",
+              "type": " Fn(previousValue:U, currentValue:number, currentIndex:number, array:this)",
               "default": false
             },
             {
               "name": "initialValue",
-              "comment": "If initialValue is specified, it is used as the initial value to start\nthe accumulation. The first call to the callbackfn function provides this value as an argument\ninstead of an array value.\n",
+              "comment": "If initialValue is specified, it is used as the initial value to start\nthe accumulation. The first call to the callbackfn function provides this value as an argument\ninstead of an array value.",
               "type": "U",
               "default": false
             }
@@ -1738,21 +1682,20 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3971,
-          15
+          4017,
+          4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3972,
-          15
+          4018,
+          4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3984,
-          15
+          4030,
+          4
         ]
       ],
-      "id": 4959,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduceRight",
@@ -1765,7 +1708,7 @@
             {
               "name": "callbackfn",
               "comment": "A function that accepts up to four arguments. The reduceRight method calls\nthe callbackfn function one time for each element in the array.",
-              "type": " Fn(previousValue:number, currentValue:number, currentIndex:number, array:Float32Array)",
+              "type": " Fn(previousValue:number, currentValue:number, currentIndex:number, array:this)",
               "default": false
             }
           ],
@@ -1779,7 +1722,7 @@
             {
               "name": "callbackfn",
               "comment": "",
-              "type": " Fn(previousValue:number, currentValue:number, currentIndex:number, array:Float32Array)",
+              "type": " Fn(previousValue:number, currentValue:number, currentIndex:number, array:this)",
               "default": false
             },
             {
@@ -1799,12 +1742,12 @@
             {
               "name": "callbackfn",
               "comment": "A function that accepts up to four arguments. The reduceRight method calls\nthe callbackfn function one time for each element in the array.",
-              "type": " Fn(previousValue:U, currentValue:number, currentIndex:number, array:Float32Array)",
+              "type": " Fn(previousValue:U, currentValue:number, currentIndex:number, array:this)",
               "default": false
             },
             {
               "name": "initialValue",
-              "comment": "If initialValue is specified, it is used as the initial value to start\nthe accumulation. The first call to the callbackfn function provides this value as an argument\ninstead of an array value.\n",
+              "comment": "If initialValue is specified, it is used as the initial value to start\nthe accumulation. The first call to the callbackfn function provides this value as an argument\ninstead of an array value.",
               "type": "U",
               "default": false
             }
@@ -1818,11 +1761,10 @@
       "source": [
         [
           "src/Pt.ts",
-          495,
-          11
+          530,
+          2
         ]
       ],
-      "id": 4839,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.reflect2D",
@@ -1840,7 +1782,7 @@
             },
             {
               "name": "axis",
-              "comment": "optional axis such as \"yz\" to define a 2D plane of reflection\n",
+              "comment": "optional axis such as \"yz\" to define a 2D plane of reflection",
               "type": "string",
               "default": false
             }
@@ -1854,18 +1796,17 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3989,
-          11
+          4035,
+          4
         ]
       ],
-      "id": 4987,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reverse",
       "signatures": [
         {
           "comment": "Reverses the elements in an Array.",
-          "returns": "Float32Array",
+          "returns": "this",
           "returns_comment": false,
           "parameters": [],
           "tags": []
@@ -1877,18 +1818,17 @@
       "source": [
         [
           "src/Pt.ts",
-          472,
-          10
+          509,
+          2
         ]
       ],
-      "id": 4829,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.rotate2D",
       "signatures": [
         {
           "comment": "Rotate this Pt from origin or from an anchor point in 2D.",
-          "returns": "this",
+          "returns": "Noise",
           "returns_comment": false,
           "parameters": [
             {
@@ -1905,7 +1845,7 @@
             },
             {
               "name": "axis",
-              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
+              "comment": "optional string such as \"yz\" to specify a 2D plane",
               "type": "string",
               "default": false
             }
@@ -1919,11 +1859,10 @@
       "source": [
         [
           "src/Pt.ts",
-          376,
-          7
+          419,
+          2
         ]
       ],
-      "id": 4798,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.round",
@@ -1942,29 +1881,28 @@
       "source": [
         [
           "src/Pt.ts",
-          460,
-          7
+          498,
+          2
         ]
       ],
-      "id": 4825,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.scale",
       "signatures": [
         {
           "comment": "Scale this Pt from origin or from an anchor point.",
-          "returns": "this",
+          "returns": "Noise",
           "returns_comment": false,
           "parameters": [
             {
               "name": "scale",
               "comment": "scale ratio",
-              "type": "number | number[] | PtLike",
+              "type": "number | PtLike",
               "default": false
             },
             {
               "name": "anchor",
-              "comment": "optional anchor point to scale from\n",
+              "comment": "optional anchor point to scale from",
               "type": "PtLike",
               "default": false
             }
@@ -1978,24 +1916,23 @@
       "source": [
         [
           "src/Create.ts",
-          227,
-          6
+          310,
+          2
         ]
       ],
-      "id": 4663,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Specify a seed for this Noise.",
-          "returns": "this",
+          "returns": "Noise",
           "returns_comment": false,
           "parameters": [
             {
               "name": "s",
-              "comment": "seed value\n",
-              "type": "any",
+              "comment": "seed value",
+              "type": "number",
               "default": false
             }
           ],
@@ -2008,11 +1945,10 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3996,
-          7
+          4042,
+          4
         ]
       ],
-      "id": 4989,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.set",
@@ -2030,7 +1966,7 @@
             },
             {
               "name": "offset",
-              "comment": "The index in the current array at which the values are to be written.\n",
+              "comment": "The index in the current array at which the values are to be written.",
               "type": "number",
               "default": false
             }
@@ -2044,24 +1980,23 @@
       "source": [
         [
           "src/Pt.ts",
-          484,
-          9
+          520,
+          2
         ]
       ],
-      "id": 4834,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.shear2D",
       "signatures": [
         {
           "comment": "Shear this Pt from origin or from an anchor point in 2D.",
-          "returns": "this",
+          "returns": "Noise",
           "returns_comment": false,
           "parameters": [
             {
               "name": "scale",
-              "comment": "",
-              "type": "number | number[] | PtLike",
+              "comment": "shearing value which can be a number or an array of 2 numbers",
+              "type": "number | PtLike",
               "default": false
             },
             {
@@ -2072,7 +2007,7 @@
             },
             {
               "name": "axis",
-              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
+              "comment": "optional string such as \"yz\" to specify a 2D plane",
               "type": "string",
               "default": false
             }
@@ -2086,11 +2021,10 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          4003,
-          9
+          4049,
+          4
         ]
       ],
-      "id": 4993,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.slice",
@@ -2108,7 +2042,7 @@
             },
             {
               "name": "end",
-              "comment": "The end of the specified portion of the array. This is exclusive of the element at the index 'end'.\n",
+              "comment": "The end of the specified portion of the array. This is exclusive of the element at the index 'end'.",
               "type": "number",
               "default": false
             }
@@ -2122,11 +2056,10 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          4013,
-          8
+          4059,
+          4
         ]
       ],
-      "id": 4997,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.some",
@@ -2139,12 +2072,12 @@
             {
               "name": "predicate",
               "comment": "A function that accepts up to three arguments. The some method calls\nthe predicate function for each element in the array until the predicate returns a value\nwhich is coercible to the Boolean value true, or until the end of the array.",
-              "type": " Fn(value:number, index:number, array:Float32Array)",
+              "type": " Fn(value:number, index:number, array:this)",
               "default": false
             },
             {
               "name": "thisArg",
-              "comment": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.\n",
+              "comment": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.",
               "type": "any",
               "default": false
             }
@@ -2158,11 +2091,10 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          4024,
-          8
+          4070,
+          4
         ]
       ],
-      "id": 5006,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.sort",
@@ -2174,7 +2106,7 @@
           "parameters": [
             {
               "name": "compareFn",
-              "comment": "Function used to determine the order of the elements. It is expected to return\na negative value if first argument is less than second argument, zero if they're equal and a positive\nvalue otherwise. If omitted, the elements are sorted in ascending order.\n```ts\n[11,2,22,1].sort((a, b) => a - b)\n```\n",
+              "comment": "Function used to determine the order of the elements. It is expected to return\na negative value if first argument is less than second argument, zero if they're equal and a positive\nvalue otherwise. If omitted, the elements are sorted in ascending order.\n```ts\n[11,2,22,1].sort((a, b) => a - b)\n```",
               "type": " Fn(a:number, b:number)",
               "default": false
             }
@@ -2188,18 +2120,17 @@
       "source": [
         [
           "src/Create.ts",
-          218,
-          6
+          301,
+          2
         ]
       ],
-      "id": 4659,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Add a small increment to the noise values.",
-          "returns": "this",
+          "returns": "Noise",
           "returns_comment": false,
           "parameters": [
             {
@@ -2210,7 +2141,7 @@
             },
             {
               "name": "y",
-              "comment": "step in y dimension\n",
+              "comment": "step in y dimension",
               "type": "number",
               "default": "0"
             }
@@ -2224,11 +2155,10 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          4032,
-          12
+          4078,
+          4
         ]
       ],
-      "id": 5013,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.subarray",
@@ -2246,7 +2176,7 @@
             },
             {
               "name": "end",
-              "comment": "The index of the end of the array.\n",
+              "comment": "The index of the end of the array.",
               "type": "number",
               "default": false
             }
@@ -2260,11 +2190,10 @@
       "source": [
         [
           "src/Pt.ts",
-          207,
-          10
+          247,
+          2
         ]
       ],
-      "id": 4743,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.subtract",
@@ -2276,7 +2205,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -2290,11 +2219,10 @@
       "source": [
         [
           "src/Pt.ts",
-          104,
-          4
+          143,
+          2
         ]
       ],
-      "id": 4700,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.to",
@@ -2306,7 +2234,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -2320,11 +2248,10 @@
       "source": [
         [
           "src/Pt.ts",
-          128,
-          9
+          165,
+          2
         ]
       ],
-      "id": 4706,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toAngle",
@@ -2348,7 +2275,7 @@
             },
             {
               "name": "anchorFromPt",
-              "comment": "If `true`, add it from this Pt's current position. Default is `false` which update the position from origin (0,0). See also [`Geom.rotate2D`](#link) for rotating a point from another anchor point.\n",
+              "comment": "If `true`, add it from this Pt's current position. Default is `false` which update the position from origin (0,0). See also [`Geom.rotate2D`](#link) for rotating a point from another anchor point.",
               "type": "boolean",
               "default": "false"
             }
@@ -2362,11 +2289,10 @@
       "source": [
         [
           "src/Pt.ts",
-          512,
-          9
+          545,
+          2
         ]
       ],
-      "id": 4845,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toArray",
@@ -2385,11 +2311,10 @@
       "source": [
         [
           "src/Pt.ts",
-          528,
-          9
+          561,
+          2
         ]
       ],
-      "id": 4849,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toBound",
@@ -2408,11 +2333,10 @@
       "source": [
         [
           "src/Pt.ts",
-          520,
-          9
+          554,
+          2
         ]
       ],
-      "id": 4847,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toGroup",
@@ -2431,11 +2355,15 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          4037,
-          18
+          4083,
+          4
+        ],
+        [
+          "node_modules/typescript/lib/lib.es2015.core.d.ts",
+          590,
+          4
         ]
       ],
-      "id": 5017,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.toLocaleString",
@@ -2446,6 +2374,26 @@
           "returns_comment": false,
           "parameters": [],
           "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "locales",
+              "comment": "",
+              "type": "string | string[]",
+              "default": false
+            },
+            {
+              "name": "options",
+              "comment": "",
+              "type": "NumberFormatOptions",
+              "default": false
+            }
+          ],
+          "tags": []
         }
       ]
     },
@@ -2454,13 +2402,12 @@
       "source": [
         [
           "src/Pt.ts",
-          504,
-          10
+          538,
+          2
         ]
       ],
-      "id": 4843,
       "flags": {},
-      "overrides": "Float32Array.toString",
+      "overrides": false,
       "inherits": "Pt.toString",
       "signatures": [
         {
@@ -2477,11 +2424,10 @@
       "source": [
         [
           "src/Pt.ts",
-          270,
-          6
+          318,
+          2
         ]
       ],
-      "id": 4765,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.unit",
@@ -2493,8 +2439,8 @@
           "parameters": [
             {
               "name": "magnitude",
-              "comment": "Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.\n",
-              "type": "number",
+              "comment": "Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.",
+              "type": "number | undefined",
               "default": "undefined"
             }
           ],
@@ -2507,18 +2453,17 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          4045,
-          11
+          4091,
+          4
         ]
       ],
-      "id": 5019,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.valueOf",
       "signatures": [
         {
           "comment": "Returns the primitive value of the specified object.",
-          "returns": "Float32Array",
+          "returns": "this",
           "returns_comment": false,
           "parameters": [],
           "tags": []
@@ -2530,11 +2475,10 @@
       "source": [
         [
           "src/Pt.ts",
-          37,
-          13
+          54,
+          9
         ]
       ],
-      "id": 4669,
       "flags": {
         "isStatic": true
       },
@@ -2560,7 +2504,7 @@
             },
             {
               "name": "randomize",
-              "comment": "if `true`, randomize the value between 0 to default value\n",
+              "comment": "if `true`, randomize the value between 0 to default value",
               "type": "boolean",
               "default": "false"
             }
@@ -2573,37 +2517,18 @@
   "variables": [],
   "properties": [
     {
-      "name": "BYTES_PER_ELEMENT",
-      "source": [
-        [
-          "node_modules/typescript/lib/lib.es5.d.ts",
-          3810,
-          30
-        ]
-      ],
-      "id": 4851,
-      "flags": {
-        "isReadonly": true
-      },
-      "type": "BYTES_PER_ELEMENT",
-      "overrides": false,
-      "inherits": "Float32Array.BYTES_PER_ELEMENT",
-      "comment": "The size in bytes of each element in the array."
-    },
-    {
       "name": "buffer",
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3815,
-          19
+          3861,
+          13
         ]
       ],
-      "id": 4852,
       "flags": {
         "isReadonly": true
       },
-      "type": "buffer",
+      "type": "ArrayBuffer",
       "overrides": false,
       "inherits": "Float32Array.buffer",
       "comment": "The ArrayBuffer instance referenced by the array."
@@ -2613,15 +2538,14 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3820,
-          23
+          3866,
+          13
         ]
       ],
-      "id": 4853,
       "flags": {
         "isReadonly": true
       },
-      "type": "byteLength",
+      "type": "number",
       "overrides": false,
       "inherits": "Float32Array.byteLength",
       "comment": "The length in bytes of the array."
@@ -2631,33 +2555,48 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3825,
-          23
+          3871,
+          13
         ]
       ],
-      "id": 4854,
       "flags": {
         "isReadonly": true
       },
-      "type": "byteOffset",
+      "type": "number",
       "overrides": false,
       "inherits": "Float32Array.byteOffset",
       "comment": "The offset in bytes of the array."
+    },
+    {
+      "name": "BYTES_PER_ELEMENT",
+      "source": [
+        [
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3856,
+          13
+        ]
+      ],
+      "flags": {
+        "isReadonly": true
+      },
+      "type": "number",
+      "overrides": false,
+      "inherits": "Float32Array.BYTES_PER_ELEMENT",
+      "comment": "The size in bytes of each element in the array."
     },
     {
       "name": "length",
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3924,
-          19
+          3970,
+          13
         ]
       ],
-      "id": 4921,
       "flags": {
         "isReadonly": true
       },
-      "type": "length",
+      "type": "number",
       "overrides": false,
       "inherits": "Float32Array.length",
       "comment": "The length of the array."
@@ -2667,15 +2606,14 @@
       "source": [
         [
           "src/Create.ts",
-          187,
-          16
+          272,
+          12
         ]
       ],
-      "id": 4651,
       "flags": {
         "isProtected": true
       },
-      "type": "perm",
+      "type": "number[]",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -2685,8 +2623,5 @@
   "extends": [
     "Pt"
   ],
-  "implements": [
-    "IPt",
-    "Iterable"
-  ]
+  "implements": []
 }

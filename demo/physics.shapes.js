@@ -45,7 +45,7 @@ Pts.quickStart( "#pt", "#30a" );
 
       world.drawBodies( (b, i) => { 
         form.fillOnly(["#0c9","#f03","#fe6"][i%3]).polygon( b ); 
-        form.strokeOnly("rgba(0,0,0,0.1");
+        form.strokeOnly("rgba(0,0,0,0.1)");
         b.linksToLines().forEach( (l) => form.line(l) ); // visualize the edge constraints
       });
       

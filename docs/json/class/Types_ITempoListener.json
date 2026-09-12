@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Types.ts",
-      181,
-      26
+      244,
+      12
     ]
   ],
   "kind": "Typealias",
-  "id": 815,
   "comment": "Typescript type: ITempoListener represents a listener created by Tempo class",
   "constructor": [],
   "accessors": [],
@@ -20,6 +19,7 @@
   "implements": [],
   "type_alias": [
     "{ beats:`number",
-    "number[]`, continuous:`boolean`, duration:`number`, fn:`Function`, index:`number`, name:`string`, offset:`number`, period:`number` }"
+    "number[]`, continuous:`boolean`, count:`number`, duration:`number`, fn:`ITempoStartFn",
+    "ITempoProgressFn`, index:`number`, name:`string`, offset:`number`, period:`number` }"
   ]
 }

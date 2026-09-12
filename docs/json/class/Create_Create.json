@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Create.ts",
-      14,
-      19
+      22,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 4613,
   "comment": "The `Create` class helps you create structures from sets of points.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +17,10 @@
       "source": [
         [
           "src/Create.ts",
-          141,
-          17
+          169,
+          9
         ]
       ],
-      "id": 4647,
       "flags": {
         "isStatic": true
       },
@@ -32,7 +30,7 @@
         {
           "comment": "Create a Delaunay Group. Use the [`Delaunay.delaunay()`](#link) and [`Delaunay.voronoi()`](#link) functions in the returned group to generate tessellations.",
           "returns": "Delaunay",
-          "returns_comment": "an instance of the Delaunay class\n",
+          "returns_comment": "an instance of the Delaunay class",
           "parameters": [
             {
               "name": "pts",
@@ -50,11 +48,10 @@
       "source": [
         [
           "src/Create.ts",
-          40,
-          25
+          49,
+          9
         ]
       ],
-      "id": 4619,
       "flags": {
         "isStatic": true
       },
@@ -74,7 +71,7 @@
             },
             {
               "name": "count",
-              "comment": "number of points to create\n",
+              "comment": "number of points to create",
               "type": "number",
               "default": false
             }
@@ -88,11 +85,10 @@
       "source": [
         [
           "src/Create.ts",
-          23,
-          25
+          29,
+          9
         ]
       ],
-      "id": 4614,
       "flags": {
         "isStatic": true
       },
@@ -118,7 +114,7 @@
             },
             {
               "name": "dimensions",
-              "comment": "number of dimensions in each point\n",
+              "comment": "number of dimensions in each point",
               "type": "number",
               "default": "2"
             }
@@ -128,15 +124,56 @@
       ]
     },
     {
+      "name": "flock",
+      "source": [
+        [
+          "src/Create.ts",
+          187,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a [`Flock`](#link) of [`Boid`](#link) agents that simulate flocking (also known as \"boids\"),\nwhere each agent steers by three local rules: separation, alignment, and cohesion.\nAdvance the simulation by calling [`Flock.step`](#link) with the elapsed time.\nSee a [flocking demo here](https://ptsjs.org/demo/?name=create.flock).\n\nEach agent starts with a random heading, drawn from [`Num.random`](#link), so seeding with\n[`Num.seed`](#link) makes a flock reproducible.",
+          "returns": "Flock",
+          "returns_comment": "an instance of the Flock class, which is a Group of Boids",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group or an Iterable<Pt> of starting positions",
+              "type": "PtLikeIterable",
+              "default": false
+            },
+            {
+              "name": "options",
+              "comment": "optional [`FlockOptions`](#link) to tune the behavior",
+              "type": "FlockOptions",
+              "default": "{}"
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`Create.flock( Create.distributeRandom( space.innerBound, 200 ), { bound: space.innerBound } )`"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "gridCells",
       "source": [
         [
           "src/Create.ts",
-          78,
-          18
+          93,
+          9
         ]
       ],
-      "id": 4629,
       "flags": {
         "isStatic": true
       },
@@ -146,7 +183,7 @@
         {
           "comment": "Create a grid of cells inside a boundary, where each cell is defined by a group of 2 Pt.",
           "returns": "Group[]",
-          "returns_comment": "an array of Groups, where each group represents a rectangular cell\n",
+          "returns_comment": "an array of Groups, where each group represents a rectangular cell",
           "parameters": [
             {
               "name": "bound",
@@ -176,11 +213,10 @@
       "source": [
         [
           "src/Create.ts",
-          57,
-          16
+          67,
+          9
         ]
       ],
-      "id": 4623,
       "flags": {
         "isStatic": true
       },
@@ -190,7 +226,7 @@
         {
           "comment": "Create an evenly distributed set of points (like a grid of points) inside a boundary.",
           "returns": "Group",
-          "returns_comment": "a Group of Pts\n",
+          "returns_comment": "a Group of Pts",
           "parameters": [
             {
               "name": "bound",
@@ -214,7 +250,7 @@
               "name": "orientation",
               "comment": "a Pt or number array to specify where the point should be inside a cell. Default is [0.5, 0.5] which places the point in the middle.",
               "type": "PtLike",
-              "default": "[0.5, 0.5]"
+              "default": "..."
             }
           ],
           "tags": []
@@ -226,11 +262,10 @@
       "source": [
         [
           "src/Create.ts",
-          119,
-          17
+          140,
+          9
         ]
       ],
-      "id": 4640,
       "flags": {
         "isStatic": true
       },
@@ -244,7 +279,7 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<Pt>",
+              "comment": "a Group or an Iterable<Pt>, in row-major order when treated as a grid",
               "type": "PtIterable",
               "default": false
             },
@@ -268,7 +303,7 @@
             },
             {
               "name": "columns",
-              "comment": "Optional column count to generate 2D noise\n",
+              "comment": "Optional column count (points per row) to generate 2D noise. When provided, each point's noise offset is (dx·column, dy·row) with row = floor(i/columns); when only `rows` is provided it is used as the points-per-row divisor instead.",
               "type": "number",
               "default": "0"
             }
@@ -282,11 +317,10 @@
       "source": [
         [
           "src/Create.ts",
-          101,
-          18
+          118,
+          9
         ]
       ],
-      "id": 4634,
       "flags": {
         "isStatic": true
       },
@@ -318,7 +352,7 @@
             },
             {
               "name": "angleOffset",
-              "comment": "offset starting angle\n",
+              "comment": "offset starting angle",
               "type": "number",
               "default": "-Const.half_pi"
             }

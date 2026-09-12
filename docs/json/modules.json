@@ -7,8 +7,10 @@
     "Color"
   ],
   "Create": [
+    "Boid",
     "Create",
     "Delaunay",
+    "Flock",
     "Noise"
   ],
   "Dom": [
@@ -22,7 +24,8 @@
     "VisualForm"
   ],
   "Image": [
-    "Img"
+    "Img",
+    "ImgOptions"
   ],
   "LinearAlgebra": [
     "Mat",
@@ -61,38 +64,9 @@
     "Space"
   ],
   "Svg": [
+    "SVGContext2D",
     "SVGForm",
     "SVGSpace"
-  ],
-  "Types": [
-    "IPlayer",
-    "IPt",
-    "ISpacePlayers",
-    "ITimer",
-    "MultiTouchElement",
-    "PtsCanvasRenderingContext2D",
-    "AnimateCallbackFn",
-    "CanvasPatternRepetition",
-    "CanvasSpaceOptions",
-    "ColorType",
-    "DOMFormContext",
-    "DefaultFormStyle",
-    "DelaunayMesh",
-    "DelaunayShape",
-    "GroupLike",
-    "ISoundAnalyzer",
-    "ITempoListener",
-    "ITempoProgressFn",
-    "ITempoResponses",
-    "ITempoStartFn",
-    "IntersectContext",
-    "PtIterable",
-    "PtLike",
-    "PtLikeIterable",
-    "SoundType",
-    "TouchPointsKey",
-    "UIHandler",
-    "WarningType"
   ],
   "Typography": [
     "Typography"
@@ -101,6 +75,8 @@
     "UI",
     "UIButton",
     "UIDragger",
+    "UIPointerAction",
+    "UIShapeTest",
     "UIPointerActions",
     "UIShape"
   ],
@@ -109,7 +85,41 @@
     "Const"
   ],
   "uheprng": [
-    "Mash",
     "default"
+  ],
+  "Types": [
+    "IPlayer",
+    "IPt",
+    "ISpacePlayers",
+    "ITimer",
+    "MultiTouchElement",
+    "AnimateCallbackFn",
+    "CanvasPatternRepetition",
+    "CanvasSpaceOptions",
+    "ColorType",
+    "DefaultFormStyle",
+    "DelaunayMesh",
+    "DelaunayShape",
+    "DOMFormContext",
+    "FlockBoundary",
+    "FlockOptions",
+    "GroupLike",
+    "IntersectContext",
+    "ISoundAnalyzer",
+    "ITempoListener",
+    "ITempoProgressFn",
+    "ITempoResponses",
+    "ITempoStartFn",
+    "PtIterable",
+    "PtLike",
+    "PtLikeIterable",
+    "RenderingContext2D",
+    "SoundType",
+    "TextMeasure",
+    "TextVerticalAlign",
+    "TouchPointsKey",
+    "UIActionEvent",
+    "UIHandler",
+    "WarningType"
   ]
 }

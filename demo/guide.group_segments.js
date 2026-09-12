@@ -8,6 +8,7 @@ window.demoDescription = "Demo in Group guide.";
 (function() {
   
   Pts.quickStart( "#pt", "#e2e6ef" );
+  let group;
   
   space.add({
 

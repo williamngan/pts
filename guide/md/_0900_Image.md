@@ -7,7 +7,7 @@ The standard API for working with images on canvas is rather laborious, and ofte
 We will start a minimalistic example: Load an image and display it on canvas. This can be done in 2 lines of code:
 
 ```
-const img = Img.load( "/assets/demo.jpg" );
+const img = await Img.load( "/assets/demo.jpg" );
 space.add( time => form.image( space.pointer, img ) );
 ```
 
@@ -15,13 +15,13 @@ space.add( time => form.image( space.pointer, img ) );
 
 ##### Image credit: "C 50 Last Birds And Flowers" by Kurt Schwitters
 
-The above example uses the *static* function [`Img.load`](#image-img) to load an image, and then uses CanvasForm's [`image`](#canvas-canvasform) function to display it. The image will be displayed as soon as it's loaded.
+The above example uses the _static_ function [`Img.load`](#image-img), which returns a Promise that resolves to the loaded image, and then uses CanvasForm's [`image`](#canvas-canvasform) function to display it. A load failure rejects the Promise.
 
-To wait for the image to be ready first, either use the static [`Img.loadAsync`](#image-img) function, or create a blank Img instance and then call the *instance* function [`load`](#image-img). An example:
+You can also create an Img instance yourself and call the _instance_ function [`load`](#image-img), which is handy when you want to configure the instance first. An example:
 
 ```
 (async function() {
-  let img = await Img.loadAsync( "/assets/img_demo.jpg" );
+  let img = await new Img().load( "/assets/img_demo.jpg" );
   space.add( time => form.image( space.pointer, img ) );
 })();
 ```
@@ -32,17 +32,17 @@ Once the image is loaded, you can access its properties like width and height an
 
 ##### In this example, we access the image's original width and height after it's loaded, and then rescale it to fit the canvas size.
 
-
 ### Editing Images
+
 When you create an Img instance with its `editable` parameter set to `true`, it will hold an internal canvas to support image manipulations. It will also match the pixel-density of your display. An example:
 
 ```
 // Create an editable img with the current space's pixelScale
-let img = new Img( true, space.pixelScale );
+let img = new Img( { editable: true, pixelScale: space.pixelScale } );
 img.load( "/assets/demo.jpg" ).then( ... );
 
-// Alternatively, Img.loadAsync static function
-let img2 = await Img.loadAsync( "/assets/demo.jpg", true, space.pixelScale );
+// Alternatively, pass the options to the static load function
+let img2 = await Img.load( "/assets/demo.jpg", { editable: true, pixelScale: space.pixelScale } );
 ```
 
 You can do a lot with an editable image. Let's cover a couple common use cases.
@@ -55,10 +55,10 @@ The [`pixel`](#image-img) function supports a very common use case: specify a pi
 
 ##### Try scribbling in different regions of the image to change it. This demo combines `Create.delaunay` with `Img.pixel`.
 
-Another common use case is to crop a region of the image. The [`crop`](#image-img) function takes a bounding box and returns an [`ImageData`](https://developer.mozilla.org/en-US/docs/Web/API/ImageData). You can then use CanvasForm's[`imageData`](#canvas-canvasform) to draw the region. 
+Another common use case is to crop a region of the image. The [`crop`](#image-img) function takes a bounding box and returns an [`ImageData`](https://developer.mozilla.org/en-US/docs/Web/API/ImageData). You can then use CanvasForm's [`imageData`](#canvas-canvasform) to draw the region.
 
 ```
-form.imageData( img.crop( bound ) );
+form.imageData( [0, 0], img.crop( bound ) );
 ```
 
 Let's try this in a demo:
@@ -73,11 +73,12 @@ It's more efficient to draw `ImageData` directly on canvas. If needed, you can a
 
 Since an editable [`Img`](#image-img) stores an internal canvas, you can leverage [`CanvasForm`](#canvas-canvasform)'s many drawing functions to draw directly on it. It's that easy!
 
-After the image is loaded, you can access the canvas' rendering context through the property `img.ctx` and then create a new [`CanvasForm`](#canvas-canvasform) instance with it. For example:
+After the image is loaded, you can use [`getForm`](#image-img) to create a [`CanvasForm`](#canvas-canvasform) for its internal canvas. For example:
 
 ```
-const img = await Img.loadAsync( "demo.jpg" );
-const imgForm = new CanvasForm( img.ctx );
+const img = await Img.load( "demo.jpg", { editable: true } );
+const imgForm = img.getForm();
+if (!imgForm) throw new Error( "Expected an editable image" );
 ...
 imgForm.fill("#f00").rect( rect );
 ```
@@ -94,18 +95,20 @@ Additionally, the [`filter`](https://ptsjs.org/docs/?p=Image_Img#function_filter
 img.filter( "blur(10px) contrast(20%) saturate(0%)" )
 ```
 
-To display the edited image, use CanvasForm's [`image`](https://ptsjs.org/docs/?p=Canvas_CanvasForm#function_image) function but pass `img.canvas` (instead of `img` itself) in the parameter. 
+To display the edited image, use CanvasForm's [`image`](https://ptsjs.org/docs/?p=Canvas_CanvasForm#function_image) function and pass `img.current` as the image source.
 
 ```
 // draw internal image canvas
-form.image( img.canvas ); 
+form.image( [0, 0], img.current );
 ```
 
-As we are only editing an internal canvas, the original image is unchanged until it's explicitly updated. Use [`sync`](#image-img) to update the original image when needed.
+As we are only editing an internal canvas, the original image is unchanged until it's explicitly updated. Use [`sync`](#image-img), which returns a Promise, to update the original image when needed: `await img.sync()`.
+
+You can also work at the pixel level: [`setPixel`](#image-img) writes a color into the cached pixel data, [`updatePixels`](#image-img) applies those changes onto the canvas, and [`loadPixels`](#image-img) refreshes the cache after you've drawn on the canvas directly. When you're done with an Img, call [`dispose`](#image-img) to release its resources.
 
 ### Patterns
 
-In a similar way, you can treat an image (or an image canvas) as a pattern to fill an area. One difference is that we'll get a [CanvasPattern](https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern) instance for use in  `form.fill(...)`, instead of an image for `form.image(...)`.
+In a similar way, you can treat an image (or an image canvas) as a pattern to fill an area. One difference is that we'll get a [CanvasPattern](https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern) instance for use in `form.fill(...)`, instead of an image for `form.image(...)`.
 
 ```
 const pattern = await Img.loadPattern( "tile.jpg", space );
@@ -140,8 +143,7 @@ It's now your turn to experiment!
 
 - CanvasForm's [`image`](#canvas-canvasform) drawing function can take either an Img instance or a [CanvasImageSource](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) which includes various kinds of image objects like HTML Image or Canvas.
 
-- Typically, you can't load an image from another domain due to security concerns. But if the image server allows for it and you want to do it, you can set the `crossOrigin` parameter to `true` when creating an  `Img` instance. [More details here](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image).
-
+- Typically, you can't load an image from another domain due to security concerns. But if the image server allows for it and you want to do it, you can set the `crossOrigin` parameter to `true` when creating an `Img` instance. [More details here](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image).
 
 ### Cheatsheet
 
@@ -149,24 +151,20 @@ Creating, loading, displaying
 
 ```
 // Simplest way
-let img = Img.load( "demo.jpg");
+let img = await Img.load( "demo.jpg");
 
 // Load an editable image that matches the screen's resolution
-// with an optional callback function when the image is loaded.
-let img = Img.load("demo.png", true, space.pixelScale, onLoad );
+let img = await Img.load("demo.png", { editable: true, pixelScale: space.pixelScale } );
 
-// Equivalent but using async/await
-let img = new Img( true, space.pixelScale );
+// Equivalent, creating the instance first
+let img = new Img( { editable: true, pixelScale: space.pixelScale } );
 await img.load("demo.png")
 
-// Or using the loadAsync static function
-let img = await Img.loadAsync( "demo.png" )
-
-// Display an image automatically when it's loaded 
+// Display an image automatically when it's loaded
 form.image( [0,0], img );
 
 // Load a pattern and use it as fill
-let pattern = Img.loadPattern( "tile.jpg" );
+let pattern = await Img.loadPattern( "tile.jpg", space );
 form.fill( pattern ).rect( rect );
 
 // Get a pattern from an Img instance
@@ -176,6 +174,7 @@ form.fill( pattern ).rect( rect );
 ```
 
 Useful properties
+
 ```
 img.loaded; // true if the image is loaded
 img.image; // the original image
@@ -185,10 +184,11 @@ img.pixelScale; // pixel density which usually matches the space's
 ```
 
 Editing an image
+
 ```
 img.crop( rect )
-img.resize( 0.5, true );
-img.filter( "blur(10px) | contrast(200%)" );
+img.resize( [0.5, 0.5], true );
+img.filter( "blur(10px) contrast(200%)" );
 img.pixel( space.pointer );
 
 // Draw on image
@@ -196,7 +196,7 @@ let imgForm = new CanvasForm( img.ctx );
 imgForm.fill( "#f00" ).point( space.pointer, 20 );
 
 // Export as base64 string
-img.toBase64(); 
+img.toBase64();
 
 // Getting a DOMMatrix instance for pattern transforms
 const m = img.scaledMatrix.rotate2D(...).domMatrix;
@@ -204,7 +204,3 @@ pattern.setTransform( m );
 form.fill( pattern ).rect( rect );
 
 ```
-
-
-
-

@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Op.ts",
-      19,
-      17
+      25,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 1020,
   "comment": "Line class provides static functions to create and operate on lines. A line is usually represented as a Group of 2 Pts.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +17,10 @@
       "source": [
         [
           "src/Op.ts",
-          81,
-          18
+          88,
+          9
         ]
       ],
-      "id": 1042,
       "flags": {
         "isStatic": true
       },
@@ -54,7 +52,7 @@
             },
             {
               "name": "threshold",
-              "comment": "a threshold where a smaller value means higher precision threshold for the straight line. Default is 0.01.\n",
+              "comment": "a threshold where a smaller value means higher precision threshold for the straight line. Default is 0.01.",
               "type": "number",
               "default": "0.01"
             }
@@ -68,11 +66,10 @@
       "source": [
         [
           "src/Op.ts",
-          329,
-          13
+          347,
+          9
         ]
       ],
-      "id": 1101,
       "flags": {
         "isStatic": true
       },
@@ -81,8 +78,8 @@
       "signatures": [
         {
           "comment": "Crop this line by a circle or rectangle at end points. This can be useful for creating arrows that connect to an object's edge.",
-          "returns": "Pt",
-          "returns_comment": "an intersecting point on the line that can be used for cropping.\n",
+          "returns": "Pt | undefined",
+          "returns_comment": "an intersecting point on the line that can be used for cropping.",
           "parameters": [
             {
               "name": "line",
@@ -118,11 +115,10 @@
       "source": [
         [
           "src/Op.ts",
-          133,
-          23
+          148,
+          9
         ]
       ],
-      "id": 1059,
       "flags": {
         "isStatic": true
       },
@@ -143,14 +139,14 @@
             {
               "name": "pt",
               "comment": "a Pt",
-              "type": "PtLike | number[]",
+              "type": "PtLike",
               "default": false
             }
           ],
           "tags": [
             {
               "tag": "see",
-              "text": "`Line.perpendicularFromPt`\n"
+              "text": "`Line.perpendicularFromPt`"
             }
           ]
         }
@@ -161,11 +157,10 @@
       "source": [
         [
           "src/Op.ts",
-          28,
-          18
+          33,
+          9
         ]
       ],
-      "id": 1021,
       "flags": {
         "isStatic": true
       },
@@ -175,7 +170,7 @@
         {
           "comment": "Create a line that originates from an anchor point, given an angle and a magnitude.",
           "returns": "Group",
-          "returns_comment": "a Group of 2 Pts representing a line segement\n",
+          "returns_comment": "a Group of 2 Pts representing a line segement",
           "parameters": [
             {
               "name": "anchor",
@@ -205,11 +200,10 @@
       "source": [
         [
           "src/Op.ts",
-          51,
-          18
+          54,
+          9
         ]
       ],
-      "id": 1030,
       "flags": {
         "isStatic": true
       },
@@ -218,8 +212,8 @@
       "signatures": [
         {
           "comment": "Calculate the slope and xy intercepts of a line.",
-          "returns": "{ slope:`number`, xi:`number`, yi:`number` }",
-          "returns_comment": "an object with `slope`, `xi`, `yi` properties\n",
+          "returns": "{ slope:`number`, xi:`number | undefined`, yi:`number` } | undefined",
+          "returns_comment": "an object with `slope`, `xi`, `yi` properties",
           "parameters": [
             {
               "name": "p1",
@@ -243,11 +237,10 @@
       "source": [
         [
           "src/Op.ts",
-          280,
-          32
+          298,
+          9
         ]
       ],
-      "id": 1089,
       "flags": {
         "isStatic": true
       },
@@ -257,7 +250,7 @@
         {
           "comment": "Get two intersection Pts of a line segment with a 2D grid point.",
           "returns": "Group",
-          "returns_comment": "a group of two intersecting Pts. The first one is horizontal intersection and the second one is vertical intersection.\n",
+          "returns_comment": "a group of two intersecting Pts. The first one is horizontal intersection and the second one is vertical intersection.",
           "parameters": [
             {
               "name": "line",
@@ -268,7 +261,7 @@
             {
               "name": "gridPt",
               "comment": "a Pt on the grid",
-              "type": "PtLike | number[]",
+              "type": "PtLike",
               "default": false
             }
           ],
@@ -281,11 +274,10 @@
       "source": [
         [
           "src/Op.ts",
-          264,
-          31
+          280,
+          9
         ]
       ],
-      "id": 1085,
       "flags": {
         "isStatic": true
       },
@@ -295,7 +287,7 @@
         {
           "comment": "Get two points of a ray that intersects with a point on a 2D grid.",
           "returns": "Group",
-          "returns_comment": "a group of two intersecting Pts. The first one is horizontal intersection and the second one is vertical intersection.\n",
+          "returns_comment": "a group of two intersecting Pts. The first one is horizontal intersection and the second one is vertical intersection.",
           "parameters": [
             {
               "name": "ray",
@@ -319,11 +311,10 @@
       "source": [
         [
           "src/Op.ts",
-          195,
-          24
+          200,
+          9
         ]
       ],
-      "id": 1067,
       "flags": {
         "isStatic": true
       },
@@ -332,8 +323,8 @@
       "signatures": [
         {
           "comment": "Given two line segemnts, find their intersection point if any.",
-          "returns": "Pt",
-          "returns_comment": "an intersection Pt or undefined if no intersection\n",
+          "returns": "Pt | undefined",
+          "returns_comment": "an intersection Pt or undefined if no intersection",
           "parameters": [
             {
               "name": "la",
@@ -353,53 +344,14 @@
       ]
     },
     {
-      "name": "intersectLineWithRay2D",
-      "source": [
-        [
-          "src/Op.ts",
-          210,
-          31
-        ]
-      ],
-      "id": 1071,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Given a line segemnt and a ray (infinite line), find their intersection point if any.",
-          "returns": "Pt",
-          "returns_comment": "an intersection Pt or undefined if no intersection\n",
-          "parameters": [
-            {
-              "name": "line",
-              "comment": "a Group of 2 Pts representing a line segment",
-              "type": "PtIterable",
-              "default": false
-            },
-            {
-              "name": "ray",
-              "comment": "a Group of 2 Pts representing a ray",
-              "type": "PtIterable",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
       "name": "intersectLines2D",
       "source": [
         [
           "src/Op.ts",
-          245,
-          25
+          258,
+          9
         ]
       ],
-      "id": 1080,
       "flags": {
         "isStatic": true
       },
@@ -425,9 +377,46 @@
             },
             {
               "name": "isRay",
-              "comment": "a boolean value to treat the line as a ray (infinite line). Default is `false`.\n",
+              "comment": "a boolean value to treat the line as a ray (infinite line). Default is `false`.",
               "type": "boolean",
               "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "intersectLineWithRay2D",
+      "source": [
+        [
+          "src/Op.ts",
+          218,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given a line segemnt and a ray (infinite line), find their intersection point if any.",
+          "returns": "Pt | undefined",
+          "returns_comment": "an intersection Pt or undefined if no intersection",
+          "parameters": [
+            {
+              "name": "line",
+              "comment": "a Group of 2 Pts representing a line segment",
+              "type": "PtIterable",
+              "default": false
+            },
+            {
+              "name": "ray",
+              "comment": "a Group of 2 Pts representing a ray",
+              "type": "PtIterable",
+              "default": false
             }
           ],
           "tags": []
@@ -439,11 +428,10 @@
       "source": [
         [
           "src/Op.ts",
-          224,
-          27
+          234,
+          9
         ]
       ],
-      "id": 1075,
       "flags": {
         "isStatic": true
       },
@@ -452,7 +440,7 @@
       "signatures": [
         {
           "comment": "Given a line segemnt or a ray (infinite line), find its intersection point(s) with a polygon.",
-          "returns": "Group",
+          "returns": "Group | undefined",
           "returns_comment": false,
           "parameters": [
             {
@@ -469,7 +457,7 @@
             },
             {
               "name": "sourceIsRay",
-              "comment": "a boolean value to treat the line as a ray (infinite line). Default is `false`.\n",
+              "comment": "a boolean value to treat the line as a ray (infinite line). Default is `false`.",
               "type": "boolean",
               "default": "false"
             }
@@ -483,11 +471,10 @@
       "source": [
         [
           "src/Op.ts",
-          151,
-          23
+          165,
+          9
         ]
       ],
-      "id": 1063,
       "flags": {
         "isStatic": true
       },
@@ -496,8 +483,8 @@
       "signatures": [
         {
           "comment": "Given two lines as rays (infinite lines), find their intersection point if any.",
-          "returns": "Pt",
-          "returns_comment": "an intersection Pt or undefined if no intersection\n",
+          "returns": "Pt | undefined",
+          "returns_comment": "an intersection Pt or undefined if no intersection",
           "parameters": [
             {
               "name": "la",
@@ -521,11 +508,10 @@
       "source": [
         [
           "src/Op.ts",
-          297,
-          24
+          317,
+          9
         ]
       ],
-      "id": 1093,
       "flags": {
         "isStatic": true
       },
@@ -535,7 +521,7 @@
         {
           "comment": "An easy way to get rectangle-line intersection points. For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersectPolygon2D()`.",
           "returns": "Group",
-          "returns_comment": "a Group of intersecting Pts\n",
+          "returns_comment": "a Group of intersecting Pts",
           "parameters": [
             {
               "name": "line",
@@ -559,11 +545,10 @@
       "source": [
         [
           "src/Op.ts",
-          93,
-          18
+          107,
+          9
         ]
       ],
-      "id": 1048,
       "flags": {
         "isStatic": true
       },
@@ -577,7 +562,7 @@
           "parameters": [
             {
               "name": "line",
-              "comment": "a Group or an Iterable<Pt> with at least 2 Pt\n",
+              "comment": "a Group or an Iterable<Pt> with at least 2 Pt",
               "type": "PtIterable",
               "default": false
             }
@@ -591,11 +576,10 @@
       "source": [
         [
           "src/Op.ts",
-          103,
-          20
+          116,
+          9
         ]
       ],
-      "id": 1051,
       "flags": {
         "isStatic": true
       },
@@ -609,7 +593,7 @@
           "parameters": [
             {
               "name": "line",
-              "comment": "",
+              "comment": "a Group or an Iterable<Pt> with at least 2 Pt",
               "type": "PtIterable",
               "default": false
             }
@@ -623,11 +607,10 @@
       "source": [
         [
           "src/Op.ts",
-          363,
-          15
+          385,
+          9
         ]
       ],
-      "id": 1107,
       "flags": {
         "isStatic": true
       },
@@ -637,7 +620,7 @@
         {
           "comment": "Create an marker arrow or line, placed at an end point of this line.",
           "returns": "Group",
-          "returns_comment": "a Group that defines the marker's shape\n",
+          "returns_comment": "a Group that defines the marker's shape",
           "parameters": [
             {
               "name": "line",
@@ -655,7 +638,7 @@
               "name": "graphic",
               "comment": "either \"arrow\" or \"line\"",
               "type": "string",
-              "default": "(\"arrow\"||\"line\")"
+              "default": "\"arrow\""
             },
             {
               "name": "atTail",
@@ -673,11 +656,10 @@
       "source": [
         [
           "src/Op.ts",
-          116,
-          28
+          128,
+          9
         ]
       ],
-      "id": 1054,
       "flags": {
         "isStatic": true
       },
@@ -686,8 +668,8 @@
       "signatures": [
         {
           "comment": "Find a point on a line that is perpendicular (shortest distance) to a target point.",
-          "returns": "Pt",
-          "returns_comment": "a Pt on the line that is perpendicular to the target Pt, or a projection vector if `asProjection` is true.\n",
+          "returns": "Pt | undefined",
+          "returns_comment": "a Pt on the line that is perpendicular to the target Pt, or a projection vector if `asProjection` is true.",
           "parameters": [
             {
               "name": "line",
@@ -717,11 +699,10 @@
       "source": [
         [
           "src/Op.ts",
-          68,
-          19
+          73,
+          9
         ]
       ],
-      "id": 1038,
       "flags": {
         "isStatic": true
       },
@@ -731,7 +712,7 @@
         {
           "comment": "Given a 2D path and a point, find whether the point is on left or right side of the line.",
           "returns": "number",
-          "returns_comment": "a negative value if on left and a positive value if on right. If collinear, then the return value is 0.\n",
+          "returns_comment": "a negative value if on left and a positive value if on right. If collinear, then the return value is 0.",
           "parameters": [
             {
               "name": "line",
@@ -755,11 +736,10 @@
       "source": [
         [
           "src/Op.ts",
-          40,
-          14
+          44,
+          9
         ]
       ],
-      "id": 1026,
       "flags": {
         "isStatic": true
       },
@@ -768,7 +748,7 @@
       "signatures": [
         {
           "comment": "Calculate the slope of a line.",
-          "returns": "number",
+          "returns": "number | undefined",
           "returns_comment": false,
           "parameters": [
             {
@@ -779,7 +759,7 @@
             },
             {
               "name": "p2",
-              "comment": "line's second end point\n",
+              "comment": "line's second end point",
               "type": "PtLike",
               "default": false
             }
@@ -793,11 +773,10 @@
       "source": [
         [
           "src/Op.ts",
-          311,
-          18
+          330,
+          9
         ]
       ],
-      "id": 1097,
       "flags": {
         "isStatic": true
       },
@@ -817,7 +796,7 @@
             },
             {
               "name": "num",
-              "comment": "number of points to get\n",
+              "comment": "number of points to get",
               "type": "number",
               "default": false
             }
@@ -831,11 +810,10 @@
       "source": [
         [
           "src/Op.ts",
-          386,
-          15
+          412,
+          9
         ]
       ],
-      "id": 1113,
       "flags": {
         "isStatic": true
       },
@@ -849,7 +827,7 @@
           "parameters": [
             {
               "name": "line",
-              "comment": "a Group representing a line\n",
+              "comment": "a Group representing a line",
               "type": "GroupLike",
               "default": false
             }

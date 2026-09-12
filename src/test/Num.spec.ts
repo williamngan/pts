@@ -1,278 +1,439 @@
-import chai = require('chai');
-import mocha = require('mocha');
-import {Pt, Group} from '../Pt';
-import {Util, Const} from '../Util';
-import {Num, Geom, Range,} from '../Num';
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { Geom, Num, Range, Shaping } from "../Num";
+import { Group, Pt } from "../Pt";
 
-var {assert} = chai;
-var {describe, it} = mocha;
+function values(value: ArrayLike<number>) {
+  return Array.from(value);
+}
 
-describe('Num: ', function() {
+function groupValues(value: ArrayLike<ArrayLike<number>>) {
+  return Array.from(value, values);
+}
 
-  describe('Num: ', function() {
-      
-    it('can calculate linear interpolation', function() {
-      assert.isTrue( Math.abs(Num.lerp(1, 3, 0.2)-1.4) < 0.0001 );
-    });
+afterEach(() => {
+  Num.generator = undefined;
+});
 
-    it('can bound a value', function() {
-      assert.equal( Num.boundValue(105, 11, 100), 16 );
-    });
-
-    it('can bound angle', function() {
-      assert.equal( Num.boundValue(105, 11, 100), 16 );
-    });
-
-    it('can check if a value is within a range set by two values', function() {
-      assert.isTrue( Num.within( -3.001, 1, -3.001 ) && !Num.within( 3.1, -100, 3.099 ) );
-    });
-
-    it('can normalize a value', function() {
-      assert.equal( Num.normalizeValue( 15, 10, 110), 0.05 );
-    });
-    
-    it('can map value to a new range', function() {
-      assert.equal( Num.mapToRange( 0.32, 1, 0, 0, 100), 32 );
-    });
-
-    it('can sum a list of Pts', function() {
-      let p = Num.sum( [new Pt(1,3,5,7), new Pt(2,4,6,8), new Pt(5,10,15,20)] );
-      assert.isTrue( p.equals( new Pt(8, 17, 26, 35) ) );
-    });
-
-    it('can average a list of Pts', function() {
-      let p = Num.average( [new Pt(1,3,5,7), new Pt(2,3,8,8), new Pt(5,10,14,21), new Pt(0, 0, 1, 0)] );
-      assert.isTrue( p.equals( new Pt(2, 4, 7, 9) ) );
-    });
-
-    it('can seed the random function', function () {
-      const a = Num.random()
-      const b = Num.random()
-
-      assert.notEqual(a, b, "Not seeded uses Math.random")
-
-      Num.seed('42')
-      const c = Num.random()
-
-      Num.seed('foo')
-      const f = Num.random()
-      assert.notEqual(c, f, "different seed")
-
-      Num.seed('42')
-      const d = Num.random()
-
-      assert.equal(c, d, "same seed")
-
-      const e = Num.random()
-      assert.notEqual(d, e, "same seed, a second request")
-
-      assert.isTrue(a >= 0 && a < 1)
-      assert.isTrue(b >= 0 && b < 1)
-      assert.isTrue(c >= 0 && c < 1)
-      assert.isTrue(d >= 0 && d < 1)
-      assert.isTrue(e >= 0 && e < 1)
-    })
+describe("Num", () => {
+  it("compares, interpolates, clamps, wraps, and checks ranges", () => {
+    expect(Num.equals(1, 1.000001)).toBe(true);
+    expect(Num.equals(1, 1.1)).toBe(false);
+    expect(Num.lerp(10, 20, 0.25)).toBe(12.5);
+    expect(Num.clamp(-1, 0, 10)).toBe(0);
+    expect(Num.clamp(20, 0, 10)).toBe(10);
+    expect(Num.boundValue(361, 0, 360)).toBe(1);
+    expect(Num.boundValue(-1, 0, 360)).toBe(359);
+    expect(Num.boundValue(-370, 0, 360)).toBe(350);
+    expect(Num.boundValue(16, 10, 20)).toBe(16);
+    expect(Num.boundValue(-5, 10, 20)).toBe(15);
+    expect(Num.boundValue(25, 10, 20)).toBe(15);
+    expect(Num.within(3, 5, 1)).toBe(true);
+    expect(Num.within(6, 5, 1)).toBe(false);
   });
 
-
-
-  describe('Geom: ', function() {
-    
-    it('can bound angle', function() {
-      assert.equal( Geom.boundAngle(-12), 348 );
-    });
-
-    it('can bound radian', function() {
-      assert.equal( Geom.boundRadian(-Math.PI), Math.PI );
-    });
-
-    it('can find a bounding box', function() {
-      let g = Group.fromArray( [[-10,100,5], [1,2,3], [-1,50,9]] );
-      let b = Geom.boundingBox( g );
-      assert.isTrue( b[0].equals( [-10,2,3] ) && b[1].equals([1,100,9]) );
-    });
-    
-    it('can find centroid', function() {
-      let g = Group.fromArray( [[5,4,3], [1,2,3], [10,10,5]] );
-      let c = Geom.centroid( g );
-      assert.isTrue( c.equals( [(5+1+10)/3, (4+2+10)/3, (3+3+5)/3], 0.00001 ) );
-    });
-
-    it('can interpolate between 2 points', function() {
-      assert.isTrue( Geom.interpolate([10,10], [20,100], 0.3).equals( [13,37] ) );
-    });
-
-    it('can find perpendicular pts', function() {
-      let ps = Geom.perpendicular( [10, 3] )
-      assert.isTrue( Num.equals( ps[0].x, -3) && Num.equals( ps[1].y, -10 ) );
-    });
-
-    it('can check if 2 pts are perpendicular to each other', function() {
-      assert.isTrue( Geom.isPerpendicular( [-2, 4], [8,4] ) );
-    });
-
-    it('can check if a pt is within bound', function() {
-      let a = Geom.withinBound( [10, 15], [10,10], [11,15] );
-      let b = Geom.withinBound( [10, 15], [10,10], [11,14] );
-      assert.isTrue( a && !b );
-    });
-
-    it('can scale a group by dimensions', function() {
-      let ps = [new Pt(0,0,1), new Pt(3,6,5)];
-      Geom.scale( ps, [10,9,8], [0,0,0] );
-      assert.isTrue( ps[0].x === 0 && ps[1].y === 54 && ps[0].z === 8 );
-    });
-
-    it('can scale a group uniformly', function() {
-      let ps = [new Pt(1,10,0), new Pt(3,6,5)];
-      Geom.scale( ps, 5, [1,10,0] );
-      assert.isTrue( ps[0].x === 1 && ps[1].y === -10 && ps[1].z === 25 );
-    });
-
-    it('can rotate a group in 2D', function() {
-      let ps = [new Pt(1,2), new Pt(3,6) ];
-      let ang = Math.PI/4;
-      Geom.rotate2D( ps, ang, [1,1] );
-      let s1 = Num.equals( ps[0].x, Math.cos(2.35619449)+1);
-      let s2 = Num.equals( ps[1].y, Math.sin(1.97568811)*5.38516480+1 );
-      assert.isTrue( s1 && s2 );
-    });
-
-    it('can rotate a group in 2D on YZ plane', function() {
-      let ps = [new Pt(0,1,2), new Pt(0,3,6) ];
-      let ang = Math.PI/4;
-      Geom.rotate2D( ps, ang, [1,1,1], Const.yz );
-      let s1 = Num.equals( ps[0].y, Math.cos(2.35619449)+1);
-      let s2 = Num.equals( ps[1].z, Math.sin(1.97568811)*5.38516480+1 );
-      assert.isTrue( s1 && s2 );
-    });
-
-    it('can rotate a group in 2D on XZ plane', function() {
-      let ps = [new Pt(1,0,2), new Pt(3,0,6) ];
-      let ang = Math.PI/4;
-      Geom.rotate2D( ps, ang, [1,1,1], Const.xz );
-      let s1 = Num.equals( ps[0].x, Math.cos(2.35619449)+1);
-      let s2 = Num.equals( ps[1].z, Math.sin(1.97568811)*5.38516480+1 );
-      assert.isTrue( s1 && s2 );
-    });
-
-    it('can shear a group in 2D', function() {
-      let ps = [new Pt(218, 454), new Pt( 218, 404) ];
-      let scale = [-0.5154185022026432, 0];
-      Geom.shear2D( ps, scale, [268, 454] );
-      assert.isTrue( Num.equals( ps[0].x, 218) && Num.equals(ps[0].y, 482.324, 0.001) &&  Num.equals(ps[1].y, 432.324, 0.001) );
-    });
-
-    it('can shear a group in 2D on YZ plane', function() {
-      let ps = [new Pt(0, 218, 454), new Pt(0, 218, 404) ];
-      let scale = [-0.5154185022026432, 0];
-      Geom.shear2D( ps, scale, [268, 454], Const.yz );
-      assert.isTrue( Num.equals( ps[0].y, 218) && Num.equals(ps[0].z, 482.324, 0.001) &&  Num.equals(ps[1].z, 432.324, 0.001) );
-    });
-
-    it('can shear a group in 2D on XZ plane', function() {
-      let ps = [new Pt(218, 0, 454), new Pt(218, 0, 404) ];
-      let scale = [-0.5154185022026432, 0];
-      Geom.shear2D( ps, scale, [268, 454], Const.xz );
-      assert.isTrue( Num.equals( ps[0].x, 218) && Num.equals(ps[0].z, 482.324, 0.001) &&  Num.equals(ps[1].z, 432.324, 0.001) );
-    });
-
-    it('can reflect a group in 2D', function() {
-      let ps = [new Pt(218, 454), new Pt(218, 404) ];
-      let reflect = Group.fromArray( [[230, 497], [268, 454]] )
-      Geom.reflect2D( ps, reflect );
-      assert.isTrue( Num.equals(ps[0].x, 274.14938) &&  Num.equals(ps[1].y, 497.4710) );
-    });
-
-    it('can reflect a group in 2D on YZ plane', function() {
-      let ps = [new Pt(0, 218, 454), new Pt(0, 218, 404) ];
-      let reflect = Group.fromArray( [[230, 497], [268, 454]] )
-      Geom.reflect2D( ps, reflect, Const.yz );
-      assert.isTrue( Num.equals(ps[0].y, 274.14938) &&  Num.equals(ps[1].z, 497.4710) );
-    });
-
-    it('can reflect a group in 2D on XZ plane', function() {
-      let ps = [new Pt(218, 0, 454), new Pt(218, 0, 404) ];
-      let reflect = Group.fromArray( [[230, 497], [268, 454]] )
-      Geom.reflect2D( ps, reflect, Const.xz );
-      assert.isTrue( Num.equals(ps[0].x, 274.14938) &&  Num.equals(ps[1].z, 497.4710) );
-    });
-
-    it('can get a sin table', function() {
-      let sin = Geom.sinTable();
-      assert.isTrue( Num.equals( sin.sin( Math.PI/17 ), Math.sin( Math.PI/17 ), Math.PI/180) );
-    });
-
-    it('can generate a random Pt', function() {
-      let a = Num.randomPt( new Pt(0.01, 0.01, 0.01) );
-      assert.isTrue( a[0] < 0.01 && a[1] < 0.01 && a[2] < 0.01 );
-    });
-    
-    it('can generate a random Pt from 2 Pt', function() {
-      let a = Num.randomPt( new Pt(0.01, 0.01, 0.01), new Pt(0.015, 0.015, 0.015) );
-      assert.isTrue( a[0] >= 0.01 && a[0] <0.015 && a[1] >= 0.01 && a[1] < 0.015 && a[2] > 0.01 && a[2] < 0.015 );
-    });
+  it("creates deterministic random ranges and points", () => {
+    vi.spyOn(Num, "random").mockReturnValue(0.25);
+    expect(Num.randomRange(10)).toBe(2.5);
+    expect(Num.randomRange(10, 20)).toBe(12.5);
+    expect(Num.randomRange(10, 5)).toBe(6.25);
+    expect(values(Num.randomPt([8, 4]))).toEqual([2, 1]);
+    expect(values(Num.randomPt([10, 20], [30, 40]))).toEqual([15, 25]);
   });
 
-
-  describe('Range: ', function() {
-    
-    it('can calculate min and max of a range', function() {
-      let d = [ 
-        new Pt(10, 2, 0), new Pt(5,3,5), 
-        new Pt(-100, 3, 9), new Pt(-4, -12, -1), 
-        new Pt(6, 7, -40), new Pt(9, -5, -1)
-      ];
-      let r = new Range( d );
-      assert.isTrue( r.max.equals( new Pt(10, 7, 9) ) && r.min.equals( new Pt(-100, -12, -40) ) && r.magnitude.equals( new Pt(110, 19, 49) ) );
-    });
-
-    it('can normalize to unit', function() {
-      let d = [ 
-        new Pt(10, 2, 0), new Pt(5,3,5), 
-        new Pt(-100, 3, 9), new Pt(-4, -12, -1), 
-        new Pt(6, 7, -40), new Pt(9, -5, -1)
-      ];
-      let r = new Range( d );
-      let target = r.mapTo(0, 1);
-      assert.isTrue( Num.equals( target[0][0], 1 ) && Num.equals( target[2][1], 15/19) && Num.equals( target[4][2], 0 ) );
-    });
-
-    it('can normalize with exclude', function() {
-      let d = [ 
-        new Pt(10, 2, 0), new Pt(5,3,5), 
-        new Pt(-100, 3, 9), new Pt(-4, -12, -1), 
-        new Pt(6, 7, -40), new Pt(9, -5, -1)
-      ];
-      let r = new Range( d )
-      let target = r.mapTo(15, 99, [true, false, true]);
-      assert.isTrue( Num.equals( target[2][0], -100 ) && Num.equals( target[5][1], 15 + (99-15) * 7/19) && Num.equals( target[3][2], -1 ) );
-    });
-
-    it('can append and recalculate', function() {
-      let d = [ 
-        new Pt(10, 2, 0), new Pt(5,3,5), 
-        new Pt(-100, 3, 9), new Pt(-4, -12, -1), 
-        new Pt(6, 7, -40), new Pt(9, -5, -1)
-      ];
-      let r = new Range( d );
-      r.append( [new Pt(1000, -20, 3), new Pt(-2, 300, -300)] );
-      let target = r.mapTo(0, 1);
-      assert.isTrue( Num.equals( target[0][0], 110/1100 ) && Num.equals( target[2][1], 23/320) && Num.equals( target[4][2], 260/309 ) 
-       && Num.equals( target[6][0], 1 ) && Num.equals( target[7][2], 0 ) );
-    });
-
-    it('can create ticks from min and max range', function() {
-      let d = [ 
-        new Pt(10, 2, 0), new Pt(5,3,5), 
-        new Pt(-100, 3, 9), new Pt(-4, -12, -1), 
-        new Pt(6, 7, -40), new Pt(9, -5, -1)
-      ];
-      let r = new Range( d );
-      let t = r.ticks( 10 );
-      assert.isTrue( t[0].equals( new Pt(-100, -12, -40 ) ) && t[3].equals( new Pt(-67, -6.30000019, -25.29999923) ) && t[10].equals( new Pt(10, 7, 9 ) ) );
-    });
-
+  it("normalizes, maps, sums, averages, and cycles", () => {
+    expect(Num.normalizeValue(15, 10, 20)).toBe(0.5);
+    expect(Num.normalizeValue(15, 20, 10)).toBe(0.5);
+    const points = new Set([new Pt(1, 2), new Pt(3, 4), new Pt(5, 6)]);
+    expect(values(Num.sum(points))).toEqual([9, 12]);
+    expect(values(Num.average(points))).toEqual([3, 4]);
+    expect(Num.cycle(0.25, (value) => value)).toBe(0.5);
+    expect(Num.cycle(0.75, (value) => value)).toBe(0.5);
+    expect(Num.cycle(0.5)).toBeCloseTo(1);
+    expect(Num.mapToRange(5, 0, 10, 100, 0)).toBe(50);
+    // inverted target and inverted source ranges map directionally
+    expect(Num.mapToRange(2, 0, 10, 100, 0)).toBe(80);
+    expect(Num.mapToRange(2, 10, 0, 0, 100)).toBe(80);
+    expect(Num.mapToRange(2, 0, 10, 0, 100)).toBe(20);
+    expect(() => Num.mapToRange(1, 2, 2, 0, 1)).toThrow("not zero");
   });
 
+  it("uses Math.random until a reproducible generator is seeded", () => {
+    vi.spyOn(Math, "random").mockReturnValue(0.123);
+    expect(Num.random()).toBe(0.123);
+    Num.seed("repeatable");
+    const first = [Num.random(), Num.random(), Num.random()];
+    expect(first.every((value) => value >= 0 && value < 1)).toBe(true);
+    Num.seed("repeatable");
+    expect([Num.random(), Num.random(), Num.random()]).toEqual(first);
+    Num.seed("");
+    expect(Number.isFinite(Num.random())).toBe(true);
+  });
+
+  it("reproduces the exact uheprng sequences for known seeds", () => {
+    // golden values captured 2026-08-21; any change here breaks users'
+    // reproducible seeded artwork
+    Num.seed("hello");
+    expect([
+      Num.random(),
+      Num.random(),
+      Num.random(),
+      Num.random(),
+      Num.random(),
+    ]).toEqual([
+      0.9439915572293103, 0.48723091022111475, 0.5987379888538271,
+      0.31852455413900316, 0.3260437978897244,
+    ]);
+    Num.seed("");
+    expect(Num.random()).toBe(0.5887344738002867);
+    Num.seed("pts");
+    expect(Num.random()).toBe(0.03993775951676071);
+  });
+
+  it("hashes effective seeds: trimmed and control-stripped keys collide", () => {
+    Num.seed("hello");
+    const hello = Num.random();
+    Num.seed(" hello ");
+    expect(Num.random()).toBe(hello);
+    Num.seed("hel\x01lo");
+    expect(Num.random()).toBe(hello);
+    Num.seed("");
+    const empty = Num.random();
+    Num.seed("  ");
+    expect(Num.random()).toBe(empty);
+  });
+
+  it("draws on a 32-bit lattice without consuming Math.random", () => {
+    const spy = vi.spyOn(Math, "random").mockImplementation(() => {
+      throw new Error("uheprng must not consume Math.random");
+    });
+    try {
+      Num.seed("lattice");
+      const draws = [Num.random(), Num.random(), Num.random()];
+      expect(draws.every((v) => Number.isInteger(v * 4294967296))).toBe(true);
+    } finally {
+      spy.mockRestore();
+    }
+  });
+});
+
+describe("Geom basics", () => {
+  it("converts and bounds degrees and radians", () => {
+    expect(Geom.boundAngle(-12)).toBe(348);
+    expect(Geom.boundRadian(-Math.PI)).toBeCloseTo(Math.PI);
+    expect(Geom.toRadian(180)).toBeCloseTo(Math.PI);
+    expect(Geom.toDegree(Math.PI / 2)).toBeCloseTo(90);
+  });
+
+  it("calculates bounds, centroids, interpolation, and containment", () => {
+    const points = Group.fromArray([
+      [-10, 100, 5],
+      [1, 2, 3],
+      [-1, 50, 9],
+    ]);
+    expect(groupValues(Geom.boundingBox(points))).toEqual([
+      [-10, 2, 3],
+      [1, 100, 9],
+    ]);
+    const center = Geom.centroid(points);
+    expect(center.x).toBeCloseTo(-10 / 3);
+    expect(center.y).toBeCloseTo(152 / 3);
+    expect(center.z).toBeCloseTo(17 / 3);
+    expect(values(Geom.interpolate([10, 10, 99], [20, 100], 0.3))).toEqual([
+      13, 37,
+    ]);
+    expect(Geom.withinBound([10, 15], [10, 10], [11, 15])).toBe(true);
+    expect(Geom.withinBound([10, 16], [10, 10], [11, 15])).toBe(false);
+  });
+
+  it("anchors groups to an indexed or external point", () => {
+    const points = Group.fromArray([
+      [10, 10],
+      [20, 30],
+      [30, 50],
+    ]);
+    Geom.anchor(points, 1, "to");
+    expect(groupValues(points)).toEqual([
+      [-10, -20],
+      [20, 30],
+      [10, 20],
+    ]);
+    Geom.anchor(points, [1, 2], "from");
+    expect(groupValues(points)).toEqual([
+      [-9, -18],
+      [21, 32],
+      [11, 22],
+    ]);
+  });
+
+  it("creates perpendiculars and detects perpendicular vectors", () => {
+    expect(groupValues(Geom.perpendicular([2, 3]))).toEqual([
+      [-3, 2],
+      [3, -2],
+    ]);
+    expect(groupValues(Geom.perpendicular([1, 2, 3], "yz"))).toEqual([
+      [1, -3, 2],
+      [1, 3, -2],
+    ]);
+    expect(Geom.isPerpendicular([-2, 4], [8, 4])).toBe(true);
+    expect(Geom.isPerpendicular([1, 1], [1, 1])).toBe(false);
+  });
+
+  it("sorts polygon edges and rejects one-dimensional points", () => {
+    const points = Group.fromArray([
+      [1, 0],
+      [0, 1],
+      [-1, 0],
+      [0, -1],
+      [2, 0],
+    ]);
+    const sorted = Geom.sortEdges(points);
+    expect(sorted).toHaveLength(5);
+    expect(new Set(sorted)).toEqual(new Set(points));
+    expect(() => Geom.sortEdges(Group.fromArray([[1], [2]]))).toThrow(
+      "less than 2",
+    );
+  });
+});
+
+describe("Geom transforms", () => {
+  it("scales points and groups with scalar/vector and origin/anchor inputs", () => {
+    const point = new Pt(2, 3, 4);
+    expect(Geom.scale(point, 2)).toBe(Geom);
+    expect(values(point)).toEqual([4, 6, 8]);
+    const group = Group.fromArray([
+      [1, 2],
+      [3, 4],
+    ]);
+    Geom.scale(group, [2, 3], [1, 1]);
+    expect(groupValues(group)).toEqual([
+      [1, 4],
+      [5, 10],
+    ]);
+  });
+
+  it("rotates points and selected axes around origins and anchors", () => {
+    const point = new Pt(1, 0);
+    expect(Geom.rotate2D(point, Math.PI / 2)).toBe(Geom);
+    expect(point.x).toBeCloseTo(0);
+    expect(point.y).toBeCloseTo(1);
+    const xyz = new Pt(9, 2, 1);
+    Geom.rotate2D(xyz, Math.PI / 2, [0, 0], "yz");
+    expect(xyz.x).toBe(9);
+    expect(xyz.y).toBeCloseTo(-1);
+    expect(xyz.z).toBeCloseTo(2);
+  });
+
+  it("shears points and selected axes with scalar and vector factors", () => {
+    const point = new Pt(2, 3);
+    expect(Geom.shear2D(point, 0.1)).toBe(Geom);
+    expect(Number.isFinite(point.x + point.y)).toBe(true);
+    const xyz = new Pt(9, 2, 1);
+    Geom.shear2D(xyz, [0.1, 0.2], [0, 0], "yz");
+    expect(xyz.x).toBe(9);
+  });
+
+  it("reflects individual/group points and selected axes", () => {
+    const vertical = Group.fromArray([
+      [0, 0],
+      [0, 10],
+    ]);
+    const point = new Pt(3, 4);
+    expect(Geom.reflect2D(point, vertical)).toBe(Geom);
+    expect(values(point)).toEqual([-3, 4]);
+    const group = Group.fromArray([
+      [1, 2, 3],
+      [4, 5, 6],
+    ]);
+    Geom.reflect2D(
+      group,
+      Group.fromArray([
+        [0, 0],
+        [10, 0],
+      ]),
+      "yz",
+    );
+    expect(group[0].x).toBe(1);
+  });
+
+  it("creates 360-entry trigonometry lookup tables", () => {
+    const cosine = Geom.cosTable();
+    const sine = Geom.sinTable();
+    expect(cosine.table).toHaveLength(360);
+    expect(sine.table).toHaveLength(360);
+    expect(cosine.cos(Math.PI)).toBeCloseTo(-1);
+    expect(sine.sin(Math.PI / 2)).toBeCloseTo(1);
+    expect(cosine.cos(-Math.PI / 2)).toBeCloseTo(0);
+  });
+});
+
+describe("Shaping", () => {
+  const names = [
+    "linear",
+    "quadraticIn",
+    "quadraticOut",
+    "quadraticInOut",
+    "cubicIn",
+    "cubicOut",
+    "cubicInOut",
+    "exponentialIn",
+    "exponentialOut",
+    "sineIn",
+    "sineOut",
+    "sineInOut",
+    "cosineApprox",
+    "circularIn",
+    "circularOut",
+    "circularInOut",
+    "elasticIn",
+    "elasticOut",
+    "elasticInOut",
+    "bounceIn",
+    "bounceOut",
+    "bounceInOut",
+    "sigmoid",
+    "logSigmoid",
+    "seat",
+    "quadraticBezier",
+    "cubicBezier",
+    "quadraticTarget",
+    "cliff",
+  ];
+
+  it.each(names)("%s returns finite shaped values", (name) => {
+    const fn = (Shaping as any)[name];
+    expect(Number.isFinite(fn(0.25, 2))).toBe(true);
+    expect(Number.isFinite(fn(0.75, 2))).toBe(true);
+  });
+
+  it("covers piecewise transition boundaries", () => {
+    for (const t of [0.1, 0.5, 0.8, 0.95]) {
+      expect(Number.isFinite(Shaping.bounceOut(t, 2))).toBe(true);
+    }
+    expect(Shaping.quadraticInOut(0.25)).toBeLessThan(0.5);
+    expect(Shaping.quadraticInOut(0.75)).toBeGreaterThan(0.5);
+    expect(Shaping.circularInOut(0.25)).toBeLessThan(0.5);
+    expect(Shaping.circularInOut(0.75)).toBeGreaterThan(0.5);
+    expect(Shaping.elasticInOut(0.25)).toBeLessThan(0.5);
+    expect(Shaping.elasticInOut(0.75)).toBeGreaterThan(0.5);
+    expect(Shaping.bounceInOut(0.25)).toBeLessThan(0.5);
+    expect(Shaping.bounceInOut(0.75)).toBeGreaterThan(0.5);
+    expect(Shaping.seat(0.25)).toBeLessThan(0.5);
+    expect(Shaping.seat(0.75)).toBeGreaterThan(0.5);
+  });
+
+  it("clamps curve parameters and converts functions to steps", () => {
+    expect(Number.isFinite(Shaping.logSigmoid(0.5, 1, 0))).toBe(true);
+    expect(Number.isFinite(Shaping.logSigmoid(0.5, 1, 1))).toBe(true);
+    expect(Number.isFinite(Shaping.quadraticBezier(0.5, 1, 0.5))).toBe(true);
+    expect(Number.isFinite(Shaping.quadraticBezier(0.5, 1, [0.2, 0.8]))).toBe(
+      true,
+    );
+    expect(Number.isFinite(Shaping.quadraticTarget(0.5, 1, [-1, 2]))).toBe(
+      true,
+    );
+    expect(Shaping.cliff(0.5, 2, 0.5)).toBe(0);
+    expect(Shaping.cliff(0.6, 2, 0.5)).toBe(2);
+    expect(Shaping.step(Shaping.linear, 4, 0.37, 2)).toBe(0.5);
+  });
+});
+
+describe("Range", () => {
+  const source = () =>
+    Group.fromArray([
+      [1, 10, 100],
+      [3, 20, 50],
+      [5, 15, 0],
+    ]);
+
+  it("calculates defensive min, max, and magnitude copies", () => {
+    const range = new Range(source());
+    expect(values(range.min)).toEqual([1, 10, 0]);
+    expect(values(range.max)).toEqual([5, 20, 100]);
+    expect(values(range.magnitude)).toEqual([4, 10, 100]);
+    const min = range.min;
+    min.x = 999;
+    expect(range.min.x).toBe(1);
+    expect(range.calc()).toBe(range);
+  });
+
+  it("maps dimensions with optional exclusions", () => {
+    const range = new Range(source());
+    expect(groupValues(range.mapTo(0, 1))).toEqual([
+      [0, 0, 1],
+      [0.5, 1, 0.5],
+      [1, 0.5, 0],
+    ]);
+    expect(groupValues(range.mapTo(0, 1, [false, true, false]))[0]).toEqual([
+      0, 10, 1,
+    ]);
+  });
+
+  it("appends with optional recalculation and validates dimensions", () => {
+    const range = new Range(source());
+    expect(range.append(new Set([new Pt(-1, 30, 200)]), false)).toBe(range);
+    expect(range.max.z).toBe(100);
+    range.calc();
+    expect(values(range.max)).toEqual([5, 30, 200]);
+    expect(() => range.append([new Pt(1, 2)])).toThrow(
+      "Dimensions don't match",
+    );
+  });
+
+  it("creates inclusive evenly-spaced ticks", () => {
+    expect(groupValues(new Range(source()).ticks(2))).toEqual([
+      [1, 10, 0],
+      [3, 15, 50],
+      [5, 20, 100],
+    ]);
+  });
+});
+
+describe("Num and Geom correctness pins", () => {
+  it("keeps Range min/max correct for all-negative data", () => {
+    const r = new Range(
+      new Group(new Pt(-5, -10), new Pt(-2, -8), new Pt(-7, -3)),
+    );
+    expect(values(r.max)).toEqual([-2, -3]);
+    expect(values(r.min)).toEqual([-7, -10]);
+    expect(values(r.magnitude)).toEqual([5, 7]);
+  });
+
+  it("returns finite ticks for zero subdivisions", () => {
+    const r = new Range(new Group(new Pt(0, 0), new Pt(10, 10)));
+    const t = r.ticks(0);
+    expect(t.length).toBe(1);
+    expect(values(t[0]).every(Number.isFinite)).toBe(true);
+  });
+
+  it("checks perpendicularity with a relative epsilon", () => {
+    // exact perpendicular still passes
+    expect(Geom.isPerpendicular([-2, 4], [8, 4])).toBe(true);
+    // tiny float error within relative epsilon passes
+    expect(Geom.isPerpendicular([3, 1], [-1, 3.0000001])).toBe(true);
+    // clearly non-perpendicular fails
+    expect(Geom.isPerpendicular([3, 1], [-1, 3.1])).toBe(false);
+    // zero vector keeps its legacy result
+    expect(Geom.isPerpendicular([0, 0], [1, 2])).toBe(true);
+  });
+
+  it("rotates a group about an anchor that aliases a group point", () => {
+    const g = new Group(new Pt(0, 0), new Pt(2, 0));
+    Geom.rotate2D(g, Math.PI / 2, [1, 0]);
+    expect(g[0][0]).toBeCloseTo(1);
+    expect(g[0][1]).toBeCloseTo(-1);
+    expect(g[1][0]).toBeCloseTo(1);
+    expect(g[1][1]).toBeCloseTo(1);
+  });
+
+  it("shears a group with a hoisted matrix", () => {
+    // s[1] shears x by y; s[0] shears y by x (current convention, pinned)
+    const g = new Group(new Pt(0, 0), new Pt(0, 2));
+    Geom.shear2D(g, [0, 0.5], [0, 0]);
+    expect(g[1][0]).toBeCloseTo(2 * Math.tan(0.5));
+    expect(g[1][1]).toBeCloseTo(2);
+    const h = new Group(new Pt(0, 0), new Pt(2, 0));
+    Geom.shear2D(h, [0.5, 0], [0, 0]);
+    expect(h[1][0]).toBeCloseTo(2);
+    expect(h[1][1]).toBeCloseTo(2 * Math.tan(0.5));
+  });
 });

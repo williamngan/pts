@@ -9,6 +9,7 @@ window.demoDescription = "Grid cells filled with simple linear gradient, over a 
 
   // Pts quick start mode.
   var run = Pts.quickStart( "#pt", "#123" ); 
+  var linear = form.gradient( ["rgba(255,255,255,1)", "rgba(255,255,255,0)"] );
 
   run( (time, ftime) => {
     let scale = space.center.$subtract( space.pointer ).divide( space.center ).abs();
@@ -31,8 +32,7 @@ window.demoDescription = "Grid cells filled with simple linear gradient, over a 
     
     // Fill every other grid cells with a simple linear gradient
     for (let i=0, len=cells.length; i<len; i++) {
-      let grad = form.gradient( ["rgba(255,255,255,1)", "rgba(255,255,255,0)"] );
-      form.fillOnly( i%2 === 0 ? grad( cells[i] ) : "rgba(0,0,0,0)" ).rect( cells[i].subtract(0, offy) );
+      form.fillOnly( i%2 === 0 ? linear( cells[i] ) : "rgba(0,0,0,0)" ).rect( cells[i].subtract(0, offy) );
     }
   });
 

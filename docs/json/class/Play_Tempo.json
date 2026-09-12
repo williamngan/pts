@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Play.ts",
-      9,
-      18
+      19,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 6958,
   "comment": "Tempo helps you create synchronized and rhythmic animations.",
   "constructor": [
     {
@@ -16,11 +15,10 @@
       "source": [
         [
           "src/Play.ts",
-          16,
-          26
+          31,
+          2
         ]
       ],
-      "id": 6967,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -32,7 +30,7 @@
           "parameters": [
             {
               "name": "bpm",
-              "comment": "beats per minute\n",
+              "comment": "beats per minute. Must be greater than 0.",
               "type": "number",
               "default": false
             }
@@ -48,20 +46,19 @@
       "source": [
         [
           "src/Play.ts",
-          37,
-          9
+          46,
+          6
         ],
         [
           "src/Play.ts",
-          38,
-          9
+          49,
+          6
         ]
       ],
-      "id": 6973,
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "Beats-per-minute value",
+      "comment": "Beats-per-minute value. Must be greater than 0.",
       "getter": {
         "type": "number"
       },
@@ -80,16 +77,15 @@
       "source": [
         [
           "src/Play.ts",
-          46,
-          8
+          57,
+          6
         ],
         [
           "src/Play.ts",
-          47,
-          8
+          60,
+          6
         ]
       ],
-      "id": 6977,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -114,17 +110,16 @@
       "source": [
         [
           "src/Play.ts",
-          154,
-          8
+          198,
+          2
         ]
       ],
-      "id": 7001,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "IPlayer interface. Not implementated.",
+          "comment": "IPlayer interface. Not implemented.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
@@ -162,11 +157,10 @@
       "source": [
         [
           "src/Play.ts",
-          140,
-          9
+          184,
+          2
         ]
       ],
-      "id": 6993,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -179,13 +173,13 @@
             {
               "name": "time",
               "comment": "",
-              "type": "any",
+              "type": "number",
               "default": false
             },
             {
               "name": "ftime",
               "comment": "",
-              "type": "any",
+              "type": "number",
               "default": false
             }
           ],
@@ -198,19 +192,18 @@
       "source": [
         [
           "src/Play.ts",
-          74,
-          7
+          79,
+          2
         ]
       ],
-      "id": 6984,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "This is a core function that let you specify a rhythm and then define responses by calling the `start` and `progress` functions from the returned object. See [Animation guide](../guide/Animation-0700.html) for more details.\nThe `start` function lets you set a callback on every start. It takes a function ([`ITempoStartFn`](#link)).\nThe `progress` function lets you set a callback during progress. It takes a function ([`ITempoProgressFn`](#link)). Both functions let you optionally specify a time offset and a custom name.\nSee [Animation guide](../guide/animation-0700.html) for more details.",
+          "comment": "This is a core function that let you specify a rhythm and then define responses by calling the `start` and `progress` functions from the returned object. See [Animation guide](../guide/Animation-0700.html) for more details.\nThe `start` function lets you set a callback on every start. It takes a function ([`ITempoStartFn`](#link)).\nThe `progress` function lets you set a callback during progress. It takes a function ([`ITempoProgressFn`](#link)). Both functions let you optionally specify a time offset and a custom name.\nA positive offset shifts the beat earlier (fires sooner), a negative offset shifts it later.",
           "returns": "ITempoResponses",
-          "returns_comment": "an object with chainable functions\n",
+          "returns_comment": "an object with chainable functions",
           "parameters": [
             {
               "name": "beats",
@@ -233,17 +226,16 @@
       "source": [
         [
           "src/Play.ts",
-          147,
-          8
+          191,
+          2
         ]
       ],
-      "id": 6997,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "IPlayer interface. Not implementated.",
+          "comment": "IPlayer interface. Not implemented.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
@@ -269,11 +261,10 @@
       "source": [
         [
           "src/Play.ts",
-          132,
-          6
+          177,
+          2
         ]
       ],
-      "id": 6990,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -285,7 +276,7 @@
           "parameters": [
             {
               "name": "name",
-              "comment": "a name string specified when creating the callback function.\n",
+              "comment": "a name string specified when creating the callback function.",
               "type": "string",
               "default": false
             }
@@ -299,11 +290,10 @@
       "source": [
         [
           "src/Play.ts",
-          99,
-          7
+          131,
+          2
         ]
       ],
-      "id": 6987,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -315,8 +305,8 @@
           "parameters": [
             {
               "name": "time",
-              "comment": "current time in milliseconds\n",
-              "type": "any",
+              "comment": "current time in milliseconds",
+              "type": "number",
               "default": false
             }
           ],
@@ -329,11 +319,10 @@
       "source": [
         [
           "src/Play.ts",
-          30,
-          17
+          39,
+          9
         ]
       ],
-      "id": 6970,
       "flags": {
         "isStatic": true
       },
@@ -347,7 +336,7 @@
           "parameters": [
             {
               "name": "ms",
-              "comment": "milliseconds per beat\n",
+              "comment": "milliseconds per beat. Must be greater than 0.",
               "type": "number",
               "default": false
             }
@@ -364,15 +353,14 @@
       "source": [
         [
           "src/Play.ts",
-          16,
-          18
+          25,
+          9
         ]
       ],
-      "id": 6966,
       "flags": {
         "isPublic": true
       },
-      "type": "animateID",
+      "type": "string",
       "overrides": false,
       "inherits": false,
       "comment": ""

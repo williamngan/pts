@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Types.ts",
-      73,
-      23
+      86,
+      17
     ]
   ],
   "kind": "Interface",
-  "id": 459,
   "comment": "Typescript interface: ITimer represents a time-recording object.",
   "constructor": [],
   "accessors": [],
@@ -20,13 +19,12 @@
       "source": [
         [
           "src/Types.ts",
-          75,
-          6
+          88,
+          2
         ]
       ],
-      "id": 461,
       "flags": {},
-      "type": "diff",
+      "type": "number",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -36,13 +34,12 @@
       "source": [
         [
           "src/Types.ts",
-          76,
-          5
+          89,
+          2
         ]
       ],
-      "id": 462,
       "flags": {},
-      "type": "end",
+      "type": "number",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -52,13 +49,12 @@
       "source": [
         [
           "src/Types.ts",
-          77,
-          5
+          90,
+          2
         ]
       ],
-      "id": 463,
       "flags": {},
-      "type": "min",
+      "type": "number",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -68,13 +64,12 @@
       "source": [
         [
           "src/Types.ts",
-          74,
-          6
+          87,
+          2
         ]
       ],
-      "id": 460,
       "flags": {},
-      "type": "prev",
+      "type": "number",
       "overrides": false,
       "inherits": false,
       "comment": ""

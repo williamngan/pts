@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Num.ts",
-      14,
-      16
+      19,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 1415,
   "comment": "Num class provides static helper functions for basic numeric operations.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +17,10 @@
       "source": [
         [
           "src/Num.ts",
-          139,
-          16
+          132,
+          9
         ]
       ],
-      "id": 1458,
       "flags": {
         "isStatic": true
       },
@@ -32,7 +30,7 @@
         {
           "comment": "Average a group of numeric arrays",
           "returns": "Pt",
-          "returns_comment": "a Pt of averages\n",
+          "returns_comment": "a Pt of averages",
           "parameters": [
             {
               "name": "pts",
@@ -50,11 +48,10 @@
       "source": [
         [
           "src/Num.ts",
-          57,
-          19
+          59,
+          9
         ]
       ],
-      "id": 1432,
       "flags": {
         "isStatic": true
       },
@@ -88,7 +85,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`boundValue(361, 0, 360)` will return 1\n"
+              "text": "`boundValue(361, 0, 360)` will return 1"
             }
           ]
         }
@@ -99,11 +96,10 @@
       "source": [
         [
           "src/Num.ts",
-          45,
-          14
+          48,
+          9
         ]
       ],
-      "id": 1427,
       "flags": {
         "isStatic": true
       },
@@ -129,7 +125,7 @@
             },
             {
               "name": "max",
-              "comment": "max value\n",
+              "comment": "max value",
               "type": "number",
               "default": false
             }
@@ -143,11 +139,10 @@
       "source": [
         [
           "src/Num.ts",
-          151,
-          14
+          143,
+          9
         ]
       ],
-      "id": 1461,
       "flags": {
         "isStatic": true
       },
@@ -157,7 +152,7 @@
         {
           "comment": "Given a value between 0 to 1, returns a value that cycles between 0 -> 1 -> 0 using the provided shaping method.",
           "returns": "number",
-          "returns_comment": "a value between 0 to 1\n",
+          "returns_comment": "a value between 0 to 1",
           "parameters": [
             {
               "name": "t",
@@ -181,11 +176,10 @@
       "source": [
         [
           "src/Num.ts",
-          23,
-          15
+          28,
+          9
         ]
       ],
-      "id": 1417,
       "flags": {
         "isStatic": true
       },
@@ -211,7 +205,7 @@
             },
             {
               "name": "threshold",
-              "comment": "threshold value that specifies the minimum difference within which the two numbers are considered equal\n",
+              "comment": "threshold value that specifies the minimum difference within which the two numbers are considered equal",
               "type": "number",
               "default": "0.00001"
             }
@@ -225,11 +219,10 @@
       "source": [
         [
           "src/Num.ts",
-          34,
-          13
+          38,
+          9
         ]
       ],
-      "id": 1422,
       "flags": {
         "isStatic": true
       },
@@ -255,7 +248,7 @@
             },
             {
               "name": "t",
-              "comment": "an interpolation value, usually between 0 to 1\n",
+              "comment": "an interpolation value, usually between 0 to 1",
               "type": "number",
               "default": false
             }
@@ -269,11 +262,10 @@
       "source": [
         [
           "src/Num.ts",
-          165,
-          19
+          159,
+          9
         ]
       ],
-      "id": 1468,
       "flags": {
         "isStatic": true
       },
@@ -283,7 +275,7 @@
         {
           "comment": "Map a value from one range to another.",
           "returns": "number",
-          "returns_comment": "a remapped value in the second range\n",
+          "returns_comment": "a remapped value in the second range",
           "parameters": [
             {
               "name": "n",
@@ -293,25 +285,25 @@
             },
             {
               "name": "currA",
-              "comment": "",
+              "comment": "first endpoint of the input range",
               "type": "number",
               "default": false
             },
             {
               "name": "currB",
-              "comment": "",
+              "comment": "second endpoint of the input range",
               "type": "number",
               "default": false
             },
             {
               "name": "targetA",
-              "comment": "",
+              "comment": "first endpoint of the output range",
               "type": "number",
               "default": false
             },
             {
               "name": "targetB",
-              "comment": "",
+              "comment": "second endpoint of the output range",
               "type": "number",
               "default": false
             }
@@ -325,11 +317,10 @@
       "source": [
         [
           "src/Num.ts",
-          112,
-          23
+          107,
+          9
         ]
       ],
-      "id": 1450,
       "flags": {
         "isStatic": true
       },
@@ -355,7 +346,7 @@
             },
             {
               "name": "b",
-              "comment": "range value 1\n",
+              "comment": "range value 1",
               "type": "number",
               "default": false
             }
@@ -369,11 +360,10 @@
       "source": [
         [
           "src/Num.ts",
-          185,
-          15
+          194,
+          9
         ]
       ],
-      "id": 1478,
       "flags": {
         "isStatic": true
       },
@@ -381,9 +371,9 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Return a random number between 0 and 1 from a seed,\nif the seed is not defined it uses Math.random",
+          "comment": "Return a random number between 0 and 1. If a seed was set via [`Num.seed`](#link),\ndraws come from the seeded generator with 32-bit resolution (exact multiples of 2^-32);\notherwise it uses `Math.random`.",
           "returns": "number",
-          "returns_comment": "a number between 0 and 1\n",
+          "returns_comment": "a number between 0 and 1",
           "parameters": [],
           "tags": []
         }
@@ -394,11 +384,10 @@
       "source": [
         [
           "src/Num.ts",
-          95,
-          17
+          91,
+          9
         ]
       ],
-      "id": 1446,
       "flags": {
         "isStatic": true
       },
@@ -418,7 +407,7 @@
             },
             {
               "name": "b",
-              "comment": "optional Pt to define the end of the range\n",
+              "comment": "optional Pt to define the end of the range",
               "type": "PtLike",
               "default": false
             }
@@ -432,11 +421,10 @@
       "source": [
         [
           "src/Num.ts",
-          84,
-          20
+          81,
+          9
         ]
       ],
-      "id": 1442,
       "flags": {
         "isStatic": true
       },
@@ -456,7 +444,7 @@
             },
             {
               "name": "b",
-              "comment": "range value 2\n",
+              "comment": "range value 2",
               "type": "number",
               "default": "0"
             }
@@ -470,11 +458,10 @@
       "source": [
         [
           "src/Num.ts",
-          176,
-          13
+          184,
+          9
         ]
       ],
-      "id": 1475,
       "flags": {
         "isStatic": true
       },
@@ -482,13 +469,13 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Seed the pseudorandom generator.",
+          "comment": "Seed the pseudorandom generator for reproducible [`Num.random`](#link) sequences.\nThe seed is hashed by its *effective* key: leading/trailing whitespace and embedded\ncontrol characters are stripped first, so seeds differing only in those collide.\nAn empty (or whitespace-only) seed yields a fixed default sequence. This generator\nis deterministic and statistically strong, but not cryptographically secure.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
             {
               "name": "seed",
-              "comment": "seed string\n",
+              "comment": "seed string",
               "type": "string",
               "default": false
             }
@@ -502,11 +489,10 @@
       "source": [
         [
           "src/Num.ts",
-          124,
-          12
+          118,
+          9
         ]
       ],
-      "id": 1455,
       "flags": {
         "isStatic": true
       },
@@ -516,7 +502,7 @@
         {
           "comment": "Sum a group of numeric arrays.",
           "returns": "Pt",
-          "returns_comment": "a Pt of the dimensional sums\n",
+          "returns_comment": "a Pt of the dimensional sums",
           "parameters": [
             {
               "name": "pts",
@@ -534,11 +520,10 @@
       "source": [
         [
           "src/Num.ts",
-          74,
-          15
+          72,
+          9
         ]
       ],
-      "id": 1437,
       "flags": {
         "isStatic": true
       },
@@ -564,7 +549,7 @@
             },
             {
               "name": "b",
-              "comment": "second bounding value\n",
+              "comment": "second bounding value",
               "type": "number",
               "default": false
             }
@@ -581,15 +566,14 @@
       "source": [
         [
           "src/Num.ts",
-          15,
-          18
+          20,
+          9
         ]
       ],
-      "id": 1416,
       "flags": {
         "isStatic": true
       },
-      "type": "generator",
+      "type": "any",
       "overrides": false,
       "inherits": false,
       "comment": ""

@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Types.ts",
-      83,
-      26
+      96,
+      12
     ]
   ],
   "kind": "Typealias",
-  "id": 760,
   "comment": "Typescript type: TouchPointsKey represents a set of acceptable string keys for defining touch action.",
   "constructor": [],
   "accessors": [],

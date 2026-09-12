@@ -22,38 +22,42 @@ Here is the result. Click play button to start.
 
 ![js:sound_simple](./assets/bg.png)
 
-##### Music snippet from [*Space Travel Clichés*](https://soundcloud.com/mrgreenh/space-travel-cliches) by Mr Green H. 
+##### Music snippet from [_Space Travel Clichés_](https://soundcloud.com/mrgreenh/space-travel-cliches) by Mr Green H.
 
 How about something more elaborate? Let's try a silly and fun visualization.
 
 ![js:sound_visual](./assets/bg.png)
 
-##### Click play button and move your pointer around the character. Music snippet from [*Space Travel Clichés*](https://soundcloud.com/mrgreenh/space-travel-cliches) by Mr Green H. 
+##### Click play button and move your pointer around the character. Music snippet from [_Space Travel Clichés_](https://soundcloud.com/mrgreenh/space-travel-cliches) by Mr Green H.
 
 ### Input
 
 Let's get some sounds to begin! Do you want to load from a sound file, receive microphone input, or generate audio dynamically? Pts offers four handy static functions for these.
 
-1. Use [`Sound.load`](#play-sound) to load a sound file with an url or a specific `<audio>` element. The sound will play as soon as it has streamed enough data. You can check if the audio file is ready to play by accessing [`.playable`](#play-sound) property. 
+1. Use [`Sound.load`](#play-sound) to load a sound file with a URL or a specific `<audio>` element. The Promise resolves when enough data has loaded to play through, but playback does not start automatically. You can check if the audio file is ready to play by accessing [`.playable`](#play-sound) property.
+
 ```
 Sound.load( "/path/to/hello.mp3" ).then( s => sound = s );
 Sound.load( audioElem ).then( s => sound = s ); // load from <audio> element
 ```
 
-2. Use [`Sound.loadAsBuffer`](#play-sound) if you need support for Safari and iOS, since they currently don't provide sound data for <audio> element reliably. See discussion in Advanced section below.
+2. Use [`Sound.loadAsBuffer`](#play-sound) to decode the entire file into an [`AudioBuffer`](https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer). This does not stream, but it can provide more consistent analysis and replay behavior across browsers.
+
 ```
 Sound.loadAsBuffer( "/path/to/hello.mp3" ).then( s => sound = s );
 ```
 
 3. Use [`Sound.generate`](#play-sound) to create a sound. You may also generate sounds using other libraries like Tone.js. Read more in Advanced section below.
+
 ```
 let sound = Sound.generate( "sine", 120 ); // sine oscillator at 120Hz
 ```
 
-4. Use [`Sound.input`](#play-sound) to get audio from default input device (usually microphone). This will return a Promise object which will resolve when the input device is ready.
+4. Use [`Sound.input`](#play-sound) to get audio from default input device (usually microphone). This will return a Promise object which will resolve when the input device is ready, or reject if the device is unavailable or permission is denied.
+
 ```
 let sound;
-Sound.input().then( s => sound = s ); // default input device
+Sound.input().then( s => sound = s ).catch( err => ... ); // default input device
 Sound.input( constraints ).then( s => sound = s ); // advanced use cases
 ```
 
@@ -63,7 +67,6 @@ Here's a basic demo of getting audio from microphone:
 
 ##### You may first need to allow this page to access microphone, and then click the record button. We also make the recording stop when the pointer leave the demo area so that your microphone is not always on.
 
-
 You can then [`start`](#play-sound) and [`stop`](#play-sound) playing the sound like this:
 
 ```
@@ -71,9 +74,10 @@ sound.start();
 sound.stop();
 sound.toggle(); // toggle between start and stop
 sound.playing; // boolean to indicate if sound is playing
+sound.volume = 0.5; // change the volume (default is 1)
 ```
 
-##### Note that current browsers no longer support autoplay. Users will need to express intent to play the sound (eg, with a click). 
+##### Browsers commonly block audible playback until the user interacts with the page, so start sound from a click or another user gesture.
 
 ### Analyze
 
@@ -91,16 +95,23 @@ To get the time domain data at current time step, call the [`timeDomain`](#play-
 
 ```
 // get an uint typed array of 128 values (corresponds to bin size above)
-let td = sound.timeDomain(); 
+let td = sound.timeDomain();
 ```
 
-Optionaly, use the [`timeDomainTo`](#play-sound) function to map the data to another range, such as a rectangular area. You can then apply various Pts functions to transform and visualize waveforms in a few lines of code.
+Optionally, use the [`timeDomainTo`](#play-sound) function to map the data to another range, such as a rectangular area. You can then apply various Pts functions to transform and visualize waveforms in a few lines of code.
 
 ```
 // fit data into a 200x100 area, starting from position (50, 50)
 let td = sound.timeDomainTo( [200, 100], [50, 50] );
 
 form.points( td ); // visualize as points
+```
+
+Since you'll typically call these functions on every animation frame, you can optionally pass the resulting `Group` back in the last parameter to reuse it, which avoids creating new objects per frame:
+
+```
+let td; // keep a reference across frames
+td = sound.timeDomainTo( [200, 100], [50, 50], [0, 0], td ); // reused
 ```
 
 In the following example, we map the data to a normalized circle and then re-map it to draw colorful lines.
@@ -113,7 +124,7 @@ sound.timeDomainTo( [Const.two_pi, 1] ).map( t => ... );
 
 ##### Click to play and visualize sounds of drum, tambourine, and flute from Philharmonia Orchestra.
 
-In a similar way, we can access the frequency domain data by [`freqDomain`](#play-sound) and [`freqDomainTo`](#play-sound). The frequency bins are calculated by an algorithm called Fast Fourier Transform (FFT). The FFT size is usually 2 times the bin size and they need to be multiples of 2. (Recall that we set bin size to 128 earlier). You can quickly test it with a single line of code:
+In a similar way, we can access the frequency domain data by [`freqDomain`](#play-sound) and [`freqDomainTo`](#play-sound). The frequency bins are calculated by an algorithm called Fast Fourier Transform (FFT). The FFT size is 2 times the bin size and both need to be powers of 2. (Recall that we set bin size to 128 earlier). You can quickly test it with a single line of code:
 
 ```
 form.points( sound.freqDomainTo( space.size ) );
@@ -125,30 +136,32 @@ The following is a basic frequency-domain example for your reference.
 
 The interplay of sounds and shapes offer many possibilities indeed. Make good use of your imagination to create something beautiful, fun, and unexpected!
 
-
 ### Advanced
-Currently Safari and iOS can play streaming <audio> element, but don't reliably provide time and frequency domain data for it. Hopefully Safari will have a fix soon, but for now you can use [`AudioBuffer`](https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer) approach - it's a bit more clumsy but it works (see [`loadAsBuffer`](#play-sound)).
+
+If media-element analysis behaves differently across target browsers, load and decode the whole file with [`loadAsBuffer`](#play-sound). This uses an [`AudioBuffer`](https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer) instead of a streaming `<audio>` element.
 
 ```
 Sound.loadAsBuffer( "/path/to/hello.mp3" ).then( s => sound = s );
 ```
 
-`AudioBuffer` doesn't support streaming and can only be played once. To replay it, you need to recreate the buffer and reconnect the nodes. Use the convenient [`createBuffer`](#play-sound) function without parameter to re-use the previous buffer.
+`AudioBuffer` doesn't support streaming and its source node can only be played once. Pts recreates the buffer for you when you call [`start`](#play-sound) or [`toggle`](#play-sound) again, so replay just works. If you want to prepare a replay manually, use the convenient [`createBuffer`](#play-sound) function without parameter to re-use the previous buffer.
 
 ```
-// replay the sound by reusing previously loaded buffer
-sound.createBuffer().analyze(bins);
+// optionally, prepare a replay manually by reusing the loaded buffer
+sound.createBuffer();
 ```
 
-For custom use cases with other libraries, you can create an instance using  [`Sound.from`](#play-sound) static method. Here's an example using Tone.js:
+For custom use cases with other libraries, you can create an instance using [`Sound.from`](#play-sound) static method. Here's an example using Tone.js:
 
 ```
-let synth = new Tone.Synth(); 
-let sound = Sound.from( synth, synth.context ); // create Pts Sound instance
-synth.toMaster(); // play using tone.js instead of Pts
+const synth = new Tone.Synth().toDestination();
+const context = Tone.getContext().rawContext;
+const tap = context.createGain();
+synth.connect( tap );
+const sound = Sound.from( tap, context ).analyze( 128 );
 ```
 
-The following demo generates audio using [Tone.js](https://tonejs.github.io/) and then visualizes it with Pts: 
+The following demo generates audio using [Tone.js](https://tonejs.github.io/) and then visualizes it with Pts:
 
 [ ![screenshot](./assets/tone.png) ](./js/examples/tone.html)
 
@@ -166,7 +179,7 @@ Also note that calling [`start`](#play-sound) function will connect the AudioNod
 
 Web Audio covers a wide range of topics. Here are a few pointers for you to dive deeper:
 
-- [Web Audio API book](https://webaudioapi.com/book/) and [samples](https://webaudioapi.com/samples/) by Boris Smus 
+- [Web Audio API book](https://webaudioapi.com/book/) and [samples](https://webaudioapi.com/samples/) by Boris Smus
 - [tone.js](https://tonejs.github.io/) is a framework for creating interactive music in the browser
 - [tonal.js](https://github.com/danigb/tonal) is a functional music theory library for javascript
 - [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) on Web Audio API
@@ -174,6 +187,7 @@ Web Audio covers a wide range of topics. Here are a few pointers for you to dive
 ### Cheatsheet
 
 Creating and playing a [`Sound`](#play-sound) instance
+
 ```
 Sound.load( "path/file.mp3" ).then( d => s = d ); // from file
 Sound.loadAsBuffer( "path/file.mp3" ).then( d => s = d ); // using AudioBuffer instead
@@ -187,13 +201,14 @@ s.toggle();
 ```
 
 Getting time domain and frequency domain data
+
 ```
-s.analyzer( 256 ); // Create analyzer with 256 bins. Call once only.
+s.analyze( 256 ); // Create analyzer with 256 bins
 
 s.timeDomain();
 s.timeDomainTo( area, position ); // map to a area [w, h] from position [x, y]
 
 s.freqDomain();
 s.freqDomainTo( [10, 5] ); // map to a 10x5 area
+g = s.freqDomainTo( area, position, trim, g ); // reuse a Group across frames
 ```
-

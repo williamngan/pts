@@ -1,0 +1,23 @@
+{
+  "name": "UIShapeTest",
+  "source": [
+    [
+      "src/UI.ts",
+      14,
+      12
+    ]
+  ],
+  "kind": "Typealias",
+  "comment": "A hit-test function for a UI shape: given the UI's group, a point, and the UI's states, return whether the point is within the shape.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    " Fn(group:Group, pt:PtLike, states:)"
+  ]
+}

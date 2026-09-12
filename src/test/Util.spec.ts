@@ -1,89 +1,218 @@
-import chai = require('chai');
-import mocha = require('mocha');
-import {Pt} from '../Pt';
-import {Const, Util} from '../Util';
-import {Num, Geom} from '../Num';
-import {Line} from '../Op';
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { Group, Pt } from "../Pt";
+import { Num } from "../Num";
+import { Const, Util } from "../Util";
 
-var {assert} = chai;
-var {describe, it} = mocha;
+afterEach(() => {
+  Util.warnLevel("mute");
+});
 
+describe("Const", () => {
+  it("exposes consistent angle and direction constants", () => {
+    expect(Const.deg_to_rad * 180).toBeCloseTo(Math.PI);
+    expect(Const.rad_to_deg * Math.PI).toBeCloseTo(180);
+    expect(Const.two_pi).toBeCloseTo(Math.PI * 2);
+    expect(Const.xy).toBe("xy");
+    expect(Const.top_right).toBe(3);
+    expect(Const.gravity).toBe(9.81);
+  });
+});
 
-describe('Util: ', function() {
-
-  describe('Const: ', function() {
-    it('can convert radian', function() {
-      assert.equal( Const.deg_to_rad*30, 30*Math.PI/180 );
-    });
-
-    it('can convert angle', function() {
-      assert.equal( Const.rad_to_deg*Math.PI/4, 45 );
-    });
+describe("Util arguments and warnings", () => {
+  it.each([
+    [[], []],
+    [
+      [1, 2, 3],
+      [1, 2, 3],
+    ],
+    [[[4, 5, 6]], [4, 5, 6]],
+    [[new Float32Array([7, 8])], [7, 8]],
+    [[{ x: 1, y: 2, z: 3, w: 4 }], [1, 2, 3, 4]],
+    [[{ x: 1, z: 3 }], [1]],
+  ])("normalizes %j", (input, expected) => {
+    expect(Util.getArgs(input)).toEqual(expected);
   });
 
-  describe('Util: ', function() {
+  it("supports mute, console warning, and thrown-error policies", () => {
+    expect(Util.warnLevel()).toBe("mute");
+    expect(Util.warn("quiet", 42)).toBe(42);
 
-    it('can getArgs with list of numbers', function() {
-      let c = Util.getArgs( [1,2,3] )
-      assert.equal( c[1], 2 );
-    });
+    const warning = vi.spyOn(console, "warn").mockImplementation(() => {});
+    expect(Util.warnLevel("warn")).toBe("warn");
+    expect(Util.warn("visible", "fallback")).toBe("fallback");
+    expect(warning).toHaveBeenCalledWith("visible");
 
-    it('can getArgs with array', function() {
-      let c = Util.getArgs( [[1,2,3,4,5]] );
-      assert.equal( c[4], 5 );
-    });
-
-    it('can getArgs with Pt like object', function() {
-      let c = Util.getArgs( [{x:1, y:2, z:3, w:4}] );
-      assert.equal( c[3], 4 );
-    });
-
-    let group = [1,2,3,4,5,6,7];
-    
-    it('can split an array with size only', function() {
-      let g = Util.split( group, 2);
-      assert.isTrue( g.length === 3 && g[2][0] === 5 );
-    });
-
-    it('can split an array with size and stride 1', function() {
-      let g = Util.split( group, 3, 1);
-      assert.isTrue( g.length === 5 && g[4][0] === 5 );
-    });
-
-    it('can split an array with size and stride 3', function() {
-      let g = Util.split( group, 2, 3);
-      assert.isTrue( g.length === 2 && g[1][1] === 5 );
-    });
-
-    it('can split an array with size and stride 3 and loop back', function() {
-      let g = Util.split( group, 2, 3, true);
-      assert.isTrue( g.length === 3 && g[2][1] === 1 );
-    });
-
-    it("can split an array with size and stride 3 and don't match size", function() {
-      let g = Util.split( group, 2, 3, false, false);
-      assert.isTrue( g.length === 3 && g[2].length === 1 && g[2][0] === 7 );
-    });
-
-    it('can create and run a stepper', function() {
-      let g = Util.stepper( 50, 0, 3 );
-      let c = 0;
-      for (let i=0; i<61; i++) {
-        c = g();
-      }
-      assert.equal( c, 33 );
-    });
-
-    it('can loop with a range', function() {
-      let k = 0;
-      let f = (i) => {
-        k += i;
-        return {id: `id${i}`, value:i*2}
-      };
-      let g = Util.forRange( f, 100 );
-      assert.isTrue( g[12].id == "id12" && k === 4950 );
-    })
-
+    Util.warnLevel("error");
+    expect(() => Util.warn("broken")).toThrow("broken");
   });
 
+  it("keeps the deprecated random integer helper deterministic", () => {
+    vi.spyOn(Num, "random").mockReturnValue(0.49);
+    expect(Util.randomInt(10, 3)).toBe(7);
+  });
+});
+
+describe("Util collection helpers", () => {
+  it("splits arrays using size, stride, partial, and loop-back policies", () => {
+    const values = [1, 2, 3, 4, 5, 6, 7];
+    expect(Util.split(values, 2)).toEqual([
+      [1, 2],
+      [3, 4],
+      [5, 6],
+    ]);
+    expect(Util.split(values, 3, 1)).toHaveLength(5);
+    expect(Util.split(values, 2, 3, true)).toEqual([
+      [1, 2],
+      [4, 5],
+      [7, 1],
+    ]);
+    expect(Util.split(values, 2, 3, false, false)).toEqual([
+      [1, 2],
+      [4, 5],
+      [7],
+    ]);
+    expect(Util.split([], 2)).toEqual([]);
+    expect(Util.split(values, 2, -1)).toEqual([]);
+  });
+
+  it("flattens, combines, and zips collections", () => {
+    const flatGroup = Util.flatten([[new Pt(1, 2)], [new Pt(3, 4)]]);
+    expect(flatGroup).toBeInstanceOf(Group);
+    expect(flatGroup.map((point: any) => point.toArray())).toEqual([
+      [1, 2],
+      [3, 4],
+    ]);
+    expect(Util.flatten([[1, 2], [3]], false)).toEqual([1, 2, 3]);
+    expect(Util.combine([1, 2], [10, 20], (a, b) => a + b)).toEqual([
+      11, 21, 12, 22,
+    ]);
+    expect(
+      Util.zip([
+        [1, 2],
+        [3, 4],
+        [5, 6],
+      ]),
+    ).toEqual([
+      [1, 3, 5],
+      [2, 4, 6],
+    ]);
+  });
+
+  it("steps and maps ranges with explicit starts and strides", () => {
+    const callback = vi.fn();
+    const next = Util.stepper(5, 1, 2, callback);
+    expect([next(), next(), next(), next()]).toEqual([3, 1, 3, 1]);
+    expect(callback).toHaveBeenCalledTimes(4);
+
+    const values = Util.forRange((index) => index * 2, 7, 1, 2);
+    expect(values[1]).toBe(2);
+    expect(values[3]).toBe(6);
+    expect(values[5]).toBe(10);
+  });
+
+  it("validates arrays and accepts arbitrary iterables", () => {
+    const warning = vi.spyOn(Util, "warn").mockReturnValue(undefined);
+    expect(Util.arrayCheck([new Pt()], 2)).toBe(false);
+    expect(warning).toHaveBeenCalledOnce();
+    expect(Util.arrayCheck(new Set([new Pt()]), 2)).toBe(true);
+    expect(Util.iterToArray(new Set([1, 2]))).toEqual([1, 2]);
+    const array = [1, 2];
+    expect(Util.iterToArray(array)).toBe(array);
+  });
+});
+
+describe("Util platform helpers", () => {
+  class FakeRequest {
+    static instance: FakeRequest;
+    status = 200;
+    responseText = "ok";
+    onload?: () => void;
+    onerror?: () => void;
+    open = vi.fn();
+    send = vi.fn();
+
+    constructor() {
+      FakeRequest.instance = this;
+    }
+  }
+
+  it("reports successful, server-error, and network-error requests", () => {
+    vi.stubGlobal("XMLHttpRequest", FakeRequest);
+    const callback = vi.fn();
+    Util.load("/data", callback);
+    const request = FakeRequest.instance;
+    expect(request.open).toHaveBeenCalledWith("GET", "/data", true);
+    request.onload?.();
+    expect(callback).toHaveBeenLastCalledWith("ok", true);
+
+    request.status = 500;
+    request.onload?.();
+    expect(callback).toHaveBeenLastCalledWith(
+      'Server error (500) when loading "/data"',
+      false,
+    );
+
+    request.onerror?.();
+    expect(callback).toHaveBeenLastCalledWith("Unknown network error", false);
+  });
+
+  it("calculates a rolling frame-time average", () => {
+    const now = vi
+      .spyOn(Date, "now")
+      .mockReturnValueOnce(100)
+      .mockReturnValueOnce(110)
+      .mockReturnValueOnce(130)
+      .mockReturnValueOnce(160);
+    const measure = Util.performance(3);
+    expect(measure()).toBe(10);
+    expect(measure()).toBe(15);
+    expect(measure()).toBe(20); // 3 frames: (10+20+30)/3
+    expect(now).toHaveBeenCalledTimes(4);
+  });
+
+  it("detects common mobile agents", () => {
+    vi.stubGlobal("navigator", { userAgent: "Mozilla Android" });
+    expect(Util.isMobile()).toBe(true);
+    vi.stubGlobal("navigator", { userAgent: "Desktop Firefox" });
+    expect(Util.isMobile()).toBe(false);
+  });
+
+  it("creates crypto and time-based identifiers", () => {
+    vi.stubGlobal("crypto", { randomUUID: () => "fixed-uuid" });
+    expect(Util.uniqueId(true)).toBe("fixed-uuid");
+
+    vi.spyOn(Date, "now").mockReturnValue(1234);
+    vi.spyOn(Math, "random").mockReturnValue(0.5);
+    expect(Util.uniqueId()).toBe("yai");
+  });
+});
+
+describe("Util correctness pins", () => {
+  it("keeps stepper values in range for strides larger than the range", () => {
+    const next = Util.stepper(3, 0, 5);
+    const seq = [next(), next(), next(), next()];
+    expect(seq).toEqual([2, 1, 0, 2]);
+    for (const v of seq) {
+      expect(v).toBeGreaterThanOrEqual(0);
+      expect(v).toBeLessThan(3);
+    }
+  });
+
+  it("falls back to a time-based id when crypto is unavailable", () => {
+    vi.stubGlobal("crypto", undefined);
+    vi.spyOn(Date, "now").mockReturnValue(1234);
+    vi.spyOn(Math, "random").mockReturnValue(0.5);
+    expect(Util.uniqueId(true)).toBe("yai");
+  });
+
+  it("flattens very large collections without an arguments overflow", () => {
+    const many: number[][] = new Array(200000);
+    for (let i = 0; i < many.length; i++) many[i] = [i];
+    const flat = Util.flatten(many, false);
+    expect(flat).toHaveLength(200000);
+    expect(flat[199999]).toBe(199999);
+    const asGroup = Util.flatten([[new Pt(1, 2)], [new Pt(3, 4)]]);
+    expect(asGroup instanceof Group).toBe(true);
+    expect(asGroup).toHaveLength(2);
+  });
 });

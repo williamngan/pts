@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Changelog</title>
+    <link href="./assets/style.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8" />
+    <link rel="alternate" type="text/markdown" href="/guide.md" title="Complete Pts guides and demos" />
+    <link rel="alternate" type="text/markdown" href="/docs.md" title="Complete Pts API reference" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+  </head>
+
+  <body>
+    <header id="header">
+  <div id="pts">
+    <a href="../">Pts<span>.</span></a
+    >guides
+  </div>
+  <nav id="topmenu" aria-label="Site links">
+    <a href="../demo/index.html">demos</a>
+    <a href="../guide/Get-started-0100.html">guides</a>
+    <a href="../docs/">docs</a>
+    <a href="https://github.com/williamngan/pts">github</a>
+  </nav>
+</header>
+    <a href="#menu" id="toc" aria-label="Open guide menu">&#x2261;</a>
+    <main id="post"><h1>Changelog</h1>
+<p>The revamp is a full modernization of Pts. Most existing sketches should continue to work, while the library is now faster, more predictable, easier to integrate, and better tested. This page summarizes the major changes made since work on the revamp began in August 2026.</p>
+<h3>New capabilities</h3>
+<ul>
+<li><strong>Modern color spaces.</strong> <code>Color</code> now supports Oklab and Oklch, alongside corrected conversions for RGB, HSL, HSB, XYZ, LAB, LCH, and LUV. Hex colors now handle alpha correctly too.</li>
+<li><strong>A new SVG renderer.</strong> <code>SVGForm</code> now follows the supported subset of the Canvas drawing API and automatically keeps SVG elements in sync between frames. It can also serve as a reference for custom renderers.</li>
+<li><strong>Simpler UI interactions.</strong> Spaces can track and untrack UI elements directly. UI also gains custom shape registration, line and polyline hit testing, typed actions, state helpers, and one-time or abortable handlers.</li>
+<li><strong>Improved image handling.</strong> <code>Img.load</code> is now promise-based, images clean up through <code>dispose</code>, and loading, cropping, scaling, pixel access, and canvas drawing are more reliable.</li>
+<li><strong>Stronger sound controls.</strong> Sound sources share audio contexts when appropriate, can be restarted safely, expose volume and cleanup controls, and report loading or input failures consistently.</li>
+</ul>
+<h3>Correctness and reliability</h3>
+<p>Every core module received a detailed review. Around sixty confirmed bugs were fixed and covered by tests. The most visible fixes include:</p>
+<ul>
+<li>Points, Groups, and Bounds now handle equality, wrapped angles, empty collections, missing dimensions, and generated Groups correctly.</li>
+<li>Geometry operations now return accurate intersections, centers, curves, Voronoi cells, and Delaunay triangulations across edge cases.</li>
+<li>Perlin noise no longer repeats every twelve units, seeded noise covers the full table, and non-square noise grids keep their intended layout.</li>
+<li>Physics bodies no longer create duplicate or self-links, and collision and constraint behavior is more stable.</li>
+<li>Canvas text, image data, gradients, dashed strokes, style caching, and multiple forms sharing a context now render consistently.</li>
+<li>Space playback no longer starts parallel animation loops or produces large timing spikes after a pause. Mounting, resizing, input listeners, and disposal are safer in frameworks such as React.</li>
+<li>UI handlers keep stable identities, receive current pointer positions, and preserve built-in button and drag behavior.</li>
+<li>Seeded random-number sequences remain compatible with Pts 0.12 while becoming substantially faster.</li>
+</ul>
+<h3>Faster everyday drawing</h3>
+<p>Hot paths throughout the library were measured and optimized. Major improvements include polygon hit testing, curve generation, Bound coordinate access, Group insertion and segmentation, pointer dispatch, UI tracking, matrix operations, noise generation, random distribution, Delaunay triangulation, image processing, typography, sound analysis, and canvas state updates.</p>
+<p>Benchmarks now compare changes against the previous build in both Node.js and Chromium. Recorded baselines and correctness checks help prevent performance work from changing results accidentally.</p>
+<h3>TypeScript and packages</h3>
+<ul>
+<li>The codebase now uses TypeScript 6 in strict mode, with more accurate public types for optional geometry results, UI events, rendering contexts, form styles, and callbacks.</li>
+<li>Packages include explicit ESM and CommonJS entry points, matching type declarations, source maps, browser bundles, and checked export maps.</li>
+<li>Server-side imports are tested, package contents are validated before publishing, and artifact sizes have fixed budgets.</li>
+<li>Build scripts now use pnpm and tsdown, replacing the older collection of build tools and manual steps.</li>
+</ul>
+<h3>Documentation, demos, and accessibility</h3>
+<ul>
+<li>API docs and guides are generated reproducibly from source and are also available as machine-readable Markdown.</li>
+<li>Documentation links now point to exact classes and members, preserve deep links and browser history, and fail the build when a target is missing.</li>
+<li>The documentation app was upgraded to Vue 3 with safer Markdown rendering and more dependable search and navigation.</li>
+<li>Guide demos load only when needed, include keyboard playback controls and visible source links, and work reliably with touch input and slow-loading assets.</li>
+<li>The homepage, guides, documentation, demos, and editor now adapt better to narrow screens. Navigation, menus, zoom, focus, and keyboard behavior received a broad accessibility pass.</li>
+<li>The live editor was rebuilt around a reproducible Monaco bundle and can export a self-contained, responsive HTML file using the exact version of Pts shown in the preview.</li>
+<li>Google Analytics was removed, and obsolete demo assets and dependencies were cleaned up.</li>
+</ul>
+<h3>Testing and project maintenance</h3>
+<p>The old test setup was replaced by a larger Vitest suite covering Node.js, real-browser behavior, type contracts, integrations, and visual regressions. CI now checks formatting, linting, types, tests, documentation, bundles, package publishing, benchmarks, browser behavior, and the generated website before a change is merged.</p>
+<p>The repository also gained consistent formatting and line-ending rules, cleaner package metadata, documented implementation plans, and repeatable generation scripts for builds, docs, guides, and the editor.</p>
+<h3>Compatibility notes</h3>
+<p>Most API changes are additive, but corrected bugs may produce different results when old code depended on incorrect behavior. TypeScript users may also see new compile errors where a function can legitimately return <code>undefined</code>; check the result before using it.</p>
+<p><code>Img.load</code> now returns a Promise instead of an <code>Img</code>: use <code>const img = await Img.load(url)</code>, or use <code>.then(...)</code>. If you need the instance before loading finishes, use <code>const img = new Img()</code> and then <code>await img.load(url)</code>.</p>
+<p>The original SVG static drawing helpers still accept a legacy DOM context; the explicit <code>*Element</code> names are available too, such as <code>SVGForm.circleElement(ctx, pt, radius)</code>. <code>SVGForm.styleTo</code> is no longer available: use the form's <code>fill</code>, <code>stroke</code>, <code>alpha</code>, and <code>font</code> methods. Use <code>form.text([10, 14], message)</code> instead of <code>form.log(message)</code>.</p>
+<p>The following older APIs remain available but are deprecated:</p>
+<ul>
+<li><code>HTMLSpace</code> and <code>HTMLForm</code>: use <code>SVGSpace</code> and <code>SVGForm</code>.</li>
+<li><code>Img.loadAsync</code>: use <code>Img.load</code>.</li>
+<li><code>Img.cleanup</code>: use <code>Img.dispose</code>.</li>
+<li><code>SVGForm.scope</code> and <code>SVGForm.updateScope</code>: SVG elements are now reconciled automatically.</li>
+<li>The initial-box form of <code>Typography.fontSizeToBox</code>: use <code>fontSizeToBox(ratio, byHeight)</code>.</li>
+<li><code>Util.randomInt</code>: use <code>Num.randomRange</code>.</li>
+</ul>
+<p>For exact behavioral and TypeScript migration details, see the <a href="../CHANGELOG.md">full project changelog</a>.</p>
+</main>
+
+    <nav id="menu" aria-label="Guide chapters"><a id="close" href="#" aria-label="Close guide menu">&times;</a><ol><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Ecosystem-8000.html">Ecosystem</a></li><li><a href="Changelog-9100.html">Changelog</a></li></ol></nav> <div id="footer">
+  Copyright &copy; 2017-current by
+  <a href="https://twitter.com/williamngan">William Ngan</a> and contributors.
+  Pts is an
+  <a href="https://github.com/williamngan/pts">open source project</a> under
+  Apache License 2.0.
+</div>
+
+<script type="text/javascript" src="../dist/pts.min.js"></script>
+<script type="text/javascript" src="./js/guide.js"></script>
+<script src="./js/highlight.pack.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+  </body>
+</html>

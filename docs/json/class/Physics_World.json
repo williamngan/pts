@@ -3,24 +3,22 @@
   "source": [
     [
       "src/Physics.ts",
-      12,
-      18
+      21,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 6066,
-  "comment": "A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation.\nSee a [Particle demo](../demo/index.html?name=physics.particles) and a [Body demo](../demo/index.html?name=physics.shapes) on the demo page.",
+  "comment": "",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
           "src/Physics.ts",
-          27,
-          51
+          56,
+          2
         ]
       ],
-      "id": 6086,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -44,8 +42,8 @@
             },
             {
               "name": "gravity",
-              "comment": "a number of a Pt to define gravitational force. A number is a shorthand to set `new Pt(0, n)`. Default is 0.\n",
-              "type": "PtLike | number",
+              "comment": "a number of a Pt to define gravitational force. A number is a shorthand to set `new Pt(0, n)`. Default is 0.",
+              "type": "number | PtLike",
               "default": "0"
             }
           ],
@@ -60,11 +58,10 @@
       "source": [
         [
           "src/Physics.ts",
-          71,
-          15
+          146,
+          6
         ]
       ],
-      "id": 6107,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -79,16 +76,15 @@
       "source": [
         [
           "src/Physics.ts",
-          47,
-          11
+          71,
+          6
         ],
         [
           "src/Physics.ts",
-          48,
-          11
+          74,
+          6
         ]
       ],
-      "id": 6091,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -111,16 +107,15 @@
       "source": [
         [
           "src/Physics.ts",
-          65,
-          13
+          101,
+          6
         ],
         [
           "src/Physics.ts",
-          66,
-          13
+          104,
+          6
         ]
       ],
-      "id": 6103,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -143,16 +138,15 @@
       "source": [
         [
           "src/Physics.ts",
-          59,
-          14
+          91,
+          6
         ],
         [
           "src/Physics.ts",
-          60,
-          14
+          94,
+          6
         ]
       ],
-      "id": 6099,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -175,16 +169,15 @@
       "source": [
         [
           "src/Physics.ts",
-          53,
-          13
+          81,
+          6
         ],
         [
           "src/Physics.ts",
-          54,
-          13
+          84,
+          6
         ]
       ],
-      "id": 6095,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -203,15 +196,76 @@
       }
     },
     {
+      "name": "iterations",
+      "source": [
+        [
+          "src/Physics.ts",
+          111,
+          6
+        ],
+        [
+          "src/Physics.ts",
+          114,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Constraint solver iterations per substep.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "f",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "maxTimeStep",
+      "source": [
+        [
+          "src/Physics.ts",
+          136,
+          6
+        ],
+        [
+          "src/Physics.ts",
+          139,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Maximum simulated time in milliseconds per [`World.update`](#link) call. Larger elapsed\ntimes are clamped so that a hitch (eg, a backgrounded tab) cannot destabilize the\nsimulation. Default is 50.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "ms",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
       "name": "particleCount",
       "source": [
         [
           "src/Physics.ts",
-          76,
-          19
+          153,
+          6
         ]
       ],
-      "id": 6109,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -220,6 +274,37 @@
         "type": "number"
       },
       "setter": false
+    },
+    {
+      "name": "substeps",
+      "source": [
+        [
+          "src/Physics.ts",
+          124,
+          6
+        ],
+        [
+          "src/Physics.ts",
+          127,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Target number of solver substeps per 60 Hz frame (16.7 ms). Each [`World.update`](#link)\nruns enough substeps of about that size to cover its elapsed time, so a 30 Hz frame solves\ntwice as many substeps as a 60 Hz frame rather than larger ones. More substeps produce a\nmore stable and accurate simulation at a linear cost. Default is 4.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "n",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
     }
   ],
   "methods": [
@@ -228,11 +313,10 @@
       "source": [
         [
           "src/Physics.ts",
-          163,
-          5
+          266,
+          2
         ]
       ],
-      "id": 6140,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -250,7 +334,7 @@
             },
             {
               "name": "name",
-              "comment": "optional name, which can be referenced in `body()` or `particle()` function to retrieve this back.\n",
+              "comment": "optional name, which can be referenced in `body()` or `particle()` function to retrieve this back.",
               "type": "string",
               "default": "\"\""
             }
@@ -264,24 +348,23 @@
       "source": [
         [
           "src/Physics.ts",
-          84,
-          6
+          162,
+          2
         ]
       ],
-      "id": 6111,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Get a body in this world by index or string id.",
-          "returns": "any",
-          "returns_comment": "a Body, or undefined if not found\n",
+          "returns": "Body | undefined",
+          "returns_comment": "a Body, or undefined if not found",
           "parameters": [
             {
               "name": "id",
               "comment": "numeric index of the body, or a string id that associates with it.",
-              "type": "number | string",
+              "type": "string | number",
               "default": false
             }
           ],
@@ -294,11 +377,10 @@
       "source": [
         [
           "src/Physics.ts",
-          114,
-          11
+          186,
+          2
         ]
       ],
-      "id": 6117,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -306,7 +388,7 @@
         {
           "comment": "Given a body's name, return its index in the bodies array, or -1 if not found.",
           "returns": "number",
-          "returns_comment": "index number, or -1 if not found\n",
+          "returns_comment": "index number, or -1 if not found",
           "parameters": [
             {
               "name": "name",
@@ -324,11 +406,10 @@
       "source": [
         [
           "src/Physics.ts",
-          153,
-          12
+          257,
+          2
         ]
       ],
-      "id": 6133,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -340,7 +421,7 @@
           "parameters": [
             {
               "name": "fn",
-              "comment": "a function that draws a body passed in the parameters `(body, index)`.\n",
+              "comment": "a function that draws a body passed in the parameters `(body, index)`.",
               "type": " Fn(p:Body, i:number)",
               "default": false
             }
@@ -354,11 +435,10 @@
       "source": [
         [
           "src/Physics.ts",
-          144,
-          15
+          249,
+          2
         ]
       ],
-      "id": 6126,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -370,7 +450,7 @@
           "parameters": [
             {
               "name": "fn",
-              "comment": "a function that draws a particle passed in the parameters `(particle, index)`.\n",
+              "comment": "a function that draws a particle passed in the parameters `(particle, index)`.",
               "type": " Fn(p:Particle, i:number)",
               "default": false
             }
@@ -384,11 +464,10 @@
       "source": [
         [
           "src/Physics.ts",
-          269,
-          21
+          408,
+          12
         ]
       ],
-      "id": 6171,
       "flags": {
         "isProtected": true
       },
@@ -396,7 +475,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Internal integrate function",
+          "comment": "Integrate a particle for one substep: Verlet with the accumulated force plus gravity as\nacceleration, and the substep-adjusted friction as drag. Forces are read but not cleared\nhere — they persist across the substeps of one update and are cleared when it completes.",
           "returns": "Particle",
           "returns_comment": false,
           "parameters": [
@@ -408,15 +487,15 @@
             },
             {
               "name": "dt",
-              "comment": "time changed",
+              "comment": "substep time in seconds",
               "type": "number",
               "default": false
             },
             {
               "name": "prevDt",
-              "comment": "previous change in time, optional\n",
+              "comment": "time in seconds spanned by the particle's current displacement (see [`Particle.timeStep`](#link)); the velocity is rescaled to `dt` so that it is preserved when the step size changes.",
               "type": "number",
-              "default": false
+              "default": "..."
             }
           ],
           "tags": []
@@ -428,24 +507,23 @@
       "source": [
         [
           "src/Physics.ts",
-          99,
-          10
+          174,
+          2
         ]
       ],
-      "id": 6114,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Get a particle in this world by index or string id.",
-          "returns": "any",
-          "returns_comment": "a Particle, or undefined if not found\n",
+          "returns": "Particle | undefined",
+          "returns_comment": "a Particle, or undefined if not found",
           "parameters": [
             {
               "name": "id",
               "comment": "numeric index of the particle, or a string id that associates with it.",
-              "type": "number | string",
+              "type": "string | number",
               "default": false
             }
           ],
@@ -458,11 +536,10 @@
       "source": [
         [
           "src/Physics.ts",
-          124,
-          15
+          195,
+          2
         ]
       ],
-      "id": 6120,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -470,7 +547,7 @@
         {
           "comment": "Given a particle's name, return its index in the particles array, or -1 if not found.",
           "returns": "number",
-          "returns_comment": "index number, or -1 if not found\n",
+          "returns_comment": "index number, or -1 if not found",
           "parameters": [
             {
               "name": "name",
@@ -488,11 +565,10 @@
       "source": [
         [
           "src/Physics.ts",
-          192,
-          12
+          296,
+          2
         ]
       ],
-      "id": 6151,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -505,12 +581,12 @@
             {
               "name": "from",
               "comment": "Start index, which can be negative (where -1 is at index 0, -2 at index 1, etc)",
-              "type": "number | string",
+              "type": "string | number",
               "default": false
             },
             {
               "name": "count",
-              "comment": "Number of items to remove. Default is 1.\n",
+              "comment": "Number of items to remove. Default is 1.",
               "type": "number",
               "default": "1"
             }
@@ -524,11 +600,10 @@
       "source": [
         [
           "src/Physics.ts",
-          206,
-          16
+          309,
+          2
         ]
       ],
-      "id": 6155,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -541,12 +616,12 @@
             {
               "name": "from",
               "comment": "Start index, which can be negative (where -1 is at index 0, -2 at index 1, etc)",
-              "type": "number | string",
+              "type": "string | number",
               "default": false
             },
             {
               "name": "count",
-              "comment": "Number of items to remove. Default is 1.\n",
+              "comment": "Number of items to remove. Default is 1.",
               "type": "number",
               "default": "1"
             }
@@ -560,23 +635,22 @@
       "source": [
         [
           "src/Physics.ts",
-          133,
-          8
+          206,
+          2
         ]
       ],
-      "id": 6123,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Update this world by one time-step.",
+          "comment": "Advance this world by an amount of time, solved in substeps sized by\n[`World.substeps`](#link). The time is clamped to [`World.maxTimeStep`](#link), and an\nelapsed time under 2 ms is carried into the next call. Draw callbacks fire once per call,\nafter the solve completes.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
             {
               "name": "ms",
-              "comment": "change in time in milliseconds\n",
+              "comment": "change in time in milliseconds",
               "type": "number",
               "default": false
             }
@@ -590,11 +664,10 @@
       "source": [
         [
           "src/Physics.ts",
-          246,
-          24
+          355,
+          9
         ]
       ],
-      "id": 6166,
       "flags": {
         "isStatic": true
       },
@@ -620,7 +693,7 @@
             },
             {
               "name": "damping",
-              "comment": "damping between 0 to 1, where 1 means no damping. Default is 0.75.\n",
+              "comment": "damping between 0 to 1, where 1 means no damping. Default is 0.75.",
               "type": "number",
               "default": "0.75"
             }
@@ -634,11 +707,10 @@
       "source": [
         [
           "src/Physics.ts",
-          223,
-          23
+          325,
+          9
         ]
       ],
-      "id": 6159,
       "flags": {
         "isStatic": true
       },
@@ -658,7 +730,7 @@
             },
             {
               "name": "p2",
-              "comment": "particle 1",
+              "comment": "particle 2",
               "type": "Particle",
               "default": false
             },
@@ -676,7 +748,7 @@
             },
             {
               "name": "precise",
-              "comment": "use precise distance calculation. Default is `false`.\n",
+              "comment": "use precise distance calculation. Default is `false`.",
               "type": "boolean",
               "default": "false"
             }

@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Op.ts",
-      1009,
-      20
+      1066,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 1261,
   "comment": "Polygon class provides static functions to create and operate on polygons. A polygon is usually represented as a Group of 3 or more Pts.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +17,10 @@
       "source": [
         [
           "src/Op.ts",
-          1090,
-          22
+          1168,
+          9
         ]
       ],
-      "id": 1288,
       "flags": {
         "isStatic": true
       },
@@ -48,7 +46,7 @@
             },
             {
               "name": "closePath",
-              "comment": "a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).\n",
+              "comment": "a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).",
               "type": "boolean",
               "default": "false"
             }
@@ -62,11 +60,10 @@
       "source": [
         [
           "src/Op.ts",
-          1155,
-          13
+          1247,
+          9
         ]
       ],
-      "id": 1304,
       "flags": {
         "isStatic": true
       },
@@ -74,13 +71,13 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Find the area of a *convex* polygon.",
-          "returns": "any",
+          "comment": "Find the area of a simple (non-self-intersecting) polygon using the shoelace formula.",
+          "returns": "number",
           "returns_comment": false,
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike> representing a polygon\n",
+              "comment": "a Group or an Iterable<PtLike> representing a polygon",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -94,11 +91,10 @@
       "source": [
         [
           "src/Op.ts",
-          1115,
-          17
+          1196,
+          9
         ]
       ],
-      "id": 1293,
       "flags": {
         "isStatic": true
       },
@@ -107,8 +103,8 @@
       "signatures": [
         {
           "comment": "Get a bisector which is a line that split between two sides of a polygon equally.",
-          "returns": "Pt",
-          "returns_comment": "a bisector Pt that's a normalized unit vector\n",
+          "returns": "Pt | undefined",
+          "returns_comment": "a bisector direction Pt, the average of the two adjacent sides' unit vectors (not itself normalized)",
           "parameters": [
             {
               "name": "poly",
@@ -132,11 +128,10 @@
       "source": [
         [
           "src/Op.ts",
-          1015,
-          17
+          1071,
+          9
         ]
       ],
-      "id": 1262,
       "flags": {
         "isStatic": true
       },
@@ -150,7 +145,7 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike> representing a polygon\n",
+              "comment": "a Group or an Iterable<PtLike> representing a polygon",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -164,11 +159,10 @@
       "source": [
         [
           "src/Op.ts",
-          1178,
-          19
+          1270,
+          9
         ]
       ],
-      "id": 1307,
       "flags": {
         "isStatic": true
       },
@@ -178,7 +172,7 @@
         {
           "comment": "Get a convex hull of a set of points, using Melkman's algorithm. ([Reference](http://geomalgorithms.com/a12-_hull-3.html)).",
           "returns": "Group",
-          "returns_comment": "a group of Pt that defines the convex hull polygon\n",
+          "returns_comment": "a group of Pt that defines the convex hull polygon",
           "parameters": [
             {
               "name": "pts",
@@ -202,11 +196,10 @@
       "source": [
         [
           "src/Op.ts",
-          1037,
-          19
+          1095,
+          9
         ]
       ],
-      "id": 1270,
       "flags": {
         "isStatic": true
       },
@@ -232,7 +225,7 @@
             },
             {
               "name": "sides",
-              "comment": "Number of sides\n",
+              "comment": "Number of sides",
               "type": "number",
               "default": false
             }
@@ -246,11 +239,10 @@
       "source": [
         [
           "src/Op.ts",
-          1332,
-          27
+          1461,
+          9
         ]
       ],
-      "id": 1332,
       "flags": {
         "isStatic": true
       },
@@ -259,8 +251,8 @@
       "signatures": [
         {
           "comment": "Check if a convex polygon and a circle has intersections using Separating Axis Theorem.",
-          "returns": "IntersectContext",
-          "returns_comment": "an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection\n",
+          "returns": "IntersectContext | null",
+          "returns_comment": "an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection",
           "parameters": [
             {
               "name": "poly",
@@ -284,11 +276,10 @@
       "source": [
         [
           "src/Op.ts",
-          1311,
-          26
+          1436,
+          9
         ]
       ],
-      "id": 1328,
       "flags": {
         "isStatic": true
       },
@@ -308,7 +299,7 @@
             },
             {
               "name": "pt",
-              "comment": "the Pt to check\n",
+              "comment": "the Pt to check",
               "type": "PtLike",
               "default": false
             }
@@ -322,11 +313,10 @@
       "source": [
         [
           "src/Op.ts",
-          1392,
-          28
+          1588,
+          9
         ]
       ],
-      "id": 1336,
       "flags": {
         "isStatic": true
       },
@@ -335,8 +325,8 @@
       "signatures": [
         {
           "comment": "Check if two convex polygons have intersections using Separating Axis Theorem.",
-          "returns": "IntersectContext",
-          "returns_comment": "an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection\n",
+          "returns": "IntersectContext | null",
+          "returns_comment": "an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection",
           "parameters": [
             {
               "name": "poly1",
@@ -360,11 +350,10 @@
       "source": [
         [
           "src/Op.ts",
-          1457,
-          27
+          1699,
+          9
         ]
       ],
-      "id": 1340,
       "flags": {
         "isStatic": true
       },
@@ -384,7 +373,7 @@
             },
             {
               "name": "poly2",
-              "comment": "a Group or an Iterable<Pt> representing another polygon\n",
+              "comment": "a Group or an Iterable<Pt> representing another polygon",
               "type": "PtIterable",
               "default": false
             }
@@ -398,11 +387,10 @@
       "source": [
         [
           "src/Op.ts",
-          1052,
-          15
+          1111,
+          9
         ]
       ],
-      "id": 1275,
       "flags": {
         "isStatic": true
       },
@@ -422,7 +410,7 @@
             },
             {
               "name": "index",
-              "comment": "index of a Pt in the Group\n",
+              "comment": "index of a Pt in the Group",
               "type": "number",
               "default": false
             }
@@ -436,11 +424,10 @@
       "source": [
         [
           "src/Op.ts",
-          1064,
-          14
+          1127,
+          9
         ]
       ],
-      "id": 1279,
       "flags": {
         "isStatic": true
       },
@@ -450,7 +437,7 @@
         {
           "comment": "Get the line segments in this polygon.",
           "returns": "Group[]",
-          "returns_comment": "an array of Groups which has 2 Pts in each group\n",
+          "returns_comment": "an array of Groups which has 2 Pts in each group",
           "parameters": [
             {
               "name": "poly",
@@ -474,11 +461,10 @@
       "source": [
         [
           "src/Op.ts",
-          1078,
-          18
+          1149,
+          9
         ]
       ],
-      "id": 1283,
       "flags": {
         "isStatic": true
       },
@@ -504,7 +490,7 @@
             },
             {
               "name": "t",
-              "comment": "a value between 0 to 1 for interpolation. Default to 0.5 which will get the middle point.\n",
+              "comment": "a value between 0 to 1 for interpolation. Default to 0.5 which will get the middle point.",
               "type": "number",
               "default": "0.5"
             }
@@ -518,11 +504,10 @@
       "source": [
         [
           "src/Op.ts",
-          1260,
-          18
+          1353,
+          9
         ]
       ],
-      "id": 1315,
       "flags": {
         "isStatic": true
       },
@@ -532,7 +517,7 @@
         {
           "comment": "Given a target Pt, find a Pt in the polygon's corners that's nearest to it.",
           "returns": "number",
-          "returns_comment": "an index in the pts indicating the nearest Pt, or -1 if none found\n",
+          "returns_comment": "an index in the pts indicating the nearest Pt, or -1 if none found",
           "parameters": [
             {
               "name": "poly",
@@ -556,11 +541,10 @@
       "source": [
         [
           "src/Op.ts",
-          1244,
-          16
+          1338,
+          9
         ]
       ],
-      "id": 1311,
       "flags": {
         "isStatic": true
       },
@@ -570,7 +554,7 @@
         {
           "comment": "Given a point in the polygon as an origin, get an array of lines that connect all the remaining points to the origin point.",
           "returns": "Group[]",
-          "returns_comment": "an array of Groups of line segments\n",
+          "returns_comment": "an array of Groups of line segments",
           "parameters": [
             {
               "name": "poly",
@@ -594,11 +578,10 @@
       "source": [
         [
           "src/Op.ts",
-          1133,
-          18
+          1213,
+          9
         ]
       ],
-      "id": 1297,
       "flags": {
         "isStatic": true
       },
@@ -608,7 +591,7 @@
         {
           "comment": "Find the perimeter of this polygon, ie, the lengths of its sides.",
           "returns": "{ segments:`Pt`, total:`number` }",
-          "returns_comment": "an object with `total` length, and `segments` which is a Pt that stores each segment's length\n",
+          "returns_comment": "an object with `total` length, and `segments` which is a Pt that stores each segment's length",
           "parameters": [
             {
               "name": "poly",
@@ -632,11 +615,10 @@
       "source": [
         [
           "src/Op.ts",
-          1281,
-          20
+          1376,
+          9
         ]
       ],
-      "id": 1319,
       "flags": {
         "isStatic": true
       },
@@ -656,7 +638,7 @@
             },
             {
               "name": "unitAxis",
-              "comment": "unit axis for calculating dot product\n",
+              "comment": "unit axis for calculating dot product",
               "type": "Pt",
               "default": false
             }
@@ -670,11 +652,10 @@
       "source": [
         [
           "src/Op.ts",
-          1026,
-          18
+          1081,
+          9
         ]
       ],
-      "id": 1265,
       "flags": {
         "isStatic": true
       },
@@ -700,7 +681,7 @@
             },
             {
               "name": "height",
-              "comment": "optional height\n",
+              "comment": "optional height",
               "type": "number",
               "default": false
             }
@@ -714,11 +695,10 @@
       "source": [
         [
           "src/Op.ts",
-          1475,
-          16
+          1716,
+          9
         ]
       ],
-      "id": 1344,
       "flags": {
         "isStatic": true
       },
@@ -732,7 +712,7 @@
           "parameters": [
             {
               "name": "polys",
-              "comment": "an Array/Iterable of (Groups or Iterables<Pt>)\n",
+              "comment": "an Array/Iterable of (Groups or Iterables<Pt>)",
               "type": "Iterable",
               "default": false
             }

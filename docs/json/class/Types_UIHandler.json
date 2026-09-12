@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Types.ts",
-      159,
-      21
+      214,
+      12
     ]
   ],
   "kind": "Typealias",
-  "id": 796,
   "comment": "Typescript type: UIHandler represents a callback function to handle UI actions.",
   "constructor": [],
   "accessors": [],
@@ -19,6 +18,7 @@
   "extends": [],
   "implements": [],
   "type_alias": [
-    " Fn(target:UI, pt:PtLike, type:string, evt:MouseEvent)"
+    " Fn(target:UI, pt:PtLike, type:UIPointerAction",
+    "string & , evt:UIActionEvent)"
   ]
 }

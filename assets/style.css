@@ -65,6 +65,7 @@ html * {
 }
 
 #header_title  {
+  margin: 0;
   color: #fff;
   display: inline-block;
   padding-right: 0px;
@@ -123,32 +124,29 @@ html * {
 
 
 .feature-block {
-  height: auto;
-  margin: 100px 0px 0px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 100px;
 }
 
 .feature-block .feature {
-  padding: 0;
-  flex: 0 1 25%;
-  box-sizing: border-box;
+  min-width: 0;
 }
 
 .feature-block .image {
-  display: block;
   width: 100%;
-  height: 25vw;
-  background-size: cover; 
+  aspect-ratio: 1;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
-.feature-block .usage{
+.feature-block .usage {
   color: #345;
-  padding: 30px;
+  padding: clamp(16px, 3vw, 30px);
   font-size: 1.3em;
   text-align: left;
+  overflow-wrap: anywhere;
 }
 
 .feature-block .cta-link {
@@ -330,6 +328,17 @@ a:hover {
   color: #222;
 }
 
+@media screen and (max-width: 1024px) {
+  .feature-block {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .feature-block .usage {
+    padding-bottom: 56px;
+    line-height: 1.5;
+  }
+}
+
 @media only screen and (max-device-width : 768px), screen and (max-width : 768px) {
   /* Header and footer */
   
@@ -399,20 +408,6 @@ a:hover {
     
   }
   
-  .feature-block .feature {
-    flex: 0 1 50%;
-  }
-  
-  .feature-block .image {
-    height: 30vw;
-  }
-
-  .feature-block .usage{
-    padding: 30px 30px 80px;
-  }
-  
-
-
   #pts { padding-left: 0; line-height: 1.4; vertical-align: middle; }
   #pts a { padding: 0; }
 
@@ -460,7 +455,7 @@ a:hover {
 }
 
 
-@media only screen and (max-device-width : 767px) {
+@media only screen and (max-device-width : 767px), screen and (max-width : 767px) {
   /* Header and Footer */
   
   #header {
@@ -473,20 +468,20 @@ a:hover {
   /* ------- */
   
 
-  .feature-block .feature {
-    flex: 0 1 100%;
-    height: auto;
-  }
-
-  .feature-block .image {
-    height: 250px;
-  }
-
-  .feature-block .usage{
-    padding: 30px 50px 80px;
-  }
-  
   .demo {
     padding: 3px 0;
   }
+}
+
+@media screen and (max-width: 768px) {
+  .feature-block .usage {
+    font-size: 0.875rem;
+  }
+
+  #header { padding: 0 12px; line-height: 72px; }
+  #pts { padding: 0; }
+  #header_title { font-size: 48px; line-height: 1; margin: 12px 0; }
+  #header #topmenu { top: 0; right: 12px; height: 72px; display: flex; align-items: center; }
+  #header #topmenu > a { display: block; padding: 0 5px; font-size: 12px; line-height: 44px; height: auto; }
+  .block .subcol { min-width: 0; max-width: 100%; padding: 0 24px; overflow-wrap: anywhere; }
 }

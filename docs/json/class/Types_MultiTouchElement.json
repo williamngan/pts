@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Types.ts",
-      89,
-      34
+      101,
+      17
     ]
   ],
   "kind": "Interface",
-  "id": 464,
   "comment": "Typescript interface: MultiTouchElement represents an element that can handle touch events.",
   "constructor": [],
   "accessors": [],
@@ -18,30 +17,29 @@
       "source": [
         [
           "src/Types.ts",
-          90,
-          18
+          102,
+          2
         ]
       ],
-      "id": 465,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "",
-          "returns": "any",
+          "returns": "void",
           "returns_comment": false,
           "parameters": [
             {
               "name": "evt",
               "comment": "",
-              "type": "any",
+              "type": "string",
               "default": false
             },
             {
               "name": "callback",
               "comment": "",
-              "type": "Function",
+              "type": "EventListenerOrEventListenerObject",
               "default": false
             }
           ],
@@ -54,30 +52,29 @@
       "source": [
         [
           "src/Types.ts",
-          91,
-          21
+          106,
+          2
         ]
       ],
-      "id": 469,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "",
-          "returns": "any",
+          "returns": "void",
           "returns_comment": false,
           "parameters": [
             {
               "name": "evt",
               "comment": "",
-              "type": "any",
+              "type": "string",
               "default": false
             },
             {
               "name": "callback",
               "comment": "",
-              "type": "Function",
+              "type": "EventListenerOrEventListenerObject",
               "default": false
             }
           ],

@@ -3,12 +3,11 @@
   "source": [
     [
       "src/LinearAlgebra.ts",
-      11,
-      16
+      10,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 855,
   "comment": "Vec provides various static functions for vector operations. It's not fully optimized but good enough to use.",
   "constructor": [],
   "accessors": [],
@@ -19,10 +18,9 @@
         [
           "src/LinearAlgebra.ts",
           124,
-          12
+          9
         ]
       ],
-      "id": 891,
       "flags": {
         "isStatic": true
       },
@@ -32,7 +30,7 @@
         {
           "comment": "Set `a` to its absolute value in each dimension.",
           "returns": "PtLike",
-          "returns_comment": "vector `a`\n",
+          "returns_comment": "vector `a`",
           "parameters": [
             {
               "name": "a",
@@ -50,11 +48,10 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          17,
-          12
+          15,
+          9
         ]
       ],
-      "id": 856,
       "flags": {
         "isStatic": true
       },
@@ -62,9 +59,9 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Add `b` to vector `a`.",
+          "comment": "Add `b` to vector `a`. Unlike `multiply`/`divide`, a shorter `b` is tolerated: missing (or NaN) dimensions are treated as 0.",
           "returns": "PtLike",
-          "returns_comment": "vector `a`\n",
+          "returns_comment": "vector `a`",
           "parameters": [
             {
               "name": "a",
@@ -75,7 +72,7 @@
             {
               "name": "b",
               "comment": "",
-              "type": "PtLike | number",
+              "type": "number | PtLike",
               "default": false
             }
           ],
@@ -88,11 +85,10 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          142,
-          13
+          140,
+          9
         ]
       ],
-      "id": 897,
       "flags": {
         "isStatic": true
       },
@@ -102,7 +98,7 @@
         {
           "comment": "Set `a` to its ceiling value in each dimension.",
           "returns": "PtLike",
-          "returns_comment": "vector `a`\n",
+          "returns_comment": "vector `a`",
           "parameters": [
             {
               "name": "a",
@@ -120,11 +116,10 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          97,
-          14
+          96,
+          9
         ]
       ],
-      "id": 880,
       "flags": {
         "isStatic": true
       },
@@ -158,11 +153,10 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          90,
-          16
+          89,
+          9
         ]
       ],
-      "id": 876,
       "flags": {
         "isStatic": true
       },
@@ -196,11 +190,10 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          60,
-          15
+          59,
+          9
         ]
       ],
-      "id": 868,
       "flags": {
         "isStatic": true
       },
@@ -210,7 +203,7 @@
         {
           "comment": "Divide `a` over `b`.",
           "returns": "PtLike",
-          "returns_comment": "vector `a`\n",
+          "returns_comment": "vector `a`",
           "parameters": [
             {
               "name": "a",
@@ -221,7 +214,7 @@
             {
               "name": "b",
               "comment": "",
-              "type": "PtLike | number",
+              "type": "number | PtLike",
               "default": false
             }
           ],
@@ -235,10 +228,9 @@
         [
           "src/LinearAlgebra.ts",
           77,
-          12
+          9
         ]
       ],
-      "id": 872,
       "flags": {
         "isStatic": true
       },
@@ -272,11 +264,10 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          133,
-          14
+          132,
+          9
         ]
       ],
-      "id": 894,
       "flags": {
         "isStatic": true
       },
@@ -286,7 +277,7 @@
         {
           "comment": "Set `a` to its floor value in each dimension.",
           "returns": "PtLike",
-          "returns_comment": "vector `a`\n",
+          "returns_comment": "vector `a`",
           "parameters": [
             {
               "name": "a",
@@ -304,11 +295,10 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          105,
-          18
+          107,
+          9
         ]
       ],
-      "id": 884,
       "flags": {
         "isStatic": true
       },
@@ -336,11 +326,10 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          200,
-          12
+          199,
+          9
         ]
       ],
-      "id": 918,
       "flags": {
         "isStatic": true
       },
@@ -350,7 +339,7 @@
         {
           "comment": "Given a mapping function, update `a`'s value in each dimension.",
           "returns": "PtLike",
-          "returns_comment": "vector `a`\n",
+          "returns_comment": "vector `a`",
           "parameters": [
             {
               "name": "a",
@@ -361,7 +350,7 @@
             {
               "name": "fn",
               "comment": "",
-              "type": " Fn(n:number, index:number, arr:any)",
+              "type": " Fn(n:number, index:number, arr:PtLike)",
               "default": false
             }
           ],
@@ -374,11 +363,10 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          160,
-          12
+          156,
+          9
         ]
       ],
-      "id": 903,
       "flags": {
         "isStatic": true
       },
@@ -387,8 +375,8 @@
       "signatures": [
         {
           "comment": "Find the max value within a vector's dimensions.",
-          "returns": "{ index:`any`, value:`any` }",
-          "returns_comment": "an object with `value` and `index` that specifies the max value and its corresponding dimension.\n",
+          "returns": "{ index:`number`, value:`number` }",
+          "returns_comment": "an object with `value` and `index` that specifies the max value and its corresponding dimension.",
           "parameters": [
             {
               "name": "a",
@@ -406,11 +394,10 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          175,
-          12
+          174,
+          9
         ]
       ],
-      "id": 909,
       "flags": {
         "isStatic": true
       },
@@ -419,8 +406,8 @@
       "signatures": [
         {
           "comment": "Find the min value within a vector's dimensions.",
-          "returns": "{ index:`any`, value:`any` }",
-          "returns_comment": "an object with `value` and `index` that specifies the min value and its corresponding dimension.\n",
+          "returns": "{ index:`number`, value:`number` }",
+          "returns_comment": "an object with `value` and `index` that specifies the min value and its corresponding dimension.",
           "parameters": [
             {
               "name": "a",
@@ -438,11 +425,10 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          43,
-          17
+          41,
+          9
         ]
       ],
-      "id": 864,
       "flags": {
         "isStatic": true
       },
@@ -452,7 +438,7 @@
         {
           "comment": "Multiply `b` with vector `a`.",
           "returns": "PtLike",
-          "returns_comment": "vector `a`\n",
+          "returns_comment": "vector `a`",
           "parameters": [
             {
               "name": "a",
@@ -463,7 +449,7 @@
             {
               "name": "b",
               "comment": "",
-              "type": "PtLike | number",
+              "type": "number | PtLike",
               "default": false
             }
           ],
@@ -476,11 +462,10 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          151,
-          14
+          148,
+          9
         ]
       ],
-      "id": 900,
       "flags": {
         "isStatic": true
       },
@@ -490,7 +475,7 @@
         {
           "comment": "Set `a` to its rounded value in each dimension.",
           "returns": "PtLike",
-          "returns_comment": "vector `a`\n",
+          "returns_comment": "vector `a`",
           "parameters": [
             {
               "name": "a",
@@ -508,11 +493,10 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          30,
-          17
+          28,
+          9
         ]
       ],
-      "id": 860,
       "flags": {
         "isStatic": true
       },
@@ -520,9 +504,9 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Subtract `b` from vector `a`.",
+          "comment": "Subtract `b` from vector `a`. Unlike `multiply`/`divide`, a shorter `b` is tolerated: missing (or NaN) dimensions are treated as 0.",
           "returns": "PtLike",
-          "returns_comment": "vector `a`\n",
+          "returns_comment": "vector `a`",
           "parameters": [
             {
               "name": "a",
@@ -533,7 +517,7 @@
             {
               "name": "b",
               "comment": "",
-              "type": "PtLike | number",
+              "type": "number | PtLike",
               "default": false
             }
           ],
@@ -547,10 +531,9 @@
         [
           "src/LinearAlgebra.ts",
           189,
-          12
+          9
         ]
       ],
-      "id": 915,
       "flags": {
         "isStatic": true
       },
@@ -578,11 +561,10 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          113,
-          13
+          114,
+          9
         ]
       ],
-      "id": 887,
       "flags": {
         "isStatic": true
       },
@@ -603,7 +585,7 @@
             {
               "name": "magnitude",
               "comment": "",
-              "type": "number",
+              "type": "number | undefined",
               "default": "undefined"
             }
           ],

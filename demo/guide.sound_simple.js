@@ -9,22 +9,28 @@ window.demoDescription = " Sound play and analyze. Music snippet taken from Spac
 
   Pts.quickStart( "#pt", "#e2e6ef" );
 
-  // Note: use Sound.loadAsBuffer instead if you need support for Safari/iOS browser. (as of Apr 2019)
-  // See this example: http://ptsjs.org/demo/edit/?name=sound.analyze
-  
   var sound;
   var bins = 256;
   var colors = ["#f06", "#62e", "#fff", "#fe3", "#0c9"];
+  var status = "Loading...";
 
   // Load sound
   Sound.load( "/assets/spacetravel.mp3" ).then( s => {
     sound = s.analyze(bins);
-  }).catch( e => console.error(e) );
+    status = "";
+  }).catch( e => {
+    status = "Could not load sound.";
+    console.error(e);
+  });
 
 
   // Draw play button
   function playButton() {
-    if (!sound || !sound.playing) {
+    if (!sound) {
+      form.fillOnly("#9ab").text( [20,30], status );
+      return;
+    }
+    if (!sound.playing) {
       form.fillOnly("#f06").rect( [[0,0], [50,50]] );
       form.fillOnly('#fff').polygon( Triangle.fromCenter( [25,25], 10 ).rotate2D( Const.half_pi, [25,25] ) );
     } else {
@@ -47,7 +53,7 @@ window.demoDescription = " Sound play and analyze. Music snippet taken from Spac
 
     action: (type, x, y) => {
       if (type === "up" &&  Geom.withinBound( [x,y], [0,0], [50,50] )) { // clicked button
-        sound.toggle();
+        if (sound) sound.toggle();
       }
     }
   });

@@ -1,15 +1,216 @@
-/* normalize.css */ 
-html{font-family:sans-serif;line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,footer,header,nav,section{display:block}h1{font-size:2em;margin:.67em 0}figcaption,figure,main{display:block}figure{margin:1em 40px}hr{box-sizing:content-box;height:0;overflow:visible}pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent;-webkit-text-decoration-skip:objects}a:active,a:hover{outline-width:0}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:inherit;font-weight:bolder}code,kbd,samp{font-family:monospace,monospace;font-size:1em}dfn{font-style:italic}mark{background-color:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}audio,video{display:inline-block}audio:not([controls]){display:none;height:0}img{border-style:none}svg:not(:root){overflow:hidden}button,input,optgroup,select,textarea{font-family:sans-serif;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}button,html [type="button"],[type="reset"],[type="submit"]{-webkit-appearance:button}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner{border-style:none;padding:0}button:-moz-focusring,[type="button"]:-moz-focusring,[type="reset"]:-moz-focusring,[type="submit"]:-moz-focusring{outline:1px dotted ButtonText}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}progress{display:inline-block;vertical-align:baseline}textarea{overflow:auto}[type="checkbox"],[type="radio"]{box-sizing:border-box;padding:0}[type="number"]::-webkit-inner-spin-button,[type="number"]::-webkit-outer-spin-button{height:auto}[type="search"]{-webkit-appearance:textfield;outline-offset:-2px}[type="search"]::-webkit-search-cancel-button,[type="search"]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}details,menu{display:block}summary{display:list-item}canvas{display:inline-block}template{display:none}[hidden]{display:none}
+/* normalize.css */
+html {
+  font-family: sans-serif;
+  line-height: 1.15;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+}
+article,
+aside,
+footer,
+header,
+nav,
+section {
+  display: block;
+}
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+figcaption,
+figure,
+main {
+  display: block;
+}
+figure {
+  margin: 1em 40px;
+}
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+}
+pre {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+a {
+  background-color: transparent;
+  -webkit-text-decoration-skip: objects;
+}
+a:active,
+a:hover {
+  outline-width: 0;
+}
+abbr[title] {
+  border-bottom: none;
+  text-decoration: underline;
+  text-decoration: underline dotted;
+}
+b,
+strong {
+  font-weight: inherit;
+  font-weight: bolder;
+}
+code,
+kbd,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+dfn {
+  font-style: italic;
+}
+mark {
+  background-color: #ff0;
+  color: #000;
+}
+small {
+  font-size: 80%;
+}
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sub {
+  bottom: -0.25em;
+}
+sup {
+  top: -0.5em;
+}
+audio,
+video {
+  display: inline-block;
+}
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+img {
+  border-style: none;
+}
+svg:not(:root) {
+  overflow: hidden;
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: sans-serif;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+}
+button,
+input {
+  overflow: visible;
+}
+button,
+select {
+  text-transform: none;
+}
+button,
+html [type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+}
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+fieldset {
+  border: 1px solid silver;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+legend {
+  box-sizing: border-box;
+  color: inherit;
+  display: table;
+  max-width: 100%;
+  padding: 0;
+  white-space: normal;
+}
+progress {
+  display: inline-block;
+  vertical-align: baseline;
+}
+textarea {
+  overflow: auto;
+}
+[type="checkbox"],
+[type="radio"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+[type="search"] {
+  -webkit-appearance: textfield;
+  outline-offset: -2px;
+}
+[type="search"]::-webkit-search-cancel-button,
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit;
+}
+details,
+menu {
+  display: block;
+}
+summary {
+  display: list-item;
+}
+canvas {
+  display: inline-block;
+}
+template {
+  display: none;
+}
+[hidden] {
+  display: none;
+}
 
 body {
   line-height: 1.5;
   font-size: 12px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+    "Helvetica Neue", Arial, sans-serif;
 }
 
-a { color: #123; text-decoration: underline; }
-a:visited { color: #123; }
-a:hover { color: #42e; }
+a {
+  color: #123;
+  text-decoration: underline;
+}
+a:visited {
+  color: #123;
+}
+a:hover {
+  color: #42e;
+}
 
 /* Header & footer */
 
@@ -38,8 +239,10 @@ a:hover { color: #42e; }
   border-bottom: none;
 }
 
-#footer a:link, #footer a:visited { color: #aeb7c1; }
-
+#footer a:link,
+#footer a:visited {
+  color: #aeb7c1;
+}
 
 #pts {
   display: inline-block;
@@ -54,13 +257,14 @@ a:hover { color: #42e; }
 #pts a > span {
   color: #42e;
   display: inline-block;
-   padding: 0 2px; 
+  padding: 0 2px;
 }
 
 #topmenu {
   position: absolute;
-  top: 0; right: 30px;
-  height: 100%; 
+  top: 0;
+  right: 30px;
+  height: 100%;
   vertical-align: middle;
 }
 
@@ -71,18 +275,31 @@ a:hover { color: #42e; }
   height: 100%;
 }
 
-
 /* ---------- */
 
 #menu {
   position: fixed;
-  top: 105px;; left: 0; width: 25%;
+  top: 105px;
+  left: 0;
+  width: 25%;
   max-width: 300px;
   font-size: 1em;
   counter-reset: c;
   padding-left: 40px;
   padding-bottom: 50px;
   line-height: 2.4;
+}
+
+#menu > ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+a:focus-visible,
+button:focus-visible,
+pre:focus-visible {
+  outline: 2px solid #42e;
+  outline-offset: 2px;
 }
 
 #menu li {
@@ -112,15 +329,19 @@ a:hover { color: #42e; }
   text-align: left;
   padding-right: 10px;
   min-width: 20px;
-
 }
 
-#menu li a { 
-  color: #123; text-decoration: none; 
+#menu li a {
+  color: #123;
+  text-decoration: none;
   display: block;
 }
-#menu li a:visited { color: #123; }
-#menu li a:hover { color: #42e; }
+#menu li a:visited {
+  color: #123;
+}
+#menu li a:hover {
+  color: #42e;
+}
 
 #post {
   position: relative;
@@ -130,43 +351,65 @@ a:hover { color: #42e; }
   padding: 0 0px 30px;
   color: #123;
   font-size: 1.3em;
-  border-bottom: 2px solid #123; 
+  border-bottom: 2px solid #123;
   margin-bottom: 100px;
 }
-
 
 #post li {
   /* margin-bottom: 0.5em; */
 }
 
-#post img { max-width: 100%; width: 100%; }
-
-
-h1 { font-size: 4em; line-height: 1; margin: 50px 0 75px; font-weight: 500; color: #42e; }
-h2 { font-size: 2.0em; }
-h3 { font-size: 1.6em; margin-top: 50px; font-weight: 500;}
-h4 { font-size: 1.35em; }
-h5 { font-size: 0.8em; font-weight: normal; color: #90959C; margin-top: -0.8em; margin-bottom: 2.5em; }
-
-code { 
-  display: inline-block; 
-  font-size: 0.9em; 
+#post img {
+  max-width: 100%;
+  width: 100%;
 }
 
-p code, h5 code, li code {
+h1 {
+  font-size: 4em;
+  line-height: 1;
+  margin: 50px 0 75px;
+  font-weight: 500;
+  color: #42e;
+}
+h2 {
+  font-size: 2em;
+}
+h3 {
+  font-size: 1.6em;
+  margin-top: 50px;
+  font-weight: 500;
+}
+h4 {
+  font-size: 1.35em;
+}
+h5 {
+  font-size: 0.8em;
+  font-weight: normal;
+  color: #90959c;
+  margin-top: -0.8em;
+  margin-bottom: 2.5em;
+}
+
+code {
+  display: inline-block;
+  font-size: 0.9em;
+}
+
+p code,
+h5 code,
+li code {
   font-size: 1em;
-  color: #60636F;
+  color: #60636f;
   font-style: normal;
   font-size: 0.85em;
-  
 }
 
 em > code {
-  background: #FFF93A;
+  background: #fff93a;
 }
 
 a > code {
-  background: #F1F3FA;
+  background: #f1f3fa;
   border: 1px solid #e2e6ef;
   padding: 0 5px;
 }
@@ -178,9 +421,12 @@ a:hover > code {
 }
 
 #toc {
-  position: fixed; top: 0px; left: 0;
+  position: fixed;
+  top: 0px;
+  left: 0;
   display: none;
-  width: 100px; height: 80px;
+  width: 100px;
+  height: 80px;
   background: transparent;
   color: #42e;
   line-height: 78px;
@@ -191,9 +437,12 @@ a:hover > code {
 #close {
   display: none;
   position: absolute;
-  top: 0; right: 0;
-  width: 80px; height: 80px;
-  line-height: 78px; text-align: center;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 80px;
+  line-height: 78px;
+  text-align: center;
   font-size: 3em;
   text-decoration: none;
   color: #fff;
@@ -203,12 +452,14 @@ a:hover > code {
   color: #0ca;
 }
 
-
 pre {
   border-left: 2px solid #0ca;
   padding: 5px 0 5px 20px;
   font-size: 0.9em;
   margin: 20px 0 40px;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
 }
 
 code {
@@ -227,59 +478,137 @@ p {
 
 .demoOverlay {
   position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   /* background: rgba(0,0,0,.2); */
   box-sizing: border-box;
 }
 
+/* The canvas stays hidden until the sketch has painted, so the preview image
+   underneath is never replaced by an empty rectangle. A demo that fails to
+   load simply keeps showing the preview. */
+.demoOverlay canvas,
+.demoOverlay svg {
+  opacity: 0;
+  transition: opacity 0.35s ease-out;
+}
 
-.demoOverlay::after, .demoOverlay .sourceCodeLink {
+.demoOverlay.has-painted canvas,
+.demoOverlay.has-painted svg {
+  opacity: 1;
+}
+
+/* Keep playback and source controls visible and keyboard reachable. */
+.demoOverlay .demoToggle,
+.demoOverlay .sourceCodeLink {
   display: block;
-  position: absolute; bottom: 0; right: 0;
-  background: rgba(0,0,0,.7);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
   color: #fff;
   padding: 10px;
   font-size: 11px;
-  content: 'Touch to try demo';
+  border: 0;
+  line-height: 1.5;
+  z-index: 1;
 }
 
 .demoOverlay.active {
   box-shadow: 0 0 0 2px #fff;
 }
 
-.demoOverlay.active::after {
-  display: none;
+.demoOverlay .demoToggle {
+  left: 0;
+  right: auto;
+  cursor: pointer;
 }
 
-.demoOverlay .sourceCodeLink {
-  display: none;
+.demoOverlay .demoToggle:disabled {
+  visibility: hidden;
+}
+.demoOverlay .demoToggle:focus-visible,
+.demoOverlay .sourceCodeLink:focus-visible {
+  outline: 3px solid #42e;
+  outline-offset: 2px;
 }
 
-.demoOverlay.active .sourceCodeLink {
-  display: block;
-}
-
-.demoOverlay.active .sourceCodeLink::after {
+.demoOverlay .sourceCodeLink::after {
   content: "↗";
 }
 
+/* Loading spinner. Shown only after a short delay, so a cached demo does not
+   flash one on every scroll, and never outlives its own state. */
+.demoSpinner {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1.6em;
+  height: 1.6em;
+  margin: -0.8em 0 0 -0.8em;
+  border: 2px solid rgba(18, 35, 51, 0.18);
+  border-top-color: rgba(18, 35, 51, 0.65);
+  border-radius: 50%;
+  animation: demoSpin 0.7s linear infinite;
+}
+
+.demoOverlay.is-loading.show-spinner .demoSpinner {
+  display: block;
+}
+
+@keyframes demoSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* A static ring reads as "working" without the motion. */
+@media (prefers-reduced-motion: reduce) {
+  .demoSpinner {
+    animation: none;
+    border-top-color: rgba(18, 35, 51, 0.18);
+    opacity: 0.8;
+  }
+}
+
+.demoStatus {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 10px;
+  background: rgba(18, 35, 51, 0.75);
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.demoOverlay.is-failed .demoStatus {
+  display: block;
+}
 
 /* Mobile and Responsive */
-@media screen and (max-device-width : 768px), screen and (max-width : 768px), print {
-
+@media screen and (max-device-width: 768px),
+  screen and (max-width: 768px),
+  print {
   /* Header and footer */
-  
-  #header, #footer {
+
+  #header,
+  #footer {
     width: 70%;
     margin: 0 auto;
     line-height: 80px;
   }
-  
-  #footer { 
-    line-height: 1.4;
-    padding: 100px 0 30px; 
-  }
 
+  #footer {
+    line-height: 1.4;
+    padding: 100px 0 30px;
+  }
 
   #header a:first-child {
     padding-left: 0;
@@ -296,18 +625,35 @@ p {
     padding-right: 10px;
   }
 
-  #pts { padding-left: 0; }
-  #pts a { padding: 0; }
-  #topmenu { right: 0; }
-  #topmenu a { right: 0; }
+  #topmenu > a:nth-child(n + 3) {
+    display: none;
+  }
+
+  #pts {
+    padding-left: 0;
+  }
+  #pts a {
+    padding: 0;
+  }
+  #topmenu {
+    right: 0;
+  }
+  #topmenu a {
+    right: 0;
+  }
 
   /* --------- */
 
   #menu {
     position: fixed;
-    left: -100%; top: 0; bottom: 0;
-    padding: 100px; margin: 0;
-    width: 90%;
+    left: -100%;
+    visibility: hidden;
+    top: 0;
+    bottom: 0;
+    padding: 90px 40px 40px;
+    margin: 0;
+    width: min(90vw, 520px);
+    max-width: none;
     box-sizing: border-box;
     overflow: auto;
     z-index: 100;
@@ -326,12 +672,19 @@ p {
 
   #menu li:before {
     font-weight: normal;
-    color: rgba(255,255,255,.6);
+    color: rgba(255, 255, 255, 0.6);
   }
 
-  #menu li a { color: #fff; text-decoration: none; }
-  #menu li a:visited { color: #fff; }
-  #menu li a:hover { color: #0ca; }
+  #menu li a {
+    color: #fff;
+    text-decoration: none;
+  }
+  #menu li a:visited {
+    color: #fff;
+  }
+  #menu li a:hover {
+    color: #0ca;
+  }
 
   #post {
     margin: 0 auto;
@@ -340,59 +693,84 @@ p {
     font-size: 1.3em;
   }
 
-
   #toc {
     display: block;
     text-decoration: none;
   }
 
-  #menu:target {
+  /* The menu opens via the #menu hash without JavaScript; with JavaScript, the
+     `open` class is the only authority (Chromium keeps :target matching after
+     history.replaceState, so the class must win once scripts run). */
+  #menu.open,
+  html:not(.js) #menu:target {
+    visibility: visible;
     background: #42e;
     transition: left 0.3s;
     left: 0;
   }
 
-  #close { display: block; }
+  #close {
+    display: block;
+  }
 }
 
 /* Mobile */
-@media screen and (max-device-width : 767px) {
-
+@media screen and (max-device-width: 767px), screen and (max-width: 767px) {
   /* Header and Footer */
 
-  
   #header {
-    padding: 0;
-    margin-left: 15%;
-    width: 85%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 0 12px 0 52px;
+    margin: 0;
+    width: 100%;
     line-height: 70px;
     font-size: 1.2em;
-  }  
+  }
 
+  #pts {
+    white-space: nowrap;
+  }
+  #topmenu {
+    position: static;
+    margin-left: auto;
+    white-space: nowrap;
+  }
 
-  #topmenu > a { padding-left: 0; }
-  #topmenu > a:nth-child(2) { display: none; }
-  #topmenu > a:last-child { padding-right: 20px; }
+  #topmenu > a {
+    padding: 0 6px;
+  }
+  #topmenu > a:last-child {
+    padding-right: 0;
+  }
 
-  #toc { 
-    width: 50px; height: 80px; line-height: 65px; 
+  #post {
+    width: calc(100% - 40px);
+    overflow-wrap: anywhere;
+  }
+
+  #toc {
+    width: 50px;
+    height: 80px;
+    line-height: 65px;
     font-size: 2.5em;
   }
 
   /* ------- */
 
   #menu {
-    padding: 50px;
+    padding: 60px 24px 24px;
   }
 
   #menu li {
     font-size: 1.2em;
+    line-height: 44px;
   }
 
   #menu li::before {
     padding-right: 10px;
   }
-
 
   #close {
     font-size: 2.2em;
@@ -401,14 +779,12 @@ p {
   }
 
   h1 {
-    font-size: 2.5em; 
+    font-size: 2.5em;
     margin: 1em 0;
   }
-  
-  code { font-size: 0.8em; }
-  
-  .demoOverlay.active .sourceCodeLink::after {
-    content: "(desktop)"
+
+  code {
+    font-size: 0.8em;
   }
 
   .demoOverlay {
@@ -418,15 +794,27 @@ p {
 
 /* Print */
 @media print {
-  #close, #toc { display: none; }
-  #header, #footer { text-align: left; }
-  #footer { padding-bottom: 0; }
-  #topmenu { display: none; }
+  #close,
+  #toc {
+    display: none;
+  }
+  #header,
+  #footer {
+    text-align: left;
+  }
+  #footer {
+    padding-bottom: 0;
+  }
+  #topmenu {
+    display: none;
+  }
   #header {
     padding-top: 10px;
     padding-bottom: 10px;
   }
-  h1, h2, h3 {
+  h1,
+  h2,
+  h3 {
     break-after: avoid-page;
     page-break-after: avoid;
     page-break-inside: avoid;
@@ -436,7 +824,6 @@ p {
     margin: 10px;
   }
 }
-
 
 /*
 
@@ -530,4 +917,37 @@ XCode style (c) Angel Garcia <angelgarcia.mail@gmail.com>
 
 .hljs-emphasis {
   font-style: italic;
+}
+
+@media screen and (max-width: 768px) {
+  #header {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 0 12px 0 52px;
+    display: flex;
+    align-items: center;
+  }
+  #pts {
+    padding: 0;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  #toc {
+    width: 50px;
+  }
+  #topmenu {
+    position: static;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  #topmenu > a,
+  #topmenu > a:nth-child(n + 3) {
+    display: block;
+    padding: 0 4px;
+    font-size: 12px;
+    line-height: 44px;
+  }
 }

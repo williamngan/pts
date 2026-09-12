@@ -10,7 +10,7 @@ window.demoDescription = "Demo in getting image pixels";
 (async function() { // async/await function
   
   Pts.quickStart( "#pt", "#e2e6ef" );
-  let img = await Img.loadAsync( "/assets/img_demo.jpg", true, space.pixelScale);
+  let img = await Img.load( "/assets/img_demo.jpg", { editable: true, pixelScale: space.pixelScale });
   let de, triangles;
 
   // animation

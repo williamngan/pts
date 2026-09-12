@@ -3,24 +3,22 @@
   "source": [
     [
       "src/Canvas.ts",
-      443,
-      23
+      555,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 3782,
-  "comment": "CanvasForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`CanvasSpace`](#link).\nYou may extend CanvasForm to implement your own expressions for CanvasSpace.",
+  "comment": "VisualForm is an abstract class that represents a form that can be used to express Pts visually.\nFor example, [`CanvasForm`](#link) is an implementation of VisualForm that draws on [`CanvasSpace`](#link) which represents a html canvas. Learn more about Space and Form in [this guide](../guide/Space-0500.html).",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
           "src/Canvas.ts",
-          456,
-          4
+          631,
+          2
         ]
       ],
-      "id": 3796,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -32,8 +30,8 @@
           "parameters": [
             {
               "name": "space",
-              "comment": "an instance of CanvasSpace\n",
-              "type": "CanvasSpace | CanvasRenderingContext2D",
+              "comment": "an instance of CanvasSpace, or a rendering context. Passing a context is the\nrenderer extension point: any object implementing the context surface documented in\n[`SVGContext2D`](#link) (the reference implementation) receives this form's full drawing\nAPI — this is how SVG output works, and how custom renderers can be built.",
+              "type": "RenderingContext2D | CanvasSpace",
               "default": false
             }
           ],
@@ -48,17 +46,16 @@
       "source": [
         [
           "src/Canvas.ts",
-          499,
-          9
+          674,
+          6
         ]
       ],
-      "id": 3801,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "comment": "Get the rendering context of canvas to perform other canvas functions.",
       "getter": {
-        "type": "PtsCanvasRenderingContext2D"
+        "type": "RenderingContext2D"
       },
       "setter": false
     },
@@ -67,11 +64,10 @@
       "source": [
         [
           "src/Form.ts",
-          52,
-          17
+          53,
+          6
         ]
       ],
-      "id": 4015,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.currentFont",
@@ -86,16 +82,15 @@
       "source": [
         [
           "src/Form.ts",
-          38,
-          12
+          33,
+          6
         ],
         [
           "src/Form.ts",
-          39,
-          12
+          36,
+          6
         ]
       ],
-      "id": 4007,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.filled",
@@ -118,11 +113,10 @@
       "source": [
         [
           "src/Form.ts",
-          18,
-          11
+          16,
+          6
         ]
       ],
-      "id": 4052,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -137,17 +131,16 @@
       "source": [
         [
           "src/Canvas.ts",
-          492,
-          11
+          665,
+          6
         ]
       ],
-      "id": 3799,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "comment": "get the CanvasSpace instance that this form is associated with",
       "getter": {
-        "type": "CanvasSpace"
+        "type": "S"
       },
       "setter": false
     },
@@ -156,16 +149,15 @@
       "source": [
         [
           "src/Form.ts",
-          45,
-          13
+          43,
+          6
         ],
         [
           "src/Form.ts",
           46,
-          13
+          6
         ]
       ],
-      "id": 4011,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.stroked",
@@ -190,18 +182,17 @@
       "source": [
         [
           "src/Canvas.ts",
-          1228,
-          13
+          1614,
+          2
         ]
       ],
-      "id": 3997,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Set text alignment and baseline (eg, vertical-align).",
-          "returns": "this",
+          "returns": "CanvasForm",
           "returns_comment": false,
           "parameters": [
             {
@@ -212,7 +203,7 @@
             },
             {
               "name": "baseline",
-              "comment": "HTML canvas' textBaseline option: \"top\", \"hanging\", \"middle\", \"alphabetic\", \"ideographic\", \"bottom\". For convenience, you can also use \"center\" (same as \"middle\"), and \"baseline\" (same as \"alphabetic\")\n",
+              "comment": "HTML canvas' textBaseline option: \"top\", \"hanging\", \"middle\", \"alphabetic\", \"ideographic\", \"bottom\". For convenience, you can also use \"center\" (same as \"middle\"), and \"baseline\" (same as \"alphabetic\")",
               "type": "CanvasTextBaseline",
               "default": "\"alphabetic\""
             }
@@ -226,11 +217,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          531,
-          9
+          714,
+          2
         ]
       ],
-      "id": 3810,
       "flags": {},
       "overrides": "VisualForm.alpha",
       "inherits": false,
@@ -242,7 +232,7 @@
           "parameters": [
             {
               "name": "a",
-              "comment": "alpha value between 0 and 1\n",
+              "comment": "alpha value between 0 and 1",
               "type": "number",
               "default": false
             }
@@ -261,30 +251,29 @@
       "source": [
         [
           "src/Canvas.ts",
-          596,
-          19
+          806,
+          2
         ]
       ],
-      "id": 3822,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "A convenient function to apply fill and/or stroke after custom drawings using canvas context (eg, `form.ctx.ellipse(...)`).\nYou don't need to call this function if you're using Pts' drawing functions like `form.point` or `form.rect`",
-          "returns": "this",
+          "returns": "CanvasForm",
           "returns_comment": false,
           "parameters": [
             {
               "name": "filled",
               "comment": "apply fill when set to `true`",
-              "type": "boolean | string",
+              "type": "string | boolean",
               "default": "true"
             },
             {
               "name": "stroked",
               "comment": "apply stroke when set to `true`",
-              "type": "boolean | string",
+              "type": "string | boolean",
               "default": "true"
             },
             {
@@ -297,7 +286,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`form.ctx.beginPath(); form.ctx.ellipse(...); form.applyFillStroke();`\n"
+              "text": "`form.ctx.beginPath(); form.ctx.ellipse(...); form.applyFillStroke();`"
             }
           ]
         }
@@ -308,11 +297,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          909,
-          7
+          1215,
+          2
         ]
       ],
-      "id": 3915,
       "flags": {},
       "overrides": "VisualForm.arc",
       "inherits": false,
@@ -348,7 +336,7 @@
             },
             {
               "name": "cc",
-              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.\n",
+              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.",
               "type": "boolean",
               "default": false
             }
@@ -362,11 +350,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          844,
-          10
+          1115,
+          2
         ]
       ],
-      "id": 3887,
       "flags": {},
       "overrides": "VisualForm.circle",
       "inherits": false,
@@ -378,7 +365,7 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "usually a Group or an Iterable<PtLike> with 2 Pt, but it can also take an array of two numeric arrays [ [position], [size] ]\n",
+              "comment": "usually a Group or an Iterable<PtLike> with 2 Pt, but it can also take an array of two numeric arrays [ [position], [size] ]",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -392,11 +379,10 @@
       "source": [
         [
           "src/Form.ts",
-          160,
-          9
+          167,
+          2
         ]
       ],
-      "id": 4036,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.circles",
@@ -408,7 +394,7 @@
           "parameters": [
             {
               "name": "groups",
-              "comment": "an array of Groups that defines multiple circles\n",
+              "comment": "an array of Groups that defines multiple circles",
               "type": "GroupLike[]",
               "default": false
             }
@@ -422,11 +408,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          654,
-          8
+          889,
+          2
         ]
       ],
-      "id": 3837,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -445,11 +430,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          645,
-          13
+          881,
+          2
         ]
       ],
-      "id": 3834,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -461,7 +445,7 @@
           "parameters": [
             {
               "name": "mode",
-              "comment": "a composite operation such as 'lighten', 'multiply', 'overlay', and 'color-burn'.\n",
+              "comment": "a composite operation such as 'lighten', 'multiply', 'overlay', and 'color-burn'.",
               "type": "GlobalCompositeOperation",
               "default": "\"source-over\""
             }
@@ -475,11 +459,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          666,
-          8
+          900,
+          2
         ]
       ],
-      "id": 3839,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -492,12 +475,12 @@
             {
               "name": "segments",
               "comment": "Dash segments. Defaults to `true` which corresponds to `[5, 5]`. Pass `false` to deactivate dashes. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash))",
-              "type": "PtLike | boolean",
+              "type": "boolean | PtLike",
               "default": "true"
             },
             {
               "name": "offset",
-              "comment": "Dash offset. Defaults to 0. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineDashOffset)\n",
+              "comment": "Dash offset. Defaults to 0. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineDashOffset)",
               "type": "number",
               "default": "0"
             }
@@ -516,18 +499,17 @@
       "source": [
         [
           "src/Canvas.ts",
-          878,
-          11
+          1164,
+          2
         ]
       ],
-      "id": 3899,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Draw an ellipse.",
-          "returns": "this",
+          "returns": "CanvasForm",
           "returns_comment": false,
           "parameters": [
             {
@@ -562,7 +544,7 @@
             },
             {
               "name": "cc",
-              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.\n",
+              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.",
               "type": "boolean",
               "default": "false"
             }
@@ -576,11 +558,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          543,
-          8
+          725,
+          2
         ]
       ],
-      "id": 3813,
       "flags": {},
       "overrides": "VisualForm.fill",
       "inherits": false,
@@ -592,7 +573,7 @@
           "parameters": [
             {
               "name": "c",
-              "comment": "fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))\n",
+              "comment": "fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))",
               "type": "string | boolean | CanvasGradient | CanvasPattern",
               "default": false
             }
@@ -610,25 +591,24 @@
       "name": "fillOnly",
       "source": [
         [
-          "src/Form.ts",
-          92,
-          10
+          "src/Canvas.ts",
+          740,
+          2
         ]
       ],
-      "id": 4022,
       "flags": {},
-      "overrides": false,
-      "inherits": "VisualForm.fillOnly",
+      "overrides": "VisualForm.fillOnly",
+      "inherits": false,
       "signatures": [
         {
-          "comment": "Set current fill style and remove stroke style. (not implemented here  -- to be implemented in subclasses).",
+          "comment": "Set current fill style and remove stroke style.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
               "name": "c",
-              "comment": "fill color as string or `false` to specify transparent.\n",
-              "type": "string | boolean",
+              "comment": "fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))",
+              "type": "string | boolean | CanvasGradient | CanvasPattern",
               "default": false
             }
           ],
@@ -641,11 +621,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          692,
-          8
+          931,
+          2
         ]
       ],
-      "id": 3843,
       "flags": {},
       "overrides": "VisualForm.font",
       "inherits": false,
@@ -689,7 +668,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`form.font( myFont )`, `form.font(14, \"bold\")`\n"
+              "text": "`form.font( myFont )`, `form.font(14, \"bold\")`"
             }
           ]
         }
@@ -700,24 +679,23 @@
       "source": [
         [
           "src/Canvas.ts",
-          718,
-          21
+          960,
+          2
         ]
       ],
-      "id": 3850,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Set whether to use html canvas' [`measureText`](#link) function, or a faster but less accurate heuristic function.",
+          "comment": "Set whether to use html canvas' [`measureText`](#link) function, or a faster but less accurate estimate.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
               "name": "estimate",
-              "comment": "`true` to use heuristic function, or `false` to use ctx.measureText\n",
-              "type": "boolean",
+              "comment": "`false` to use ctx.measureText; `true` or `\"sample\"` to use a sampled-average estimator (fastest); `\"char\"` to use a per-character width cache (nearly as accurate as measureText for most texts, and much faster after warmup)",
+              "type": "boolean | sample | char",
               "default": "true"
             }
           ],
@@ -730,11 +708,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          728,
-          16
+          980,
+          2
         ]
       ],
-      "id": 3853,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -746,7 +723,7 @@
           "parameters": [
             {
               "name": "c",
-              "comment": "a string of text contents\n",
+              "comment": "a string of text contents",
               "type": "string",
               "default": false
             }
@@ -760,11 +737,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          617,
-          12
+          830,
+          2
         ]
       ],
-      "id": 3827,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -777,14 +753,14 @@
             {
               "name": "stops",
               "comment": "an array of gradient stops. This can be an array of colors `[\"#f00\", \"#0f0\", ...]` for evenly distributed gradient, or an array of [stop, color] like `[[0.1, \"#f00\"], [0.7, \"#0f0\"]]`",
-              "type": " | string[]",
+              "type": "string[] | number,string[]",
               "default": false
             }
           ],
           "tags": [
             {
               "tag": "example",
-              "text": "`c1 = Circle.fromCenter(...); grad = form.gradient([\"#f00\", \"#00f\"]); form.fill( grad( c1, c2 ) ).circle( c1 )`\n"
+              "text": "`c1 = Circle.fromCenter(...); grad = form.gradient([\"#f00\", \"#00f\"]); form.fill( grad( c1, c2 ) ).circle( c1 )`"
             }
           ]
         }
@@ -795,18 +771,17 @@
       "source": [
         [
           "src/Canvas.ts",
-          1078,
-          9
+          1407,
+          2
         ]
       ],
-      "id": 3958,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Draw an image.",
-          "returns": "this",
+          "returns": "CanvasForm",
           "returns_comment": false,
           "parameters": [
             {
@@ -818,12 +793,12 @@
             {
               "name": "img",
               "comment": "either an [Img](#link) instance or an [`CanvasImageSource`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) instance (eg the image from `<img>`, `<video>` or `<canvas>`)",
-              "type": "CanvasImageSource | Img",
+              "type": "Img | CanvasImageSource",
               "default": false
             },
             {
               "name": "orig",
-              "comment": "optionally a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a cropping box  in the original target.\n",
+              "comment": "optionally a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a cropping box  in the original target.",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -837,18 +812,17 @@
       "source": [
         [
           "src/Canvas.ts",
-          1111,
-          13
+          1457,
+          2
         ]
       ],
-      "id": 3968,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Draw ImageData on canvas using ImageData",
-          "returns": "this",
+          "returns": "CanvasForm",
           "returns_comment": false,
           "parameters": [
             {
@@ -859,7 +833,7 @@
             },
             {
               "name": "img",
-              "comment": "an ImageData object\n",
+              "comment": "an ImageData object",
               "type": "ImageData",
               "default": false
             }
@@ -873,11 +847,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          976,
-          8
+          1298,
+          2
         ]
       ],
-      "id": 3935,
       "flags": {},
       "overrides": "VisualForm.line",
       "inherits": false,
@@ -889,7 +862,7 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike> representing a line\n",
+              "comment": "a Group or an Iterable<PtLike> representing a line",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -903,11 +876,10 @@
       "source": [
         [
           "src/Form.ts",
-          196,
-          7
+          205,
+          2
         ]
       ],
-      "id": 4042,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.lines",
@@ -919,7 +891,7 @@
           "parameters": [
             {
               "name": "groups",
-              "comment": "An array of Groups of Pts\n",
+              "comment": "An array of Groups of Pts",
               "type": "GroupLike[]",
               "default": false
             }
@@ -933,11 +905,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          1243,
-          7
+          1631,
+          2
         ]
       ],
-      "id": 4001,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -949,7 +920,7 @@
           "parameters": [
             {
               "name": "txt",
-              "comment": "text\n",
+              "comment": "text",
               "type": "any",
               "default": false
             }
@@ -963,11 +934,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          1168,
-          16
+          1531,
+          2
         ]
       ],
-      "id": 3990,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -998,12 +968,12 @@
             {
               "name": "verticalAlign",
               "comment": "\"top\", \"middle\", or \"bottom\" to specify vertical alignment inside the box",
-              "type": "string",
+              "type": "TextVerticalAlign",
               "default": "\"top\""
             },
             {
               "name": "crop",
-              "comment": "a boolean to specify whether to crop text when overflowing\n",
+              "comment": "a boolean to specify whether to crop text when overflowing",
               "type": "boolean",
               "default": "true"
             }
@@ -1017,11 +987,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          819,
-          9
+          1092,
+          2
         ]
       ],
-      "id": 3877,
       "flags": {},
       "overrides": "VisualForm.point",
       "inherits": false,
@@ -1053,7 +1022,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`form.point( p )`, `form.point( p, 10, \"circle\" )`\n"
+              "text": "`form.point( p )`, `form.point( p, 10, \"circle\" )`"
             }
           ]
         }
@@ -1064,11 +1033,10 @@
       "source": [
         [
           "src/Form.ts",
-          138,
-          8
+          148,
+          2
         ]
       ],
-      "id": 4031,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.points",
@@ -1092,7 +1060,7 @@
             },
             {
               "name": "shape",
-              "comment": "The shape of the point. Defaults to \"square\", but it can be \"circle\" or a custom shape function in your own implementation.\n",
+              "comment": "The shape of the point. Defaults to \"square\", but it can be \"circle\" or a custom shape function in your own implementation.",
               "type": "string",
               "default": false
             }
@@ -1106,11 +1074,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          999,
-          11
+          1319,
+          2
         ]
       ],
-      "id": 3942,
       "flags": {},
       "overrides": "VisualForm.polygon",
       "inherits": false,
@@ -1122,7 +1089,7 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike> representingg a polygon\n",
+              "comment": "a Group or an Iterable<PtLike> representingg a polygon",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -1136,11 +1103,10 @@
       "source": [
         [
           "src/Form.ts",
-          212,
-          10
+          219,
+          2
         ]
       ],
-      "id": 4045,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.polygons",
@@ -1152,7 +1118,7 @@
           "parameters": [
             {
               "name": "groups",
-              "comment": "An array of Groups of Pts\n",
+              "comment": "An array of Groups of Pts",
               "type": "GroupLike[]",
               "default": false
             }
@@ -1166,11 +1132,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          1028,
-          8
+          1345,
+          2
         ]
       ],
-      "id": 3949,
       "flags": {},
       "overrides": "VisualForm.rect",
       "inherits": false,
@@ -1182,7 +1147,7 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.\n",
+              "comment": "a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -1196,11 +1161,10 @@
       "source": [
         [
           "src/Form.ts",
-          229,
-          7
+          233,
+          2
         ]
       ],
-      "id": 4048,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.rects",
@@ -1212,7 +1176,7 @@
           "parameters": [
             {
               "name": "groups",
-              "comment": "An array of Groups of Pts\n",
+              "comment": "An array of Groups of Pts",
               "type": "GroupLike[]",
               "default": false
             }
@@ -1226,11 +1190,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          518,
-          17
+          697,
+          2
         ]
       ],
-      "id": 3807,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1242,9 +1205,9 @@
           "parameters": [
             {
               "name": "offset",
-              "comment": "Optional offset on the top-left position when drawing on the visible canvas\n",
+              "comment": "Optional offset on the top-left position when drawing on the visible canvas",
               "type": "PtLike",
-              "default": "[0,0]"
+              "default": "..."
             }
           ],
           "tags": []
@@ -1256,11 +1219,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          779,
-          9
+          1043,
+          2
         ]
       ],
-      "id": 3867,
       "flags": {},
       "overrides": "VisualForm.reset",
       "inherits": false,
@@ -1279,18 +1241,17 @@
       "source": [
         [
           "src/Canvas.ts",
-          944,
-          10
+          1254,
+          2
         ]
       ],
-      "id": 3927,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Draw a square, given a center and its half-size.",
-          "returns": "this",
+          "returns": "CanvasForm",
           "returns_comment": false,
           "parameters": [
             {
@@ -1301,7 +1262,7 @@
             },
             {
               "name": "halfsize",
-              "comment": "half-size\n",
+              "comment": "half-size",
               "type": "number",
               "default": false
             }
@@ -1315,11 +1276,10 @@
       "source": [
         [
           "src/Form.ts",
-          169,
-          9
+          175,
+          2
         ]
       ],
-      "id": 4039,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.squares",
@@ -1331,7 +1291,7 @@
           "parameters": [
             {
               "name": "groups",
-              "comment": "an array of Groups that defines multiple circles\n",
+              "comment": "an array of Groups that defines multiple circles",
               "type": "GroupLike[]",
               "default": false
             }
@@ -1345,11 +1305,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          564,
-          10
+          753,
+          2
         ]
       ],
-      "id": 3816,
       "flags": {},
       "overrides": "VisualForm.stroke",
       "inherits": false,
@@ -1379,7 +1338,7 @@
             },
             {
               "name": "linecap",
-              "comment": "Optional string to set line cap style. Can be \"butt\", \"round\", or \"square\".\n",
+              "comment": "Optional string to set line cap style. Can be \"butt\", \"round\", or \"square\".",
               "type": "CanvasLineCap",
               "default": false
             }
@@ -1397,25 +1356,24 @@
       "name": "strokeOnly",
       "source": [
         [
-          "src/Form.ts",
-          117,
-          12
+          "src/Canvas.ts",
+          788,
+          2
         ]
       ],
-      "id": 4025,
       "flags": {},
-      "overrides": false,
-      "inherits": "VisualForm.strokeOnly",
+      "overrides": "VisualForm.strokeOnly",
+      "inherits": false,
       "signatures": [
         {
-          "comment": "Set stroke style and remove fill style. (not implemented here  -- to be implemented in subclasses).",
+          "comment": "Set stroke style and remove fill style.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
               "name": "c",
-              "comment": "stroke color as string or `false` to specify transparent.",
-              "type": "string | boolean",
+              "comment": "stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))",
+              "type": "string | boolean | CanvasGradient | CanvasPattern",
               "default": false
             },
             {
@@ -1427,13 +1385,13 @@
             {
               "name": "linejoin",
               "comment": "Optional string to set line joint style. Can be \"miter\", \"bevel\", or \"round\".",
-              "type": "string",
+              "type": "CanvasLineJoin",
               "default": false
             },
             {
               "name": "linecap",
-              "comment": "Optional string to set line cap style. Can be \"butt\", \"round\", or \"square\".\n",
-              "type": "string",
+              "comment": "Optional string to set line cap style. Can be \"butt\", \"round\", or \"square\".",
+              "type": "CanvasLineCap",
               "default": false
             }
           ],
@@ -1446,11 +1404,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          1136,
-          8
+          1485,
+          2
         ]
       ],
-      "id": 3978,
       "flags": {},
       "overrides": "VisualForm.text",
       "inherits": false,
@@ -1462,19 +1419,19 @@
           "parameters": [
             {
               "name": "pt",
-              "comment": "",
+              "comment": "a Pt or numeric array to specify the anchor point",
               "type": "PtLike",
               "default": false
             },
             {
               "name": "txt",
-              "comment": "",
+              "comment": "text",
               "type": "string",
               "default": false
             },
             {
               "name": "maxWidth",
-              "comment": "",
+              "comment": "specify a maximum width per line",
               "type": "number",
               "default": false
             }
@@ -1488,11 +1445,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          1150,
-          11
+          1498,
+          2
         ]
       ],
-      "id": 3983,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1517,7 +1473,7 @@
             {
               "name": "verticalAlign",
               "comment": "\"top\", \"middle\", or \"bottom\" to specify vertical alignment inside the box",
-              "type": "string",
+              "type": "TextVerticalAlign",
               "default": "\"middle\""
             },
             {
@@ -1528,7 +1484,7 @@
             },
             {
               "name": "overrideBaseline",
-              "comment": "If `true`, use the corresponding baseline as verticalAlign. If `false`, use the current canvas context's textBaseline setting. Default is `true`.\n",
+              "comment": "If `true`, use the corresponding baseline as verticalAlign. If `false`, use the current canvas context's textBaseline setting. Default is `true`.",
               "type": "boolean",
               "default": "true"
             }
@@ -1542,18 +1498,17 @@
       "source": [
         [
           "src/Canvas.ts",
-          507,
-          14
+          683,
+          2
         ]
       ],
-      "id": 3803,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Toggle whether to draw on offscreen canvas (if offscreen is set in CanvasSpace)",
-          "returns": "this",
+          "returns": "CanvasForm",
           "returns_comment": false,
           "parameters": [
             {
@@ -1564,8 +1519,8 @@
             },
             {
               "name": "clear",
-              "comment": "optionally provide a valid color string to fill a bg color. see CanvasSpace's `clearOffscreen` function.\n",
-              "type": "boolean | string",
+              "comment": "optionally provide a valid color string to fill a bg color. see CanvasSpace's `clearOffscreen` function.",
+              "type": "string | boolean",
               "default": "false"
             }
           ],
@@ -1578,11 +1533,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          894,
-          14
+          1194,
+          9
         ]
       ],
-      "id": 3907,
       "flags": {
         "isStatic": true
       },
@@ -1597,7 +1551,7 @@
             {
               "name": "ctx",
               "comment": "canvas rendering context",
-              "type": "CanvasRenderingContext2D",
+              "type": "RenderingContext2D",
               "default": false
             },
             {
@@ -1626,7 +1580,7 @@
             },
             {
               "name": "cc",
-              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.\n",
+              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.",
               "type": "boolean",
               "default": false
             }
@@ -1640,11 +1594,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          832,
-          17
+          1104,
+          9
         ]
       ],
-      "id": 3882,
       "flags": {
         "isStatic": true
       },
@@ -1659,7 +1612,7 @@
             {
               "name": "ctx",
               "comment": "canvas rendering context",
-              "type": "CanvasRenderingContext2D",
+              "type": "RenderingContext2D",
               "default": false
             },
             {
@@ -1670,7 +1623,7 @@
             },
             {
               "name": "radius",
-              "comment": "radius of the circle\n",
+              "comment": "radius of the circle",
               "type": "number",
               "default": "10"
             }
@@ -1684,11 +1637,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          862,
-          18
+          1132,
+          9
         ]
       ],
-      "id": 3890,
       "flags": {
         "isStatic": true
       },
@@ -1703,7 +1655,7 @@
             {
               "name": "ctx",
               "comment": "canvas rendering context",
-              "type": "CanvasRenderingContext2D",
+              "type": "RenderingContext2D",
               "default": false
             },
             {
@@ -1738,7 +1690,7 @@
             },
             {
               "name": "cc",
-              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.\n",
+              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.",
               "type": "boolean",
               "default": "false"
             }
@@ -1752,11 +1704,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          1042,
-          16
+          1358,
+          9
         ]
       ],
-      "id": 3952,
       "flags": {
         "isStatic": true
       },
@@ -1771,7 +1722,7 @@
             {
               "name": "ctx",
               "comment": "canvas rendering context",
-              "type": "CanvasRenderingContext2D",
+              "type": "RenderingContext2D",
               "default": false
             },
             {
@@ -1783,12 +1734,12 @@
             {
               "name": "img",
               "comment": "either an [Img](#link) instance or an [`CanvasImageSource`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) instance (eg the image from `<img>`, `<video>` or `<canvas>`)",
-              "type": "CanvasImageSource | Img",
+              "type": "Img | CanvasImageSource",
               "default": false
             },
             {
               "name": "orig",
-              "comment": "optionally a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a cropping box in the original target.\n",
+              "comment": "optionally a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a cropping box in the original target.",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -1802,11 +1753,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          1096,
-          20
+          1428,
+          9
         ]
       ],
-      "id": 3963,
       "flags": {
         "isStatic": true
       },
@@ -1821,18 +1771,18 @@
             {
               "name": "ctx",
               "comment": "canvas rendering context",
-              "type": "CanvasRenderingContext2D",
+              "type": "RenderingContext2D",
               "default": false
             },
             {
               "name": "ptOrRect",
-              "comment": "a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.",
+              "comment": "a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that places a region of the image data of that size at that position. Note that `putImageData` cannot resize: the rect clips, not scales. Default is (0,0) at top-left.",
               "type": "PtLike | PtLikeIterable",
               "default": false
             },
             {
               "name": "img",
-              "comment": "an ImageData object\n",
+              "comment": "an ImageData object",
               "type": "ImageData",
               "default": false
             }
@@ -1846,11 +1796,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          956,
-          15
+          1265,
+          9
         ]
       ],
-      "id": 3931,
       "flags": {
         "isStatic": true
       },
@@ -1865,12 +1814,12 @@
             {
               "name": "ctx",
               "comment": "canvas rendering context",
-              "type": "CanvasRenderingContext2D",
+              "type": "RenderingContext2D",
               "default": false
             },
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike> representing a line\n",
+              "comment": "a Group or an Iterable<PtLike> representing a line",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -1884,11 +1833,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          805,
-          16
+          1073,
+          9
         ]
       ],
-      "id": 3871,
       "flags": {
         "isStatic": true
       },
@@ -1903,7 +1851,7 @@
             {
               "name": "ctx",
               "comment": "canvas rendering context",
-              "type": "CanvasRenderingContext2D",
+              "type": "RenderingContext2D",
               "default": false
             },
             {
@@ -1928,7 +1876,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`form.point( p )`, `form.point( p, 10, \"circle\" )`\n"
+              "text": "`form.point( p )`, `form.point( p, 10, \"circle\" )`"
             }
           ]
         }
@@ -1939,11 +1887,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          988,
-          18
+          1309,
+          9
         ]
       ],
-      "id": 3938,
       "flags": {
         "isStatic": true
       },
@@ -1958,12 +1905,12 @@
             {
               "name": "ctx",
               "comment": "canvas rendering context",
-              "type": "CanvasRenderingContext2D",
+              "type": "RenderingContext2D",
               "default": false
             },
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike> representing a polygon\n",
+              "comment": "a Group or an Iterable<PtLike> representing a polygon",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -1977,11 +1924,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          1011,
-          15
+          1330,
+          9
         ]
       ],
-      "id": 3945,
       "flags": {
         "isStatic": true
       },
@@ -1996,13 +1942,44 @@
             {
               "name": "ctx",
               "comment": "canvas rendering context",
-              "type": "CanvasRenderingContext2D",
+              "type": "RenderingContext2D",
               "default": false
             },
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.\n",
+              "comment": "a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.",
               "type": "PtLikeIterable",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "resetStyleCache",
+      "source": [
+        [
+          "src/Canvas.ts",
+          590,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Forget the cached style values for a rendering context, so every\nsubsequent style write applies. Call this after anything that resets or\ndesyncs a context's state outside a form — most commonly assigning a\ncanvas's `width` or `height`, which resets the context to its defaults.\n(Within a form, [`CanvasForm.reset`](#link) is the equivalent recovery.)",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "the rendering context to forget",
+              "type": "object | RenderingContext2D",
               "default": false
             }
           ],
@@ -2015,11 +1992,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          922,
-          17
+          1233,
+          9
         ]
       ],
-      "id": 3922,
       "flags": {
         "isStatic": true
       },
@@ -2034,7 +2010,7 @@
             {
               "name": "ctx",
               "comment": "canvas rendering context",
-              "type": "CanvasRenderingContext2D",
+              "type": "RenderingContext2D",
               "default": false
             },
             {
@@ -2045,7 +2021,7 @@
             },
             {
               "name": "halfsize",
-              "comment": "half size of the square\n",
+              "comment": "half size of the square",
               "type": "number",
               "default": false
             }
@@ -2059,11 +2035,10 @@
       "source": [
         [
           "src/Canvas.ts",
-          1124,
-          15
+          1469,
+          9
         ]
       ],
-      "id": 3972,
       "flags": {
         "isStatic": true
       },
@@ -2078,24 +2053,24 @@
             {
               "name": "ctx",
               "comment": "canvas rendering context",
-              "type": "CanvasRenderingContext2D",
+              "type": "RenderingContext2D",
               "default": false
             },
             {
               "name": "pt",
-              "comment": "",
+              "comment": "a Point object to specify the anchor point",
               "type": "PtLike",
               "default": false
             },
             {
               "name": "txt",
-              "comment": "",
+              "comment": "a string of text to draw",
               "type": "string",
               "default": false
             },
             {
               "name": "maxWidth",
-              "comment": "",
+              "comment": "specify a maximum width per line",
               "type": "number",
               "default": false
             }

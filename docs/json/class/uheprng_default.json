@@ -3,12 +3,11 @@
   "source": [
     [
       "src/uheprng.ts",
-      76,
-      1
+      93,
+      24
     ]
   ],
   "kind": "Function",
-  "id": 1411,
   "comment": "",
   "constructor": [],
   "accessors": [],

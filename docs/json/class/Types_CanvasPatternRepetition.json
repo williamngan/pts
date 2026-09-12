@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Types.ts",
-      233,
-      35
+      297,
+      12
     ]
   ],
   "kind": "Typealias",
-  "id": 853,
   "comment": "Typescript type: CanvasPatternRepetition represents the string options to specify pattern repetition",
   "constructor": [],
   "accessors": [],

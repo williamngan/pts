@@ -1,20 +1,23 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "noImplicitAny": false,
+    "target": "ES2015",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "rootDir": "src",
-    "downlevelIteration": true,
+    "noEmit": true,
+    "strict": true,
+    // Do NOT add "verbatimModuleSyntax": tsdown/oxc reads this file, and with
+    // that flag on, type-only imports written in value form stop being elided
+    // from the bundle — rolldown then emits lazy __esm wrappers (+6.5KB) and
+    // can hard-error on type re-exports. `import type` hygiene is enforced by
+    // eslint (@typescript-eslint/consistent-type-imports) instead.
+    "skipLibCheck": true,
     "removeComments": true,
+    // load-bearing if target ever moves to ES2022+: Pt extends Float32Array
+    // relies on constructor-assignment (set) semantics for class fields
     "useDefineForClassFields": false
   },
-
-  "include": [
-    "./src/*", 
-    "tsup.script.js"  
-  ],
-
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

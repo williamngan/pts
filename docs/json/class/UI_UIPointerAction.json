@@ -1,0 +1,23 @@
+{
+  "name": "UIPointerAction",
+  "source": [
+    [
+      "src/UI.ts",
+      98,
+      12
+    ]
+  ],
+  "kind": "Typealias",
+  "comment": "A known pointer, touch, or keyboard action dispatched by a Pts space.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    "UIPointerActions[keyof UIPointerActions]"
+  ]
+}

@@ -1,60 +1,76 @@
+<!doctype html>
+<!--
+  LEGACY — no longer referenced. The editor now embeds this shell in
+  edit.js (see FRAME_SRCDOC there), so it can never be cached separately from
+  the editor that injects into it. This file stays only so browsers holding a
+  previously cached index.html/edit.js pair — which still fetch
+  `./frame.html?v=<old>` — keep working instead of hitting a 404. Safe to
+  delete once those caches have long expired.
+-->
 <html>
   <head>
-      <script type="text/javascript" src="../../dist/pts.min.js"></script>
-      <style>
-        body {
-          background-color: #f1f3f7;
-          font-family: sans-serif;
-          margin: 0;
-        }
-        #pt {
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-        }
-        #error {
-          position: absolute; top: 30px; left: 30px; right: 30px;
-          color: #f03; font-size: 14px;
-        }
-      </style>
+    <meta charset="UTF-8" />
+    <script type="text/javascript" src="../../dist/pts.min.js"></script>
+    <style>
+      /* This document is in standards mode, where <body> is only as tall as
+         its content. HTMLSpace and DOMSpace measure their container — which is
+         the body when the sketch targets `#pt` — so without this they size
+         themselves to zero height and render nothing. */
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        background-color: #f1f3f7;
+        font-family: sans-serif;
+        margin: 0;
+      }
+      #pt {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+    </style>
   </head>
   <body>
+    <!--
+      Sketch host.
+
+      This document is a shell. Every Run creates a *new* iframe pointing here
+      and the editor injects the sketch once it has loaded, then swaps the new
+      frame in for the old one.
+
+      That is deliberate. The previous design injected each new version into one
+      long-lived document and tried to undo the previous sketch by hand, which
+      cannot work:
+
+        - It stopped the old sketch through `window.space`, which only exists
+          when the sketch uses `Pts.quickStart`. A sketch holding its space in a
+          local variable — the form the guide documents as "Option 4" — leaked
+          its render loop on every Run, so the editor got measurably slower the
+          longer it was used.
+        - Removing a <script> element does not release its top-level `let` and
+          `const` bindings, so the second Run of any sketch using them failed
+          with "Identifier has already been declared" until the page was
+          reloaded.
+
+      A fresh document has neither problem and needs no teardown at all.
+    -->
     <div id="pt"></div>
-    <div id="error"></div>
 
     <script type="text/javascript">
-      window.addEventListener( "error", function (e){
-        document.getElementById("error").style.display = "block";
-        document.getElementById("error").textContent = e.message + " (line: "+e.lineno+", column: "+e.colno+")";
-      });
+      // Put the Pts classes in scope so sketches can write `new CanvasSpace(...)`
+      // rather than `new Pts.CanvasSpace(...)`, which is what the guide teaches
+      // and what `Pts.quickStart` does internally.
+      //
+      // This used to happen by accident: the editor reused one document, so the
+      // first sketch to call `quickStart` left the namespace behind for every
+      // later run. Now that each Run gets a fresh document, it has to be done
+      // deliberately — otherwise a sketch would work or fail depending on what
+      // had been run before it.
+      Pts.namespace(window);
     </script>
-
-    <script type="text/javascript">
-      function update( txt ) {
-        document.getElementById("pt").innerHTML = "";
-        document.getElementById("error").style.display = "none";
-
-        var existing = document.getElementById("ptscode");
-        
-        if (existing) {
-          if (window.space) {
-            window.cancelAnimationFrame( window.space._animID ); // stop immediately
-            window.space.stop();
-            window.space.removeAll();
-            window.space = null;
-          }
-          if (existing.parentNode) existing.parentNode.removeChild(existing);
-        }
-
-        var sc = document.createElement("script");
-        sc.setAttribute("id", "ptscode")
-        sc.type = "text/javascript";
-
-        
-        sc.innerHTML = txt;
-        document.body.appendChild( sc );
-      }
-
-    </script>
-
   </body>
 </html>

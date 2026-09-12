@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Types.ts",
-      135,
-      26
+      190,
+      12
     ]
   ],
   "kind": "Typealias",
-  "id": 780,
   "comment": "Typescript type: DOMFormContext represents the current context for an DOMForm.",
   "constructor": [],
   "accessors": [],
@@ -19,6 +18,8 @@
   "extends": [],
   "implements": [],
   "type_alias": [
-    "{ currentClass:`string`, currentID:`string`, group:`Element`, groupCount:`number`, groupID:`string`, style:`object` }"
+    "{ currentClass:`string`, currentID:`string`, group:`Element",
+    "null",
+    "undefined`, groupCount:`number`, groupID:`string`, style:`Record` }"
   ]
 }

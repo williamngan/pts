@@ -10,7 +10,7 @@ window.demoDescription = "Demo in loading images";
   const run = Pts.quickStart( "#pt", "#e2e6ef" );
 
   let duration = [Date.now(), 0];
-  let img = await Img.loadAsync( "/assets/img_demo.jpg");
+  let img = await Img.load( "/assets/img_demo.jpg");
   duration[1] = Date.now();
 
   run( (time, ftime) => {

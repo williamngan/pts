@@ -3,12 +3,11 @@
   "source": [
     [
       "src/UI.ts",
-      19,
-      29
+      76,
+      13
     ]
   ],
   "kind": "Objectliteral",
-  "id": 416,
   "comment": "**[Experimental]** A set of string constants to represent different UI event types.",
   "constructor": [],
   "accessors": [],
@@ -19,12 +18,13 @@
       "source": [
         [
           "src/UI.ts",
-          24,
-          33
+          94,
+          2
         ]
       ],
-      "id": 432,
-      "flags": {},
+      "flags": {
+        "isReadonly": true
+      },
       "type": "all",
       "overrides": false,
       "inherits": false,
@@ -35,12 +35,13 @@
       "source": [
         [
           "src/UI.ts",
-          22,
-          65
+          88,
+          2
         ]
       ],
-      "id": 428,
-      "flags": {},
+      "flags": {
+        "isReadonly": true
+      },
       "type": "click",
       "overrides": false,
       "inherits": false,
@@ -51,12 +52,13 @@
       "source": [
         [
           "src/UI.ts",
-          24,
-          13
+          93,
+          2
         ]
       ],
-      "id": 431,
-      "flags": {},
+      "flags": {
+        "isReadonly": true
+      },
       "type": "contextmenu",
       "overrides": false,
       "inherits": false,
@@ -67,12 +69,13 @@
       "source": [
         [
           "src/UI.ts",
-          20,
-          16
+          78,
+          2
         ]
       ],
-      "id": 418,
-      "flags": {},
+      "flags": {
+        "isReadonly": true
+      },
       "type": "down",
       "overrides": false,
       "inherits": false,
@@ -83,12 +86,13 @@
       "source": [
         [
           "src/UI.ts",
-          21,
-          6
+          80,
+          2
         ]
       ],
-      "id": 420,
-      "flags": {},
+      "flags": {
+        "isReadonly": true
+      },
       "type": "drag",
       "overrides": false,
       "inherits": false,
@@ -99,12 +103,13 @@
       "source": [
         [
           "src/UI.ts",
-          21,
-          38
+          82,
+          2
         ]
       ],
-      "id": 422,
-      "flags": {},
+      "flags": {
+        "isReadonly": true
+      },
       "type": "drop",
       "overrides": false,
       "inherits": false,
@@ -115,12 +120,13 @@
       "source": [
         [
           "src/UI.ts",
-          22,
-          33
+          86,
+          2
         ]
       ],
-      "id": 426,
-      "flags": {},
+      "flags": {
+        "isReadonly": true
+      },
       "type": "enter",
       "overrides": false,
       "inherits": false,
@@ -131,12 +137,13 @@
       "source": [
         [
           "src/UI.ts",
-          23,
-          9
+          89,
+          2
         ]
       ],
-      "id": 429,
-      "flags": {},
+      "flags": {
+        "isReadonly": true
+      },
       "type": "keydown",
       "overrides": false,
       "inherits": false,
@@ -147,12 +154,13 @@
       "source": [
         [
           "src/UI.ts",
-          23,
-          27
+          90,
+          2
         ]
       ],
-      "id": 430,
-      "flags": {},
+      "flags": {
+        "isReadonly": true
+      },
       "type": "keyup",
       "overrides": false,
       "inherits": false,
@@ -163,12 +171,13 @@
       "source": [
         [
           "src/UI.ts",
-          22,
-          49
+          87,
+          2
         ]
       ],
-      "id": 427,
-      "flags": {},
+      "flags": {
+        "isReadonly": true
+      },
       "type": "leave",
       "overrides": false,
       "inherits": false,
@@ -179,12 +188,13 @@
       "source": [
         [
           "src/UI.ts",
-          20,
-          30
+          79,
+          2
         ]
       ],
-      "id": 419,
-      "flags": {},
+      "flags": {
+        "isReadonly": true
+      },
       "type": "move",
       "overrides": false,
       "inherits": false,
@@ -195,12 +205,13 @@
       "source": [
         [
           "src/UI.ts",
-          22,
-          19
+          85,
+          2
         ]
       ],
-      "id": 425,
-      "flags": {},
+      "flags": {
+        "isReadonly": true
+      },
       "type": "out",
       "overrides": false,
       "inherits": false,
@@ -211,13 +222,48 @@
       "source": [
         [
           "src/UI.ts",
-          22,
-          6
+          84,
+          2
         ]
       ],
-      "id": 424,
-      "flags": {},
+      "flags": {
+        "isReadonly": true
+      },
       "type": "over",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "pointerdown",
+      "source": [
+        [
+          "src/UI.ts",
+          91,
+          2
+        ]
+      ],
+      "flags": {
+        "isReadonly": true
+      },
+      "type": "pointerdown",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "pointerup",
+      "source": [
+        [
+          "src/UI.ts",
+          92,
+          2
+        ]
+      ],
+      "flags": {
+        "isReadonly": true
+      },
+      "type": "pointerup",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -227,12 +273,13 @@
       "source": [
         [
           "src/UI.ts",
-          21,
-          22
+          81,
+          2
         ]
       ],
-      "id": 421,
-      "flags": {},
+      "flags": {
+        "isReadonly": true
+      },
       "type": "uidrag",
       "overrides": false,
       "inherits": false,
@@ -243,12 +290,13 @@
       "source": [
         [
           "src/UI.ts",
-          21,
-          54
+          83,
+          2
         ]
       ],
-      "id": 423,
-      "flags": {},
+      "flags": {
+        "isReadonly": true
+      },
       "type": "uidrop",
       "overrides": false,
       "inherits": false,
@@ -259,12 +307,13 @@
       "source": [
         [
           "src/UI.ts",
-          20,
-          4
+          77,
+          2
         ]
       ],
-      "id": 417,
-      "flags": {},
+      "flags": {
+        "isReadonly": true
+      },
       "type": "up",
       "overrides": false,
       "inherits": false,

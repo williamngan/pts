@@ -1,0 +1,2 @@
+# Keep authored HTML consistent across platforms without altering binary assets.
+*.html text eol=lf

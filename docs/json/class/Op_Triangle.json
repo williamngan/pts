@@ -3,12 +3,11 @@
   "source": [
     [
       "src/Op.ts",
-      855,
-      21
+      905,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 1222,
   "comment": "Triangle class provides static functions to create and operate on trianges. A triange is a polygon represented as a Group of 3 Pts.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +17,10 @@
       "source": [
         [
           "src/Op.ts",
-          926,
-          17
+          971,
+          9
         ]
       ],
-      "id": 1240,
       "flags": {
         "isStatic": true
       },
@@ -32,7 +30,7 @@
         {
           "comment": "Get a triangle's altitude, which is a line from a triangle's point to its opposite side, and perpendicular to its opposite side.",
           "returns": "Group",
-          "returns_comment": "a Group that represents the altitude line\n",
+          "returns_comment": "a Group that represents the altitude line",
           "parameters": [
             {
               "name": "tri",
@@ -56,11 +54,10 @@
       "source": [
         [
           "src/Op.ts",
-          981,
-          21
+          1033,
+          9
         ]
       ],
-      "id": 1254,
       "flags": {
         "isStatic": true
       },
@@ -69,8 +66,8 @@
       "signatures": [
         {
           "comment": "Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side).",
-          "returns": "Pt",
-          "returns_comment": "the circumcenter as a Pt\n",
+          "returns": "Pt | undefined",
+          "returns_comment": "the circumcenter as a Pt",
           "parameters": [
             {
               "name": "tri",
@@ -88,11 +85,10 @@
       "source": [
         [
           "src/Op.ts",
-          994,
-          21
+          1052,
+          9
         ]
       ],
-      "id": 1257,
       "flags": {
         "isStatic": true
       },
@@ -101,7 +97,7 @@
       "signatures": [
         {
           "comment": "Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side).",
-          "returns": "Group",
+          "returns": "Group | undefined",
           "returns_comment": false,
           "parameters": [
             {
@@ -112,7 +108,7 @@
             },
             {
               "name": "center",
-              "comment": "Optional parameter if the circumcenter is already known. Otherwise, leave it empty and the circumcenter will be calculated\n",
+              "comment": "Optional parameter if the circumcenter is already known. Otherwise, leave it empty and the circumcenter will be calculated",
               "type": "Pt",
               "default": false
             }
@@ -126,11 +122,10 @@
       "source": [
         [
           "src/Op.ts",
-          885,
-          19
+          932,
+          9
         ]
       ],
-      "id": 1229,
       "flags": {
         "isStatic": true
       },
@@ -150,7 +145,7 @@
             },
             {
               "name": "size",
-              "comment": "size is the magnitude of lines from center to the triangle's vertices, like a \"radius\".\n",
+              "comment": "size is the magnitude of lines from center to the triangle's vertices, like a \"radius\".",
               "type": "number",
               "default": false
             }
@@ -164,11 +159,10 @@
       "source": [
         [
           "src/Op.ts",
-          875,
-          19
+          923,
+          9
         ]
       ],
-      "id": 1226,
       "flags": {
         "isStatic": true
       },
@@ -182,7 +176,7 @@
           "parameters": [
             {
               "name": "circle",
-              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a circle\n",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a circle",
               "type": "PtIterable",
               "default": false
             }
@@ -196,11 +190,10 @@
       "source": [
         [
           "src/Op.ts",
-          861,
-          17
+          910,
+          9
         ]
       ],
-      "id": 1223,
       "flags": {
         "isStatic": true
       },
@@ -214,7 +207,7 @@
           "parameters": [
             {
               "name": "rect",
-              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a rectangle\n",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a rectangle",
               "type": "PtIterable",
               "default": false
             }
@@ -228,11 +221,10 @@
       "source": [
         [
           "src/Op.ts",
-          954,
-          17
+          1002,
+          9
         ]
       ],
-      "id": 1247,
       "flags": {
         "isStatic": true
       },
@@ -241,8 +233,8 @@
       "signatures": [
         {
           "comment": "Get incenter, which is the center point of its inner circle, and also the intersection point of its 3 angle bisector lines (each of which cuts one of the 3 angles in half).",
-          "returns": "Pt",
-          "returns_comment": "the incenter as a Pt\n",
+          "returns": "Pt | undefined",
+          "returns_comment": "the incenter as a Pt",
           "parameters": [
             {
               "name": "tri",
@@ -260,11 +252,10 @@
       "source": [
         [
           "src/Op.ts",
-          967,
-          17
+          1015,
+          9
         ]
       ],
-      "id": 1250,
       "flags": {
         "isStatic": true
       },
@@ -273,7 +264,7 @@
       "signatures": [
         {
           "comment": "Get an interior circle, which is the largest circle completed enclosed by this triangle.",
-          "returns": "Group",
+          "returns": "Group | undefined",
           "returns_comment": false,
           "parameters": [
             {
@@ -284,7 +275,7 @@
             },
             {
               "name": "center",
-              "comment": "Optional parameter if the incenter is already known. Otherwise, leave it empty and the incenter will be calculated\n",
+              "comment": "Optional parameter if the incenter is already known. Otherwise, leave it empty and the incenter will be calculated",
               "type": "Pt",
               "default": false
             }
@@ -298,11 +289,10 @@
       "source": [
         [
           "src/Op.ts",
-          895,
-          15
+          941,
+          9
         ]
       ],
-      "id": 1233,
       "flags": {
         "isStatic": true
       },
@@ -312,7 +302,7 @@
         {
           "comment": "Get the medial, which is an inner triangle formed by connecting the midpoints of this triangle's sides.",
           "returns": "Group",
-          "returns_comment": "a Group representing a medial triangle\n",
+          "returns_comment": "a Group representing a medial triangle",
           "parameters": [
             {
               "name": "tri",
@@ -330,11 +320,10 @@
       "source": [
         [
           "src/Op.ts",
-          908,
-          21
+          953,
+          9
         ]
       ],
-      "id": 1236,
       "flags": {
         "isStatic": true
       },
@@ -344,7 +333,7 @@
         {
           "comment": "Given a point of the triangle, the opposite side is the side which the point doesn't touch.",
           "returns": "Group",
-          "returns_comment": "a Group that represents a line of the opposite side\n",
+          "returns_comment": "a Group that represents a line of the opposite side",
           "parameters": [
             {
               "name": "tri",
@@ -368,11 +357,10 @@
       "source": [
         [
           "src/Op.ts",
-          941,
-          20
+          989,
+          9
         ]
       ],
-      "id": 1244,
       "flags": {
         "isStatic": true
       },
@@ -381,8 +369,8 @@
       "signatures": [
         {
           "comment": "Get orthocenter, which is the intersection point of a triangle's 3 altitudes (the 3 lines that are perpendicular to its 3 opposite sides).",
-          "returns": "Pt",
-          "returns_comment": "the orthocenter as a Pt\n",
+          "returns": "Pt | undefined",
+          "returns_comment": "the orthocenter as a Pt",
           "parameters": [
             {
               "name": "tri",

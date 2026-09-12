@@ -3,16 +3,15 @@
 
 window.demoDescription = "This sketch is rendered as SVG. Using your browser's inspector, you can take a look at the svg element and copy it into a svg file too.";
 
-// Create SVG space and form
-Pts.namespace( this );
-var space = new SVGSpace("#pt").setup({bgcolor: "#90f", resize: true });
-var form = space.getForm();
-
-
 //// Demo code starts (anonymous function wrapper is optional) ---
 
 (function() {
-  
+
+  // Create SVG space and form
+  Pts.namespace( window );
+  var space = new SVGSpace("#pt").setup({bgcolor: "#90f", resize: true });
+  var form = space.getForm();
+
   let pts = new Group();
 
   space.add( {
