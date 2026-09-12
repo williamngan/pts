@@ -21,6 +21,7 @@ const expectedFiles = [
 ];
 const expectedExports = [
   "Body",
+  "Boid",
   "Bound",
   "CanvasForm",
   "CanvasSpace",
@@ -31,6 +32,7 @@ const expectedExports = [
   "Curve",
   "DOMSpace",
   "Delaunay",
+  "Flock",
   "Font",
   "Form",
   "Geom",

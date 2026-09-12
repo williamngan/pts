@@ -188,6 +188,10 @@ always did:
 
 ### New
 
+- **Flocking**: `Create.flock(pts, options)` builds a `Flock` of `Boid`
+  agents that steer by separation, alignment, and cohesion over a spatial
+  hash, with `"steer"`, `"wrap"`, `"bounce"`, or `"none"` boundaries.
+  Advance it with `flock.step(ftime)`; see the `create.flock` demo.
 - **Color**: Oklab and Oklch modes (`Color.oklab(...)`,
   `Color.oklch(...)`), with constants verified against published
   reference values.

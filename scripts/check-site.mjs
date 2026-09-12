@@ -645,7 +645,7 @@ async function checkDemoShell() {
       viewport: document.querySelector('meta[name="viewport"]').content,
     }));
     assert.deepEqual(semantics, {
-      demoLinks: 40,
+      demoLinks: 41,
       htmlLanguage: "en",
       nonLinks: 0,
       viewport: "width=device-width, initial-scale=1",
@@ -683,7 +683,7 @@ async function checkDemoShell() {
     await page.close();
   }
 
-  return "query edge cases fail visibly and 40 choices use native links";
+  return "query edge cases fail visibly and 41 choices use native links";
 }
 
 async function checkAllDemos() {
