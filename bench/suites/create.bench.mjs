@@ -144,6 +144,40 @@ export default defineSuite("create", (b, { Pts, fx }) => {
     },
   });
 
+  // -------------------------------------------------------------- Flock
+
+  // Each iteration advances the same flock by one frame, so the state evolves
+  // as it would in a sketch; the steering bound keeps the density stable.
+  const flocking = (label, count) => () => {
+    Num.seed(label);
+    return Create.flock(Create.distributeRandom(fx.bound(), count), {
+      bound: fx.bound(),
+      boundary: "steer",
+      perception: 40,
+      separation: 20,
+      maxSpeed: 120,
+      minSpeed: 40,
+    });
+  };
+
+  b.case("Flock.step (500 agents)", {
+    batch: 500,
+    setupOnce: flocking("create:flock-500", 500),
+    run: (flock) => {
+      flock.step(16);
+      sink(flock[0][0]);
+    },
+  });
+
+  b.case("Flock.step (2000 agents)", {
+    batch: 2000,
+    setupOnce: flocking("create:flock-2000", 2000),
+    run: (flock) => {
+      flock.step(16);
+      sink(flock[0][0]);
+    },
+  });
+
   // `voronoi`, `mesh` and `neighborPts` all read the mesh that `delaunay()`
   // builds, and quietly return nothing if it was never called — so these cases
   // triangulate in the untimed setup and measure only the read.
