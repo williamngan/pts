@@ -1939,7 +1939,7 @@ Generate Delaunay and Voronoi tessellations. When 100 points are added, the diag
 <a id="demo-create-flock"></a>
 ### `create.flock`
 
-A flock of agents steering by three local rules: separation, alignment, and cohesion. Move the pointer to scatter them, and watch the flock re-form.
+A flock of agents steering by three local rules: separation, alignment, and cohesion. Move the pointer to scatter them, and watch the flock re-form. Agents caught in the circle turn white.
 
 [Open live](https://ptsjs.org/demo/?name=create.flock) · [Source code](https://ptsjs.org/demo/create.flock.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/create.flock.js)
 

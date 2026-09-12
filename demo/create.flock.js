@@ -36,13 +36,13 @@ Pts.quickStart( "#pt", "#123" );
         boundary: "steer",   // turn back at the edges instead of teleporting across them
         margin: Math.min( space.size.x, space.size.y ) / 5,
         perception: 45,      // how far an agent sees its neighbors
-        separation: 22,      // how close is too close
+        separation: 32,      // how close is too close
         cohesionWeight: 1,
         alignWeight: 1.2,
         separateWeight: 1.6,
-        maxSpeed: 130,
+        maxSpeed: 200,
         minSpeed: 45,        // never stall, so every agent keeps a heading to draw
-        maxForce: 260
+        maxForce: 300
       } );
     },
 
@@ -88,9 +88,9 @@ Pts.quickStart( "#pt", "#123" );
         let g = Math.round( Num.lerp( c[1], 255, t ) );
         let bl = Math.round( Num.lerp( c[2], 255, t ) );
         form.fillOnly( `rgb(${r},${g},${bl})` ).polygon( [
-          new Pt( b[0] + cos * 7, b[1] + sin * 7 ),
-          new Pt( b[0] - cos * 4 - sin * 3, b[1] - sin * 4 + cos * 3 ),
-          new Pt( b[0] - cos * 4 + sin * 3, b[1] - sin * 4 - cos * 3 )
+          new Pt( b[0] + cos * 20, b[1] + sin * 20 ),
+          new Pt( b[0] - cos * 7 - sin * 4, b[1] - sin * 7 + cos * 4 ),
+          new Pt( b[0] - cos * 7 + sin * 4, b[1] - sin * 7 - cos * 4 )
         ] );
       } );
 
