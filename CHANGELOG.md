@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0 (unreleased)
+## 1.0.0 (2026-09-12)
 
 Pts 1.0 is a full modernization of the library: the toolchain, the type
 system, and every core module were reviewed line by line, with roughly

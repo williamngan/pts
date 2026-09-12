@@ -1,6 +1,6 @@
 {
   "name": "pts",
-  "version": "0.12.9",
+  "version": "1.0.0",
   "description": "A library for visualization and creative coding.",
   "type": "commonjs",
   "main": "./dist/index.js",
