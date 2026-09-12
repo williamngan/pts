@@ -174,7 +174,7 @@ export class Create {
    * Create a [`Flock`](#link) of [`Boid`](#link) agents that simulate flocking (also known as "boids"),
    * where each agent steers by three local rules: separation, alignment, and cohesion.
    * Advance the simulation by calling [`Flock.step`](#link) with the elapsed time.
-   * See a [flocking demo here](../demo/index.html?name=create.flock).
+   * See a [flocking demo here](https://ptsjs.org/demo/?name=create.flock).
    *
    * Each agent starts with a random heading, drawn from [`Num.random`](#link), so seeding with
    * [`Num.seed`](#link) makes a flock reproducible.
@@ -871,8 +871,8 @@ const __flock_maxCell = 0x7fffffff;
 /**
  * Boid is a subclass of [`Pt`](#link) that represents a single agent in a [`Flock`](#link).
  * Its own values are the agent's position, and it carries a `velocity` that [`Flock.step`](#link)
- * integrates. Create them through [`Create.flock`](#link) or [`Flock.add`](#link).
- * See [a demo here](../demo/index.html?name=create.flock).
+ * integrates. Create them through [`Create.flock`](#link) or [`Flock.addBoid`](#link).
+ * See [a demo here](https://ptsjs.org/demo/?name=create.flock).
  */
 export class Boid extends Pt {
   protected _vel: Pt = new Pt(0, 0);
@@ -914,7 +914,7 @@ export class Boid extends Pt {
  *
  * Neighbors are found through a uniform spatial hash rather than by testing every pair, so the
  * cost scales with the number of agents rather than with its square.
- * See [a demo here](../demo/index.html?name=create.flock).
+ * See [a demo here](https://ptsjs.org/demo/?name=create.flock).
  */
 export class Flock extends Group {
   protected _perception: number = 40;

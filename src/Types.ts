@@ -144,6 +144,47 @@ export type DelaunayShape = {
 export type DelaunayMesh = { [key: string]: DelaunayShape }[];
 
 /**
+ * Typescript type: FlockBoundary is how a [`Flock`](#link) treats the edges of its bound:
+ * `"steer"` turns agents back within a margin, `"wrap"` moves them to the opposite edge,
+ * `"bounce"` reflects them, and `"none"` lets them leave.
+ */
+export type FlockBoundary = "steer" | "wrap" | "bounce" | "none";
+
+/**
+ * Typescript type: FlockOptions are the settings accepted by [`Create.flock`](#link) and
+ * [`Flock.setup`](#link). Every field is optional; see the matching [`Flock`](#link) accessor
+ * for its meaning and default.
+ */
+export type FlockOptions = {
+  /** Radius within which an agent sees its neighbors. Default is 40. */
+  perception?: number;
+  /** Radius within which an agent steers away from its neighbors. Default is 20. */
+  separation?: number;
+  /** Weight of steering toward the neighbors' center. Default is 1. */
+  cohesionWeight?: number;
+  /** Weight of matching the neighbors' heading. Default is 1. */
+  alignWeight?: number;
+  /** Weight of steering away from close neighbors. Default is 1.5. */
+  separateWeight?: number;
+  /** Maximum speed, in units per second. Default is 100. */
+  maxSpeed?: number;
+  /** Minimum speed, in units per second. Default is 0. */
+  minSpeed?: number;
+  /** Maximum steering force, in units per second squared. Default is 200. */
+  maxForce?: number;
+  /** A [`Bound`](#link) or a Group of 2 Pts that keeps the flock in view. Default is none. */
+  bound?: GroupLike;
+  /** How the bound's edges are treated. Default is `"steer"`. */
+  boundary?: FlockBoundary;
+  /** Distance from an edge at which `"steer"` starts turning agents back. Default is 50. */
+  margin?: number;
+  /** Maximum simulated time in milliseconds per step. Default is 50. */
+  maxTimeStep?: number;
+  /** Speed given to agents added without a velocity. Default is half of `maxSpeed`. */
+  initialSpeed?: number;
+};
+
+/**
  * Typescript type: DOMFormContext represents the current context for an DOMForm.
  */
 export type DOMFormContext = {
