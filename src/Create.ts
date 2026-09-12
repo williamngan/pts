@@ -7,10 +7,13 @@ import { Num, Geom } from "./Num";
 import { triangulate, type Triangulation } from "./_triangulate";
 import {
   type PtLike,
+  type PtLikeIterable,
   type GroupLike,
   type PtIterable,
   type DelaunayMesh,
   type DelaunayShape,
+  type FlockBoundary,
+  type FlockOptions,
 } from "./Types";
 
 /**
@@ -165,6 +168,27 @@ export class Create {
    */
   static delaunay(pts: GroupLike): Delaunay {
     return Delaunay.from(pts) as Delaunay;
+  }
+
+  /**
+   * Create a [`Flock`](#link) of [`Boid`](#link) agents that simulate flocking (also known as "boids"),
+   * where each agent steers by three local rules: separation, alignment, and cohesion.
+   * Advance the simulation by calling [`Flock.step`](#link) with the elapsed time.
+   * See a [flocking demo here](../demo/index.html?name=create.flock).
+   *
+   * Each agent starts with a random heading, drawn from [`Num.random`](#link), so seeding with
+   * [`Num.seed`](#link) makes a flock reproducible.
+   *
+   * @param pts a Group or an Iterable<Pt> of starting positions
+   * @param options optional [`FlockOptions`](#link) to tune the behavior
+   * @returns an instance of the Flock class, which is a Group of Boids
+   * @example `Create.flock( Create.distributeRandom( space.innerBound, 200 ), { bound: space.innerBound } )`
+   */
+  static flock(pts: PtLikeIterable, options: FlockOptions = {}): Flock {
+    const flock = new Flock();
+    flock.setup(options);
+    for (const p of pts) flock.addBoid(p);
+    return flock;
   }
 }
 
@@ -791,5 +815,720 @@ export class Delaunay extends Group {
     }
 
     return edges;
+  }
+}
+
+/**
+ * Accumulate one behavior's contribution as a weighted unit vector.
+ *
+ * The three behaviors are blended as *directions* and only then turned into a single steering
+ * force, rather than each producing its own `desired - velocity` steer that are then summed.
+ * Summing them would apply the `- velocity` damping term once per behavior, so with weights
+ * totalling ~3.8 an agent is dragged toward a standstill whenever the behaviors disagree —
+ * which is exactly what happens inside a tight cluster, where cohesion and separation nearly
+ * oppose. Blending first also bounds separation structurally: its inverse-square sum is
+ * normalized here, so no amount of piled-up neighbors can dominate the result.
+ *
+ * Does nothing when the direction is degenerate (zero length), which happens whenever neighbor
+ * velocities cancel out or an agent sits exactly on its neighbors' center.
+ */
+function __flock_accumulateUnit(
+  out: Float32Array,
+  dx: number,
+  dy: number,
+  weight: number,
+): void {
+  const mag2 = dx * dx + dy * dy;
+  if (mag2 <= 0) return;
+  const scale = weight / Math.sqrt(mag2);
+  out[0] += dx * scale;
+  out[1] += dy * scale;
+}
+
+/**
+ * Two agents at the exact same position have no direction to separate along. Rather than
+ * leaving them fused forever, separation falls back to this offset, which the antisymmetric
+ * accumulation splits into +x for one agent and -x for the other.
+ */
+const __flock_tieBreak = 1;
+
+/**
+ * Separation weights each neighbor by inverse-square distance, so a pair that is nearly
+ * coincident would produce an unbounded force. Distances are clamped to this fraction of the
+ * separation radius. (The per-behavior `maxForce` clamp is what ultimately bounds the sum.)
+ */
+const __flock_minSepFraction = 0.01;
+
+/**
+ * Cell indices are hashed through `Math.imul`, which truncates to int32, so anything past this
+ * carries no information. It is also the guard that keeps the 3x3 cell walk terminating: a
+ * non-finite position yields a non-finite cell index, and `gy <= cy + 1` is either always true
+ * (Infinity) or leaves `gy++` unable to advance (magnitudes where adding 1 is a no-op in
+ * float64). The comparison is written so NaN fails it too.
+ */
+const __flock_maxCell = 0x7fffffff;
+
+/**
+ * Boid is a subclass of [`Pt`](#link) that represents a single agent in a [`Flock`](#link).
+ * Its own values are the agent's position, and it carries a `velocity` that [`Flock.step`](#link)
+ * integrates. Create them through [`Create.flock`](#link) or [`Flock.add`](#link).
+ * See [a demo here](../demo/index.html?name=create.flock).
+ */
+export class Boid extends Pt {
+  protected _vel: Pt = new Pt(0, 0);
+
+  /**
+   * This agent's velocity, in units per second.
+   */
+  get velocity(): Pt {
+    return this._vel;
+  }
+  set velocity(v: Pt) {
+    this._vel = v;
+  }
+
+  /**
+   * This agent's speed, in units per second.
+   */
+  get speed(): number {
+    return Math.sqrt(this._vel[0] * this._vel[0] + this._vel[1] * this._vel[1]);
+  }
+
+  /**
+   * The angle this agent is heading toward, in radians. Note that a stationary agent has no
+   * heading and reports 0 (pointing along +x) rather than NaN. Set a [`Flock`](#link)'s
+   * `minSpeed` if you are drawing headings and want to avoid that.
+   */
+  get heading(): number {
+    return Math.atan2(this._vel[1], this._vel[0]);
+  }
+}
+
+/**
+ * Flock is a subclass of [`Group`](#link) that holds [`Boid`](#link) agents and simulates
+ * flocking behavior (also known as "boids", after Craig Reynolds). Each agent steers by three
+ * local rules — separation, alignment, and cohesion — evaluated over the neighbors within its
+ * `perception` radius. Create one with [`Create.flock`](#link) and advance it with
+ * [`Flock.step`](#link). Since a Flock is a Group of Pts, it draws directly:
+ * `form.points( flock, 2, "circle" )`.
+ *
+ * Neighbors are found through a uniform spatial hash rather than by testing every pair, so the
+ * cost scales with the number of agents rather than with its square.
+ * See [a demo here](../demo/index.html?name=create.flock).
+ */
+export class Flock extends Group {
+  protected _perception: number = 40;
+  protected _separation: number = 20;
+  protected _cohesionWeight: number = 1;
+  protected _alignWeight: number = 1;
+  protected _separateWeight: number = 1.5;
+  protected _maxSpeed: number = 100;
+  protected _minSpeed: number = 0;
+  protected _maxForce: number = 200;
+  protected _boundary: FlockBoundary = "steer";
+  protected _margin: number = 50;
+  protected _maxTimeStep: number = 50;
+  protected _bound: GroupLike | null = null;
+  protected _initialSpeed: number | undefined = undefined;
+
+  // Flat per-agent state, gathered from the Boids at the start of each step and scattered back
+  // at the end. The neighbor pass runs entirely on these, so it reads sequential memory instead
+  // of chasing `this[i].velocity[0]` through two objects for every pair.
+  private _pos: Float32Array = new Float32Array(0);
+  private _vel: Float32Array = new Float32Array(0);
+  // Per-agent accumulators, interleaved 6-wide: cohesion x/y, alignment x/y, separation x/y.
+  private _sums: Float32Array = new Float32Array(0);
+  private _counts: Uint32Array = new Uint32Array(0);
+
+  // Spatial-hash scratch, grown geometrically and reused across steps.
+  private _hashKeys: Uint32Array = new Uint32Array(0);
+  private _cellStart: Uint32Array = new Uint32Array(0);
+  private _cellEntries: Uint32Array = new Uint32Array(0);
+  private _neighborKeys: Uint32Array = new Uint32Array(9);
+  private _steerOut: Float32Array = new Float32Array(2);
+
+  /**
+   * Set any number of options at once. Unspecified options keep their current value.
+   * @param options a [`FlockOptions`](#link) object
+   */
+  setup(options: FlockOptions): this {
+    if (options.perception !== undefined) this.perception = options.perception;
+    if (options.separation !== undefined) this.separation = options.separation;
+    if (options.cohesionWeight !== undefined)
+      this._cohesionWeight = options.cohesionWeight;
+    if (options.alignWeight !== undefined)
+      this._alignWeight = options.alignWeight;
+    if (options.separateWeight !== undefined)
+      this._separateWeight = options.separateWeight;
+    if (options.maxSpeed !== undefined) this.maxSpeed = options.maxSpeed;
+    if (options.minSpeed !== undefined) this.minSpeed = options.minSpeed;
+    if (options.maxForce !== undefined) this._maxForce = options.maxForce;
+    if (options.bound !== undefined) this._bound = options.bound as GroupLike;
+    if (options.boundary !== undefined) this._boundary = options.boundary;
+    if (options.margin !== undefined) this.margin = options.margin;
+    if (options.maxTimeStep !== undefined)
+      this.maxTimeStep = options.maxTimeStep;
+    if (options.initialSpeed !== undefined)
+      this._initialSpeed = options.initialSpeed;
+    return this;
+  }
+
+  /**
+   * Radius within which an agent sees its neighbors. This is also the spatial hash's cell size.
+   */
+  get perception(): number {
+    return this._perception;
+  }
+  set perception(r: number) {
+    this._perception = Math.max(0, r);
+  }
+
+  /**
+   * Radius within which an agent steers away from its neighbors. Values above `perception`
+   * have no additional effect, since an agent only considers neighbors it can see.
+   */
+  get separation(): number {
+    return this._separation;
+  }
+  set separation(r: number) {
+    this._separation = Math.max(0, r);
+  }
+
+  /**
+   * Weight of the cohesion behavior, which steers an agent toward its neighbors' center.
+   */
+  get cohesionWeight(): number {
+    return this._cohesionWeight;
+  }
+  set cohesionWeight(w: number) {
+    this._cohesionWeight = w;
+  }
+
+  /**
+   * Weight of the alignment behavior, which matches an agent's heading to its neighbors'.
+   */
+  get alignWeight(): number {
+    return this._alignWeight;
+  }
+  set alignWeight(w: number) {
+    this._alignWeight = w;
+  }
+
+  /**
+   * Weight of the separation behavior, which steers an agent away from close neighbors.
+   */
+  get separateWeight(): number {
+    return this._separateWeight;
+  }
+  set separateWeight(w: number) {
+    this._separateWeight = w;
+  }
+
+  /**
+   * Maximum speed, in units per second.
+   */
+  get maxSpeed(): number {
+    return this._maxSpeed;
+  }
+  set maxSpeed(s: number) {
+    this._maxSpeed = Math.max(0, s);
+  }
+
+  /**
+   * Minimum speed, in units per second, so agents never stall. Default is 0.
+   */
+  get minSpeed(): number {
+    return this._minSpeed;
+  }
+  set minSpeed(s: number) {
+    this._minSpeed = Math.max(0, s);
+  }
+
+  /**
+   * Maximum steering force, in units per second squared. This caps how sharply an agent can
+   * turn toward the direction its three behaviors blend to. A boundary turn is added on top,
+   * so an agent near an edge can accelerate up to twice this.
+   */
+  get maxForce(): number {
+    return this._maxForce;
+  }
+  set maxForce(f: number) {
+    this._maxForce = f;
+  }
+
+  /**
+   * Boundary that keeps the flock in view, as a [`Bound`](#link) or a Group of 2 Pts.
+   * When this is null, no boundary behavior is applied regardless of `boundary`.
+   */
+  get bound(): GroupLike | null {
+    return this._bound;
+  }
+  set bound(b: GroupLike | null) {
+    this._bound = b;
+  }
+
+  /**
+   * How the boundary is treated: `"steer"`, `"wrap"`, `"bounce"`, or `"none"`.
+   *
+   * Note that `"wrap"` teleports agents across the bound while the neighborhood search is not
+   * toroidal, so a flock loses sight of itself at the seam. Prefer `"steer"` when that matters.
+   */
+  get boundary(): FlockBoundary {
+    return this._boundary;
+  }
+  set boundary(b: FlockBoundary) {
+    this._boundary = b;
+  }
+
+  /**
+   * Distance from an edge at which `"steer"` starts turning agents back.
+   */
+  get margin(): number {
+    return this._margin;
+  }
+  set margin(m: number) {
+    this._margin = Math.max(0, m);
+  }
+
+  /**
+   * Maximum simulated time in milliseconds per [`Flock.step`](#link) call. Longer elapsed times
+   * are clamped to this, which keeps a stalled frame from teleporting the flock. Default is 50.
+   */
+  get maxTimeStep(): number {
+    return this._maxTimeStep;
+  }
+  set maxTimeStep(ms: number) {
+    this._maxTimeStep = Math.max(0, ms);
+  }
+
+  /**
+   * Speed given to an agent added without an explicit velocity. Defaults to half of `maxSpeed`.
+   */
+  get initialSpeed(): number {
+    return this._initialSpeed === undefined
+      ? this._maxSpeed * 0.5
+      : this._initialSpeed;
+  }
+  set initialSpeed(s: number) {
+    this._initialSpeed = s;
+  }
+
+  /**
+   * Add an agent to this flock. Named `addBoid` rather than `add` because [`Group.add`](#link)
+   * already means "translate every Pt in this group", and [`Group.moveBy`](#link) delegates to it.
+   * @param pt a Pt, a Boid, or an array of numbers for the starting position
+   * @param velocity optional starting velocity. When omitted, a new agent gets a random heading
+   * at [`Flock.initialSpeed`](#link), drawn from [`Num.random`](#link).
+   */
+  addBoid(pt: PtLike | Boid, velocity?: PtLike): this {
+    const isBoid = pt instanceof Boid;
+    const boid = isBoid ? (pt as Boid) : new Boid(pt);
+    if (velocity !== undefined) {
+      boid.velocity[0] = velocity[0];
+      boid.velocity[1] = velocity[1];
+    } else if (!isBoid) {
+      const a = Num.random() * Const.two_pi;
+      const s = this.initialSpeed;
+      boid.velocity[0] = Math.cos(a) * s;
+      boid.velocity[1] = Math.sin(a) * s;
+    }
+    this.push(boid);
+    return this;
+  }
+
+  /**
+   * Advance the simulation. Call this once per frame with the frame time, eg
+   * `space.add( (time, ftime) => flock.step( ftime ) )`.
+   *
+   * Elapsed times longer than [`Flock.maxTimeStep`](#link) are clamped, so a slow frame slows
+   * the flock down instead of teleporting it. A non-positive or NaN time is a no-op.
+   *
+   * @param ms elapsed time in milliseconds
+   */
+  step(ms: number): this {
+    const n = this.length;
+    if (n === 0 || !(ms > 0)) return this;
+
+    const dt = Math.min(ms, this._maxTimeStep) / 1000;
+    if (dt <= 0) return this;
+
+    this._ensureBuffers(n);
+    this._gather(n);
+    if (n > 1 && this._perception > 0) {
+      this._accumulate(n);
+    } else {
+      this._sums.fill(0, 0, n * 6);
+      this._counts.fill(0, 0, n);
+    }
+    this._integrate(n, dt);
+    this._scatter(n);
+    return this;
+  }
+
+  /**
+   * Grow the flat state and hash scratch to fit `n` agents. Every buffer is fully written
+   * before it is read within a step, so reallocating here never loses state.
+   */
+  private _ensureBuffers(n: number) {
+    if (this._pos.length < n * 2) {
+      const size = n * 2 * 2; // geometric growth
+      this._pos = new Float32Array(size);
+      this._vel = new Float32Array(size);
+      this._sums = new Float32Array(size * 3);
+      this._counts = new Uint32Array(size);
+      this._hashKeys = new Uint32Array(size);
+      this._cellEntries = new Uint32Array(size);
+    }
+  }
+
+  /**
+   * Copy positions and velocities out of the Boids into the flat buffers. An element that
+   * reached this Group without a velocity — pushed as a plain Pt, or produced by a Group method
+   * that copies through the species constructor — is upgraded to a Boid in place here rather
+   * than throwing mid-simulation.
+   */
+  private _gather(n: number) {
+    const pos = this._pos;
+    const vel = this._vel;
+    for (let i = 0; i < n; i++) {
+      let b = this[i] as Boid;
+      let v = b.velocity;
+      if (v === undefined) {
+        b = new Boid(b);
+        v = b.velocity;
+        this[i] = b;
+      }
+      const k = i * 2;
+      pos[k] = b[0];
+      pos[k + 1] = b[1];
+      vel[k] = v[0];
+      vel[k + 1] = v[1];
+    }
+  }
+
+  /**
+   * Write the integrated positions and velocities back into the Boids.
+   */
+  private _scatter(n: number) {
+    const pos = this._pos;
+    const vel = this._vel;
+    for (let i = 0; i < n; i++) {
+      const b = this[i] as Boid;
+      const v = b.velocity;
+      const k = i * 2;
+      b[0] = pos[k];
+      b[1] = pos[k + 1];
+      v[0] = vel[k];
+      v[1] = vel[k + 1];
+    }
+  }
+
+  /**
+   * Accumulate the three behaviors' sums for every agent in a single pass over neighboring
+   * pairs, using a uniform spatial hash (a counting-sort grid) built the same way as
+   * [`World`](#link)'s collision broad phase — see `World._collideParticles`. The two are kept
+   * separate on purpose: this one queries a fixed radius and accumulates into flat sums, and
+   * sharing an abstraction between them would put an indirect call on the per-pair path.
+   *
+   * Cells are exactly `perception` wide, which is the smallest size for which every neighbor
+   * within that radius is guaranteed to lie in the 3x3 block around an agent's cell.
+   *
+   * Each pair is visited once, from its lower index, and accumulated into both agents:
+   * "j is within r of i" is symmetric, so this halves the distance computations. No `sqrt` is
+   * taken here — radius tests compare squared distances, and separation falls off as the
+   * inverse square, which is what makes the fallback in `__flock_tieBreak` necessary.
+   */
+  private _accumulate(n: number) {
+    const pos = this._pos;
+    const vel = this._vel;
+    const sums = this._sums;
+    const counts = this._counts;
+
+    sums.fill(0, 0, n * 6);
+    counts.fill(0, 0, n);
+
+    const r2 = this._perception * this._perception;
+    const sep = Math.min(this._separation, this._perception);
+    const sep2 = sep * sep;
+    const minSep = sep * __flock_minSepFraction;
+    const minSep2 = minSep * minSep;
+    const inv = 1 / this._perception;
+
+    // Hash table size: the next power of two above 2n, so buckets stay sparse.
+    let m = 16;
+    while (m < n * 2) m <<= 1;
+    const mask = m - 1;
+    if (this._cellStart.length < m + 1)
+      this._cellStart = new Uint32Array(m + 1);
+
+    const keys = this._hashKeys;
+    const start = this._cellStart;
+    const entries = this._cellEntries;
+
+    // Count per cell, exclusive prefix sum, then scatter; after the scatter, bucket k spans
+    // [start[k-1], start[k]).
+    start.fill(0, 0, m + 1);
+    for (let i = 0; i < n; i++) {
+      const key =
+        ((Math.imul(Math.floor(pos[i * 2] * inv), 0x9e3779b1) ^
+          Math.imul(Math.floor(pos[i * 2 + 1] * inv), 0x85ebca77)) >>>
+          0) &
+        mask;
+      keys[i] = key;
+      start[key]++;
+    }
+    let sum = 0;
+    for (let k = 0; k < m; k++) {
+      const c = start[k];
+      start[k] = sum;
+      sum += c;
+    }
+    start[m] = sum;
+    for (let i = 0; i < n; i++) {
+      entries[start[keys[i]]++] = i;
+    }
+
+    const visited = this._neighborKeys;
+    for (let i = 0; i < n; i++) {
+      const ki = i * 2;
+      const ix = pos[ki];
+      const iy = pos[ki + 1];
+      const ivx = vel[ki];
+      const ivy = vel[ki + 1];
+      const si = i * 6;
+      const cx = Math.floor(ix * inv);
+      const cy = Math.floor(iy * inv);
+      if (!(
+        cx >= -__flock_maxCell &&
+        cx <= __flock_maxCell &&
+        cy >= -__flock_maxCell &&
+        cy <= __flock_maxCell
+      )) {
+        continue; // non-finite or absurd position: it has no finite neighborhood
+      }
+
+      // Visit each distinct hash key of the 3x3 neighborhood exactly once: two neighbor cells
+      // can collide to the same bucket, and visiting it twice would count a neighbor twice.
+      let visitedCount = 0;
+      for (let gy = cy - 1; gy <= cy + 1; gy++) {
+        const hy = Math.imul(gy, 0x85ebca77);
+        for (let gx = cx - 1; gx <= cx + 1; gx++) {
+          const key = ((Math.imul(gx, 0x9e3779b1) ^ hy) >>> 0) & mask;
+          let seen = false;
+          for (let v = 0; v < visitedCount; v++) {
+            if (visited[v] === key) {
+              seen = true;
+              break;
+            }
+          }
+          if (seen) continue;
+          visited[visitedCount++] = key;
+
+          const end = start[key];
+          const begin = key > 0 ? start[key - 1] : 0;
+          for (let e = begin; e < end; e++) {
+            const j = entries[e];
+            if (j <= i) continue;
+
+            const kj = j * 2;
+            const jx = pos[kj];
+            const jy = pos[kj + 1];
+            const dx = jx - ix;
+            const dy = jy - iy;
+            const d2 = dx * dx + dy * dy;
+            if (!(d2 < r2)) continue; // also rejects NaN
+
+            const sj = j * 6;
+            sums[si] += jx;
+            sums[si + 1] += jy;
+            sums[sj] += ix;
+            sums[sj + 1] += iy;
+            sums[si + 2] += vel[kj];
+            sums[si + 3] += vel[kj + 1];
+            sums[sj + 2] += ivx;
+            sums[sj + 3] += ivy;
+            counts[i]++;
+            counts[j]++;
+
+            if (d2 < sep2) {
+              let ox = dx;
+              let oy = dy;
+              let dd = d2;
+              if (dd === 0) {
+                // Coincident agents have no direction to separate along; split them along x.
+                ox = __flock_tieBreak;
+                oy = 0;
+                dd = minSep2;
+              } else if (dd < minSep2) {
+                dd = minSep2;
+              }
+              const w = 1 / dd;
+              const wx = ox * w;
+              const wy = oy * w;
+              sums[si + 4] -= wx;
+              sums[si + 5] -= wy;
+              sums[sj + 4] += wx;
+              sums[sj + 5] += wy;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Turn the accumulated sums into a steering force per agent, then integrate velocity and
+   * position. This is O(n), so it uses the classic "steer toward the desired velocity"
+   * formulation and its handful of square roots, which behaves better than weighting raw
+   * offsets and keeps `maxSpeed` and `maxForce` as the only scale-dependent knobs.
+   * See `__flock_accumulateUnit` for why the behaviors are blended before that steer is taken.
+   */
+  private _integrate(n: number, dt: number) {
+    const pos = this._pos;
+    const vel = this._vel;
+    const sums = this._sums;
+    const counts = this._counts;
+    const out = this._steerOut;
+
+    const maxSpeed = this._maxSpeed;
+    const maxForce = this._maxForce;
+    const minSpeed = Math.min(this._minSpeed, maxSpeed);
+    const cw = this._cohesionWeight;
+    const aw = this._alignWeight;
+    const sw = this._separateWeight;
+
+    const bound = this._bound;
+    const boundary = bound ? this._boundary : "none";
+    let minX = 0;
+    let minY = 0;
+    let maxX = 0;
+    let maxY = 0;
+    if (bound && boundary !== "none") {
+      const b0 = bound[0];
+      const b1 = bound[1];
+      minX = Math.min(b0[0], b1[0]);
+      minY = Math.min(b0[1], b1[1]);
+      maxX = Math.max(b0[0], b1[0]);
+      maxY = Math.max(b0[1], b1[1]);
+    }
+    const margin = this._margin;
+
+    for (let i = 0; i < n; i++) {
+      const k = i * 2;
+      const s = i * 6;
+      let px = pos[k];
+      let py = pos[k + 1];
+      let vx = vel[k];
+      let vy = vel[k + 1];
+
+      // Blend the three behaviors into one desired direction...
+      out[0] = 0;
+      out[1] = 0;
+      const c = counts[i];
+      if (c > 0) {
+        // steer toward the neighbors' center
+        if (cw !== 0) {
+          __flock_accumulateUnit(
+            out,
+            sums[s] / c - px,
+            sums[s + 1] / c - py,
+            cw,
+          );
+        }
+        // match the neighbors' heading. The mean and the sum point the same way, and the
+        // direction is normalized anyway, so the neighbor count is not needed here.
+        if (aw !== 0) __flock_accumulateUnit(out, sums[s + 2], sums[s + 3], aw);
+        if (sw !== 0) __flock_accumulateUnit(out, sums[s + 4], sums[s + 5], sw);
+      }
+
+      // ...then take a single steer toward it, so the damping is applied once.
+      let ax = 0;
+      let ay = 0;
+      const dm2 = out[0] * out[0] + out[1] * out[1];
+      if (dm2 > 0) {
+        const sc = maxSpeed / Math.sqrt(dm2);
+        ax = out[0] * sc - vx;
+        ay = out[1] * sc - vy;
+        const f2 = ax * ax + ay * ay;
+        if (f2 > maxForce * maxForce) {
+          const fs = maxForce / Math.sqrt(f2);
+          ax *= fs;
+          ay *= fs;
+        }
+      }
+
+      if (boundary === "steer" && margin > 0) {
+        // Ramp the turn from zero at the margin's inner edge to full force at the wall, and
+        // hold it at full force for anything that already escaped. This is added on top of the
+        // blended steer rather than mixed into it, so the flock's own rules cannot outvote it
+        // and pin a cluster against an edge.
+        const dl = px - minX;
+        const dr = maxX - px;
+        const dtp = py - minY;
+        const db = maxY - py;
+        if (dl < margin) ax += maxForce * (1 - Math.max(dl, 0) / margin);
+        else if (dr < margin) ax -= maxForce * (1 - Math.max(dr, 0) / margin);
+        if (dtp < margin) ay += maxForce * (1 - Math.max(dtp, 0) / margin);
+        else if (db < margin) ay -= maxForce * (1 - Math.max(db, 0) / margin);
+      }
+
+      vx += ax * dt;
+      vy += ay * dt;
+
+      const sp2 = vx * vx + vy * vy;
+      if (sp2 > maxSpeed * maxSpeed) {
+        const sc = maxSpeed / Math.sqrt(sp2);
+        vx *= sc;
+        vy *= sc;
+      } else if (minSpeed > 0 && sp2 < minSpeed * minSpeed) {
+        if (sp2 > 0) {
+          const sc = minSpeed / Math.sqrt(sp2);
+          vx *= sc;
+          vy *= sc;
+        } else {
+          // A dead stop has no heading to preserve; pick one deterministically.
+          vx = minSpeed;
+          vy = 0;
+        }
+      }
+
+      px += vx * dt;
+      py += vy * dt;
+
+      if (boundary === "wrap") {
+        const w = maxX - minX;
+        const h = maxY - minY;
+        if (w > 0) {
+          if (px < minX) px = maxX - ((minX - px) % w);
+          else if (px > maxX) px = minX + ((px - maxX) % w);
+        }
+        if (h > 0) {
+          if (py < minY) py = maxY - ((minY - py) % h);
+          else if (py > maxY) py = minY + ((py - maxY) % h);
+        }
+      } else if (boundary === "bounce") {
+        // `<=` rather than `<`: an agent that lands exactly on the wall is still heading out,
+        // and would otherwise leave on the next step without ever reflecting.
+        if (px <= minX) {
+          px = minX;
+          if (vx < 0) vx = -vx;
+        } else if (px >= maxX) {
+          px = maxX;
+          if (vx > 0) vx = -vx;
+        }
+        if (py <= minY) {
+          py = minY;
+          if (vy < 0) vy = -vy;
+        } else if (py >= maxY) {
+          py = maxY;
+          if (vy > 0) vy = -vy;
+        }
+      }
+
+      pos[k] = px;
+      pos[k + 1] = py;
+      vel[k] = vx;
+      vel[k + 1] = vy;
+    }
   }
 }
