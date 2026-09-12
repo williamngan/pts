@@ -34,6 +34,7 @@ Demo and study source files are linked directly from `ptsjs.org` instead of embe
 - [`color.HSLtoRGB`](#demo-color-hslto-rgb)
 - [`color.LABtoRGB`](#demo-color-labto-rgb)
 - [`create.delaunay`](#demo-create-delaunay)
+- [`create.flock`](#demo-create-flock)
 - [`create.gridcells`](#demo-create-gridcells)
 - [`create.noisePts`](#demo-create-noise-pts)
 - [`curve.bezier`](#demo-curve-bezier)
@@ -1934,6 +1935,13 @@ Create a gradient grid using Lab color space. The pointer position updates the l
 Generate Delaunay and Voronoi tessellations. When 100 points are added, the diagram will animate and display guidelines at pointer position.
 
 [Open live](https://ptsjs.org/demo/?name=create.delaunay) · [Source code](https://ptsjs.org/demo/create.delaunay.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/create.delaunay.js)
+
+<a id="demo-create-flock"></a>
+### `create.flock`
+
+A flock of agents steering by three local rules: separation, alignment, and cohesion. Move the pointer to scatter them, and watch the flock re-form.
+
+[Open live](https://ptsjs.org/demo/?name=create.flock) · [Source code](https://ptsjs.org/demo/create.flock.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/create.flock.js)
 
 <a id="demo-create-gridcells"></a>
 ### `create.gridcells`

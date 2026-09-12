@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Create.ts",
-      19,
+      22,
       13
     ]
   ],
@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Create.ts",
-          166,
+          169,
           9
         ]
       ],
@@ -48,7 +48,7 @@
       "source": [
         [
           "src/Create.ts",
-          46,
+          49,
           9
         ]
       ],
@@ -85,7 +85,7 @@
       "source": [
         [
           "src/Create.ts",
-          26,
+          29,
           9
         ]
       ],
@@ -124,11 +124,53 @@
       ]
     },
     {
+      "name": "flock",
+      "source": [
+        [
+          "src/Create.ts",
+          187,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a [`Flock`](#link) of [`Boid`](#link) agents that simulate flocking (also known as \"boids\"),\nwhere each agent steers by three local rules: separation, alignment, and cohesion.\nAdvance the simulation by calling [`Flock.step`](#link) with the elapsed time.\nSee a [flocking demo here](https://ptsjs.org/demo/?name=create.flock).\n\nEach agent starts with a random heading, drawn from [`Num.random`](#link), so seeding with\n[`Num.seed`](#link) makes a flock reproducible.",
+          "returns": "Flock",
+          "returns_comment": "an instance of the Flock class, which is a Group of Boids",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group or an Iterable<Pt> of starting positions",
+              "type": "PtLikeIterable",
+              "default": false
+            },
+            {
+              "name": "options",
+              "comment": "optional [`FlockOptions`](#link) to tune the behavior",
+              "type": "FlockOptions",
+              "default": "{}"
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`Create.flock( Create.distributeRandom( space.innerBound, 200 ), { bound: space.innerBound } )`"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "gridCells",
       "source": [
         [
           "src/Create.ts",
-          90,
+          93,
           9
         ]
       ],
@@ -171,7 +213,7 @@
       "source": [
         [
           "src/Create.ts",
-          64,
+          67,
           9
         ]
       ],
@@ -220,7 +262,7 @@
       "source": [
         [
           "src/Create.ts",
-          137,
+          140,
           9
         ]
       ],
@@ -275,7 +317,7 @@
       "source": [
         [
           "src/Create.ts",
-          115,
+          118,
           9
         ]
       ],

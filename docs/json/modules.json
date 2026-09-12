@@ -7,8 +7,10 @@
     "Color"
   ],
   "Create": [
+    "Boid",
     "Create",
     "Delaunay",
+    "Flock",
     "Noise"
   ],
   "Dom": [
@@ -99,6 +101,8 @@
     "DelaunayMesh",
     "DelaunayShape",
     "DOMFormContext",
+    "FlockBoundary",
+    "FlockOptions",
     "GroupLike",
     "IntersectContext",
     "ISoundAnalyzer",

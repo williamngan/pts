@@ -13,8 +13,10 @@ Complete API reference for [Pts 1.0.0](https://ptsjs.org), generated from the sa
   - [`Color`](#color-color)
 
 - [`Create`](#module-create)
+  - [`Boid`](#create-boid)
   - [`Create`](#create-create)
   - [`Delaunay`](#create-delaunay)
+  - [`Flock`](#create-flock)
   - [`Noise`](#create-noise)
 
 - [`Dom`](#module-dom)
@@ -105,6 +107,8 @@ Complete API reference for [Pts 1.0.0](https://ptsjs.org), generated from the sa
   - [`DelaunayMesh`](#types-delaunaymesh)
   - [`DelaunayShape`](#types-delaunayshape)
   - [`DOMFormContext`](#types-domformcontext)
+  - [`FlockBoundary`](#types-flockboundary)
+  - [`FlockOptions`](#types-flockoptions)
   - [`GroupLike`](#types-grouplike)
   - [`IntersectContext`](#types-intersectcontext)
   - [`ISoundAnalyzer`](#types-isoundanalyzer)
@@ -2109,10 +2113,59 @@ Value range for each color space
 <a id="module-create"></a>
 ## Module: `Create`
 
+<a id="create-boid"></a>
+### `Boid`
+
+**Kind:** Class · **Source:** [`src/Create.ts:879`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L879)
+
+**Extends:** `Pt`
+
+Boid is a subclass of [`Pt`](#pt-pt) that represents a single agent in a [`Flock`](#create-flock).
+Its own values are the agent's position, and it carries a `velocity` that [`Flock.step`](#create-flock-step)
+integrates. Create them through [`Create.flock`](#create-create-static-flock) or [`Flock.addBoid`](#create-flock-add-boid).
+See [a demo here](https://ptsjs.org/demo/?name=create.flock).
+
+#### Accessors
+
+<a id="create-boid-heading"></a>
+##### `heading`
+
+```ts
+get heading(): number
+```
+
+The angle this agent is heading toward, in radians. Note that a stationary agent has no
+heading and reports 0 (pointing along +x) rather than NaN. Set a [`Flock`](#create-flock)'s
+`minSpeed` if you are drawing headings and want to avoid that.
+
+<a id="create-boid-speed"></a>
+##### `speed`
+
+```ts
+get speed(): number
+```
+
+This agent's speed, in units per second.
+
+<a id="create-boid-velocity"></a>
+##### `velocity`
+
+```ts
+get velocity(): Pt
+set velocity(v: Pt): void
+```
+
+This agent's velocity, in units per second.
+
+#### Inherited API
+
+- From [`Pt`](#pt-pt): [`constructor`](#pt-pt-constructor), [`id`](#pt-pt-id), [`w`](#pt-pt-w), [`x`](#pt-pt-x), [`y`](#pt-pt-y), [`z`](#pt-pt-z), [`$abs`](#pt-pt-dollar-abs), [`$add`](#pt-pt-dollar-add), [`$ceil`](#pt-pt-dollar-ceil), [`$concat`](#pt-pt-dollar-concat), [`$cross`](#pt-pt-dollar-cross), [`$cross2D`](#pt-pt-dollar-cross2-d), [`$divide`](#pt-pt-dollar-divide), [`$floor`](#pt-pt-dollar-floor), [`$max`](#pt-pt-dollar-max), [`$min`](#pt-pt-dollar-min), [`$multiply`](#pt-pt-dollar-multiply), [`$project`](#pt-pt-dollar-project), [`$round`](#pt-pt-dollar-round), [`$subtract`](#pt-pt-dollar-subtract), [`$take`](#pt-pt-dollar-take), [`$to`](#pt-pt-dollar-to), [`$unit`](#pt-pt-dollar-unit), [`abs`](#pt-pt-abs), [`add`](#pt-pt-add), [`angle`](#pt-pt-angle), [`angleBetween`](#pt-pt-angle-between), [`ceil`](#pt-pt-ceil), [`clone`](#pt-pt-clone), [`divide`](#pt-pt-divide), [`dot`](#pt-pt-dot), [`equals`](#pt-pt-equals), [`floor`](#pt-pt-floor), [`magnitude`](#pt-pt-magnitude), [`magnitudeSq`](#pt-pt-magnitude-sq), [`maxValue`](#pt-pt-max-value), [`minValue`](#pt-pt-min-value), [`multiply`](#pt-pt-multiply), [`op`](#pt-pt-op), [`ops`](#pt-pt-ops), [`projectScalar`](#pt-pt-project-scalar), [`reflect2D`](#pt-pt-reflect2-d), [`rotate2D`](#pt-pt-rotate2-d), [`round`](#pt-pt-round), [`scale`](#pt-pt-scale), [`shear2D`](#pt-pt-shear2-d), [`subtract`](#pt-pt-subtract), [`to`](#pt-pt-to), [`toAngle`](#pt-pt-to-angle), [`toArray`](#pt-pt-to-array), [`toBound`](#pt-pt-to-bound), [`toGroup`](#pt-pt-to-group), [`toString`](#pt-pt-to-string), [`unit`](#pt-pt-unit), [`make`](#pt-pt-static-make).
+- From [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array): 26 standard properties and methods (not repeated here).
+
 <a id="create-create"></a>
 ### `Create`
 
-**Kind:** Class · **Source:** [`src/Create.ts:19`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L19)
+**Kind:** Class · **Source:** [`src/Create.ts:22`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L22)
 
 The `Create` class helps you create structures from sets of points.
 
@@ -2167,6 +2220,36 @@ Create a set of random points inside a bounday.
 - `bound` (`Bound`) — the rectangular boundary
 - `count` (`number`) — number of random points to create
 - `dimensions` (`number`; default `2`) — number of dimensions in each point
+
+<a id="create-create-static-flock"></a>
+##### `flock`
+
+*static*
+
+```ts
+static flock(pts: PtLikeIterable, options: FlockOptions = {}): Flock
+```
+
+Create a [`Flock`](#create-flock) of [`Boid`](#create-boid) agents that simulate flocking (also known as "boids"),
+where each agent steers by three local rules: separation, alignment, and cohesion.
+Advance the simulation by calling [`Flock.step`](#create-flock-step) with the elapsed time.
+See a [flocking demo here](https://ptsjs.org/demo/?name=create.flock).
+
+Each agent starts with a random heading, drawn from [`Num.random`](#num-num-static-random), so seeding with
+[`Num.seed`](#num-num-static-seed) makes a flock reproducible.
+
+**Parameters**
+
+- `pts` (`PtLikeIterable`) — a Group or an Iterable<Pt> of starting positions
+- `options` (`FlockOptions`; default `{}`) — optional [`FlockOptions`](#types-flockoptions) to tune the behavior
+
+**Returns:** an instance of the Flock class, which is a Group of Boids
+
+**Example**
+
+```ts
+Create.flock( Create.distributeRandom( space.innerBound, 200 ), { bound: space.innerBound } )
+```
 
 <a id="create-create-static-grid-cells"></a>
 ##### `gridCells`
@@ -2247,7 +2330,7 @@ Create a set of Pts around a circular path.
 <a id="create-delaunay"></a>
 ### `Delaunay`
 
-**Kind:** Class · **Source:** [`src/Create.ts:478`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L478)
+**Kind:** Class · **Source:** [`src/Create.ts:502`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L502)
 
 **Extends:** `Group`
 
@@ -2335,10 +2418,220 @@ Generate Voronoi cells. `delaunay()` must be called before calling this function
 - From [`Group`](#pt-group): [`constructor`](#pt-group-constructor), [`id`](#pt-group-id), [`p1`](#pt-group-p1), [`p2`](#pt-group-p2), [`p3`](#pt-group-p3), [`p4`](#pt-group-p4), [`q1`](#pt-group-q1), [`q2`](#pt-group-q2), [`q3`](#pt-group-q3), [`q4`](#pt-group-q4), [`$matrixAdd`](#pt-group-dollar-matrix-add), [`$matrixMultiply`](#pt-group-dollar-matrix-multiply), [`$zip`](#pt-group-dollar-zip), [`add`](#pt-group-add), [`anchorFrom`](#pt-group-anchor-from), [`anchorTo`](#pt-group-anchor-to), [`boundingBox`](#pt-group-bounding-box), [`centroid`](#pt-group-centroid), [`clone`](#pt-group-clone), [`divide`](#pt-group-divide), [`forEachPt`](#pt-group-for-each-pt), [`insert`](#pt-group-insert), [`interpolate`](#pt-group-interpolate), [`lines`](#pt-group-lines), [`moveBy`](#pt-group-move-by), [`moveTo`](#pt-group-move-to), [`multiply`](#pt-group-multiply), [`op`](#pt-group-op), [`ops`](#pt-group-ops), [`reflect2D`](#pt-group-reflect2-d), [`remove`](#pt-group-remove), [`rotate2D`](#pt-group-rotate2-d), [`scale`](#pt-group-scale), [`segments`](#pt-group-segments), [`shear2D`](#pt-group-shear2-d), [`sortByDimension`](#pt-group-sort-by-dimension), [`split`](#pt-group-split), [`subtract`](#pt-group-subtract), [`toBound`](#pt-group-to-bound), [`toString`](#pt-group-to-string), [`zipSlice`](#pt-group-zip-slice), [`fromArray`](#pt-group-static-from-array), [`fromPtArray`](#pt-group-static-from-pt-array).
 - From [`Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array): 21 standard properties and methods (not repeated here).
 
+<a id="create-flock"></a>
+### `Flock`
+
+**Kind:** Class · **Source:** [`src/Create.ts:921`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L921)
+
+**Extends:** `Group`
+
+Flock is a subclass of [`Group`](#pt-group) that holds [`Boid`](#create-boid) agents and simulates
+flocking behavior (also known as "boids", after Craig Reynolds). Each agent steers by three
+local rules — separation, alignment, and cohesion — evaluated over the neighbors within its
+`perception` radius. Create one with [`Create.flock`](#create-create-static-flock) and advance it with
+[`Flock.step`](#create-flock-step). Since a Flock is a Group of Pts, it draws directly:
+`form.points( flock, 2, "circle" )`.
+
+Neighbors are found through a uniform spatial hash rather than by testing every pair, so the
+cost scales with the number of agents rather than with its square.
+See [a demo here](https://ptsjs.org/demo/?name=create.flock).
+
+#### Accessors
+
+<a id="create-flock-align-weight"></a>
+##### `alignWeight`
+
+```ts
+get alignWeight(): number
+set alignWeight(w: number): void
+```
+
+Weight of the alignment behavior, which matches an agent's heading to its neighbors'.
+
+<a id="create-flock-bound"></a>
+##### `bound`
+
+```ts
+get bound(): GroupLike | null
+set bound(b: GroupLike | null): void
+```
+
+Boundary that keeps the flock in view, as a [`Bound`](#pt-bound) or a Group of 2 Pts.
+When this is null, no boundary behavior is applied regardless of `boundary`.
+
+<a id="create-flock-boundary"></a>
+##### `boundary`
+
+```ts
+get boundary(): FlockBoundary
+set boundary(b: FlockBoundary): void
+```
+
+How the boundary is treated: `"steer"`, `"wrap"`, `"bounce"`, or `"none"`.
+
+Note that `"wrap"` teleports agents across the bound while the neighborhood search is not
+toroidal, so a flock loses sight of itself at the seam. Prefer `"steer"` when that matters.
+
+<a id="create-flock-cohesion-weight"></a>
+##### `cohesionWeight`
+
+```ts
+get cohesionWeight(): number
+set cohesionWeight(w: number): void
+```
+
+Weight of the cohesion behavior, which steers an agent toward its neighbors' center.
+
+<a id="create-flock-initial-speed"></a>
+##### `initialSpeed`
+
+```ts
+get initialSpeed(): number
+set initialSpeed(s: number): void
+```
+
+Speed given to an agent added without an explicit velocity. Defaults to half of `maxSpeed`.
+
+<a id="create-flock-margin"></a>
+##### `margin`
+
+```ts
+get margin(): number
+set margin(m: number): void
+```
+
+Distance from an edge at which `"steer"` starts turning agents back.
+
+<a id="create-flock-max-force"></a>
+##### `maxForce`
+
+```ts
+get maxForce(): number
+set maxForce(f: number): void
+```
+
+Maximum steering force, in units per second squared. This caps how sharply an agent can
+turn toward the direction its three behaviors blend to. A boundary turn is added on top,
+so an agent near an edge can accelerate up to twice this.
+
+<a id="create-flock-max-speed"></a>
+##### `maxSpeed`
+
+```ts
+get maxSpeed(): number
+set maxSpeed(s: number): void
+```
+
+Maximum speed, in units per second.
+
+<a id="create-flock-max-time-step"></a>
+##### `maxTimeStep`
+
+```ts
+get maxTimeStep(): number
+set maxTimeStep(ms: number): void
+```
+
+Maximum simulated time in milliseconds per [`Flock.step`](#create-flock-step) call. Longer elapsed times
+are clamped to this, which keeps a stalled frame from teleporting the flock. Default is 50.
+
+<a id="create-flock-min-speed"></a>
+##### `minSpeed`
+
+```ts
+get minSpeed(): number
+set minSpeed(s: number): void
+```
+
+Minimum speed, in units per second, so agents never stall. Default is 0.
+
+<a id="create-flock-perception"></a>
+##### `perception`
+
+```ts
+get perception(): number
+set perception(r: number): void
+```
+
+Radius within which an agent sees its neighbors. This is also the spatial hash's cell size.
+
+<a id="create-flock-separate-weight"></a>
+##### `separateWeight`
+
+```ts
+get separateWeight(): number
+set separateWeight(w: number): void
+```
+
+Weight of the separation behavior, which steers an agent away from close neighbors.
+
+<a id="create-flock-separation"></a>
+##### `separation`
+
+```ts
+get separation(): number
+set separation(r: number): void
+```
+
+Radius within which an agent steers away from its neighbors. Values above `perception`
+have no additional effect, since an agent only considers neighbors it can see.
+
+#### Methods
+
+<a id="create-flock-add-boid"></a>
+##### `addBoid`
+
+```ts
+addBoid(pt: PtLike | Boid, velocity: PtLike): this
+```
+
+Add an agent to this flock. Named `addBoid` rather than `add` because [`Group.add`](#pt-group-add)
+already means "translate every Pt in this group", and [`Group.moveBy`](#pt-group-move-by) delegates to it.
+
+**Parameters**
+
+- `pt` (`PtLike | Boid`) — a Pt, a Boid, or an array of numbers for the starting position
+- `velocity` (`PtLike`) — optional starting velocity. When omitted, a new agent gets a random heading at [`Flock.initialSpeed`](#create-flock-initial-speed), drawn from [`Num.random`](#num-num-static-random).
+
+<a id="create-flock-setup"></a>
+##### `setup`
+
+```ts
+setup(options: FlockOptions): this
+```
+
+Set any number of options at once. Unspecified options keep their current value.
+
+**Parameters**
+
+- `options` (`FlockOptions`) — a [`FlockOptions`](#types-flockoptions) object
+
+<a id="create-flock-step"></a>
+##### `step`
+
+```ts
+step(ms: number): this
+```
+
+Advance the simulation. Call this once per frame with the frame time, eg
+`space.add( (time, ftime) => flock.step( ftime ) )`.
+
+Elapsed times longer than [`Flock.maxTimeStep`](#create-flock-max-time-step) are clamped, so a slow frame slows
+the flock down instead of teleporting it. A non-positive or NaN time is a no-op.
+
+**Parameters**
+
+- `ms` (`number`) — elapsed time in milliseconds
+
+#### Inherited API
+
+- From [`Group`](#pt-group): [`constructor`](#pt-group-constructor), [`id`](#pt-group-id), [`p1`](#pt-group-p1), [`p2`](#pt-group-p2), [`p3`](#pt-group-p3), [`p4`](#pt-group-p4), [`q1`](#pt-group-q1), [`q2`](#pt-group-q2), [`q3`](#pt-group-q3), [`q4`](#pt-group-q4), [`$matrixAdd`](#pt-group-dollar-matrix-add), [`$matrixMultiply`](#pt-group-dollar-matrix-multiply), [`$zip`](#pt-group-dollar-zip), [`add`](#pt-group-add), [`anchorFrom`](#pt-group-anchor-from), [`anchorTo`](#pt-group-anchor-to), [`boundingBox`](#pt-group-bounding-box), [`centroid`](#pt-group-centroid), [`clone`](#pt-group-clone), [`divide`](#pt-group-divide), [`forEachPt`](#pt-group-for-each-pt), [`insert`](#pt-group-insert), [`interpolate`](#pt-group-interpolate), [`lines`](#pt-group-lines), [`moveBy`](#pt-group-move-by), [`moveTo`](#pt-group-move-to), [`multiply`](#pt-group-multiply), [`op`](#pt-group-op), [`ops`](#pt-group-ops), [`reflect2D`](#pt-group-reflect2-d), [`remove`](#pt-group-remove), [`rotate2D`](#pt-group-rotate2-d), [`scale`](#pt-group-scale), [`segments`](#pt-group-segments), [`shear2D`](#pt-group-shear2-d), [`sortByDimension`](#pt-group-sort-by-dimension), [`split`](#pt-group-split), [`subtract`](#pt-group-subtract), [`toBound`](#pt-group-to-bound), [`toString`](#pt-group-to-string), [`zipSlice`](#pt-group-zip-slice), [`fromArray`](#pt-group-static-from-array), [`fromPtArray`](#pt-group-static-from-pt-array).
+- From [`Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array): 21 standard properties and methods (not repeated here).
+
 <a id="create-noise"></a>
 ### `Noise`
 
-**Kind:** Class · **Source:** [`src/Create.ts:247`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L247)
+**Kind:** Class · **Source:** [`src/Create.ts:271`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L271)
 
 **Extends:** `Pt`
 
@@ -14199,7 +14492,7 @@ type AnimateCallbackFn =  Fn(time:number, frameTime:number, currentSpace:Space);
 <a id="types-canvaspatternrepetition"></a>
 ### `CanvasPatternRepetition`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:256`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L256)
+**Kind:** Typealias · **Source:** [`src/Types.ts:297`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L297)
 
 Typescript type: CanvasPatternRepetition represents the string options to specify pattern repetition
 
@@ -14232,7 +14525,7 @@ type ColorType = rgb | hsl | hsb | lab | lch | luv | xyz | oklab | oklch;
 <a id="types-defaultformstyle"></a>
 ### `DefaultFormStyle`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:244`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L244)
+**Kind:** Typealias · **Source:** [`src/Types.ts:285`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L285)
 
 Typescript type: DefaultFormStyle represents a default object for visual styles such as fill, stroke, line width, and others.
 
@@ -14266,12 +14559,38 @@ type DelaunayShape = { circle:Group, i:number, j:number, k:number, triangle:Grou
 <a id="types-domformcontext"></a>
 ### `DOMFormContext`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:149`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L149)
+**Kind:** Typealias · **Source:** [`src/Types.ts:190`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L190)
 
 Typescript type: DOMFormContext represents the current context for an DOMForm.
 
 ```ts
 type DOMFormContext = { currentClass:string, currentID:string, group:Element | null | undefined, groupCount:number, groupID:string, style:Record };
+```
+
+<a id="types-flockboundary"></a>
+### `FlockBoundary`
+
+**Kind:** Typealias · **Source:** [`src/Types.ts:151`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L151)
+
+Typescript type: FlockBoundary is how a [`Flock`](#create-flock) treats the edges of its bound:
+`"steer"` turns agents back within a margin, `"wrap"` moves them to the opposite edge,
+`"bounce"` reflects them, and `"none"` lets them leave.
+
+```ts
+type FlockBoundary = steer | wrap | bounce | none;
+```
+
+<a id="types-flockoptions"></a>
+### `FlockOptions`
+
+**Kind:** Typealias · **Source:** [`src/Types.ts:158`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L158)
+
+Typescript type: FlockOptions are the settings accepted by [`Create.flock`](#create-create-static-flock) and
+[`Flock.setup`](#create-flock-setup). Every field is optional; see the matching [`Flock`](#create-flock) accessor
+for its meaning and default.
+
+```ts
+type FlockOptions = { alignWeight:number, bound:GroupLike, boundary:FlockBoundary, cohesionWeight:number, initialSpeed:number, margin:number, maxForce:number, maxSpeed:number, maxTimeStep:number, minSpeed:number, perception:number, separateWeight:number, separation:number };
 ```
 
 <a id="types-grouplike"></a>
@@ -14288,7 +14607,7 @@ type GroupLike = Group | Pt[];
 <a id="types-intersectcontext"></a>
 ### `IntersectContext`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:161`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L161)
+**Kind:** Typealias · **Source:** [`src/Types.ts:202`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L202)
 
 Typescript type: IntersectContext represents a type of an object that store the intersection info.
 
@@ -14299,7 +14618,7 @@ type IntersectContext = { dist:number, edge:Group, normal:Pt, other:unknown, ver
 <a id="types-isoundanalyzer"></a>
 ### `ISoundAnalyzer`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:230`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L230)
+**Kind:** Typealias · **Source:** [`src/Types.ts:271`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L271)
 
 Typescript type: ISoundAnalyzer represents an object that stores the AnalyzerNode properties
 
@@ -14310,7 +14629,7 @@ type ISoundAnalyzer = { data:Uint8Array, node:AnalyserNode, size:number };
 <a id="types-itempolistener"></a>
 ### `ITempoListener`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:203`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L203)
+**Kind:** Typealias · **Source:** [`src/Types.ts:244`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L244)
 
 Typescript type: ITempoListener represents a listener created by Tempo class
 
@@ -14321,7 +14640,7 @@ type ITempoListener = { beats:number | number[], continuous:boolean, count:numbe
 <a id="types-itempoprogressfn"></a>
 ### `ITempoProgressFn`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:193`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L193)
+**Kind:** Typealias · **Source:** [`src/Types.ts:234`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L234)
 
 Typescript type: a callback function type used in `tempo.every(...).progress( fn )`
 
@@ -14332,7 +14651,7 @@ type ITempoProgressFn =  Fn(count:number, t:number, ms:number, start:boolean);
 <a id="types-itemporesponses"></a>
 ### `ITempoResponses`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:218`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L218)
+**Kind:** Typealias · **Source:** [`src/Types.ts:259`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L259)
 
 Typescript type: the return type of `tempo.every(...)`
 
@@ -14343,7 +14662,7 @@ type ITempoResponses = { progress: Fn(fn:ITempoProgressFn, offset:number, name:s
 <a id="types-itempostartfn"></a>
 ### `ITempoStartFn`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:188`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L188)
+**Kind:** Typealias · **Source:** [`src/Types.ts:229`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L229)
 
 Typescript type: a callback function type used in `tempo.every(...).start( fn )`
 
@@ -14389,7 +14708,7 @@ type PtLikeIterable = GroupLike | PtLike[] | Iterable;
 <a id="types-renderingcontext2d"></a>
 ### `RenderingContext2D`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:259`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L259)
+**Kind:** Typealias · **Source:** [`src/Types.ts:300`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L300)
 
 ```ts
 type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
@@ -14398,7 +14717,7 @@ type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingCon
 <a id="types-soundtype"></a>
 ### `SoundType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:239`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L239)
+**Kind:** Typealias · **Source:** [`src/Types.ts:280`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L280)
 
 Typescript type: SoundType represents a type of sound input. It corresponds to Sound.type property.
 
@@ -14453,7 +14772,7 @@ type UIActionEvent = MouseEvent | TouchEvent | PointerEvent | KeyboardEvent;
 <a id="types-uihandler"></a>
 ### `UIHandler`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:173`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L173)
+**Kind:** Typealias · **Source:** [`src/Types.ts:214`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L214)
 
 Typescript type: UIHandler represents a callback function to handle UI actions.
 
@@ -14464,7 +14783,7 @@ type UIHandler =  Fn(target:UI, pt:PtLike, type:UIPointerAction | string & , evt
 <a id="types-warningtype"></a>
 ### `WarningType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:183`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L183)
+**Kind:** Typealias · **Source:** [`src/Types.ts:224`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L224)
 
 Typescript type: WarningType specifies a level of warning for [`Util.warnLevel`](#util-util-static-warn-level).
 

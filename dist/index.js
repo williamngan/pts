@@ -5352,6 +5352,12 @@ var Create = class {
 	static delaunay(pts) {
 		return Delaunay.from(pts);
 	}
+	static flock(pts, options = {}) {
+		const flock = new Flock();
+		flock.setup(options);
+		for (const p of pts) flock.addBoid(p);
+		return flock;
+	}
 };
 const __noise_grad3 = [
 	[
@@ -6017,6 +6023,457 @@ var Delaunay = class extends Group {
 			}
 		}
 		return edges;
+	}
+};
+function __flock_accumulateUnit(out, dx, dy, weight) {
+	const mag2 = dx * dx + dy * dy;
+	if (mag2 <= 0) return;
+	const scale = weight / Math.sqrt(mag2);
+	out[0] += dx * scale;
+	out[1] += dy * scale;
+}
+const __flock_tieBreak = 1;
+const __flock_minSepFraction = .01;
+const __flock_maxCell = 2147483647;
+const __flock_noCell = -2147483648;
+var Boid = class extends Pt {
+	constructor(..._args2) {
+		super(..._args2);
+		this._vel = new Pt(0, 0);
+	}
+	get velocity() {
+		return this._vel;
+	}
+	set velocity(v) {
+		this._vel = v;
+	}
+	get speed() {
+		return Math.sqrt(this._vel[0] * this._vel[0] + this._vel[1] * this._vel[1]);
+	}
+	get heading() {
+		return Math.atan2(this._vel[1], this._vel[0]);
+	}
+};
+var Flock = class extends Group {
+	constructor(..._args3) {
+		super(..._args3);
+		this._perception = 40;
+		this._separation = 20;
+		this._cohesionWeight = 1;
+		this._alignWeight = 1;
+		this._separateWeight = 1.5;
+		this._maxSpeed = 100;
+		this._minSpeed = 0;
+		this._maxForce = 200;
+		this._boundary = "steer";
+		this._margin = 50;
+		this._maxTimeStep = 50;
+		this._bound = null;
+		this._initialSpeed = void 0;
+		this._pos = /* @__PURE__ */ new Float32Array(0);
+		this._vel = /* @__PURE__ */ new Float32Array(0);
+		this._sums = /* @__PURE__ */ new Float32Array(0);
+		this._counts = /* @__PURE__ */ new Uint32Array(0);
+		this._hashKeys = /* @__PURE__ */ new Uint32Array(0);
+		this._cellX = /* @__PURE__ */ new Int32Array(0);
+		this._cellY = /* @__PURE__ */ new Int32Array(0);
+		this._cellStart = /* @__PURE__ */ new Uint32Array(0);
+		this._cellEntries = /* @__PURE__ */ new Uint32Array(0);
+		this._steerOut = /* @__PURE__ */ new Float32Array(2);
+	}
+	setup(options) {
+		if (options.perception !== void 0) this.perception = options.perception;
+		if (options.separation !== void 0) this.separation = options.separation;
+		if (options.cohesionWeight !== void 0) this._cohesionWeight = options.cohesionWeight;
+		if (options.alignWeight !== void 0) this._alignWeight = options.alignWeight;
+		if (options.separateWeight !== void 0) this._separateWeight = options.separateWeight;
+		if (options.maxSpeed !== void 0) this.maxSpeed = options.maxSpeed;
+		if (options.minSpeed !== void 0) this.minSpeed = options.minSpeed;
+		if (options.maxForce !== void 0) this._maxForce = options.maxForce;
+		if (options.bound !== void 0) this._bound = options.bound;
+		if (options.boundary !== void 0) this._boundary = options.boundary;
+		if (options.margin !== void 0) this.margin = options.margin;
+		if (options.maxTimeStep !== void 0) this.maxTimeStep = options.maxTimeStep;
+		if (options.initialSpeed !== void 0) this._initialSpeed = options.initialSpeed;
+		return this;
+	}
+	get perception() {
+		return this._perception;
+	}
+	set perception(r) {
+		this._perception = Math.max(0, r);
+	}
+	get separation() {
+		return this._separation;
+	}
+	set separation(r) {
+		this._separation = Math.max(0, r);
+	}
+	get cohesionWeight() {
+		return this._cohesionWeight;
+	}
+	set cohesionWeight(w) {
+		this._cohesionWeight = w;
+	}
+	get alignWeight() {
+		return this._alignWeight;
+	}
+	set alignWeight(w) {
+		this._alignWeight = w;
+	}
+	get separateWeight() {
+		return this._separateWeight;
+	}
+	set separateWeight(w) {
+		this._separateWeight = w;
+	}
+	get maxSpeed() {
+		return this._maxSpeed;
+	}
+	set maxSpeed(s) {
+		this._maxSpeed = Math.max(0, s);
+	}
+	get minSpeed() {
+		return this._minSpeed;
+	}
+	set minSpeed(s) {
+		this._minSpeed = Math.max(0, s);
+	}
+	get maxForce() {
+		return this._maxForce;
+	}
+	set maxForce(f) {
+		this._maxForce = f;
+	}
+	get bound() {
+		return this._bound;
+	}
+	set bound(b) {
+		this._bound = b;
+	}
+	get boundary() {
+		return this._boundary;
+	}
+	set boundary(b) {
+		this._boundary = b;
+	}
+	get margin() {
+		return this._margin;
+	}
+	set margin(m) {
+		this._margin = Math.max(0, m);
+	}
+	get maxTimeStep() {
+		return this._maxTimeStep;
+	}
+	set maxTimeStep(ms) {
+		this._maxTimeStep = Math.max(0, ms);
+	}
+	get initialSpeed() {
+		return this._initialSpeed === void 0 ? this._maxSpeed * .5 : this._initialSpeed;
+	}
+	set initialSpeed(s) {
+		this._initialSpeed = s;
+	}
+	addBoid(pt, velocity) {
+		const isBoid = pt instanceof Boid;
+		const boid = isBoid ? pt : new Boid(pt);
+		if (velocity !== void 0) {
+			boid.velocity[0] = velocity[0];
+			boid.velocity[1] = velocity[1];
+		} else if (!isBoid) {
+			const a = Num.random() * Const.two_pi;
+			const s = this.initialSpeed;
+			boid.velocity[0] = Math.cos(a) * s;
+			boid.velocity[1] = Math.sin(a) * s;
+		}
+		this.push(boid);
+		return this;
+	}
+	step(ms) {
+		const n = this.length;
+		if (n === 0 || !(ms > 0)) return this;
+		const dt = Math.min(ms, this._maxTimeStep) / 1e3;
+		if (dt <= 0) return this;
+		this._ensureBuffers(n);
+		this._gather(n);
+		if (n > 1 && this._perception > 0) this._accumulate(n);
+		else {
+			this._sums.fill(0, 0, n * 6);
+			this._counts.fill(0, 0, n);
+		}
+		this._integrate(n, dt);
+		this._scatter(n);
+		return this;
+	}
+	_ensureBuffers(n) {
+		if (this._pos.length < n * 2) {
+			const size = n * 2 * 2;
+			this._pos = new Float32Array(size);
+			this._vel = new Float32Array(size);
+			this._sums = new Float32Array(size * 3);
+			this._counts = new Uint32Array(size);
+			this._hashKeys = new Uint32Array(size);
+			this._cellX = new Int32Array(size);
+			this._cellY = new Int32Array(size);
+			this._cellEntries = new Uint32Array(size);
+		}
+	}
+	_gather(n) {
+		const pos = this._pos;
+		const vel = this._vel;
+		for (let i = 0; i < n; i++) {
+			let b = this[i];
+			let v = b.velocity;
+			if (v === void 0) {
+				b = new Boid(b);
+				v = b.velocity;
+				this[i] = b;
+			}
+			const k = i * 2;
+			pos[k] = b[0];
+			pos[k + 1] = b[1];
+			vel[k] = v[0];
+			vel[k + 1] = v[1];
+		}
+	}
+	_scatter(n) {
+		const pos = this._pos;
+		const vel = this._vel;
+		for (let i = 0; i < n; i++) {
+			const b = this[i];
+			const v = b.velocity;
+			const k = i * 2;
+			b[0] = pos[k];
+			b[1] = pos[k + 1];
+			v[0] = vel[k];
+			v[1] = vel[k + 1];
+		}
+	}
+	_accumulate(n) {
+		const pos = this._pos;
+		const vel = this._vel;
+		const sums = this._sums;
+		const counts = this._counts;
+		sums.fill(0, 0, n * 6);
+		counts.fill(0, 0, n);
+		const r2 = this._perception * this._perception;
+		const sep = Math.min(this._separation, this._perception);
+		const sep2 = sep * sep;
+		const minSep = sep * __flock_minSepFraction;
+		const minSep2 = minSep * minSep;
+		const inv = 1 / this._perception;
+		let m = 16;
+		while (m < n * 2) m <<= 1;
+		const mask = m - 1;
+		if (this._cellStart.length < m + 1) this._cellStart = new Uint32Array(m + 1);
+		const keys = this._hashKeys;
+		const cellX = this._cellX;
+		const cellY = this._cellY;
+		const start = this._cellStart;
+		const entries = this._cellEntries;
+		start.fill(0, 0, m + 1);
+		for (let i = 0; i < n; i++) {
+			const cx = Math.floor(pos[i * 2] * inv);
+			const cy = Math.floor(pos[i * 2 + 1] * inv);
+			if (cx >= -2147483647 && cx <= __flock_maxCell && cy >= -2147483647 && cy <= __flock_maxCell) {
+				cellX[i] = cx;
+				cellY[i] = cy;
+			} else {
+				cellX[i] = __flock_noCell;
+				cellY[i] = __flock_noCell;
+			}
+			const key = (Math.imul(cellX[i], 2654435761) ^ Math.imul(cellY[i], 2246822519)) >>> 0 & mask;
+			keys[i] = key;
+			start[key]++;
+		}
+		let sum = 0;
+		for (let k = 0; k < m; k++) {
+			const c = start[k];
+			start[k] = sum;
+			sum += c;
+		}
+		start[m] = sum;
+		for (let i = 0; i < n; i++) entries[start[keys[i]]++] = i;
+		for (let i = 0; i < n; i++) {
+			const cx = cellX[i];
+			if (cx === __flock_noCell) continue;
+			const cy = cellY[i];
+			const ki = i * 2;
+			const ix = pos[ki];
+			const iy = pos[ki + 1];
+			const ivx = vel[ki];
+			const ivy = vel[ki + 1];
+			const si = i * 6;
+			for (let c = 0; c < 5; c++) {
+				const gx = c === 2 ? cx - 1 : c === 0 || c === 3 ? cx : cx + 1;
+				const gy = c < 2 ? cy : cy + 1;
+				const key = (Math.imul(gx, 2654435761) ^ Math.imul(gy, 2246822519)) >>> 0 & mask;
+				const end = start[key];
+				const begin = key > 0 ? start[key - 1] : 0;
+				for (let e = begin; e < end; e++) {
+					const j = entries[e];
+					if (cellX[j] !== gx || cellY[j] !== gy) continue;
+					if (c === 0 && j <= i) continue;
+					const kj = j * 2;
+					const jx = pos[kj];
+					const jy = pos[kj + 1];
+					const dx = jx - ix;
+					const dy = jy - iy;
+					const d2 = dx * dx + dy * dy;
+					if (!(d2 < r2)) continue;
+					const sj = j * 6;
+					sums[si] += jx;
+					sums[si + 1] += jy;
+					sums[sj] += ix;
+					sums[sj + 1] += iy;
+					sums[si + 2] += vel[kj];
+					sums[si + 3] += vel[kj + 1];
+					sums[sj + 2] += ivx;
+					sums[sj + 3] += ivy;
+					counts[i]++;
+					counts[j]++;
+					if (d2 < sep2) {
+						let ox = dx;
+						let oy = dy;
+						let dd = d2;
+						if (dd === 0) {
+							ox = __flock_tieBreak;
+							oy = 0;
+							dd = minSep2;
+						} else if (dd < minSep2) dd = minSep2;
+						const w = 1 / dd;
+						const wx = ox * w;
+						const wy = oy * w;
+						sums[si + 4] -= wx;
+						sums[si + 5] -= wy;
+						sums[sj + 4] += wx;
+						sums[sj + 5] += wy;
+					}
+				}
+			}
+		}
+	}
+	_integrate(n, dt) {
+		const pos = this._pos;
+		const vel = this._vel;
+		const sums = this._sums;
+		const counts = this._counts;
+		const out = this._steerOut;
+		const maxSpeed = this._maxSpeed;
+		const maxForce = this._maxForce;
+		const minSpeed = Math.min(this._minSpeed, maxSpeed);
+		const cw = this._cohesionWeight;
+		const aw = this._alignWeight;
+		const sw = this._separateWeight;
+		const bound = this._bound;
+		const boundary = bound ? this._boundary : "none";
+		const steer = boundary === "steer" && this._margin > 0;
+		const wrap = boundary === "wrap";
+		const bounce = boundary === "bounce";
+		let minX = 0;
+		let minY = 0;
+		let maxX = 0;
+		let maxY = 0;
+		if (bound && boundary !== "none") {
+			const b0 = bound[0];
+			const b1 = bound[1];
+			minX = Math.min(b0[0], b1[0]);
+			minY = Math.min(b0[1], b1[1]);
+			maxX = Math.max(b0[0], b1[0]);
+			maxY = Math.max(b0[1], b1[1]);
+		}
+		const margin = this._margin;
+		for (let i = 0; i < n; i++) {
+			const k = i * 2;
+			const s = i * 6;
+			let px = pos[k];
+			let py = pos[k + 1];
+			let vx = vel[k];
+			let vy = vel[k + 1];
+			out[0] = 0;
+			out[1] = 0;
+			const c = counts[i];
+			if (c > 0) {
+				if (cw !== 0) __flock_accumulateUnit(out, sums[s] / c - px, sums[s + 1] / c - py, cw);
+				if (aw !== 0) __flock_accumulateUnit(out, sums[s + 2], sums[s + 3], aw);
+				if (sw !== 0) __flock_accumulateUnit(out, sums[s + 4], sums[s + 5], sw);
+			}
+			let ax = 0;
+			let ay = 0;
+			const dm2 = out[0] * out[0] + out[1] * out[1];
+			if (dm2 > 0) {
+				const sc = maxSpeed / Math.sqrt(dm2);
+				ax = out[0] * sc - vx;
+				ay = out[1] * sc - vy;
+				const f2 = ax * ax + ay * ay;
+				if (f2 > maxForce * maxForce) {
+					const fs = maxForce / Math.sqrt(f2);
+					ax *= fs;
+					ay *= fs;
+				}
+			}
+			if (steer) {
+				const dl = px - minX;
+				const dr = maxX - px;
+				const dtp = py - minY;
+				const db = maxY - py;
+				if (dl < margin) ax += maxForce * (1 - Math.max(dl, 0) / margin);
+				else if (dr < margin) ax -= maxForce * (1 - Math.max(dr, 0) / margin);
+				if (dtp < margin) ay += maxForce * (1 - Math.max(dtp, 0) / margin);
+				else if (db < margin) ay -= maxForce * (1 - Math.max(db, 0) / margin);
+			}
+			vx += ax * dt;
+			vy += ay * dt;
+			const sp2 = vx * vx + vy * vy;
+			if (sp2 > maxSpeed * maxSpeed) {
+				const sc = maxSpeed / Math.sqrt(sp2);
+				vx *= sc;
+				vy *= sc;
+			} else if (minSpeed > 0 && sp2 < minSpeed * minSpeed) {
+				if (sp2 > 0) {
+					const sc = minSpeed / Math.sqrt(sp2);
+					vx *= sc;
+					vy *= sc;
+				} else {
+					vx = minSpeed;
+					vy = 0;
+				}
+			}
+			px += vx * dt;
+			py += vy * dt;
+			if (wrap) {
+				const w = maxX - minX;
+				const h = maxY - minY;
+				if (w > 0) {
+					if (px < minX) px = maxX - (minX - px) % w;
+					else if (px > maxX) px = minX + (px - maxX) % w;
+				}
+				if (h > 0) {
+					if (py < minY) py = maxY - (minY - py) % h;
+					else if (py > maxY) py = minY + (py - maxY) % h;
+				}
+			} else if (bounce) {
+				if (px <= minX) {
+					px = minX;
+					if (vx < 0) vx = -vx;
+				} else if (px >= maxX) {
+					px = maxX;
+					if (vx > 0) vx = -vx;
+				}
+				if (py <= minY) {
+					py = minY;
+					if (vy < 0) vy = -vy;
+				} else if (py >= maxY) {
+					py = maxY;
+					if (vy > 0) vy = -vy;
+				}
+			}
+			pos[k] = px;
+			pos[k + 1] = py;
+			vel[k] = vx;
+			vel[k + 1] = vy;
+		}
 	}
 };
 
@@ -8887,6 +9344,7 @@ var Sound = class Sound {
 
 //#endregion
 exports.Body = Body;
+exports.Boid = Boid;
 exports.Bound = Bound;
 exports.CanvasForm = CanvasForm;
 exports.CanvasSpace = CanvasSpace;
@@ -8897,6 +9355,7 @@ exports.Create = Create;
 exports.Curve = Curve;
 exports.DOMSpace = DOMSpace;
 exports.Delaunay = Delaunay;
+exports.Flock = Flock;
 exports.Font = Font;
 exports.Form = Form;
 exports.Geom = Geom;

@@ -1,14 +1,14 @@
 {
-  "name": "Delaunay",
+  "name": "Flock",
   "source": [
     [
       "src/Create.ts",
-      502,
+      921,
       13
     ]
   ],
   "kind": "Class",
-  "comment": "Delaunay is a [`Group`](#link) of Pts that generates Delaunay and Voronoi tessellations.\nPoints are triangulated by incremental insertion in Hilbert-curve order with exact\norientation and in-circle tests, so grids, collinear runs, points on edges, and duplicate\npoints are handled without degenerate triangles.",
+  "comment": "Flock is a subclass of [`Group`](#link) that holds [`Boid`](#link) agents and simulates\nflocking behavior (also known as \"boids\", after Craig Reynolds). Each agent steers by three\nlocal rules — separation, alignment, and cohesion — evaluated over the neighbors within its\n`perception` radius. Create one with [`Create.flock`](#link) and advance it with\n[`Flock.step`](#link). Since a Flock is a Group of Pts, it draws directly:\n`form.points( flock, 2, \"circle\" )`.\n\nNeighbors are found through a uniform spatial hash rather than by testing every pair, so the\ncost scales with the number of agents rather than with its square.\nSee [a demo here](https://ptsjs.org/demo/?name=create.flock).",
   "constructor": [
     {
       "name": "constructor",
@@ -25,7 +25,7 @@
       "signatures": [
         {
           "comment": "Create a Group by passing an array of [`Pt`](#link). You may also create a Group using [`Group.fromArray`](#link) or [`Group.fromPtArray`](#link).",
-          "returns": "Delaunay",
+          "returns": "Flock",
           "returns_comment": false,
           "parameters": [
             {
@@ -41,6 +41,130 @@
     }
   ],
   "accessors": [
+    {
+      "name": "alignWeight",
+      "source": [
+        [
+          "src/Create.ts",
+          1013,
+          6
+        ],
+        [
+          "src/Create.ts",
+          1016,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Weight of the alignment behavior, which matches an agent's heading to its neighbors'.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "w",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "bound",
+      "source": [
+        [
+          "src/Create.ts",
+          1066,
+          6
+        ],
+        [
+          "src/Create.ts",
+          1069,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Boundary that keeps the flock in view, as a [`Bound`](#link) or a Group of 2 Pts.\nWhen this is null, no boundary behavior is applied regardless of `boundary`.",
+      "getter": {
+        "type": "GroupLike | null"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "b",
+          "comment": "",
+          "type": "GroupLike | null",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "boundary",
+      "source": [
+        [
+          "src/Create.ts",
+          1079,
+          6
+        ],
+        [
+          "src/Create.ts",
+          1082,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "How the boundary is treated: `\"steer\"`, `\"wrap\"`, `\"bounce\"`, or `\"none\"`.\n\nNote that `\"wrap\"` teleports agents across the bound while the neighborhood search is not\ntoroidal, so a flock loses sight of itself at the seam. Prefer `\"steer\"` when that matters.",
+      "getter": {
+        "type": "FlockBoundary"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "b",
+          "comment": "",
+          "type": "FlockBoundary",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "cohesionWeight",
+      "source": [
+        [
+          "src/Create.ts",
+          1003,
+          6
+        ],
+        [
+          "src/Create.ts",
+          1006,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Weight of the cohesion behavior, which steers an agent toward its neighbors' center.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "w",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
     {
       "name": "id",
       "source": [
@@ -68,6 +192,192 @@
           "name": "s",
           "comment": "",
           "type": "string",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "initialSpeed",
+      "source": [
+        [
+          "src/Create.ts",
+          1110,
+          6
+        ],
+        [
+          "src/Create.ts",
+          1115,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Speed given to an agent added without an explicit velocity. Defaults to half of `maxSpeed`.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "s",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "margin",
+      "source": [
+        [
+          "src/Create.ts",
+          1089,
+          6
+        ],
+        [
+          "src/Create.ts",
+          1092,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Distance from an edge at which `\"steer\"` starts turning agents back.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "m",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "maxForce",
+      "source": [
+        [
+          "src/Create.ts",
+          1055,
+          6
+        ],
+        [
+          "src/Create.ts",
+          1058,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Maximum steering force, in units per second squared. This caps how sharply an agent can\nturn toward the direction its three behaviors blend to. A boundary turn is added on top,\nso an agent near an edge can accelerate up to twice this.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "f",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "maxSpeed",
+      "source": [
+        [
+          "src/Create.ts",
+          1033,
+          6
+        ],
+        [
+          "src/Create.ts",
+          1036,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Maximum speed, in units per second.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "s",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "maxTimeStep",
+      "source": [
+        [
+          "src/Create.ts",
+          1100,
+          6
+        ],
+        [
+          "src/Create.ts",
+          1103,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Maximum simulated time in milliseconds per [`Flock.step`](#link) call. Longer elapsed times\nare clamped to this, which keeps a stalled frame from teleporting the flock. Default is 50.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "ms",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "minSpeed",
+      "source": [
+        [
+          "src/Create.ts",
+          1043,
+          6
+        ],
+        [
+          "src/Create.ts",
+          1046,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Minimum speed, in units per second, so agents never stall. Default is 0.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "s",
+          "comment": "",
+          "type": "number",
           "default": false
         }
       }
@@ -145,6 +455,37 @@
       "setter": false
     },
     {
+      "name": "perception",
+      "source": [
+        [
+          "src/Create.ts",
+          982,
+          6
+        ],
+        [
+          "src/Create.ts",
+          985,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Radius within which an agent sees its neighbors. This is also the spatial hash's cell size.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "r",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
       "name": "q1",
       "source": [
         [
@@ -215,6 +556,68 @@
         "type": "Pt"
       },
       "setter": false
+    },
+    {
+      "name": "separateWeight",
+      "source": [
+        [
+          "src/Create.ts",
+          1023,
+          6
+        ],
+        [
+          "src/Create.ts",
+          1026,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Weight of the separation behavior, which steers an agent away from close neighbors.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "w",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "separation",
+      "source": [
+        [
+          "src/Create.ts",
+          993,
+          6
+        ],
+        [
+          "src/Create.ts",
+          996,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Radius within which an agent steers away from its neighbors. Values above `perception`\nhave no additional effect, since an agent only considers neighbors it can see.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "r",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
     }
   ],
   "methods": [
@@ -345,6 +748,41 @@
               "name": "args",
               "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "addBoid",
+      "source": [
+        [
+          "src/Create.ts",
+          1126,
+          2
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Add an agent to this flock. Named `addBoid` rather than `add` because [`Group.add`](#link)\nalready means \"translate every Pt in this group\", and [`Group.moveBy`](#link) delegates to it.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pt",
+              "comment": "a Pt, a Boid, or an array of numbers for the starting position",
+              "type": "PtLike | Boid",
+              "default": false
+            },
+            {
+              "name": "velocity",
+              "comment": "optional starting velocity. When omitted, a new agent gets a random heading\nat [`Flock.initialSpeed`](#link), drawn from [`Num.random`](#link).",
+              "type": "PtLike",
               "default": false
             }
           ],
@@ -518,35 +956,6 @@
               "comment": "Additional arrays and/or items to add to the end of the array.",
               "type": "(Pt | ConcatArray)[]",
               "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "delaunay",
-      "source": [
-        [
-          "src/Create.ts",
-          514,
-          2
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`. See a [Delaunay demo here](https://ptsjs.org/demo/?name=create.delaunay).",
-          "returns": "GroupLike[] | DelaunayShape[]",
-          "returns_comment": "an array of Groups or an array of DelaunayShapes `{i, j, k, triangle, circle}` which records the indices of the vertices, and the calculated triangles and circumcircles",
-          "parameters": [
-            {
-              "name": "triangleOnly",
-              "comment": "if true, returns an array of triangles in Groups, otherwise return the whole DelaunayShape",
-              "type": "boolean",
-              "default": "true"
             }
           ],
           "tags": []
@@ -993,28 +1402,6 @@
       ]
     },
     {
-      "name": "mesh",
-      "source": [
-        [
-          "src/Create.ts",
-          685,
-          2
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Get the cached mesh. The mesh is an array of objects, each of which representing the enclosing triangles around a Pt in this Delaunay group.",
-          "returns": "DelaunayMesh",
-          "returns_comment": "an array of objects that store a series of DelaunayShapes",
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
       "name": "moveBy",
       "source": [
         [
@@ -1094,70 +1481,6 @@
               "name": "args",
               "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "neighborPts",
-      "source": [
-        [
-          "src/Create.ts",
-          695,
-          2
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Given an index of a Pt in this Delaunay Group, returns its neighboring Pts in the network.",
-          "returns": "GroupLike",
-          "returns_comment": "an array of Pts",
-          "parameters": [
-            {
-              "name": "i",
-              "comment": "index of a Pt",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "sort",
-              "comment": "if true, sort the neighbors so that their edges will form a polygon",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "neighbors",
-      "source": [
-        [
-          "src/Create.ts",
-          709,
-          2
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Given an index of a Pt in this Delaunay Group, returns its neighboring DelaunayShapes.",
-          "returns": "DelaunayShape[]",
-          "returns_comment": "an array of DelaunayShapes `{i, j, k, triangle, circle}`",
-          "parameters": [
-            {
-              "name": "i",
-              "comment": "index of a Pt",
-              "type": "number",
               "default": false
             }
           ],
@@ -1652,6 +1975,35 @@
       ]
     },
     {
+      "name": "setup",
+      "source": [
+        [
+          "src/Create.ts",
+          957,
+          2
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set any number of options at once. Unspecified options keep their current value.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "options",
+              "comment": "a [`FlockOptions`](#link) object",
+              "type": "FlockOptions",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "shear2D",
       "source": [
         [
@@ -1956,6 +2308,35 @@
       ]
     },
     {
+      "name": "step",
+      "source": [
+        [
+          "src/Create.ts",
+          1151,
+          2
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Advance the simulation. Call this once per frame with the frame time, eg\n`space.add( (time, ftime) => flock.step( ftime ) )`.\n\nElapsed times longer than [`Flock.maxTimeStep`](#link) are clamped, so a slow frame slows\nthe flock down instead of teleporting it. A non-positive or NaN time is a no-op.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ms",
+              "comment": "elapsed time in milliseconds",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "subtract",
       "source": [
         [
@@ -2097,35 +2478,6 @@
               "name": "items",
               "comment": "Elements to insert at the start of the array.",
               "type": "Pt[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "voronoi",
-      "source": [
-        [
-          "src/Create.ts",
-          585,
-          2
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Generate Voronoi cells. `delaunay()` must be called before calling this function. See a [Voronoi demo here](https://ptsjs.org/demo/?name=create.delaunay).",
-          "returns": "Group[]",
-          "returns_comment": "an array of Groups, each of which represents a Voronoi cell. Unclipped cells share their vertex Pts with the cached mesh (see [`Delaunay.mesh`](#link)), so treat them as read-only or clone before mutating.",
-          "parameters": [
-            {
-              "name": "bound",
-              "comment": "Optionally provide a rectangular bound (eg, `space.innerBound`) to clip the cells against, including the unbounded cells on the convex hull.\nWithout a bound, cells around sliver triangles can extend to enormous coordinates (circumcenters of\nnearly-collinear points), which is technically correct but extremely slow to draw.",
-              "type": "PtIterable",
               "default": false
             }
           ],

@@ -431,6 +431,45 @@ type DelaunayMesh = {
   [key: string]: DelaunayShape;
 }[];
 /**
+ * Typescript type: FlockBoundary is how a [`Flock`](#link) treats the edges of its bound:
+ * `"steer"` turns agents back within a margin, `"wrap"` moves them to the opposite edge,
+ * `"bounce"` reflects them, and `"none"` lets them leave.
+ */
+type FlockBoundary = "steer" | "wrap" | "bounce" | "none";
+/**
+ * Typescript type: FlockOptions are the settings accepted by [`Create.flock`](#link) and
+ * [`Flock.setup`](#link). Every field is optional; see the matching [`Flock`](#link) accessor
+ * for its meaning and default.
+ */
+type FlockOptions = {
+  /** Radius within which an agent sees its neighbors. Default is 40. */
+  perception?: number;
+  /** Radius within which an agent steers away from its neighbors. Default is 20. */
+  separation?: number;
+  /** Weight of steering toward the neighbors' center. Default is 1. */
+  cohesionWeight?: number;
+  /** Weight of matching the neighbors' heading. Default is 1. */
+  alignWeight?: number;
+  /** Weight of steering away from close neighbors. Default is 1.5. */
+  separateWeight?: number;
+  /** Maximum speed, in units per second. Default is 100. */
+  maxSpeed?: number;
+  /** Minimum speed, in units per second. Default is 0. */
+  minSpeed?: number;
+  /** Maximum steering force, in units per second squared. Default is 200. */
+  maxForce?: number;
+  /** A [`Bound`](#link) or a Group of 2 Pts that keeps the flock in view. Default is none. */
+  bound?: GroupLike;
+  /** How the bound's edges are treated. Default is `"steer"`. */
+  boundary?: FlockBoundary;
+  /** Distance from an edge at which `"steer"` starts turning agents back. Default is 50. */
+  margin?: number;
+  /** Maximum simulated time in milliseconds per step. Default is 50. */
+  maxTimeStep?: number;
+  /** Speed given to agents added without a velocity. Default is half of `maxSpeed`. */
+  initialSpeed?: number;
+};
+/**
  * Typescript type: DOMFormContext represents the current context for an DOMForm.
  */
 type DOMFormContext = {
@@ -2656,6 +2695,21 @@ declare class Create {
    * @returns an instance of the Delaunay class
    */
   static delaunay(pts: GroupLike): Delaunay;
+  /**
+   * Create a [`Flock`](#link) of [`Boid`](#link) agents that simulate flocking (also known as "boids"),
+   * where each agent steers by three local rules: separation, alignment, and cohesion.
+   * Advance the simulation by calling [`Flock.step`](#link) with the elapsed time.
+   * See a [flocking demo here](https://ptsjs.org/demo/?name=create.flock).
+   *
+   * Each agent starts with a random heading, drawn from [`Num.random`](#link), so seeding with
+   * [`Num.seed`](#link) makes a flock reproducible.
+   *
+   * @param pts a Group or an Iterable<Pt> of starting positions
+   * @param options optional [`FlockOptions`](#link) to tune the behavior
+   * @returns an instance of the Flock class, which is a Group of Boids
+   * @example `Create.flock( Create.distributeRandom( space.innerBound, 200 ), { bound: space.innerBound } )`
+   */
+  static flock(pts: PtLikeIterable, options?: FlockOptions): Flock;
 }
 /**
  * Noise is a subclass of Pt that generates Perlin noise. Current implementation supports basic 2D noise.
@@ -2775,6 +2829,209 @@ declare class Delaunay extends Group {
    * @param edges
    */
   protected static _dedupe(edges: number[]): number[];
+}
+/**
+ * Boid is a subclass of [`Pt`](#link) that represents a single agent in a [`Flock`](#link).
+ * Its own values are the agent's position, and it carries a `velocity` that [`Flock.step`](#link)
+ * integrates. Create them through [`Create.flock`](#link) or [`Flock.addBoid`](#link).
+ * See [a demo here](https://ptsjs.org/demo/?name=create.flock).
+ */
+declare class Boid extends Pt {
+  protected _vel: Pt;
+  /**
+   * This agent's velocity, in units per second.
+   */
+  get velocity(): Pt;
+  set velocity(v: Pt);
+  /**
+   * This agent's speed, in units per second.
+   */
+  get speed(): number;
+  /**
+   * The angle this agent is heading toward, in radians. Note that a stationary agent has no
+   * heading and reports 0 (pointing along +x) rather than NaN. Set a [`Flock`](#link)'s
+   * `minSpeed` if you are drawing headings and want to avoid that.
+   */
+  get heading(): number;
+}
+/**
+ * Flock is a subclass of [`Group`](#link) that holds [`Boid`](#link) agents and simulates
+ * flocking behavior (also known as "boids", after Craig Reynolds). Each agent steers by three
+ * local rules — separation, alignment, and cohesion — evaluated over the neighbors within its
+ * `perception` radius. Create one with [`Create.flock`](#link) and advance it with
+ * [`Flock.step`](#link). Since a Flock is a Group of Pts, it draws directly:
+ * `form.points( flock, 2, "circle" )`.
+ *
+ * Neighbors are found through a uniform spatial hash rather than by testing every pair, so the
+ * cost scales with the number of agents rather than with its square.
+ * See [a demo here](https://ptsjs.org/demo/?name=create.flock).
+ */
+declare class Flock extends Group {
+  protected _perception: number;
+  protected _separation: number;
+  protected _cohesionWeight: number;
+  protected _alignWeight: number;
+  protected _separateWeight: number;
+  protected _maxSpeed: number;
+  protected _minSpeed: number;
+  protected _maxForce: number;
+  protected _boundary: FlockBoundary;
+  protected _margin: number;
+  protected _maxTimeStep: number;
+  protected _bound: GroupLike | null;
+  protected _initialSpeed: number | undefined;
+  private _pos;
+  private _vel;
+  private _sums;
+  private _counts;
+  private _hashKeys;
+  private _cellX;
+  private _cellY;
+  private _cellStart;
+  private _cellEntries;
+  private _steerOut;
+  /**
+   * Set any number of options at once. Unspecified options keep their current value.
+   * @param options a [`FlockOptions`](#link) object
+   */
+  setup(options: FlockOptions): this;
+  /**
+   * Radius within which an agent sees its neighbors. This is also the spatial hash's cell size.
+   */
+  get perception(): number;
+  set perception(r: number);
+  /**
+   * Radius within which an agent steers away from its neighbors. Values above `perception`
+   * have no additional effect, since an agent only considers neighbors it can see.
+   */
+  get separation(): number;
+  set separation(r: number);
+  /**
+   * Weight of the cohesion behavior, which steers an agent toward its neighbors' center.
+   */
+  get cohesionWeight(): number;
+  set cohesionWeight(w: number);
+  /**
+   * Weight of the alignment behavior, which matches an agent's heading to its neighbors'.
+   */
+  get alignWeight(): number;
+  set alignWeight(w: number);
+  /**
+   * Weight of the separation behavior, which steers an agent away from close neighbors.
+   */
+  get separateWeight(): number;
+  set separateWeight(w: number);
+  /**
+   * Maximum speed, in units per second.
+   */
+  get maxSpeed(): number;
+  set maxSpeed(s: number);
+  /**
+   * Minimum speed, in units per second, so agents never stall. Default is 0.
+   */
+  get minSpeed(): number;
+  set minSpeed(s: number);
+  /**
+   * Maximum steering force, in units per second squared. This caps how sharply an agent can
+   * turn toward the direction its three behaviors blend to. A boundary turn is added on top,
+   * so an agent near an edge can accelerate up to twice this.
+   */
+  get maxForce(): number;
+  set maxForce(f: number);
+  /**
+   * Boundary that keeps the flock in view, as a [`Bound`](#link) or a Group of 2 Pts.
+   * When this is null, no boundary behavior is applied regardless of `boundary`.
+   */
+  get bound(): GroupLike | null;
+  set bound(b: GroupLike | null);
+  /**
+   * How the boundary is treated: `"steer"`, `"wrap"`, `"bounce"`, or `"none"`.
+   *
+   * Note that `"wrap"` teleports agents across the bound while the neighborhood search is not
+   * toroidal, so a flock loses sight of itself at the seam. Prefer `"steer"` when that matters.
+   */
+  get boundary(): FlockBoundary;
+  set boundary(b: FlockBoundary);
+  /**
+   * Distance from an edge at which `"steer"` starts turning agents back.
+   */
+  get margin(): number;
+  set margin(m: number);
+  /**
+   * Maximum simulated time in milliseconds per [`Flock.step`](#link) call. Longer elapsed times
+   * are clamped to this, which keeps a stalled frame from teleporting the flock. Default is 50.
+   */
+  get maxTimeStep(): number;
+  set maxTimeStep(ms: number);
+  /**
+   * Speed given to an agent added without an explicit velocity. Defaults to half of `maxSpeed`.
+   */
+  get initialSpeed(): number;
+  set initialSpeed(s: number);
+  /**
+   * Add an agent to this flock. Named `addBoid` rather than `add` because [`Group.add`](#link)
+   * already means "translate every Pt in this group", and [`Group.moveBy`](#link) delegates to it.
+   * @param pt a Pt, a Boid, or an array of numbers for the starting position
+   * @param velocity optional starting velocity. When omitted, a new agent gets a random heading
+   * at [`Flock.initialSpeed`](#link), drawn from [`Num.random`](#link).
+   */
+  addBoid(pt: PtLike | Boid, velocity?: PtLike): this;
+  /**
+   * Advance the simulation. Call this once per frame with the frame time, eg
+   * `space.add( (time, ftime) => flock.step( ftime ) )`.
+   *
+   * Elapsed times longer than [`Flock.maxTimeStep`](#link) are clamped, so a slow frame slows
+   * the flock down instead of teleporting it. A non-positive or NaN time is a no-op.
+   *
+   * @param ms elapsed time in milliseconds
+   */
+  step(ms: number): this;
+  /**
+   * Grow the flat state and hash scratch to fit `n` agents. Every buffer is fully written
+   * before it is read within a step, so reallocating here never loses state.
+   */
+  private _ensureBuffers;
+  /**
+   * Copy positions and velocities out of the Boids into the flat buffers. An element that
+   * reached this Group without a velocity — pushed as a plain Pt, or produced by a Group method
+   * that copies through the species constructor — is upgraded to a Boid in place here rather
+   * than throwing mid-simulation.
+   */
+  private _gather;
+  /**
+   * Write the integrated positions and velocities back into the Boids.
+   */
+  private _scatter;
+  /**
+   * Accumulate the three behaviors' sums for every agent in a single pass over neighboring
+   * pairs, using a uniform spatial hash (a counting-sort grid) built the same way as
+   * [`World`](#link)'s collision broad phase — see `World._collideParticles`. The two are kept
+   * separate on purpose: this one queries a fixed radius and accumulates into flat sums, and
+   * sharing an abstraction between them would put an indirect call on the per-pair path.
+   *
+   * Cells are exactly `perception` wide, which is the smallest size for which every neighbor
+   * within that radius is guaranteed to lie in the 3x3 block around an agent's cell. Each
+   * agent's cell coordinates are kept, so an entry found through a hash bucket is checked
+   * against the cell actually being visited: two cells that collide into one bucket cannot
+   * count a neighbor twice or hide one. That exact check is also what allows visiting only
+   * half of the neighborhood — the agent's own cell (pairing with higher indices) plus the four
+   * cells east, south-west, south, and south-east — since every pair of adjacent cells is then
+   * seen from exactly one side.
+   *
+   * Each pair is accumulated into both agents: "j is within r of i" is symmetric, so this
+   * halves the distance computations. No `sqrt` is taken here — radius tests compare squared
+   * distances, and separation falls off as the inverse square, which is what makes the
+   * fallback in `__flock_tieBreak` necessary.
+   */
+  private _accumulate;
+  /**
+   * Turn the accumulated sums into a steering force per agent, then integrate velocity and
+   * position. This is O(n), so it uses the classic "steer toward the desired velocity"
+   * formulation and its handful of square roots, which behaves better than weighting raw
+   * offsets and keeps `maxSpeed` and `maxForce` as the only scale-dependent knobs.
+   * See `__flock_accumulateUnit` for why the behaviors are blended before that steer is taken.
+   */
+  private _integrate;
 }
 //#endregion
 //#region src/Num.d.ts
@@ -6073,5 +6330,5 @@ declare class Sound {
   dispose(): this;
 }
 //#endregion
-export { AnimateCallbackFn, Body, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, ImgOptions, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TextMeasure, TextVerticalAlign, TouchPointsKey, Triangle, Typography, UI, UIActionEvent, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, UIShapeTest, Util, Vec, VisualForm, WarningType, World };
+export { AnimateCallbackFn, Body, Boid, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Flock, FlockBoundary, FlockOptions, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, ImgOptions, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TextMeasure, TextVerticalAlign, TouchPointsKey, Triangle, Typography, UI, UIActionEvent, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, UIShapeTest, Util, Vec, VisualForm, WarningType, World };
 //# sourceMappingURL=index.d.ts.map

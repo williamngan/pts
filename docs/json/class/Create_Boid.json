@@ -1,46 +1,69 @@
 {
-  "name": "Noise",
+  "name": "Boid",
   "source": [
     [
       "src/Create.ts",
-      271,
+      879,
       13
     ]
   ],
   "kind": "Class",
-  "comment": "Noise is a subclass of Pt that generates Perlin noise. Current implementation supports basic 2D noise.\nThis implementation is based on this [gist](https://gist.github.com/banksean/304522).",
+  "comment": "Boid is a subclass of [`Pt`](#link) that represents a single agent in a [`Flock`](#link).\nIts own values are the agent's position, and it carries a `velocity` that [`Flock.step`](#link)\nintegrates. Create them through [`Create.flock`](#link) or [`Flock.addBoid`](#link).\nSee [a demo here](https://ptsjs.org/demo/?name=create.flock).",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
-          "src/Create.ts",
-          279,
+          "src/Pt.ts",
+          27,
           2
         ]
       ],
       "flags": {},
-      "overrides": "Pt.__constructor",
-      "inherits": false,
+      "overrides": false,
+      "inherits": "Pt.constructor",
       "signatures": [
         {
-          "comment": "Create a Noise Pt that can generate noise continuously. See a [Noise demo here](https://ptsjs.org/demo/?name=create.noisePts).",
-          "returns": "Noise",
+          "comment": "Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].\nNote that `new Pt(3)` will only instantiate Pt with length of 3 (ie, same as `new Float32Array(3)` ). If you need a Pt with 1 dimension of value 3, use `new Pt([3])`.",
+          "returns": "Boid",
           "returns_comment": false,
           "parameters": [
             {
               "name": "args",
               "comment": "a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties",
-              "type": "any[]",
+              "type": "(number | number[] | Float32Array | IPt)[]",
               "default": false
             }
           ],
-          "tags": []
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`"
+            }
+          ]
         }
       ]
     }
   ],
   "accessors": [
+    {
+      "name": "heading",
+      "source": [
+        [
+          "src/Create.ts",
+          904,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "The angle this agent is heading toward, in radians. Note that a stationary agent has no\nheading and reports 0 (pointing along +x) rather than NaN. Set a [`Flock`](#link)'s\n`minSpeed` if you are drawing headings and want to avoid that.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": false
+    },
     {
       "name": "id",
       "source": [
@@ -68,6 +91,55 @@
           "name": "s",
           "comment": "",
           "type": "string",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "speed",
+      "source": [
+        [
+          "src/Create.ts",
+          895,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "This agent's speed, in units per second.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": false
+    },
+    {
+      "name": "velocity",
+      "source": [
+        [
+          "src/Create.ts",
+          885,
+          6
+        ],
+        [
+          "src/Create.ts",
+          888,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "This agent's velocity, in units per second.",
+      "getter": {
+        "type": "Pt"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "v",
+          "comment": "",
+          "type": "Pt",
           "default": false
         }
       }
@@ -1230,40 +1302,6 @@
       ]
     },
     {
-      "name": "initNoise",
-      "source": [
-        [
-          "src/Create.ts",
-          291,
-          2
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Set the initial dimensional values of the noise.",
-          "returns": "Noise",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": [
-            {
-              "tag": "example",
-              "text": "`noise.initNoise( 0.01, 0.1 )`"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "join",
       "source": [
         [
@@ -1475,28 +1513,6 @@
               "default": false
             }
           ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "noise2D",
-      "source": [
-        [
-          "src/Create.ts",
-          318,
-          2
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Generate a 2D Perlin noise value.",
-          "returns": "number",
-          "returns_comment": false,
-          "parameters": [],
           "tags": []
         }
       ]
@@ -1828,7 +1844,7 @@
       "signatures": [
         {
           "comment": "Rotate this Pt from origin or from an anchor point in 2D.",
-          "returns": "Noise",
+          "returns": "Boid",
           "returns_comment": false,
           "parameters": [
             {
@@ -1891,7 +1907,7 @@
       "signatures": [
         {
           "comment": "Scale this Pt from origin or from an anchor point.",
-          "returns": "Noise",
+          "returns": "Boid",
           "returns_comment": false,
           "parameters": [
             {
@@ -1904,35 +1920,6 @@
               "name": "anchor",
               "comment": "optional anchor point to scale from",
               "type": "PtLike",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "seed",
-      "source": [
-        [
-          "src/Create.ts",
-          310,
-          2
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Specify a seed for this Noise.",
-          "returns": "Noise",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "s",
-              "comment": "seed value",
-              "type": "number",
               "default": false
             }
           ],
@@ -1990,7 +1977,7 @@
       "signatures": [
         {
           "comment": "Shear this Pt from origin or from an anchor point in 2D.",
-          "returns": "Noise",
+          "returns": "Boid",
           "returns_comment": false,
           "parameters": [
             {
@@ -2109,41 +2096,6 @@
               "comment": "Function used to determine the order of the elements. It is expected to return\na negative value if first argument is less than second argument, zero if they're equal and a positive\nvalue otherwise. If omitted, the elements are sorted in ascending order.\n```ts\n[11,2,22,1].sort((a, b) => a - b)\n```",
               "type": " Fn(a:number, b:number)",
               "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "step",
-      "source": [
-        [
-          "src/Create.ts",
-          301,
-          2
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Add a small increment to the noise values.",
-          "returns": "Noise",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "x",
-              "comment": "step in x dimension",
-              "type": "number",
-              "default": "0"
-            },
-            {
-              "name": "y",
-              "comment": "step in y dimension",
-              "type": "number",
-              "default": "0"
             }
           ],
           "tags": []
@@ -2600,23 +2552,6 @@
       "overrides": false,
       "inherits": "Float32Array.length",
       "comment": "The length of the array."
-    },
-    {
-      "name": "perm",
-      "source": [
-        [
-          "src/Create.ts",
-          272,
-          12
-        ]
-      ],
-      "flags": {
-        "isProtected": true
-      },
-      "type": "number[]",
-      "overrides": false,
-      "inherits": false,
-      "comment": ""
     }
   ],
   "flags": {},

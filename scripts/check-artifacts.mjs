@@ -70,14 +70,15 @@ const expectedExports = [
   "World",
 ];
 const sizeLimits = {
-  // The declarations keep their doc comments since 1.0, and the triangulation
-  // is a full implementation. Keep approximately 2% headroom above the measured build.
-  "index.d.mts": 287300,
-  "index.d.ts": 287300,
-  "index.js": 257600,
-  "index.mjs": 256700,
-  "pts.js": 269200,
-  "pts.min.js": 157600,
+  // The declarations keep their doc comments since 1.0; the triangulation and
+  // the flock are full implementations. Keep approximately 2% headroom above the
+  // measured build.
+  "index.d.mts": 299000,
+  "index.d.ts": 299000,
+  "index.js": 273500,
+  "index.mjs": 272600,
+  "pts.js": 285700,
+  "pts.min.js": 166400,
 };
 const banner = "Copyright © 2017-present William Ngan and contributors.";
 
