@@ -2,3 +2,13 @@
 # without adding any dependency to the published Pts runtime.
 overrides:
   monaco-editor>dompurify: 3.4.14
+
+# node_modules is shared between macOS and the Linux sandbox through a bind
+# mount, so install the native bindings (rolldown, lightningcss, ...) for both.
+supportedArchitectures:
+  os:
+    - darwin
+    - linux
+  cpu:
+    - arm64
+    - x64
