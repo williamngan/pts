@@ -867,6 +867,8 @@ const __flock_minSepFraction = 0.01;
  * float64). The comparison is written so NaN fails it too.
  */
 const __flock_maxCell = 0x7fffffff;
+/** Cell coordinate of an agent with no finite neighborhood; below every valid cell. */
+const __flock_noCell = -0x80000000;
 
 /**
  * Boid is a subclass of [`Pt`](#link) that represents a single agent in a [`Flock`](#link).
@@ -942,9 +944,10 @@ export class Flock extends Group {
 
   // Spatial-hash scratch, grown geometrically and reused across steps.
   private _hashKeys: Uint32Array = new Uint32Array(0);
+  private _cellX: Int32Array = new Int32Array(0);
+  private _cellY: Int32Array = new Int32Array(0);
   private _cellStart: Uint32Array = new Uint32Array(0);
   private _cellEntries: Uint32Array = new Uint32Array(0);
-  private _neighborKeys: Uint32Array = new Uint32Array(9);
   private _steerOut: Float32Array = new Float32Array(2);
 
   /**
@@ -1177,6 +1180,8 @@ export class Flock extends Group {
       this._sums = new Float32Array(size * 3);
       this._counts = new Uint32Array(size);
       this._hashKeys = new Uint32Array(size);
+      this._cellX = new Int32Array(size);
+      this._cellY = new Int32Array(size);
       this._cellEntries = new Uint32Array(size);
     }
   }
@@ -1231,12 +1236,18 @@ export class Flock extends Group {
    * sharing an abstraction between them would put an indirect call on the per-pair path.
    *
    * Cells are exactly `perception` wide, which is the smallest size for which every neighbor
-   * within that radius is guaranteed to lie in the 3x3 block around an agent's cell.
+   * within that radius is guaranteed to lie in the 3x3 block around an agent's cell. Each
+   * agent's cell coordinates are kept, so an entry found through a hash bucket is checked
+   * against the cell actually being visited: two cells that collide into one bucket cannot
+   * count a neighbor twice or hide one. That exact check is also what allows visiting only
+   * half of the neighborhood — the agent's own cell (pairing with higher indices) plus the four
+   * cells east, south-west, south, and south-east — since every pair of adjacent cells is then
+   * seen from exactly one side.
    *
-   * Each pair is visited once, from its lower index, and accumulated into both agents:
-   * "j is within r of i" is symmetric, so this halves the distance computations. No `sqrt` is
-   * taken here — radius tests compare squared distances, and separation falls off as the
-   * inverse square, which is what makes the fallback in `__flock_tieBreak` necessary.
+   * Each pair is accumulated into both agents: "j is within r of i" is symmetric, so this
+   * halves the distance computations. No `sqrt` is taken here — radius tests compare squared
+   * distances, and separation falls off as the inverse square, which is what makes the
+   * fallback in `__flock_tieBreak` necessary.
    */
   private _accumulate(n: number) {
     const pos = this._pos;
@@ -1262,16 +1273,33 @@ export class Flock extends Group {
       this._cellStart = new Uint32Array(m + 1);
 
     const keys = this._hashKeys;
+    const cellX = this._cellX;
+    const cellY = this._cellY;
     const start = this._cellStart;
     const entries = this._cellEntries;
 
-    // Count per cell, exclusive prefix sum, then scatter; after the scatter, bucket k spans
-    // [start[k-1], start[k]).
+    // Cell coordinates once per agent. A non-finite or absurd position gets a sentinel cell
+    // that no neighborhood visit can match, so it neither sees nor is seen (see
+    // `__flock_maxCell`). Then count per cell, exclusive prefix sum, and scatter; after the
+    // scatter, bucket k spans [start[k-1], start[k]).
     start.fill(0, 0, m + 1);
     for (let i = 0; i < n; i++) {
+      const cx = Math.floor(pos[i * 2] * inv);
+      const cy = Math.floor(pos[i * 2 + 1] * inv);
+      if (
+        cx >= -__flock_maxCell &&
+        cx <= __flock_maxCell &&
+        cy >= -__flock_maxCell &&
+        cy <= __flock_maxCell
+      ) {
+        cellX[i] = cx;
+        cellY[i] = cy;
+      } else {
+        cellX[i] = __flock_noCell;
+        cellY[i] = __flock_noCell;
+      }
       const key =
-        ((Math.imul(Math.floor(pos[i * 2] * inv), 0x9e3779b1) ^
-          Math.imul(Math.floor(pos[i * 2 + 1] * inv), 0x85ebca77)) >>>
+        ((Math.imul(cellX[i], 0x9e3779b1) ^ Math.imul(cellY[i], 0x85ebca77)) >>>
           0) &
         mask;
       keys[i] = key;
@@ -1288,88 +1316,70 @@ export class Flock extends Group {
       entries[start[keys[i]]++] = i;
     }
 
-    const visited = this._neighborKeys;
     for (let i = 0; i < n; i++) {
+      const cx = cellX[i];
+      if (cx === __flock_noCell) continue;
+      const cy = cellY[i];
       const ki = i * 2;
       const ix = pos[ki];
       const iy = pos[ki + 1];
       const ivx = vel[ki];
       const ivy = vel[ki + 1];
       const si = i * 6;
-      const cx = Math.floor(ix * inv);
-      const cy = Math.floor(iy * inv);
-      if (!(
-        cx >= -__flock_maxCell &&
-        cx <= __flock_maxCell &&
-        cy >= -__flock_maxCell &&
-        cy <= __flock_maxCell
-      )) {
-        continue; // non-finite or absurd position: it has no finite neighborhood
-      }
 
-      // Visit each distinct hash key of the 3x3 neighborhood exactly once: two neighbor cells
-      // can collide to the same bucket, and visiting it twice would count a neighbor twice.
-      let visitedCount = 0;
-      for (let gy = cy - 1; gy <= cy + 1; gy++) {
-        const hy = Math.imul(gy, 0x85ebca77);
-        for (let gx = cx - 1; gx <= cx + 1; gx++) {
-          const key = ((Math.imul(gx, 0x9e3779b1) ^ hy) >>> 0) & mask;
-          let seen = false;
-          for (let v = 0; v < visitedCount; v++) {
-            if (visited[v] === key) {
-              seen = true;
-              break;
+      // the five cells of the half neighborhood, own cell first
+      for (let c = 0; c < 5; c++) {
+        const gx = c === 2 ? cx - 1 : c === 0 || c === 3 ? cx : cx + 1;
+        const gy = c < 2 ? cy : cy + 1;
+        const key =
+          ((Math.imul(gx, 0x9e3779b1) ^ Math.imul(gy, 0x85ebca77)) >>> 0) &
+          mask;
+        const end = start[key];
+        const begin = key > 0 ? start[key - 1] : 0;
+        for (let e = begin; e < end; e++) {
+          const j = entries[e];
+          if (cellX[j] !== gx || cellY[j] !== gy) continue; // another cell in this bucket
+          if (c === 0 && j <= i) continue; // own cell: each pair once
+
+          const kj = j * 2;
+          const jx = pos[kj];
+          const jy = pos[kj + 1];
+          const dx = jx - ix;
+          const dy = jy - iy;
+          const d2 = dx * dx + dy * dy;
+          if (!(d2 < r2)) continue;
+
+          const sj = j * 6;
+          sums[si] += jx;
+          sums[si + 1] += jy;
+          sums[sj] += ix;
+          sums[sj + 1] += iy;
+          sums[si + 2] += vel[kj];
+          sums[si + 3] += vel[kj + 1];
+          sums[sj + 2] += ivx;
+          sums[sj + 3] += ivy;
+          counts[i]++;
+          counts[j]++;
+
+          if (d2 < sep2) {
+            let ox = dx;
+            let oy = dy;
+            let dd = d2;
+            if (dd === 0) {
+              // Coincident agents have no direction to separate along; split them along x.
+              ox = __flock_tieBreak;
+              oy = 0;
+              dd = minSep2;
+            } else if (dd < minSep2) {
+              dd = minSep2;
             }
-          }
-          if (seen) continue;
-          visited[visitedCount++] = key;
-
-          const end = start[key];
-          const begin = key > 0 ? start[key - 1] : 0;
-          for (let e = begin; e < end; e++) {
-            const j = entries[e];
-            if (j <= i) continue;
-
-            const kj = j * 2;
-            const jx = pos[kj];
-            const jy = pos[kj + 1];
-            const dx = jx - ix;
-            const dy = jy - iy;
-            const d2 = dx * dx + dy * dy;
-            if (!(d2 < r2)) continue; // also rejects NaN
-
-            const sj = j * 6;
-            sums[si] += jx;
-            sums[si + 1] += jy;
-            sums[sj] += ix;
-            sums[sj + 1] += iy;
-            sums[si + 2] += vel[kj];
-            sums[si + 3] += vel[kj + 1];
-            sums[sj + 2] += ivx;
-            sums[sj + 3] += ivy;
-            counts[i]++;
-            counts[j]++;
-
-            if (d2 < sep2) {
-              let ox = dx;
-              let oy = dy;
-              let dd = d2;
-              if (dd === 0) {
-                // Coincident agents have no direction to separate along; split them along x.
-                ox = __flock_tieBreak;
-                oy = 0;
-                dd = minSep2;
-              } else if (dd < minSep2) {
-                dd = minSep2;
-              }
-              const w = 1 / dd;
-              const wx = ox * w;
-              const wy = oy * w;
-              sums[si + 4] -= wx;
-              sums[si + 5] -= wy;
-              sums[sj + 4] += wx;
-              sums[sj + 5] += wy;
-            }
+            const w = 1 / dd;
+            const wx = ox * w;
+            const wy = oy * w;
+            sums[si + 4] -= wx;
+            sums[si + 5] -= wy;
+            sums[sj + 4] += wx;
+            sums[sj + 5] += wy;
           }
         }
       }
@@ -1399,6 +1409,9 @@ export class Flock extends Group {
 
     const bound = this._bound;
     const boundary = bound ? this._boundary : "none";
+    const steer = boundary === "steer" && this._margin > 0;
+    const wrap = boundary === "wrap";
+    const bounce = boundary === "bounce";
     let minX = 0;
     let minY = 0;
     let maxX = 0;
@@ -1457,7 +1470,7 @@ export class Flock extends Group {
         }
       }
 
-      if (boundary === "steer" && margin > 0) {
+      if (steer) {
         // Ramp the turn from zero at the margin's inner edge to full force at the wall, and
         // hold it at full force for anything that already escaped. This is added on top of the
         // blended steer rather than mixed into it, so the flock's own rules cannot outvote it
@@ -1495,7 +1508,7 @@ export class Flock extends Group {
       px += vx * dt;
       py += vy * dt;
 
-      if (boundary === "wrap") {
+      if (wrap) {
         const w = maxX - minX;
         const h = maxY - minY;
         if (w > 0) {
@@ -1506,7 +1519,7 @@ export class Flock extends Group {
           if (py < minY) py = maxY - ((minY - py) % h);
           else if (py > maxY) py = minY + ((py - maxY) % h);
         }
-      } else if (boundary === "bounce") {
+      } else if (bounce) {
         // `<=` rather than `<`: an agent that lands exactly on the wall is still heading out,
         // and would otherwise leave on the next step without ever reflecting.
         if (px <= minX) {
