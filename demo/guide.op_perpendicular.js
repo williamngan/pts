@@ -14,8 +14,9 @@ window.demoDescription = "Perpendicular demo in Op guide.";
     // would be better to init this in player's `start` function, but we are lazy here.
     if (!pts) pts = Create.distributeRandom( space.innerBound, 100 );
 
-    let path = [new Pt(), space.pointer];    
-    let perpends = pts.map( (p) => [p, Line.perpendicularFromPt( path, p )] );
+    let path = [new Pt(), space.pointer];
+    // the path has no direction while the pointer sits at the origin, so skip those frames
+    let perpends = pts.map( (p) => [p, Line.perpendicularFromPt( path, p )] ).filter( (pair) => pair[1] );
 
     form.strokeOnly("#42e", 5).line( path );
     form.strokeOnly("#123", 1).lines( perpends );

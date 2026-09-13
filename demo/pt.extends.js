@@ -15,11 +15,11 @@ Pts.quickStart( "#pt", "#fe3" );
   class Confetti extends Pt {
     constructor( ...args ) {
       super( ...args );
-      this.color = ["#f03", "#09f", "#0c6", "#fff"][ Util.randomInt(4) ];
+      this.color = ["#f03", "#09f", "#0c6", "#fff"][ Math.floor( Num.random() * 4 ) ];
       this.size = Math.random()*7+2;
       this.angle = Math.random() * Const.two_pi;
       this.dir = (Math.random() > 0.5) ? 1 : -1;
-      this.shape = ["rect", "circle", "tri"][ Util.randomInt(3) ];
+      this.shape = ["rect", "circle", "tri"][ Math.floor( Num.random() * 3 ) ];
     }
 
     render( form ) {

@@ -19,9 +19,9 @@ window.demoDescription = "Fitting four circles inside and outside of four triang
     var tris = poly.segments( 2, 1, true );
     tris.map( (t) => t.push( space.pointer ) );
     
-    // circle
-    var circles = tris.map( (t) => Triangle.incircle( t ) );
-    var circums = tris.map( (t) => Triangle.circumcircle( t ) );
+    // circle (a triangle collapses when the pointer lies on one of its edges, so skip those)
+    var circles = tris.map( (t) => Triangle.incircle( t ) ).filter( Boolean );
+    var circums = tris.map( (t) => Triangle.circumcircle( t ) ).filter( Boolean );
     
     // drawing
     form.fillOnly("rgba(255,255,255,.2)", 1 ).circles( circums );
