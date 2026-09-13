@@ -59,7 +59,7 @@ Demo and study source files are linked directly from `ptsjs.org` instead of embe
 - [`sound.freqDomain`](#demo-sound-freq-domain)
 - [`sound.play`](#demo-sound-play)
 - [`sound.timeDomain`](#demo-sound-time-domain)
-- [`svgform.scope`](#demo-svgform-scope)
+- [`svgspace.getForm`](#demo-svgspace-get-form)
 - [`template`](#demo-template)
 - [`triangle.incircle`](#demo-triangle-incircle)
 - [`ui.track`](#demo-ui-track)
@@ -2112,12 +2112,12 @@ Play snippets of drum, tambourine, and flute. Visualize their waveforms in radia
 
 [Open live](https://ptsjs.org/demo/?name=sound.timeDomain) · [Source code](https://ptsjs.org/demo/sound.timeDomain.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/sound.timeDomain.js)
 
-<a id="demo-svgform-scope"></a>
-### `svgform.scope`
+<a id="demo-svgspace-get-form"></a>
+### `svgspace.getForm`
 
 This sketch is rendered as SVG. Using your browser's inspector, you can take a look at the svg element and copy it into a svg file too.
 
-[Open live](https://ptsjs.org/demo/?name=svgform.scope) · [Source code](https://ptsjs.org/demo/svgform.scope.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/svgform.scope.js)
+[Open live](https://ptsjs.org/demo/?name=svgspace.getForm) · [Source code](https://ptsjs.org/demo/svgspace.getForm.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/svgspace.getForm.js)
 
 <a id="demo-template"></a>
 ### `template`

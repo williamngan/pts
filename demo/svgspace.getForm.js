@@ -21,8 +21,8 @@ window.demoDescription = "This sketch is rendered as SVG. Using your browser's i
 
     animate: function (time, ftime) {
 
-      // Draw with the same API as CanvasForm. SVG elements are reconciled every frame,
-      // so there is no scope to set up.
+      // Draw with the same API as CanvasForm. 
+      // SVG elements are now reconciled every frame in Pts v1.0
 
       // "L" is for the way you look at me
       let l = Rectangle.corners( Rectangle.toSquare( pts[0] ) );
