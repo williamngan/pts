@@ -19,11 +19,10 @@ window.demoDescription = "This sketch is rendered as SVG. Using your browser's i
       pts = Create.gridCells( space.innerBound, 4, 1 );
     },
 
-    // For SVG, don't use arrow function so that `this` here will refer to this player
     animate: function (time, ftime) {
-        
-      // SVG scope starts
-      form.scope( this );
+
+      // Draw with the same API as CanvasForm. SVG elements are reconciled every frame,
+      // so there is no scope to set up.
 
       // "L" is for the way you look at me
       let l = Rectangle.corners( Rectangle.toSquare( pts[0] ) );
@@ -56,11 +55,8 @@ window.demoDescription = "This sketch is rendered as SVG. Using your browser's i
   });
 
 
-  // Add another player for testing. Again don't use arrow function => so as to bind the scope of "this" correctly.
-  space.add( function(time, ftime) {
-
-    // SVG scope starts
-    form.scope(this);
+  // Add another player for testing.
+  space.add( (time, ftime) => {
     form.fillOnly("#f0f").point( space.pointer, 10, "circle" );
   });
 
