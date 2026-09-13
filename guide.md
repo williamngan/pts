@@ -42,7 +42,6 @@ Demo and study source files are linked directly from `ptsjs.org` instead of embe
 - [`curve.cardinal`](#demo-curve-cardinal)
 - [`geom.interpolate`](#demo-geom-interpolate)
 - [`geom.perpendicular`](#demo-geom-perpendicular)
-- [`htmlform.scope`](#demo-htmlform-scope)
 - [`img.pattern`](#demo-img-pattern)
 - [`img.pixel`](#demo-img-pixel)
 - [`line.collinear`](#demo-line-collinear)
@@ -1993,13 +1992,6 @@ Interpolate every 2 corners of a rectangle to draw inner rectangles recursively.
 Draw a series of perpendicular lines along a diagonal path to visualize sine waves.
 
 [Open live](https://ptsjs.org/demo/?name=geom.perpendicular) · [Source code](https://ptsjs.org/demo/geom.perpendicular.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/geom.perpendicular.js)
-
-<a id="demo-htmlform-scope"></a>
-### `htmlform.scope`
-
-Pts also provides experimental support for rendering HTML elements. Take a look using your browser's DOM inspector.
-
-[Open live](https://ptsjs.org/demo/?name=htmlform.scope) · [Source code](https://ptsjs.org/demo/htmlform.scope.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/htmlform.scope.js)
 
 <a id="demo-img-pattern"></a>
 ### `img.pattern`
