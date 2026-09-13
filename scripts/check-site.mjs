@@ -1292,7 +1292,14 @@ async function checkHomepageHero() {
       const canvasBounds = document
         .querySelector("canvas")
         .getBoundingClientRect();
-      const collisionDiameter = 40;
+      // the hero packs its dots tighter on small screens: the collision
+      // diameter scales with the shorter canvas side, down to half, relative
+      // to a 560 px small-desktop hero
+      const scale = Math.min(
+        1,
+        Math.max(0.5, Math.min(canvasBounds.width, canvasBounds.height) / 560),
+      );
+      const collisionDiameter = 40 * scale;
       const baseCount = Math.min(
         200,
         Math.max(

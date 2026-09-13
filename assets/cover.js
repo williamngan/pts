@@ -29,8 +29,15 @@ window.demoDescription = "In a field of bouncing particles, rotate a centered pa
   var header = null;
   var headerOffset = null;
   var connectorFadeDistance = 1;
-  var collisionRadius = 20;
-  var pointerRadius = 30;
+  // The collision radius sets how far apart the dots pack. It is scaled down on small
+  // screens (see updateCanvasGeometry) from these values, which suit a desktop hero.
+  var baseCollisionRadius = 20;
+  var basePointerRadius = 30;
+  var referenceSize = 560; // the shorter canvas side of a small desktop or tablet hero
+  var minScale = 0.5;
+  var collisionRadius = baseCollisionRadius;
+  var pointerRadius = basePointerRadius;
+  var worldCollisionRadius = 0;
   var initialDividerRotation = 30 * Const.one_degree;
   var flashDuration = 500;
   var flashDebounceDuration = 30;
@@ -191,6 +198,12 @@ window.demoDescription = "In a field of bouncing particles, rotate a centered pa
     canvasOffset.to( bound[0] );
     center = space.center;
     connectorFadeDistance = Math.max( center.x, 1 );
+
+    // Pack the dots proportionally tighter on small screens: scale the collision and
+    // pointer radii with the shorter side of the canvas, never enlarging them on wide ones.
+    var scale = Num.clamp( Math.min( space.width, space.height ) / referenceSize, minScale, 1 );
+    collisionRadius = baseCollisionRadius * scale;
+    pointerRadius = basePointerRadius * scale;
   };
 
   var calculateParticleCount = () => {
@@ -216,6 +229,7 @@ window.demoDescription = "In a field of bouncing particles, rotate a centered pa
     world.damping = 1;
 
     var particleCount = calculateParticleCount();
+    worldCollisionRadius = collisionRadius;
     var points = Create.distributeRandom( bound, particleCount - 1 );
     var initialImpulse = new Pt();
     particles.length = 0;
@@ -341,7 +355,11 @@ window.demoDescription = "In a field of bouncing particles, rotate a centered pa
       updateHeaderPosition();
       clearTimeout( resizeTimeoutId );
       resizeTimeoutId = setTimeout( () => {
-        if (world.particleCount !== calculateParticleCount()) createWorld();
+        // Rebuild when the count or the spacing changes, eg when rotating a phone.
+        if (
+          world.particleCount !== calculateParticleCount() ||
+          worldCollisionRadius !== collisionRadius
+        ) createWorld();
       }, 500 );
     }
 
