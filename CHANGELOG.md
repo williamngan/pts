@@ -223,6 +223,69 @@ build; full numbers in `plans/*.md`):
   `Create.distributeRandom` −30%, `Num.seed` −60%
 - Perlin noise: lag-12 autocorrelation 0.95 → 0.009 (quality fix)
 
+#### Measured against 0.12.9
+
+A direct A/B of the published `pts@0.12.9` artifact against the 1.0.0
+build through the same benchmark suites: 5 rounds, each build in its
+own process, order alternated per round, medians across rounds, on
+Node 24 and headless Chromium 151 (arm64 VM; the same-build noise
+floor peaked at 9%). Across the 371 Node cases both versions can run,
+1.0.0 is **3.2× faster by geometric mean and 1.8× at the median**. The
+gains are uneven by design: scalar primitives are unchanged, calls
+that used to allocate a `Pt` or `Group` per call are 5–20× faster,
+and the rewritten algorithms (physics, Delaunay, polygon queries) are
+100–1000× faster. Six cases 0.12.9 cannot run are excluded, and
+`World.update` in 1.0 solves 4 substeps per update by default, so the
+physics rows compare four solver steps against one Verlet step.
+
+Frame-shaped scenarios, per item for one frame:
+
+| scenario                                 | 0.12.9   | 1.0.0   | speedup |
+| ---------------------------------------- | -------: | ------: | ------: |
+| nearest-point query (512 probes)         | 25.1 µs  | 69 ns   |    362× |
+| delaunay + voronoi (500 points)          | 242 µs   | 0.91 µs |    268× |
+| particle field frame (300 particles)     | 63.1 µs  | 0.38 µs |    167× |
+| polygon collision sweep (100 polygons)   | 5.99 µs  | 59 ns   |    101× |
+| curve smoothing (200 points × 20 steps)  | 1.01 µs  | 77 ns   |     13× |
+| grid + noise field (4096 points)         | 1.94 µs  | 0.30 µs |    6.4× |
+| transform pipeline (4096 points)         | 1.49 µs  | 0.34 µs |    4.4× |
+| colour gradient sweep (2000 stops)       | 775 ns   | 428 ns  |    1.8× |
+
+Node suites, geometric mean of per-case speedup:
+
+| suite          | cases | geomean | standouts                                                                          |
+| -------------- | ----: | ------: | ---------------------------------------------------------------------------------- |
+| physics        |    18 |     31× | `World.update` 114–1036× (100–3400× at 1 substep), `Particle.collide` 124×          |
+| create         |    15 |     12× | Delaunay 126× at 500 pts and 800–1050× at 1600–2000 pts, voronoi 88×, `noisePts` 6.9× |
+| op             |    86 |    5.4× | `Polygon.nearestPt` 209×, SAT intersection 120×, `perimeter` 77×, all Curve 12–15×  |
+| pt             |    58 |    3.9× | Pt ops with Pt/array args 10–20×, `Bound.fromGroup`/`clone` 13–17×, `Bound.x/y/z` 134× |
+| color          |    48 |    2.0× | LAB/LCH/LUV/XYZ conversions 2–4.6×, `clone` 14×, `toString` unchanged               |
+| num            |    63 |    1.6× | `Geom.boundingBox` 105×, `sortEdges` 83×, `isPerpendicular` 80×; scalar math unchanged |
+| play           |     6 |    1.6× | `freqDomainTo`/`timeDomainTo` 1.2× (11.6× with the new `out` parameter)             |
+| util           |    17 |    1.3× | `getArgs(Pt)` 9×, `flatten` 2×, `Num.seed` 2.3×                                    |
+| linear-algebra |    44 |   1.25× | `Mat.zip`/`zipSlice` 3.6–3.9×, `Mat.multiply` 1.9–3.9×; Vec unchanged              |
+| typography     |     6 |   1.15× | paragraph wrap 4.2×; `truncate` on short strings 0.46×                             |
+| all            |   371 |    3.2× | median 1.8×; 179 cases ≥ 2×, 161 within noise, 2 slower                            |
+
+Browser, headless Chromium:
+
+| case                                            | 0.12.9     | 1.0.0        | speedup  |
+| ----------------------------------------------- | ---------: | -----------: | -------: |
+| Space pointer-action dispatch (per event)       | 3.85 µs    | 46 ns        |      83× |
+| `UI.fromPolygon` hit test                       | 460 ns     | 36 ns        |    12.7× |
+| `UI.track` hit test                             | 985 ns     | 535 ns       |     1.8× |
+| SVG frame of 64 shapes (per shape)              | 1.0–3.1 µs | 0.25–0.59 µs | 2.1–7.9× |
+| `Img.pixel` / `getPixel`                        | 165 ns     | 29 ns        |     5.6× |
+| `CanvasForm.textBox`                            | 2.77 µs    | 1.35 µs      |     2.1× |
+| `CanvasForm` point/circle/rect/arc/text draws   | —          | —            |     1.0× |
+| `Sound.freqDomainTo`/`timeDomainTo` (per bin)   | 76–80 ns   | 64–68 ns     |     1.2× |
+
+Canvas shape draws are bound by the rasterizer, not by Pts. Slower in
+1.0.0, beyond the noise floor: `Noise.seed` with a fresh seed +32%
+(a per-seed table; repeated seeds are 30× faster), and the
+fit-guarantee measure probes in `Typography.truncate` on short strings
+(+117%) and measured-mode `CanvasForm.paragraphBox` (+22%).
+
 ### Internal / tooling
 
 - Build: tsdown with ESM + CJS + browser IIFE outputs, byte-exact
