@@ -22,6 +22,7 @@ function recordingCtx() {
     "beginPath",
     "moveTo",
     "lineTo",
+    "bezierCurveTo",
     "closePath",
     "arc",
   ]) {
@@ -212,5 +213,80 @@ describe("CanvasForm rendering pins", () => {
     expect(
       fromArray.filter((c) => c[0] !== "fill" && c[0] !== "stroke"),
     ).toEqual(fromIterable.filter((c) => c[0] !== "fill" && c[0] !== "stroke"));
+  });
+});
+
+describe("CanvasForm.bezier", () => {
+  const chain = [
+    [0, 0],
+    [10, 20],
+    [30, 20],
+    [40, 0],
+    [50, -20],
+    [70, -20],
+    [80, 0],
+  ];
+
+  it("draws one native bezierCurveTo per segment and paints once", () => {
+    const { form, calls } = makeForm();
+    form.strokeOnly("#000").bezier(chain);
+    expect(calls.map((c) => c[0])).toEqual([
+      "beginPath",
+      "moveTo",
+      "bezierCurveTo",
+      "bezierCurveTo",
+      "stroke",
+    ]);
+    expect(calls[1]).toEqual(["moveTo", 0, 0]);
+    expect(calls[2]).toEqual(["bezierCurveTo", 10, 20, 30, 20, 40, 0]);
+    expect(calls[3]).toEqual(["bezierCurveTo", 50, -20, 70, -20, 80, 0]);
+  });
+
+  it("fills when filled, ignores a trailing partial segment, and skips short input", () => {
+    const { form, calls } = makeForm();
+    form
+      .fill("#000")
+      .stroke(false)
+      .bezier([...chain, [90, 10], [95, 10]]);
+    expect(calls.filter((c) => c[0] === "bezierCurveTo")).toHaveLength(2);
+    expect(calls[calls.length - 1][0]).toBe("fill");
+    calls.length = 0;
+    for (const count of [0, 1, 2, 3]) {
+      function* shortChain() {
+        yield* chain.slice(0, count);
+      }
+      expect(form.bezier(shortChain())).toBe(form);
+    }
+    expect(calls).toEqual([]); // an incomplete chain must not repaint the retained path
+  });
+
+  it("line and polygon also leave the retained path alone on short input", () => {
+    const { form, calls } = makeForm();
+    form
+      .strokeOnly("#000")
+      .line([[1, 2]])
+      .polygon([[1, 2]])
+      .line([]);
+    function* one() {
+      yield [1, 2];
+    }
+    form.polygon(one());
+    expect(calls).toEqual([]); // no paint without a new path, like bezier
+    form.line([
+      [0, 0],
+      [5, 5],
+    ]);
+    expect(calls.map((c) => c[0])).toEqual([
+      "beginPath",
+      "moveTo",
+      "lineTo",
+      "stroke",
+    ]);
+  });
+
+  it("accepts an iterable of Pts, as Curve.cardinalToBezier returns", () => {
+    const { form, calls } = makeForm();
+    form.bezier(new Set(chain.map((c) => new Pt(c))));
+    expect(calls.filter((c) => c[0] === "bezierCurveTo")).toHaveLength(2);
   });
 });

@@ -592,6 +592,42 @@ export default defineSuite("op", (b, { Pts, fx }) => {
     },
   });
 
+  // Anchors to Bezier control points (3 Pts per segment instead of a sampled polyline)
+  const conversions = [
+    ["cardinalToBezier", (g) => Curve.cardinalToBezier(g)],
+    [
+      "cardinalToBezier (centripetal)",
+      (g) => Curve.cardinalToBezier(g, 0.5, 0.5),
+    ],
+    ["bsplineToBezier", (g) => Curve.bsplineToBezier(g)],
+  ];
+
+  for (const [name, apply] of conversions) {
+    b.case(`Curve.${name}`, {
+      batch: CURVE_POINTS,
+      setupOnce: () => fx.group(`op:curve:${name}`, CURVE_POINTS),
+      run: (g) => {
+        sink(apply(g).length);
+      },
+    });
+  }
+
+  // Bezier chains (CURVE_POINTS segments) back to anchors
+  const inversions = [
+    ["bezierToCardinal", (g) => Curve.bezierToCardinal(g)],
+    ["bezierToBspline", (g) => Curve.bezierToBspline(g)],
+  ];
+
+  for (const [name, apply] of inversions) {
+    b.case(`Curve.${name}`, {
+      batch: CURVE_POINTS,
+      setupOnce: () => fx.group(`op:curve:${name}`, CURVE_POINTS * 3 + 1),
+      run: (g) => {
+        sink(apply(g).length);
+      },
+    });
+  }
+
   // Single-point step functions (used per-frame by easing/shaping callers)
   const curveSteps = [
     ["catmullRomStep", (s, c) => Curve.catmullRomStep(s, c)],

@@ -1,7 +1,7 @@
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
-window.demoDescription = "Draw three cardinal curves with different tensions. Move pointer near the control points to modify the curve.";
+window.demoDescription = "Draw cardinal curves with different tensions, plus a centripetal one converted to bezier. Touch it with cursor to modify it.";
 
 Pts.quickStart( "#pt", "#0c6" );
 
@@ -39,9 +39,16 @@ Pts.quickStart( "#pt", "#0c6" );
       
       
       form.fillOnly("rgba(255, 230, 0, 0.9)").line( Curve.catmullRom( temp, 10 ) );
-      form.stroke("#f06").line( Curve.cardinal( temp, 10, 0.2 ) );
-      form.strokeOnly("#123", 3).line( Curve.cardinal( temp, 10, 0.8 ) );
-      form.fill("#fff").points( temp, 5, "circle" );
+      form.strokeOnly("#123", 8).line( Curve.cardinal( temp, 10 ) );
+      form.stroke("#f06", 2).line( Curve.cardinal( temp, 10, 0.1 ) );
+
+      // convert to Bezier control points (centripetal) and draw handles
+      let bezier = Curve.cardinalToBezier( temp, 0.5, 0.5 );
+      form.strokeOnly("#ffffff", 1);
+      for (let i=0, len=bezier.length-1; i<len; i+=3) {
+        form.line( [bezier[i], bezier[i+1]] ).line( [bezier[i+2], bezier[i+3]] );
+        form.point(bezier[i], 2, "circle");
+      }
     },
     
   });

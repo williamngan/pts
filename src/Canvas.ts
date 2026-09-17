@@ -1296,8 +1296,44 @@ export class CanvasForm<
    * @param pts a Group or an Iterable<PtLike> representing a line
    */
   line(pts: PtLikeIterable): this {
-    CanvasForm.line(this._ctx, pts);
-    this._paint();
+    const p = Util.iterToArray(pts);
+    if (Util.arrayCheck(p)) {
+      CanvasForm.line(this._ctx, p);
+      this._paint();
+    }
+    return this;
+  }
+
+  /**
+   * A static function to draw a chain of cubic Bezier curves as one native path.
+   * @param ctx canvas rendering context
+   * @param pts a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#link): an anchor followed by 2 control points and an anchor per segment
+   */
+  static bezier(ctx: RenderingContext2D, pts: PtLikeIterable) {
+    const p = Util.iterToArray(pts);
+    if (p.length < 4) return;
+    ctx.beginPath();
+    ctx.moveTo(p[0][0], p[0][1]);
+    for (let i = 3; i < p.length; i += 3) {
+      const c1 = p[i - 2];
+      const c2 = p[i - 1];
+      ctx.bezierCurveTo(c1[0], c1[1], c2[0], c2[1], p[i][0], p[i][1]);
+    }
+  }
+
+  /**
+   * Draw a chain of cubic Bezier curves as one native path. Unlike a polyline from [`Curve.bezier`](#link),
+   * the path stays smooth at any zoom and exports as compact SVG. Use [`Curve.cardinalToBezier`](#link) or
+   * [`Curve.bsplineToBezier`](#link) to draw those curves this way.
+   * @param pts a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#link): an anchor followed by 2 control points and an anchor per segment
+   * @example `form.bezier( Curve.cardinalToBezier( pts ) )`
+   */
+  bezier(pts: PtLikeIterable): this {
+    const p = Util.iterToArray(pts);
+    if (p.length >= 4) {
+      CanvasForm.bezier(this._ctx, p);
+      this._paint();
+    }
     return this;
   }
 
@@ -1317,8 +1353,11 @@ export class CanvasForm<
    * @param pts a Group or an Iterable<PtLike> representingg a polygon
    */
   polygon(pts: PtLikeIterable): this {
-    CanvasForm.polygon(this._ctx, pts);
-    this._paint();
+    const p = Util.iterToArray(pts);
+    if (Util.arrayCheck(p)) {
+      CanvasForm.polygon(this._ctx, p);
+      this._paint();
+    }
     return this;
   }
 

@@ -172,6 +172,9 @@ Curve.cardinal( pts );
 Curve.cardinal( pts, 20, 0.3 ); // step and tension parameters
 Curve.bezier( pts );
 Curve.bspline( pts );
+Curve.cardinalToBezier( pts ); // convert anchors to bezier control points
+form.bezier( Curve.cardinalToBezier( pts, 0.5, 0.5 ) ); // draw a centripetal curve as a native path
+Curve.bezierToBspline( chain ); // and back: bezier chain to b-spline anchors
 </code></pre>
 <p>Check out the <a href="../docs/">full documentation</a> too.</p>
 </main>

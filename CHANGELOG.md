@@ -2,12 +2,36 @@
 
 ## Unreleased
 
+- New `Curve.cardinalToBezier(pts, tension?, alpha?)` and
+  `Curve.bsplineToBezier(pts, tension?)` convert curve anchors into cubic
+  Bezier control points (each segment is a cubic, with results rounded to
+  float32). The result is in the layout `Curve.bezier` takes, and the new
+  `form.bezier(pts)` on `CanvasForm` and `SVGForm` draws such a chain as
+  one native path, so a curve stays smooth at any zoom and exports as a
+  few `C` commands instead of a long polyline. `alpha` selects the knot
+  parameterization: 0 (default, uniform, matching `Curve.cardinal`), 0.5
+  (centripetal), or 1 (chordal). Centripetal segments have no internal loops
+  or cusps at tension 0.5 with distinct adjacent anchors. Non-uniform curves
+  preserve small nonzero knot intervals; repeated anchors yield constant
+  segments with zero end tangents.
+  See the `curve.cardinal` and `curve.bspline` demos. The inverses `Curve.bezierToCardinal`
+  and `Curve.bezierToBspline` take a Bezier chain back to anchors: the
+  cardinal one keeps the Bezier anchors (a cardinal curve's tangents come
+  from its neighbors), and the B-spline one solves for the B-spline through
+  every anchor with the chain's end tangents. Round trips require the original
+  cardinal parameters or B-spline tension 1, and are subject to float32 rounding.
+  Empty or incomplete `form.bezier` chains leave the previous drawing untouched,
+  and `cardinalToBezier` warns and returns an empty Group for a negative or
+  NaN `alpha`.
+- `form.line` and `form.polygon` with fewer than 2 points no longer repaint
+  the previous path in the current style; they warn (as before) and draw
+  nothing.
 - New `Create.sampling(bound, radius, options?)` returns a `PoissonDisk`
   Group of points that are randomly placed but never closer than `radius`
   (Poisson-disk sampling, or blue noise). It uses Bridson's linear-time grid
   sampler with Roberts' candidate placement, seeded through `Num.random`. For
   a set that grows over frames, construct `new PoissonDisk().setup(bound,
-  radius)` and call `step()` per point or `sample(count)` per frame; see the
+radius)` and call `step()` per point or `sample(count)` per frame; see the
   `create.sampling` demo. Options: `candidates` (default 8) and `start`.
 
 ## 1.0.0 (2026-09-12)
@@ -250,45 +274,45 @@ physics rows compare four solver steps against one Verlet step.
 
 Frame-shaped scenarios, per item for one frame:
 
-| scenario                                 | 0.12.9   | 1.0.0   | speedup |
-| ---------------------------------------- | -------: | ------: | ------: |
-| nearest-point query (512 probes)         | 25.1 µs  | 69 ns   |    362× |
-| delaunay + voronoi (500 points)          | 242 µs   | 0.91 µs |    268× |
-| particle field frame (300 particles)     | 63.1 µs  | 0.38 µs |    167× |
-| polygon collision sweep (100 polygons)   | 5.99 µs  | 59 ns   |    101× |
-| curve smoothing (200 points × 20 steps)  | 1.01 µs  | 77 ns   |     13× |
-| grid + noise field (4096 points)         | 1.94 µs  | 0.30 µs |    6.4× |
-| transform pipeline (4096 points)         | 1.49 µs  | 0.34 µs |    4.4× |
-| colour gradient sweep (2000 stops)       | 775 ns   | 428 ns  |    1.8× |
+| scenario                                |  0.12.9 |   1.0.0 | speedup |
+| --------------------------------------- | ------: | ------: | ------: |
+| nearest-point query (512 probes)        | 25.1 µs |   69 ns |    362× |
+| delaunay + voronoi (500 points)         |  242 µs | 0.91 µs |    268× |
+| particle field frame (300 particles)    | 63.1 µs | 0.38 µs |    167× |
+| polygon collision sweep (100 polygons)  | 5.99 µs |   59 ns |    101× |
+| curve smoothing (200 points × 20 steps) | 1.01 µs |   77 ns |     13× |
+| grid + noise field (4096 points)        | 1.94 µs | 0.30 µs |    6.4× |
+| transform pipeline (4096 points)        | 1.49 µs | 0.34 µs |    4.4× |
+| colour gradient sweep (2000 stops)      |  775 ns |  428 ns |    1.8× |
 
 Node suites, geometric mean of per-case speedup:
 
-| suite          | cases | geomean | standouts                                                                          |
-| -------------- | ----: | ------: | ---------------------------------------------------------------------------------- |
-| physics        |    18 |     31× | `World.update` 114–1036× (100–3400× at 1 substep), `Particle.collide` 124×          |
-| create         |    15 |     12× | Delaunay 126× at 500 pts and 800–1050× at 1600–2000 pts, voronoi 88×, `noisePts` 6.9× |
-| op             |    86 |    5.4× | `Polygon.nearestPt` 209×, SAT intersection 120×, `perimeter` 77×, all Curve 12–15×  |
+| suite          | cases | geomean | standouts                                                                              |
+| -------------- | ----: | ------: | -------------------------------------------------------------------------------------- |
+| physics        |    18 |     31× | `World.update` 114–1036× (100–3400× at 1 substep), `Particle.collide` 124×             |
+| create         |    15 |     12× | Delaunay 126× at 500 pts and 800–1050× at 1600–2000 pts, voronoi 88×, `noisePts` 6.9×  |
+| op             |    86 |    5.4× | `Polygon.nearestPt` 209×, SAT intersection 120×, `perimeter` 77×, all Curve 12–15×     |
 | pt             |    58 |    3.9× | Pt ops with Pt/array args 10–20×, `Bound.fromGroup`/`clone` 13–17×, `Bound.x/y/z` 134× |
-| color          |    48 |    2.0× | LAB/LCH/LUV/XYZ conversions 2–4.6×, `clone` 14×, `toString` unchanged               |
+| color          |    48 |    2.0× | LAB/LCH/LUV/XYZ conversions 2–4.6×, `clone` 14×, `toString` unchanged                  |
 | num            |    63 |    1.6× | `Geom.boundingBox` 105×, `sortEdges` 83×, `isPerpendicular` 80×; scalar math unchanged |
-| play           |     6 |    1.6× | `freqDomainTo`/`timeDomainTo` 1.2× (11.6× with the new `out` parameter)             |
-| util           |    17 |    1.3× | `getArgs(Pt)` 9×, `flatten` 2×, `Num.seed` 2.3×                                    |
-| linear-algebra |    44 |   1.25× | `Mat.zip`/`zipSlice` 3.6–3.9×, `Mat.multiply` 1.9–3.9×; Vec unchanged              |
-| typography     |     6 |   1.15× | paragraph wrap 4.2×; `truncate` on short strings 0.46×                             |
-| all            |   371 |    3.2× | median 1.8×; 179 cases ≥ 2×, 161 within noise, 2 slower                            |
+| play           |     6 |    1.6× | `freqDomainTo`/`timeDomainTo` 1.2× (11.6× with the new `out` parameter)                |
+| util           |    17 |    1.3× | `getArgs(Pt)` 9×, `flatten` 2×, `Num.seed` 2.3×                                        |
+| linear-algebra |    44 |   1.25× | `Mat.zip`/`zipSlice` 3.6–3.9×, `Mat.multiply` 1.9–3.9×; Vec unchanged                  |
+| typography     |     6 |   1.15× | paragraph wrap 4.2×; `truncate` on short strings 0.46×                                 |
+| all            |   371 |    3.2× | median 1.8×; 179 cases ≥ 2×, 161 within noise, 2 slower                                |
 
 Browser, headless Chromium:
 
-| case                                            | 0.12.9     | 1.0.0        | speedup  |
-| ----------------------------------------------- | ---------: | -----------: | -------: |
-| Space pointer-action dispatch (per event)       | 3.85 µs    | 46 ns        |      83× |
-| `UI.fromPolygon` hit test                       | 460 ns     | 36 ns        |    12.7× |
-| `UI.track` hit test                             | 985 ns     | 535 ns       |     1.8× |
-| SVG frame of 64 shapes (per shape)              | 1.0–3.1 µs | 0.25–0.59 µs | 2.1–7.9× |
-| `Img.pixel` / `getPixel`                        | 165 ns     | 29 ns        |     5.6× |
-| `CanvasForm.textBox`                            | 2.77 µs    | 1.35 µs      |     2.1× |
-| `CanvasForm` point/circle/rect/arc/text draws   | —          | —            |     1.0× |
-| `Sound.freqDomainTo`/`timeDomainTo` (per bin)   | 76–80 ns   | 64–68 ns     |     1.2× |
+| case                                          |     0.12.9 |        1.0.0 |  speedup |
+| --------------------------------------------- | ---------: | -----------: | -------: |
+| Space pointer-action dispatch (per event)     |    3.85 µs |        46 ns |      83× |
+| `UI.fromPolygon` hit test                     |     460 ns |        36 ns |    12.7× |
+| `UI.track` hit test                           |     985 ns |       535 ns |     1.8× |
+| SVG frame of 64 shapes (per shape)            | 1.0–3.1 µs | 0.25–0.59 µs | 2.1–7.9× |
+| `Img.pixel` / `getPixel`                      |     165 ns |        29 ns |     5.6× |
+| `CanvasForm.textBox`                          |    2.77 µs |      1.35 µs |     2.1× |
+| `CanvasForm` point/circle/rect/arc/text draws |          — |            — |     1.0× |
+| `Sound.freqDomainTo`/`timeDomainTo` (per bin) |   76–80 ns |     64–68 ns |     1.2× |
 
 Canvas shape draws are bound by the rasterizer, not by Pts. Slower in
 1.0.0, beyond the noise floor: `Noise.seed` with a fresh seed +32%

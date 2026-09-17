@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Op.ts",
-          1984,
+          2098,
           9
         ]
       ],
@@ -54,7 +54,7 @@
       "source": [
         [
           "src/Op.ts",
-          2018,
+          2132,
           9
         ]
       ],
@@ -87,11 +87,83 @@
       ]
     },
     {
+      "name": "bezierToBspline",
+      "source": [
+        [
+          "src/Op.ts",
+          2302,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert a chain of cubic Bezier curves into the anchors of a B-spline curve: the inverse of [`Curve.bsplineToBezier`](#link) at its default tension.\nA B-spline does not pass through its anchors, so they are solved for: the result is the B-spline that passes through\nevery Bezier anchor and starts and ends along the Bezier's end handles (a tridiagonal system, solved in linear time).\nFor a chain that `bsplineToBezier` produced at tension 1 this recovers its anchors up to float32 rounding; for any other chain the B-spline keeps\nthe anchors and the end tangents, and its interior, being smooth to the second derivative, can only approximate the other handles.",
+          "returns": "Group",
+          "returns_comment": "a Group of `m+3` anchors for `m` Bezier segments, for [`Curve.bspline`](#link) or [`Curve.bsplineToBezier`](#link)",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#link); an incomplete trailing segment is ignored",
+              "type": "PtLikeIterable",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`Curve.bspline( Curve.bezierToBspline( chain ) )`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "bezierToCardinal",
+      "source": [
+        [
+          "src/Op.ts",
+          2083,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert a chain of cubic Bezier curves into the anchors of a Cardinal curve: the inverse of [`Curve.cardinalToBezier`](#link).\nA Cardinal curve's tangents come from its neighboring anchors, so this keeps every Bezier anchor and drops the Bezier handles.\nThe Cardinal curve still passes through the same anchors; between them it follows the handles only when they were\nin Cardinal form to begin with and the original tension and alpha are reused. Coordinates are rounded to float32.",
+          "returns": "Group",
+          "returns_comment": "a Group of anchors for [`Curve.cardinal`](#link) or [`Curve.cardinalToBezier`](#link), with the tension and alpha of your choice",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#link); an incomplete trailing segment is ignored",
+              "type": "PtLikeIterable",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`Curve.cardinal( Curve.bezierToCardinal( chain ), 10, 0.5 )`"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "bspline",
       "source": [
         [
           "src/Op.ts",
-          2039,
+          2153,
           9
         ]
       ],
@@ -134,7 +206,7 @@
       "source": [
         [
           "src/Op.ts",
-          2087,
+          2201,
           9
         ]
       ],
@@ -171,7 +243,7 @@
       "source": [
         [
           "src/Op.ts",
-          2108,
+          2222,
           9
         ]
       ],
@@ -206,6 +278,48 @@
             }
           ],
           "tags": []
+        }
+      ]
+    },
+    {
+      "name": "bsplineToBezier",
+      "source": [
+        [
+          "src/Op.ts",
+          2252,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert the anchors of a B-spline curve into cubic Bezier control points, so the same curve can be drawn as a native path\nwith [`CanvasForm.bezier`](#link) or sampled with [`Curve.bezier`](#link).\nThe Bezier traces the curve that [`Curve.bspline`](#link) approximates with line segments,\nsubject to the float32 rounding of a Pt. See a [demo here](https://ptsjs.org/demo/?name=curve.bspline).",
+          "returns": "Group",
+          "returns_comment": "a Group of `3(n-3)+1` Pts in the layout that [`Curve.bezier`](#link) takes",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group or an Iterable<PtLike> of at least 4 anchor points",
+              "type": "PtLikeIterable",
+              "default": false
+            },
+            {
+              "name": "tension",
+              "comment": "optional value between 0 to n to specify a \"tension\". Default is 1 which is the usual tension.",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`form.bezier( Curve.bsplineToBezier( pts ) )`"
+            }
+          ]
         }
       ]
     },
@@ -292,6 +406,54 @@
             }
           ],
           "tags": []
+        }
+      ]
+    },
+    {
+      "name": "cardinalToBezier",
+      "source": [
+        [
+          "src/Op.ts",
+          1995,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert the anchors of a Cardinal curve into cubic Bezier control points, so the same curve can be drawn as a native path\nwith [`CanvasForm.bezier`](#link) or sampled with [`Curve.bezier`](#link).\nWith the default `alpha`, the Bezier traces the curve that [`Curve.cardinal`](#link) approximates with line segments,\nsubject to the float32 rounding of a Pt.\nSee a [demo here](https://ptsjs.org/demo/?name=curve.cardinal).\n\nSet `alpha` to 0.5 for centripetal or to 1 for chordal parameterization. At the default tension of 0.5,\ncentripetal Catmull-Rom segments with distinct adjacent anchors have no internal loops or cusps\n(Yuksel, Schaefer and Keyser, 2011); changing tension can introduce them.\nFor non-uniform curves, coincident consecutive anchors give a constant segment and zero tangents at its ends.",
+          "returns": "Group",
+          "returns_comment": "a Group of `3(n-1)+1` Pts in the layout that [`Curve.bezier`](#link) takes: each anchor is followed by the 2 control points of the segment that starts there",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group or an Iterable<PtLike> of anchor points",
+              "type": "PtLikeIterable",
+              "default": false
+            },
+            {
+              "name": "tension",
+              "comment": "optional value between 0 to 1 to specify a \"tension\". Default to 0.5 which is the tension for Catmull-Rom curve.",
+              "type": "number",
+              "default": "0.5"
+            },
+            {
+              "name": "alpha",
+              "comment": "optional knot parameterization: 0 (default) is uniform, 0.5 is centripetal, 1 is chordal",
+              "type": "number",
+              "default": "0"
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`form.bezier( Curve.cardinalToBezier( pts ) )`"
+            }
+          ]
         }
       ]
     },

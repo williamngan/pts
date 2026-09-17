@@ -987,6 +987,57 @@ See https://github.com/williamngan/pts for details. */
 			const t = step[2];
 			return Curve._stepPt(ctrls, tension * (-t3 + 2 * t2 - t), tension * (-t3 + t2) + (2 * t3 - 3 * t2 + 1), tension * (t3 - 2 * t2 + t) + (-2 * t3 + 3 * t2), tension * (t3 - t2));
 		}
+		static cardinalToBezier(pts, tension = .5, alpha = 0) {
+			const out = new Group();
+			if (!(alpha >= 0)) return Util.warn("cardinalToBezier needs an alpha of 0 or more", out);
+			const p = Util.iterToArray(pts);
+			const n = p.length;
+			if (n < 2) return out;
+			const dim3 = p[0].length > 2;
+			const dt = alpha === 0 ? void 0 : new Float64Array(n - 1);
+			if (dt) for (let i = 0; i < n - 1; i++) {
+				const dx = p[i + 1][0] - p[i][0];
+				const dy = p[i + 1][1] - p[i][1];
+				const dz = dim3 ? p[i + 1][2] - p[i][2] : 0;
+				dt[i] = Math.pow(Math.hypot(dx, dy, dz), alpha);
+			}
+			const control = (o, k, mx, my, mz) => {
+				const pt = new Pt(dim3 ? 3 : 2);
+				pt[0] = o[0] + k * mx;
+				pt[1] = o[1] + k * my;
+				if (dim3) pt[2] = o[2] + k * mz;
+				return pt;
+			};
+			for (let i = 0; i < n; i++) {
+				const p0 = p[Math.max(i - 1, 0)];
+				const p1 = p[i];
+				const p2 = p[Math.min(i + 1, n - 1)];
+				const a = dt ? dt[Math.max(i - 1, 0)] : 1;
+				const b = dt ? dt[Math.min(i, n - 2)] : 1;
+				let wa = 0;
+				let wb = 0;
+				if (dt && a > 0 && b > 0) {
+					const s = 2 * tension / (a + b);
+					wa = s * (b / a);
+					wb = s * (a / b);
+				}
+				const mx = dt ? wa * (p1[0] - p0[0]) + wb * (p2[0] - p1[0]) : tension * (p2[0] - p0[0]);
+				const my = dt ? wa * (p1[1] - p0[1]) + wb * (p2[1] - p1[1]) : tension * (p2[1] - p0[1]);
+				const mz = dim3 ? dt ? wa * (p1[2] - p0[2]) + wb * (p2[2] - p1[2]) : tension * (p2[2] - p0[2]) : 0;
+				if (i > 0) out.push(control(p1, -a / 3, mx, my, mz));
+				out.push(new Pt(p1));
+				if (i < n - 1) out.push(control(p1, b / 3, mx, my, mz));
+			}
+			return out;
+		}
+		static bezierToCardinal(pts) {
+			const p = Util.iterToArray(pts);
+			const m = Math.floor((p.length - 1) / 3);
+			const out = new Group();
+			if (m < 1) return out;
+			for (let k = 0; k <= m; k++) out.push(new Pt(p[3 * k]));
+			return out;
+		}
 		static bezier(pts, steps = 10) {
 			let _pts = Util.iterToArray(pts);
 			if (_pts.length < 4) return new Group();
@@ -1059,6 +1110,66 @@ See https://github.com/williamngan/pts for details. */
 			const b1 = 2 * t3 - 3 * t2 + 1;
 			const b2 = -2 * t3 + 3 * t2;
 			return Curve._stepPt(ctrls, tension * (-t3 / 6 + .5 * t2 - .5 * t + 1 / 6), tension * (-1.5 * t3 + 2 * t2 - 1 / 3) + b1, tension * (1.5 * t3 - 2.5 * t2 + .5 * t + 1 / 6) + b2, tension * (t3 / 6));
+		}
+		static bsplineToBezier(pts, tension = 1) {
+			const p = Util.iterToArray(pts);
+			const n = p.length;
+			const out = new Group();
+			if (n < 4) return out;
+			const dim3 = p[0].length > 2;
+			const a = tension / 6;
+			const c = 1 - 2 * a;
+			const blend = (u, v, w, wu, wv, ww) => {
+				const pt = new Pt(dim3 ? 3 : 2);
+				pt[0] = wu * u[0] + wv * v[0] + ww * w[0];
+				pt[1] = wu * u[1] + wv * v[1] + ww * w[1];
+				if (dim3) pt[2] = wu * u[2] + wv * v[2] + ww * w[2];
+				return pt;
+			};
+			out.push(blend(p[0], p[1], p[2], a, c, a));
+			for (let i = 1; i < n - 2; i++) {
+				const p1 = p[i];
+				const p2 = p[i + 1];
+				out.push(blend(p1, p2, p2, c, 2 * a, 0), blend(p1, p2, p2, 2 * a, c, 0), blend(p1, p2, p[i + 2], a, c, a));
+			}
+			return out;
+		}
+		static bezierToBspline(pts) {
+			const p = Util.iterToArray(pts);
+			const m = Math.floor((p.length - 1) / 3);
+			const out = new Group();
+			if (m < 1) return out;
+			const dim = p[0].length > 2 ? 3 : 2;
+			const n = m + 1;
+			const r = new Float64Array(n * dim);
+			const d = new Float64Array(n);
+			for (let k = 0; k < n; k++) {
+				const src = k === 0 ? p[1] : k === m ? p[3 * m - 1] : p[3 * k];
+				const w = k === 0 || k === m ? 3 : 6;
+				for (let j = 0; j < dim; j++) r[k * dim + j] = w * src[j];
+			}
+			d[0] = 2;
+			for (let k = 1; k < n; k++) {
+				const w = 1 / d[k - 1];
+				d[k] = (k < m ? 4 : 2) - w;
+				for (let j = 0; j < dim; j++) r[k * dim + j] -= w * r[(k - 1) * dim + j];
+			}
+			for (let j = 0; j < dim; j++) r[(n - 1) * dim + j] /= d[n - 1];
+			for (let k = n - 2; k >= 0; k--) for (let j = 0; j < dim; j++) r[k * dim + j] = (r[k * dim + j] - r[(k + 1) * dim + j]) / d[k];
+			const first = new Pt(dim);
+			const last = new Pt(dim);
+			for (let j = 0; j < dim; j++) {
+				first[j] = r[dim + j] - 6 * (p[1][j] - p[0][j]);
+				last[j] = r[(m - 1) * dim + j] + 6 * (p[3 * m][j] - p[3 * m - 1][j]);
+			}
+			out.push(first);
+			for (let k = 0; k < n; k++) {
+				const pt = new Pt(dim);
+				for (let j = 0; j < dim; j++) pt[j] = r[k * dim + j];
+				out.push(pt);
+			}
+			out.push(last);
+			return out;
 		}
 	};
 
@@ -4622,8 +4733,30 @@ See https://github.com/williamngan/pts for details. */
 			}
 		}
 		line(pts) {
-			CanvasForm.line(this._ctx, pts);
-			this._paint();
+			const p = Util.iterToArray(pts);
+			if (Util.arrayCheck(p)) {
+				CanvasForm.line(this._ctx, p);
+				this._paint();
+			}
+			return this;
+		}
+		static bezier(ctx, pts) {
+			const p = Util.iterToArray(pts);
+			if (p.length < 4) return;
+			ctx.beginPath();
+			ctx.moveTo(p[0][0], p[0][1]);
+			for (let i = 3; i < p.length; i += 3) {
+				const c1 = p[i - 2];
+				const c2 = p[i - 1];
+				ctx.bezierCurveTo(c1[0], c1[1], c2[0], c2[1], p[i][0], p[i][1]);
+			}
+		}
+		bezier(pts) {
+			const p = Util.iterToArray(pts);
+			if (p.length >= 4) {
+				CanvasForm.bezier(this._ctx, p);
+				this._paint();
+			}
 			return this;
 		}
 		static polygon(ctx, pts) {
@@ -4632,8 +4765,11 @@ See https://github.com/williamngan/pts for details. */
 			ctx.closePath();
 		}
 		polygon(pts) {
-			CanvasForm.polygon(this._ctx, pts);
-			this._paint();
+			const p = Util.iterToArray(pts);
+			if (Util.arrayCheck(p)) {
+				CanvasForm.polygon(this._ctx, p);
+				this._paint();
+			}
 			return this;
 		}
 		static rect(ctx, pts) {

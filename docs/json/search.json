@@ -66,6 +66,12 @@
     8
   ],
   [
+    "Canvas_CanvasForm#function_bezier",
+    "CanvasForm.bezier",
+    "Function",
+    8
+  ],
+  [
     "Canvas_CanvasForm#function_circle",
     "CanvasForm.circle",
     "Function",
@@ -266,6 +272,12 @@
   [
     "Canvas_CanvasForm#function_static_arc",
     "CanvasForm.arc",
+    "Function",
+    8
+  ],
+  [
+    "Canvas_CanvasForm#function_static_bezier",
+    "CanvasForm.bezier",
     "Function",
     8
   ],
@@ -6072,6 +6084,18 @@
     8
   ],
   [
+    "Op_Curve#function_static_bezierToBspline",
+    "Curve.bezierToBspline",
+    "Function",
+    8
+  ],
+  [
+    "Op_Curve#function_static_bezierToCardinal",
+    "Curve.bezierToCardinal",
+    "Function",
+    8
+  ],
+  [
     "Op_Curve#function_static_bspline",
     "Curve.bspline",
     "Function",
@@ -6090,6 +6114,12 @@
     8
   ],
   [
+    "Op_Curve#function_static_bsplineToBezier",
+    "Curve.bsplineToBezier",
+    "Function",
+    8
+  ],
+  [
     "Op_Curve#function_static_cardinal",
     "Curve.cardinal",
     "Function",
@@ -6098,6 +6128,12 @@
   [
     "Op_Curve#function_static_cardinalStep",
     "Curve.cardinalStep",
+    "Function",
+    8
+  ],
+  [
+    "Op_Curve#function_static_cardinalToBezier",
+    "Curve.cardinalToBezier",
     "Function",
     8
   ],
@@ -10254,6 +10290,12 @@
     8
   ],
   [
+    "Svg_SVGForm#function_bezier",
+    "SVGForm.bezier",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGForm#function_circle",
     "SVGForm.circle",
     "Function",
@@ -10484,6 +10526,12 @@
   [
     "Svg_SVGForm#function_static_arcElement",
     "SVGForm.arcElement",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_static_bezier",
+    "SVGForm.bezier",
     "Function",
     8
   ],

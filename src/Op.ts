@@ -1976,6 +1976,120 @@ export class Curve {
   }
 
   /**
+   * Convert the anchors of a Cardinal curve into cubic Bezier control points, so the same curve can be drawn as a native path
+   * with [`CanvasForm.bezier`](#link) or sampled with [`Curve.bezier`](#link).
+   * With the default `alpha`, the Bezier traces the curve that [`Curve.cardinal`](#link) approximates with line segments,
+   * subject to the float32 rounding of a Pt.
+   * See a [demo here](https://ptsjs.org/demo/?name=curve.cardinal).
+   *
+   * Set `alpha` to 0.5 for centripetal or to 1 for chordal parameterization. At the default tension of 0.5,
+   * centripetal Catmull-Rom segments with distinct adjacent anchors have no internal loops or cusps
+   * (Yuksel, Schaefer and Keyser, 2011); changing tension can introduce them.
+   * For non-uniform curves, coincident consecutive anchors give a constant segment and zero tangents at its ends.
+   * @param pts a Group or an Iterable<PtLike> of anchor points
+   * @param tension optional value between 0 to 1 to specify a "tension". Default to 0.5 which is the tension for Catmull-Rom curve.
+   * @param alpha optional knot parameterization: 0 (default) is uniform, 0.5 is centripetal, 1 is chordal
+   * @returns a Group of `3(n-1)+1` Pts in the layout that [`Curve.bezier`](#link) takes: each anchor is followed by the 2 control points of the segment that starts there
+   * @example `form.bezier( Curve.cardinalToBezier( pts ) )`
+   */
+  static cardinalToBezier(
+    pts: PtLikeIterable,
+    tension: number = 0.5,
+    alpha: number = 0,
+  ): Group {
+    const out = new Group();
+    if (!(alpha >= 0)) {
+      return Util.warn("cardinalToBezier needs an alpha of 0 or more", out);
+    }
+    const p = Util.iterToArray(pts);
+    const n = p.length;
+    if (n < 2) return out;
+    const dim3 = p[0].length > 2;
+
+    // Uniform curves need no knot array. Keep small nonzero distances: replacing them
+    // with an absolute epsilon changes the curve when coordinates are scaled.
+    const dt = alpha === 0 ? undefined : new Float64Array(n - 1);
+    if (dt) {
+      for (let i = 0; i < n - 1; i++) {
+        const dx = p[i + 1][0] - p[i][0];
+        const dy = p[i + 1][1] - p[i][1];
+        const dz = dim3 ? p[i + 1][2] - p[i][2] : 0;
+        dt[i] = Math.pow(Math.hypot(dx, dy, dz), alpha);
+      }
+    }
+
+    // Each segment is a cubic Hermite between two anchors, and a Hermite converts to a Bezier by
+    // placing the control points a third of the way along the end tangents. The tangent at an
+    // anchor comes from its two neighbors in the non-uniform Catmull-Rom form; an end anchor stands
+    // in for its missing neighbor, which is the duplicated-endpoint convention of `Curve.cardinal`.
+    const control = (
+      o: PtLike,
+      k: number,
+      mx: number,
+      my: number,
+      mz: number,
+    ) => {
+      const pt = new Pt(dim3 ? 3 : 2);
+      pt[0] = o[0] + k * mx;
+      pt[1] = o[1] + k * my;
+      if (dim3) pt[2] = o[2] + k * mz;
+      return pt;
+    };
+
+    for (let i = 0; i < n; i++) {
+      const p0 = p[Math.max(i - 1, 0)];
+      const p1 = p[i];
+      const p2 = p[Math.min(i + 1, n - 1)];
+      const a = dt ? dt[Math.max(i - 1, 0)] : 1;
+      const b = dt ? dt[Math.min(i, n - 2)] : 1;
+      // Weighted adjacent differences, with weights shared across coordinates.
+      // A repeated anchor has zero tangent on both sides: constant segments stay
+      // constant, and reversing the anchors applies the same degeneracy policy.
+      let wa = 0;
+      let wb = 0;
+      if (dt && a > 0 && b > 0) {
+        const s = (2 * tension) / (a + b);
+        wa = s * (b / a);
+        wb = s * (a / b);
+      }
+      const mx = dt
+        ? wa * (p1[0] - p0[0]) + wb * (p2[0] - p1[0])
+        : tension * (p2[0] - p0[0]);
+      const my = dt
+        ? wa * (p1[1] - p0[1]) + wb * (p2[1] - p1[1])
+        : tension * (p2[1] - p0[1]);
+      const mz = dim3
+        ? dt
+          ? wa * (p1[2] - p0[2]) + wb * (p2[2] - p1[2])
+          : tension * (p2[2] - p0[2])
+        : 0;
+
+      if (i > 0) out.push(control(p1, -a / 3, mx, my, mz));
+      out.push(new Pt(p1));
+      if (i < n - 1) out.push(control(p1, b / 3, mx, my, mz));
+    }
+    return out;
+  }
+
+  /**
+   * Convert a chain of cubic Bezier curves into the anchors of a Cardinal curve: the inverse of [`Curve.cardinalToBezier`](#link).
+   * A Cardinal curve's tangents come from its neighboring anchors, so this keeps every Bezier anchor and drops the Bezier handles.
+   * The Cardinal curve still passes through the same anchors; between them it follows the handles only when they were
+   * in Cardinal form to begin with and the original tension and alpha are reused. Coordinates are rounded to float32.
+   * @param pts a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#link); an incomplete trailing segment is ignored
+   * @returns a Group of anchors for [`Curve.cardinal`](#link) or [`Curve.cardinalToBezier`](#link), with the tension and alpha of your choice
+   * @example `Curve.cardinal( Curve.bezierToCardinal( chain ), 10, 0.5 )`
+   */
+  static bezierToCardinal(pts: PtLikeIterable): Group {
+    const p = Util.iterToArray(pts);
+    const m = Math.floor((p.length - 1) / 3); // complete segments
+    const out = new Group();
+    if (m < 1) return out;
+    for (let k = 0; k <= m; k++) out.push(new Pt(p[3 * k]));
+    return out;
+  }
+
+  /**
    * Create a Bezier curve. In a cubic bezier curve, the first and 4th anchors are end-points, and 2nd and 3rd anchors are control-points.
    * @param pts a group of anchor Pt
    * @param steps the number of line segments per curve. Defaults to 10 steps.
@@ -2123,5 +2237,112 @@ export class Curve {
       tension * (1.5 * t3 - 2.5 * t2 + 0.5 * t + 1 / 6) + b2,
       tension * (t3 / 6),
     );
+  }
+
+  /**
+   * Convert the anchors of a B-spline curve into cubic Bezier control points, so the same curve can be drawn as a native path
+   * with [`CanvasForm.bezier`](#link) or sampled with [`Curve.bezier`](#link).
+   * The Bezier traces the curve that [`Curve.bspline`](#link) approximates with line segments,
+   * subject to the float32 rounding of a Pt. See a [demo here](https://ptsjs.org/demo/?name=curve.bspline).
+   * @param pts a Group or an Iterable<PtLike> of at least 4 anchor points
+   * @param tension optional value between 0 to n to specify a "tension". Default is 1 which is the usual tension.
+   * @returns a Group of `3(n-3)+1` Pts in the layout that [`Curve.bezier`](#link) takes
+   * @example `form.bezier( Curve.bsplineToBezier( pts ) )`
+   */
+  static bsplineToBezier(pts: PtLikeIterable, tension: number = 1): Group {
+    const p = Util.iterToArray(pts);
+    const n = p.length;
+    const out = new Group();
+    if (n < 4) return out;
+    const dim3 = p[0].length > 2;
+
+    // A segment spans anchors p1..p2 with neighbors p0 and p3. Its end points blend three
+    // anchors (a, 1-2a, a) and its control points blend p1 and p2 only; at tension 1 these
+    // are the (1, 4, 1)/6 and (2, 1)/3 weights of Böhm's knot insertion.
+    const a = tension / 6;
+    const c = 1 - 2 * a;
+    const blend = (
+      u: PtLike,
+      v: PtLike,
+      w: PtLike,
+      wu: number,
+      wv: number,
+      ww: number,
+    ) => {
+      const pt = new Pt(dim3 ? 3 : 2);
+      pt[0] = wu * u[0] + wv * v[0] + ww * w[0];
+      pt[1] = wu * u[1] + wv * v[1] + ww * w[1];
+      if (dim3) pt[2] = wu * u[2] + wv * v[2] + ww * w[2];
+      return pt;
+    };
+
+    out.push(blend(p[0], p[1], p[2], a, c, a));
+    for (let i = 1; i < n - 2; i++) {
+      const p1 = p[i];
+      const p2 = p[i + 1];
+      out.push(
+        blend(p1, p2, p2, c, 2 * a, 0),
+        blend(p1, p2, p2, 2 * a, c, 0),
+        blend(p1, p2, p[i + 2], a, c, a),
+      );
+    }
+    return out;
+  }
+
+  /**
+   * Convert a chain of cubic Bezier curves into the anchors of a B-spline curve: the inverse of [`Curve.bsplineToBezier`](#link) at its default tension.
+   * A B-spline does not pass through its anchors, so they are solved for: the result is the B-spline that passes through
+   * every Bezier anchor and starts and ends along the Bezier's end handles (a tridiagonal system, solved in linear time).
+   * For a chain that `bsplineToBezier` produced at tension 1 this recovers its anchors up to float32 rounding; for any other chain the B-spline keeps
+   * the anchors and the end tangents, and its interior, being smooth to the second derivative, can only approximate the other handles.
+   * @param pts a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#link); an incomplete trailing segment is ignored
+   * @returns a Group of `m+3` anchors for `m` Bezier segments, for [`Curve.bspline`](#link) or [`Curve.bsplineToBezier`](#link)
+   * @example `Curve.bspline( Curve.bezierToBspline( chain ) )`
+   */
+  static bezierToBspline(pts: PtLikeIterable): Group {
+    const p = Util.iterToArray(pts);
+    const m = Math.floor((p.length - 1) / 3); // complete segments
+    const out = new Group();
+    if (m < 1) return out;
+    const dim = p[0].length > 2 ? 3 : 2;
+
+    // Unknowns are the anchors P1..P(m+1). Each Bezier anchor gives one row of (1, 4, 1)·P = 6·A,
+    // and the two end rows fold in the end tangents, which also fix P0 and P(m+2) afterwards.
+    // The right-hand sides then simplify to 3× the first handle, 6× each interior anchor, and 3× the last handle.
+    const n = m + 1;
+    const r = new Float64Array(n * dim);
+    const d = new Float64Array(n); // pivots of the tridiagonal (2, 4, ..., 4, 2) with unit off-diagonals
+    for (let k = 0; k < n; k++) {
+      const src = k === 0 ? p[1] : k === m ? p[3 * m - 1] : p[3 * k];
+      const w = k === 0 || k === m ? 3 : 6;
+      for (let j = 0; j < dim; j++) r[k * dim + j] = w * src[j];
+    }
+    d[0] = 2;
+    for (let k = 1; k < n; k++) {
+      const w = 1 / d[k - 1];
+      d[k] = (k < m ? 4 : 2) - w;
+      for (let j = 0; j < dim; j++) r[k * dim + j] -= w * r[(k - 1) * dim + j];
+    }
+    for (let j = 0; j < dim; j++) r[(n - 1) * dim + j] /= d[n - 1];
+    for (let k = n - 2; k >= 0; k--) {
+      for (let j = 0; j < dim; j++) {
+        r[k * dim + j] = (r[k * dim + j] - r[(k + 1) * dim + j]) / d[k];
+      }
+    }
+
+    const first = new Pt(dim);
+    const last = new Pt(dim);
+    for (let j = 0; j < dim; j++) {
+      first[j] = r[dim + j] - 6 * (p[1][j] - p[0][j]);
+      last[j] = r[(m - 1) * dim + j] + 6 * (p[3 * m][j] - p[3 * m - 1][j]);
+    }
+    out.push(first);
+    for (let k = 0; k < n; k++) {
+      const pt = new Pt(dim);
+      for (let j = 0; j < dim; j++) pt[j] = r[k * dim + j];
+      out.push(pt);
+    }
+    out.push(last);
+    return out;
   }
 }

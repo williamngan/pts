@@ -928,6 +928,9 @@ Curve.cardinal( pts );
 Curve.cardinal( pts, 20, 0.3 ); // step and tension parameters
 Curve.bezier( pts );
 Curve.bspline( pts );
+Curve.cardinalToBezier( pts ); // convert anchors to bezier control points
+form.bezier( Curve.cardinalToBezier( pts, 0.5, 0.5 ) ); // draw a centripetal curve as a native path
+Curve.bezierToBspline( chain ); // and back: bezier chain to b-spline anchors
 ```
 
 Check out the [full documentation](https://ptsjs.org/docs/) too.
@@ -1962,7 +1965,7 @@ Using Perlin noise to animate a line and a grid. Move mouse or touch around the 
 <a id="demo-create-sampling"></a>
 ### `create.sampling`
 
-Poisson-disk sampling packs the space with evenly spaced points, a few hundred per frame. Points inside five circles grow hairs that point to each circle's center. Move the pointer to comb the hairs, and click anywhere to let them settle back.
+Sampling circular areas with evenly spaced points. Move the pointer to comb, and click anywhere to settle back.
 
 [Open live](https://ptsjs.org/demo/?name=create.sampling) · [Source code](https://ptsjs.org/demo/create.sampling.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/create.sampling.js)
 
@@ -1976,14 +1979,14 @@ Add a point to a trail as the pointer moves. Use those points as controls for a 
 <a id="demo-curve-bspline"></a>
 ### `curve.bspline`
 
-Create a set of points around a center point, varying each's radius slightly. Draw a b-spline curve around the points.
+Create a set of points around a center point, varying each's radius slightly. Convert the b-spline curve around them into Bezier control points, draw it as one native path, and show the Bezier anchors and handles.
 
 [Open live](https://ptsjs.org/demo/?name=curve.bspline) · [Source code](https://ptsjs.org/demo/curve.bspline.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/curve.bspline.js)
 
 <a id="demo-curve-cardinal"></a>
 ### `curve.cardinal`
 
-Draw three cardinal curves with different tensions. Move pointer near the control points to modify the curve.
+Draw three cardinal curves with different tensions, plus a centripetal one converted to a native Bezier path with its handles. Move pointer near the control points to modify the curve.
 
 [Open live](https://ptsjs.org/demo/?name=curve.cardinal) · [Source code](https://ptsjs.org/demo/curve.cardinal.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/curve.cardinal.js)
 

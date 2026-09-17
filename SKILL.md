@@ -73,7 +73,9 @@ Core data and math:
 - `Line`, `Rectangle`, `Circle`, `Triangle`, `Polygon`, `Curve` —
   geometry as static functions that take Groups: intersections,
   hit-tests, subdivisions, convex hulls, and curves (Catmull-Rom,
-  cardinal, B-spline, bezier) from control points.
+  cardinal, B-spline, bezier) from control points, `cardinalToBezier` /
+  `bsplineToBezier` to draw them as native paths with `form.bezier`, and
+  `bezierToCardinal` / `bezierToBspline` back.
 - `Vec`, `Mat` — the lower-level vector/matrix helpers behind Pt ops.
 
 Generators and media:

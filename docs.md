@@ -256,6 +256,27 @@ Draw an arc.
 - `endAngle` (`number`) — end angle of the arc
 - `cc` (`boolean`) — an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
 
+<a id="canvas-canvasform-bezier"></a>
+##### `bezier`
+
+```ts
+bezier(pts: PtLikeIterable): this
+```
+
+Draw a chain of cubic Bezier curves as one native path. Unlike a polyline from [`Curve.bezier`](#op-curve-static-bezier),
+the path stays smooth at any zoom and exports as compact SVG. Use [`Curve.cardinalToBezier`](#op-curve-static-cardinal-to-bezier) or
+[`Curve.bsplineToBezier`](#op-curve-static-bspline-to-bezier) to draw those curves this way.
+
+**Parameters**
+
+- `pts` (`PtLikeIterable`) — a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#op-curve-static-bezier): an anchor followed by 2 control points and an anchor per segment
+
+**Example**
+
+```ts
+form.bezier( Curve.cardinalToBezier( pts ) )
+```
+
 <a id="canvas-canvasform-circle"></a>
 ##### `circle`
 
@@ -713,6 +734,22 @@ A static function to draw an arc.
 - `startAngle` (`number`) — start angle of the arc
 - `endAngle` (`number`) — end angle of the arc
 - `cc` (`boolean`) — an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
+
+<a id="canvas-canvasform-static-bezier"></a>
+##### `bezier`
+
+*static*
+
+```ts
+static bezier(ctx: RenderingContext2D, pts: PtLikeIterable): void
+```
+
+A static function to draw a chain of cubic Bezier curves as one native path.
+
+**Parameters**
+
+- `ctx` (`RenderingContext2D`) — canvas rendering context
+- `pts` (`PtLikeIterable`) — a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#op-curve-static-bezier): an anchor followed by 2 control points and an anchor per segment
 
 <a id="canvas-canvasform-static-circle"></a>
 ##### `circle`
@@ -6851,6 +6888,59 @@ Interpolate to get a point on a cubic Bezier curve.
 
 **Returns:** an interpolated Pt on the curve
 
+<a id="op-curve-static-bezier-to-bspline"></a>
+##### `bezierToBspline`
+
+*static*
+
+```ts
+static bezierToBspline(pts: PtLikeIterable): Group
+```
+
+Convert a chain of cubic Bezier curves into the anchors of a B-spline curve: the inverse of [`Curve.bsplineToBezier`](#op-curve-static-bspline-to-bezier) at its default tension.
+A B-spline does not pass through its anchors, so they are solved for: the result is the B-spline that passes through
+every Bezier anchor and starts and ends along the Bezier's end handles (a tridiagonal system, solved in linear time).
+For a chain that `bsplineToBezier` produced at tension 1 this recovers its anchors up to float32 rounding; for any other chain the B-spline keeps
+the anchors and the end tangents, and its interior, being smooth to the second derivative, can only approximate the other handles.
+
+**Parameters**
+
+- `pts` (`PtLikeIterable`) — a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#op-curve-static-bezier); an incomplete trailing segment is ignored
+
+**Returns:** a Group of `m+3` anchors for `m` Bezier segments, for [`Curve.bspline`](#op-curve-static-bspline) or [`Curve.bsplineToBezier`](#op-curve-static-bspline-to-bezier)
+
+**Example**
+
+```ts
+Curve.bspline( Curve.bezierToBspline( chain ) )
+```
+
+<a id="op-curve-static-bezier-to-cardinal"></a>
+##### `bezierToCardinal`
+
+*static*
+
+```ts
+static bezierToCardinal(pts: PtLikeIterable): Group
+```
+
+Convert a chain of cubic Bezier curves into the anchors of a Cardinal curve: the inverse of [`Curve.cardinalToBezier`](#op-curve-static-cardinal-to-bezier).
+A Cardinal curve's tangents come from its neighboring anchors, so this keeps every Bezier anchor and drops the Bezier handles.
+The Cardinal curve still passes through the same anchors; between them it follows the handles only when they were
+in Cardinal form to begin with and the original tension and alpha are reused. Coordinates are rounded to float32.
+
+**Parameters**
+
+- `pts` (`PtLikeIterable`) — a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#op-curve-static-bezier); an incomplete trailing segment is ignored
+
+**Returns:** a Group of anchors for [`Curve.cardinal`](#op-curve-static-cardinal) or [`Curve.cardinalToBezier`](#op-curve-static-cardinal-to-bezier), with the tension and alpha of your choice
+
+**Example**
+
+```ts
+Curve.cardinal( Curve.bezierToCardinal( chain ), 10, 0.5 )
+```
+
 <a id="op-curve-static-bspline"></a>
 ##### `bspline`
 
@@ -6907,6 +6997,33 @@ Interpolate to get a point on a basis spline curve with tension.
 
 **Returns:** an interpolated Pt on the curve
 
+<a id="op-curve-static-bspline-to-bezier"></a>
+##### `bsplineToBezier`
+
+*static*
+
+```ts
+static bsplineToBezier(pts: PtLikeIterable, tension: number = 1): Group
+```
+
+Convert the anchors of a B-spline curve into cubic Bezier control points, so the same curve can be drawn as a native path
+with [`CanvasForm.bezier`](#canvas-canvasform-bezier) or sampled with [`Curve.bezier`](#op-curve-static-bezier).
+The Bezier traces the curve that [`Curve.bspline`](#op-curve-static-bspline) approximates with line segments,
+subject to the float32 rounding of a Pt. See a [demo here](https://ptsjs.org/demo/?name=curve.bspline).
+
+**Parameters**
+
+- `pts` (`PtLikeIterable`) — a Group or an Iterable<PtLike> of at least 4 anchor points
+- `tension` (`number`; default `1`) — optional value between 0 to n to specify a "tension". Default is 1 which is the usual tension.
+
+**Returns:** a Group of `3(n-3)+1` Pts in the layout that [`Curve.bezier`](#op-curve-static-bezier) takes
+
+**Example**
+
+```ts
+form.bezier( Curve.bsplineToBezier( pts ) )
+```
+
 <a id="op-curve-static-cardinal"></a>
 ##### `cardinal`
 
@@ -6944,6 +7061,40 @@ Interpolate to get a point on Cardinal curve.
 - `tension` (`number`; default `0.5`) — optional value between 0 to 1 to specify a "tension". Default to 0.5 which is the tension for Catmull-Rom curve
 
 **Returns:** an interpolated Pt on the curve
+
+<a id="op-curve-static-cardinal-to-bezier"></a>
+##### `cardinalToBezier`
+
+*static*
+
+```ts
+static cardinalToBezier(pts: PtLikeIterable, tension: number = 0.5, alpha: number = 0): Group
+```
+
+Convert the anchors of a Cardinal curve into cubic Bezier control points, so the same curve can be drawn as a native path
+with [`CanvasForm.bezier`](#canvas-canvasform-bezier) or sampled with [`Curve.bezier`](#op-curve-static-bezier).
+With the default `alpha`, the Bezier traces the curve that [`Curve.cardinal`](#op-curve-static-cardinal) approximates with line segments,
+subject to the float32 rounding of a Pt.
+See a [demo here](https://ptsjs.org/demo/?name=curve.cardinal).
+
+Set `alpha` to 0.5 for centripetal or to 1 for chordal parameterization. At the default tension of 0.5,
+centripetal Catmull-Rom segments with distinct adjacent anchors have no internal loops or cusps
+(Yuksel, Schaefer and Keyser, 2011); changing tension can introduce them.
+For non-uniform curves, coincident consecutive anchors give a constant segment and zero tangents at its ends.
+
+**Parameters**
+
+- `pts` (`PtLikeIterable`) — a Group or an Iterable<PtLike> of anchor points
+- `tension` (`number`; default `0.5`) — optional value between 0 to 1 to specify a "tension". Default to 0.5 which is the tension for Catmull-Rom curve.
+- `alpha` (`number`; default `0`) — optional knot parameterization: 0 (default) is uniform, 0.5 is centripetal, 1 is chordal
+
+**Returns:** a Group of `3(n-1)+1` Pts in the layout that [`Curve.bezier`](#op-curve-static-bezier) takes: each anchor is followed by the 2 control points of the segment that starts there
+
+**Example**
+
+```ts
+form.bezier( Curve.cardinalToBezier( pts ) )
+```
 
 <a id="op-curve-static-catmull-rom"></a>
 ##### `catmullRom`
@@ -12725,7 +12876,7 @@ A static function to draw a text element.
 
 #### Inherited API
 
-- From [`CanvasForm`](#canvas-canvasform): [`ctx`](#canvas-canvasform-ctx), [`alignText`](#canvas-canvasform-align-text), [`alpha`](#canvas-canvasform-alpha), [`applyFillStroke`](#canvas-canvasform-apply-fill-stroke), [`arc`](#canvas-canvasform-arc), [`circle`](#canvas-canvasform-circle), [`clip`](#canvas-canvasform-clip), [`composite`](#canvas-canvasform-composite), [`dash`](#canvas-canvasform-dash), [`ellipse`](#canvas-canvasform-ellipse), [`fill`](#canvas-canvasform-fill), [`fillOnly`](#canvas-canvasform-fill-only), [`font`](#canvas-canvasform-font), [`fontWidthEstimate`](#canvas-canvasform-font-width-estimate), [`getTextWidth`](#canvas-canvasform-get-text-width), [`gradient`](#canvas-canvasform-gradient), [`image`](#canvas-canvasform-image), [`imageData`](#canvas-canvasform-image-data), [`line`](#canvas-canvasform-line), [`log`](#canvas-canvasform-log), [`paragraphBox`](#canvas-canvasform-paragraph-box), [`point`](#canvas-canvasform-point), [`polygon`](#canvas-canvasform-polygon), [`rect`](#canvas-canvasform-rect), [`reset`](#canvas-canvasform-reset), [`square`](#canvas-canvasform-square), [`stroke`](#canvas-canvasform-stroke), [`strokeOnly`](#canvas-canvasform-stroke-only), [`text`](#canvas-canvasform-text), [`textBox`](#canvas-canvasform-text-box), [`ellipse`](#canvas-canvasform-ellipse), [`image`](#canvas-canvasform-image), [`imageData`](#canvas-canvasform-image-data), [`resetStyleCache`](#canvas-canvasform-static-reset-style-cache).
+- From [`CanvasForm`](#canvas-canvasform): [`ctx`](#canvas-canvasform-ctx), [`alignText`](#canvas-canvasform-align-text), [`alpha`](#canvas-canvasform-alpha), [`applyFillStroke`](#canvas-canvasform-apply-fill-stroke), [`arc`](#canvas-canvasform-arc), [`bezier`](#canvas-canvasform-bezier), [`circle`](#canvas-canvasform-circle), [`clip`](#canvas-canvasform-clip), [`composite`](#canvas-canvasform-composite), [`dash`](#canvas-canvasform-dash), [`ellipse`](#canvas-canvasform-ellipse), [`fill`](#canvas-canvasform-fill), [`fillOnly`](#canvas-canvasform-fill-only), [`font`](#canvas-canvasform-font), [`fontWidthEstimate`](#canvas-canvasform-font-width-estimate), [`getTextWidth`](#canvas-canvasform-get-text-width), [`gradient`](#canvas-canvasform-gradient), [`image`](#canvas-canvasform-image), [`imageData`](#canvas-canvasform-image-data), [`line`](#canvas-canvasform-line), [`log`](#canvas-canvasform-log), [`paragraphBox`](#canvas-canvasform-paragraph-box), [`point`](#canvas-canvasform-point), [`polygon`](#canvas-canvasform-polygon), [`rect`](#canvas-canvasform-rect), [`reset`](#canvas-canvasform-reset), [`square`](#canvas-canvasform-square), [`stroke`](#canvas-canvasform-stroke), [`strokeOnly`](#canvas-canvasform-stroke-only), [`text`](#canvas-canvasform-text), [`textBox`](#canvas-canvasform-text-box), [`bezier`](#canvas-canvasform-bezier), [`ellipse`](#canvas-canvasform-ellipse), [`image`](#canvas-canvasform-image), [`imageData`](#canvas-canvasform-image-data), [`resetStyleCache`](#canvas-canvasform-static-reset-style-cache).
 - From [`VisualForm`](#form-visualform): [`currentFont`](#form-visualform-current-font), [`circles`](#form-visualform-circles), [`lines`](#form-visualform-lines), [`points`](#form-visualform-points), [`polygons`](#form-visualform-polygons), [`rects`](#form-visualform-rects), [`squares`](#form-visualform-squares).
 - From [`Form`](#form-form): [`ready`](#form-form-ready).
 

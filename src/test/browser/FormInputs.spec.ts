@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { CanvasSpace } from "../../Canvas";
+import { CanvasForm, CanvasSpace } from "../../Canvas";
 import { SVGSpace } from "../../Svg";
 import { Group, Pt } from "../../Pt";
 import type { PtLikeIterable } from "../../Types";
@@ -7,6 +7,30 @@ import type { PtLikeIterable } from "../../Types";
 afterEach(() => {
   document.body.innerHTML = "";
   vi.restoreAllMocks();
+});
+
+describe("bezier input contract", () => {
+  it("does not repaint the previous canvas path for an incomplete iterable", () => {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d")!;
+    const form = new CanvasForm(ctx);
+    const chain = [
+      [0, 10],
+      [30, 10],
+      [60, 10],
+      [90, 10],
+    ];
+    form.strokeOnly("#f00", 3).bezier(chain);
+    const pixel = () => [...ctx.getImageData(20, 10, 1, 1).data];
+    expect(pixel()).toEqual([255, 0, 0, 255]);
+    for (const count of [0, 1, 2, 3]) {
+      function* shortChain() {
+        yield* chain.slice(0, count);
+      }
+      form.strokeOnly("#00f", 3).bezier(shortChain());
+      expect(pixel()).toEqual([255, 0, 0, 255]);
+    }
+  });
 });
 
 describe("paragraphBox input contract", () => {

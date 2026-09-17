@@ -182,7 +182,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1614,
+          1653,
           2
         ]
       ],
@@ -342,6 +342,40 @@
             }
           ],
           "tags": []
+        }
+      ]
+    },
+    {
+      "name": "bezier",
+      "source": [
+        [
+          "src/Canvas.ts",
+          1331,
+          2
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw a chain of cubic Bezier curves as one native path. Unlike a polyline from [`Curve.bezier`](#link),\nthe path stays smooth at any zoom and exports as compact SVG. Use [`Curve.cardinalToBezier`](#link) or\n[`Curve.bsplineToBezier`](#link) to draw those curves this way.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#link): an anchor followed by 2 control points and an anchor per segment",
+              "type": "PtLikeIterable",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`form.bezier( Curve.cardinalToBezier( pts ) )`"
+            }
+          ]
         }
       ]
     },
@@ -771,7 +805,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1407,
+          1446,
           2
         ]
       ],
@@ -812,7 +846,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1457,
+          1496,
           2
         ]
       ],
@@ -905,7 +939,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1631,
+          1670,
           2
         ]
       ],
@@ -934,7 +968,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1531,
+          1570,
           2
         ]
       ],
@@ -1074,7 +1108,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1319,
+          1355,
           2
         ]
       ],
@@ -1132,7 +1166,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1345,
+          1384,
           2
         ]
       ],
@@ -1404,7 +1438,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1485,
+          1524,
           2
         ]
       ],
@@ -1445,7 +1479,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1498,
+          1537,
           2
         ]
       ],
@@ -1590,6 +1624,43 @@
       ]
     },
     {
+      "name": "bezier",
+      "source": [
+        [
+          "src/Canvas.ts",
+          1312,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to draw a chain of cubic Bezier curves as one native path.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "canvas rendering context",
+              "type": "RenderingContext2D",
+              "default": false
+            },
+            {
+              "name": "pts",
+              "comment": "a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#link): an anchor followed by 2 control points and an anchor per segment",
+              "type": "PtLikeIterable",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "circle",
       "source": [
         [
@@ -1704,7 +1775,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1358,
+          1397,
           9
         ]
       ],
@@ -1753,7 +1824,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1428,
+          1467,
           9
         ]
       ],
@@ -1887,7 +1958,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1309,
+          1345,
           9
         ]
       ],
@@ -1924,7 +1995,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1330,
+          1369,
           9
         ]
       ],
@@ -2035,7 +2106,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1469,
+          1508,
           9
         ]
       ],

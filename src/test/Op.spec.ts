@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { Circle, Curve, Line, Polygon, Rectangle, Triangle } from "../Op";
+import { Num } from "../Num";
 import { Group, Pt } from "../Pt";
 import { Util } from "../Util";
 
@@ -846,5 +847,430 @@ describe("Geometry correctness pins", () => {
     const bstBatch = Curve.bspline(g4, 10, 0.8)[3];
     expect(bstBatch[0]).toBeCloseTo(bst[0], 5);
     expect(bstBatch[1]).toBeCloseTo(bst[1], 5);
+  });
+});
+
+function seededPath(n: number, seed: number = 1): Group {
+  Num.seed(`bezier-${seed}`);
+  const g = new Group();
+  for (let i = 0; i < n; i++) {
+    g.push(new Pt(i * 50 + Num.random() * 30, 100 + Num.random() * 200));
+  }
+  return g;
+}
+
+function expectClose(actual: Group, expected: Group, digits = 3) {
+  expect(actual.length).toBe(expected.length);
+  for (let i = 0; i < actual.length; i++) {
+    expect(actual[i].length).toBe(expected[i].length);
+    for (let k = 0; k < expected[i].length; k++) {
+      expect(actual[i][k]).toBeCloseTo(expected[i][k], digits);
+    }
+  }
+}
+
+describe("Curve to Bezier conversions", () => {
+  it("accepts generators for all conversions without mutating their points", () => {
+    const pts = seededPath(7);
+    const original = pts.clone();
+    for (const convert of [
+      Curve.cardinalToBezier,
+      Curve.bsplineToBezier,
+      Curve.bezierToCardinal,
+      Curve.bezierToBspline,
+    ]) {
+      function* points() {
+        yield* pts;
+      }
+      expectClose(convert(points()), convert(pts));
+      expectClose(pts, original);
+    }
+  });
+  // Barry-Goldman pyramid: the reference definition of a non-uniform Catmull-Rom segment
+  function barryGoldman(
+    P: ArrayLike<number>[],
+    T: number[],
+    u: number,
+  ): number[] {
+    const lerp = (
+      a: ArrayLike<number>,
+      b: ArrayLike<number>,
+      ta: number,
+      tb: number,
+    ) =>
+      Array.from(
+        { length: a.length },
+        (_, k) => ((tb - u) * a[k] + (u - ta) * b[k]) / (tb - ta),
+      );
+    const a1 = lerp(P[0], P[1], T[0], T[1]);
+    const a2 = lerp(P[1], P[2], T[1], T[2]);
+    const a3 = lerp(P[2], P[3], T[2], T[3]);
+    return lerp(lerp(a1, a2, T[0], T[2]), lerp(a2, a3, T[1], T[3]), T[1], T[2]);
+  }
+
+  it("cardinalToBezier traces the curve that cardinal samples, for any tension and size", () => {
+    for (const tension of [0.2, 0.5, 0.8, 1]) {
+      for (const n of [2, 3, 5, 12]) {
+        const pts = seededPath(n, n);
+        const ctrls = Curve.cardinalToBezier(pts, tension);
+        expect(ctrls).toHaveLength(3 * (n - 1) + 1);
+        expectClose(Curve.bezier(ctrls, 10), Curve.cardinal(pts, 10, tension));
+      }
+    }
+  });
+
+  it("cardinalToBezier defaults to Catmull-Rom and keeps the anchors in place", () => {
+    const pts = seededPath(9, 2);
+    const ctrls = Curve.cardinalToBezier(pts);
+    expectClose(Curve.bezier(ctrls, 8), Curve.catmullRom(pts, 8));
+    for (let i = 0; i < pts.length; i++) {
+      expect(ctrls[i * 3].equals(pts[i])).toBe(true);
+      expect(ctrls[i * 3]).not.toBe(pts[i]); // a copy, not the caller's Pt
+    }
+  });
+
+  it("cardinalToBezier handles too few or two anchors", () => {
+    expect(Curve.cardinalToBezier([])).toHaveLength(0);
+    expect(Curve.cardinalToBezier([[1, 2]])).toHaveLength(0);
+    const two = Curve.cardinalToBezier([
+      [0, 0],
+      [30, 60],
+    ]);
+    expect(two).toHaveLength(4);
+    expectClose(
+      two,
+      Group.fromArray([
+        [0, 0],
+        [5, 10],
+        [25, 50],
+        [30, 60],
+      ]),
+    );
+  });
+
+  it("cardinalToBezier with alpha matches the Barry-Goldman form of a non-uniform Catmull-Rom", () => {
+    const pts = seededPath(8, 3);
+    for (const alpha of [0, 0.5, 1]) {
+      const T = [0];
+      for (let i = 1; i < pts.length; i++) {
+        T.push(
+          T[i - 1] + Math.pow(pts[i].$subtract(pts[i - 1]).magnitude(), alpha),
+        );
+      }
+      const ctrls = Curve.cardinalToBezier(pts, 0.5, alpha);
+      for (let i = 1; i < pts.length - 2; i++) {
+        const P = [pts[i - 1], pts[i], pts[i + 1], pts[i + 2]];
+        const K = [T[i - 1], T[i], T[i + 1], T[i + 2]];
+        const seg = ctrls.slice(i * 3, i * 3 + 4);
+        for (let j = 0; j <= 10; j++) {
+          const u = j / 10;
+          const ref = barryGoldman(P, K, K[1] + u * (K[2] - K[1]));
+          const got = Curve.bezierStep(new Pt(u * u * u, u * u, u, 1), seg);
+          expect(got[0]).toBeCloseTo(ref[0], 3);
+          expect(got[1]).toBeCloseTo(ref[1], 3);
+        }
+      }
+    }
+  });
+
+  it("centripetal alpha keeps a short segment between long ones from overshooting", () => {
+    const pts = Group.fromArray([
+      [0, 0],
+      [100, 0],
+      [102, 5],
+      [0, 80],
+    ]);
+    const uniform = Curve.cardinalToBezier(pts).slice(3, 7);
+    const centripetal = Curve.cardinalToBezier(pts, 0.5, 0.5).slice(3, 7);
+    // the segment runs from (100,0) to (102,5); its controls should stay near it
+    const within = (g: Pt[], r: number) =>
+      g.every((c) => Math.abs(c[0] - 101) <= r && Math.abs(c[1] - 2.5) <= r);
+    expect(within(centripetal, 5)).toBe(true);
+    expect(within(uniform, 5)).toBe(false);
+  });
+
+  it("preserves non-uniform curves under scaling and reversal in 2D and 3D", () => {
+    for (const dim of [2, 3]) {
+      const pts = [
+        [0, 0, 3],
+        [100, 0, 10],
+        [102, 5, 11],
+        [0, 80, 0],
+      ].map((p) => p.slice(0, dim));
+      for (const alpha of [0.5, 1]) {
+        const reference = Curve.cardinalToBezier(pts, 0.5, alpha);
+        for (const scale of [1e-12, 1e-6, 1, 1e6]) {
+          const scaled = pts.map((p) => p.map((v) => v * scale));
+          const converted = Curve.cardinalToBezier(scaled, 0.5, alpha);
+          const reversed = Curve.cardinalToBezier(
+            [...scaled].reverse(),
+            0.5,
+            alpha,
+          ).reverse();
+          for (let i = 0; i < converted.length; i++) {
+            for (let k = 0; k < dim; k++) {
+              expect(converted[i][k] / scale).toBeCloseTo(reference[i][k], 4);
+              expect(reversed[i][k] / scale).toBeCloseTo(reference[i][k], 4);
+            }
+          }
+          // An independent double-precision reference also pins the shape at small scales.
+          const knots = [0];
+          for (let i = 1; i < scaled.length; i++) {
+            knots.push(
+              knots[i - 1] +
+                Math.hypot(...scaled[i].map((v, k) => v - scaled[i - 1][k])) **
+                  alpha,
+            );
+          }
+          const samples = Curve.bezier(converted.slice(3, 7), 8);
+          for (let j = 0; j <= 8; j++) {
+            const expected = barryGoldman(
+              scaled,
+              knots,
+              knots[1] + (j / 8) * (knots[2] - knots[1]),
+            );
+            for (let k = 0; k < dim; k++)
+              expect(samples[j][k] / scale).toBeCloseTo(expected[k] / scale, 4);
+          }
+        }
+      }
+    }
+  });
+
+  it("keeps repeated non-uniform segments constant, with zero end tangents", () => {
+    const pts = [
+      [0, 0],
+      [0, 0],
+      [100, 0],
+      [100, 0],
+      [100, 0],
+      [100, 100],
+      [100, 100],
+    ];
+    for (const alpha of [0.5, 1]) {
+      const reference = Curve.cardinalToBezier(pts, 0.5, alpha);
+      for (const scale of [1e-10, 1, 1e6]) {
+        const scaled = pts.map((p) => p.map((v) => v * scale));
+        const converted = Curve.cardinalToBezier(scaled, 0.5, alpha);
+        const reversed = Curve.cardinalToBezier(
+          [...scaled].reverse(),
+          0.5,
+          alpha,
+        ).reverse();
+        for (let i = 0; i < converted.length; i++) {
+          for (let k = 0; k < 2; k++) {
+            expect(converted[i][k] / scale).toBeCloseTo(reference[i][k], 4);
+            expect(reversed[i][k] / scale).toBeCloseTo(reference[i][k], 4);
+          }
+        }
+        for (const segment of [0, 2, 3, 5]) {
+          const start = segment * 3;
+          for (let j = 0; j < 4; j++)
+            expect([...converted[start + j]]).toEqual([
+              ...new Pt(scaled[segment]),
+            ]);
+          if (segment > 0)
+            expect([...converted[start - 1]]).toEqual([...converted[start]]);
+          if (start + 4 < converted.length)
+            expect([...converted[start + 4]]).toEqual([
+              ...converted[start + 3],
+            ]);
+        }
+      }
+    }
+  });
+
+  it("cardinalToBezier rejects a negative or NaN alpha instead of returning NaN points", () => {
+    const pts = seededPath(5, 11);
+    const warn = vi.spyOn(Util, "warn").mockImplementation((_m, d) => d);
+    expect(Curve.cardinalToBezier(pts, 0.5, -0.5)).toHaveLength(0);
+    expect(Curve.cardinalToBezier(pts, 0.5, NaN)).toHaveLength(0);
+    expect(warn).toHaveBeenCalledTimes(2);
+    expect(Curve.cardinalToBezier(pts, 0.5, 0)).toHaveLength(13);
+  });
+
+  it("cardinalToBezier stays finite on coincident anchors with any alpha", () => {
+    const pts = Group.fromArray([
+      [10, 10],
+      [10, 10],
+      [50, 20],
+      [50, 20],
+      [90, 90],
+    ]);
+    for (const alpha of [0, 0.5, 1]) {
+      const ctrls = Curve.cardinalToBezier(pts, 0.5, alpha);
+      expect(ctrls).toHaveLength(13);
+      expect(
+        ctrls.every((c) => Number.isFinite(c[0]) && Number.isFinite(c[1])),
+      ).toBe(true);
+    }
+    const same = Curve.cardinalToBezier(
+      [
+        [3, 4],
+        [3, 4],
+        [3, 4],
+      ],
+      0.5,
+      0.5,
+    );
+    expect(same.every((c) => c.equals(new Pt(3, 4)))).toBe(true);
+  });
+
+  it("cardinalToBezier converts 3D anchors", () => {
+    Num.seed("bezier-3d");
+    const pts = new Group();
+    for (let i = 0; i < 6; i++) {
+      pts.push(new Pt(i * 40, Num.random() * 100, Num.random() * 100));
+    }
+    const ctrls = Curve.cardinalToBezier(pts, 0.7);
+    expect(ctrls[1]).toHaveLength(3);
+    expectClose(Curve.bezier(ctrls, 6), Curve.cardinal(pts, 6, 0.7));
+  });
+
+  it("bsplineToBezier traces the curve that bspline samples, with and without tension", () => {
+    const pts = seededPath(9, 4);
+    for (const tension of [1, 0.4, 1.6]) {
+      const ctrls = Curve.bsplineToBezier(pts, tension);
+      expect(ctrls).toHaveLength(3 * (pts.length - 3) + 1);
+      expectClose(Curve.bezier(ctrls, 10), Curve.bspline(pts, 10, tension));
+    }
+    expect(Curve.bsplineToBezier(pts.slice(0, 3))).toHaveLength(0);
+    expect(Curve.bsplineToBezier([])).toHaveLength(0);
+  });
+
+  it("bsplineToBezier converts 3D anchors", () => {
+    const pts = Group.fromArray([
+      [0, 0, 0],
+      [10, 20, 30],
+      [40, 10, 5],
+      [60, 50, 25],
+      [80, 0, 40],
+    ]);
+    const ctrls = Curve.bsplineToBezier(pts);
+    expect(ctrls[0]).toHaveLength(3);
+    expectClose(Curve.bezier(ctrls, 5), Curve.bspline(pts, 5));
+  });
+});
+
+describe("Curve from Bezier conversions", () => {
+  it("reconstructs a B-spline with continuous first and second derivatives", () => {
+    for (const dim of [2, 3]) {
+      const chain = Array.from({ length: 13 }, (_, i) =>
+        Array.from({ length: dim }, (_, k) => 100 * Math.sin(i * 1.3 + k * 2)),
+      );
+      const smooth = Curve.bsplineToBezier(Curve.bezierToBspline(chain));
+      for (let i = 3; i < smooth.length - 1; i += 3) {
+        for (let k = 0; k < dim; k++) {
+          const left = 3 * (smooth[i][k] - smooth[i - 1][k]);
+          const right = 3 * (smooth[i + 1][k] - smooth[i][k]);
+          const left2 =
+            6 * (smooth[i][k] - 2 * smooth[i - 1][k] + smooth[i - 2][k]);
+          const right2 =
+            6 * (smooth[i + 2][k] - 2 * smooth[i + 1][k] + smooth[i][k]);
+          expect(left).toBeCloseTo(right, 3);
+          expect(left2).toBeCloseTo(right2, 3);
+        }
+      }
+    }
+  });
+
+  it("bezierToCardinal inverts cardinalToBezier exactly for any tension and alpha", () => {
+    for (const [tension, alpha] of [
+      [0.5, 0],
+      [0.2, 0.5],
+      [1, 1],
+    ]) {
+      const pts = seededPath(9, 1);
+      const back = Curve.bezierToCardinal(
+        Curve.cardinalToBezier(pts, tension, alpha),
+      );
+      expect(back).toHaveLength(9);
+      for (let i = 0; i < 9; i++) {
+        expect(back[i].equals(pts[i])).toBe(true);
+        expect(back[i]).not.toBe(pts[i]);
+      }
+    }
+  });
+
+  it("bezierToCardinal keeps the anchors, ignores a partial segment, and needs one full segment", () => {
+    const chain = seededPath(13, 2);
+    const anchors = Curve.bezierToCardinal(chain);
+    expect(anchors).toHaveLength(5);
+    anchors.forEach((a, k) => expect(a.equals(chain[3 * k])).toBe(true));
+    expect(Curve.bezierToCardinal(chain.slice(0, 6))).toHaveLength(2);
+    expect(Curve.bezierToCardinal(chain.slice(0, 3))).toHaveLength(0);
+    expect(Curve.bezierToCardinal([])).toHaveLength(0);
+    // the anchors trace a cardinal curve through the same points
+    expect(Curve.cardinal(anchors, 4)[0].equals(chain[0])).toBe(true);
+  });
+
+  it("bezierToBspline inverts bsplineToBezier", () => {
+    for (const n of [4, 5, 9, 30]) {
+      const pts = seededPath(n, n);
+      const chain = Curve.bsplineToBezier(pts);
+      const back = Curve.bezierToBspline(chain);
+      expect(back).toHaveLength(n);
+      // float32 Bezier points are amplified a little by the solve: 2 decimals on coordinates in the hundreds
+      expectClose(back, pts, 2);
+      expectClose(Curve.bsplineToBezier(back), chain, 3);
+    }
+  });
+
+  it("bezierToBspline passes through every anchor and keeps the end tangents of any chain", () => {
+    const chain = seededPath(13, 7); // 4 segments with arbitrary handles
+    const ctrls = Curve.bezierToBspline(chain);
+    expect(ctrls).toHaveLength(7);
+    const steps = 8;
+    const curve = Curve.bspline(ctrls, steps);
+    for (let k = 0; k <= 4; k++) {
+      const at = k === 0 ? 0 : k * (steps + 1) - 1;
+      expect(curve[at][0]).toBeCloseTo(chain[3 * k][0], 2);
+      expect(curve[at][1]).toBeCloseTo(chain[3 * k][1], 2);
+    }
+    // start and end derivatives: (P2 - P0) / 2 equals the Bezier's 3 * handle
+    const start = ctrls[2].$subtract(ctrls[0]).divide(2);
+    const end = ctrls[6].$subtract(ctrls[4]).divide(2);
+    expectClose(
+      new Group(start, end),
+      new Group(
+        chain[1].$subtract(chain[0]).multiply(3),
+        chain[12].$subtract(chain[11]).multiply(3),
+      ),
+      1,
+    );
+  });
+
+  it("bezierToBspline handles one segment, a partial segment, short input, and 3D", () => {
+    const one = Curve.bezierToBspline([
+      [0, 0],
+      [10, 30],
+      [40, 30],
+      [50, 0],
+    ]);
+    expect(one).toHaveLength(4);
+    expectClose(
+      Curve.bsplineToBezier(one),
+      Group.fromArray([
+        [0, 0],
+        [10, 30],
+        [40, 30],
+        [50, 0],
+      ]),
+      2,
+    );
+    expect(Curve.bezierToBspline(seededPath(6, 3))).toHaveLength(4);
+    expect(Curve.bezierToBspline(seededPath(3, 3))).toHaveLength(0);
+    expect(Curve.bezierToBspline(new Set<number[]>())).toHaveLength(0);
+
+    const pts = Group.fromArray([
+      [0, 0, 0],
+      [10, 20, 30],
+      [40, 10, 5],
+      [60, 50, 25],
+      [80, 0, 40],
+    ]);
+    const back = Curve.bezierToBspline(Curve.bsplineToBezier(pts));
+    expect(back[0]).toHaveLength(3);
+    expectClose(back, pts, 2);
   });
 });

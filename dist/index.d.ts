@@ -2552,6 +2552,20 @@ declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends Visual
    */
   line(pts: PtLikeIterable): this;
   /**
+   * A static function to draw a chain of cubic Bezier curves as one native path.
+   * @param ctx canvas rendering context
+   * @param pts a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#link): an anchor followed by 2 control points and an anchor per segment
+   */
+  static bezier(ctx: RenderingContext2D, pts: PtLikeIterable): void;
+  /**
+   * Draw a chain of cubic Bezier curves as one native path. Unlike a polyline from [`Curve.bezier`](#link),
+   * the path stays smooth at any zoom and exports as compact SVG. Use [`Curve.cardinalToBezier`](#link) or
+   * [`Curve.bsplineToBezier`](#link) to draw those curves this way.
+   * @param pts a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#link): an anchor followed by 2 control points and an anchor per segment
+   * @example `form.bezier( Curve.cardinalToBezier( pts ) )`
+   */
+  bezier(pts: PtLikeIterable): this;
+  /**
    * A static function to draw a polygon.
    * @param ctx canvas rendering context
    * @param pts a Group or an Iterable<PtLike> representing a polygon
@@ -4256,6 +4270,34 @@ declare class Curve {
    */
   static cardinalStep(step: Pt, ctrls: GroupLike, tension?: number): Pt;
   /**
+   * Convert the anchors of a Cardinal curve into cubic Bezier control points, so the same curve can be drawn as a native path
+   * with [`CanvasForm.bezier`](#link) or sampled with [`Curve.bezier`](#link).
+   * With the default `alpha`, the Bezier traces the curve that [`Curve.cardinal`](#link) approximates with line segments,
+   * subject to the float32 rounding of a Pt.
+   * See a [demo here](https://ptsjs.org/demo/?name=curve.cardinal).
+   *
+   * Set `alpha` to 0.5 for centripetal or to 1 for chordal parameterization. At the default tension of 0.5,
+   * centripetal Catmull-Rom segments with distinct adjacent anchors have no internal loops or cusps
+   * (Yuksel, Schaefer and Keyser, 2011); changing tension can introduce them.
+   * For non-uniform curves, coincident consecutive anchors give a constant segment and zero tangents at its ends.
+   * @param pts a Group or an Iterable<PtLike> of anchor points
+   * @param tension optional value between 0 to 1 to specify a "tension". Default to 0.5 which is the tension for Catmull-Rom curve.
+   * @param alpha optional knot parameterization: 0 (default) is uniform, 0.5 is centripetal, 1 is chordal
+   * @returns a Group of `3(n-1)+1` Pts in the layout that [`Curve.bezier`](#link) takes: each anchor is followed by the 2 control points of the segment that starts there
+   * @example `form.bezier( Curve.cardinalToBezier( pts ) )`
+   */
+  static cardinalToBezier(pts: PtLikeIterable, tension?: number, alpha?: number): Group;
+  /**
+   * Convert a chain of cubic Bezier curves into the anchors of a Cardinal curve: the inverse of [`Curve.cardinalToBezier`](#link).
+   * A Cardinal curve's tangents come from its neighboring anchors, so this keeps every Bezier anchor and drops the Bezier handles.
+   * The Cardinal curve still passes through the same anchors; between them it follows the handles only when they were
+   * in Cardinal form to begin with and the original tension and alpha are reused. Coordinates are rounded to float32.
+   * @param pts a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#link); an incomplete trailing segment is ignored
+   * @returns a Group of anchors for [`Curve.cardinal`](#link) or [`Curve.cardinalToBezier`](#link), with the tension and alpha of your choice
+   * @example `Curve.cardinal( Curve.bezierToCardinal( chain ), 10, 0.5 )`
+   */
+  static bezierToCardinal(pts: PtLikeIterable): Group;
+  /**
    * Create a Bezier curve. In a cubic bezier curve, the first and 4th anchors are end-points, and 2nd and 3rd anchors are control-points.
    * @param pts a group of anchor Pt
    * @param steps the number of line segments per curve. Defaults to 10 steps.
@@ -4292,6 +4334,28 @@ declare class Curve {
    * @return an interpolated Pt on the curve
    */
   static bsplineTensionStep(step: Pt, ctrls: GroupLike, tension?: number): Pt;
+  /**
+   * Convert the anchors of a B-spline curve into cubic Bezier control points, so the same curve can be drawn as a native path
+   * with [`CanvasForm.bezier`](#link) or sampled with [`Curve.bezier`](#link).
+   * The Bezier traces the curve that [`Curve.bspline`](#link) approximates with line segments,
+   * subject to the float32 rounding of a Pt. See a [demo here](https://ptsjs.org/demo/?name=curve.bspline).
+   * @param pts a Group or an Iterable<PtLike> of at least 4 anchor points
+   * @param tension optional value between 0 to n to specify a "tension". Default is 1 which is the usual tension.
+   * @returns a Group of `3(n-3)+1` Pts in the layout that [`Curve.bezier`](#link) takes
+   * @example `form.bezier( Curve.bsplineToBezier( pts ) )`
+   */
+  static bsplineToBezier(pts: PtLikeIterable, tension?: number): Group;
+  /**
+   * Convert a chain of cubic Bezier curves into the anchors of a B-spline curve: the inverse of [`Curve.bsplineToBezier`](#link) at its default tension.
+   * A B-spline does not pass through its anchors, so they are solved for: the result is the B-spline that passes through
+   * every Bezier anchor and starts and ends along the Bezier's end handles (a tridiagonal system, solved in linear time).
+   * For a chain that `bsplineToBezier` produced at tension 1 this recovers its anchors up to float32 rounding; for any other chain the B-spline keeps
+   * the anchors and the end tangents, and its interior, being smooth to the second derivative, can only approximate the other handles.
+   * @param pts a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#link); an incomplete trailing segment is ignored
+   * @returns a Group of `m+3` anchors for `m` Bezier segments, for [`Curve.bspline`](#link) or [`Curve.bsplineToBezier`](#link)
+   * @example `Curve.bspline( Curve.bezierToBspline( chain ) )`
+   */
+  static bezierToBspline(pts: PtLikeIterable): Group;
 }
 //#endregion
 //#region src/Color.d.ts

@@ -1,7 +1,7 @@
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
-window.demoDescription = "Create a set of points around a center point, varying each's radius slightly. Draw a b-spline curve around the points.";
+window.demoDescription = "Create a set of points around a center point, varying each's radius slightly. Draw a b-spline curve and also show the corresponding bezier handles.";
 
 Pts.quickStart( "#pt", "#f03" );
 
@@ -45,9 +45,18 @@ Pts.quickStart( "#pt", "#f03" );
       tempB.push( temp.p2 );
       tempB.push( temp.p3 );
 
-      form.fillOnly("#fff").line( Curve.bspline( tempB, 10 ) );
+      // convert the b-spline anchors to Bezier control points and draw one native path
+      let bezier = Curve.bsplineToBezier( tempB );
+      form.fillOnly("#fff").bezier( bezier );
       form.fill("rgba(255, 255, 255, 0.5)").points( temp, 2, "circle" );
       form.fill("#fd6").point( temp.centroid(), radius/3, "circle" );
+
+      // the Bezier anchors sit on the curve, each with a control point on either side
+      let anchors = Curve.bezierToCardinal( bezier );
+      form.strokeOnly("rgba(0,0,0,.7)", 1);
+      for (let i=0, len=bezier.length-1; i<len; i+=3) {
+        form.line( [bezier[i], bezier[i+1]] ).line( [bezier[i+2], bezier[i+3]] );
+      }
     },
     
   });

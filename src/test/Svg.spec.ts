@@ -157,3 +157,44 @@ describe("SVGContext2D surface", () => {
     expect(run.attrs.fill).toBe("none");
   });
 });
+
+describe("SVGContext2D bezier paths", () => {
+  it("leaves the preceding shape unchanged when a chain has no complete segment", () => {
+    const { ctx, form } = makeForm();
+    form.strokeOnly("#f00").bezier([
+      [0, 10],
+      [30, 10],
+      [60, 10],
+      [90, 10],
+    ]);
+    form
+      .strokeOnly("#00f")
+      .bezier([])
+      .bezier([
+        [1, 2],
+        [3, 4],
+        [5, 6],
+      ]);
+    ctx._flushShape();
+    expect(ctx._runs).toHaveLength(1);
+    expect(ctx._runs[0].attrs.stroke).toBe("#f00");
+    expect(ctx._runs[0].attrs.d).toBe("M0 10C30 10 60 10 90 10");
+  });
+
+  it("emits one C command per segment from form.bezier", () => {
+    const { ctx, form } = makeForm();
+    form.strokeOnly("#000").bezier([
+      [0, 0],
+      [10, 20],
+      [30, 20],
+      [40, 0],
+      [50, -20],
+      [70, -20],
+      [80, 0],
+    ]);
+    ctx._flushShape();
+    const paths = ctx._runs.filter((r: any) => r.tag === "path");
+    expect(paths).toHaveLength(1);
+    expect(paths[0].attrs.d).toBe("M0 0C10 20 30 20 40 0C50 -20 70 -20 80 0");
+  });
+});

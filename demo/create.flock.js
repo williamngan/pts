@@ -1,7 +1,7 @@
 // Source code licensed under Apache License 2.0.
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
-window.demoDescription = "A flock of agents steering by three local rules: separation, alignment, and cohesion. Move the pointer to scatter them, and watch the flock re-form. Agents caught in the circle turn white.";
+window.demoDescription = "Move the pointer to scatter the flock. They will turn white and move away.";
 
 Pts.quickStart( "#pt", "#123" );
 
