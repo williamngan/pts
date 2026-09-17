@@ -1,6 +1,6 @@
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
-import { Pt, Group, type Bound } from "./Pt";
+import { Pt, Group, Bound } from "./Pt";
 import { Line, Triangle } from "./Op";
 import { Const, Util } from "./Util";
 import { Num, Geom } from "./Num";
@@ -14,6 +14,7 @@ import {
   type DelaunayShape,
   type FlockBoundary,
   type FlockOptions,
+  type PoissonDiskOptions,
 } from "./Types";
 
 /**
@@ -189,6 +190,31 @@ export class Create {
     flock.setup(options);
     for (const p of pts) flock.addBoid(p);
     return flock;
+  }
+
+  /**
+   * Create a set of Pts that are randomly placed but never closer than `radius` to each other,
+   * using Poisson-disk sampling (also called blue noise).
+   * Compared with [`Create.distributeRandom`](#link), the points avoid clumping.
+   * Sampling uses a finite candidate budget, so gaps can remain when it finishes.
+   * The returned [`PoissonDisk`](#link) is a complete Group; to grow a set gradually instead,
+   * construct a `PoissonDisk` and call its [`PoissonDisk.step`](#link) or [`PoissonDisk.sample`](#link).
+   * See a [demo here](https://ptsjs.org/demo/?name=create.sampling).
+   *
+   * Randomness comes from [`Num.random`](#link), so seeding with [`Num.seed`](#link) makes the set reproducible.
+   *
+   * @param bound the rectangular boundary
+   * @param radius minimum distance between any two points
+   * @param options optional [`PoissonDiskOptions`](#link)
+   * @returns an instance of the PoissonDisk class, which is a Group of Pts
+   * @example `Create.sampling( space.innerBound, 10 )`
+   */
+  static sampling(
+    bound: Bound,
+    radius: number,
+    options: PoissonDiskOptions = {},
+  ): PoissonDisk {
+    return new PoissonDisk().setup(bound, radius, options).sample();
   }
 }
 
@@ -1543,5 +1569,250 @@ export class Flock extends Group {
       vel[k] = vx;
       vel[k + 1] = vy;
     }
+  }
+}
+
+// Cell offsets in scan order for `PoissonDisk`, nearest first
+const __near = [0, -1, 1, -2, 2];
+
+/**
+ * PoissonDisk is a Group of Pts produced by Poisson-disk sampling: every point is at least
+ * [`PoissonDisk.radius`](#link) away from every other. Create a finished set with
+ * [`Create.sampling`](#link), or construct one directly and grow it with [`PoissonDisk.step`](#link)
+ * (one point at a time) or [`PoissonDisk.sample`](#link) (a batch at a time), which is how the
+ * [demo](https://ptsjs.org/demo/?name=create.sampling) shows the packing as it forms.
+ *
+ * The sampler is Bridson's grid-accelerated algorithm with Roberts' candidate placement: each
+ * visit to an active point tries up to [`PoissonDisk.candidates`](#link) candidates on the circle
+ * just outside `radius` around it, at evenly spaced angles from a random offset, and accepts the
+ * first one with no existing point within `radius`. It runs in linear time on one small integer
+ * grid. In a bound thinner than the radius, candidates take random positions across the thin
+ * axis and alternate along the long one, since a circle of candidates would miss the strip.
+ *
+ * Three traits to know: most points sit just beyond `radius` from the point that spawned them,
+ * which packs tighter than candidates at random distances; the candidate budget is finite, so
+ * a finished set can still have gaps; and coordinates are compared as float32 (the precision of
+ * a Pt), exact at pixel scales but rejecting some candidates when coordinates exceed roughly
+ * 8000 times the radius.
+ *
+ * Treat the Group as read-only while sampling: pushing or moving its Pts by hand would
+ * desynchronize the grid that enforces the spacing.
+ */
+export class PoissonDisk extends Group {
+  protected _radius = 0;
+  protected _candidates = 8;
+  private _x0 = 0;
+  private _y0 = 0;
+  private _x1 = 0;
+  private _y1 = 0;
+  private _cell = 1;
+  private _cols = 0;
+  private _rows = 0;
+  private _grid = new Int32Array(0); // one sample index per cell, or -1
+  private _active: number[] = []; // indices of samples that may still spawn neighbors
+
+  /**
+   * Reset this sampler and place its first sample. Calling `setup` again empties the group and
+   * starts over, which is how a sketch restarts sampling after a resize.
+   * @param bound the rectangular boundary
+   * @param radius minimum distance between any two points
+   * @param options optional [`PoissonDiskOptions`](#link)
+   */
+  setup(bound: Bound, radius: number, options: PoissonDiskOptions = {}): this {
+    if (!(radius > 0) || !Number.isFinite(radius)) {
+      throw new Error("PoissonDisk radius must be a positive finite number");
+    }
+    const x0 = bound.x ?? NaN;
+    const y0 = bound.y ?? NaN;
+    const width = bound.width;
+    const height = bound.height;
+    const x1 = x0 + width;
+    const y1 = y0 + height;
+    if (![x0, y0, x1, y1].every(Number.isFinite) || width < 0 || height < 0) {
+      throw new Error("PoissonDisk bound must have a finite position and size");
+    }
+    // A size can vanish when added to a far larger position (e.g. 1 at 1e20)
+    if ((width > 0 && x1 <= x0) || (height > 0 && y1 <= y0)) {
+      throw new Error(
+        "PoissonDisk bound size must be representable at its position",
+      );
+    }
+    const k = options.candidates ?? 8;
+    if (!(k >= 1) || !Number.isFinite(k)) {
+      throw new Error("PoissonDisk candidates must be a number of at least 1");
+    }
+
+    // Each grid cell is small enough to hold at most one sample
+    const cell = radius / Math.SQRT2;
+    const hasArea = width > 0 && height > 0;
+    const cols = hasArea ? Math.ceil(width / cell) : 0;
+    const rows = hasArea ? Math.ceil(height / cell) : 0;
+    if (cols * rows > 1 << 26) {
+      throw new Error(
+        "PoissonDisk radius is too small for this bound: the grid would exceed 2^26 cells",
+      );
+    }
+
+    this.length = 0;
+    this._active.length = 0;
+    this._radius = radius;
+    this._candidates = Math.floor(k);
+    this._x0 = x0;
+    this._y0 = y0;
+    this._x1 = x1;
+    this._y1 = y1;
+    this._cell = cell;
+    this._cols = cols;
+    this._rows = rows;
+    this._grid = new Int32Array(cols * rows).fill(-1);
+
+    if (options.start !== undefined) {
+      const s = options.start;
+      if (!this._tryAdd(Math.fround(s[0]), Math.fround(s[1]))) {
+        throw new Error("PoissonDisk start point must lie inside the bound");
+      }
+    } else if (cols * rows > 0) {
+      // Redraw on the rare float32 rounding that lands exactly on the far edge
+      while (
+        !this._tryAdd(
+          Math.fround(x0 + Num.random() * width),
+          Math.fround(y0 + Num.random() * height),
+        )
+      );
+    }
+    return this;
+  }
+
+  /**
+   * Minimum distance between any two points in this set.
+   */
+  get radius(): number {
+    return this._radius;
+  }
+
+  /**
+   * Maximum candidates tried per visit to an active sample before retiring it if none succeed.
+   */
+  get candidates(): number {
+    return this._candidates;
+  }
+
+  /**
+   * The rectangular boundary that the samples fill.
+   */
+  get bound(): Bound {
+    return new Bound(new Pt(this._x0, this._y0), new Pt(this._x1, this._y1));
+  }
+
+  /**
+   * Whether no active samples remain. Gaps may still fit further points, but sampling has stopped.
+   */
+  get done(): boolean {
+    return this._active.length === 0;
+  }
+
+  /**
+   * Add the next sample and return it, or return `undefined` once no active samples remain.
+   * The new Pt is also the last element of this group.
+   * @example `let p = pd.step(); if (p) form.point( p, 2 );`
+   */
+  step(): Pt | undefined {
+    const active = this._active;
+    const k = this._candidates;
+    const dist = this._radius * 1.001; // allow for float32 rounding at ordinary canvas scales
+    const cos = Math.cos(Const.two_pi / k);
+    const sin = Math.sin(Const.two_pi / k);
+    const width = this._x1 - this._x0;
+    const height = this._y1 - this._y0;
+    // A full circle of candidates can miss a strip thinner than `dist` entirely; there,
+    // candidates take a random position across the strip and alternate along it instead.
+    const narrowX = width < dist && width <= height;
+    const narrowY = height < dist && !narrowX;
+
+    while (active.length > 0) {
+      const ai = Math.floor(Num.random() * active.length);
+      const p = this[active[ai]];
+      const a0 = Num.random() * Const.two_pi;
+      let dx = dist * Math.cos(a0);
+      let dy = dist * Math.sin(a0);
+      let along = a0 < Math.PI ? 1 : -1;
+      for (let j = 0; j < k; j++) {
+        if (narrowX) {
+          dx = this._x0 + Num.random() * width - p[0];
+          dy = along * Math.sqrt(Math.max(0, dist * dist - dx * dx));
+          along = -along;
+        } else if (narrowY) {
+          dy = this._y0 + Num.random() * height - p[1];
+          dx = along * Math.sqrt(Math.max(0, dist * dist - dy * dy));
+          along = -along;
+        } else if (j > 0) {
+          const x = dx * cos - dy * sin;
+          dy = dx * sin + dy * cos;
+          dx = x;
+        }
+        if (this._tryAdd(Math.fround(p[0] + dx), Math.fround(p[1] + dy))) {
+          return this[this.length - 1];
+        }
+      }
+      // This visit exhausted its candidate budget: retire the sample
+      active[ai] = active[active.length - 1];
+      active.pop();
+    }
+    return undefined;
+  }
+
+  /**
+   * Add up to `count` more samples, or every remaining sample by default.
+   * @param count maximum number of samples to add, rounded down; nonpositive values and NaN add none
+   * @example `pd.sample( 20 )` adds twenty points per frame; `pd.sample()` completes the set
+   */
+  sample(count: number = Infinity): this {
+    const limit = Math.floor(count);
+    for (let i = 0; i < limit; i++) {
+      if (this.step() === undefined) break;
+    }
+    return this;
+  }
+
+  /**
+   * Store the point at (x, y) if it lies inside the bound and no sample is within `radius` of it.
+   * Coordinates must already be float32 values, so what is tested is exactly what is stored.
+   */
+  private _tryAdd(x: number, y: number): boolean {
+    if (!(x >= this._x0 && x < this._x1 && y >= this._y0 && y < this._y1)) {
+      return false;
+    }
+    const cols = this._cols;
+    const rows = this._rows;
+    const cx = Math.min(cols - 1, Math.floor((x - this._x0) / this._cell));
+    const cy = Math.min(rows - 1, Math.floor((y - this._y0) / this._cell));
+    const grid = this._grid;
+
+    // A conflicting sample lies within two cells in each direction, but never in the four
+    // corners of that window. Scan from the center outward: a rejected candidate usually
+    // conflicts with a sample close to it, so the scan ends after a few cells.
+    const r2 = this._radius * this._radius;
+    for (const dj of __near) {
+      const j = cy + dj;
+      if (j < 0 || j >= rows) continue;
+      const row = j * cols;
+      const reach = dj === -2 || dj === 2 ? 1 : 2;
+      for (const di of __near) {
+        const i = cx + di;
+        if (di > reach || di < -reach || i < 0 || i >= cols) continue;
+        const s = grid[row + i];
+        if (s >= 0) {
+          const q = this[s];
+          const dx = q[0] - x;
+          const dy = q[1] - y;
+          if (dx * dx + dy * dy < r2) return false;
+        }
+      }
+    }
+
+    grid[cy * cols + cx] = this.length;
+    this._active.push(this.length);
+    this.push(new Pt(x, y));
+    return true;
   }
 }

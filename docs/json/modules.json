@@ -11,7 +11,8 @@
     "Create",
     "Delaunay",
     "Flock",
-    "Noise"
+    "Noise",
+    "PoissonDisk"
   ],
   "Dom": [
     "DOMSpace",
@@ -110,6 +111,7 @@
     "ITempoProgressFn",
     "ITempoResponses",
     "ITempoStartFn",
+    "PoissonDiskOptions",
     "PtIterable",
     "PtLike",
     "PtLikeIterable",

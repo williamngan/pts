@@ -1,14 +1,14 @@
 {
-  "name": "ITempoStartFn",
+  "name": "PoissonDiskOptions",
   "source": [
     [
       "src/Types.ts",
-      240,
+      191,
       12
     ]
   ],
   "kind": "Typealias",
-  "comment": "Typescript type: a callback function type used in `tempo.every(...).start( fn )`",
+  "comment": "Typescript type: PoissonDiskOptions are the settings accepted by [`Create.sampling`](#link)\nand [`PoissonDisk.setup`](#link). Every field is optional.",
   "constructor": [],
   "accessors": [],
   "methods": [],
@@ -18,6 +18,6 @@
   "extends": [],
   "implements": [],
   "type_alias": [
-    " Fn(count:number)"
+    "{ candidates:`number`, start:`PtLike` }"
   ]
 }

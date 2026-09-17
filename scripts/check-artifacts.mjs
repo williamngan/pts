@@ -46,6 +46,7 @@ const expectedExports = [
   "Noise",
   "Num",
   "Particle",
+  "PoissonDisk",
   "Polygon",
   "Pt",
   "Range",

@@ -1,14 +1,14 @@
 {
-  "name": "Flock",
+  "name": "PoissonDisk",
   "source": [
     [
       "src/Create.ts",
-      947,
+      1601,
       13
     ]
   ],
   "kind": "Class",
-  "comment": "Flock is a subclass of [`Group`](#link) that holds [`Boid`](#link) agents and simulates\nflocking behavior (also known as \"boids\", after Craig Reynolds). Each agent steers by three\nlocal rules — separation, alignment, and cohesion — evaluated over the neighbors within its\n`perception` radius. Create one with [`Create.flock`](#link) and advance it with\n[`Flock.step`](#link). Since a Flock is a Group of Pts, it draws directly:\n`form.points( flock, 2, \"circle\" )`.\n\nNeighbors are found through a uniform spatial hash rather than by testing every pair, so the\ncost scales with the number of agents rather than with its square.\nSee [a demo here](https://ptsjs.org/demo/?name=create.flock).",
+  "comment": "PoissonDisk is a Group of Pts produced by Poisson-disk sampling: every point is at least\n[`PoissonDisk.radius`](#link) away from every other. Create a finished set with\n[`Create.sampling`](#link), or construct one directly and grow it with [`PoissonDisk.step`](#link)\n(one point at a time) or [`PoissonDisk.sample`](#link) (a batch at a time), which is how the\n[demo](https://ptsjs.org/demo/?name=create.sampling) shows the packing as it forms.\n\nThe sampler is Bridson's grid-accelerated algorithm with Roberts' candidate placement: each\nvisit to an active point tries up to [`PoissonDisk.candidates`](#link) candidates on the circle\njust outside `radius` around it, at evenly spaced angles from a random offset, and accepts the\nfirst one with no existing point within `radius`. It runs in linear time on one small integer\ngrid. In a bound thinner than the radius, candidates take random positions across the thin\naxis and alternate along the long one, since a circle of candidates would miss the strip.\n\nThree traits to know: most points sit just beyond `radius` from the point that spawned them,\nwhich packs tighter than candidates at random distances; the candidate budget is finite, so\na finished set can still have gaps; and coordinates are compared as float32 (the precision of\na Pt), exact at pixel scales but rejecting some candidates when coordinates exceed roughly\n8000 times the radius.\n\nTreat the Group as read-only while sampling: pushing or moving its Pts by hand would\ndesynchronize the grid that enforces the spacing.",
   "constructor": [
     {
       "name": "constructor",
@@ -25,7 +25,7 @@
       "signatures": [
         {
           "comment": "Create a Group by passing an array of [`Pt`](#link). You may also create a Group using [`Group.fromArray`](#link) or [`Group.fromPtArray`](#link).",
-          "returns": "Flock",
+          "returns": "PoissonDisk",
           "returns_comment": false,
           "parameters": [
             {
@@ -42,128 +42,58 @@
   ],
   "accessors": [
     {
-      "name": "alignWeight",
-      "source": [
-        [
-          "src/Create.ts",
-          1039,
-          6
-        ],
-        [
-          "src/Create.ts",
-          1042,
-          6
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "comment": "Weight of the alignment behavior, which matches an agent's heading to its neighbors'.",
-      "getter": {
-        "type": "number"
-      },
-      "setter": {
-        "type": "void",
-        "parameters": {
-          "name": "w",
-          "comment": "",
-          "type": "number",
-          "default": false
-        }
-      }
-    },
-    {
       "name": "bound",
       "source": [
         [
           "src/Create.ts",
-          1092,
-          6
-        ],
-        [
-          "src/Create.ts",
-          1095,
+          1703,
           6
         ]
       ],
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "Boundary that keeps the flock in view, as a [`Bound`](#link) or a Group of 2 Pts.\nWhen this is null, no boundary behavior is applied regardless of `boundary`.",
+      "comment": "The rectangular boundary that the samples fill.",
       "getter": {
-        "type": "GroupLike | null"
+        "type": "Bound"
       },
-      "setter": {
-        "type": "void",
-        "parameters": {
-          "name": "b",
-          "comment": "",
-          "type": "GroupLike | null",
-          "default": false
-        }
-      }
+      "setter": false
     },
     {
-      "name": "boundary",
+      "name": "candidates",
       "source": [
         [
           "src/Create.ts",
-          1105,
-          6
-        ],
-        [
-          "src/Create.ts",
-          1108,
+          1696,
           6
         ]
       ],
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "How the boundary is treated: `\"steer\"`, `\"wrap\"`, `\"bounce\"`, or `\"none\"`.\n\nNote that `\"wrap\"` teleports agents across the bound while the neighborhood search is not\ntoroidal, so a flock loses sight of itself at the seam. Prefer `\"steer\"` when that matters.",
-      "getter": {
-        "type": "FlockBoundary"
-      },
-      "setter": {
-        "type": "void",
-        "parameters": {
-          "name": "b",
-          "comment": "",
-          "type": "FlockBoundary",
-          "default": false
-        }
-      }
-    },
-    {
-      "name": "cohesionWeight",
-      "source": [
-        [
-          "src/Create.ts",
-          1029,
-          6
-        ],
-        [
-          "src/Create.ts",
-          1032,
-          6
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "comment": "Weight of the cohesion behavior, which steers an agent toward its neighbors' center.",
+      "comment": "Maximum candidates tried per visit to an active sample before retiring it if none succeed.",
       "getter": {
         "type": "number"
       },
-      "setter": {
-        "type": "void",
-        "parameters": {
-          "name": "w",
-          "comment": "",
-          "type": "number",
-          "default": false
-        }
-      }
+      "setter": false
+    },
+    {
+      "name": "done",
+      "source": [
+        [
+          "src/Create.ts",
+          1710,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Whether no active samples remain. Gaps may still fit further points, but sampling has stopped.",
+      "getter": {
+        "type": "boolean"
+      },
+      "setter": false
     },
     {
       "name": "id",
@@ -192,192 +122,6 @@
           "name": "s",
           "comment": "",
           "type": "string",
-          "default": false
-        }
-      }
-    },
-    {
-      "name": "initialSpeed",
-      "source": [
-        [
-          "src/Create.ts",
-          1136,
-          6
-        ],
-        [
-          "src/Create.ts",
-          1141,
-          6
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "comment": "Speed given to an agent added without an explicit velocity. Defaults to half of `maxSpeed`.",
-      "getter": {
-        "type": "number"
-      },
-      "setter": {
-        "type": "void",
-        "parameters": {
-          "name": "s",
-          "comment": "",
-          "type": "number",
-          "default": false
-        }
-      }
-    },
-    {
-      "name": "margin",
-      "source": [
-        [
-          "src/Create.ts",
-          1115,
-          6
-        ],
-        [
-          "src/Create.ts",
-          1118,
-          6
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "comment": "Distance from an edge at which `\"steer\"` starts turning agents back.",
-      "getter": {
-        "type": "number"
-      },
-      "setter": {
-        "type": "void",
-        "parameters": {
-          "name": "m",
-          "comment": "",
-          "type": "number",
-          "default": false
-        }
-      }
-    },
-    {
-      "name": "maxForce",
-      "source": [
-        [
-          "src/Create.ts",
-          1081,
-          6
-        ],
-        [
-          "src/Create.ts",
-          1084,
-          6
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "comment": "Maximum steering force, in units per second squared. This caps how sharply an agent can\nturn toward the direction its three behaviors blend to. A boundary turn is added on top,\nso an agent near an edge can accelerate up to twice this.",
-      "getter": {
-        "type": "number"
-      },
-      "setter": {
-        "type": "void",
-        "parameters": {
-          "name": "f",
-          "comment": "",
-          "type": "number",
-          "default": false
-        }
-      }
-    },
-    {
-      "name": "maxSpeed",
-      "source": [
-        [
-          "src/Create.ts",
-          1059,
-          6
-        ],
-        [
-          "src/Create.ts",
-          1062,
-          6
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "comment": "Maximum speed, in units per second.",
-      "getter": {
-        "type": "number"
-      },
-      "setter": {
-        "type": "void",
-        "parameters": {
-          "name": "s",
-          "comment": "",
-          "type": "number",
-          "default": false
-        }
-      }
-    },
-    {
-      "name": "maxTimeStep",
-      "source": [
-        [
-          "src/Create.ts",
-          1126,
-          6
-        ],
-        [
-          "src/Create.ts",
-          1129,
-          6
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "comment": "Maximum simulated time in milliseconds per [`Flock.step`](#link) call. Longer elapsed times\nare clamped to this, which keeps a stalled frame from teleporting the flock. Default is 50.",
-      "getter": {
-        "type": "number"
-      },
-      "setter": {
-        "type": "void",
-        "parameters": {
-          "name": "ms",
-          "comment": "",
-          "type": "number",
-          "default": false
-        }
-      }
-    },
-    {
-      "name": "minSpeed",
-      "source": [
-        [
-          "src/Create.ts",
-          1069,
-          6
-        ],
-        [
-          "src/Create.ts",
-          1072,
-          6
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "comment": "Minimum speed, in units per second, so agents never stall. Default is 0.",
-      "getter": {
-        "type": "number"
-      },
-      "setter": {
-        "type": "void",
-        "parameters": {
-          "name": "s",
-          "comment": "",
-          "type": "number",
           "default": false
         }
       }
@@ -455,37 +199,6 @@
       "setter": false
     },
     {
-      "name": "perception",
-      "source": [
-        [
-          "src/Create.ts",
-          1008,
-          6
-        ],
-        [
-          "src/Create.ts",
-          1011,
-          6
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "comment": "Radius within which an agent sees its neighbors. This is also the spatial hash's cell size.",
-      "getter": {
-        "type": "number"
-      },
-      "setter": {
-        "type": "void",
-        "parameters": {
-          "name": "r",
-          "comment": "",
-          "type": "number",
-          "default": false
-        }
-      }
-    },
-    {
       "name": "q1",
       "source": [
         [
@@ -558,66 +271,22 @@
       "setter": false
     },
     {
-      "name": "separateWeight",
+      "name": "radius",
       "source": [
         [
           "src/Create.ts",
-          1049,
-          6
-        ],
-        [
-          "src/Create.ts",
-          1052,
+          1689,
           6
         ]
       ],
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "Weight of the separation behavior, which steers an agent away from close neighbors.",
+      "comment": "Minimum distance between any two points in this set.",
       "getter": {
         "type": "number"
       },
-      "setter": {
-        "type": "void",
-        "parameters": {
-          "name": "w",
-          "comment": "",
-          "type": "number",
-          "default": false
-        }
-      }
-    },
-    {
-      "name": "separation",
-      "source": [
-        [
-          "src/Create.ts",
-          1019,
-          6
-        ],
-        [
-          "src/Create.ts",
-          1022,
-          6
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "comment": "Radius within which an agent steers away from its neighbors. Values above `perception`\nhave no additional effect, since an agent only considers neighbors it can see.",
-      "getter": {
-        "type": "number"
-      },
-      "setter": {
-        "type": "void",
-        "parameters": {
-          "name": "r",
-          "comment": "",
-          "type": "number",
-          "default": false
-        }
-      }
+      "setter": false
     }
   ],
   "methods": [
@@ -748,41 +417,6 @@
               "name": "args",
               "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "addBoid",
-      "source": [
-        [
-          "src/Create.ts",
-          1152,
-          2
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Add an agent to this flock. Named `addBoid` rather than `add` because [`Group.add`](#link)\nalready means \"translate every Pt in this group\", and [`Group.moveBy`](#link) delegates to it.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "pt",
-              "comment": "a Pt, a Boid, or an array of numbers for the starting position",
-              "type": "PtLike | Boid",
-              "default": false
-            },
-            {
-              "name": "velocity",
-              "comment": "optional starting velocity. When omitted, a new agent gets a random heading\nat [`Flock.initialSpeed`](#link), drawn from [`Num.random`](#link).",
-              "type": "PtLike",
               "default": false
             }
           ],
@@ -1899,6 +1533,40 @@
       ]
     },
     {
+      "name": "sample",
+      "source": [
+        [
+          "src/Create.ts",
+          1769,
+          2
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Add up to `count` more samples, or every remaining sample by default.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "count",
+              "comment": "maximum number of samples to add, rounded down; nonpositive values and NaN add none",
+              "type": "number",
+              "default": "Infinity"
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`pd.sample( 20 )` adds twenty points per frame; `pd.sample()` completes the set"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "scale",
       "source": [
         [
@@ -1979,7 +1647,7 @@
       "source": [
         [
           "src/Create.ts",
-          983,
+          1621,
           2
         ]
       ],
@@ -1988,15 +1656,27 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Set any number of options at once. Unspecified options keep their current value.",
+          "comment": "Reset this sampler and place its first sample. Calling `setup` again empties the group and\nstarts over, which is how a sketch restarts sampling after a resize.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
-              "name": "options",
-              "comment": "a [`FlockOptions`](#link) object",
-              "type": "FlockOptions",
+              "name": "bound",
+              "comment": "the rectangular boundary",
+              "type": "Bound",
               "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "minimum distance between any two points",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "options",
+              "comment": "optional [`PoissonDiskOptions`](#link)",
+              "type": "PoissonDiskOptions",
+              "default": "{}"
             }
           ],
           "tags": []
@@ -2312,7 +1992,7 @@
       "source": [
         [
           "src/Create.ts",
-          1177,
+          1719,
           2
         ]
       ],
@@ -2321,18 +2001,16 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Advance the simulation. Call this once per frame with the frame time, eg\n`space.add( (time, ftime) => flock.step( ftime ) )`.\n\nElapsed times longer than [`Flock.maxTimeStep`](#link) are clamped, so a slow frame slows\nthe flock down instead of teleporting it. A non-positive or NaN time is a no-op.",
-          "returns": "this",
+          "comment": "Add the next sample and return it, or return `undefined` once no active samples remain.\nThe new Pt is also the last element of this group.",
+          "returns": "Pt | undefined",
           "returns_comment": false,
-          "parameters": [
+          "parameters": [],
+          "tags": [
             {
-              "name": "ms",
-              "comment": "elapsed time in milliseconds",
-              "type": "number",
-              "default": false
+              "tag": "example",
+              "text": "`let p = pd.step(); if (p) form.point( p, 2 );`"
             }
-          ],
-          "tags": []
+          ]
         }
       ]
     },

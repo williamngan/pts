@@ -81,6 +81,9 @@ Generators and media:
 - `Create` — point generators: `distributeRandom`, `gridPts`/`gridCells`,
   `radialPts`, plus `noisePts` for Perlin noise fields
   (each Pt gets a `noise2D()` you can step per frame).
+- `Create.sampling(bound, radius)` — evenly spaced random points (blue
+  noise), never closer than `radius`. For a set that grows over frames, use
+  `new PoissonDisk().setup(bound, radius)` with `.sample(n)` or `.step()`.
 - `Create.delaunay(group)` — Delaunay triangulation: call `.delaunay()`
   for triangles, `.voronoi()` for the dual Voronoi cells, `.mesh()` for
   the neighbor structure. Good for organic cell patterns from any point

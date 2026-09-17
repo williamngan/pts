@@ -37,6 +37,7 @@ Demo and study source files are linked directly from `ptsjs.org` instead of embe
 - [`create.flock`](#demo-create-flock)
 - [`create.gridcells`](#demo-create-gridcells)
 - [`create.noisePts`](#demo-create-noise-pts)
+- [`create.sampling`](#demo-create-sampling)
 - [`curve.bezier`](#demo-curve-bezier)
 - [`curve.bspline`](#demo-curve-bspline)
 - [`curve.cardinal`](#demo-curve-cardinal)
@@ -1957,6 +1958,13 @@ A retro-style dazzling effect created by a grid whose cells change color and siz
 Using Perlin noise to animate a line and a grid. Move mouse or touch around the canvas to change speed.
 
 [Open live](https://ptsjs.org/demo/?name=create.noisePts) · [Source code](https://ptsjs.org/demo/create.noisePts.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/create.noisePts.js)
+
+<a id="demo-create-sampling"></a>
+### `create.sampling`
+
+Poisson-disk sampling packs the space with evenly spaced points, a few hundred per frame. Points inside five circles grow hairs that point to each circle's center. Move the pointer to comb the hairs, and click anywhere to let them settle back.
+
+[Open live](https://ptsjs.org/demo/?name=create.sampling) · [Source code](https://ptsjs.org/demo/create.sampling.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/create.sampling.js)
 
 <a id="demo-curve-bezier"></a>
 ### `curve.bezier`

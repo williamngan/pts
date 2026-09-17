@@ -13,7 +13,7 @@ const N = SIZES.M;
 const MESH_POINTS = 128;
 
 export default defineSuite("create", (b, { Pts, fx }) => {
-  const { Create, Noise, Num, Pt } = Pts;
+  const { Create, Noise, Num, PoissonDisk, Pt } = Pts;
 
   b.case("Create.distributeRandom", {
     batch: N,
@@ -177,6 +177,27 @@ export default defineSuite("create", (b, { Pts, fx }) => {
       sink(flock[0][0]);
     },
   });
+
+  // -------------------------------------------------------------- PoissonDisk
+
+  // A sampler is `done` once filled, so each iteration sets up a fresh one and
+  // times filling it. The radius is chosen so the fixture bound holds about
+  // `batch` points.
+  const poisson = (label, radius, batch) => {
+    b.case(`PoissonDisk.sample (~${batch} points)`, {
+      batch,
+      setupOnce: () => {
+        Num.seed(label);
+        return fx.bound();
+      },
+      setup: (bound) => new PoissonDisk().setup(bound, radius),
+      run: (pd) => {
+        sink(pd.sample().length);
+      },
+    });
+  };
+  poisson("create:poisson-m", 28, SIZES.M);
+  poisson("create:poisson-l", 9.8, SIZES.L);
 
   // `voronoi`, `mesh` and `neighborPts` all read the mesh that `delaunay()`
   // builds, and quietly return nothing if it was never called — so these cases

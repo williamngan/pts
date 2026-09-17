@@ -173,7 +173,7 @@ try {
       import * as Pts from "pts";
       assert.match(import.meta.resolve("pts"), /dist\\/index\\.mjs$/);
       assert.equal(new Pts.Pt(1, 2).add(3).toString(), "Pt(4, 5)");
-      assert.equal(Object.keys(Pts).length, 48);
+      assert.equal(Object.keys(Pts).length, 49);
     `,
   );
   await writeFile(
@@ -184,7 +184,7 @@ try {
       assert.match(require.resolve("pts"), /dist\\/index\\.js$/);
       assert.match(require.resolve("pts/dist/pts.min.js"), /dist\\/pts\\.min\\.js$/);
       assert.equal(new Pts.Pt(2, 4).multiply(2).toString(), "Pt(4, 8)");
-      assert.equal(Object.keys(Pts).length, 48);
+      assert.equal(Object.keys(Pts).length, 49);
     `,
   );
   run(process.execPath, ["esm-smoke.mjs"], consumer);

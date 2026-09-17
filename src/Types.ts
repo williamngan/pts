@@ -185,6 +185,17 @@ export type FlockOptions = {
 };
 
 /**
+ * Typescript type: PoissonDiskOptions are the settings accepted by [`Create.sampling`](#link)
+ * and [`PoissonDisk.setup`](#link). Every field is optional.
+ */
+export type PoissonDiskOptions = {
+  /** Maximum candidates tried per visit to an active sample. More candidates generally pack tighter and take longer. Rounded down; default is 8. */
+  candidates?: number;
+  /** The first sample, which must lie inside the bound. Default is a random point inside the bound. */
+  start?: PtLike;
+};
+
+/**
  * Typescript type: DOMFormContext represents the current context for an DOMForm.
  */
 export type DOMFormContext = {

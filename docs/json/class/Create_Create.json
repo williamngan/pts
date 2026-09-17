@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Create.ts",
-      22,
+      23,
       13
     ]
   ],
@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Create.ts",
-          169,
+          170,
           9
         ]
       ],
@@ -48,7 +48,7 @@
       "source": [
         [
           "src/Create.ts",
-          49,
+          50,
           9
         ]
       ],
@@ -85,7 +85,7 @@
       "source": [
         [
           "src/Create.ts",
-          29,
+          30,
           9
         ]
       ],
@@ -128,7 +128,7 @@
       "source": [
         [
           "src/Create.ts",
-          187,
+          188,
           9
         ]
       ],
@@ -170,7 +170,7 @@
       "source": [
         [
           "src/Create.ts",
-          93,
+          94,
           9
         ]
       ],
@@ -213,7 +213,7 @@
       "source": [
         [
           "src/Create.ts",
-          67,
+          68,
           9
         ]
       ],
@@ -262,7 +262,7 @@
       "source": [
         [
           "src/Create.ts",
-          140,
+          141,
           9
         ]
       ],
@@ -317,7 +317,7 @@
       "source": [
         [
           "src/Create.ts",
-          118,
+          119,
           9
         ]
       ],
@@ -358,6 +358,54 @@
             }
           ],
           "tags": []
+        }
+      ]
+    },
+    {
+      "name": "sampling",
+      "source": [
+        [
+          "src/Create.ts",
+          212,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a set of Pts that are randomly placed but never closer than `radius` to each other,\nusing Poisson-disk sampling (also called blue noise).\nCompared with [`Create.distributeRandom`](#link), the points avoid clumping.\nSampling uses a finite candidate budget, so gaps can remain when it finishes.\nThe returned [`PoissonDisk`](#link) is a complete Group; to grow a set gradually instead,\nconstruct a `PoissonDisk` and call its [`PoissonDisk.step`](#link) or [`PoissonDisk.sample`](#link).\nSee a [demo here](https://ptsjs.org/demo/?name=create.sampling).\n\nRandomness comes from [`Num.random`](#link), so seeding with [`Num.seed`](#link) makes the set reproducible.",
+          "returns": "PoissonDisk",
+          "returns_comment": "an instance of the PoissonDisk class, which is a Group of Pts",
+          "parameters": [
+            {
+              "name": "bound",
+              "comment": "the rectangular boundary",
+              "type": "Bound",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "minimum distance between any two points",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "options",
+              "comment": "optional [`PoissonDiskOptions`](#link)",
+              "type": "PoissonDiskOptions",
+              "default": "{}"
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`Create.sampling( space.innerBound, 10 )`"
+            }
+          ]
         }
       ]
     }

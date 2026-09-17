@@ -18,6 +18,7 @@ Complete API reference for [Pts 1.0.0](https://ptsjs.org), generated from the sa
   - [`Delaunay`](#create-delaunay)
   - [`Flock`](#create-flock)
   - [`Noise`](#create-noise)
+  - [`PoissonDisk`](#create-poissondisk)
 
 - [`Dom`](#module-dom)
   - [`DOMSpace`](#dom-domspace)
@@ -116,6 +117,7 @@ Complete API reference for [Pts 1.0.0](https://ptsjs.org), generated from the sa
   - [`ITempoProgressFn`](#types-itempoprogressfn)
   - [`ITempoResponses`](#types-itemporesponses)
   - [`ITempoStartFn`](#types-itempostartfn)
+  - [`PoissonDiskOptions`](#types-poissondiskoptions)
   - [`PtIterable`](#types-ptiterable)
   - [`PtLike`](#types-ptlike)
   - [`PtLikeIterable`](#types-ptlikeiterable)
@@ -2116,7 +2118,7 @@ Value range for each color space
 <a id="create-boid"></a>
 ### `Boid`
 
-**Kind:** Class · **Source:** [`src/Create.ts:879`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L879)
+**Kind:** Class · **Source:** [`src/Create.ts:905`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L905)
 
 **Extends:** `Pt`
 
@@ -2165,7 +2167,7 @@ This agent's velocity, in units per second.
 <a id="create-create"></a>
 ### `Create`
 
-**Kind:** Class · **Source:** [`src/Create.ts:22`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L22)
+**Kind:** Class · **Source:** [`src/Create.ts:23`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L23)
 
 The `Create` class helps you create structures from sets of points.
 
@@ -2327,10 +2329,43 @@ Create a set of Pts around a circular path.
 - `count` (`number`) — number of Pts to create
 - `angleOffset` (`number`; default `-Const.half_pi`) — offset starting angle
 
+<a id="create-create-static-sampling"></a>
+##### `sampling`
+
+*static*
+
+```ts
+static sampling(bound: Bound, radius: number, options: PoissonDiskOptions = {}): PoissonDisk
+```
+
+Create a set of Pts that are randomly placed but never closer than `radius` to each other,
+using Poisson-disk sampling (also called blue noise).
+Compared with [`Create.distributeRandom`](#create-create-static-distribute-random), the points avoid clumping.
+Sampling uses a finite candidate budget, so gaps can remain when it finishes.
+The returned [`PoissonDisk`](#create-poissondisk) is a complete Group; to grow a set gradually instead,
+construct a `PoissonDisk` and call its [`PoissonDisk.step`](#create-poissondisk-step) or [`PoissonDisk.sample`](#create-poissondisk-sample).
+See a [demo here](https://ptsjs.org/demo/?name=create.sampling).
+
+Randomness comes from [`Num.random`](#num-num-static-random), so seeding with [`Num.seed`](#num-num-static-seed) makes the set reproducible.
+
+**Parameters**
+
+- `bound` (`Bound`) — the rectangular boundary
+- `radius` (`number`) — minimum distance between any two points
+- `options` (`PoissonDiskOptions`; default `{}`) — optional [`PoissonDiskOptions`](#types-poissondiskoptions)
+
+**Returns:** an instance of the PoissonDisk class, which is a Group of Pts
+
+**Example**
+
+```ts
+Create.sampling( space.innerBound, 10 )
+```
+
 <a id="create-delaunay"></a>
 ### `Delaunay`
 
-**Kind:** Class · **Source:** [`src/Create.ts:502`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L502)
+**Kind:** Class · **Source:** [`src/Create.ts:528`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L528)
 
 **Extends:** `Group`
 
@@ -2421,7 +2456,7 @@ Generate Voronoi cells. `delaunay()` must be called before calling this function
 <a id="create-flock"></a>
 ### `Flock`
 
-**Kind:** Class · **Source:** [`src/Create.ts:921`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L921)
+**Kind:** Class · **Source:** [`src/Create.ts:947`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L947)
 
 **Extends:** `Group`
 
@@ -2631,7 +2666,7 @@ the flock down instead of teleporting it. A non-positive or NaN time is a no-op.
 <a id="create-noise"></a>
 ### `Noise`
 
-**Kind:** Class · **Source:** [`src/Create.ts:271`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L271)
+**Kind:** Class · **Source:** [`src/Create.ts:297`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L297)
 
 **Extends:** `Pt`
 
@@ -2727,6 +2762,131 @@ perm: number[]
 
 - From [`Pt`](#pt-pt): [`id`](#pt-pt-id), [`w`](#pt-pt-w), [`x`](#pt-pt-x), [`y`](#pt-pt-y), [`z`](#pt-pt-z), [`$abs`](#pt-pt-dollar-abs), [`$add`](#pt-pt-dollar-add), [`$ceil`](#pt-pt-dollar-ceil), [`$concat`](#pt-pt-dollar-concat), [`$cross`](#pt-pt-dollar-cross), [`$cross2D`](#pt-pt-dollar-cross2-d), [`$divide`](#pt-pt-dollar-divide), [`$floor`](#pt-pt-dollar-floor), [`$max`](#pt-pt-dollar-max), [`$min`](#pt-pt-dollar-min), [`$multiply`](#pt-pt-dollar-multiply), [`$project`](#pt-pt-dollar-project), [`$round`](#pt-pt-dollar-round), [`$subtract`](#pt-pt-dollar-subtract), [`$take`](#pt-pt-dollar-take), [`$to`](#pt-pt-dollar-to), [`$unit`](#pt-pt-dollar-unit), [`abs`](#pt-pt-abs), [`add`](#pt-pt-add), [`angle`](#pt-pt-angle), [`angleBetween`](#pt-pt-angle-between), [`ceil`](#pt-pt-ceil), [`clone`](#pt-pt-clone), [`divide`](#pt-pt-divide), [`dot`](#pt-pt-dot), [`equals`](#pt-pt-equals), [`floor`](#pt-pt-floor), [`magnitude`](#pt-pt-magnitude), [`magnitudeSq`](#pt-pt-magnitude-sq), [`maxValue`](#pt-pt-max-value), [`minValue`](#pt-pt-min-value), [`multiply`](#pt-pt-multiply), [`op`](#pt-pt-op), [`ops`](#pt-pt-ops), [`projectScalar`](#pt-pt-project-scalar), [`reflect2D`](#pt-pt-reflect2-d), [`rotate2D`](#pt-pt-rotate2-d), [`round`](#pt-pt-round), [`scale`](#pt-pt-scale), [`shear2D`](#pt-pt-shear2-d), [`subtract`](#pt-pt-subtract), [`to`](#pt-pt-to), [`toAngle`](#pt-pt-to-angle), [`toArray`](#pt-pt-to-array), [`toBound`](#pt-pt-to-bound), [`toGroup`](#pt-pt-to-group), [`toString`](#pt-pt-to-string), [`unit`](#pt-pt-unit), [`make`](#pt-pt-static-make).
 - From [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array): 26 standard properties and methods (not repeated here).
+
+<a id="create-poissondisk"></a>
+### `PoissonDisk`
+
+**Kind:** Class · **Source:** [`src/Create.ts:1601`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L1601)
+
+**Extends:** `Group`
+
+PoissonDisk is a Group of Pts produced by Poisson-disk sampling: every point is at least
+[`PoissonDisk.radius`](#create-poissondisk-radius) away from every other. Create a finished set with
+[`Create.sampling`](#create-create-static-sampling), or construct one directly and grow it with [`PoissonDisk.step`](#create-poissondisk-step)
+(one point at a time) or [`PoissonDisk.sample`](#create-poissondisk-sample) (a batch at a time), which is how the
+[demo](https://ptsjs.org/demo/?name=create.sampling) shows the packing as it forms.
+
+The sampler is Bridson's grid-accelerated algorithm with Roberts' candidate placement: each
+visit to an active point tries up to [`PoissonDisk.candidates`](#create-poissondisk-candidates) candidates on the circle
+just outside `radius` around it, at evenly spaced angles from a random offset, and accepts the
+first one with no existing point within `radius`. It runs in linear time on one small integer
+grid. In a bound thinner than the radius, candidates take random positions across the thin
+axis and alternate along the long one, since a circle of candidates would miss the strip.
+
+Three traits to know: most points sit just beyond `radius` from the point that spawned them,
+which packs tighter than candidates at random distances; the candidate budget is finite, so
+a finished set can still have gaps; and coordinates are compared as float32 (the precision of
+a Pt), exact at pixel scales but rejecting some candidates when coordinates exceed roughly
+8000 times the radius.
+
+Treat the Group as read-only while sampling: pushing or moving its Pts by hand would
+desynchronize the grid that enforces the spacing.
+
+#### Accessors
+
+<a id="create-poissondisk-bound"></a>
+##### `bound`
+
+```ts
+get bound(): Bound
+```
+
+The rectangular boundary that the samples fill.
+
+<a id="create-poissondisk-candidates"></a>
+##### `candidates`
+
+```ts
+get candidates(): number
+```
+
+Maximum candidates tried per visit to an active sample before retiring it if none succeed.
+
+<a id="create-poissondisk-done"></a>
+##### `done`
+
+```ts
+get done(): boolean
+```
+
+Whether no active samples remain. Gaps may still fit further points, but sampling has stopped.
+
+<a id="create-poissondisk-radius"></a>
+##### `radius`
+
+```ts
+get radius(): number
+```
+
+Minimum distance between any two points in this set.
+
+#### Methods
+
+<a id="create-poissondisk-sample"></a>
+##### `sample`
+
+```ts
+sample(count: number = Infinity): this
+```
+
+Add up to `count` more samples, or every remaining sample by default.
+
+**Parameters**
+
+- `count` (`number`; default `Infinity`) — maximum number of samples to add, rounded down; nonpositive values and NaN add none
+
+**Example**
+
+```ts
+pd.sample( 20 )` adds twenty points per frame; `pd.sample()` completes the set
+```
+
+<a id="create-poissondisk-setup"></a>
+##### `setup`
+
+```ts
+setup(bound: Bound, radius: number, options: PoissonDiskOptions = {}): this
+```
+
+Reset this sampler and place its first sample. Calling `setup` again empties the group and
+starts over, which is how a sketch restarts sampling after a resize.
+
+**Parameters**
+
+- `bound` (`Bound`) — the rectangular boundary
+- `radius` (`number`) — minimum distance between any two points
+- `options` (`PoissonDiskOptions`; default `{}`) — optional [`PoissonDiskOptions`](#types-poissondiskoptions)
+
+<a id="create-poissondisk-step"></a>
+##### `step`
+
+```ts
+step(): Pt | undefined
+```
+
+Add the next sample and return it, or return `undefined` once no active samples remain.
+The new Pt is also the last element of this group.
+
+**Example**
+
+```ts
+let p = pd.step(); if (p) form.point( p, 2 );
+```
+
+#### Inherited API
+
+- From [`Group`](#pt-group): [`constructor`](#pt-group-constructor), [`id`](#pt-group-id), [`p1`](#pt-group-p1), [`p2`](#pt-group-p2), [`p3`](#pt-group-p3), [`p4`](#pt-group-p4), [`q1`](#pt-group-q1), [`q2`](#pt-group-q2), [`q3`](#pt-group-q3), [`q4`](#pt-group-q4), [`$matrixAdd`](#pt-group-dollar-matrix-add), [`$matrixMultiply`](#pt-group-dollar-matrix-multiply), [`$zip`](#pt-group-dollar-zip), [`add`](#pt-group-add), [`anchorFrom`](#pt-group-anchor-from), [`anchorTo`](#pt-group-anchor-to), [`boundingBox`](#pt-group-bounding-box), [`centroid`](#pt-group-centroid), [`clone`](#pt-group-clone), [`divide`](#pt-group-divide), [`forEachPt`](#pt-group-for-each-pt), [`insert`](#pt-group-insert), [`interpolate`](#pt-group-interpolate), [`lines`](#pt-group-lines), [`moveBy`](#pt-group-move-by), [`moveTo`](#pt-group-move-to), [`multiply`](#pt-group-multiply), [`op`](#pt-group-op), [`ops`](#pt-group-ops), [`reflect2D`](#pt-group-reflect2-d), [`remove`](#pt-group-remove), [`rotate2D`](#pt-group-rotate2-d), [`scale`](#pt-group-scale), [`segments`](#pt-group-segments), [`shear2D`](#pt-group-shear2-d), [`sortByDimension`](#pt-group-sort-by-dimension), [`split`](#pt-group-split), [`subtract`](#pt-group-subtract), [`toBound`](#pt-group-to-bound), [`toString`](#pt-group-to-string), [`zipSlice`](#pt-group-zip-slice), [`fromArray`](#pt-group-static-from-array), [`fromPtArray`](#pt-group-static-from-pt-array).
+- From [`Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array): 21 standard properties and methods (not repeated here).
 
 <a id="module-dom"></a>
 ## Module: `Dom`
@@ -14492,7 +14652,7 @@ type AnimateCallbackFn =  Fn(time:number, frameTime:number, currentSpace:Space);
 <a id="types-canvaspatternrepetition"></a>
 ### `CanvasPatternRepetition`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:297`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L297)
+**Kind:** Typealias · **Source:** [`src/Types.ts:308`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L308)
 
 Typescript type: CanvasPatternRepetition represents the string options to specify pattern repetition
 
@@ -14525,7 +14685,7 @@ type ColorType = rgb | hsl | hsb | lab | lch | luv | xyz | oklab | oklch;
 <a id="types-defaultformstyle"></a>
 ### `DefaultFormStyle`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:285`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L285)
+**Kind:** Typealias · **Source:** [`src/Types.ts:296`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L296)
 
 Typescript type: DefaultFormStyle represents a default object for visual styles such as fill, stroke, line width, and others.
 
@@ -14559,7 +14719,7 @@ type DelaunayShape = { circle:Group, i:number, j:number, k:number, triangle:Grou
 <a id="types-domformcontext"></a>
 ### `DOMFormContext`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:190`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L190)
+**Kind:** Typealias · **Source:** [`src/Types.ts:201`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L201)
 
 Typescript type: DOMFormContext represents the current context for an DOMForm.
 
@@ -14607,7 +14767,7 @@ type GroupLike = Group | Pt[];
 <a id="types-intersectcontext"></a>
 ### `IntersectContext`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:202`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L202)
+**Kind:** Typealias · **Source:** [`src/Types.ts:213`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L213)
 
 Typescript type: IntersectContext represents a type of an object that store the intersection info.
 
@@ -14618,7 +14778,7 @@ type IntersectContext = { dist:number, edge:Group, normal:Pt, other:unknown, ver
 <a id="types-isoundanalyzer"></a>
 ### `ISoundAnalyzer`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:271`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L271)
+**Kind:** Typealias · **Source:** [`src/Types.ts:282`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L282)
 
 Typescript type: ISoundAnalyzer represents an object that stores the AnalyzerNode properties
 
@@ -14629,7 +14789,7 @@ type ISoundAnalyzer = { data:Uint8Array, node:AnalyserNode, size:number };
 <a id="types-itempolistener"></a>
 ### `ITempoListener`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:244`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L244)
+**Kind:** Typealias · **Source:** [`src/Types.ts:255`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L255)
 
 Typescript type: ITempoListener represents a listener created by Tempo class
 
@@ -14640,7 +14800,7 @@ type ITempoListener = { beats:number | number[], continuous:boolean, count:numbe
 <a id="types-itempoprogressfn"></a>
 ### `ITempoProgressFn`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:234`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L234)
+**Kind:** Typealias · **Source:** [`src/Types.ts:245`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L245)
 
 Typescript type: a callback function type used in `tempo.every(...).progress( fn )`
 
@@ -14651,7 +14811,7 @@ type ITempoProgressFn =  Fn(count:number, t:number, ms:number, start:boolean);
 <a id="types-itemporesponses"></a>
 ### `ITempoResponses`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:259`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L259)
+**Kind:** Typealias · **Source:** [`src/Types.ts:270`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L270)
 
 Typescript type: the return type of `tempo.every(...)`
 
@@ -14662,12 +14822,24 @@ type ITempoResponses = { progress: Fn(fn:ITempoProgressFn, offset:number, name:s
 <a id="types-itempostartfn"></a>
 ### `ITempoStartFn`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:229`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L229)
+**Kind:** Typealias · **Source:** [`src/Types.ts:240`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L240)
 
 Typescript type: a callback function type used in `tempo.every(...).start( fn )`
 
 ```ts
 type ITempoStartFn =  Fn(count:number);
+```
+
+<a id="types-poissondiskoptions"></a>
+### `PoissonDiskOptions`
+
+**Kind:** Typealias · **Source:** [`src/Types.ts:191`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L191)
+
+Typescript type: PoissonDiskOptions are the settings accepted by [`Create.sampling`](#create-create-static-sampling)
+and [`PoissonDisk.setup`](#create-poissondisk-setup). Every field is optional.
+
+```ts
+type PoissonDiskOptions = { candidates:number, start:PtLike };
 ```
 
 <a id="types-ptiterable"></a>
@@ -14708,7 +14880,7 @@ type PtLikeIterable = GroupLike | PtLike[] | Iterable;
 <a id="types-renderingcontext2d"></a>
 ### `RenderingContext2D`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:300`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L300)
+**Kind:** Typealias · **Source:** [`src/Types.ts:311`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L311)
 
 ```ts
 type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
@@ -14717,7 +14889,7 @@ type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingCon
 <a id="types-soundtype"></a>
 ### `SoundType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:280`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L280)
+**Kind:** Typealias · **Source:** [`src/Types.ts:291`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L291)
 
 Typescript type: SoundType represents a type of sound input. It corresponds to Sound.type property.
 
@@ -14772,7 +14944,7 @@ type UIActionEvent = MouseEvent | TouchEvent | PointerEvent | KeyboardEvent;
 <a id="types-uihandler"></a>
 ### `UIHandler`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:214`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L214)
+**Kind:** Typealias · **Source:** [`src/Types.ts:225`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L225)
 
 Typescript type: UIHandler represents a callback function to handle UI actions.
 
@@ -14783,7 +14955,7 @@ type UIHandler =  Fn(target:UI, pt:PtLike, type:UIPointerAction | string & , evt
 <a id="types-warningtype"></a>
 ### `WarningType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:224`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L224)
+**Kind:** Typealias · **Source:** [`src/Types.ts:235`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L235)
 
 Typescript type: WarningType specifies a level of warning for [`Util.warnLevel`](#util-util-static-warn-level).
 

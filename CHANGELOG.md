@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- New `Create.sampling(bound, radius, options?)` returns a `PoissonDisk`
+  Group of points that are randomly placed but never closer than `radius`
+  (Poisson-disk sampling, or blue noise). It uses Bridson's linear-time grid
+  sampler with Roberts' candidate placement, seeded through `Num.random`. For
+  a set that grows over frames, construct `new PoissonDisk().setup(bound,
+  radius)` and call `step()` per point or `sample(count)` per frame; see the
+  `create.sampling` demo. Options: `candidates` (default 8) and `start`.
+
 ## 1.0.0 (2026-09-12)
 
 Pts 1.0 is a full modernization of the library: the toolchain, the type

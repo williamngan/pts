@@ -5357,6 +5357,9 @@ var Create = class {
 		for (const p of pts) flock.addBoid(p);
 		return flock;
 	}
+	static sampling(bound, radius, options = {}) {
+		return new PoissonDisk().setup(bound, radius, options).sample();
+	}
 };
 const __noise_grad3 = [
 	[
@@ -6473,6 +6476,154 @@ var Flock = class extends Group {
 			vel[k] = vx;
 			vel[k + 1] = vy;
 		}
+	}
+};
+const __near = [
+	0,
+	-1,
+	1,
+	-2,
+	2
+];
+var PoissonDisk = class extends Group {
+	constructor(..._args4) {
+		super(..._args4);
+		this._radius = 0;
+		this._candidates = 8;
+		this._x0 = 0;
+		this._y0 = 0;
+		this._x1 = 0;
+		this._y1 = 0;
+		this._cell = 1;
+		this._cols = 0;
+		this._rows = 0;
+		this._grid = /* @__PURE__ */ new Int32Array(0);
+		this._active = [];
+	}
+	setup(bound, radius, options = {}) {
+		var _bound$x, _bound$y, _options$candidates;
+		if (!(radius > 0) || !Number.isFinite(radius)) throw new Error("PoissonDisk radius must be a positive finite number");
+		const x0 = (_bound$x = bound.x) !== null && _bound$x !== void 0 ? _bound$x : NaN;
+		const y0 = (_bound$y = bound.y) !== null && _bound$y !== void 0 ? _bound$y : NaN;
+		const width = bound.width;
+		const height = bound.height;
+		const x1 = x0 + width;
+		const y1 = y0 + height;
+		if (![
+			x0,
+			y0,
+			x1,
+			y1
+		].every(Number.isFinite) || width < 0 || height < 0) throw new Error("PoissonDisk bound must have a finite position and size");
+		if (width > 0 && x1 <= x0 || height > 0 && y1 <= y0) throw new Error("PoissonDisk bound size must be representable at its position");
+		const k = (_options$candidates = options.candidates) !== null && _options$candidates !== void 0 ? _options$candidates : 8;
+		if (!(k >= 1) || !Number.isFinite(k)) throw new Error("PoissonDisk candidates must be a number of at least 1");
+		const cell = radius / Math.SQRT2;
+		const hasArea = width > 0 && height > 0;
+		const cols = hasArea ? Math.ceil(width / cell) : 0;
+		const rows = hasArea ? Math.ceil(height / cell) : 0;
+		if (cols * rows > 1 << 26) throw new Error("PoissonDisk radius is too small for this bound: the grid would exceed 2^26 cells");
+		this.length = 0;
+		this._active.length = 0;
+		this._radius = radius;
+		this._candidates = Math.floor(k);
+		this._x0 = x0;
+		this._y0 = y0;
+		this._x1 = x1;
+		this._y1 = y1;
+		this._cell = cell;
+		this._cols = cols;
+		this._rows = rows;
+		this._grid = new Int32Array(cols * rows).fill(-1);
+		if (options.start !== void 0) {
+			const s = options.start;
+			if (!this._tryAdd(Math.fround(s[0]), Math.fround(s[1]))) throw new Error("PoissonDisk start point must lie inside the bound");
+		} else if (cols * rows > 0) while (!this._tryAdd(Math.fround(x0 + Num.random() * width), Math.fround(y0 + Num.random() * height)));
+		return this;
+	}
+	get radius() {
+		return this._radius;
+	}
+	get candidates() {
+		return this._candidates;
+	}
+	get bound() {
+		return new Bound(new Pt(this._x0, this._y0), new Pt(this._x1, this._y1));
+	}
+	get done() {
+		return this._active.length === 0;
+	}
+	step() {
+		const active = this._active;
+		const k = this._candidates;
+		const dist = this._radius * 1.001;
+		const cos = Math.cos(Const.two_pi / k);
+		const sin = Math.sin(Const.two_pi / k);
+		const width = this._x1 - this._x0;
+		const height = this._y1 - this._y0;
+		const narrowX = width < dist && width <= height;
+		const narrowY = height < dist && !narrowX;
+		while (active.length > 0) {
+			const ai = Math.floor(Num.random() * active.length);
+			const p = this[active[ai]];
+			const a0 = Num.random() * Const.two_pi;
+			let dx = dist * Math.cos(a0);
+			let dy = dist * Math.sin(a0);
+			let along = a0 < Math.PI ? 1 : -1;
+			for (let j = 0; j < k; j++) {
+				if (narrowX) {
+					dx = this._x0 + Num.random() * width - p[0];
+					dy = along * Math.sqrt(Math.max(0, dist * dist - dx * dx));
+					along = -along;
+				} else if (narrowY) {
+					dy = this._y0 + Num.random() * height - p[1];
+					dx = along * Math.sqrt(Math.max(0, dist * dist - dy * dy));
+					along = -along;
+				} else if (j > 0) {
+					const x = dx * cos - dy * sin;
+					dy = dx * sin + dy * cos;
+					dx = x;
+				}
+				if (this._tryAdd(Math.fround(p[0] + dx), Math.fround(p[1] + dy))) return this[this.length - 1];
+			}
+			active[ai] = active[active.length - 1];
+			active.pop();
+		}
+	}
+	sample(count = Infinity) {
+		const limit = Math.floor(count);
+		for (let i = 0; i < limit; i++) if (this.step() === void 0) break;
+		return this;
+	}
+	_tryAdd(x, y) {
+		if (!(x >= this._x0 && x < this._x1 && y >= this._y0 && y < this._y1)) return false;
+		const cols = this._cols;
+		const rows = this._rows;
+		const cx = Math.min(cols - 1, Math.floor((x - this._x0) / this._cell));
+		const cy = Math.min(rows - 1, Math.floor((y - this._y0) / this._cell));
+		const grid = this._grid;
+		const r2 = this._radius * this._radius;
+		for (const dj of __near) {
+			const j = cy + dj;
+			if (j < 0 || j >= rows) continue;
+			const row = j * cols;
+			const reach = dj === -2 || dj === 2 ? 1 : 2;
+			for (const di of __near) {
+				const i = cx + di;
+				if (di > reach || di < -reach || i < 0 || i >= cols) continue;
+				const s = grid[row + i];
+				if (s >= 0) {
+					const q = this[s];
+					const dx = q[0] - x;
+					const dy = q[1] - y;
+					if (dx * dx + dy * dy < r2) return false;
+				}
+			}
+		}
+		grid[cy * cols + cx] = this.length;
+		this._active.push(this.length);
+		this.push(new Pt(x, y));
+		return true;
 	}
 };
 
@@ -9342,5 +9493,5 @@ var Sound = class Sound {
 };
 
 //#endregion
-export { Body, Boid, Bound, CanvasForm, CanvasSpace, Circle, Color, Const, Create, Curve, DOMSpace, Delaunay, Flock, Font, Form, Geom, Group, HTMLForm, HTMLSpace, Img, Line, Mat, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, Range, Rectangle, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, Space, Tempo, Triangle, Typography, UI, UIButton, UIDragger, UIPointerActions, UIShape, Util, Vec, VisualForm, World };
+export { Body, Boid, Bound, CanvasForm, CanvasSpace, Circle, Color, Const, Create, Curve, DOMSpace, Delaunay, Flock, Font, Form, Geom, Group, HTMLForm, HTMLSpace, Img, Line, Mat, MultiTouchSpace, Noise, Num, Particle, PoissonDisk, Polygon, Pt, Range, Rectangle, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, Space, Tempo, Triangle, Typography, UI, UIButton, UIDragger, UIPointerActions, UIShape, Util, Vec, VisualForm, World };
 //# sourceMappingURL=index.mjs.map

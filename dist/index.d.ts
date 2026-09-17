@@ -470,6 +470,16 @@ type FlockOptions = {
   initialSpeed?: number;
 };
 /**
+ * Typescript type: PoissonDiskOptions are the settings accepted by [`Create.sampling`](#link)
+ * and [`PoissonDisk.setup`](#link). Every field is optional.
+ */
+type PoissonDiskOptions = {
+  /** Maximum candidates tried per visit to an active sample. More candidates generally pack tighter and take longer. Rounded down; default is 8. */
+  candidates?: number;
+  /** The first sample, which must lie inside the bound. Default is a random point inside the bound. */
+  start?: PtLike;
+};
+/**
  * Typescript type: DOMFormContext represents the current context for an DOMForm.
  */
 type DOMFormContext = {
@@ -2710,6 +2720,24 @@ declare class Create {
    * @example `Create.flock( Create.distributeRandom( space.innerBound, 200 ), { bound: space.innerBound } )`
    */
   static flock(pts: PtLikeIterable, options?: FlockOptions): Flock;
+  /**
+   * Create a set of Pts that are randomly placed but never closer than `radius` to each other,
+   * using Poisson-disk sampling (also called blue noise).
+   * Compared with [`Create.distributeRandom`](#link), the points avoid clumping.
+   * Sampling uses a finite candidate budget, so gaps can remain when it finishes.
+   * The returned [`PoissonDisk`](#link) is a complete Group; to grow a set gradually instead,
+   * construct a `PoissonDisk` and call its [`PoissonDisk.step`](#link) or [`PoissonDisk.sample`](#link).
+   * See a [demo here](https://ptsjs.org/demo/?name=create.sampling).
+   *
+   * Randomness comes from [`Num.random`](#link), so seeding with [`Num.seed`](#link) makes the set reproducible.
+   *
+   * @param bound the rectangular boundary
+   * @param radius minimum distance between any two points
+   * @param options optional [`PoissonDiskOptions`](#link)
+   * @returns an instance of the PoissonDisk class, which is a Group of Pts
+   * @example `Create.sampling( space.innerBound, 10 )`
+   */
+  static sampling(bound: Bound, radius: number, options?: PoissonDiskOptions): PoissonDisk;
 }
 /**
  * Noise is a subclass of Pt that generates Perlin noise. Current implementation supports basic 2D noise.
@@ -3032,6 +3060,83 @@ declare class Flock extends Group {
    * See `__flock_accumulateUnit` for why the behaviors are blended before that steer is taken.
    */
   private _integrate;
+}
+/**
+ * PoissonDisk is a Group of Pts produced by Poisson-disk sampling: every point is at least
+ * [`PoissonDisk.radius`](#link) away from every other. Create a finished set with
+ * [`Create.sampling`](#link), or construct one directly and grow it with [`PoissonDisk.step`](#link)
+ * (one point at a time) or [`PoissonDisk.sample`](#link) (a batch at a time), which is how the
+ * [demo](https://ptsjs.org/demo/?name=create.sampling) shows the packing as it forms.
+ *
+ * The sampler is Bridson's grid-accelerated algorithm with Roberts' candidate placement: each
+ * visit to an active point tries up to [`PoissonDisk.candidates`](#link) candidates on the circle
+ * just outside `radius` around it, at evenly spaced angles from a random offset, and accepts the
+ * first one with no existing point within `radius`. It runs in linear time on one small integer
+ * grid. In a bound thinner than the radius, candidates take random positions across the thin
+ * axis and alternate along the long one, since a circle of candidates would miss the strip.
+ *
+ * Three traits to know: most points sit just beyond `radius` from the point that spawned them,
+ * which packs tighter than candidates at random distances; the candidate budget is finite, so
+ * a finished set can still have gaps; and coordinates are compared as float32 (the precision of
+ * a Pt), exact at pixel scales but rejecting some candidates when coordinates exceed roughly
+ * 8000 times the radius.
+ *
+ * Treat the Group as read-only while sampling: pushing or moving its Pts by hand would
+ * desynchronize the grid that enforces the spacing.
+ */
+declare class PoissonDisk extends Group {
+  protected _radius: number;
+  protected _candidates: number;
+  private _x0;
+  private _y0;
+  private _x1;
+  private _y1;
+  private _cell;
+  private _cols;
+  private _rows;
+  private _grid;
+  private _active;
+  /**
+   * Reset this sampler and place its first sample. Calling `setup` again empties the group and
+   * starts over, which is how a sketch restarts sampling after a resize.
+   * @param bound the rectangular boundary
+   * @param radius minimum distance between any two points
+   * @param options optional [`PoissonDiskOptions`](#link)
+   */
+  setup(bound: Bound, radius: number, options?: PoissonDiskOptions): this;
+  /**
+   * Minimum distance between any two points in this set.
+   */
+  get radius(): number;
+  /**
+   * Maximum candidates tried per visit to an active sample before retiring it if none succeed.
+   */
+  get candidates(): number;
+  /**
+   * The rectangular boundary that the samples fill.
+   */
+  get bound(): Bound;
+  /**
+   * Whether no active samples remain. Gaps may still fit further points, but sampling has stopped.
+   */
+  get done(): boolean;
+  /**
+   * Add the next sample and return it, or return `undefined` once no active samples remain.
+   * The new Pt is also the last element of this group.
+   * @example `let p = pd.step(); if (p) form.point( p, 2 );`
+   */
+  step(): Pt | undefined;
+  /**
+   * Add up to `count` more samples, or every remaining sample by default.
+   * @param count maximum number of samples to add, rounded down; nonpositive values and NaN add none
+   * @example `pd.sample( 20 )` adds twenty points per frame; `pd.sample()` completes the set
+   */
+  sample(count?: number): this;
+  /**
+   * Store the point at (x, y) if it lies inside the bound and no sample is within `radius` of it.
+   * Coordinates must already be float32 values, so what is tested is exactly what is stored.
+   */
+  private _tryAdd;
 }
 //#endregion
 //#region src/Num.d.ts
@@ -6330,5 +6435,5 @@ declare class Sound {
   dispose(): this;
 }
 //#endregion
-export { AnimateCallbackFn, Body, Boid, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Flock, FlockBoundary, FlockOptions, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, ImgOptions, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TextMeasure, TextVerticalAlign, TouchPointsKey, Triangle, Typography, UI, UIActionEvent, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, UIShapeTest, Util, Vec, VisualForm, WarningType, World };
+export { AnimateCallbackFn, Body, Boid, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Flock, FlockBoundary, FlockOptions, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, ImgOptions, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, PoissonDisk, PoissonDiskOptions, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TextMeasure, TextVerticalAlign, TouchPointsKey, Triangle, Typography, UI, UIActionEvent, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, UIShapeTest, Util, Vec, VisualForm, WarningType, World };
 //# sourceMappingURL=index.d.ts.map
