@@ -29,11 +29,6 @@
     <main id="post"><h1>Changelog</h1>
 <p>The revamp is a full modernization of Pts. Most existing sketches should continue to work, while the library is now faster, more predictable, easier to integrate, and better tested. This page summarizes the major changes made since work on the revamp began in August 2026.</p>
 <h3>1.0.1</h3>
-<ul>
-<li><strong>Path booleans.</strong> The new <code>Path</code> class unites, intersects, excludes, subtracts, divides and crops polygons, returning rings with holes that <code>form.compound</code> draws as one path.</li>
-<li><strong>Curve conversions.</strong> <code>Curve.cardinalToBezier</code> and <code>Curve.bsplineToBezier</code> turn curve anchors into cubic Bezier control points that <code>form.bezier</code> draws as one native path, and <code>Curve.bezierToCardinal</code> and <code>Curve.bezierToBspline</code> convert back.</li>
-<li><strong>Poisson-disk sampling.</strong> <code>Create.sampling</code> returns a <code>PoissonDisk</code> group of randomly placed points that are never closer than a given radius, and a <code>PoissonDisk</code> can also grow one point or one batch at a time.</li>
-</ul>
 <h3>New capabilities</h3>
 <ul>
 <li><strong>Modern color spaces.</strong> <code>Color</code> now supports Oklab and Oklch, alongside corrected conversions for RGB, HSL, HSB, XYZ, LAB, LCH, and LUV. Hex colors now handle alpha correctly too.</li>
@@ -41,6 +36,9 @@
 <li><strong>Simpler UI interactions.</strong> Spaces can track and untrack UI elements directly. UI also gains custom shape registration, line and polyline hit testing, typed actions, state helpers, and one-time or abortable handlers.</li>
 <li><strong>Improved image handling.</strong> <code>Img.load</code> is now promise-based, images clean up through <code>dispose</code>, and loading, cropping, scaling, pixel access, and canvas drawing are more reliable.</li>
 <li><strong>Stronger sound controls.</strong> Sound sources share audio contexts when appropriate, can be restarted safely, expose volume and cleanup controls, and report loading or input failures consistently.</li>
+<li><strong>Path booleans.</strong> The new <code>Path</code> class unites, intersects, excludes, subtracts, divides and crops polygons, returning rings with holes that <code>form.compound</code> draws as one path.</li>
+<li><strong>Curve conversions.</strong> <code>Curve.cardinalToBezier</code> and <code>Curve.bsplineToBezier</code> turn curve anchors into cubic Bezier control points that <code>form.bezier</code> draws as one native path, and <code>Curve.bezierToCardinal</code> and <code>Curve.bezierToBspline</code> convert back.</li>
+<li><strong>Poisson-disk sampling.</strong> <code>Create.sampling</code> returns a <code>PoissonDisk</code> group of randomly placed points that are never closer than a given radius, and a <code>PoissonDisk</code> can also grow one point or one batch at a time.</li>
 </ul>
 <h3>Correctness and reliability</h3>
 <p>Every core module received a detailed review. Around sixty confirmed bugs were fixed and covered by tests. The most visible fixes include:</p>
