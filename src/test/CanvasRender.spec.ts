@@ -290,3 +290,68 @@ describe("CanvasForm.bezier", () => {
     expect(calls.filter((c) => c[0] === "bezierCurveTo")).toHaveLength(2);
   });
 });
+
+describe("CanvasForm.compound", () => {
+  const outer = [
+    [0, 0],
+    [10, 0],
+    [10, 10],
+    [0, 10],
+  ];
+  const hole = [
+    [2, 2],
+    [2, 8],
+    [8, 8],
+    [8, 2],
+  ];
+
+  it("draws every ring as a closed subpath of one path and paints once", () => {
+    const { form, calls } = makeForm();
+    form.fillOnly("#000").compound([outer, hole]);
+    expect(calls.map((c) => c[0])).toEqual([
+      "beginPath",
+      "moveTo",
+      "lineTo",
+      "lineTo",
+      "lineTo",
+      "closePath",
+      "moveTo",
+      "lineTo",
+      "lineTo",
+      "lineTo",
+      "closePath",
+      "fill",
+    ]);
+    expect(calls[1]).toEqual(["moveTo", 0, 0]);
+    expect(calls[6]).toEqual(["moveTo", 2, 2]);
+  });
+
+  it("strokes and fills as the style implies, and accepts Groups and iterables", () => {
+    const { form, calls } = makeForm();
+    function* rings() {
+      yield Group.fromArray(outer);
+      yield new Set(hole.map((p) => new Pt(p)));
+    }
+    form.fill("#000").stroke("#fff").compound(rings());
+    expect(calls.filter((c) => c[0] === "closePath")).toHaveLength(2);
+    expect(calls.slice(-2).map((c) => c[0])).toEqual(["fill", "stroke"]);
+  });
+
+  it("does not replace iterable rings in the caller's array", () => {
+    const { form, calls } = makeForm();
+    const rings = [new Set(outer.map((p) => new Pt(p))), hole];
+    form.fillOnly("#000").compound(rings);
+    expect(rings[0]).toBeInstanceOf(Set);
+    expect(calls.filter((c) => c[0] === "closePath")).toHaveLength(2);
+  });
+
+  it("skips rings with fewer than 2 points and draws nothing when none remain", () => {
+    const { form, calls } = makeForm();
+    form.fillOnly("#000").compound([[], [[1, 1]], outer]);
+    expect(calls.filter((c) => c[0] === "moveTo")).toHaveLength(1);
+    calls.length = 0;
+    expect(form.compound([])).toBe(form);
+    expect(form.compound([[], [[1, 1]]])).toBe(form);
+    expect(calls).toEqual([]); // nothing to draw must not repaint the retained path
+  });
+});

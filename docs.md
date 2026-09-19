@@ -48,6 +48,7 @@ Complete API reference for [Pts 1.0.0](https://ptsjs.org), generated from the sa
   - [`Circle`](#op-circle)
   - [`Curve`](#op-curve)
   - [`Line`](#op-line)
+  - [`Path`](#op-path)
   - [`Polygon`](#op-polygon)
   - [`Rectangle`](#op-rectangle)
   - [`Triangle`](#op-triangle)
@@ -118,6 +119,7 @@ Complete API reference for [Pts 1.0.0](https://ptsjs.org), generated from the sa
   - [`ITempoResponses`](#types-itemporesponses)
   - [`ITempoStartFn`](#types-itempostartfn)
   - [`PoissonDiskOptions`](#types-poissondiskoptions)
+  - [`PolygonLike`](#types-polygonlike)
   - [`PtIterable`](#types-ptiterable)
   - [`PtLike`](#types-ptlike)
   - [`PtLikeIterable`](#types-ptlikeiterable)
@@ -313,6 +315,26 @@ Set composite operation (also known as blend mode). You can also call this funct
 **Parameters**
 
 - `mode` (`GlobalCompositeOperation`; default `"source-over"`) — a composite operation such as 'lighten', 'multiply', 'overlay', and 'color-burn'.
+
+<a id="canvas-canvasform-compound"></a>
+##### `compound`
+
+```ts
+compound(rings: Iterable): this
+```
+
+Draw a compound polygon: several rings as one path, so that a ring inside another with the opposite orientation becomes a hole
+(the nonzero winding rule). This is how a [`Path`](#op-path) result is drawn; [`CanvasForm.polygons`](#form-visualform-polygons) would fill the holes.
+
+**Parameters**
+
+- `rings` (`Iterable`) — an Array/Iterable of rings, each a Group or an Iterable<PtLike>; rings with fewer than 2 points are skipped, and nothing is drawn if no ring remains
+
+**Example**
+
+```ts
+form.fillOnly("#f03").compound( Path.minusFront( [disc, hole] ) )
+```
 
 <a id="canvas-canvasform-dash"></a>
 ##### `dash`
@@ -767,6 +789,22 @@ A static function to draw a circle.
 - `ctx` (`RenderingContext2D`) — canvas rendering context
 - `pt` (`PtLike`) — center position of the circle
 - `radius` (`number`; default `10`) — radius of the circle
+
+<a id="canvas-canvasform-static-compound"></a>
+##### `compound`
+
+*static*
+
+```ts
+static compound(ctx: RenderingContext2D, rings: Iterable): void
+```
+
+A static function to draw a compound polygon: several rings as one path, so that a ring inside another with the opposite orientation becomes a hole (the nonzero winding rule).
+
+**Parameters**
+
+- `ctx` (`RenderingContext2D`) — canvas rendering context
+- `rings` (`Iterable`) — an Array/Iterable of rings, each a Group or an Iterable<PtLike>; rings with fewer than 2 points are skipped
 
 <a id="canvas-canvasform-static-ellipse"></a>
 ##### `ellipse`
@@ -6654,7 +6692,7 @@ Convert any shaping functions into a series of steps.
 <a id="op-circle"></a>
 ### `Circle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:682`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L682)
+**Kind:** Class · **Source:** [`src/Op.ts:684`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L684)
 
 Circle class provides static functions to create and operate on circles. A circle is usually represented as a Group of 2 Pts, where the first Pt specifies the center, and the second Pt specifies the radius.
 To move a circle without changing its radius, move only its center, eg `circle[0].to(20, 20)`. Group transforms such as `circle.moveTo(20, 20)` affect both Pts, including the radius.
@@ -6844,7 +6882,7 @@ Check if a point is within a circle.
 <a id="op-curve"></a>
 ### `Curve`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1733`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1733)
+**Kind:** Class · **Source:** [`src/Op.ts:1823`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1823)
 
 Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -7169,7 +7207,7 @@ Get a precalculated coefficients per step.
 <a id="op-line"></a>
 ### `Line`
 
-**Kind:** Class · **Source:** [`src/Op.ts:25`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L25)
+**Kind:** Class · **Source:** [`src/Op.ts:27`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L27)
 
 Line class provides static functions to create and operate on lines. A line is usually represented as a Group of 2 Pts.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -7546,10 +7584,193 @@ Convert this line to a new rectangle representation.
 
 - `line` (`GroupLike`) — a Group representing a line
 
+<a id="op-path"></a>
+### `Path`
+
+**Kind:** Class · **Source:** [`src/Op.ts:1743`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1743)
+
+Path class provides static functions to combine polygons with boolean operations:
+unite, intersect, exclude, subtract the shapes in front or behind, divide into faces, or crop by the top shape.
+Shapes are listed in stacking order, the first at the back and the last in front, like the order you would draw them in.
+A shape is a polygon (a Group, or any iterable of points), or a list of rings that together form a polygon with holes,
+such as the result of another Path function. Every result is such a list of rings: an outer ring followed by its
+holes, in opposite orientations, which [`CanvasForm.compound`](#canvas-canvasform-compound) draws as one path. Rings are open (the first point
+is not repeated), 2D, and never share Pts with the input. Clockwise and counterclockwise rings are the same shape, and
+a self-intersecting ring covers what `form.polygon` would fill (the nonzero rule). Input vertices closer together than a
+millionth of the largest absolute coordinate are merged before finding intersections. For small shapes at large offsets,
+work in local coordinates to avoid losing detail to this tolerance or the Float32 output.
+See [Op guide](https://ptsjs.org/guide/Op-0400.html) for details.
+
+#### Methods
+
+<a id="op-path-static-crop"></a>
+##### `crop`
+
+*static*
+
+```ts
+static crop(shapes: Iterable): Group[][]
+```
+
+Crop: use the frontmost (last) shape as a mask, keeping the faces of the other shapes inside it and deleting the mask itself.
+Like [`Path.divide`](#op-path-static-divide), the shapes under the mask stay divided where they overlap.
+See a [demo here](https://ptsjs.org/demo/?name=path.crop).
+
+**Parameters**
+
+- `shapes` (`Iterable`) — an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+
+**Returns:** an array of polygons, one per face inside the mask, each an outer ring followed by its holes
+
+**Example**
+
+```ts
+Path.crop( [photo, frame] )
+```
+
+<a id="op-path-static-divide"></a>
+##### `divide`
+
+*static*
+
+```ts
+static divide(shapes: Iterable): Group[][]
+```
+
+Divide: split the shapes at every crossing into separate faces. Each face is the largest area not cut by any edge, so
+a region inside two shapes is its own face, and a self-overlapping region of one shape is too.
+
+**Parameters**
+
+- `shapes` (`Iterable`) — an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+
+**Returns:** an array of polygons, one per face, each an outer ring followed by its holes
+
+**Example**
+
+```ts
+Path.divide( [a, b] ).forEach( (face, i) => form.fillOnly( colors[i] ).compound( face ) )
+```
+
+<a id="op-path-static-exclude"></a>
+##### `exclude`
+
+*static*
+
+```ts
+static exclude(shapes: Iterable): Group[]
+```
+
+Exclude: keep the area inside an odd number of shapes, so where two shapes overlap becomes a hole.
+
+**Parameters**
+
+- `shapes` (`Iterable`) — an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+
+**Returns:** the rings of the result: each outer ring followed by its holes; empty if the shapes cancel out
+
+**Example**
+
+```ts
+Path.exclude( [a, b] )
+```
+
+<a id="op-path-static-intersect"></a>
+##### `intersect`
+
+*static*
+
+```ts
+static intersect(shapes: Iterable): Group[]
+```
+
+Intersect: keep only the area inside every shape.
+
+**Parameters**
+
+- `shapes` (`Iterable`) — an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+
+**Returns:** the rings of the common polygon: each outer ring followed by its holes; empty if the shapes do not all overlap
+
+**Example**
+
+```ts
+Path.intersect( [a, b, c] )
+```
+
+<a id="op-path-static-minus-back"></a>
+##### `minusBack`
+
+*static*
+
+```ts
+static minusBack(shapes: Iterable): Group[]
+```
+
+Minus Back: subtract every shape behind from the frontmost (last) shape.
+
+**Parameters**
+
+- `shapes` (`Iterable`) — an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+
+**Returns:** the rings of what remains of the last shape: each outer ring followed by its holes; empty if nothing remains
+
+**Example**
+
+```ts
+Path.minusBack( [wall, window] )` keeps the part of `window` not covered by `wall
+```
+
+<a id="op-path-static-minus-front"></a>
+##### `minusFront`
+
+*static*
+
+```ts
+static minusFront(shapes: Iterable): Group[]
+```
+
+Minus Front: subtract every shape in front from the backmost (first) shape.
+
+**Parameters**
+
+- `shapes` (`Iterable`) — an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+
+**Returns:** the rings of what remains of the first shape: each outer ring followed by its holes; empty if nothing remains
+
+**Example**
+
+```ts
+Path.minusFront( [disc, hole] )` cuts `hole` out of `disc
+```
+
+<a id="op-path-static-unite"></a>
+##### `unite`
+
+*static*
+
+```ts
+static unite(shapes: Iterable): Group[]
+```
+
+Unite: merge all shapes into one polygon (the area inside any shape).
+
+**Parameters**
+
+- `shapes` (`Iterable`) — an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+
+**Returns:** the rings of the merged polygon: each outer ring followed by its holes; empty if the shapes have no area
+
+**Example**
+
+```ts
+form.fillOnly("#f03").compound( Path.unite( [star, disc] ) )
+```
+
 <a id="op-polygon"></a>
 ### `Polygon`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1066`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1066)
+**Kind:** Class · **Source:** [`src/Op.ts:1068`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1068)
 
 Polygon class provides static functions to create and operate on polygons. A polygon is usually represented as a Group of 3 or more Pts.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -7881,7 +8102,7 @@ Get a bounding box for each polygon group, as well as a union bounding-box for a
 <a id="op-rectangle"></a>
 ### `Rectangle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:423`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L423)
+**Kind:** Class · **Source:** [`src/Op.ts:425`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L425)
 
 Rectangle class provides static functions to create and operate on rectangles. A rectangle is usually represented as a Group of 2 Pts, marking the top-left and bottom-right corners of the rectangle.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -8165,7 +8386,7 @@ Check if a point is within a rectangle.
 <a id="op-triangle"></a>
 ### `Triangle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:905`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L905)
+**Kind:** Class · **Source:** [`src/Op.ts:907`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L907)
 
 Triangle class provides static functions to create and operate on trianges. A triange is a polygon represented as a Group of 3 Pts.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -12876,7 +13097,7 @@ A static function to draw a text element.
 
 #### Inherited API
 
-- From [`CanvasForm`](#canvas-canvasform): [`ctx`](#canvas-canvasform-ctx), [`alignText`](#canvas-canvasform-align-text), [`alpha`](#canvas-canvasform-alpha), [`applyFillStroke`](#canvas-canvasform-apply-fill-stroke), [`arc`](#canvas-canvasform-arc), [`bezier`](#canvas-canvasform-bezier), [`circle`](#canvas-canvasform-circle), [`clip`](#canvas-canvasform-clip), [`composite`](#canvas-canvasform-composite), [`dash`](#canvas-canvasform-dash), [`ellipse`](#canvas-canvasform-ellipse), [`fill`](#canvas-canvasform-fill), [`fillOnly`](#canvas-canvasform-fill-only), [`font`](#canvas-canvasform-font), [`fontWidthEstimate`](#canvas-canvasform-font-width-estimate), [`getTextWidth`](#canvas-canvasform-get-text-width), [`gradient`](#canvas-canvasform-gradient), [`image`](#canvas-canvasform-image), [`imageData`](#canvas-canvasform-image-data), [`line`](#canvas-canvasform-line), [`log`](#canvas-canvasform-log), [`paragraphBox`](#canvas-canvasform-paragraph-box), [`point`](#canvas-canvasform-point), [`polygon`](#canvas-canvasform-polygon), [`rect`](#canvas-canvasform-rect), [`reset`](#canvas-canvasform-reset), [`square`](#canvas-canvasform-square), [`stroke`](#canvas-canvasform-stroke), [`strokeOnly`](#canvas-canvasform-stroke-only), [`text`](#canvas-canvasform-text), [`textBox`](#canvas-canvasform-text-box), [`bezier`](#canvas-canvasform-bezier), [`ellipse`](#canvas-canvasform-ellipse), [`image`](#canvas-canvasform-image), [`imageData`](#canvas-canvasform-image-data), [`resetStyleCache`](#canvas-canvasform-static-reset-style-cache).
+- From [`CanvasForm`](#canvas-canvasform): [`ctx`](#canvas-canvasform-ctx), [`alignText`](#canvas-canvasform-align-text), [`alpha`](#canvas-canvasform-alpha), [`applyFillStroke`](#canvas-canvasform-apply-fill-stroke), [`arc`](#canvas-canvasform-arc), [`bezier`](#canvas-canvasform-bezier), [`circle`](#canvas-canvasform-circle), [`clip`](#canvas-canvasform-clip), [`composite`](#canvas-canvasform-composite), [`compound`](#canvas-canvasform-compound), [`dash`](#canvas-canvasform-dash), [`ellipse`](#canvas-canvasform-ellipse), [`fill`](#canvas-canvasform-fill), [`fillOnly`](#canvas-canvasform-fill-only), [`font`](#canvas-canvasform-font), [`fontWidthEstimate`](#canvas-canvasform-font-width-estimate), [`getTextWidth`](#canvas-canvasform-get-text-width), [`gradient`](#canvas-canvasform-gradient), [`image`](#canvas-canvasform-image), [`imageData`](#canvas-canvasform-image-data), [`line`](#canvas-canvasform-line), [`log`](#canvas-canvasform-log), [`paragraphBox`](#canvas-canvasform-paragraph-box), [`point`](#canvas-canvasform-point), [`polygon`](#canvas-canvasform-polygon), [`rect`](#canvas-canvasform-rect), [`reset`](#canvas-canvasform-reset), [`square`](#canvas-canvasform-square), [`stroke`](#canvas-canvasform-stroke), [`strokeOnly`](#canvas-canvasform-stroke-only), [`text`](#canvas-canvasform-text), [`textBox`](#canvas-canvasform-text-box), [`bezier`](#canvas-canvasform-bezier), [`compound`](#canvas-canvasform-compound), [`ellipse`](#canvas-canvasform-ellipse), [`image`](#canvas-canvasform-image), [`imageData`](#canvas-canvasform-image-data), [`resetStyleCache`](#canvas-canvasform-static-reset-style-cache).
 - From [`VisualForm`](#form-visualform): [`currentFont`](#form-visualform-current-font), [`circles`](#form-visualform-circles), [`lines`](#form-visualform-lines), [`points`](#form-visualform-points), [`polygons`](#form-visualform-polygons), [`rects`](#form-visualform-rects), [`squares`](#form-visualform-squares).
 - From [`Form`](#form-form): [`ready`](#form-form-ready).
 
@@ -14597,7 +14818,7 @@ A string to indicate yz plane.
 <a id="types-iplayer"></a>
 ### `IPlayer`
 
-**Kind:** Interface · **Source:** [`src/Types.ts:68`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L68)
+**Kind:** Interface · **Source:** [`src/Types.ts:74`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L74)
 
 Typescript interface: IPlayer is an interface that represents a "player" object that can be added into a Space.
 
@@ -14715,14 +14936,14 @@ z?: number
 <a id="types-ispaceplayers"></a>
 ### `ISpacePlayers`
 
-**Kind:** Interface · **Source:** [`src/Types.ts:79`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L79)
+**Kind:** Interface · **Source:** [`src/Types.ts:85`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L85)
 
 Typescript interface: ISpacePlayers represents a map of IPlayer instances.
 
 <a id="types-itimer"></a>
 ### `ITimer`
 
-**Kind:** Interface · **Source:** [`src/Types.ts:86`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L86)
+**Kind:** Interface · **Source:** [`src/Types.ts:92`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L92)
 
 Typescript interface: ITimer represents a time-recording object.
 
@@ -14759,7 +14980,7 @@ prev: number
 <a id="types-multitouchelement"></a>
 ### `MultiTouchElement`
 
-**Kind:** Interface · **Source:** [`src/Types.ts:101`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L101)
+**Kind:** Interface · **Source:** [`src/Types.ts:107`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L107)
 
 Typescript interface: MultiTouchElement represents an element that can handle touch events.
 
@@ -14792,7 +15013,7 @@ removeEventListener(evt: string, callback: EventListenerOrEventListenerObject): 
 <a id="types-animatecallbackfn"></a>
 ### `AnimateCallbackFn`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:53`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L53)
+**Kind:** Typealias · **Source:** [`src/Types.ts:59`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L59)
 
 Typescript type: AnimateCallbackFn represents a callback function for animation. It accepts parameters to keep track of current time, current frame-time, and current space instance.
 
@@ -14803,7 +15024,7 @@ type AnimateCallbackFn =  Fn(time:number, frameTime:number, currentSpace:Space);
 <a id="types-canvaspatternrepetition"></a>
 ### `CanvasPatternRepetition`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:308`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L308)
+**Kind:** Typealias · **Source:** [`src/Types.ts:314`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L314)
 
 Typescript type: CanvasPatternRepetition represents the string options to specify pattern repetition
 
@@ -14814,7 +15035,7 @@ type CanvasPatternRepetition = repeat | repeat-x | repeat-y | no-repeat;
 <a id="types-canvasspaceoptions"></a>
 ### `CanvasSpaceOptions`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:115`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L115)
+**Kind:** Typealias · **Source:** [`src/Types.ts:121`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L121)
 
 Typescript type: Setup options for CanvasSpace. See [`CanvasSpace.setup()`](#canvas-canvasspace-setup) function.
 
@@ -14825,7 +15046,7 @@ type CanvasSpaceOptions = { bgcolor:string, offscreen:boolean, pixelDensity:numb
 <a id="types-colortype"></a>
 ### `ColorType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:126`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L126)
+**Kind:** Typealias · **Source:** [`src/Types.ts:132`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L132)
 
 Typescript type: ColorType represents a defined set of string values such as "rgb" and "lab".
 
@@ -14836,7 +15057,7 @@ type ColorType = rgb | hsl | hsb | lab | lch | luv | xyz | oklab | oklch;
 <a id="types-defaultformstyle"></a>
 ### `DefaultFormStyle`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:296`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L296)
+**Kind:** Typealias · **Source:** [`src/Types.ts:302`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L302)
 
 Typescript type: DefaultFormStyle represents a default object for visual styles such as fill, stroke, line width, and others.
 
@@ -14847,7 +15068,7 @@ type DefaultFormStyle = { fillStyle:string | CanvasGradient | CanvasPattern, glo
 <a id="types-delaunaymesh"></a>
 ### `DelaunayMesh`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:144`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L144)
+**Kind:** Typealias · **Source:** [`src/Types.ts:150`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L150)
 
 Typescript type: DelaunayMesh represents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.
 Note the unusual shape: it is an array indexed by point index, where each entry is a dictionary keyed by `"min-max"` neighbor-pair strings. This mirrors the mesh cache built by [`Delaunay.mesh`](#create-delaunay-mesh) and is kept as-is for compatibility.
@@ -14859,7 +15080,7 @@ type DelaunayMesh = [];
 <a id="types-delaunayshape"></a>
 ### `DelaunayShape`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:132`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L132)
+**Kind:** Typealias · **Source:** [`src/Types.ts:138`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L138)
 
 Typescript type: DelaunayShape represents an object type that can store a Delaunay element. It has 3 indices (i, j, k) and two groups that represent a triangle and a circle.
 
@@ -14870,7 +15091,7 @@ type DelaunayShape = { circle:Group, i:number, j:number, k:number, triangle:Grou
 <a id="types-domformcontext"></a>
 ### `DOMFormContext`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:201`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L201)
+**Kind:** Typealias · **Source:** [`src/Types.ts:207`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L207)
 
 Typescript type: DOMFormContext represents the current context for an DOMForm.
 
@@ -14881,7 +15102,7 @@ type DOMFormContext = { currentClass:string, currentID:string, group:Element | n
 <a id="types-flockboundary"></a>
 ### `FlockBoundary`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:151`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L151)
+**Kind:** Typealias · **Source:** [`src/Types.ts:157`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L157)
 
 Typescript type: FlockBoundary is how a [`Flock`](#create-flock) treats the edges of its bound:
 `"steer"` turns agents back within a margin, `"wrap"` moves them to the opposite edge,
@@ -14894,7 +15115,7 @@ type FlockBoundary = steer | wrap | bounce | none;
 <a id="types-flockoptions"></a>
 ### `FlockOptions`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:158`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L158)
+**Kind:** Typealias · **Source:** [`src/Types.ts:164`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L164)
 
 Typescript type: FlockOptions are the settings accepted by [`Create.flock`](#create-create-static-flock) and
 [`Flock.setup`](#create-flock-setup). Every field is optional; see the matching [`Flock`](#create-flock) accessor
@@ -14918,7 +15139,7 @@ type GroupLike = Group | Pt[];
 <a id="types-intersectcontext"></a>
 ### `IntersectContext`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:213`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L213)
+**Kind:** Typealias · **Source:** [`src/Types.ts:219`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L219)
 
 Typescript type: IntersectContext represents a type of an object that store the intersection info.
 
@@ -14929,7 +15150,7 @@ type IntersectContext = { dist:number, edge:Group, normal:Pt, other:unknown, ver
 <a id="types-isoundanalyzer"></a>
 ### `ISoundAnalyzer`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:282`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L282)
+**Kind:** Typealias · **Source:** [`src/Types.ts:288`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L288)
 
 Typescript type: ISoundAnalyzer represents an object that stores the AnalyzerNode properties
 
@@ -14940,7 +15161,7 @@ type ISoundAnalyzer = { data:Uint8Array, node:AnalyserNode, size:number };
 <a id="types-itempolistener"></a>
 ### `ITempoListener`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:255`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L255)
+**Kind:** Typealias · **Source:** [`src/Types.ts:261`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L261)
 
 Typescript type: ITempoListener represents a listener created by Tempo class
 
@@ -14951,7 +15172,7 @@ type ITempoListener = { beats:number | number[], continuous:boolean, count:numbe
 <a id="types-itempoprogressfn"></a>
 ### `ITempoProgressFn`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:245`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L245)
+**Kind:** Typealias · **Source:** [`src/Types.ts:251`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L251)
 
 Typescript type: a callback function type used in `tempo.every(...).progress( fn )`
 
@@ -14962,7 +15183,7 @@ type ITempoProgressFn =  Fn(count:number, t:number, ms:number, start:boolean);
 <a id="types-itemporesponses"></a>
 ### `ITempoResponses`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:270`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L270)
+**Kind:** Typealias · **Source:** [`src/Types.ts:276`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L276)
 
 Typescript type: the return type of `tempo.every(...)`
 
@@ -14973,7 +15194,7 @@ type ITempoResponses = { progress: Fn(fn:ITempoProgressFn, offset:number, name:s
 <a id="types-itempostartfn"></a>
 ### `ITempoStartFn`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:240`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L240)
+**Kind:** Typealias · **Source:** [`src/Types.ts:246`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L246)
 
 Typescript type: a callback function type used in `tempo.every(...).start( fn )`
 
@@ -14984,13 +15205,25 @@ type ITempoStartFn =  Fn(count:number);
 <a id="types-poissondiskoptions"></a>
 ### `PoissonDiskOptions`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:191`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L191)
+**Kind:** Typealias · **Source:** [`src/Types.ts:197`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L197)
 
 Typescript type: PoissonDiskOptions are the settings accepted by [`Create.sampling`](#create-create-static-sampling)
 and [`PoissonDisk.setup`](#create-poissondisk-setup). Every field is optional.
 
 ```ts
 type PoissonDiskOptions = { candidates:number, start:PtLike };
+```
+
+<a id="types-polygonlike"></a>
+### `PolygonLike`
+
+**Kind:** Typealias · **Source:** [`src/Types.ts:43`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L43)
+
+Typescript type: PolygonLike represents a polygon for [`Path`](#op-path): either one ring of points (any `PtLikeIterable`),
+or a list of rings combined by the nonzero winding rule, such as the `Group[]` a Path function returns (an outer ring followed by its holes).
+
+```ts
+type PolygonLike = PtLikeIterable | Iterable;
 ```
 
 <a id="types-ptiterable"></a>
@@ -15031,7 +15264,7 @@ type PtLikeIterable = GroupLike | PtLike[] | Iterable;
 <a id="types-renderingcontext2d"></a>
 ### `RenderingContext2D`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:311`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L311)
+**Kind:** Typealias · **Source:** [`src/Types.ts:317`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L317)
 
 ```ts
 type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
@@ -15040,7 +15273,7 @@ type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingCon
 <a id="types-soundtype"></a>
 ### `SoundType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:291`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L291)
+**Kind:** Typealias · **Source:** [`src/Types.ts:297`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L297)
 
 Typescript type: SoundType represents a type of sound input. It corresponds to Sound.type property.
 
@@ -15051,7 +15284,7 @@ type SoundType = file | gen | input;
 <a id="types-textmeasure"></a>
 ### `TextMeasure`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:42`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L42)
+**Kind:** Typealias · **Source:** [`src/Types.ts:48`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L48)
 
 Typescript type: TextMeasure represents a function that returns the rendered width of a string of text, such as canvas context's `measureText` or an estimator created via [`Typography.textWidthEstimator`](#typography-typography-static-text-width-estimator).
 
@@ -15062,7 +15295,7 @@ type TextMeasure =  Fn(text:string);
 <a id="types-textverticalalign"></a>
 ### `TextVerticalAlign`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:47`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L47)
+**Kind:** Typealias · **Source:** [`src/Types.ts:53`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L53)
 
 Typescript type: TextVerticalAlign represents the vertical alignment options accepted by [`CanvasForm.textBox`](#canvas-canvasform-text-box) and [`CanvasForm.paragraphBox`](#canvas-canvasform-paragraph-box).
 
@@ -15073,7 +15306,7 @@ type TextVerticalAlign = top | start | middle | center | bottom | end;
 <a id="types-touchpointskey"></a>
 ### `TouchPointsKey`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:96`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L96)
+**Kind:** Typealias · **Source:** [`src/Types.ts:102`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L102)
 
 Typescript type: TouchPointsKey represents a set of acceptable string keys for defining touch action.
 
@@ -15084,7 +15317,7 @@ type TouchPointsKey = touches | changedTouches | targetTouches;
 <a id="types-uiactionevent"></a>
 ### `UIActionEvent`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:62`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L62)
+**Kind:** Typealias · **Source:** [`src/Types.ts:68`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L68)
 
 Typescript type: UIActionEvent represents the DOM events a Space dispatches to players and UI handlers — pointer, mouse, touch, and keyboard.
 
@@ -15095,7 +15328,7 @@ type UIActionEvent = MouseEvent | TouchEvent | PointerEvent | KeyboardEvent;
 <a id="types-uihandler"></a>
 ### `UIHandler`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:225`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L225)
+**Kind:** Typealias · **Source:** [`src/Types.ts:231`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L231)
 
 Typescript type: UIHandler represents a callback function to handle UI actions.
 
@@ -15106,7 +15339,7 @@ type UIHandler =  Fn(target:UI, pt:PtLike, type:UIPointerAction | string & , evt
 <a id="types-warningtype"></a>
 ### `WarningType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:235`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L235)
+**Kind:** Typealias · **Source:** [`src/Types.ts:241`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L241)
 
 Typescript type: WarningType specifies a level of warning for [`Util.warnLevel`](#util-util-static-warn-level).
 

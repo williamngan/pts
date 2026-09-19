@@ -76,6 +76,11 @@ Core data and math:
   cardinal, B-spline, bezier) from control points, `cardinalToBezier` /
   `bsplineToBezier` to draw them as native paths with `form.bezier`, and
   `bezierToCardinal` / `bezierToBspline` back.
+- `Path` — polygon boolean operations:
+  `unite`, `intersect`, `exclude`, `minusFront`, `minusBack` return the
+  rings of one polygon with holes (draw with `form.compound(rings)`);
+  `divide` and `crop` return one such polygon per face. Shapes are listed
+  back to front; a result can be passed back as one shape.
 - `Vec`, `Mat` — the lower-level vector/matrix helpers behind Pt ops.
 
 Generators and media:

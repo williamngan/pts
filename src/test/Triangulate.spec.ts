@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   hilbertIndex,
+  crossingParameter,
   hilbertOrder,
   incircle,
   incircleExact,
@@ -10,6 +11,17 @@ import {
   triangulate,
   type Triangulation,
 } from "../_triangulate";
+
+describe("crossingParameter", () => {
+  it("keeps a crossing parameter finite over a wide binary exponent range", () => {
+    expect(crossingParameter(-1e200, 0, 1e200, 0, 0, -1e-200, 0, 1e-200)).toBe(
+      0.5,
+    );
+    expect(crossingParameter(0, 1e-200, 0, -1e-200, -1e200, 0, 1e200, 0)).toBe(
+      0.5,
+    );
+  });
+});
 
 function rng(seed: number) {
   let a = seed;

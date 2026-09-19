@@ -166,6 +166,15 @@ Polygon.convexHull( poly );
 Polygon.lines( poly ); // get line segments
 Polygon.intersectPolygon2D( poly, lines );
 </code></pre>
+<p><a href="../docs/?p=Op_Path"><code>Path</code></a> from &quot;Op&quot; module combines polygons with boolean operations. List the shapes from back to front; every function returns the rings of a polygon with holes, which <code>form.compound</code> draws as one path.</p>
+<pre tabindex="0"><code>Path.unite( [star, disc] ); // merge into one polygon
+Path.minusFront( [star, disc] ); // cut the disc out of the star
+Path.intersect( [a, b, c] ); // the area inside all three
+Path.exclude( [a, b] ); // everything but the overlap
+Path.divide( [a, b] ); // one polygon per face
+Path.crop( [photo, frame] ); // the faces of photo inside frame
+form.fillOnly(&quot;#f03&quot;).compound( Path.minusBack( [wall, window] ) );
+</code></pre>
 <p><a href="../docs/?p=Op_Curve"><code>Curve</code></a> from &quot;Op&quot; module helps you create and work with curves.</p>
 <pre tabindex="0"><code>Curve.catmullRom( pts );
 Curve.cardinal( pts );

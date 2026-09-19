@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+- New `Path` class with polygon boolean operations: `unite`, `intersect`, `exclude`,
+  `minusFront`, `minusBack`, `divide` and `crop`. Each takes a list of shapes
+  in stacking order (back to front) and returns a polygon with holes as a
+  `Group[]` of rings, an outer ring followed by its holes in the opposite
+  orientation (`divide` and `crop` return one such polygon per face). A shape
+  is any polygon Pts already understands, or a list of rings such as a
+  previous result. Rings use the nonzero winding rule like `form.polygon`,
+  so orientation does not matter and a self-intersecting star is filled the
+  way it is drawn. Shapes that share edges, touch at a vertex or coincide are
+  handled as exact coincidences (input vertices within a millionth of the
+  largest absolute coordinate are merged before intersections). The new `form.compound(rings)` on `CanvasForm`
+  and `SVGForm` draws such a polygon as one path with its holes. See the
+  `Path.*` studies.
+- Path preserves closing corners during simplification and uses exact
+  intersection predicates and determinants for near-coincident and shallow
+  crossings. Vertices within the tolerance of an edge split it before any
+  crossing is computed, so a vertex that touches an edge to float32 precision
+  and shapes whose edges coincide up to rounding (such as shifted copies)
+  behave like exact touches. Output drops vertices and faces that collapse in
+  Float32 and rings thinner than the tolerance. Hole ownership uses an
+  iterative traversal; sparse winding vectors and a ray index that is built
+  only for many shapes or holes keep the common case fast.
 - New `Curve.cardinalToBezier(pts, tension?, alpha?)` and
   `Curve.bsplineToBezier(pts, tension?)` convert curve anchors into cubic
   Bezier control points (each segment is a cubic, with results rounded to

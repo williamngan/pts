@@ -1,6 +1,1467 @@
 /*! Copyright © 2017-present William Ngan and contributors.
 Licensed under Apache 2.0 License.
 See https://github.com/williamngan/pts for details. */
+//#region src/_triangulate.ts
+const EMPTY = {
+	triangles: /* @__PURE__ */ new Uint32Array(0),
+	neighbors: /* @__PURE__ */ new Int32Array(0),
+	hull: /* @__PURE__ */ new Uint32Array(0)
+};
+const EPS = 11102230246251565e-32;
+const ORIENT_BOUND = 3.0000000000000018 * EPS;
+const INCIRCLE_BOUND = 10.00000000000001 * EPS;
+const INT_LIMIT = 2147483648;
+const _input = /* @__PURE__ */ new Float64Array(8);
+let _presetScale = 0;
+function _integerScale(count) {
+	if (_presetScale > 0) return _presetScale;
+	let scale = 1;
+	for (let k = 0; k <= 30; k++) {
+		let exact = true;
+		for (let i = 0; i < count; i++) {
+			const v = _input[i] * scale;
+			if (v >= INT_LIMIT || v <= -2147483648) return 0;
+			if ((v | 0) !== v) exact = false;
+		}
+		if (exact) return scale;
+		scale *= 2;
+	}
+	return 0;
+}
+function orient2d(ax, ay, bx, by, cx, cy) {
+	const left = (ax - cx) * (by - cy);
+	const right = (ay - cy) * (bx - cx);
+	const det = left - right;
+	const bound = ORIENT_BOUND * (Math.abs(left) + Math.abs(right));
+	if (det > bound) return 1;
+	if (-det > bound) return -1;
+	_input[0] = ax;
+	_input[1] = ay;
+	_input[2] = bx;
+	_input[3] = by;
+	_input[4] = cx;
+	_input[5] = cy;
+	const scale = _integerScale(6);
+	if (scale !== 0) return _orientInt((ax - cx) * scale, (by - cy) * scale, (ay - cy) * scale, (bx - cx) * scale);
+	return orient2dExact(ax, ay, bx, by, cx, cy);
+}
+function incircle(ax, ay, bx, by, cx, cy, dx, dy) {
+	const adx = ax - dx;
+	const ady = ay - dy;
+	const bdx = bx - dx;
+	const bdy = by - dy;
+	const cdx = cx - dx;
+	const cdy = cy - dy;
+	const bdxcdy = bdx * cdy;
+	const cdxbdy = cdx * bdy;
+	const alift = adx * adx + ady * ady;
+	const cdxady = cdx * ady;
+	const adxcdy = adx * cdy;
+	const blift = bdx * bdx + bdy * bdy;
+	const adxbdy = adx * bdy;
+	const bdxady = bdx * ady;
+	const clift = cdx * cdx + cdy * cdy;
+	const det = alift * (bdxcdy - cdxbdy) + blift * (cdxady - adxcdy) + clift * (adxbdy - bdxady);
+	const permanent = (Math.abs(bdxcdy) + Math.abs(cdxbdy)) * alift + (Math.abs(cdxady) + Math.abs(adxcdy)) * blift + (Math.abs(adxbdy) + Math.abs(bdxady)) * clift;
+	const bound = INCIRCLE_BOUND * permanent;
+	if (det > bound) return 1;
+	if (-det > bound) return -1;
+	_input[0] = ax;
+	_input[1] = ay;
+	_input[2] = bx;
+	_input[3] = by;
+	_input[4] = cx;
+	_input[5] = cy;
+	_input[6] = dx;
+	_input[7] = dy;
+	const scale = _integerScale(8);
+	if (scale !== 0) return _incircleInt(adx * scale, ady * scale, bdx * scale, bdy * scale, cdx * scale, cdy * scale);
+	return incircleExact(ax, ay, bx, by, cx, cy, dx, dy);
+}
+const LIMB = 262144;
+const INV_LIMB = 1 / LIMB;
+const _acc = /* @__PURE__ */ new Float64Array(8);
+const _liftA = /* @__PURE__ */ new Float64Array(4);
+const _liftB = /* @__PURE__ */ new Float64Array(4);
+const _liftC = /* @__PURE__ */ new Float64Array(4);
+const _crossA = /* @__PURE__ */ new Float64Array(4);
+const _crossB = /* @__PURE__ */ new Float64Array(4);
+const _crossC = /* @__PURE__ */ new Float64Array(4);
+function _mulAdd22(x, y, sign, at) {
+	const x0 = x & 262143;
+	const x1 = x >>> 18;
+	const y0 = y & 262143;
+	const y1 = y >>> 18;
+	_acc[at] += sign * x0 * y0;
+	_acc[at + 1] += sign * (x0 * y1 + x1 * y0);
+	_acc[at + 2] += sign * x1 * y1;
+}
+function _mulAdd44(a, m, sign) {
+	for (let i = 0; i < 4; i++) {
+		const ai = sign * a[i];
+		if (ai === 0) continue;
+		for (let j = 0; j < 4; j++) _acc[i + j] += ai * m[j];
+	}
+}
+function _carry(n) {
+	let carry = 0;
+	for (let k = 0; k < n; k++) {
+		const v = _acc[k] + carry;
+		carry = Math.floor(v * INV_LIMB);
+		_acc[k] = v - carry * LIMB;
+	}
+	return carry;
+}
+function _accSign(n, carry) {
+	if (carry !== 0) return carry > 0 ? 1 : -1;
+	for (let k = 0; k < n; k++) if (_acc[k] !== 0) return 1;
+	return 0;
+}
+function _magnitude(n, carry, out) {
+	if (carry >= 0) {
+		let zero = carry === 0;
+		for (let k = 0; k < n; k++) {
+			out[k] = _acc[k];
+			if (_acc[k] !== 0) zero = false;
+		}
+		out[n] = carry;
+		return zero ? 0 : 1;
+	}
+	let up = 1;
+	for (let k = 0; k < n; k++) {
+		let m = 262143 - _acc[k] + up;
+		up = 0;
+		if (m === LIMB) {
+			m = 0;
+			up = 1;
+		}
+		out[k] = m;
+	}
+	out[n] = -carry - 1 + up;
+	return -1;
+}
+function _orientInt(a, b, c, d) {
+	_acc[0] = 0;
+	_acc[1] = 0;
+	_acc[2] = 0;
+	_mulAdd22(Math.abs(a), Math.abs(b), a < 0 !== b < 0 ? -1 : 1, 0);
+	_mulAdd22(Math.abs(c), Math.abs(d), c < 0 !== d < 0 ? 1 : -1, 0);
+	return _accSign(3, _carry(3));
+}
+function _lift(dx, dy, out) {
+	_acc[0] = 0;
+	_acc[1] = 0;
+	_acc[2] = 0;
+	_mulAdd22(Math.abs(dx), Math.abs(dx), 1, 0);
+	_mulAdd22(Math.abs(dy), Math.abs(dy), 1, 0);
+	const carry = _carry(3);
+	out[0] = _acc[0];
+	out[1] = _acc[1];
+	out[2] = _acc[2];
+	out[3] = carry;
+}
+function _cross(p, q, r, t, out) {
+	_acc[0] = 0;
+	_acc[1] = 0;
+	_acc[2] = 0;
+	_mulAdd22(Math.abs(p), Math.abs(q), p < 0 !== q < 0 ? -1 : 1, 0);
+	_mulAdd22(Math.abs(r), Math.abs(t), r < 0 !== t < 0 ? 1 : -1, 0);
+	return _magnitude(3, _carry(3), out);
+}
+function _incircleInt(adx, ady, bdx, bdy, cdx, cdy) {
+	_lift(adx, ady, _liftA);
+	_lift(bdx, bdy, _liftB);
+	_lift(cdx, cdy, _liftC);
+	const sa = _cross(bdx, cdy, cdx, bdy, _crossA);
+	const sb = _cross(cdx, ady, adx, cdy, _crossB);
+	const sc = _cross(adx, bdy, bdx, ady, _crossC);
+	for (let k = 0; k < 7; k++) _acc[k] = 0;
+	if (sa !== 0) _mulAdd44(_liftA, _crossA, sa);
+	if (sb !== 0) _mulAdd44(_liftB, _crossB, sb);
+	if (sc !== 0) _mulAdd44(_liftC, _crossC, sc);
+	return _accSign(7, _carry(7));
+}
+const _bits = /* @__PURE__ */ new Float64Array(1);
+const _words = new Uint32Array(_bits.buffer);
+_bits[0] = 1;
+const HI = _words[1] === 1072693248 ? 1 : 0;
+const LO = HI ^ 1;
+const _mant = /* @__PURE__ */ new Float64Array(8);
+const _expo = /* @__PURE__ */ new Int32Array(8);
+function _scaled(values, count) {
+	let minExpo = 2147483647;
+	for (let i = 0; i < count; i++) {
+		_bits[0] = values[i];
+		const hi = _words[HI];
+		const biased = hi >>> 20 & 2047;
+		let m = (hi & 1048575) * 4294967296 + _words[LO];
+		let e = -1074;
+		if (biased !== 0) {
+			m += 4503599627370496;
+			e = biased - 1075;
+		}
+		_mant[i] = hi >>> 31 ? -m : m;
+		_expo[i] = e;
+		if (m !== 0 && e < minExpo) minExpo = e;
+	}
+	const out = [];
+	for (let i = 0; i < count; i++) out.push(_mant[i] === 0 ? BigInt(0) : BigInt(_mant[i]) << BigInt(_expo[i] - minExpo));
+	return out;
+}
+const FINITE_LIMIT = BigInt(1) << BigInt(1023);
+const SHIFT_STEP = BigInt(64);
+function crossingParameter(ax, ay, bx, by, cx, cy, dx, dy) {
+	_input.set([
+		ax,
+		ay,
+		bx,
+		by,
+		cx,
+		cy,
+		dx,
+		dy
+	]);
+	const [a, b, c, d, e, f, g, h] = _scaled(_input, 8);
+	const rx = g - e;
+	const ry = h - f;
+	let numerator = rx * (b - f) - ry * (a - e);
+	let denominator = numerator - (rx * (d - f) - ry * (c - e));
+	if (denominator < BigInt(0)) {
+		numerator = -numerator;
+		denominator = -denominator;
+	}
+	let shift = BigInt(0);
+	let scaled = denominator;
+	while (scaled >= FINITE_LIMIT) {
+		scaled >>= SHIFT_STEP;
+		shift += SHIFT_STEP;
+	}
+	return Number(numerator >> shift) / Number(scaled);
+}
+function orient2dExact(ax, ay, bx, by, cx, cy) {
+	_input[0] = ax;
+	_input[1] = ay;
+	_input[2] = bx;
+	_input[3] = by;
+	_input[4] = cx;
+	_input[5] = cy;
+	const s = _scaled(_input, 6);
+	const det = (s[0] - s[4]) * (s[3] - s[5]) - (s[1] - s[5]) * (s[2] - s[4]);
+	const zero = BigInt(0);
+	return det > zero ? 1 : det < zero ? -1 : 0;
+}
+function incircleExact(ax, ay, bx, by, cx, cy, dx, dy) {
+	_input[0] = ax;
+	_input[1] = ay;
+	_input[2] = bx;
+	_input[3] = by;
+	_input[4] = cx;
+	_input[5] = cy;
+	_input[6] = dx;
+	_input[7] = dy;
+	const s = _scaled(_input, 8);
+	const adx = s[0] - s[6];
+	const ady = s[1] - s[7];
+	const bdx = s[2] - s[6];
+	const bdy = s[3] - s[7];
+	const cdx = s[4] - s[6];
+	const cdy = s[5] - s[7];
+	const det = (adx * adx + ady * ady) * (bdx * cdy - cdx * bdy) + (bdx * bdx + bdy * bdy) * (cdx * ady - adx * cdy) + (cdx * cdx + cdy * cdy) * (adx * bdy - bdx * ady);
+	const zero = BigInt(0);
+	return det > zero ? 1 : det < zero ? -1 : 0;
+}
+function hilbertIndex(order, x, y) {
+	const n = 1 << order;
+	let d = 0;
+	for (let s = n >> 1; s > 0; s >>= 1) {
+		const rx = (x & s) !== 0 ? 1 : 0;
+		const ry = (y & s) !== 0 ? 1 : 0;
+		d += s * s * (3 * rx ^ ry);
+		if (ry === 0) {
+			if (rx === 1) {
+				x = n - 1 - x;
+				y = n - 1 - y;
+			}
+			const t = x;
+			x = y;
+			y = t;
+		}
+	}
+	return d;
+}
+function hilbertOrder(coords, n) {
+	let minX = Infinity;
+	let minY = Infinity;
+	let maxX = -Infinity;
+	let maxY = -Infinity;
+	for (let i = 0; i < n; i++) {
+		const x = coords[2 * i];
+		const y = coords[2 * i + 1];
+		if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+		if (x < minX) minX = x;
+		if (x > maxX) maxX = x;
+		if (y < minY) minY = y;
+		if (y > maxY) maxY = y;
+	}
+	let order = 2;
+	while (order < 16 && 1 << 2 * order < 16 * n) order++;
+	const cells = (1 << order) - 1;
+	const span = Math.max(maxX - minX, maxY - minY);
+	const scale = span > 0 && Number.isFinite(span) ? cells / span : 0;
+	const keys = new Uint32Array(n);
+	for (let i = 0; i < n; i++) {
+		const x = coords[2 * i];
+		const y = coords[2 * i + 1];
+		let gx = 0;
+		let gy = 0;
+		if (Number.isFinite(x) && Number.isFinite(y)) {
+			gx = Math.min(cells, Math.max(0, Math.floor((x - minX) * scale)));
+			gy = Math.min(cells, Math.max(0, Math.floor((y - minY) * scale)));
+		}
+		keys[i] = hilbertIndex(order, gx, gy);
+	}
+	let from = new Uint32Array(n);
+	let to = new Uint32Array(n);
+	for (let i = 0; i < n; i++) from[i] = i;
+	const counts = /* @__PURE__ */ new Int32Array(257);
+	for (let shift = 0; shift < 2 * order; shift += 8) {
+		counts.fill(0);
+		for (let i = 0; i < n; i++) counts[(keys[i] >>> shift & 255) + 1]++;
+		for (let b = 0; b < 256; b++) counts[b + 1] += counts[b];
+		for (let i = 0; i < n; i++) {
+			const p = from[i];
+			to[counts[keys[p] >>> shift & 255]++] = p;
+		}
+		const swap = from;
+		from = to;
+		to = swap;
+	}
+	return from;
+}
+function triangulate(coords, n = coords.length >> 1) {
+	if (n < 3) return EMPTY;
+	_presetScale = sharedScale(coords, n);
+	try {
+		return _triangulate(coords, n);
+	} finally {
+		_presetScale = 0;
+	}
+}
+function sharedScale(coords, n) {
+	let bits = 0;
+	let max = 0;
+	for (let i = 0; i < 2 * n; i++) {
+		const v = coords[i];
+		if (!Number.isFinite(v)) continue;
+		if (v === 0) continue;
+		if (Math.abs(v) > max) max = Math.abs(v);
+		_bits[0] = v;
+		const hi = _words[HI];
+		const lo = _words[LO];
+		const biased = hi >>> 20 & 2047;
+		const e = biased === 0 ? -1074 : biased - 1075;
+		let trailing;
+		if (lo !== 0) trailing = 31 - Math.clz32(lo & -lo);
+		else {
+			const m = hi & 1048575 | (biased === 0 ? 0 : 1048576);
+			trailing = 32 + (31 - Math.clz32(m & -m));
+		}
+		const fractional = -(e + trailing);
+		if (fractional > bits) bits = fractional;
+		if (bits > 30) return 0;
+	}
+	const scale = Math.pow(2, bits);
+	return max * scale < INT_LIMIT ? scale : 0;
+}
+function _triangulate(coords, n) {
+	const order = hilbertOrder(coords, n);
+	let i0 = -1;
+	let i1 = -1;
+	let i2 = -1;
+	let k = 0;
+	for (; k < n; k++) {
+		const i = order[k];
+		if (Number.isFinite(coords[2 * i]) && Number.isFinite(coords[2 * i + 1])) {
+			i0 = i;
+			k++;
+			break;
+		}
+	}
+	if (i0 < 0) return EMPTY;
+	for (; k < n; k++) {
+		const i = order[k];
+		const x = coords[2 * i];
+		const y = coords[2 * i + 1];
+		if (Number.isFinite(x) && Number.isFinite(y) && (x !== coords[2 * i0] || y !== coords[2 * i0 + 1])) {
+			i1 = i;
+			k++;
+			break;
+		}
+	}
+	if (i1 < 0) return EMPTY;
+	for (; k < n; k++) {
+		const i = order[k];
+		const x = coords[2 * i];
+		const y = coords[2 * i + 1];
+		if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+		const o = orient2d(coords[2 * i0], coords[2 * i0 + 1], coords[2 * i1], coords[2 * i1 + 1], x, y);
+		if (o !== 0) {
+			i2 = i;
+			if (o < 0) {
+				const swap = i1;
+				i1 = i2;
+				i2 = swap;
+			}
+			break;
+		}
+	}
+	if (i2 < 0) return EMPTY;
+	const INF = n;
+	const capacity = 2 * n + 4;
+	const tv = new Int32Array(capacity * 3);
+	const adj = new Int32Array(capacity * 3);
+	const live = new Uint8Array(capacity);
+	const mark = new Int32Array(capacity);
+	const freed = new Int32Array(capacity);
+	let freedCount = 0;
+	let triCount = 0;
+	const stack = new Int32Array(capacity);
+	const cavity = new Int32Array(capacity);
+	const edgeFrom = new Int32Array(capacity * 3);
+	const edgeTo = new Int32Array(capacity * 3);
+	const edgeTwin = new Int32Array(capacity * 3);
+	const toPoint = new Int32Array(n + 1);
+	const fromPoint = new Int32Array(n + 1);
+	let stamp = 0;
+	const alloc = (a, b, c) => {
+		const t = freedCount > 0 ? freed[--freedCount] : triCount++;
+		const h = 3 * t;
+		tv[h] = a;
+		tv[h + 1] = b;
+		tv[h + 2] = c;
+		live[t] = 1;
+		return t;
+	};
+	const link = (h, g) => {
+		adj[h] = g;
+		adj[g] = h;
+	};
+	const t0 = alloc(i0, i1, i2);
+	const g0 = alloc(i1, i0, INF);
+	const g1 = alloc(i2, i1, INF);
+	const g2 = alloc(i0, i2, INF);
+	link(3 * t0, 3 * g0);
+	link(3 * t0 + 1, 3 * g1);
+	link(3 * t0 + 2, 3 * g2);
+	link(3 * g0 + 1, 3 * g2 + 2);
+	link(3 * g1 + 1, 3 * g0 + 2);
+	link(3 * g2 + 1, 3 * g1 + 2);
+	const inGhostDisk = (g, px, py) => {
+		const u = tv[3 * g];
+		const v = tv[3 * g + 1];
+		const ux = coords[2 * u];
+		const uy = coords[2 * u + 1];
+		const vx = coords[2 * v];
+		const vy = coords[2 * v + 1];
+		const o = orient2d(ux, uy, vx, vy, px, py);
+		if (o !== 0) return o > 0;
+		return Math.abs(vx - ux) >= Math.abs(vy - uy) ? vx > ux ? px > ux && px < vx : px < ux && px > vx : vy > uy ? py > uy && py < vy : py < uy && py > vy;
+	};
+	const inDisk = (t, px, py) => {
+		const h = 3 * t;
+		if (tv[h + 2] === INF) return inGhostDisk(t, px, py);
+		const a = tv[h];
+		const b = tv[h + 1];
+		const c = tv[h + 2];
+		return incircle(coords[2 * a], coords[2 * a + 1], coords[2 * b], coords[2 * b + 1], coords[2 * c], coords[2 * c + 1], px, py) > 0;
+	};
+	const locate = (t, px, py) => {
+		let steps = 0;
+		const limit = 4 * triCount + 64;
+		while (true) {
+			const h = 3 * t;
+			const a = tv[h];
+			const b = tv[h + 1];
+			const c = tv[h + 2];
+			const ax = coords[2 * a];
+			const ay = coords[2 * a + 1];
+			const bx = coords[2 * b];
+			const by = coords[2 * b + 1];
+			if (c === INF) {
+				if (orient2d(ax, ay, bx, by, px, py) > 0) return t;
+				t = adj[h] / 3 | 0;
+			} else {
+				const cx = coords[2 * c];
+				const cy = coords[2 * c + 1];
+				if (orient2d(ax, ay, bx, by, px, py) < 0) t = adj[h] / 3 | 0;
+				else if (orient2d(bx, by, cx, cy, px, py) < 0) t = adj[h + 1] / 3 | 0;
+				else if (orient2d(cx, cy, ax, ay, px, py) < 0) t = adj[h + 2] / 3 | 0;
+				else if (px === ax && py === ay || px === bx && py === by || px === cx && py === cy) return -1;
+				else return t;
+			}
+			if (++steps > limit) throw new Error("Delaunay walk did not terminate");
+		}
+	};
+	const insert = (p, start) => {
+		const px = coords[2 * p];
+		const py = coords[2 * p + 1];
+		const t = locate(start, px, py);
+		if (t < 0) return start;
+		stamp++;
+		let top = 0;
+		let count = 0;
+		stack[top++] = t;
+		mark[t] = stamp;
+		while (top > 0) {
+			const s = stack[--top];
+			cavity[count++] = s;
+			const h = 3 * s;
+			for (let e = 0; e < 3; e++) {
+				const o = adj[h + e] / 3 | 0;
+				if (mark[o] !== stamp && inDisk(o, px, py)) {
+					mark[o] = stamp;
+					stack[top++] = o;
+				}
+			}
+		}
+		let edges = 0;
+		for (let i = 0; i < count; i++) {
+			const h = 3 * cavity[i];
+			for (let e = 0; e < 3; e++) {
+				const twin = adj[h + e];
+				if (mark[twin / 3 | 0] !== stamp) {
+					edgeFrom[edges] = tv[h + e];
+					edgeTo[edges] = tv[h + (e + 1) % 3];
+					edgeTwin[edges] = twin;
+					edges++;
+				}
+			}
+		}
+		for (let i = 0; i < count; i++) {
+			live[cavity[i]] = 0;
+			freed[freedCount++] = cavity[i];
+		}
+		let first = -1;
+		for (let i = 0; i < edges; i++) {
+			const u = edgeFrom[i];
+			const v = edgeTo[i];
+			let t2;
+			let hEdge;
+			let hToP;
+			let hFromP;
+			if (u === INF) {
+				t2 = alloc(v, p, INF);
+				hEdge = 3 * t2 + 2;
+				hToP = 3 * t2;
+				hFromP = 3 * t2 + 1;
+			} else if (v === INF) {
+				t2 = alloc(p, u, INF);
+				hEdge = 3 * t2 + 1;
+				hToP = 3 * t2 + 2;
+				hFromP = 3 * t2;
+			} else {
+				t2 = alloc(u, v, p);
+				hEdge = 3 * t2;
+				hToP = 3 * t2 + 1;
+				hFromP = 3 * t2 + 2;
+				if (first < 0) first = t2;
+			}
+			link(hEdge, edgeTwin[i]);
+			toPoint[v] = hToP;
+			fromPoint[u] = hFromP;
+		}
+		for (let i = 0; i < edges; i++) {
+			const v = edgeTo[i];
+			link(toPoint[v], fromPoint[v]);
+		}
+		return first < 0 ? start : first;
+	};
+	let last = t0;
+	for (let j = 0; j < n; j++) {
+		const i = order[j];
+		if (i === i0 || i === i1 || i === i2) continue;
+		if (!Number.isFinite(coords[2 * i]) || !Number.isFinite(coords[2 * i + 1])) continue;
+		last = insert(i, last);
+	}
+	const index = new Int32Array(triCount);
+	let m = 0;
+	let ghost = -1;
+	for (let t = 0; t < triCount; t++) if (!live[t]) index[t] = -1;
+	else if (tv[3 * t + 2] === INF) {
+		index[t] = -1;
+		ghost = t;
+	} else index[t] = m++;
+	const triangles = new Uint32Array(m * 3);
+	const neighbors = new Int32Array(m * 3);
+	for (let t = 0; t < triCount; t++) {
+		const k2 = index[t];
+		if (k2 < 0) continue;
+		for (let e = 0; e < 3; e++) {
+			triangles[3 * k2 + e] = tv[3 * t + e];
+			const o = adj[3 * t + e];
+			const ot = index[o / 3 | 0];
+			neighbors[3 * k2 + e] = ot < 0 ? -1 : 3 * ot + o % 3;
+		}
+	}
+	let hullCount = 0;
+	let g = ghost;
+	do {
+		hullCount++;
+		g = adj[3 * g + 2] / 3 | 0;
+	} while (g !== ghost);
+	const hull = new Uint32Array(hullCount);
+	g = ghost;
+	for (let i = 0; i < hullCount; i++) {
+		hull[i] = tv[3 * g + 1];
+		g = adj[3 * g + 2] / 3 | 0;
+	}
+	return {
+		triangles,
+		neighbors,
+		hull
+	};
+}
+
+//#endregion
+//#region src/_path.ts
+const CELL_TOLS = 64;
+const CELL_OFFSET = 16384;
+const CELL_SPAN = 32768;
+const RAY_TREE_PER_LOG = 1.5;
+function ringsOf(shape) {
+	const list = Util.iterToArray(shape);
+	if (list.length === 0) return [];
+	const first = list[0];
+	if (first != null && typeof first[0] === "number") return [list];
+	const rings = new Array(list.length);
+	for (let i = 0; i < list.length; i++) rings[i] = Util.iterToArray(list[i]);
+	return rings;
+}
+function pseudoAngle(dx, dy) {
+	const s = (dx < 0 ? -dx : dx) + (dy < 0 ? -dy : dy);
+	const d = dy >= 0 ? dx >= 0 ? dy / s : 1 - dx / s : dx < 0 ? 2 - dy / s : 3 + dx / s;
+	return d >= 2 ? d - 2 : d + 2;
+}
+function addWinding(vector, shape, delta) {
+	var _vector$get;
+	const value = ((_vector$get = vector.get(shape)) !== null && _vector$get !== void 0 ? _vector$get : 0) + delta;
+	if (value === 0) vector.delete(shape);
+	else vector.set(shape, value);
+}
+function outputPerimeter(ring) {
+	let length = 0;
+	for (let i = 0, n = ring.length; i < n; i++) {
+		const a = ring[i];
+		const b = ring[i === n - 1 ? 0 : i + 1];
+		length += Math.hypot(b[0] - a[0], b[1] - a[1]);
+	}
+	return length;
+}
+function outputArea(ring) {
+	let area = 0;
+	const a = ring[0];
+	for (let i = 1; i + 1 < ring.length; i++) {
+		const b = ring[i], c = ring[i + 1];
+		area += (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]);
+	}
+	return area / 2;
+}
+var Overlay = class {
+	constructor() {
+		this.tol = 0;
+		this.rounding = 0;
+		this.k = 0;
+		this.vx = [];
+		this.vy = [];
+		this.cells = /* @__PURE__ */ new Map();
+		this.ea = [];
+		this.eb = [];
+		this.es = [];
+		this.spE = [];
+		this.spT = [];
+		this.spV = [];
+		this.gu = [];
+		this.gv = [];
+		this.deltas = [];
+		this.cycleArea = [];
+		this.cycleStart = [];
+	}
+	origin(h) {
+		return h & 1 ? this.gv[h >> 1] : this.gu[h >> 1];
+	}
+	target(h) {
+		return h & 1 ? this.gu[h >> 1] : this.gv[h >> 1];
+	}
+	read(shapes) {
+		const list = Util.iterToArray(shapes);
+		this.k = list.length;
+		const rings = [];
+		const ringShape = [];
+		let maxAbs = 0;
+		for (let s = 0; s < list.length; s++) {
+			const shapeRings = ringsOf(list[s]);
+			for (let r = 0; r < shapeRings.length; r++) {
+				const ring = shapeRings[r];
+				if (ring.length < 3) continue;
+				let finite = true;
+				let max = maxAbs;
+				for (let i = 0, n = ring.length; i < n; i++) {
+					const x = +ring[i][0];
+					const y = +ring[i][1];
+					if (!(Number.isFinite(x) && Number.isFinite(y))) {
+						finite = false;
+						break;
+					}
+					const ax = x < 0 ? -x : x;
+					const ay = y < 0 ? -y : y;
+					if (ax > max) max = ax;
+					if (ay > max) max = ay;
+				}
+				if (!finite) {
+					Util.warn("Path skipped a ring with a non-finite coordinate");
+					continue;
+				}
+				maxAbs = max;
+				rings.push(ring);
+				ringShape.push(s);
+			}
+		}
+		if (rings.length === 0 || maxAbs === 0) return false;
+		this.tol = maxAbs * 1e-6;
+		this.rounding = maxAbs * Number.EPSILON * 8;
+		const ids = [];
+		for (let r = 0; r < rings.length; r++) {
+			const ring = rings[r];
+			ids.length = 0;
+			let prev = -1;
+			for (let i = 0, n = ring.length; i < n; i++) {
+				const v = this.vertexAt(+ring[i][0], +ring[i][1]);
+				if (v !== prev) {
+					ids.push(v);
+					prev = v;
+				}
+			}
+			while (ids.length > 1 && ids[ids.length - 1] === ids[0]) ids.pop();
+			if (ids.length >= 3) for (let i = 0, n = ids.length; i < n; i++) {
+				this.ea.push(ids[i]);
+				this.eb.push(ids[i === n - 1 ? 0 : i + 1]);
+				this.es.push(ringShape[r]);
+			}
+		}
+		return this.ea.length > 0;
+	}
+	vertexAt(x, y, tol = this.tol) {
+		const cellSize = this.tol * CELL_TOLS;
+		const fx = x / cellSize;
+		const fy = y / cellSize;
+		const cx = Math.floor(fx);
+		const cy = Math.floor(fy);
+		const border = tol / cellSize;
+		const x0 = fx - cx <= border ? -1 : 0;
+		const x1 = fx - cx >= 1 - border ? 1 : 0;
+		const y0 = fy - cy <= border ? -1 : 0;
+		const y1 = fy - cy >= 1 - border ? 1 : 0;
+		const t2 = tol * tol;
+		for (let i = x0; i <= x1; i++) for (let j = y0; j <= y1; j++) {
+			const cell = this.cells.get((cx + i + CELL_OFFSET) * CELL_SPAN + (cy + j + CELL_OFFSET));
+			if (!cell) continue;
+			for (let n = 0; n < cell.length; n++) {
+				const v = cell[n];
+				const dx = this.vx[v] - x;
+				const dy = this.vy[v] - y;
+				if (dx * dx + dy * dy <= t2) return v;
+			}
+		}
+		const id = this.vx.length;
+		this.vx.push(x);
+		this.vy.push(y);
+		const key = (cx + CELL_OFFSET) * CELL_SPAN + (cy + CELL_OFFSET);
+		const cell = this.cells.get(key);
+		if (cell) cell.push(id);
+		else this.cells.set(key, [id]);
+		return id;
+	}
+	split() {
+		let boxes = this.boxes();
+		let pairs = this.sweep(boxes, this.tol);
+		for (let i = 0, n = pairs.length; i < n; i += 2) this.touchPair(pairs[i], pairs[i + 1], boxes);
+		if (this.spE.length > 0) {
+			this.applySplits();
+			boxes = this.boxes();
+			pairs = this.sweep(boxes, 0);
+		}
+		for (let i = 0, n = pairs.length; i < n; i += 2) this.crossPair(pairs[i], pairs[i + 1]);
+	}
+	boxes() {
+		const E = this.ea.length;
+		const vx = this.vx;
+		const vy = this.vy;
+		const minX = new Float64Array(E);
+		const maxX = new Float64Array(E);
+		const minY = new Float64Array(E);
+		const maxY = new Float64Array(E);
+		for (let e = 0; e < E; e++) {
+			const ax = vx[this.ea[e]];
+			const ay = vy[this.ea[e]];
+			const bx = vx[this.eb[e]];
+			const by = vy[this.eb[e]];
+			minX[e] = ax < bx ? ax : bx;
+			maxX[e] = ax < bx ? bx : ax;
+			minY[e] = ay < by ? ay : by;
+			maxY[e] = ay < by ? by : ay;
+		}
+		const order = new Uint32Array(E);
+		for (let e = 0; e < E; e++) order[e] = e;
+		order.sort((p, q) => minX[p] - minX[q]);
+		return {
+			minX,
+			maxX,
+			minY,
+			maxY,
+			order
+		};
+	}
+	sweep(boxes, margin) {
+		const { minX, maxX, minY, maxY, order } = boxes;
+		const pairs = [];
+		for (let i = 0, E = order.length; i < E; i++) {
+			const e1 = order[i];
+			const limit = maxX[e1] + margin;
+			const lo = minY[e1] - margin;
+			const hi = maxY[e1] + margin;
+			for (let j = i + 1; j < E; j++) {
+				const e2 = order[j];
+				if (minX[e2] > limit) break;
+				if (minY[e2] > hi || maxY[e2] < lo) continue;
+				pairs.push(e1, e2);
+			}
+		}
+		return pairs;
+	}
+	touchPair(e1, e2, boxes) {
+		const a = this.ea[e1];
+		const b = this.eb[e1];
+		const c = this.ea[e2];
+		const d = this.eb[e2];
+		if (this.inBox(a, e2, boxes)) this.touch(e2, a, c, d);
+		if (this.inBox(b, e2, boxes)) this.touch(e2, b, c, d);
+		if (this.inBox(c, e1, boxes)) this.touch(e1, c, a, b);
+		if (this.inBox(d, e1, boxes)) this.touch(e1, d, a, b);
+	}
+	inBox(v, e, boxes) {
+		const x = this.vx[v];
+		const y = this.vy[v];
+		const tol = this.tol;
+		return x >= boxes.minX[e] - tol && x <= boxes.maxX[e] + tol && y >= boxes.minY[e] - tol && y <= boxes.maxY[e] + tol;
+	}
+	touch(e, v, p, q) {
+		if (v === p || v === q) return;
+		const vx = this.vx;
+		const vy = this.vy;
+		const px = vx[p];
+		const py = vy[p];
+		const rx = vx[q] - px;
+		const ry = vy[q] - py;
+		const len2 = rx * rx + ry * ry;
+		const dx = vx[v] - px;
+		const dy = vy[v] - py;
+		const t = (dx * rx + dy * ry) / len2;
+		if (t <= 0 || t >= 1) return;
+		const cross = rx * dy - ry * dx;
+		if (cross * cross > this.tol * this.tol * len2) return;
+		this.registerSplit(e, v);
+	}
+	crossPair(e1, e2) {
+		const a = this.ea[e1];
+		const b = this.eb[e1];
+		const c = this.ea[e2];
+		const d = this.eb[e2];
+		if (a === c || a === d || b === c || b === d) return;
+		const vx = this.vx;
+		const vy = this.vy;
+		const ax = vx[a];
+		const ay = vy[a];
+		const bx = vx[b];
+		const by = vy[b];
+		const cx = vx[c];
+		const cy = vy[c];
+		const dx = vx[d];
+		const dy = vy[d];
+		if (orient2d(ax, ay, bx, by, cx, cy) * orient2d(ax, ay, bx, by, dx, dy) >= 0) return;
+		if (orient2d(cx, cy, dx, dy, ax, ay) * orient2d(cx, cy, dx, dy, bx, by) >= 0) return;
+		const t = crossingParameter(ax, ay, bx, by, cx, cy, dx, dy);
+		const v = this.vertexAt(ax + t * (bx - ax), ay + t * (by - ay), this.rounding);
+		this.registerSplit(e1, v);
+		this.registerSplit(e2, v);
+	}
+	applySplits() {
+		const E = this.ea.length;
+		const S = this.spE.length;
+		const spE = this.spE;
+		const spT = this.spT;
+		const spV = this.spV;
+		const order = new Uint32Array(S);
+		for (let i = 0; i < S; i++) order[i] = i;
+		order.sort((p, q) => spE[p] - spE[q] || spT[p] - spT[q]);
+		const ea = [];
+		const eb = [];
+		const es = [];
+		let si = 0;
+		for (let e = 0; e < E; e++) {
+			let u = this.ea[e];
+			const end = this.eb[e];
+			const s = this.es[e];
+			while (si < S && spE[order[si]] === e) {
+				const v = spV[order[si++]];
+				if (v === u) continue;
+				ea.push(u);
+				eb.push(v);
+				es.push(s);
+				u = v;
+			}
+			if (u !== end) {
+				ea.push(u);
+				eb.push(end);
+				es.push(s);
+			}
+		}
+		this.ea = ea;
+		this.eb = eb;
+		this.es = es;
+		spE.length = 0;
+		spT.length = 0;
+		spV.length = 0;
+	}
+	registerSplit(e, v) {
+		const a = this.ea[e];
+		const b = this.eb[e];
+		if (v === a || v === b) return;
+		const ax = this.vx[a];
+		const ay = this.vy[a];
+		const rx = this.vx[b] - ax;
+		const ry = this.vy[b] - ay;
+		const t = ((this.vx[v] - ax) * rx + (this.vy[v] - ay) * ry) / (rx * rx + ry * ry);
+		if (t <= 0 || t >= 1) return;
+		this.spE.push(e);
+		this.spT.push(t);
+		this.spV.push(v);
+	}
+	merge() {
+		if (this.spE.length > 0) this.applySplits();
+		const V = this.vx.length;
+		const index = /* @__PURE__ */ new Map();
+		const gu = this.gu;
+		const gv = this.gv;
+		const deltas = this.deltas;
+		for (let e = 0, E = this.ea.length; e < E; e++) {
+			const u = this.ea[e];
+			const v = this.eb[e];
+			const lo = u < v ? u : v;
+			const hi = u < v ? v : u;
+			const key = lo * V + hi;
+			let g = index.get(key);
+			if (g === void 0) {
+				g = gu.length;
+				gu.push(lo);
+				gv.push(hi);
+				deltas.push(/* @__PURE__ */ new Map());
+				index.set(key, g);
+			}
+			addWinding(deltas[g], this.es[e], u === lo ? 1 : -1);
+		}
+		let n = 0;
+		for (let e = 0, len = gu.length; e < len; e++) {
+			if (deltas[e].size === 0) continue;
+			if (n !== e) {
+				gu[n] = gu[e];
+				gv[n] = gv[e];
+				deltas[n] = deltas[e];
+			}
+			n++;
+		}
+		gu.length = n;
+		gv.length = n;
+		deltas.length = n;
+	}
+	rayTree() {
+		return this.rayIndex;
+	}
+	expectRayQueries(queries) {
+		const E = this.gu.length;
+		if (this.rayIndex === void 0 && queries > RAY_TREE_PER_LOG * Math.log2(E + 1) + 1) {
+			var _this$indexRays;
+			this.rayIndex = (_this$indexRays = this.indexRays()) !== null && _this$indexRays !== void 0 ? _this$indexRays : null;
+		}
+	}
+	indexRays() {
+		const edges = this.gu.map((_, e) => e).filter((e) => this.vy[this.gu[e]] !== this.vy[this.gv[e]]);
+		if (edges.length === 0) return void 0;
+		const build = (list) => {
+			const node = {
+				x0: Infinity,
+				x1: -Infinity,
+				y0: Infinity,
+				y1: -Infinity,
+				allY0: -Infinity,
+				allY1: Infinity,
+				sum: /* @__PURE__ */ new Map()
+			};
+			for (const e of list) {
+				const u = this.gu[e], v = this.gv[e];
+				const y0 = Math.min(this.vy[u], this.vy[v]);
+				const y1 = Math.max(this.vy[u], this.vy[v]);
+				node.x0 = Math.min(node.x0, this.vx[u], this.vx[v]);
+				node.x1 = Math.max(node.x1, this.vx[u], this.vx[v]);
+				node.y0 = Math.min(node.y0, y0);
+				node.y1 = Math.max(node.y1, y1);
+				node.allY0 = Math.max(node.allY0, y0);
+				node.allY1 = Math.min(node.allY1, y1);
+			}
+			if (list.length <= 8) {
+				node.edges = list;
+				if (node.allY0 < node.allY1) for (const e of list) {
+					const sign = this.vy[this.gv[e]] > this.vy[this.gu[e]] ? -1 : 1;
+					for (const [s, d] of this.deltas[e]) addWinding(node.sum, s, sign * d);
+				}
+			} else {
+				const axis = node.x1 - node.x0 >= node.y1 - node.y0 ? this.vx : this.vy;
+				list.sort((a, b) => axis[this.gu[a]] + axis[this.gv[a]] - (axis[this.gu[b]] + axis[this.gv[b]]));
+				const mid = list.length >> 1;
+				node.left = build(list.slice(0, mid));
+				node.right = build(list.slice(mid));
+				if (node.allY0 < node.allY1) for (const child of [node.left, node.right]) for (const [s, d] of child.sum) addWinding(node.sum, s, d);
+			}
+			return node;
+		};
+		return build(edges);
+	}
+	trace() {
+		const E = this.gu.length;
+		const H = 2 * E;
+		const V = this.vx.length;
+		const vx = this.vx;
+		const vy = this.vy;
+		const gu = this.gu;
+		const gv = this.gv;
+		const angle = new Float64Array(H);
+		for (let e = 0; e < E; e++) {
+			const dx = vx[gv[e]] - vx[gu[e]];
+			const dy = vy[gv[e]] - vy[gu[e]];
+			angle[2 * e] = pseudoAngle(dx, dy);
+			angle[2 * e + 1] = pseudoAngle(-dx, -dy);
+		}
+		const offset = new Int32Array(V + 1);
+		for (let e = 0; e < E; e++) {
+			offset[gu[e] + 1]++;
+			offset[gv[e] + 1]++;
+		}
+		for (let v = 0; v < V; v++) offset[v + 1] += offset[v];
+		const out = new Int32Array(H);
+		const cursor = offset.slice(0, V);
+		for (let e = 0; e < E; e++) {
+			out[cursor[gu[e]]++] = 2 * e;
+			out[cursor[gv[e]]++] = 2 * e + 1;
+		}
+		const slot = new Int32Array(H);
+		for (let v = 0; v < V; v++) {
+			const lo = offset[v];
+			const hi = offset[v + 1];
+			for (let i = lo + 1; i < hi; i++) {
+				const h = out[i];
+				const a = angle[h];
+				let j = i - 1;
+				while (j >= lo && (angle[out[j]] > a || angle[out[j]] === a && this.target(out[j]) > this.target(h))) {
+					out[j + 1] = out[j];
+					j--;
+				}
+				out[j + 1] = h;
+			}
+			for (let i = lo; i < hi; i++) slot[out[i]] = i - lo;
+		}
+		const next = new Int32Array(H);
+		for (let h = 0; h < H; h++) {
+			const v = this.target(h);
+			const base = offset[v];
+			const n = offset[v + 1] - base;
+			const s = slot[h ^ 1];
+			next[h] = out[base + (s === 0 ? n - 1 : s - 1)];
+		}
+		const cycle = new Int32Array(H).fill(-1);
+		const cycleArea = this.cycleArea;
+		const cycleStart = this.cycleStart;
+		for (let h = 0; h < H; h++) {
+			if (cycle[h] >= 0) continue;
+			const c = cycleArea.length;
+			let area = 0;
+			let cur = h;
+			do {
+				cycle[cur] = c;
+				const o = this.origin(cur);
+				const t = this.target(cur);
+				area += vx[o] * vy[t] - vx[t] * vy[o];
+				cur = next[cur];
+			} while (cur !== h);
+			cycleArea.push(area / 2);
+			cycleStart.push(h);
+		}
+		this.offset = offset;
+		this.out = out;
+		this.slot = slot;
+		this.next = next;
+		this.cycle = cycle;
+	}
+	label() {
+		const V = this.vx.length;
+		const E = this.gu.length;
+		const C = this.cycleArea.length;
+		const vx = this.vx;
+		const vy = this.vy;
+		const offset = this.offset;
+		const parent = new Int32Array(V);
+		for (let v = 0; v < V; v++) parent[v] = v;
+		const find = (v) => {
+			while (parent[v] !== v) {
+				parent[v] = parent[parent[v]];
+				v = parent[v];
+			}
+			return v;
+		};
+		for (let e = 0; e < E; e++) {
+			const a = find(this.gu[e]);
+			const b = find(this.gv[e]);
+			if (a !== b) parent[a] = b;
+		}
+		const leftmost = new Int32Array(V).fill(-1);
+		let components = 0;
+		for (let v = 0; v < V; v++) {
+			if (offset[v + 1] === offset[v]) continue;
+			const r = find(v);
+			const l = leftmost[r];
+			if (l < 0) components++;
+			if (l < 0 || vx[v] < vx[l] || vx[v] === vx[l] && vy[v] < vy[l]) leftmost[r] = v;
+		}
+		const labels = new Array(C);
+		const labeled = new Uint8Array(C);
+		const queue = new Int32Array(C);
+		if (components > 1) this.expectRayQueries(components);
+		for (let r = 0; r < V; r++) {
+			const p = leftmost[r];
+			if (p < 0) continue;
+			const g = this.out[offset[p + 1] - 1];
+			const c0 = this.cycle[g];
+			if (labeled[c0]) continue;
+			labels[c0] = /* @__PURE__ */ new Map();
+			if (components > 1) this.windingWest(p, labels[c0]);
+			labeled[c0] = 1;
+			let head = 0;
+			let tail = 0;
+			queue[tail++] = c0;
+			while (head < tail) {
+				const c = queue[head++];
+				const start = this.cycleStart[c];
+				let h = start;
+				do {
+					const c2 = this.cycle[h ^ 1];
+					if (!labeled[c2]) {
+						const nextLabel = new Map(labels[c]);
+						const sign = h & 1 ? 1 : -1;
+						for (const [s, d] of this.deltas[h >> 1]) addWinding(nextLabel, s, sign * d);
+						labels[c2] = nextLabel;
+						labeled[c2] = 1;
+						queue[tail++] = c2;
+					}
+					h = this.next[h];
+				} while (h !== start);
+			}
+		}
+		this.labels = labels;
+	}
+	windingWest(p, labels) {
+		const px = this.vx[p];
+		const py = this.vy[p];
+		const gu = this.gu;
+		const gv = this.gv;
+		const vy = this.vy;
+		const deltas = this.deltas;
+		const cross = (e) => {
+			const u = gu[e];
+			const v = gv[e];
+			if (u === p || v === p) return;
+			const uy = vy[u];
+			const wy = vy[v];
+			if (uy > py === wy > py) return;
+			if (this.crossingX(u, v, py) >= px) return;
+			const sign = wy > uy ? -1 : 1;
+			for (const [s, d] of deltas[e]) addWinding(labels, s, sign * d);
+		};
+		const tree = this.rayTree();
+		if (tree === void 0) {
+			for (let e = 0, E = this.gu.length; e < E; e++) cross(e);
+			return;
+		}
+		const stack = tree ? [tree] : [];
+		while (stack.length > 0) {
+			const node = stack.pop();
+			if (node.x0 >= px || py < node.y0 || py >= node.y1) continue;
+			if (node.x1 < px && py >= node.allY0 && py < node.allY1) {
+				for (const [s, d] of node.sum) addWinding(labels, s, d);
+				continue;
+			}
+			if (!node.edges) {
+				stack.push(node.left, node.right);
+				continue;
+			}
+			for (const e of node.edges) cross(e);
+		}
+	}
+	crossingX(u, v, y) {
+		const uy = this.vy[u];
+		const wy = this.vy[v];
+		if (uy === y) return this.vx[u];
+		if (wy === y) return this.vx[v];
+		const ux = this.vx[u];
+		return ux + (y - uy) * (this.vx[v] - ux) / (wy - uy);
+	}
+	select(mode) {
+		const C = this.cycleArea.length;
+		const k = this.k;
+		const labels = this.labels;
+		const keep = new Uint8Array(C);
+		for (let c = 0; c < C; c++) {
+			const count = labels[c].size;
+			const first = labels[c].has(0);
+			const last = labels[c].has(k - 1);
+			let on = false;
+			switch (mode) {
+				case "intersect":
+					on = count === k;
+					break;
+				case "exclude":
+					on = (count & 1) === 1;
+					break;
+				case "minusFront":
+					on = first && count === 1;
+					break;
+				case "minusBack":
+					on = last && count === 1;
+					break;
+				case "crop":
+					on = last && count >= 2;
+					break;
+				default: on = count > 0;
+			}
+			keep[c] = on ? 1 : 0;
+		}
+		return keep;
+	}
+	mergedRings(keep, ringOf) {
+		const H = ringOf.length;
+		const cycle = this.cycle;
+		const boundary = (h) => keep[cycle[h]] === 1 && keep[cycle[h ^ 1]] === 0;
+		const rings = [];
+		for (let h = 0; h < H; h++) {
+			if (ringOf[h] >= 0 || !boundary(h)) continue;
+			const r = rings.length;
+			const seq = [];
+			let cur = h;
+			do {
+				ringOf[cur] = r;
+				seq.push(cur);
+				const v = this.target(cur);
+				const base = this.offset[v];
+				const n = this.offset[v + 1] - base;
+				const s = this.slot[cur ^ 1];
+				let found = -1;
+				for (let i = 1; i <= n; i++) {
+					const cand = this.out[base + (s - i + n) % n];
+					if (boundary(cand)) {
+						found = cand;
+						break;
+					}
+				}
+				if (found < 0) break;
+				cur = found;
+			} while (cur !== h);
+			rings.push(seq);
+		}
+		return rings;
+	}
+	faceRings(keep, ringOf) {
+		const rings = [];
+		for (let c = 0, C = this.cycleArea.length; c < C; c++) {
+			if (!keep[c]) continue;
+			const r = rings.length;
+			const seq = [];
+			const start = this.cycleStart[c];
+			let h = start;
+			do {
+				ringOf[h] = r;
+				seq.push(h);
+				h = this.next[h];
+			} while (h !== start);
+			rings.push(seq);
+		}
+		return rings;
+	}
+	assemble(rings, ringOf) {
+		const R = rings.length;
+		const vx = this.vx;
+		const vy = this.vy;
+		const area = new Float64Array(R);
+		const left = new Int32Array(R);
+		for (let r = 0; r < R; r++) {
+			const seq = rings[r];
+			let a = 0;
+			let l = this.origin(seq[0]);
+			for (let i = 0; i < seq.length; i++) {
+				const o = this.origin(seq[i]);
+				const t = this.target(seq[i]);
+				a += vx[o] * vy[t] - vx[t] * vy[o];
+				if (vx[o] < vx[l] || vx[o] === vx[l] && vy[o] < vy[l]) l = o;
+			}
+			area[r] = a / 2;
+			left[r] = l;
+		}
+		const sliver = this.tol * this.tol;
+		let holes = 0;
+		for (let r = 0; r < R; r++) if (area[r] < 0) holes++;
+		this.expectRayQueries(holes);
+		const parent = new Int32Array(R).fill(-2);
+		const resolve = (r) => {
+			const chain = [];
+			let p = r;
+			while (p >= 0 && area[p] < 0 && parent[p] === -2) {
+				chain.push(p);
+				parent[p] = -1;
+				p = this.westHit(left[p], ringOf);
+			}
+			if (p >= 0 && area[p] < 0) p = parent[p];
+			if (p >= 0 && !(area[p] > sliver)) p = -1;
+			for (const hole of chain) parent[hole] = p;
+			return p;
+		};
+		const hairline = (ring, a) => Math.abs(a) < this.tol * outputPerimeter(ring) / 2;
+		const outers = new Int32Array(R).fill(-1);
+		const polygons = [];
+		for (let r = 0; r < R; r++) if (area[r] > sliver) {
+			const outer = this.ring(rings[r]);
+			const a = outputArea(outer);
+			if (a <= 0 || hairline(outer, a)) continue;
+			outers[r] = polygons.length;
+			polygons.push([outer]);
+		}
+		for (let r = 0; r < R; r++) {
+			if (area[r] >= -sliver) continue;
+			const p = resolve(r);
+			if (p >= 0 && outers[p] >= 0) {
+				const hole = this.ring(rings[r]);
+				const a = outputArea(hole);
+				if (a < 0 && !hairline(hole, a)) polygons[outers[p]].push(hole);
+			}
+		}
+		return polygons;
+	}
+	westHit(p, ringOf) {
+		const px = this.vx[p];
+		const py = this.vy[p];
+		let best = -Infinity;
+		let bestSlope = -Infinity;
+		let ring = -1;
+		const gu = this.gu;
+		const gv = this.gv;
+		const vx = this.vx;
+		const vy = this.vy;
+		const visit = (e) => {
+			if (ringOf[2 * e] < 0 && ringOf[2 * e + 1] < 0) return;
+			const u = gu[e];
+			const v = gv[e];
+			if (u === p || v === p) return;
+			const uy = vy[u];
+			const wy = vy[v];
+			if (uy > py === wy > py) return;
+			const xc = this.crossingX(u, v, py);
+			if (xc >= px) return;
+			const ux = vx[u];
+			const wx = vx[v];
+			const up = wy > uy;
+			const slope = up ? (wx - ux) / (wy - uy) : (ux - wx) / (uy - wy);
+			if (xc > best || xc === best && slope > bestSlope) {
+				best = xc;
+				bestSlope = slope;
+				ring = ringOf[up ? 2 * e + 1 : 2 * e];
+			}
+		};
+		const tree = this.rayTree();
+		if (tree === void 0) {
+			for (let e = 0, E = this.gu.length; e < E; e++) visit(e);
+			return ring;
+		}
+		const stack = tree ? [tree] : [];
+		while (stack.length > 0) {
+			const node = stack.pop();
+			if (node.x0 >= px || node.x1 < best || py < node.y0 || py >= node.y1) continue;
+			if (!node.edges) {
+				const a = node.left, b = node.right;
+				if (a.x1 < b.x1) stack.push(a, b);
+				else stack.push(b, a);
+				continue;
+			}
+			for (const e of node.edges) visit(e);
+		}
+		return ring;
+	}
+	ring(seq) {
+		const vx = this.vx;
+		const vy = this.vy;
+		const n = seq.length;
+		const ids = [];
+		for (let i = 0; i < n; i++) ids.push(this.origin(seq[i]));
+		const keep = [ids[0]];
+		const straight = (prev, v, w) => {
+			const rx = vx[w] - vx[prev];
+			const ry = vy[w] - vy[prev];
+			const t = ((vx[v] - vx[prev]) * rx + (vy[v] - vy[prev]) * ry) / (rx * rx + ry * ry);
+			return t > 0 && t < 1 && orient2d(vx[prev], vy[prev], vx[w], vy[w], vx[v], vy[v]) === 0;
+		};
+		for (let i = 1; i < n; i++) {
+			const v = ids[i];
+			const w = ids[i === n - 1 ? 0 : i + 1];
+			if (straight(keep[keep.length - 1], v, w)) continue;
+			keep.push(v);
+		}
+		if (keep.length > 3 && straight(keep[keep.length - 1], keep[0], keep[1])) keep.shift();
+		const g = new Group();
+		for (let i = 0; i < keep.length; i++) {
+			const pt = new Pt(2);
+			pt[0] = vx[keep[i]];
+			pt[1] = vy[keep[i]];
+			const prev = g[g.length - 1];
+			if (!prev || prev[0] !== pt[0] || prev[1] !== pt[1]) g.push(pt);
+		}
+		if (g.length > 1 && g[0][0] === g[g.length - 1][0] && g[0][1] === g[g.length - 1][1]) g.pop();
+		return g;
+	}
+};
+function overlay(shapes, mode) {
+	const faces = mode === "divide" || mode === "crop";
+	const ov = new Overlay();
+	if (!ov.read(shapes)) return [];
+	ov.split();
+	ov.merge();
+	if (ov.gu.length === 0) return [];
+	ov.trace();
+	ov.label();
+	const keep = ov.select(mode);
+	const ringOf = new Int32Array(2 * ov.gu.length).fill(-1);
+	const rings = faces ? ov.faceRings(keep, ringOf) : ov.mergedRings(keep, ringOf);
+	const polygons = ov.assemble(rings, ringOf);
+	if (faces) return polygons;
+	const flat = [];
+	for (let i = 0; i < polygons.length; i++) for (let j = 0; j < polygons[i].length; j++) flat.push(polygons[i][j]);
+	return flat;
+}
+
+//#endregion
 //#region src/Op.ts
 let _errorLength = (obj, param = "expected") => Util.warn("Group's length is less than " + param, obj);
 let _errorOutofBound = (obj, param = "") => Util.warn(`Index ${param} is out of bound in Group`, obj);
@@ -843,6 +2304,29 @@ var Polygon = class Polygon {
 		let merged = Util.flatten(boxes, false);
 		boxes.unshift(Geom.boundingBox(merged));
 		return boxes;
+	}
+};
+var Path = class {
+	static unite(shapes) {
+		return overlay(shapes, "unite");
+	}
+	static intersect(shapes) {
+		return overlay(shapes, "intersect");
+	}
+	static exclude(shapes) {
+		return overlay(shapes, "exclude");
+	}
+	static minusFront(shapes) {
+		return overlay(shapes, "minusFront");
+	}
+	static minusBack(shapes) {
+		return overlay(shapes, "minusBack");
+	}
+	static divide(shapes) {
+		return overlay(shapes, "divide");
+	}
+	static crop(shapes) {
+		return overlay(shapes, "crop");
 	}
 };
 var Curve = class Curve {
@@ -4704,6 +6188,34 @@ var CanvasForm = class CanvasForm extends VisualForm {
 		}
 		return this;
 	}
+	static compound(ctx, rings) {
+		let started = false;
+		for (const ring of rings) {
+			const p = Util.iterToArray(ring);
+			if (p.length < 2) continue;
+			if (!started) {
+				ctx.beginPath();
+				started = true;
+			}
+			ctx.moveTo(p[0][0], p[0][1]);
+			for (let i = 1, len = p.length; i < len; i++) ctx.lineTo(p[i][0], p[i][1]);
+			ctx.closePath();
+		}
+	}
+	compound(rings) {
+		const list = [];
+		let drawable = false;
+		for (const ring of rings) {
+			const p = Util.iterToArray(ring);
+			if (p.length >= 2) drawable = true;
+			list.push(p);
+		}
+		if (drawable) {
+			CanvasForm.compound(this._ctx, list);
+			this._paint();
+		}
+		return this;
+	}
 	static rect(ctx, pts) {
 		const p = Util.iterToArray(pts);
 		if (!Util.arrayCheck(p)) return;
@@ -4832,598 +6344,6 @@ var CanvasForm = class CanvasForm extends VisualForm {
 		return this;
 	}
 };
-
-//#endregion
-//#region src/_triangulate.ts
-const EMPTY = {
-	triangles: /* @__PURE__ */ new Uint32Array(0),
-	neighbors: /* @__PURE__ */ new Int32Array(0),
-	hull: /* @__PURE__ */ new Uint32Array(0)
-};
-const EPS = 11102230246251565e-32;
-const ORIENT_BOUND = 3.0000000000000018 * EPS;
-const INCIRCLE_BOUND = 10.00000000000001 * EPS;
-const INT_LIMIT = 2147483648;
-const _input = /* @__PURE__ */ new Float64Array(8);
-let _presetScale = 0;
-function _integerScale(count) {
-	if (_presetScale > 0) return _presetScale;
-	let scale = 1;
-	for (let k = 0; k <= 30; k++) {
-		let exact = true;
-		for (let i = 0; i < count; i++) {
-			const v = _input[i] * scale;
-			if (v >= INT_LIMIT || v <= -2147483648) return 0;
-			if ((v | 0) !== v) exact = false;
-		}
-		if (exact) return scale;
-		scale *= 2;
-	}
-	return 0;
-}
-function orient2d(ax, ay, bx, by, cx, cy) {
-	const left = (ax - cx) * (by - cy);
-	const right = (ay - cy) * (bx - cx);
-	const det = left - right;
-	const bound = ORIENT_BOUND * (Math.abs(left) + Math.abs(right));
-	if (det > bound) return 1;
-	if (-det > bound) return -1;
-	_input[0] = ax;
-	_input[1] = ay;
-	_input[2] = bx;
-	_input[3] = by;
-	_input[4] = cx;
-	_input[5] = cy;
-	const scale = _integerScale(6);
-	if (scale !== 0) return _orientInt((ax - cx) * scale, (by - cy) * scale, (ay - cy) * scale, (bx - cx) * scale);
-	return orient2dExact(ax, ay, bx, by, cx, cy);
-}
-function incircle(ax, ay, bx, by, cx, cy, dx, dy) {
-	const adx = ax - dx;
-	const ady = ay - dy;
-	const bdx = bx - dx;
-	const bdy = by - dy;
-	const cdx = cx - dx;
-	const cdy = cy - dy;
-	const bdxcdy = bdx * cdy;
-	const cdxbdy = cdx * bdy;
-	const alift = adx * adx + ady * ady;
-	const cdxady = cdx * ady;
-	const adxcdy = adx * cdy;
-	const blift = bdx * bdx + bdy * bdy;
-	const adxbdy = adx * bdy;
-	const bdxady = bdx * ady;
-	const clift = cdx * cdx + cdy * cdy;
-	const det = alift * (bdxcdy - cdxbdy) + blift * (cdxady - adxcdy) + clift * (adxbdy - bdxady);
-	const permanent = (Math.abs(bdxcdy) + Math.abs(cdxbdy)) * alift + (Math.abs(cdxady) + Math.abs(adxcdy)) * blift + (Math.abs(adxbdy) + Math.abs(bdxady)) * clift;
-	const bound = INCIRCLE_BOUND * permanent;
-	if (det > bound) return 1;
-	if (-det > bound) return -1;
-	_input[0] = ax;
-	_input[1] = ay;
-	_input[2] = bx;
-	_input[3] = by;
-	_input[4] = cx;
-	_input[5] = cy;
-	_input[6] = dx;
-	_input[7] = dy;
-	const scale = _integerScale(8);
-	if (scale !== 0) return _incircleInt(adx * scale, ady * scale, bdx * scale, bdy * scale, cdx * scale, cdy * scale);
-	return incircleExact(ax, ay, bx, by, cx, cy, dx, dy);
-}
-const LIMB = 262144;
-const INV_LIMB = 1 / LIMB;
-const _acc = /* @__PURE__ */ new Float64Array(8);
-const _liftA = /* @__PURE__ */ new Float64Array(4);
-const _liftB = /* @__PURE__ */ new Float64Array(4);
-const _liftC = /* @__PURE__ */ new Float64Array(4);
-const _crossA = /* @__PURE__ */ new Float64Array(4);
-const _crossB = /* @__PURE__ */ new Float64Array(4);
-const _crossC = /* @__PURE__ */ new Float64Array(4);
-function _mulAdd22(x, y, sign, at) {
-	const x0 = x & 262143;
-	const x1 = x >>> 18;
-	const y0 = y & 262143;
-	const y1 = y >>> 18;
-	_acc[at] += sign * x0 * y0;
-	_acc[at + 1] += sign * (x0 * y1 + x1 * y0);
-	_acc[at + 2] += sign * x1 * y1;
-}
-function _mulAdd44(a, m, sign) {
-	for (let i = 0; i < 4; i++) {
-		const ai = sign * a[i];
-		if (ai === 0) continue;
-		for (let j = 0; j < 4; j++) _acc[i + j] += ai * m[j];
-	}
-}
-function _carry(n) {
-	let carry = 0;
-	for (let k = 0; k < n; k++) {
-		const v = _acc[k] + carry;
-		carry = Math.floor(v * INV_LIMB);
-		_acc[k] = v - carry * LIMB;
-	}
-	return carry;
-}
-function _accSign(n, carry) {
-	if (carry !== 0) return carry > 0 ? 1 : -1;
-	for (let k = 0; k < n; k++) if (_acc[k] !== 0) return 1;
-	return 0;
-}
-function _magnitude(n, carry, out) {
-	if (carry >= 0) {
-		let zero = carry === 0;
-		for (let k = 0; k < n; k++) {
-			out[k] = _acc[k];
-			if (_acc[k] !== 0) zero = false;
-		}
-		out[n] = carry;
-		return zero ? 0 : 1;
-	}
-	let up = 1;
-	for (let k = 0; k < n; k++) {
-		let m = 262143 - _acc[k] + up;
-		up = 0;
-		if (m === LIMB) {
-			m = 0;
-			up = 1;
-		}
-		out[k] = m;
-	}
-	out[n] = -carry - 1 + up;
-	return -1;
-}
-function _orientInt(a, b, c, d) {
-	_acc[0] = 0;
-	_acc[1] = 0;
-	_acc[2] = 0;
-	_mulAdd22(Math.abs(a), Math.abs(b), a < 0 !== b < 0 ? -1 : 1, 0);
-	_mulAdd22(Math.abs(c), Math.abs(d), c < 0 !== d < 0 ? 1 : -1, 0);
-	return _accSign(3, _carry(3));
-}
-function _lift(dx, dy, out) {
-	_acc[0] = 0;
-	_acc[1] = 0;
-	_acc[2] = 0;
-	_mulAdd22(Math.abs(dx), Math.abs(dx), 1, 0);
-	_mulAdd22(Math.abs(dy), Math.abs(dy), 1, 0);
-	const carry = _carry(3);
-	out[0] = _acc[0];
-	out[1] = _acc[1];
-	out[2] = _acc[2];
-	out[3] = carry;
-}
-function _cross(p, q, r, t, out) {
-	_acc[0] = 0;
-	_acc[1] = 0;
-	_acc[2] = 0;
-	_mulAdd22(Math.abs(p), Math.abs(q), p < 0 !== q < 0 ? -1 : 1, 0);
-	_mulAdd22(Math.abs(r), Math.abs(t), r < 0 !== t < 0 ? 1 : -1, 0);
-	return _magnitude(3, _carry(3), out);
-}
-function _incircleInt(adx, ady, bdx, bdy, cdx, cdy) {
-	_lift(adx, ady, _liftA);
-	_lift(bdx, bdy, _liftB);
-	_lift(cdx, cdy, _liftC);
-	const sa = _cross(bdx, cdy, cdx, bdy, _crossA);
-	const sb = _cross(cdx, ady, adx, cdy, _crossB);
-	const sc = _cross(adx, bdy, bdx, ady, _crossC);
-	for (let k = 0; k < 7; k++) _acc[k] = 0;
-	if (sa !== 0) _mulAdd44(_liftA, _crossA, sa);
-	if (sb !== 0) _mulAdd44(_liftB, _crossB, sb);
-	if (sc !== 0) _mulAdd44(_liftC, _crossC, sc);
-	return _accSign(7, _carry(7));
-}
-const _bits = /* @__PURE__ */ new Float64Array(1);
-const _words = new Uint32Array(_bits.buffer);
-_bits[0] = 1;
-const HI = _words[1] === 1072693248 ? 1 : 0;
-const LO = HI ^ 1;
-const _mant = /* @__PURE__ */ new Float64Array(8);
-const _expo = /* @__PURE__ */ new Int32Array(8);
-function _scaled(values, count) {
-	let minExpo = 2147483647;
-	for (let i = 0; i < count; i++) {
-		_bits[0] = values[i];
-		const hi = _words[HI];
-		const biased = hi >>> 20 & 2047;
-		let m = (hi & 1048575) * 4294967296 + _words[LO];
-		let e = -1074;
-		if (biased !== 0) {
-			m += 4503599627370496;
-			e = biased - 1075;
-		}
-		_mant[i] = hi >>> 31 ? -m : m;
-		_expo[i] = e;
-		if (m !== 0 && e < minExpo) minExpo = e;
-	}
-	const out = [];
-	for (let i = 0; i < count; i++) out.push(_mant[i] === 0 ? BigInt(0) : BigInt(_mant[i]) << BigInt(_expo[i] - minExpo));
-	return out;
-}
-function orient2dExact(ax, ay, bx, by, cx, cy) {
-	_input[0] = ax;
-	_input[1] = ay;
-	_input[2] = bx;
-	_input[3] = by;
-	_input[4] = cx;
-	_input[5] = cy;
-	const s = _scaled(_input, 6);
-	const det = (s[0] - s[4]) * (s[3] - s[5]) - (s[1] - s[5]) * (s[2] - s[4]);
-	const zero = BigInt(0);
-	return det > zero ? 1 : det < zero ? -1 : 0;
-}
-function incircleExact(ax, ay, bx, by, cx, cy, dx, dy) {
-	_input[0] = ax;
-	_input[1] = ay;
-	_input[2] = bx;
-	_input[3] = by;
-	_input[4] = cx;
-	_input[5] = cy;
-	_input[6] = dx;
-	_input[7] = dy;
-	const s = _scaled(_input, 8);
-	const adx = s[0] - s[6];
-	const ady = s[1] - s[7];
-	const bdx = s[2] - s[6];
-	const bdy = s[3] - s[7];
-	const cdx = s[4] - s[6];
-	const cdy = s[5] - s[7];
-	const det = (adx * adx + ady * ady) * (bdx * cdy - cdx * bdy) + (bdx * bdx + bdy * bdy) * (cdx * ady - adx * cdy) + (cdx * cdx + cdy * cdy) * (adx * bdy - bdx * ady);
-	const zero = BigInt(0);
-	return det > zero ? 1 : det < zero ? -1 : 0;
-}
-function hilbertIndex(order, x, y) {
-	const n = 1 << order;
-	let d = 0;
-	for (let s = n >> 1; s > 0; s >>= 1) {
-		const rx = (x & s) !== 0 ? 1 : 0;
-		const ry = (y & s) !== 0 ? 1 : 0;
-		d += s * s * (3 * rx ^ ry);
-		if (ry === 0) {
-			if (rx === 1) {
-				x = n - 1 - x;
-				y = n - 1 - y;
-			}
-			const t = x;
-			x = y;
-			y = t;
-		}
-	}
-	return d;
-}
-function hilbertOrder(coords, n) {
-	let minX = Infinity;
-	let minY = Infinity;
-	let maxX = -Infinity;
-	let maxY = -Infinity;
-	for (let i = 0; i < n; i++) {
-		const x = coords[2 * i];
-		const y = coords[2 * i + 1];
-		if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
-		if (x < minX) minX = x;
-		if (x > maxX) maxX = x;
-		if (y < minY) minY = y;
-		if (y > maxY) maxY = y;
-	}
-	let order = 2;
-	while (order < 16 && 1 << 2 * order < 16 * n) order++;
-	const cells = (1 << order) - 1;
-	const span = Math.max(maxX - minX, maxY - minY);
-	const scale = span > 0 && Number.isFinite(span) ? cells / span : 0;
-	const keys = new Uint32Array(n);
-	for (let i = 0; i < n; i++) {
-		const x = coords[2 * i];
-		const y = coords[2 * i + 1];
-		let gx = 0;
-		let gy = 0;
-		if (Number.isFinite(x) && Number.isFinite(y)) {
-			gx = Math.min(cells, Math.max(0, Math.floor((x - minX) * scale)));
-			gy = Math.min(cells, Math.max(0, Math.floor((y - minY) * scale)));
-		}
-		keys[i] = hilbertIndex(order, gx, gy);
-	}
-	let from = new Uint32Array(n);
-	let to = new Uint32Array(n);
-	for (let i = 0; i < n; i++) from[i] = i;
-	const counts = /* @__PURE__ */ new Int32Array(257);
-	for (let shift = 0; shift < 2 * order; shift += 8) {
-		counts.fill(0);
-		for (let i = 0; i < n; i++) counts[(keys[i] >>> shift & 255) + 1]++;
-		for (let b = 0; b < 256; b++) counts[b + 1] += counts[b];
-		for (let i = 0; i < n; i++) {
-			const p = from[i];
-			to[counts[keys[p] >>> shift & 255]++] = p;
-		}
-		const swap = from;
-		from = to;
-		to = swap;
-	}
-	return from;
-}
-function triangulate(coords, n = coords.length >> 1) {
-	if (n < 3) return EMPTY;
-	_presetScale = sharedScale(coords, n);
-	try {
-		return _triangulate(coords, n);
-	} finally {
-		_presetScale = 0;
-	}
-}
-function sharedScale(coords, n) {
-	let bits = 0;
-	let max = 0;
-	for (let i = 0; i < 2 * n; i++) {
-		const v = coords[i];
-		if (!Number.isFinite(v)) continue;
-		if (v === 0) continue;
-		if (Math.abs(v) > max) max = Math.abs(v);
-		_bits[0] = v;
-		const hi = _words[HI];
-		const lo = _words[LO];
-		const biased = hi >>> 20 & 2047;
-		const e = biased === 0 ? -1074 : biased - 1075;
-		let trailing;
-		if (lo !== 0) trailing = 31 - Math.clz32(lo & -lo);
-		else {
-			const m = hi & 1048575 | (biased === 0 ? 0 : 1048576);
-			trailing = 32 + (31 - Math.clz32(m & -m));
-		}
-		const fractional = -(e + trailing);
-		if (fractional > bits) bits = fractional;
-		if (bits > 30) return 0;
-	}
-	const scale = Math.pow(2, bits);
-	return max * scale < INT_LIMIT ? scale : 0;
-}
-function _triangulate(coords, n) {
-	const order = hilbertOrder(coords, n);
-	let i0 = -1;
-	let i1 = -1;
-	let i2 = -1;
-	let k = 0;
-	for (; k < n; k++) {
-		const i = order[k];
-		if (Number.isFinite(coords[2 * i]) && Number.isFinite(coords[2 * i + 1])) {
-			i0 = i;
-			k++;
-			break;
-		}
-	}
-	if (i0 < 0) return EMPTY;
-	for (; k < n; k++) {
-		const i = order[k];
-		const x = coords[2 * i];
-		const y = coords[2 * i + 1];
-		if (Number.isFinite(x) && Number.isFinite(y) && (x !== coords[2 * i0] || y !== coords[2 * i0 + 1])) {
-			i1 = i;
-			k++;
-			break;
-		}
-	}
-	if (i1 < 0) return EMPTY;
-	for (; k < n; k++) {
-		const i = order[k];
-		const x = coords[2 * i];
-		const y = coords[2 * i + 1];
-		if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
-		const o = orient2d(coords[2 * i0], coords[2 * i0 + 1], coords[2 * i1], coords[2 * i1 + 1], x, y);
-		if (o !== 0) {
-			i2 = i;
-			if (o < 0) {
-				const swap = i1;
-				i1 = i2;
-				i2 = swap;
-			}
-			break;
-		}
-	}
-	if (i2 < 0) return EMPTY;
-	const INF = n;
-	const capacity = 2 * n + 4;
-	const tv = new Int32Array(capacity * 3);
-	const adj = new Int32Array(capacity * 3);
-	const live = new Uint8Array(capacity);
-	const mark = new Int32Array(capacity);
-	const freed = new Int32Array(capacity);
-	let freedCount = 0;
-	let triCount = 0;
-	const stack = new Int32Array(capacity);
-	const cavity = new Int32Array(capacity);
-	const edgeFrom = new Int32Array(capacity * 3);
-	const edgeTo = new Int32Array(capacity * 3);
-	const edgeTwin = new Int32Array(capacity * 3);
-	const toPoint = new Int32Array(n + 1);
-	const fromPoint = new Int32Array(n + 1);
-	let stamp = 0;
-	const alloc = (a, b, c) => {
-		const t = freedCount > 0 ? freed[--freedCount] : triCount++;
-		const h = 3 * t;
-		tv[h] = a;
-		tv[h + 1] = b;
-		tv[h + 2] = c;
-		live[t] = 1;
-		return t;
-	};
-	const link = (h, g) => {
-		adj[h] = g;
-		adj[g] = h;
-	};
-	const t0 = alloc(i0, i1, i2);
-	const g0 = alloc(i1, i0, INF);
-	const g1 = alloc(i2, i1, INF);
-	const g2 = alloc(i0, i2, INF);
-	link(3 * t0, 3 * g0);
-	link(3 * t0 + 1, 3 * g1);
-	link(3 * t0 + 2, 3 * g2);
-	link(3 * g0 + 1, 3 * g2 + 2);
-	link(3 * g1 + 1, 3 * g0 + 2);
-	link(3 * g2 + 1, 3 * g1 + 2);
-	const inGhostDisk = (g, px, py) => {
-		const u = tv[3 * g];
-		const v = tv[3 * g + 1];
-		const ux = coords[2 * u];
-		const uy = coords[2 * u + 1];
-		const vx = coords[2 * v];
-		const vy = coords[2 * v + 1];
-		const o = orient2d(ux, uy, vx, vy, px, py);
-		if (o !== 0) return o > 0;
-		return Math.abs(vx - ux) >= Math.abs(vy - uy) ? vx > ux ? px > ux && px < vx : px < ux && px > vx : vy > uy ? py > uy && py < vy : py < uy && py > vy;
-	};
-	const inDisk = (t, px, py) => {
-		const h = 3 * t;
-		if (tv[h + 2] === INF) return inGhostDisk(t, px, py);
-		const a = tv[h];
-		const b = tv[h + 1];
-		const c = tv[h + 2];
-		return incircle(coords[2 * a], coords[2 * a + 1], coords[2 * b], coords[2 * b + 1], coords[2 * c], coords[2 * c + 1], px, py) > 0;
-	};
-	const locate = (t, px, py) => {
-		let steps = 0;
-		const limit = 4 * triCount + 64;
-		while (true) {
-			const h = 3 * t;
-			const a = tv[h];
-			const b = tv[h + 1];
-			const c = tv[h + 2];
-			const ax = coords[2 * a];
-			const ay = coords[2 * a + 1];
-			const bx = coords[2 * b];
-			const by = coords[2 * b + 1];
-			if (c === INF) {
-				if (orient2d(ax, ay, bx, by, px, py) > 0) return t;
-				t = adj[h] / 3 | 0;
-			} else {
-				const cx = coords[2 * c];
-				const cy = coords[2 * c + 1];
-				if (orient2d(ax, ay, bx, by, px, py) < 0) t = adj[h] / 3 | 0;
-				else if (orient2d(bx, by, cx, cy, px, py) < 0) t = adj[h + 1] / 3 | 0;
-				else if (orient2d(cx, cy, ax, ay, px, py) < 0) t = adj[h + 2] / 3 | 0;
-				else if (px === ax && py === ay || px === bx && py === by || px === cx && py === cy) return -1;
-				else return t;
-			}
-			if (++steps > limit) throw new Error("Delaunay walk did not terminate");
-		}
-	};
-	const insert = (p, start) => {
-		const px = coords[2 * p];
-		const py = coords[2 * p + 1];
-		const t = locate(start, px, py);
-		if (t < 0) return start;
-		stamp++;
-		let top = 0;
-		let count = 0;
-		stack[top++] = t;
-		mark[t] = stamp;
-		while (top > 0) {
-			const s = stack[--top];
-			cavity[count++] = s;
-			const h = 3 * s;
-			for (let e = 0; e < 3; e++) {
-				const o = adj[h + e] / 3 | 0;
-				if (mark[o] !== stamp && inDisk(o, px, py)) {
-					mark[o] = stamp;
-					stack[top++] = o;
-				}
-			}
-		}
-		let edges = 0;
-		for (let i = 0; i < count; i++) {
-			const h = 3 * cavity[i];
-			for (let e = 0; e < 3; e++) {
-				const twin = adj[h + e];
-				if (mark[twin / 3 | 0] !== stamp) {
-					edgeFrom[edges] = tv[h + e];
-					edgeTo[edges] = tv[h + (e + 1) % 3];
-					edgeTwin[edges] = twin;
-					edges++;
-				}
-			}
-		}
-		for (let i = 0; i < count; i++) {
-			live[cavity[i]] = 0;
-			freed[freedCount++] = cavity[i];
-		}
-		let first = -1;
-		for (let i = 0; i < edges; i++) {
-			const u = edgeFrom[i];
-			const v = edgeTo[i];
-			let t2;
-			let hEdge;
-			let hToP;
-			let hFromP;
-			if (u === INF) {
-				t2 = alloc(v, p, INF);
-				hEdge = 3 * t2 + 2;
-				hToP = 3 * t2;
-				hFromP = 3 * t2 + 1;
-			} else if (v === INF) {
-				t2 = alloc(p, u, INF);
-				hEdge = 3 * t2 + 1;
-				hToP = 3 * t2 + 2;
-				hFromP = 3 * t2;
-			} else {
-				t2 = alloc(u, v, p);
-				hEdge = 3 * t2;
-				hToP = 3 * t2 + 1;
-				hFromP = 3 * t2 + 2;
-				if (first < 0) first = t2;
-			}
-			link(hEdge, edgeTwin[i]);
-			toPoint[v] = hToP;
-			fromPoint[u] = hFromP;
-		}
-		for (let i = 0; i < edges; i++) {
-			const v = edgeTo[i];
-			link(toPoint[v], fromPoint[v]);
-		}
-		return first < 0 ? start : first;
-	};
-	let last = t0;
-	for (let j = 0; j < n; j++) {
-		const i = order[j];
-		if (i === i0 || i === i1 || i === i2) continue;
-		if (!Number.isFinite(coords[2 * i]) || !Number.isFinite(coords[2 * i + 1])) continue;
-		last = insert(i, last);
-	}
-	const index = new Int32Array(triCount);
-	let m = 0;
-	let ghost = -1;
-	for (let t = 0; t < triCount; t++) if (!live[t]) index[t] = -1;
-	else if (tv[3 * t + 2] === INF) {
-		index[t] = -1;
-		ghost = t;
-	} else index[t] = m++;
-	const triangles = new Uint32Array(m * 3);
-	const neighbors = new Int32Array(m * 3);
-	for (let t = 0; t < triCount; t++) {
-		const k2 = index[t];
-		if (k2 < 0) continue;
-		for (let e = 0; e < 3; e++) {
-			triangles[3 * k2 + e] = tv[3 * t + e];
-			const o = adj[3 * t + e];
-			const ot = index[o / 3 | 0];
-			neighbors[3 * k2 + e] = ot < 0 ? -1 : 3 * ot + o % 3;
-		}
-	}
-	let hullCount = 0;
-	let g = ghost;
-	do {
-		hullCount++;
-		g = adj[3 * g + 2] / 3 | 0;
-	} while (g !== ghost);
-	const hull = new Uint32Array(hullCount);
-	g = ghost;
-	for (let i = 0; i < hullCount; i++) {
-		hull[i] = tv[3 * g + 1];
-		g = adj[3 * g + 2] / 3 | 0;
-	}
-	return {
-		triangles,
-		neighbors,
-		hull
-	};
-}
 
 //#endregion
 //#region src/Create.ts
@@ -9629,5 +10549,5 @@ var Sound = class Sound {
 };
 
 //#endregion
-export { Body, Boid, Bound, CanvasForm, CanvasSpace, Circle, Color, Const, Create, Curve, DOMSpace, Delaunay, Flock, Font, Form, Geom, Group, HTMLForm, HTMLSpace, Img, Line, Mat, MultiTouchSpace, Noise, Num, Particle, PoissonDisk, Polygon, Pt, Range, Rectangle, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, Space, Tempo, Triangle, Typography, UI, UIButton, UIDragger, UIPointerActions, UIShape, Util, Vec, VisualForm, World };
+export { Body, Boid, Bound, CanvasForm, CanvasSpace, Circle, Color, Const, Create, Curve, DOMSpace, Delaunay, Flock, Font, Form, Geom, Group, HTMLForm, HTMLSpace, Img, Line, Mat, MultiTouchSpace, Noise, Num, Particle, Path, PoissonDisk, Polygon, Pt, Range, Rectangle, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, Space, Tempo, Triangle, Typography, UI, UIButton, UIDragger, UIPointerActions, UIShape, Util, Vec, VisualForm, World };
 //# sourceMappingURL=index.mjs.map

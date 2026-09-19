@@ -359,6 +359,47 @@ function _scaled(values: Float64Array, count: number): bigint[] {
   return out;
 }
 
+// `Number(bigint)` is finite below 2^1024; shift in whole limbs until then.
+const FINITE_LIMIT = BigInt(1) << BigInt(1023);
+const SHIFT_STEP = BigInt(64);
+
+/**
+ * Parameter of a known proper crossing along a→b. Evaluate the determinants
+ * exactly before division: shallow crossings can lose most of their digits
+ * when two rounded products are subtracted. Used by the polygon overlay.
+ */
+export function crossingParameter(
+  ax: number,
+  ay: number,
+  bx: number,
+  by: number,
+  cx: number,
+  cy: number,
+  dx: number,
+  dy: number,
+): number {
+  _input.set([ax, ay, bx, by, cx, cy, dx, dy]);
+  const [a, b, c, d, e, f, g, h] = _scaled(_input, 8);
+  const rx = g - e;
+  const ry = h - f;
+  let numerator = rx * (b - f) - ry * (a - e);
+  let denominator = numerator - (rx * (d - f) - ry * (c - e));
+  if (denominator < BigInt(0)) {
+    numerator = -numerator;
+    denominator = -denominator;
+  }
+  // Keep the conversion finite even when the input doubles span hundreds of
+  // binary exponents. The numerator is between zero and the denominator, and
+  // a denominator of ordinary size needs no shift at all.
+  let shift = BigInt(0);
+  let scaled = denominator;
+  while (scaled >= FINITE_LIMIT) {
+    scaled >>= SHIFT_STEP;
+    shift += SHIFT_STEP;
+  }
+  return Number(numerator >> shift) / Number(scaled);
+}
+
 /** Exact orientation, evaluated in BigInt. Used when the fast filter cannot decide. */
 export function orient2dExact(
   ax: number,

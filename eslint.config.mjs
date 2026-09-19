@@ -28,6 +28,7 @@ const ptsGlobals = Object.fromEntries(
     "Noise",
     "Num",
     "Particle",
+    "Path",
     "PoissonDisk",
     "Polygon",
     "Pt",

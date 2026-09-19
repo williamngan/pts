@@ -16,6 +16,7 @@ describe("public module entry", () => {
         Mat: expect.any(Function),
         Num: expect.any(Function),
         Particle: expect.any(Function),
+        Path: expect.any(Function),
         Pt: expect.any(Function),
         Rectangle: expect.any(Function),
         SVGSpace: expect.any(Function),

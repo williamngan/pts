@@ -348,6 +348,11 @@ type PtIterable = GroupLike | Pt[] | Iterable<Pt>;
  */
 type PtLikeIterable = GroupLike | PtLike[] | Iterable<PtLike>;
 /**
+ * Typescript type: PolygonLike represents a polygon for [`Path`](#link): either one ring of points (any `PtLikeIterable`),
+ * or a list of rings combined by the nonzero winding rule, such as the `Group[]` a Path function returns (an outer ring followed by its holes).
+ */
+type PolygonLike = PtLikeIterable | Iterable<PtLikeIterable>;
+/**
  * Typescript type: TextMeasure represents a function that returns the rendered width of a string of text, such as canvas context's `measureText` or an estimator created via [`Typography.textWidthEstimator`](#link).
  */
 type TextMeasure = (text: string) => number;
@@ -2577,6 +2582,19 @@ declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends Visual
    */
   polygon(pts: PtLikeIterable): this;
   /**
+   * A static function to draw a compound polygon: several rings as one path, so that a ring inside another with the opposite orientation becomes a hole (the nonzero winding rule).
+   * @param ctx canvas rendering context
+   * @param rings an Array/Iterable of rings, each a Group or an Iterable<PtLike>; rings with fewer than 2 points are skipped
+   */
+  static compound(ctx: RenderingContext2D, rings: Iterable<PtLikeIterable>): void;
+  /**
+   * Draw a compound polygon: several rings as one path, so that a ring inside another with the opposite orientation becomes a hole
+   * (the nonzero winding rule). This is how a [`Path`](#link) result is drawn; [`CanvasForm.polygons`](#link) would fill the holes.
+   * @param rings an Array/Iterable of rings, each a Group or an Iterable<PtLike>; rings with fewer than 2 points are skipped, and nothing is drawn if no ring remains
+   * @example `form.fillOnly("#f03").compound( Path.minusFront( [disc, hole] ) )`
+   */
+  compound(rings: Iterable<PtLikeIterable>): this;
+  /**
    * A static function to draw a rectangle.
    * @param ctx canvas rendering context
    * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.
@@ -4195,6 +4213,73 @@ declare class Polygon {
    * @param polys an Array/Iterable of (Groups or Iterables<Pt>)
    */
   static toRects(polys: Iterable<PtIterable>): Group[];
+}
+/**
+ * Path class provides static functions to combine polygons with boolean operations:
+ * unite, intersect, exclude, subtract the shapes in front or behind, divide into faces, or crop by the top shape.
+ * Shapes are listed in stacking order, the first at the back and the last in front, like the order you would draw them in.
+ * A shape is a polygon (a Group, or any iterable of points), or a list of rings that together form a polygon with holes,
+ * such as the result of another Path function. Every result is such a list of rings: an outer ring followed by its
+ * holes, in opposite orientations, which [`CanvasForm.compound`](#link) draws as one path. Rings are open (the first point
+ * is not repeated), 2D, and never share Pts with the input. Clockwise and counterclockwise rings are the same shape, and
+ * a self-intersecting ring covers what `form.polygon` would fill (the nonzero rule). Input vertices closer together than a
+ * millionth of the largest absolute coordinate are merged before finding intersections. For small shapes at large offsets,
+ * work in local coordinates to avoid losing detail to this tolerance or the Float32 output.
+ * See [Op guide](../guide/Op-0400.html) for details.
+ */
+declare class Path {
+  /**
+   * Unite: merge all shapes into one polygon (the area inside any shape).
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @returns the rings of the merged polygon: each outer ring followed by its holes; empty if the shapes have no area
+   * @example `form.fillOnly("#f03").compound( Path.unite( [star, disc] ) )`
+   */
+  static unite(shapes: Iterable<PolygonLike>): Group[];
+  /**
+   * Intersect: keep only the area inside every shape.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @returns the rings of the common polygon: each outer ring followed by its holes; empty if the shapes do not all overlap
+   * @example `Path.intersect( [a, b, c] )`
+   */
+  static intersect(shapes: Iterable<PolygonLike>): Group[];
+  /**
+   * Exclude: keep the area inside an odd number of shapes, so where two shapes overlap becomes a hole.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @returns the rings of the result: each outer ring followed by its holes; empty if the shapes cancel out
+   * @example `Path.exclude( [a, b] )`
+   */
+  static exclude(shapes: Iterable<PolygonLike>): Group[];
+  /**
+   * Minus Front: subtract every shape in front from the backmost (first) shape.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @returns the rings of what remains of the first shape: each outer ring followed by its holes; empty if nothing remains
+   * @example `Path.minusFront( [disc, hole] )` cuts `hole` out of `disc`
+   */
+  static minusFront(shapes: Iterable<PolygonLike>): Group[];
+  /**
+   * Minus Back: subtract every shape behind from the frontmost (last) shape.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @returns the rings of what remains of the last shape: each outer ring followed by its holes; empty if nothing remains
+   * @example `Path.minusBack( [wall, window] )` keeps the part of `window` not covered by `wall`
+   */
+  static minusBack(shapes: Iterable<PolygonLike>): Group[];
+  /**
+   * Divide: split the shapes at every crossing into separate faces. Each face is the largest area not cut by any edge, so
+   * a region inside two shapes is its own face, and a self-overlapping region of one shape is too.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @returns an array of polygons, one per face, each an outer ring followed by its holes
+   * @example `Path.divide( [a, b] ).forEach( (face, i) => form.fillOnly( colors[i] ).compound( face ) )`
+   */
+  static divide(shapes: Iterable<PolygonLike>): Group[][];
+  /**
+   * Crop: use the frontmost (last) shape as a mask, keeping the faces of the other shapes inside it and deleting the mask itself.
+   * Like [`Path.divide`](#link), the shapes under the mask stay divided where they overlap.
+   * See a [demo here](https://ptsjs.org/demo/?name=path.crop).
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @returns an array of polygons, one per face inside the mask, each an outer ring followed by its holes
+   * @example `Path.crop( [photo, frame] )`
+   */
+  static crop(shapes: Iterable<PolygonLike>): Group[][];
 }
 /**
  * Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.
@@ -6499,5 +6584,5 @@ declare class Sound {
   dispose(): this;
 }
 //#endregion
-export { AnimateCallbackFn, Body, Boid, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Flock, FlockBoundary, FlockOptions, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, ImgOptions, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, PoissonDisk, PoissonDiskOptions, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TextMeasure, TextVerticalAlign, TouchPointsKey, Triangle, Typography, UI, UIActionEvent, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, UIShapeTest, Util, Vec, VisualForm, WarningType, World };
+export { AnimateCallbackFn, Body, Boid, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Flock, FlockBoundary, FlockOptions, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, ImgOptions, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Path, PoissonDisk, PoissonDiskOptions, Polygon, PolygonLike, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TextMeasure, TextVerticalAlign, TouchPointsKey, Triangle, Typography, UI, UIActionEvent, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, UIShapeTest, Util, Vec, VisualForm, WarningType, World };
 //# sourceMappingURL=index.d.mts.map

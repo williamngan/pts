@@ -48,6 +48,7 @@ Demo and study source files are linked directly from `ptsjs.org` instead of embe
 - [`line.collinear`](#demo-line-collinear)
 - [`line.intersectLine2D`](#demo-line-intersect-line2-d)
 - [`line.perpendicularFromPt`](#demo-line-perpendicular-from-pt)
+- [`path.crop`](#demo-path-crop)
 - [`physics.particles`](#demo-physics-particles)
 - [`physics.shapes`](#demo-physics-shapes)
 - [`polygon.convexHull`](#demo-polygon-convex-hull)
@@ -126,6 +127,13 @@ Demo and study source files are linked directly from `ptsjs.org` instead of embe
 - [`Img.load`](#study-img-load)
 - [`Line.intersect2D`](#study-line-intersect2-d)
 - [`Line.marker`](#study-line-marker)
+- [`Path.crop`](#study-path-crop)
+- [`Path.divide`](#study-path-divide)
+- [`Path.exclude`](#study-path-exclude)
+- [`Path.intersect`](#study-path-intersect)
+- [`Path.minusBack`](#study-path-minus-back)
+- [`Path.minusFront`](#study-path-minus-front)
+- [`Path.unite`](#study-path-unite)
 - [`Polygon.bisector`](#study-polygon-bisector)
 - [`Polygon.convexHull`](#study-polygon-convex-hull)
 - [`Polygon.intersect`](#study-polygon-intersect)
@@ -918,6 +926,18 @@ Polygon.centroid( poly );
 Polygon.convexHull( poly );
 Polygon.lines( poly ); // get line segments
 Polygon.intersectPolygon2D( poly, lines );
+```
+
+[`Path`](https://ptsjs.org/docs.md#op-path) from "Op" module combines polygons with boolean operations. List the shapes from back to front; every function returns the rings of a polygon with holes, which `form.compound` draws as one path.
+
+```
+Path.unite( [star, disc] ); // merge into one polygon
+Path.minusFront( [star, disc] ); // cut the disc out of the star
+Path.intersect( [a, b, c] ); // the area inside all three
+Path.exclude( [a, b] ); // everything but the overlap
+Path.divide( [a, b] ); // one polygon per face
+Path.crop( [photo, frame] ); // the faces of photo inside frame
+form.fillOnly("#f03").compound( Path.minusBack( [wall, window] ) );
 ```
 
 [`Curve`](https://ptsjs.org/docs.md#op-curve) from "Op" module helps you create and work with curves.
@@ -1944,7 +1964,7 @@ Generate Delaunay and Voronoi tessellations. When 100 points are added, the diag
 <a id="demo-create-flock"></a>
 ### `create.flock`
 
-A flock of agents steering by three local rules: separation, alignment, and cohesion. Move the pointer to scatter them, and watch the flock re-form. Agents caught in the circle turn white.
+Move the pointer to scatter the flock. They will turn white and move away.
 
 [Open live](https://ptsjs.org/demo/?name=create.flock) · [Source code](https://ptsjs.org/demo/create.flock.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/create.flock.js)
 
@@ -1979,14 +1999,14 @@ Add a point to a trail as the pointer moves. Use those points as controls for a 
 <a id="demo-curve-bspline"></a>
 ### `curve.bspline`
 
-Create a set of points around a center point, varying each's radius slightly. Convert the b-spline curve around them into Bezier control points, draw it as one native path, and show the Bezier anchors and handles.
+Create a set of points around a center point, varying each's radius slightly. Draw a b-spline curve and also show the corresponding bezier handles.
 
 [Open live](https://ptsjs.org/demo/?name=curve.bspline) · [Source code](https://ptsjs.org/demo/curve.bspline.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/curve.bspline.js)
 
 <a id="demo-curve-cardinal"></a>
 ### `curve.cardinal`
 
-Draw three cardinal curves with different tensions, plus a centripetal one converted to a native Bezier path with its handles. Move pointer near the control points to modify the curve.
+Draw cardinal curves with different tensions, plus a centripetal one converted to bezier. Touch it with cursor to modify it.
 
 [Open live](https://ptsjs.org/demo/?name=curve.cardinal) · [Source code](https://ptsjs.org/demo/curve.cardinal.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/curve.cardinal.js)
 
@@ -2038,6 +2058,13 @@ Lines rotating in a grid. Intersections between lines are marked with circles. M
 In a field of points that revolves around a center, draw a perpendicular line from each point to a path.
 
 [Open live](https://ptsjs.org/demo/?name=line.perpendicularFromPt) · [Source code](https://ptsjs.org/demo/line.perpendicularFromPt.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/line.perpendicularFromPt.js)
+
+<a id="demo-path-crop"></a>
+### `path.crop`
+
+Nested squares interpolated from a rectangle's corners, cropped by a shape that follows the pointer: Path.crop keeps only the faces inside the shape, colored here by how deeply they nest. Click to switch the shape between a circle, an ellipse, a donut, a triangle and an octagon.
+
+[Open live](https://ptsjs.org/demo/?name=path.crop) · [Source code](https://ptsjs.org/demo/path.crop.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/path.crop.js)
 
 <a id="demo-physics-particles"></a>
 ### `physics.particles`
@@ -2546,6 +2573,55 @@ Study of `Line.intersect2D`.
 Study of `Line.marker`.
 
 [Open live](https://ptsjs.org/study/?name=Line.marker) · [Source code](https://ptsjs.org/study/Line.marker.js) · [GitHub](https://github.com/williamngan/pts/blob/master/study/Line.marker.js)
+
+<a id="study-path-crop"></a>
+### `Path.crop`
+
+Path.crop uses the frontmost shape as a mask: the disc under the pointer. Only the faces of the star and the turning rectangle inside the disc remain, and the disc itself is discarded.
+
+[Open live](https://ptsjs.org/study/?name=Path.crop) · [Source code](https://ptsjs.org/study/Path.crop.js) · [GitHub](https://github.com/williamngan/pts/blob/master/study/Path.crop.js)
+
+<a id="study-path-divide"></a>
+### `Path.divide`
+
+Path.divide splits the shapes at every crossing into separate faces, each drawn in its own color. The star alone has six faces, since its center is enclosed twice.
+
+[Open live](https://ptsjs.org/study/?name=Path.divide) · [Source code](https://ptsjs.org/study/Path.divide.js) · [GitHub](https://github.com/williamngan/pts/blob/master/study/Path.divide.js)
+
+<a id="study-path-exclude"></a>
+### `Path.exclude`
+
+Path.exclude keeps the area inside an odd number of shapes, so every overlap becomes a hole. Drag the disc across the star and the turning rectangle.
+
+[Open live](https://ptsjs.org/study/?name=Path.exclude) · [Source code](https://ptsjs.org/study/Path.exclude.js) · [GitHub](https://github.com/williamngan/pts/blob/master/study/Path.exclude.js)
+
+<a id="study-path-intersect"></a>
+### `Path.intersect`
+
+Path.intersect keeps only the area inside every shape. Drag the disc over where the star and the turning rectangle overlap to see the common area; anywhere else the result is empty.
+
+[Open live](https://ptsjs.org/study/?name=Path.intersect) · [Source code](https://ptsjs.org/study/Path.intersect.js) · [GitHub](https://github.com/williamngan/pts/blob/master/study/Path.intersect.js)
+
+<a id="study-path-minus-back"></a>
+### `Path.minusBack`
+
+Path.minusBack subtracts the shapes behind from the frontmost one: the disc under the pointer minus the star and the turning rectangle. Drag the disc across them to carve it.
+
+[Open live](https://ptsjs.org/study/?name=Path.minusBack) · [Source code](https://ptsjs.org/study/Path.minusBack.js) · [GitHub](https://github.com/williamngan/pts/blob/master/study/Path.minusBack.js)
+
+<a id="study-path-minus-front"></a>
+### `Path.minusFront`
+
+Path.minusFront subtracts the shapes in front from the backmost one: here the turning rectangle and the disc are cut out of the star. Drag the disc inside the star to punch a hole.
+
+[Open live](https://ptsjs.org/study/?name=Path.minusFront) · [Source code](https://ptsjs.org/study/Path.minusFront.js) · [GitHub](https://github.com/williamngan/pts/blob/master/study/Path.minusFront.js)
+
+<a id="study-path-unite"></a>
+### `Path.unite`
+
+Path.unite merges every shape into one polygon: the area inside any of them. Move the pointer to drag the disc over the star and the turning rectangle; where nothing overlaps, the shapes stay separate rings.
+
+[Open live](https://ptsjs.org/study/?name=Path.unite) · [Source code](https://ptsjs.org/study/Path.unite.js) · [GitHub](https://github.com/williamngan/pts/blob/master/study/Path.unite.js)
 
 <a id="study-polygon-bisector"></a>
 ### `Polygon.bisector`

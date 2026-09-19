@@ -120,6 +120,7 @@ try {
     "src/UI.ts",
     "src/Util.ts",
     "src/_module.ts",
+    "src/_path.ts",
     "src/_script.ts",
     "src/_triangulate.ts",
     "src/uheprng.ts",
@@ -130,9 +131,9 @@ try {
     "published file allowlist changed",
   );
   assert.ok(
-    // Approximately 2% above the measured archive (1,385,558 bytes), whose
+    // Approximately 2% above the measured archive (1,507,026 bytes), whose
     // declarations keep their doc comments.
-    dryRun.size < 1_413_000,
+    dryRun.size < 1_537_000,
     `packed tarball is unexpectedly large: ${dryRun.size} bytes`,
   );
   assert.equal(
@@ -173,7 +174,7 @@ try {
       import * as Pts from "pts";
       assert.match(import.meta.resolve("pts"), /dist\\/index\\.mjs$/);
       assert.equal(new Pts.Pt(1, 2).add(3).toString(), "Pt(4, 5)");
-      assert.equal(Object.keys(Pts).length, 49);
+      assert.equal(Object.keys(Pts).length, 50);
     `,
   );
   await writeFile(
@@ -184,7 +185,7 @@ try {
       assert.match(require.resolve("pts"), /dist\\/index\\.js$/);
       assert.match(require.resolve("pts/dist/pts.min.js"), /dist\\/pts\\.min\\.js$/);
       assert.equal(new Pts.Pt(2, 4).multiply(2).toString(), "Pt(4, 8)");
-      assert.equal(Object.keys(Pts).length, 49);
+      assert.equal(Object.keys(Pts).length, 50);
     `,
   );
   run(process.execPath, ["esm-smoke.mjs"], consumer);

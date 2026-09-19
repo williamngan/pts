@@ -198,3 +198,44 @@ describe("SVGContext2D bezier paths", () => {
     expect(paths[0].attrs.d).toBe("M0 0C10 20 30 20 40 0C50 -20 70 -20 80 0");
   });
 });
+
+describe("SVGContext2D compound paths", () => {
+  it("emits one closed subpath per ring in a single path element", () => {
+    const { ctx, form } = makeForm();
+    form.fillOnly("#000").compound([
+      [
+        [0, 0],
+        [10, 0],
+        [10, 10],
+        [0, 10],
+      ],
+      [
+        [2, 2],
+        [2, 8],
+        [8, 8],
+        [8, 2],
+      ],
+    ]);
+    ctx._flushShape();
+    const paths = ctx._runs.filter((r: any) => r.tag === "path");
+    expect(paths).toHaveLength(1);
+    expect(paths[0].attrs.d).toBe("M0 0L10 0L10 10L0 10ZM2 2L2 8L8 8L8 2Z");
+    expect(paths[0].attrs.fill).toBe("#000");
+  });
+
+  it("leaves the preceding shape unchanged when no ring can be drawn", () => {
+    const { ctx, form } = makeForm();
+    form.strokeOnly("#f00").polygon([
+      [0, 0],
+      [5, 0],
+      [5, 5],
+    ]);
+    form
+      .strokeOnly("#00f")
+      .compound([])
+      .compound([[[1, 1]]]);
+    ctx._flushShape();
+    expect(ctx._runs).toHaveLength(1);
+    expect(ctx._runs[0].attrs.stroke).toBe("#f00");
+  });
+});

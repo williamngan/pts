@@ -4,12 +4,14 @@ import { Util } from "./Util";
 import { Geom, Num } from "./Num";
 import { Pt, Group } from "./Pt";
 import { Mat } from "./LinearAlgebra";
+import { overlay } from "./_path";
 import {
   type PtLike,
   type GroupLike,
   type PtLikeIterable,
   type IntersectContext,
   type PtIterable,
+  type PolygonLike,
 } from "./Types";
 
 let _errorLength = (obj: any, param: number | string = "expected") =>
@@ -1722,6 +1724,94 @@ export class Polygon {
     let merged = Util.flatten(boxes, false);
     boxes.unshift(Geom.boundingBox(merged));
     return boxes;
+  }
+}
+
+/**
+ * Path class provides static functions to combine polygons with boolean operations:
+ * unite, intersect, exclude, subtract the shapes in front or behind, divide into faces, or crop by the top shape.
+ * Shapes are listed in stacking order, the first at the back and the last in front, like the order you would draw them in.
+ * A shape is a polygon (a Group, or any iterable of points), or a list of rings that together form a polygon with holes,
+ * such as the result of another Path function. Every result is such a list of rings: an outer ring followed by its
+ * holes, in opposite orientations, which [`CanvasForm.compound`](#link) draws as one path. Rings are open (the first point
+ * is not repeated), 2D, and never share Pts with the input. Clockwise and counterclockwise rings are the same shape, and
+ * a self-intersecting ring covers what `form.polygon` would fill (the nonzero rule). Input vertices closer together than a
+ * millionth of the largest absolute coordinate are merged before finding intersections. For small shapes at large offsets,
+ * work in local coordinates to avoid losing detail to this tolerance or the Float32 output.
+ * See [Op guide](../guide/Op-0400.html) for details.
+ */
+export class Path {
+  /**
+   * Unite: merge all shapes into one polygon (the area inside any shape).
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @returns the rings of the merged polygon: each outer ring followed by its holes; empty if the shapes have no area
+   * @example `form.fillOnly("#f03").compound( Path.unite( [star, disc] ) )`
+   */
+  static unite(shapes: Iterable<PolygonLike>): Group[] {
+    return overlay(shapes, "unite");
+  }
+
+  /**
+   * Intersect: keep only the area inside every shape.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @returns the rings of the common polygon: each outer ring followed by its holes; empty if the shapes do not all overlap
+   * @example `Path.intersect( [a, b, c] )`
+   */
+  static intersect(shapes: Iterable<PolygonLike>): Group[] {
+    return overlay(shapes, "intersect");
+  }
+
+  /**
+   * Exclude: keep the area inside an odd number of shapes, so where two shapes overlap becomes a hole.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @returns the rings of the result: each outer ring followed by its holes; empty if the shapes cancel out
+   * @example `Path.exclude( [a, b] )`
+   */
+  static exclude(shapes: Iterable<PolygonLike>): Group[] {
+    return overlay(shapes, "exclude");
+  }
+
+  /**
+   * Minus Front: subtract every shape in front from the backmost (first) shape.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @returns the rings of what remains of the first shape: each outer ring followed by its holes; empty if nothing remains
+   * @example `Path.minusFront( [disc, hole] )` cuts `hole` out of `disc`
+   */
+  static minusFront(shapes: Iterable<PolygonLike>): Group[] {
+    return overlay(shapes, "minusFront");
+  }
+
+  /**
+   * Minus Back: subtract every shape behind from the frontmost (last) shape.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @returns the rings of what remains of the last shape: each outer ring followed by its holes; empty if nothing remains
+   * @example `Path.minusBack( [wall, window] )` keeps the part of `window` not covered by `wall`
+   */
+  static minusBack(shapes: Iterable<PolygonLike>): Group[] {
+    return overlay(shapes, "minusBack");
+  }
+
+  /**
+   * Divide: split the shapes at every crossing into separate faces. Each face is the largest area not cut by any edge, so
+   * a region inside two shapes is its own face, and a self-overlapping region of one shape is too.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @returns an array of polygons, one per face, each an outer ring followed by its holes
+   * @example `Path.divide( [a, b] ).forEach( (face, i) => form.fillOnly( colors[i] ).compound( face ) )`
+   */
+  static divide(shapes: Iterable<PolygonLike>): Group[][] {
+    return overlay(shapes, "divide");
+  }
+
+  /**
+   * Crop: use the frontmost (last) shape as a mask, keeping the faces of the other shapes inside it and deleting the mask itself.
+   * Like [`Path.divide`](#link), the shapes under the mask stay divided where they overlap.
+   * See a [demo here](https://ptsjs.org/demo/?name=path.crop).
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @returns an array of polygons, one per face inside the mask, each an outer ring followed by its holes
+   * @example `Path.crop( [photo, frame] )`
+   */
+  static crop(shapes: Iterable<PolygonLike>): Group[][] {
+    return overlay(shapes, "crop");
   }
 }
 

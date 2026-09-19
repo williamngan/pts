@@ -1362,6 +1362,48 @@ export class CanvasForm<
   }
 
   /**
+   * A static function to draw a compound polygon: several rings as one path, so that a ring inside another with the opposite orientation becomes a hole (the nonzero winding rule).
+   * @param ctx canvas rendering context
+   * @param rings an Array/Iterable of rings, each a Group or an Iterable<PtLike>; rings with fewer than 2 points are skipped
+   */
+  static compound(ctx: RenderingContext2D, rings: Iterable<PtLikeIterable>) {
+    let started = false;
+    for (const ring of rings) {
+      const p = Util.iterToArray(ring);
+      if (p.length < 2) continue;
+      if (!started) {
+        ctx.beginPath();
+        started = true;
+      }
+      ctx.moveTo(p[0][0], p[0][1]);
+      for (let i = 1, len = p.length; i < len; i++)
+        ctx.lineTo(p[i][0], p[i][1]);
+      ctx.closePath();
+    }
+  }
+
+  /**
+   * Draw a compound polygon: several rings as one path, so that a ring inside another with the opposite orientation becomes a hole
+   * (the nonzero winding rule). This is how a [`Path`](#link) result is drawn; [`CanvasForm.polygons`](#link) would fill the holes.
+   * @param rings an Array/Iterable of rings, each a Group or an Iterable<PtLike>; rings with fewer than 2 points are skipped, and nothing is drawn if no ring remains
+   * @example `form.fillOnly("#f03").compound( Path.minusFront( [disc, hole] ) )`
+   */
+  compound(rings: Iterable<PtLikeIterable>): this {
+    const list: PtLike[][] = [];
+    let drawable = false;
+    for (const ring of rings) {
+      const p = Util.iterToArray(ring);
+      if (p.length >= 2) drawable = true;
+      list.push(p);
+    }
+    if (drawable) {
+      CanvasForm.compound(this._ctx, list);
+      this._paint();
+    }
+    return this;
+  }
+
+  /**
    * A static function to draw a rectangle.
    * @param ctx canvas rendering context
    * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.

@@ -62,7 +62,8 @@
     "prepack": "pnpm build",
     "docs": "node scripts/build-docs-runtime.mjs && node scripts/generate-docs.mjs && node scripts/generate-guides.mjs && node scripts/generate-markdown-docs.mjs",
     "build:docs-runtime": "node scripts/build-docs-runtime.mjs",
-    "build:editor": "node scripts/build-editor.mjs"
+    "build:editor": "node scripts/build-editor.mjs",
+    "test:path:fuzz": "node scripts/fuzz-path.mjs"
   },
   "keywords": [
     "canvas",

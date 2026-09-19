@@ -1,5 +1,5 @@
 /**
- * `Line`, `Rectangle`, `Circle`, `Triangle`, `Polygon` and `Curve`.
+ * `Line`, `Rectangle`, `Circle`, `Triangle`, `Polygon`, `Path` and `Curve`.
  *
  * This is the widest surface in the library and the one sketches call most.
  * Intersection tests and curve subdivision dominate real frame budgets, so both
@@ -19,7 +19,8 @@ const CURVE_POINTS = 64;
 const CURVE_STEPS = 20;
 
 export default defineSuite("op", (b, { Pts, fx }) => {
-  const { Line, Rectangle, Circle, Triangle, Polygon, Curve, Group, Pt } = Pts;
+  const { Line, Rectangle, Circle, Triangle, Polygon, Curve, Path, Group, Pt } =
+    Pts;
 
   /** Register a case that applies `apply` to every item of a prepared list. */
   const perItem = (name, size, prepare, apply) =>
@@ -546,6 +547,107 @@ export default defineSuite("op", (b, { Pts, fx }) => {
     run: (g) => {
       sink(Polygon.convexHull(g, true).length);
     },
+  });
+
+  // ------------------------------------------------------------ Path
+
+  /** `count` lists of `shapes` jittered polygons, each offset so they overlap by about a third. */
+  const overlapping = (
+    label,
+    count,
+    shapes,
+    sides,
+    radius = 60,
+    spread = 0.66,
+  ) => {
+    const out = new Array(count);
+    for (let i = 0; i < count; i++) {
+      const list = new Array(shapes);
+      for (let s = 0; s < shapes; s++) {
+        const a = (s / shapes) * Math.PI * 2;
+        list[s] = fx.polygon(`${label}:${i}:${s}`, sides, radius, [
+          Math.cos(a) * radius * spread,
+          Math.sin(a) * radius * spread,
+        ]);
+      }
+      out[i] = list;
+    }
+    return out;
+  };
+  // a result is a list of rings (or of faces); summarize it as a number
+  const ringsValue = (rings) =>
+    rings.length + (rings.length > 0 ? rings[0][0][0] : 0);
+
+  for (const mode of ["unite", "intersect", "exclude", "minusFront"]) {
+    perItem(
+      `Path.${mode}`,
+      SIZES.S,
+      () => overlapping(`op:path:${mode}`, SIZES.S, 2, CURVE_POINTS),
+      (pairs, i) => ringsValue(Path[mode](pairs[i])),
+    );
+  }
+
+  perItem(
+    "Path.divide (3 shapes)",
+    SIZES.S,
+    () => overlapping("op:path:divide", SIZES.S, 3, CURVE_POINTS),
+    (triples, i) => Path.divide(triples[i]).length,
+  );
+
+  perItem(
+    "Path.crop (3 shapes)",
+    SIZES.S,
+    () => overlapping("op:path:crop", SIZES.S, 3, CURVE_POINTS),
+    (triples, i) => Path.crop(triples[i]).length,
+  );
+
+  // many vertices: the sweep rather than the arrangement dominates
+  perItem(
+    "Path.unite (512-gons)",
+    SIZES.XS,
+    () => overlapping("op:path:large", SIZES.XS, 2, 512),
+    (pairs, i) => ringsValue(Path.unite(pairs[i])),
+  );
+
+  // nothing crosses: input cleanup plus the sweep's rejection path
+  perItem(
+    "Path.unite (disjoint)",
+    SIZES.S,
+    () => overlapping("op:path:disjoint", SIZES.S, 2, CURVE_POINTS, 60, 3),
+    (pairs, i) => ringsValue(Path.unite(pairs[i])),
+  );
+
+  const square = (x, y, size = 1) =>
+    Group.fromArray([
+      [x, y],
+      [x + size, y],
+      [x + size, y + size],
+      [x, y + size],
+    ]);
+  b.case("Path.unite (2000 disjoint shapes)", {
+    batch: 1,
+    setupOnce: () =>
+      Array.from({ length: 2000 }, (_, i) =>
+        square(3 * (i % 50), 3 * Math.floor(i / 50)),
+      ),
+    run: (shapes) => sink(ringsValue(Path.unite(shapes))),
+  });
+  b.case("Path.unite (1000 holes)", {
+    batch: 1,
+    setupOnce: () => [
+      [
+        Group.fromArray([
+          [-1, -1],
+          [3001, -1],
+          [3001, 2],
+          [-1, 2],
+        ]),
+        ...Array.from({ length: 1000 }, (_, i) =>
+          square(3 * (999 - i), 0).reverse(),
+        ),
+      ],
+    ],
+    run: (shapes) => sink(ringsValue(Path.unite(shapes))),
   });
 
   // ----------------------------------------------------------------- Curve

@@ -46,6 +46,7 @@ const expectedExports = [
   "Noise",
   "Num",
   "Particle",
+  "Path",
   "PoissonDisk",
   "Polygon",
   "Pt",
@@ -74,12 +75,12 @@ const sizeLimits = {
   // The declarations keep their doc comments since 1.0; the triangulation and
   // the flock are full implementations. Keep approximately 2% headroom above the
   // measured build.
-  "index.d.mts": 307200,
-  "index.d.ts": 307200,
-  "index.js": 281100,
-  "index.mjs": 280200,
-  "pts.js": 293500,
-  "pts.min.js": 170800,
+  "index.d.mts": 316200,
+  "index.d.ts": 316200,
+  "index.js": 307600,
+  "index.mjs": 306700,
+  "pts.js": 321000,
+  "pts.min.js": 184900,
 };
 const banner = "Copyright © 2017-present William Ngan and contributors.";
 

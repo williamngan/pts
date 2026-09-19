@@ -182,7 +182,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1653,
+          1695,
           2
         ]
       ],
@@ -485,6 +485,40 @@
             }
           ],
           "tags": []
+        }
+      ]
+    },
+    {
+      "name": "compound",
+      "source": [
+        [
+          "src/Canvas.ts",
+          1391,
+          2
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw a compound polygon: several rings as one path, so that a ring inside another with the opposite orientation becomes a hole\n(the nonzero winding rule). This is how a [`Path`](#link) result is drawn; [`CanvasForm.polygons`](#link) would fill the holes.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "rings",
+              "comment": "an Array/Iterable of rings, each a Group or an Iterable<PtLike>; rings with fewer than 2 points are skipped, and nothing is drawn if no ring remains",
+              "type": "Iterable",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`form.fillOnly(\"#f03\").compound( Path.minusFront( [disc, hole] ) )`"
+            }
+          ]
         }
       ]
     },
@@ -805,7 +839,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1446,
+          1488,
           2
         ]
       ],
@@ -846,7 +880,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1496,
+          1538,
           2
         ]
       ],
@@ -939,7 +973,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1670,
+          1712,
           2
         ]
       ],
@@ -968,7 +1002,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1570,
+          1612,
           2
         ]
       ],
@@ -1166,7 +1200,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1384,
+          1426,
           2
         ]
       ],
@@ -1438,7 +1472,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1524,
+          1566,
           2
         ]
       ],
@@ -1479,7 +1513,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1537,
+          1579,
           2
         ]
       ],
@@ -1704,6 +1738,43 @@
       ]
     },
     {
+      "name": "compound",
+      "source": [
+        [
+          "src/Canvas.ts",
+          1369,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to draw a compound polygon: several rings as one path, so that a ring inside another with the opposite orientation becomes a hole (the nonzero winding rule).",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "canvas rendering context",
+              "type": "RenderingContext2D",
+              "default": false
+            },
+            {
+              "name": "rings",
+              "comment": "an Array/Iterable of rings, each a Group or an Iterable<PtLike>; rings with fewer than 2 points are skipped",
+              "type": "Iterable",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "ellipse",
       "source": [
         [
@@ -1775,7 +1846,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1397,
+          1439,
           9
         ]
       ],
@@ -1824,7 +1895,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1467,
+          1509,
           9
         ]
       ],
@@ -1995,7 +2066,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1369,
+          1411,
           9
         ]
       ],
@@ -2106,7 +2177,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1508,
+          1550,
           9
         ]
       ],

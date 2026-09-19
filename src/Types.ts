@@ -37,6 +37,12 @@ export type PtIterable = GroupLike | Pt[] | Iterable<Pt>;
 export type PtLikeIterable = GroupLike | PtLike[] | Iterable<PtLike>;
 
 /**
+ * Typescript type: PolygonLike represents a polygon for [`Path`](#link): either one ring of points (any `PtLikeIterable`),
+ * or a list of rings combined by the nonzero winding rule, such as the `Group[]` a Path function returns (an outer ring followed by its holes).
+ */
+export type PolygonLike = PtLikeIterable | Iterable<PtLikeIterable>;
+
+/**
  * Typescript type: TextMeasure represents a function that returns the rendered width of a string of text, such as canvas context's `measureText` or an estimator created via [`Typography.textWidthEstimator`](#link).
  */
 export type TextMeasure = (text: string) => number;

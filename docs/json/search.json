@@ -96,6 +96,12 @@
     8
   ],
   [
+    "Canvas_CanvasForm#function_compound",
+    "CanvasForm.compound",
+    "Function",
+    8
+  ],
+  [
     "Canvas_CanvasForm#function_dash",
     "CanvasForm.dash",
     "Function",
@@ -284,6 +290,12 @@
   [
     "Canvas_CanvasForm#function_static_circle",
     "CanvasForm.circle",
+    "Function",
+    8
+  ],
+  [
+    "Canvas_CanvasForm#function_static_compound",
+    "CanvasForm.compound",
     "Function",
     8
   ],
@@ -6300,6 +6312,54 @@
     0
   ],
   [
+    "Op_Path#function_static_crop",
+    "Path.crop",
+    "Function",
+    8
+  ],
+  [
+    "Op_Path#function_static_divide",
+    "Path.divide",
+    "Function",
+    8
+  ],
+  [
+    "Op_Path#function_static_exclude",
+    "Path.exclude",
+    "Function",
+    8
+  ],
+  [
+    "Op_Path#function_static_intersect",
+    "Path.intersect",
+    "Function",
+    8
+  ],
+  [
+    "Op_Path#function_static_minusBack",
+    "Path.minusBack",
+    "Function",
+    8
+  ],
+  [
+    "Op_Path#function_static_minusFront",
+    "Path.minusFront",
+    "Function",
+    8
+  ],
+  [
+    "Op_Path#function_static_unite",
+    "Path.unite",
+    "Function",
+    8
+  ],
+  [
+    "Op_Path",
+    "Path",
+    "Class",
+    0
+  ],
+  [
     "Op_Polygon#function_static_adjacentSides",
     "Polygon.adjacentSides",
     "Function",
@@ -10326,6 +10386,12 @@
     8
   ],
   [
+    "Svg_SVGForm#function_compound",
+    "SVGForm.compound",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGForm#function_dash",
     "SVGForm.dash",
     "Function",
@@ -10544,6 +10610,12 @@
   [
     "Svg_SVGForm#function_static_circleElement",
     "SVGForm.circleElement",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_static_compound",
+    "SVGForm.compound",
     "Function",
     8
   ],
@@ -11234,6 +11306,12 @@
   [
     "Types_PoissonDiskOptions",
     "PoissonDiskOptions",
+    "Type alias",
+    0
+  ],
+  [
+    "Types_PolygonLike",
+    "PolygonLike",
     "Type alias",
     0
   ],
