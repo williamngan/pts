@@ -31,6 +31,24 @@ describe("Num", () => {
     expect(Num.within(6, 5, 1)).toBe(false);
   });
 
+  it("treats the equality threshold as inclusive, like Pt.equals", () => {
+    // a number equals itself at any threshold, including 0
+    expect(Num.equals(5, 5, 0)).toBe(true);
+    expect(Num.equals(0, 0, 0)).toBe(true);
+    expect(Num.equals(-3.5, -3.5, 0)).toBe(true);
+    // a difference exactly at the threshold counts as equal
+    expect(Num.equals(1, 1.5, 0.5)).toBe(true);
+    expect(Num.equals(0, 0.25, 0.25)).toBe(true);
+    // Pt.equals, the sibling comparison, already answers the same way
+    expect(new Pt([5, 5]).equals([5, 5], 0)).toBe(true);
+    expect(new Pt([1, 1]).equals([1.5, 1], 0.5)).toBe(true);
+    // beyond the threshold is still unequal, and NaN is never equal
+    expect(Num.equals(1, 2, 0.5)).toBe(false);
+    expect(Num.equals(1, 1.5000001, 0.5)).toBe(false);
+    expect(Num.equals(NaN, NaN, 1)).toBe(false);
+    expect(Num.equals(1, 1, -1)).toBe(false);
+  });
+
   it("creates deterministic random ranges and points", () => {
     vi.spyOn(Num, "random").mockReturnValue(0.25);
     expect(Num.randomRange(10)).toBe(2.5);
