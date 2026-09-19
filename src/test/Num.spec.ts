@@ -31,6 +31,71 @@ describe("Num", () => {
     expect(Num.within(6, 5, 1)).toBe(false);
   });
 
+  it("treats the equality threshold as inclusive, like Pt.equals", () => {
+    // identical finite values compare equal at threshold 0
+    expect(Num.equals(5, 5, 0)).toBe(true);
+    expect(Num.equals(0, 0, 0)).toBe(true);
+    expect(Num.equals(-3.5, -3.5, 0)).toBe(true);
+    // a difference exactly at the threshold counts as equal
+    expect(Num.equals(1, 1.5, 0.5)).toBe(true);
+    expect(Num.equals(0, 0.25, 0.25)).toBe(true);
+    // Pt.equals, the sibling comparison, already answers the same way
+    expect(new Pt([5, 5]).equals([5, 5], 0)).toBe(true);
+    expect(new Pt([1, 1]).equals([1.5, 1], 0.5)).toBe(true);
+    // beyond the threshold is still unequal, and NaN is never equal
+    expect(Num.equals(1, 2, 0.5)).toBe(false);
+    expect(Num.equals(1, 1.5000001, 0.5)).toBe(false);
+    expect(Num.equals(NaN, NaN, 1)).toBe(false);
+    expect(Num.equals(1, 1, -1)).toBe(false);
+  });
+
+  it("treats the default threshold as inclusive at its exact limit", () => {
+    // a difference of exactly the documented default, 0.00001, is representable
+    expect(Math.abs(0 - 0.00001)).toBe(0.00001);
+    expect(Num.equals(0, 0.00001)).toBe(true);
+    expect(Num.equals(-0.00001, 0)).toBe(true);
+    // one representable step past the default is still unequal (control)
+    expect(Num.equals(0, 0.0000100000001)).toBe(false);
+  });
+
+  it("compares the same pair either way round", () => {
+    // the difference is symmetric, so swapping the operands cannot change the answer
+    expect(Num.equals(1.5, 1, 0.5)).toBe(true);
+    expect(Num.equals(0.25, 0, 0.25)).toBe(true);
+    expect(Num.equals(0.00001, 0)).toBe(true);
+    expect(Num.equals(1.5, 1, 0.5)).toBe(Num.equals(1, 1.5, 0.5));
+    // and the beyond-threshold answer is symmetric too (control)
+    expect(Num.equals(2, 1, 0.5)).toBe(false);
+  });
+
+  it("treats both spellings of zero as the same threshold and the same value", () => {
+    // -0 is the falsy but valid zero, and must behave exactly like 0
+    expect(Num.equals(5, 5, -0)).toBe(true);
+    expect(Num.equals(0, -0, 0)).toBe(true);
+    expect(Num.equals(-0, 0, -0)).toBe(true);
+    // the smallest representable difference is still a difference (control)
+    expect(Num.equals(5e-324, 0, 0)).toBe(false);
+  });
+
+  it("accepts an infinite threshold and keeps same-signed infinities apart", () => {
+    // an infinite tolerance means every measurable difference is equal
+    expect(Num.equals(Infinity, 1, Infinity)).toBe(true);
+    expect(Num.equals(Infinity, -Infinity, Infinity)).toBe(true);
+    // Infinity minus Infinity is NaN, so equal infinities never compare equal (control)
+    expect(Num.equals(Infinity, Infinity, 0)).toBe(false);
+    // a NaN threshold rejects, as every NaN comparison does (control)
+    expect(Num.equals(1, 1, NaN)).toBe(false);
+    // a finite pair under an infinite tolerance was already equal (control)
+    expect(Num.equals(1, 2, Infinity)).toBe(true);
+  });
+
+  it("holds at the boundary for large magnitudes", () => {
+    expect(Num.equals(Number.MAX_VALUE, Number.MAX_VALUE, 0)).toBe(true);
+    expect(Num.equals(1e16, 1e16 + 2, 2)).toBe(true);
+    // past the boundary at the same magnitude is still unequal (control)
+    expect(Num.equals(1e16, 1e16 + 4, 2)).toBe(false);
+  });
+
   it("creates deterministic random ranges and points", () => {
     vi.spyOn(Num, "random").mockReturnValue(0.25);
     expect(Num.randomRange(10)).toBe(2.5);

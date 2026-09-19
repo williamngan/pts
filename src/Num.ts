@@ -26,7 +26,8 @@ export class Num {
    * @param threshold threshold value that specifies the minimum difference within which the two numbers are considered equal
    */
   static equals(a: number, b: number, threshold = 0.00001): boolean {
-    return Math.abs(a - b) < threshold;
+    // Finite differences equal to the threshold are included.
+    return Math.abs(a - b) <= threshold;
   }
 
   /**
