@@ -3119,7 +3119,7 @@ function uheprng(seed) {
 //#region src/Num.ts
 var Num = class Num {
 	static equals(a, b, threshold = 1e-5) {
-		return Math.abs(a - b) < threshold;
+		return a === b || Math.abs(a - b) <= threshold;
 	}
 	static lerp(a, b, t) {
 		return (1 - t) * a + t * b;

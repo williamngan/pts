@@ -60,6 +60,9 @@
 
 ### Fixed
 
+- `Num.equals` treats its threshold as inclusive, like `Pt.equals`: a value
+  equals itself at threshold 0 (infinities included) and a difference of
+  exactly the threshold counts as equal. Contributed in #228.
 - `form.line` and `form.polygon` with fewer than 2 points no longer repaint
   the previous path in the current style; they warn (as before) and draw
   nothing.

@@ -5520,7 +5520,7 @@ Unit vector of `a`. If magnitude of `a` is already known, pass it in the second 
 <a id="num-geom"></a>
 ### `Geom`
 
-**Kind:** Class · **Source:** [`src/Num.ts:202`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L202)
+**Kind:** Class · **Source:** [`src/Num.ts:204`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L204)
 
 Geom class provides static helper functions for basic geometric operations.
 
@@ -6088,7 +6088,7 @@ static generator: any
 <a id="num-range"></a>
 ### `Range`
 
-**Kind:** Class · **Source:** [`src/Num.ts:967`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L967)
+**Kind:** Class · **Source:** [`src/Num.ts:969`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L969)
 
 Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension.
 It also provides convenient functions such as mapping the Group to another range. This class may be useful for visualizing data in charts.
@@ -6193,7 +6193,7 @@ Create a number of evenly spaced "ticks" that span this Range's min and max valu
 <a id="num-shaping"></a>
 ### `Shaping`
 
-**Kind:** Class · **Source:** [`src/Num.ts:575`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L575)
+**Kind:** Class · **Source:** [`src/Num.ts:577`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L577)
 
 Shaping provides shaping functions to interpolate a value. These are useful for easing and transitions.
 
