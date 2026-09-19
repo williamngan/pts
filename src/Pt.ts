@@ -1137,7 +1137,14 @@ export class Bound extends Group implements IPt {
     const n = b ? b.length : 0;
     if (this._size.length !== n) this._size = new Pt(n);
     for (let i = 0; i < n; i++) {
-      this._size[i] = Math.abs(b[i] - (a ? a[i] || 0 : 0));
+      let lo = a ? a[i] || 0 : 0;
+      if (a && b[i] < lo) {
+        // corners given in the other order: keep top-left the smaller one
+        a[i] = b[i];
+        b[i] = lo;
+        lo = a[i];
+      }
+      this._size[i] = Math.abs(b[i] - lo);
     }
     this._updateCenter();
   }

@@ -44,6 +44,7 @@ Pts.quickStart( "#pt", "#0c6" );
 
       // convert to Bezier control points (centripetal) and draw handles
       let bezier = Curve.cardinalToBezier( temp, 0.5, 0.5 );
+      form.strokeOnly("#fff", 2).bezier( bezier );
       form.strokeOnly("#ffffff", 1);
       for (let i=0, len=bezier.length-1; i<len; i+=3) {
         form.line( [bezier[i], bezier[i+1]] ).line( [bezier[i+2], bezier[i+3]] );

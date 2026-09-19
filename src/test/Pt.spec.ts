@@ -599,3 +599,20 @@ describe("Pt, Group, and Bound correctness pins", () => {
     expect(Array.from(g[200000])).toEqual([199999, 199999]);
   });
 });
+
+describe("Bound corner order", () => {
+  it("keeps top-left as the smaller corner when the corners are given in the other order", () => {
+    const b = new Bound(new Pt(10, 10), new Pt(0, 0));
+    expect([...b.topLeft]).toEqual([0, 0]);
+    expect([...b.bottomRight]).toEqual([10, 10]);
+    expect([...b.size]).toEqual([10, 10]);
+    expect([...b.center]).toEqual([5, 5]);
+    const mixed = new Bound(new Pt(0, 10), new Pt(10, 0));
+    expect([...mixed.topLeft]).toEqual([0, 0]);
+    expect([...mixed.size]).toEqual([10, 10]);
+    // ordered corners are untouched
+    const plain = new Bound(new Pt(1, 2), new Pt(3, 5));
+    expect([...plain.topLeft]).toEqual([1, 2]);
+    expect([...plain.size]).toEqual([2, 3]);
+  });
+});

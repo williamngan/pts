@@ -1317,6 +1317,36 @@ export class SVGForm extends CanvasForm<SVGSpace> {
   }
 
   /** Draw through a rendering context, or use the legacy per-element DOM context. */
+  static bezier(
+    ctx: DOMFormContext,
+    pts: PtLikeIterable,
+  ): SVGElement | undefined;
+  static bezier(ctx: RenderingContext2D, pts: PtLikeIterable): void;
+  static bezier(ctx: DOMFormContext | RenderingContext2D, pts: PtLikeIterable) {
+    return "style" in ctx
+      ? SVGForm.bezierElement(ctx, pts)
+      : CanvasForm.bezier(ctx, pts);
+  }
+
+  /** Draw through a rendering context, or use the legacy per-element DOM context. */
+  static compound(
+    ctx: DOMFormContext,
+    rings: Iterable<PtLikeIterable>,
+  ): SVGElement | undefined;
+  static compound(
+    ctx: RenderingContext2D,
+    rings: Iterable<PtLikeIterable>,
+  ): void;
+  static compound(
+    ctx: DOMFormContext | RenderingContext2D,
+    rings: Iterable<PtLikeIterable>,
+  ) {
+    return "style" in ctx
+      ? SVGForm.compoundElement(ctx, rings)
+      : CanvasForm.compound(ctx, rings);
+  }
+
+  /** Draw through a rendering context, or use the legacy per-element DOM context. */
   static text(ctx: DOMFormContext, pt: PtLike, txt: string): SVGElement;
   static text(
     ctx: RenderingContext2D,
@@ -1517,6 +1547,55 @@ export class SVGForm extends CanvasForm<SVGSpace> {
   static polygonElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement {
     let points = SVGForm.pointsString(pts);
     return SVGForm._poly(ctx, points.string, true);
+  }
+
+  /**
+   * A static function to draw a chain of cubic Bezier curves as one path element.
+   * @param ctx a context object of SVGForm
+   * @param pts a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#link); an incomplete trailing segment is ignored
+   */
+  static bezierElement(
+    ctx: DOMFormContext,
+    pts: PtLikeIterable,
+  ): SVGElement | undefined {
+    const p = Util.iterToArray(pts);
+    if (p.length < 4) return;
+    let d = `M${p[0][0]} ${p[0][1]}`;
+    for (let i = 3; i < p.length; i += 3) {
+      d += `C${p[i - 2][0]} ${p[i - 2][1]} ${p[i - 1][0]} ${p[i - 1][1]} ${p[i][0]} ${p[i][1]}`;
+    }
+    return SVGForm._pathElement(ctx, d);
+  }
+
+  /**
+   * A static function to draw a compound polygon as one path element, so that a ring inside another with the opposite orientation becomes a hole.
+   * @param ctx a context object of SVGForm
+   * @param rings an Array/Iterable of rings, each a Group or an Iterable<PtLike>; rings with fewer than 2 points are skipped
+   */
+  static compoundElement(
+    ctx: DOMFormContext,
+    rings: Iterable<PtLikeIterable>,
+  ): SVGElement | undefined {
+    let d = "";
+    for (const ring of rings) {
+      const p = Util.iterToArray(ring);
+      if (p.length < 2 || typeof p[0][0] !== "number") continue;
+      d += `M${p[0][0]} ${p[0][1]}`;
+      for (let i = 1; i < p.length; i++) d += `L${p[i][0]} ${p[i][1]}`;
+      d += "Z";
+    }
+    if (d === "") return;
+    return SVGForm._pathElement(ctx, d);
+  }
+
+  protected static _pathElement(ctx: DOMFormContext, d: string): SVGElement {
+    const elem = SVGSpace.svgElement(ctx.group, "path", SVGForm.getID(ctx));
+    DOMSpace.setAttr(elem, {
+      d,
+      class: `pts-svgform pts-path ${ctx.currentClass}`,
+    });
+    SVGForm.style(elem, ctx.style);
+    return elem;
   }
 
   /**

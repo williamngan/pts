@@ -3,7 +3,7 @@
 import { Pt, Group } from "./Pt";
 import { Util } from "./Util";
 import { crossingParameter, orient2d } from "./_triangulate";
-import { type PolygonLike, type PtLike } from "./Types";
+import { type PolygonLike, type PtLike, type PtLikeIterable } from "./Types";
 
 /**
  * Internal planar overlay used by [`Path`](#link).
@@ -53,6 +53,10 @@ const CELL_SPAN = 32768;
 // queries is known before they start: components for the seeds, holes for
 // the owners.
 const RAY_TREE_PER_LOG = 1.5;
+// Candidate pairs from the first sweep are kept, up to this many, so that the
+// second sweep can replay them when the first registered no split (the common
+// case). Beyond the cap they are streamed and enumerated again.
+const PAIR_BUFFER = 1 << 18;
 
 /** The rings of a shape as arrays of points: one ring (its first item is a point) or a list of rings. */
 function ringsOf(shape: PolygonLike): PtLike[][] {
@@ -93,6 +97,57 @@ function addWinding(
   const value = (vector.get(shape) ?? 0) + delta;
   if (value === 0) vector.delete(shape);
   else vector.set(shape, value);
+}
+
+/** How many distinct points a ring has, up to three: enough to tell a real ring from a degenerate one. */
+function distinctPoints(ring: PtLike[]): number {
+  const seen: PtLike[] = [];
+  for (let i = 0; i < ring.length && seen.length < 3; i++) {
+    const p = ring[i];
+    let dup = false;
+    for (let j = 0; j < seen.length; j++) {
+      if (seen[j][0] === p[0] && seen[j][1] === p[1]) {
+        dup = true;
+        break;
+      }
+    }
+    if (!dup) seen.push(p);
+  }
+  return seen.length;
+}
+
+/**
+ * Reorder `items[lo, hi)` so the item at `k` has the key it would have when
+ * sorted, smaller keys before it and larger after (Hoare quickselect).
+ */
+function selectByKey(
+  items: Uint32Array,
+  key: Float64Array,
+  lo: number,
+  hi: number,
+  k: number,
+): void {
+  let l = lo;
+  let r = hi - 1;
+  while (l < r) {
+    const pivot = key[items[(l + r) >> 1]];
+    let i = l;
+    let j = r;
+    while (i <= j) {
+      while (key[items[i]] < pivot) i++;
+      while (key[items[j]] > pivot) j--;
+      if (i <= j) {
+        const t = items[i];
+        items[i] = items[j];
+        items[j] = t;
+        i++;
+        j--;
+      }
+    }
+    if (k <= j) r = j;
+    else if (k >= i) l = i;
+    else return;
+  }
 }
 
 /** Output perimeter, for the hairline test. */
@@ -177,7 +232,13 @@ export class Overlay {
   cycle!: Int32Array; // cycle id per half-edge
   cycleArea: number[] = [];
   cycleStart: number[] = [];
-  labels!: Map<number, number>[]; // nonzero winding numbers per cycle
+  // per cycle: how many shapes wind around its face, and whether the first
+  // and last shapes do. That is all the modes need, so the full sparse
+  // winding vectors are kept only when `label(true)` asks for them (tests).
+  count!: Int32Array;
+  hasFirst!: Uint8Array;
+  hasLast!: Uint8Array;
+  labels?: Map<number, number>[];
   // undefined: not built yet; null: built, but no edge can cross a ray
   private rayIndex: RayNode | null | undefined;
 
@@ -192,8 +253,17 @@ export class Overlay {
   // ------------------------------------------------------------- input
 
   /** Read the shapes into snapped vertices and directed edges. False when there is nothing to combine. */
-  read(shapes: Iterable<PolygonLike>): boolean {
-    const list = Util.iterToArray(shapes);
+  read(shapes: Iterable<PolygonLike> | PtLikeIterable): boolean {
+    let list: unknown[] = Util.iterToArray(shapes as Iterable<unknown>);
+    // A single ring of points is the likeliest misuse (every Polygon function
+    // takes one Group); treat it as a list of one shape.
+    if (
+      list.length > 0 &&
+      list[0] != null &&
+      typeof (list[0] as ArrayLike<unknown>)[0] === "number"
+    ) {
+      list = [list];
+    }
     this.k = list.length;
     const rings: PtLike[][] = [];
     const ringShape: number[] = [];
@@ -201,7 +271,7 @@ export class Overlay {
 
     // first pass: the scale that sets the tolerance, and which rings are usable
     for (let s = 0; s < list.length; s++) {
-      const shapeRings = ringsOf(list[s]);
+      const shapeRings = ringsOf(list[s] as PolygonLike);
       for (let r = 0; r < shapeRings.length; r++) {
         const ring = shapeRings[r];
         if (ring.length < 3) continue;
@@ -253,6 +323,10 @@ export class Overlay {
           this.eb.push(ids[i === n - 1 ? 0 : i + 1]);
           this.es.push(ringShape[r]);
         }
+      } else if (distinctPoints(ring) >= 3) {
+        Util.warn(
+          "Path dropped a ring whose points merge within the tolerance; use local coordinates for small shapes at large offsets",
+        );
       }
     }
     return this.ea.length > 0;
@@ -309,18 +383,18 @@ export class Overlay {
    */
   split(): void {
     let boxes = this.boxes();
-    let pairs = this.sweep(boxes, this.tol);
-    for (let i = 0, n = pairs.length; i < n; i += 2) {
-      this.touchPair(pairs[i], pairs[i + 1], boxes);
-    }
+    const pairs = this.sweep(boxes, this.tol, true);
     if (this.spE.length > 0) {
       // the sub-edges are new edges; enumerate their pairs again, exactly
       this.applySplits();
       boxes = this.boxes();
-      pairs = this.sweep(boxes, 0);
-    }
-    for (let i = 0, n = pairs.length; i < n; i += 2) {
-      this.crossPair(pairs[i], pairs[i + 1]);
+      this.sweep(boxes, 0, false);
+    } else if (pairs) {
+      for (let i = 0; i < pairs.length; i += 2) {
+        this.crossPair(pairs[i], pairs[i + 1]);
+      }
+    } else {
+      this.sweep(boxes, 0, false);
     }
   }
 
@@ -349,10 +423,20 @@ export class Overlay {
     return { minX, maxX, minY, maxY, order };
   }
 
-  /** Every two edges whose boxes, grown by `margin`, overlap, as a flat list of index pairs. */
-  private sweep(boxes: SweepBoxes, margin: number): number[] {
+  /**
+   * Run a phase over every two edges whose boxes, grown by `margin`, overlap:
+   * the touch phase (which also returns the pairs, unless there are more than
+   * the buffer holds) or the crossing phase. Pairs are visited as they are
+   * found rather than listed first: shapes that all share a vertex have
+   * quadratically many candidate pairs, more than an array can hold.
+   */
+  private sweep(
+    boxes: SweepBoxes,
+    margin: number,
+    touching: boolean,
+  ): number[] | undefined {
     const { minX, maxX, minY, maxY, order } = boxes;
-    const pairs: number[] = [];
+    let pairs: number[] | undefined = touching ? [] : undefined;
     for (let i = 0, E = order.length; i < E; i++) {
       const e1 = order[i];
       const limit = maxX[e1] + margin;
@@ -362,7 +446,15 @@ export class Overlay {
         const e2 = order[j];
         if (minX[e2] > limit) break;
         if (minY[e2] > hi || maxY[e2] < lo) continue;
-        pairs.push(e1, e2);
+        if (touching) {
+          this.touchPair(e1, e2, boxes);
+          if (pairs) {
+            if (pairs.length < 2 * PAIR_BUFFER) pairs.push(e1, e2);
+            else pairs = undefined;
+          }
+        } else {
+          this.crossPair(e1, e2);
+        }
       }
     }
     return pairs;
@@ -569,11 +661,23 @@ export class Overlay {
 
   /** Balanced bounding-box tree for seed winding and nearest boundary queries. */
   private indexRays(): RayNode | undefined {
-    const edges = this.gu
-      .map((_, e) => e)
-      .filter((e) => this.vy[this.gu[e]] !== this.vy[this.gv[e]]);
-    if (edges.length === 0) return undefined;
-    const build = (list: number[]): RayNode => {
+    const E = this.gu.length;
+    const vx = this.vx;
+    const vy = this.vy;
+    let n = 0;
+    const edges = new Uint32Array(E);
+    for (let e = 0; e < E; e++) {
+      if (vy[this.gu[e]] !== vy[this.gv[e]]) edges[n++] = e;
+    }
+    if (n === 0) return undefined;
+    // edge centers, so each level partitions by a plain number
+    const cx = new Float64Array(E);
+    const cy = new Float64Array(E);
+    for (let e = 0; e < E; e++) {
+      cx[e] = vx[this.gu[e]] + vx[this.gv[e]];
+      cy[e] = vy[this.gu[e]] + vy[this.gv[e]];
+    }
+    const build = (lo: number, hi: number): RayNode => {
       const node: RayNode = {
         x0: Infinity,
         x1: -Infinity,
@@ -583,38 +687,34 @@ export class Overlay {
         allY1: Infinity,
         sum: new Map(),
       };
-      for (const e of list) {
-        const u = this.gu[e],
-          v = this.gv[e];
-        const y0 = Math.min(this.vy[u], this.vy[v]);
-        const y1 = Math.max(this.vy[u], this.vy[v]);
-        node.x0 = Math.min(node.x0, this.vx[u], this.vx[v]);
-        node.x1 = Math.max(node.x1, this.vx[u], this.vx[v]);
+      for (let i = lo; i < hi; i++) {
+        const e = edges[i];
+        const u = this.gu[e];
+        const v = this.gv[e];
+        const y0 = Math.min(vy[u], vy[v]);
+        const y1 = Math.max(vy[u], vy[v]);
+        node.x0 = Math.min(node.x0, vx[u], vx[v]);
+        node.x1 = Math.max(node.x1, vx[u], vx[v]);
         node.y0 = Math.min(node.y0, y0);
         node.y1 = Math.max(node.y1, y1);
         node.allY0 = Math.max(node.allY0, y0);
         node.allY1 = Math.min(node.allY1, y1);
       }
-      if (list.length <= 8) {
-        node.edges = list;
+      if (hi - lo <= 8) {
+        node.edges = Array.from(edges.subarray(lo, hi));
         if (node.allY0 < node.allY1) {
-          for (const e of list) {
-            const sign = this.vy[this.gv[e]] > this.vy[this.gu[e]] ? -1 : 1;
+          for (const e of node.edges) {
+            const sign = vy[this.gv[e]] > vy[this.gu[e]] ? -1 : 1;
             for (const [s, d] of this.deltas[e])
               addWinding(node.sum, s, sign * d);
           }
         }
       } else {
-        const axis = node.x1 - node.x0 >= node.y1 - node.y0 ? this.vx : this.vy;
-        list.sort(
-          (a, b) =>
-            axis[this.gu[a]] +
-            axis[this.gv[a]] -
-            (axis[this.gu[b]] + axis[this.gv[b]]),
-        );
-        const mid = list.length >> 1;
-        node.left = build(list.slice(0, mid));
-        node.right = build(list.slice(mid));
+        const key = node.x1 - node.x0 >= node.y1 - node.y0 ? cx : cy;
+        const mid = (lo + hi) >> 1;
+        selectByKey(edges, key, lo, hi, mid);
+        node.left = build(lo, mid);
+        node.right = build(mid, hi);
         if (node.allY0 < node.allY1) {
           for (const child of [node.left, node.right])
             for (const [s, d] of child.sum) addWinding(node.sum, s, d);
@@ -622,7 +722,7 @@ export class Overlay {
       }
       return node;
     };
-    return build(edges);
+    return build(0, n);
   }
 
   // ------------------------------------------------------------- faces
@@ -718,8 +818,11 @@ export class Overlay {
     this.cycle = cycle;
   }
 
-  /** Label every cycle with the winding number of each shape on its face. */
-  label(): void {
+  /**
+   * Label every cycle with what the modes need to know about the winding
+   * numbers on its face. With `full`, the sparse winding vectors are kept too.
+   */
+  label(full = false): void {
     const V = this.vx.length;
     const E = this.gu.length;
     const C = this.cycleArea.length;
@@ -754,9 +857,32 @@ export class Overlay {
       }
     }
 
-    const labels = new Array<Map<number, number>>(C);
+    const count = new Int32Array(C);
+    const hasFirst = new Uint8Array(C);
+    const hasLast = new Uint8Array(C);
+    const labels = full ? new Array<Map<number, number>>(C) : undefined;
     const labeled = new Uint8Array(C);
-    const queue = new Int32Array(C);
+    const last = this.k - 1;
+    // One winding vector, edited on the way into a neighboring face and
+    // restored on the way back, so the memory is one vector plus three
+    // numbers per face rather than a vector per face.
+    const w = new Map<number, number>();
+    const record = (c: number) => {
+      count[c] = w.size;
+      hasFirst[c] = w.has(0) ? 1 : 0;
+      hasLast[c] = w.has(last) ? 1 : 0;
+      if (labels) labels[c] = new Map(w);
+      labeled[c] = 1;
+    };
+    const step = (h: number, dir: number) => {
+      const sign = (h & 1 ? 1 : -1) * dir;
+      for (const [s, d] of this.deltas[h >> 1]) addWinding(w, s, sign * d);
+    };
+    // depth-first frames: the cycle, the next half-edge to look across, and
+    // the half-edge that led into the cycle
+    const fc = new Int32Array(C);
+    const fh = new Int32Array(C);
+    const fvia = new Int32Array(C);
     if (components > 1) this.expectRayQueries(components);
     for (let r = 0; r < V; r++) {
       const p = leftmost[r];
@@ -768,32 +894,37 @@ export class Overlay {
       const g = this.out[offset[p + 1] - 1];
       const c0 = this.cycle[g];
       if (labeled[c0]) continue;
-      labels[c0] = new Map();
+      w.clear();
       // A connected graph has no other component around its unbounded face.
-      if (components > 1) this.windingWest(p, labels[c0]);
-      labeled[c0] = 1;
-      let head = 0;
-      let tail = 0;
-      queue[tail++] = c0;
-      while (head < tail) {
-        const c = queue[head++];
-        const start = this.cycleStart[c];
-        let h = start;
-        do {
-          const c2 = this.cycle[h ^ 1];
-          if (!labeled[c2]) {
-            const nextLabel = new Map(labels[c]);
-            const sign = h & 1 ? 1 : -1;
-            for (const [s, d] of this.deltas[h >> 1])
-              addWinding(nextLabel, s, sign * d);
-            labels[c2] = nextLabel;
-            labeled[c2] = 1;
-            queue[tail++] = c2;
-          }
-          h = this.next[h];
-        } while (h !== start);
+      if (components > 1) this.windingWest(p, w);
+      record(c0);
+      let depth = 0;
+      fc[0] = c0;
+      fh[0] = this.cycleStart[c0];
+      fvia[0] = -1;
+      while (depth >= 0) {
+        const h = fh[depth];
+        if (h < 0) {
+          // every neighbor of this cycle is labeled: restore and back out
+          if (fvia[depth] >= 0) step(fvia[depth], -1);
+          depth--;
+          continue;
+        }
+        const hn = this.next[h];
+        fh[depth] = hn === this.cycleStart[fc[depth]] ? -1 : hn;
+        const c2 = this.cycle[h ^ 1];
+        if (labeled[c2]) continue;
+        step(h, 1);
+        record(c2);
+        depth++;
+        fc[depth] = c2;
+        fh[depth] = this.cycleStart[c2];
+        fvia[depth] = h;
       }
     }
+    this.count = count;
+    this.hasFirst = hasFirst;
+    this.hasLast = hasLast;
     this.labels = labels;
   }
 
@@ -858,12 +989,11 @@ export class Overlay {
   select(mode: PathMode): Uint8Array {
     const C = this.cycleArea.length;
     const k = this.k;
-    const labels = this.labels;
     const keep = new Uint8Array(C);
     for (let c = 0; c < C; c++) {
-      const count = labels[c].size;
-      const first = labels[c].has(0);
-      const last = labels[c].has(k - 1);
+      const count = this.count[c];
+      const first = this.hasFirst[c] === 1;
+      const last = this.hasLast[c] === 1;
       let on = false;
       switch (mode) {
         case "intersect":
@@ -929,6 +1059,46 @@ export class Overlay {
     return rings;
   }
 
+  /**
+   * Split each traced walk at repeated vertices into simple rings. A boundary
+   * that touches itself at a vertex (a hole pinched to its outer ring, two
+   * holes meeting, two regions meeting at a corner) is one closed walk; its
+   * simple pieces are separate rings. Returns the walk each ring came from.
+   */
+  simpleRings(
+    walks: number[][],
+    ringOf: Int32Array,
+  ): { rings: number[][]; walk: number[] } {
+    const at = new Int32Array(this.vx.length).fill(-1); // stack position of a vertex
+    const rings: number[][] = [];
+    const walk: number[] = [];
+    const emit = (seq: number[], w: number) => {
+      for (let i = 0; i < seq.length; i++) ringOf[seq[i]] = rings.length;
+      rings.push(seq);
+      walk.push(w);
+    };
+    for (let w = 0; w < walks.length; w++) {
+      const seq = walks[w];
+      const open: number[] = [];
+      for (let i = 0; i < seq.length; i++) {
+        const h = seq[i];
+        const o = this.origin(h);
+        const pos = at[o];
+        if (pos >= 0) {
+          // back at a vertex already on the walk: the part since then is a loop
+          const loop = open.splice(pos);
+          for (let j = 0; j < loop.length; j++) at[this.origin(loop[j])] = -1;
+          emit(loop, w);
+        }
+        at[o] = open.length;
+        open.push(h);
+      }
+      for (let j = 0; j < open.length; j++) at[this.origin(open[j])] = -1;
+      emit(open, w);
+    }
+    return { rings, walk };
+  }
+
   /** Rings of every kept face, one per cycle. */
   faceRings(keep: Uint8Array, ringOf: Int32Array): number[][] {
     const rings: number[][] = [];
@@ -954,7 +1124,7 @@ export class Overlay {
    * a ray west from its leftmost vertex: the nearest ring edge crossed has
    * that face on its east side.
    */
-  assemble(rings: number[][], ringOf: Int32Array): Group[][] {
+  assemble(rings: number[][], ringOf: Int32Array, walk: number[]): Group[][] {
     const R = rings.length;
     const vx = this.vx;
     const vy = this.vy;
@@ -975,17 +1145,58 @@ export class Overlay {
     }
 
     const sliver = this.tol * this.tol;
-    let holes = 0;
-    for (let r = 0; r < R; r++) if (area[r] < 0) holes++;
-    this.expectRayQueries(holes);
     const parent = new Int32Array(R).fill(-2); // -2 unresolved, -1 none
+
+    // A hole split off a pinched walk may have another piece of the walk at
+    // its own leftmost vertex, where a westward ray starts inside that piece
+    // or finds nothing. The pieces of one walk bound one region: a hole's
+    // outer is the smallest counterclockwise piece of the walk that contains
+    // it, and a hole inside none of them shares the walk's outermost piece's
+    // surroundings, found by a ray from the walk's leftmost vertex.
+    const rayFrom = left;
+    const pieces = new Map<number, number[]>();
+    if (walk.length > 0 && walk[walk.length - 1] !== R - 1) {
+      // some walk split into several rings (walk ids repeat)
+      for (let r = 0; r < R; r++) {
+        const list = pieces.get(walk[r]);
+        if (list) list.push(r);
+        else pieces.set(walk[r], [r]);
+      }
+    }
+    for (const list of pieces.values()) {
+      if (list.length < 2) continue;
+      let l = left[list[0]];
+      for (const q of list) {
+        const v = left[q];
+        if (vx[v] < vx[l] || (vx[v] === vx[l] && vy[v] < vy[l])) l = v;
+      }
+      for (const r of list) {
+        if (area[r] >= 0) continue;
+        const o = this.origin(rings[r][0]);
+        const t = this.target(rings[r][0]);
+        const mx = (vx[o] + vx[t]) / 2;
+        const my = (vy[o] + vy[t]) / 2;
+        let best = -1;
+        for (const q of list) {
+          if (area[q] <= sliver || (best >= 0 && area[q] >= area[best]))
+            continue;
+          if (this.encloses(rings[q], mx, my)) best = q;
+        }
+        if (best >= 0) parent[r] = best;
+        else rayFrom[r] = l;
+      }
+    }
+
+    let holes = 0;
+    for (let r = 0; r < R; r++) if (area[r] < 0 && parent[r] === -2) holes++;
+    this.expectRayQueries(holes);
     const resolve = (r: number): number => {
       const chain: number[] = [];
       let p = r;
       while (p >= 0 && area[p] < 0 && parent[p] === -2) {
         chain.push(p);
         parent[p] = -1; // stop if inconsistent geometry creates a cycle
-        p = this.westHit(left[p], ringOf);
+        p = this.westHit(rayFrom[p], ringOf);
       }
       if (p >= 0 && area[p] < 0) p = parent[p];
       if (p >= 0 && !(area[p] > sliver)) p = -1;
@@ -1020,6 +1231,23 @@ export class Overlay {
       }
     }
     return polygons;
+  }
+
+  /** Whether a simple ring encloses a point that is not on its boundary (crossing parity). */
+  private encloses(seq: number[], x: number, y: number): boolean {
+    const vx = this.vx;
+    const vy = this.vy;
+    let inside = false;
+    for (let i = 0; i < seq.length; i++) {
+      const o = this.origin(seq[i]);
+      const t = this.target(seq[i]);
+      const oy = vy[o];
+      const ty = vy[t];
+      if (oy > y === ty > y) continue;
+      const xc = vx[o] + ((y - oy) * (vx[t] - vx[o])) / (ty - oy);
+      if (xc < x) inside = !inside;
+    }
+    return inside;
   }
 
   /** The ring, among those in `ringOf`, whose edge is the nearest crossing of the ray west from vertex p and faces it. */
@@ -1135,19 +1363,19 @@ export class Overlay {
  * for the merging modes, or one ring list per face for `divide` and `crop`.
  */
 export function overlay(
-  shapes: Iterable<PolygonLike>,
+  shapes: Iterable<PolygonLike> | PtLikeIterable,
   mode: "divide" | "crop",
 ): Group[][];
 export function overlay(
-  shapes: Iterable<PolygonLike>,
+  shapes: Iterable<PolygonLike> | PtLikeIterable,
   mode: Exclude<PathMode, "divide" | "crop">,
 ): Group[];
 export function overlay(
-  shapes: Iterable<PolygonLike>,
+  shapes: Iterable<PolygonLike> | PtLikeIterable,
   mode: PathMode,
 ): Group[] | Group[][];
 export function overlay(
-  shapes: Iterable<PolygonLike>,
+  shapes: Iterable<PolygonLike> | PtLikeIterable,
   mode: PathMode,
 ): Group[] | Group[][] {
   const faces = mode === "divide" || mode === "crop";
@@ -1160,10 +1388,11 @@ export function overlay(
   ov.label();
   const keep = ov.select(mode);
   const ringOf = new Int32Array(2 * ov.gu.length).fill(-1);
-  const rings = faces
+  const walks = faces
     ? ov.faceRings(keep, ringOf)
     : ov.mergedRings(keep, ringOf);
-  const polygons = ov.assemble(rings, ringOf);
+  const { rings, walk } = ov.simpleRings(walks, ringOf);
+  const polygons = ov.assemble(rings, ringOf, walk);
   if (faces) return polygons;
   const flat: Group[] = [];
   for (let i = 0; i < polygons.length; i++) {

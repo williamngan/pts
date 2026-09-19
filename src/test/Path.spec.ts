@@ -754,9 +754,9 @@ describe("Path", () => {
       ov.split();
       ov.merge();
       ov.trace();
-      ov.label();
+      ov.label(true);
       expect(ov.deltas.reduce((n, d) => n + d.size, 0)).toBe(8000);
-      expect(ov.labels.reduce((n, d) => n + d.size, 0)).toBe(2000);
+      expect(ov.labels!.reduce((n, d) => n + d.size, 0)).toBe(2000);
     });
 
     it("preserves winding consistency and planar edges in seeded near-coincident arrangements", () => {
@@ -779,10 +779,10 @@ describe("Path", () => {
         ov.split();
         ov.merge();
         ov.trace();
-        ov.label();
+        ov.label(true);
         for (let e = 0; e < ov.gu.length; e++) {
-          const left = ov.labels[ov.cycle[2 * e]];
-          const right = ov.labels[ov.cycle[2 * e + 1]];
+          const left = ov.labels![ov.cycle[2 * e]];
+          const right = ov.labels![ov.cycle[2 * e + 1]];
           for (let s = 0; s < shapes.length; s++)
             expect(
               (left.get(s) ?? 0) - (right.get(s) ?? 0),
@@ -1055,5 +1055,191 @@ describe("Path", () => {
       expect(Polygon.area(u[0])).toBeCloseTo(polygonArea(u), 4);
       expect(Polygon.centroid(u[0])).toBeInstanceOf(Pt);
     });
+  });
+});
+
+describe("Path pinched rings, input forms and resource bounds", () => {
+  const area = (g: ArrayLike<ArrayLike<number>>) => signedArea(g);
+
+  it("splits a hole that touches its outer ring into two simple rings, like divide", () => {
+    const shapes = [
+      box(0, 0, 10, 10),
+      [
+        [0, 5],
+        [5, 8],
+        [5, 2],
+      ] as Ring,
+    ];
+    const merged = Path.minusFront(shapes);
+    expect(merged.map((r) => r.length)).toEqual([4, 3]);
+    expect(area(merged[0])).toBeCloseTo(100, 6);
+    expect(area(merged[1])).toBeCloseTo(-15, 6);
+    // no vertex repeats within a ring
+    for (const r of merged) {
+      const keys = new Set(Array.from(r, (p) => `${p[0]},${p[1]}`));
+      expect(keys.size).toBe(r.length);
+    }
+    const faces = Path.divide(shapes);
+    expect(faces.map((f) => f.map((r) => Math.round(area(r))))).toEqual([
+      [100, -15],
+      [15],
+    ]);
+  });
+
+  it("keeps two holes that meet at a vertex, and two regions that meet at a corner, as separate rings", () => {
+    const holes = Path.minusFront([
+      box(0, 0, 20, 20),
+      box(5, 5, 10, 10),
+      box(10, 10, 15, 15),
+    ]);
+    expect(holes.map((r) => Math.round(area(r)))).toEqual([400, -25, -25]);
+    const corners = Path.unite([box(0, 0, 10, 10), box(10, 10, 20, 20)]);
+    expect(corners.map((r) => Math.round(area(r)))).toEqual([100, 100]);
+    // a hole pinched to the outer's own left edge, with an island touching the hole
+    const nested = Path.exclude([
+      box(0, 0, 30, 30),
+      [
+        [0, 15],
+        [10, 25],
+        [10, 5],
+      ] as Ring,
+      [
+        [10, 15],
+        [6, 18],
+        [6, 12],
+      ] as Ring,
+    ]);
+    expect(nested.map((r) => Math.round(area(r)))).toEqual([900, -100, 12]);
+  });
+
+  it("finds the outer of two touching holes when the ray from the shared vertex would start inside the neighbor", () => {
+    // from the fuzz: the larger hole's leftmost vertex is the vertex it shares with the smaller one
+    const shapes = [
+      [
+        [
+          [18.368373673874885, 4.271545778028667],
+          [11.81821235222742, 26.99763053096831],
+          [8.041599208954722, 20.005324543453753],
+          [29.91773154353723, 19.179545491933823],
+          [10.042000331450254, 7.683746418915689],
+          [15.089984822552651, 14.068798637017608],
+        ],
+      ],
+      [
+        [
+          [13.084358763881028, 29.35348825296387],
+          [2.1163038723170757, 17.785107765812427],
+          [3.5859281150624156, 14.077763452660292],
+          [6.293078558519483, 13.669658827129751],
+          [25.941267334856093, 25.09259052341804],
+          [21.323031596839428, 26.25076833413914],
+          [7.243422134779394, 14.310932855587453],
+        ],
+      ],
+      [
+        [
+          [9.183018787298352, 11.428966973908246],
+          [28.334283807780594, 10.837185177952051],
+          [12.740369823295623, 1.16216033231467],
+          [22.00918526155874, 16.179535249248147],
+          [7.992793957237154, 22.443709359504282],
+        ],
+      ],
+      [
+        [
+          [2.6448295265436172, 11.949709199834615],
+          [26.78789389785379, 6.172364267986268],
+          [21.71520902775228, 15.388958549592644],
+          [23.3117998810485, 0.7790414406917989],
+          [21.036106701940298, 2.5900863599963486],
+          [0.5804121075198054, 27.54530858946964],
+        ],
+      ],
+    ];
+    const rings = Path.unite(shapes);
+    const holes = rings.filter((r) => area(r) < -1);
+    expect(holes).toHaveLength(3);
+    expect(holes.map((r) => Math.round(area(r) * 100) / 100).sort()).toEqual(
+      [-6.8, -3.54, -2.81].sort(),
+    );
+  });
+
+  it("accepts a single ring as one shape", () => {
+    expect(Path.unite(ring(box(0, 0, 10, 10))).map((r) => area(r))).toEqual([
+      100,
+    ]);
+    expect(Path.unite(box(0, 0, 10, 10)).map((r) => area(r))).toEqual([100]);
+    expect(Path.unite(pentagram(0, 0, 10))).toHaveLength(1); // normalizes a self-intersecting ring
+  });
+
+  it("warns when a ring's points all merge within the tolerance", () => {
+    const warn = vi.spyOn(Util, "warn").mockImplementation((_m, d) => d);
+    // tolerance is a millionth of the largest coordinate: 1 here, so the unit square collapses
+    expect(
+      Path.unite([box(1e6, 1e6, 1e6 + 1, 1e6 + 1), box(0, 0, 10, 10)]).map(
+        (r) => area(r),
+      ),
+    ).toEqual([100]);
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn.mock.calls[0][0]).toMatch(/tolerance/);
+    // three collinear points are degenerate, not collapsed: no warning
+    expect(
+      Path.unite([
+        [
+          [0, 0],
+          [5, 0],
+          [10, 0],
+        ] as Ring,
+      ]),
+    ).toEqual([]);
+    expect(warn).toHaveBeenCalledTimes(1);
+  });
+
+  it("a result is valid input: uniting the divided faces gives the union back", () => {
+    const shapes = [disc(10, 10, 8), disc(16, 12, 7), box(5, 5, 20, 8)];
+    const union = Path.unite(shapes);
+    const reunited = Path.unite(Path.divide(shapes));
+    const total = (rings: Group[]) => rings.reduce((a, r) => a + area(r), 0);
+    expect(total(reunited)).toBeCloseTo(total(union), 3);
+    expect(Path.unite([union]).length).toBe(union.length);
+  });
+
+  it("stays bounded on deep overlap and on a fan sharing a vertex", () => {
+    const bars = Array.from({ length: 80 }, (_, i) => {
+      const a = (Math.PI * i) / 80;
+      const c = Math.cos(a),
+        s = Math.sin(a),
+        w = 2;
+      return [
+        [-200 * c - w * s, -200 * s + w * c],
+        [200 * c - w * s, 200 * s + w * c],
+        [200 * c + w * s, 200 * s - w * c],
+        [-200 * c + w * s, -200 * s - w * c],
+      ] as Ring;
+    });
+    const memory = () =>
+      (globalThis as any).process.memoryUsage().heapUsed as number;
+    const before = memory();
+    const star = Path.unite(bars);
+    const grown = memory() - before;
+    expect(star.filter((r) => area(r) > 0)).toHaveLength(1);
+    expect(grown).toBeLessThan(150e6); // was over a gigabyte at 300 bars with a vector per face
+    const fan = Array.from({ length: 1500 }, (_, i) => {
+      const a = (2 * Math.PI * i) / 1500;
+      return [
+        [0, 0],
+        [100 * Math.cos(a), 100 * Math.sin(a)],
+        [100 * Math.cos(a + 0.002), 100 * Math.sin(a + 0.002)],
+      ] as Ring;
+    });
+    const union = Path.unite(fan); // used to throw RangeError from the pair list
+    expect(union.length).toBeGreaterThan(0);
+    expect(
+      union.every((r) =>
+        Array.from(r).every(
+          (p) => Number.isFinite(p[0]) && Number.isFinite(p[1]),
+        ),
+      ),
+    ).toBe(true);
   });
 });

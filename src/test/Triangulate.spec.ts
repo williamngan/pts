@@ -719,3 +719,11 @@ describe("triangulate", () => {
     expect(triangulate(c).triangles.length).toBe(6);
   });
 });
+
+describe("crossingParameter at ordinary values", () => {
+  it("returns the exact parameter of a plain crossing", () => {
+    expect(crossingParameter(0, 0, 4, 0, 1, -1, 1, 1)).toBe(0.25);
+    expect(crossingParameter(0, 0, 10, 10, 0, 10, 10, 0)).toBe(0.5);
+    expect(crossingParameter(2, 3, 8, 3, 6.5, 0, 6.5, 9)).toBe(0.75);
+  });
+});

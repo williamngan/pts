@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Create.ts",
-      1601,
+      1602,
       13
     ]
   ],
   "kind": "Class",
-  "comment": "PoissonDisk is a Group of Pts produced by Poisson-disk sampling: every point is at least\n[`PoissonDisk.radius`](#link) away from every other. Create a finished set with\n[`Create.sampling`](#link), or construct one directly and grow it with [`PoissonDisk.step`](#link)\n(one point at a time) or [`PoissonDisk.sample`](#link) (a batch at a time), which is how the\n[demo](https://ptsjs.org/demo/?name=create.sampling) shows the packing as it forms.\n\nThe sampler is Bridson's grid-accelerated algorithm with Roberts' candidate placement: each\nvisit to an active point tries up to [`PoissonDisk.candidates`](#link) candidates on the circle\njust outside `radius` around it, at evenly spaced angles from a random offset, and accepts the\nfirst one with no existing point within `radius`. It runs in linear time on one small integer\ngrid. In a bound thinner than the radius, candidates take random positions across the thin\naxis and alternate along the long one, since a circle of candidates would miss the strip.\n\nThree traits to know: most points sit just beyond `radius` from the point that spawned them,\nwhich packs tighter than candidates at random distances; the candidate budget is finite, so\na finished set can still have gaps; and coordinates are compared as float32 (the precision of\na Pt), exact at pixel scales but rejecting some candidates when coordinates exceed roughly\n8000 times the radius.\n\nTreat the Group as read-only while sampling: pushing or moving its Pts by hand would\ndesynchronize the grid that enforces the spacing.",
+  "comment": "PoissonDisk is a Group of Pts produced by Poisson-disk sampling: every point is at least\n[`PoissonDisk.radius`](#link) away from every other. Create a finished set with\n[`Create.sampling`](#link), or construct one directly and grow it with [`PoissonDisk.step`](#link)\n(one point at a time) or [`PoissonDisk.sample`](#link) (a batch at a time), which is how the\n[demo](https://ptsjs.org/demo/?name=create.sampling) shows the packing as it forms.\n\nThe sampler is Bridson's grid-accelerated algorithm with Roberts' candidate placement: each\nvisit to an active point tries up to [`PoissonDisk.candidates`](#link) candidates on the circle\njust outside `radius` around it, at evenly spaced angles from a random offset, and accepts the\nfirst one with no existing point within `radius`. It runs in linear time on one small integer\ngrid. In a bound thinner than the radius, candidates take random positions across the thin\naxis and alternate along the long one, since a circle of candidates would miss the strip.\n\nThree traits to know: most points sit just beyond `radius` from the point that spawned them,\nwhich packs tighter than candidates at random distances; the candidate budget is finite, so\na finished set can still have gaps; and coordinates are compared as float32 (the precision of\na Pt), exact at pixel scales but rejecting some candidates when coordinates exceed roughly\n8000 times the radius.\n\nTreat the Group as read-only while sampling: pushing or moving its Pts by hand would\ndesynchronize the grid that enforces the spacing. A PoissonDisk produced by `map`, `filter`\nor `slice` is a plain copy that reports radius 0 and `done`, and needs `setup` before sampling.",
   "constructor": [
     {
       "name": "constructor",
@@ -46,7 +46,7 @@
       "source": [
         [
           "src/Create.ts",
-          1703,
+          1721,
           6
         ]
       ],
@@ -64,7 +64,7 @@
       "source": [
         [
           "src/Create.ts",
-          1696,
+          1714,
           6
         ]
       ],
@@ -82,7 +82,7 @@
       "source": [
         [
           "src/Create.ts",
-          1710,
+          1728,
           6
         ]
       ],
@@ -275,7 +275,7 @@
       "source": [
         [
           "src/Create.ts",
-          1689,
+          1707,
           6
         ]
       ],
@@ -1537,7 +1537,7 @@
       "source": [
         [
           "src/Create.ts",
-          1769,
+          1785,
           2
         ]
       ],
@@ -1647,7 +1647,7 @@
       "source": [
         [
           "src/Create.ts",
-          1621,
+          1630,
           2
         ]
       ],
@@ -1658,7 +1658,7 @@
         {
           "comment": "Reset this sampler and place its first sample. Calling `setup` again empties the group and\nstarts over, which is how a sketch restarts sampling after a resize.",
           "returns": "this",
-          "returns_comment": false,
+          "returns_comment": "this",
           "parameters": [
             {
               "name": "bound",
@@ -1679,7 +1679,12 @@
               "default": "{}"
             }
           ],
-          "tags": []
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`new PoissonDisk().setup( space.innerBound, 12 ).sample( 40 )`"
+            }
+          ]
         }
       ]
     },
@@ -1992,7 +1997,7 @@
       "source": [
         [
           "src/Create.ts",
-          1719,
+          1737,
           2
         ]
       ],

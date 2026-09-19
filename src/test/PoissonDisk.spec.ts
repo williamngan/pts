@@ -337,3 +337,42 @@ describe("PoissonDisk", () => {
     });
   });
 });
+
+describe("PoissonDisk setup edge cases", () => {
+  it("fills the intended region when the bound's corners are given in the other order", () => {
+    Num.seed("reversed");
+    const pd = Create.sampling(new Bound(new Pt(20, 20), new Pt(0, 0)), 3);
+    expect(pd.length).toBeGreaterThan(10);
+    for (const p of pd) {
+      expect(p[0]).toBeGreaterThanOrEqual(0);
+      expect(p[0]).toBeLessThan(20);
+      expect(p[1]).toBeGreaterThanOrEqual(0);
+      expect(p[1]).toBeLessThan(20);
+    }
+  });
+
+  it("rejects a start on the far edge (the bound is half-open) and accepts one on the near edge", () => {
+    expect(() =>
+      new PoissonDisk().setup(bound(0, 0, 100, 100), 10, { start: [100, 50] }),
+    ).toThrow(/start/);
+    const pd = new PoissonDisk().setup(bound(0, 0, 100, 100), 10, {
+      start: [0, 50],
+    });
+    expect(pd[0].equals(new Pt(0, 50))).toBe(true);
+  });
+
+  it("a species-derived copy reports no setup until setup is called on it", () => {
+    Num.seed("species");
+    const pd = Create.sampling(bound(0, 0, 60, 60), 6);
+    const copy = pd.filter((p) => p[0] < 30) as PoissonDisk;
+    expect(copy).toBeInstanceOf(PoissonDisk);
+    expect(copy.radius).toBe(0);
+    expect(copy.done).toBe(true);
+    expect(copy.step()).toBeUndefined();
+    copy.setup(bound(0, 0, 60, 60), 6);
+    expect(copy.done).toBe(false);
+    copy.sample();
+    expect(copy.done).toBe(true);
+    expect(copy.length).toBeGreaterThan(10);
+  });
+});

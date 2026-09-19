@@ -219,7 +219,8 @@ keyboard. `on()` supports `{ once, signal }`. Custom shapes:
 # Ecosystem
 
 - `react-pts-canvas` (separate repository) wraps a Pts space in a React
-  component. Its published release pins `pts ^0.12.8`; a release that accepts
-  1.0 is prepared separately and must ship before, or with, Pts 1.0.0.
-- `pts-cli` is not published yet. Do not tell users to install it; the
-  Ecosystem guide describes it as forthcoming.
+  component; it is published on npm and documented at react.ptsjs.org.
+- `pts-render` is the Pts CLI, published on npm and documented at
+  cli.ptsjs.org; it renders sketches from the terminal without a browser.
+  The Ecosystem guide (`guide/md/_8000_Ecosystem.md`) is the source of truth
+  for both.

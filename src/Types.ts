@@ -197,7 +197,7 @@ export type FlockOptions = {
 export type PoissonDiskOptions = {
   /** Maximum candidates tried per visit to an active sample. More candidates generally pack tighter and take longer. Rounded down; default is 8. */
   candidates?: number;
-  /** The first sample, which must lie inside the bound. Default is a random point inside the bound. */
+  /** The first sample, which must lie on or after the bound's top-left edges and strictly before its bottom-right edges (the bound is half-open). Default is a random point inside the bound. */
   start?: PtLike;
 };
 

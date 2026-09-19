@@ -2,6 +2,12 @@
 
 The revamp is a full modernization of Pts. Most existing sketches should continue to work, while the library is now faster, more predictable, easier to integrate, and better tested. This page summarizes the major changes made since work on the revamp began in August 2026.
 
+### 1.0.1
+
+- **Path booleans.** The new `Path` class unites, intersects, excludes, subtracts, divides and crops polygons, returning rings with holes that `form.compound` draws as one path.
+- **Curve conversions.** `Curve.cardinalToBezier` and `Curve.bsplineToBezier` turn curve anchors into cubic Bezier control points that `form.bezier` draws as one native path, and `Curve.bezierToCardinal` and `Curve.bezierToBspline` convert back.
+- **Poisson-disk sampling.** `Create.sampling` returns a `PoissonDisk` group of randomly placed points that are never closer than a given radius, and a `PoissonDisk` can also grow one point or one batch at a time.
+
 ### New capabilities
 
 - **Modern color spaces.** `Color` now supports Oklab and Oklch, alongside corrected conversions for RGB, HSL, HSB, XYZ, LAB, LCH, and LUV. Hex colors now handle alpha correctly too.

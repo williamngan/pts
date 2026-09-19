@@ -1,60 +1,104 @@
 # Changelog
 
-## Unreleased
+## 1.0.1 (2026-09-19)
 
-- New `Path` class with polygon boolean operations: `unite`, `intersect`, `exclude`,
-  `minusFront`, `minusBack`, `divide` and `crop`. Each takes a list of shapes
-  in stacking order (back to front) and returns a polygon with holes as a
-  `Group[]` of rings, an outer ring followed by its holes in the opposite
-  orientation (`divide` and `crop` return one such polygon per face). A shape
-  is any polygon Pts already understands, or a list of rings such as a
-  previous result. Rings use the nonzero winding rule like `form.polygon`,
-  so orientation does not matter and a self-intersecting star is filled the
-  way it is drawn. Shapes that share edges, touch at a vertex or coincide are
-  handled as exact coincidences (input vertices within a millionth of the
-  largest absolute coordinate are merged before intersections). The new `form.compound(rings)` on `CanvasForm`
-  and `SVGForm` draws such a polygon as one path with its holes. See the
-  `Path.*` studies.
-- Path preserves closing corners during simplification and uses exact
-  intersection predicates and determinants for near-coincident and shallow
-  crossings. Vertices within the tolerance of an edge split it before any
-  crossing is computed, so a vertex that touches an edge to float32 precision
-  and shapes whose edges coincide up to rounding (such as shifted copies)
-  behave like exact touches. Output drops vertices and faces that collapse in
-  Float32 and rings thinner than the tolerance. Hole ownership uses an
-  iterative traversal; sparse winding vectors and a ray index that is built
-  only for many shapes or holes keep the common case fast.
-- New `Curve.cardinalToBezier(pts, tension?, alpha?)` and
-  `Curve.bsplineToBezier(pts, tension?)` convert curve anchors into cubic
-  Bezier control points (each segment is a cubic, with results rounded to
-  float32). The result is in the layout `Curve.bezier` takes, and the new
-  `form.bezier(pts)` on `CanvasForm` and `SVGForm` draws such a chain as
-  one native path, so a curve stays smooth at any zoom and exports as a
-  few `C` commands instead of a long polyline. `alpha` selects the knot
-  parameterization: 0 (default, uniform, matching `Curve.cardinal`), 0.5
-  (centripetal), or 1 (chordal). Centripetal segments have no internal loops
-  or cusps at tension 0.5 with distinct adjacent anchors. Non-uniform curves
-  preserve small nonzero knot intervals; repeated anchors yield constant
-  segments with zero end tangents.
-  See the `curve.cardinal` and `curve.bspline` demos. The inverses `Curve.bezierToCardinal`
-  and `Curve.bezierToBspline` take a Bezier chain back to anchors: the
-  cardinal one keeps the Bezier anchors (a cardinal curve's tangents come
-  from its neighbors), and the B-spline one solves for the B-spline through
-  every anchor with the chain's end tangents. Round trips require the original
-  cardinal parameters or B-spline tension 1, and are subject to float32 rounding.
-  Empty or incomplete `form.bezier` chains leave the previous drawing untouched,
-  and `cardinalToBezier` warns and returns an empty Group for a negative or
-  NaN `alpha`.
+### New
+
+- **Path**: `Path` is a new class with polygon boolean operations:
+  `unite`, `intersect`, `exclude`, `minusFront`, `minusBack`, `divide` and
+  `crop`. Each takes a list of shapes in stacking order (back to front) and
+  returns a polygon with holes as a `Group[]` of rings, an outer ring
+  followed by its holes in the opposite orientation (`divide` and `crop`
+  return one such polygon per face). A shape is any polygon Pts already
+  understands, or a list of rings such as a previous result. Rings use the
+  nonzero winding rule like `form.polygon`, so orientation does not matter
+  and a self-intersecting star is filled the way it is drawn. Shapes that
+  share edges, touch at a vertex or coincide are handled as exact
+  coincidences (input vertices within a millionth of the largest absolute
+  coordinate are merged before intersections). The new
+  `form.compound(rings)` on `CanvasForm` and `SVGForm` draws such a polygon
+  as one path with its holes, and the static
+  `CanvasForm.compound(ctx, rings)` does the same on a raw context for
+  renderer authors. See the `Path.*` studies.
+- **Curve conversions**: `Curve.cardinalToBezier(pts, tension?, alpha?)`
+  and `Curve.bsplineToBezier(pts, tension?)` convert curve anchors (2D or
+  3D) into cubic Bezier control points (each segment is a cubic, with
+  results rounded to float32). The result is in the layout `Curve.bezier`
+  takes, and the new `form.bezier(pts)` on `CanvasForm` and `SVGForm` draws
+  such a chain as one native path, so a curve stays smooth at any zoom and
+  exports as a few `C` commands instead of a long polyline; the static
+  `CanvasForm.bezier(ctx, pts)` draws it on a raw context for renderer
+  authors. `alpha` selects the knot parameterization: 0 (default, uniform,
+  matching `Curve.cardinal`), 0.5 (centripetal), or 1 (chordal).
+  Centripetal segments have no internal loops or cusps at tension 0.5 with
+  distinct adjacent anchors. Non-uniform curves preserve small nonzero knot
+  intervals; repeated anchors yield constant segments with zero end
+  tangents. See the `curve.cardinal` and `curve.bspline` demos. The
+  inverses `Curve.bezierToCardinal` and `Curve.bezierToBspline` take a
+  Bezier chain back to anchors: the cardinal one keeps the Bezier anchors
+  (a cardinal curve's tangents come from its neighbors), and the B-spline
+  one solves for the B-spline through every anchor with the chain's end
+  tangents. Round trips require the original cardinal parameters or
+  B-spline tension 1, and are subject to float32 rounding. Empty or
+  incomplete `form.bezier` chains leave the previous drawing untouched, and
+  `cardinalToBezier` warns and returns an empty Group for a negative or NaN
+  `alpha`.
+- **Sampling**: `Create.sampling(bound, radius, options?)` returns a
+  `PoissonDisk` Group of points that are randomly placed but never closer
+  than `radius` (Poisson-disk sampling, or blue noise). It uses Bridson's
+  linear-time grid sampler with Roberts' candidate placement, seeded
+  through `Num.random`. For a set that grows over frames, construct
+  `new PoissonDisk().setup(bound, radius)` and call `step()` per point or
+  `sample(count)` per frame; see the `create.sampling` demo. Options:
+  `candidates` (default 8) and `start`. A `PoissonDisk` exposes `radius`,
+  `candidates`, `bound` and `done` getters. `setup` resets the set and
+  throws on a non-positive or non-finite radius, a non-finite bound,
+  `candidates` below 1, a `start` outside the bound, or a grid over 2^26
+  cells.
+- **Types**: `PolygonLike` (a shape accepted by `Path`) and
+  `PoissonDiskOptions` are exported.
+
+### Fixed
+
 - `form.line` and `form.polygon` with fewer than 2 points no longer repaint
   the previous path in the current style; they warn (as before) and draw
   nothing.
-- New `Create.sampling(bound, radius, options?)` returns a `PoissonDisk`
-  Group of points that are randomly placed but never closer than `radius`
-  (Poisson-disk sampling, or blue noise). It uses Bridson's linear-time grid
-  sampler with Roberts' candidate placement, seeded through `Num.random`. For
-  a set that grows over frames, construct `new PoissonDisk().setup(bound,
-radius)` and call `step()` per point or `sample(count)` per frame; see the
-  `create.sampling` demo. Options: `candidates` (default 8) and `start`.
+
+- `Path` no longer keeps a winding vector per face, so shapes that overlap
+  deeply (hundreds of bars through one point, hundreds of overlapping discs)
+  run in a fraction of the memory and time; candidate edge pairs are visited
+  as they are found, so shapes that all share a vertex no longer overflow an
+  array; and the ray index is built with a median partition instead of a
+  sort per level.
+- `Path` results are simple rings: a hole that touches its outer ring, two
+  holes that meet, or two regions that meet at a corner come back as
+  separate rings instead of one ring through the shared vertex, and the
+  merging modes agree with `divide` on the shape of such faces.
+- `Path` accepts a single ring of points as one shape (`Path.unite( square )`)
+  instead of throwing, and warns when a ring's points all merge within the
+  tolerance instead of dropping it silently. `form.compound` warns when given
+  a list of polygons (a `divide` or `crop` result) instead of rings.
+- `Curve.cardinalToBezier` rejects an infinite `alpha` and treats an
+  overflowing knot interval like a repeated anchor, instead of returning NaN
+  points. `form.bezier` now warns like `form.line` when given fewer than 4
+  points. `SVGForm.bezier` and `SVGForm.compound` gain the legacy DOM-context
+  overloads that `line` and `polygon` have.
+- A `Bound` given its corners in the other order (`new Bound( [10, 10], [0, 0] )`)
+  now keeps top-left as the smaller corner, so `Create.sampling` and
+  `Create.distributeRandom` fill the intended region.
+
+### Internal / tooling
+
+- Path preserves closing corners during simplification and uses exact
+  intersection predicates for near-coincident and shallow crossings, so a
+  vertex that touches an edge to float32 precision and shapes whose edges
+  coincide up to rounding (such as shifted copies) behave like exact
+  touches. Output drops vertices and faces that collapse in float32 and
+  rings thinner than the tolerance. Hole ownership uses an iterative
+  traversal, and sparse winding vectors with a ray index built only for
+  many shapes or holes keep the common case fast.
+- Demos: `htmlform.scope` removed and `svgform.scope` renamed to
+  `svgspace.getForm`.
 
 ## 1.0.0 (2026-09-12)
 

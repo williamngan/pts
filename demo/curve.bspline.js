@@ -1,7 +1,7 @@
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
-window.demoDescription = "Create a set of points around a center point, varying each's radius slightly. Draw a b-spline curve and also show the corresponding bezier handles.";
+window.demoDescription = "Create a set of points around a center point, varying each's radius slightly. Draw a b-spline curve and also show the corresponding bezier anchors and handles.";
 
 Pts.quickStart( "#pt", "#f03" );
 
@@ -57,6 +57,7 @@ Pts.quickStart( "#pt", "#f03" );
       for (let i=0, len=bezier.length-1; i<len; i+=3) {
         form.line( [bezier[i], bezier[i+1]] ).line( [bezier[i+2], bezier[i+3]] );
       }
+      form.fillOnly("#123").points( anchors, 3, "circle" );
     },
     
   });

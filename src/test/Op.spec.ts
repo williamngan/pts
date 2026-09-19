@@ -1274,3 +1274,29 @@ describe("Curve from Bezier conversions", () => {
     expectClose(back, pts, 2);
   });
 });
+
+describe("Curve conversion guards and tension range", () => {
+  it("cardinalToBezier rejects an infinite alpha and survives an overflowing one", () => {
+    const pts = seededPath(6, 21);
+    const warn = vi.spyOn(Util, "warn").mockImplementation((_m, d) => d);
+    expect(Curve.cardinalToBezier(pts, 0.5, Infinity)).toHaveLength(0);
+    expect(warn).toHaveBeenCalledTimes(1);
+    // pow(distance, 400) overflows to Infinity: the interval acts like a repeated anchor
+    const huge = Curve.cardinalToBezier(pts, 0.5, 400);
+    expect(huge).toHaveLength(16);
+    expect(
+      huge.every((p) => Number.isFinite(p[0]) && Number.isFinite(p[1])),
+    ).toBe(true);
+    expect(warn).toHaveBeenCalledTimes(1);
+  });
+
+  it("cardinalToBezier matches the sampler at tension 0, above 1 and below 0", () => {
+    const pts = seededPath(8, 22);
+    for (const tension of [0, 1.5, -0.5]) {
+      expectClose(
+        Curve.bezier(Curve.cardinalToBezier(pts, tension), 6),
+        Curve.cardinal(pts, 6, tension),
+      );
+    }
+  });
+});

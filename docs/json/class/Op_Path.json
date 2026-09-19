@@ -34,8 +34,8 @@
           "parameters": [
             {
               "name": "shapes",
-              "comment": "an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.",
-              "type": "Iterable",
+              "comment": "an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes. A single ring is taken as one shape.",
+              "type": "PtLikeIterable | Iterable",
               "default": false
             }
           ],
@@ -70,8 +70,8 @@
           "parameters": [
             {
               "name": "shapes",
-              "comment": "an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.",
-              "type": "Iterable",
+              "comment": "an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes. A single ring is taken as one shape.",
+              "type": "PtLikeIterable | Iterable",
               "default": false
             }
           ],
@@ -106,8 +106,8 @@
           "parameters": [
             {
               "name": "shapes",
-              "comment": "an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.",
-              "type": "Iterable",
+              "comment": "an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes. A single ring is taken as one shape.",
+              "type": "PtLikeIterable | Iterable",
               "default": false
             }
           ],
@@ -142,8 +142,8 @@
           "parameters": [
             {
               "name": "shapes",
-              "comment": "an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.",
-              "type": "Iterable",
+              "comment": "an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes. A single ring is taken as one shape.",
+              "type": "PtLikeIterable | Iterable",
               "default": false
             }
           ],
@@ -178,8 +178,8 @@
           "parameters": [
             {
               "name": "shapes",
-              "comment": "an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.",
-              "type": "Iterable",
+              "comment": "an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes. A single ring is taken as one shape.",
+              "type": "PtLikeIterable | Iterable",
               "default": false
             }
           ],
@@ -214,8 +214,8 @@
           "parameters": [
             {
               "name": "shapes",
-              "comment": "an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.",
-              "type": "Iterable",
+              "comment": "an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes. A single ring is taken as one shape.",
+              "type": "PtLikeIterable | Iterable",
               "default": false
             }
           ],
@@ -250,8 +250,8 @@
           "parameters": [
             {
               "name": "shapes",
-              "comment": "an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.",
-              "type": "Iterable",
+              "comment": "an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes. A single ring is taken as one shape.",
+              "type": "PtLikeIterable | Iterable",
               "default": false
             }
           ],

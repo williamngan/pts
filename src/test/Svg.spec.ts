@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { CanvasForm } from "../Canvas";
-import { SVGContext2D } from "../Svg";
+import { SVGContext2D, SVGForm } from "../Svg";
 
 function makeForm() {
   const ctx = new SVGContext2D(null!);
@@ -237,5 +237,50 @@ describe("SVGContext2D compound paths", () => {
     ctx._flushShape();
     expect(ctx._runs).toHaveLength(1);
     expect(ctx._runs[0].attrs.stroke).toBe("#f00");
+  });
+});
+
+describe("SVG bezier chains: partial segments, fills, and static dispatch", () => {
+  const chain = [
+    [0, 0],
+    [10, 20],
+    [30, 20],
+    [40, 0],
+    [50, -20],
+    [70, -20],
+    [80, 0],
+  ];
+
+  it("ignores a trailing partial segment and carries the fill", () => {
+    const { ctx, form } = makeForm();
+    form.fillOnly("#0f0").bezier([...chain, [90, 10], [95, 10]]);
+    ctx._flushShape();
+    const paths = ctx._runs.filter((r: any) => r.tag === "path");
+    expect(paths).toHaveLength(1);
+    expect(paths[0].attrs.d.match(/C/g)).toHaveLength(2);
+    expect(paths[0].attrs.fill).toBe("#0f0");
+  });
+
+  it("SVGForm.bezier and SVGForm.compound dispatch a rendering context to the canvas statics", () => {
+    const calls: string[] = [];
+    const ctx: any = new Proxy(
+      {},
+      {
+        get:
+          (_t, k: string) =>
+          (...a: unknown[]) =>
+            calls.push(k),
+      },
+    );
+    SVGForm.bezier(ctx, chain);
+    expect(calls).toEqual([
+      "beginPath",
+      "moveTo",
+      "bezierCurveTo",
+      "bezierCurveTo",
+    ]);
+    calls.length = 0;
+    SVGForm.compound(ctx, [chain.slice(0, 3), chain.slice(3, 6)]);
+    expect(calls.filter((c) => c === "closePath")).toHaveLength(2);
   });
 });

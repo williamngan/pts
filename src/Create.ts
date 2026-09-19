@@ -1596,11 +1596,18 @@ const __near = [0, -1, 1, -2, 2];
  * 8000 times the radius.
  *
  * Treat the Group as read-only while sampling: pushing or moving its Pts by hand would
- * desynchronize the grid that enforces the spacing.
+ * desynchronize the grid that enforces the spacing. A PoissonDisk produced by `map`, `filter`
+ * or `slice` is a plain copy that reports radius 0 and `done`, and needs `setup` before sampling.
  */
 export class PoissonDisk extends Group {
-  protected _radius = 0;
-  protected _candidates = 8;
+  private _radius = 0;
+  private _candidates = 8;
+  // per-setup constants of the candidate placement, hoisted out of step()
+  private _dist = 0; // radius with an allowance for float32 rounding
+  private _cos = 1; // rotation between candidates
+  private _sin = 0;
+  private _narrowX = false; // the bound is thinner than a candidate circle across x
+  private _narrowY = false; // or across y
   private _x0 = 0;
   private _y0 = 0;
   private _x1 = 0;
@@ -1617,6 +1624,8 @@ export class PoissonDisk extends Group {
    * @param bound the rectangular boundary
    * @param radius minimum distance between any two points
    * @param options optional [`PoissonDiskOptions`](#link)
+   * @returns this
+   * @example `new PoissonDisk().setup( space.innerBound, 12 ).sample( 40 )`
    */
   setup(bound: Bound, radius: number, options: PoissonDiskOptions = {}): this {
     if (!(radius > 0) || !Number.isFinite(radius)) {
@@ -1665,11 +1674,20 @@ export class PoissonDisk extends Group {
     this._cols = cols;
     this._rows = rows;
     this._grid = new Int32Array(cols * rows).fill(-1);
+    this._dist = radius * 1.001; // allow for float32 rounding at ordinary canvas scales
+    this._cos = Math.cos(Const.two_pi / this._candidates);
+    this._sin = Math.sin(Const.two_pi / this._candidates);
+    // A full circle of candidates can miss a strip thinner than `dist` entirely; there,
+    // candidates take a random position across the strip and alternate along it instead.
+    this._narrowX = width < this._dist && width <= height;
+    this._narrowY = height < this._dist && !this._narrowX;
 
     if (options.start !== undefined) {
       const s = options.start;
       if (!this._tryAdd(Math.fround(s[0]), Math.fround(s[1]))) {
-        throw new Error("PoissonDisk start point must lie inside the bound");
+        throw new Error(
+          "PoissonDisk start point must lie on or after the bound's top-left edges and before its bottom-right edges",
+        );
       }
     } else if (cols * rows > 0) {
       // Redraw on the rare float32 rounding that lands exactly on the far edge
@@ -1719,15 +1737,13 @@ export class PoissonDisk extends Group {
   step(): Pt | undefined {
     const active = this._active;
     const k = this._candidates;
-    const dist = this._radius * 1.001; // allow for float32 rounding at ordinary canvas scales
-    const cos = Math.cos(Const.two_pi / k);
-    const sin = Math.sin(Const.two_pi / k);
+    const dist = this._dist;
+    const cos = this._cos;
+    const sin = this._sin;
     const width = this._x1 - this._x0;
     const height = this._y1 - this._y0;
-    // A full circle of candidates can miss a strip thinner than `dist` entirely; there,
-    // candidates take a random position across the strip and alternate along it instead.
-    const narrowX = width < dist && width <= height;
-    const narrowY = height < dist && !narrowX;
+    const narrowX = this._narrowX;
+    const narrowY = this._narrowY;
 
     while (active.length > 0) {
       const ai = Math.floor(Num.random() * active.length);

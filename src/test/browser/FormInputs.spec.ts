@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { CanvasForm, CanvasSpace } from "../../Canvas";
-import { SVGSpace } from "../../Svg";
+import { SVGForm, SVGSpace } from "../../Svg";
 import { Group, Pt } from "../../Pt";
 import type { PtLikeIterable } from "../../Types";
 
@@ -102,4 +102,56 @@ describe("paragraphBox input contract", () => {
       }
     },
   );
+});
+
+describe("SVGForm legacy DOM-context statics", () => {
+  it("bezier and compound build path elements like line and polygon build theirs", () => {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    svg.appendChild(group);
+    document.body.appendChild(svg);
+    const ctx = {
+      group,
+      groupID: "g",
+      groupCount: 0,
+      currentID: "p",
+      currentClass: "",
+      style: { fill: "#f00" },
+    };
+    const chain = [
+      [0, 0],
+      [10, 20],
+      [30, 20],
+      [40, 0],
+      [50, -20],
+      [70, -20],
+      [80, 0],
+    ];
+    const curve = SVGForm.bezier(ctx, chain)!;
+    expect(curve.tagName.toLowerCase()).toBe("path");
+    expect(curve.getAttribute("d")).toBe(
+      "M0 0C10 20 30 20 40 0C50 -20 70 -20 80 0",
+    );
+    expect(SVGForm.bezier(ctx, chain.slice(0, 3))).toBeUndefined();
+    const compound = SVGForm.compound(ctx, [
+      [
+        [0, 0],
+        [10, 0],
+        [10, 10],
+        [0, 10],
+      ],
+      [
+        [2, 2],
+        [2, 8],
+        [8, 8],
+        [8, 2],
+      ],
+    ])!;
+    expect(compound.tagName.toLowerCase()).toBe("path");
+    expect(compound.getAttribute("d")).toBe(
+      "M0 0L10 0L10 10L0 10ZM2 2L2 8L8 8L8 2Z",
+    );
+    expect(SVGForm.compound(ctx, [])).toBeUndefined();
+    svg.remove();
+  });
 });

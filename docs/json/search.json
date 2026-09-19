@@ -10602,6 +10602,12 @@
     8
   ],
   [
+    "Svg_SVGForm#function_static_bezierElement",
+    "SVGForm.bezierElement",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGForm#function_static_circle",
     "SVGForm.circle",
     "Function",
@@ -10616,6 +10622,12 @@
   [
     "Svg_SVGForm#function_static_compound",
     "SVGForm.compound",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_static_compoundElement",
+    "SVGForm.compoundElement",
     "Function",
     8
   ],

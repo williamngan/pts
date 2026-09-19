@@ -1,6 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { CanvasForm } from "../Canvas";
 import { Group, Pt } from "../Pt";
+import { Util } from "../Util";
 
 // A recording stub context: CanvasForm treats any object with the documented
 // context surface as a renderer, which makes the drawing logic testable here.
@@ -353,5 +354,45 @@ describe("CanvasForm.compound", () => {
     expect(form.compound([])).toBe(form);
     expect(form.compound([[], [[1, 1]]])).toBe(form);
     expect(calls).toEqual([]); // nothing to draw must not repaint the retained path
+  });
+});
+
+describe("CanvasForm.bezier and compound input guards", () => {
+  it("bezier warns on fewer than 4 points, like line", () => {
+    const { form, calls } = makeForm();
+    const warn = vi.spyOn(Util, "warn").mockImplementation((_m, d) => d);
+    form.strokeOnly("#000").bezier([
+      [1, 2],
+      [3, 4],
+    ]);
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(calls).toEqual([]);
+  });
+
+  it("compound warns and draws nothing when given a list of polygons instead of rings", () => {
+    const { form, calls } = makeForm();
+    const warn = vi.spyOn(Util, "warn").mockImplementation((_m, d) => d);
+    const faces = [
+      [
+        Group.fromArray([
+          [0, 0],
+          [10, 0],
+          [10, 10],
+        ]),
+      ],
+      [
+        Group.fromArray([
+          [20, 0],
+          [30, 0],
+          [30, 10],
+        ]),
+      ],
+    ];
+    form.fillOnly("#000").compound(faces as any);
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(calls.filter((c) => c[0] === "moveTo")).toHaveLength(0);
+    // each face is a valid rings list
+    form.compound(faces[0]);
+    expect(calls.filter((c) => c[0] === "moveTo")).toHaveLength(1);
   });
 });

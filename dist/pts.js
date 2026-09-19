@@ -647,6 +647,7 @@ See https://github.com/williamngan/pts for details. */
 	const CELL_OFFSET = 16384;
 	const CELL_SPAN = 32768;
 	const RAY_TREE_PER_LOG = 1.5;
+	const PAIR_BUFFER = 1 << 18;
 	function ringsOf(shape) {
 		const list = Util.iterToArray(shape);
 		if (list.length === 0) return [];
@@ -666,6 +667,42 @@ See https://github.com/williamngan/pts for details. */
 		const value = ((_vector$get = vector.get(shape)) !== null && _vector$get !== void 0 ? _vector$get : 0) + delta;
 		if (value === 0) vector.delete(shape);
 		else vector.set(shape, value);
+	}
+	function distinctPoints(ring) {
+		const seen = [];
+		for (let i = 0; i < ring.length && seen.length < 3; i++) {
+			const p = ring[i];
+			let dup = false;
+			for (let j = 0; j < seen.length; j++) if (seen[j][0] === p[0] && seen[j][1] === p[1]) {
+				dup = true;
+				break;
+			}
+			if (!dup) seen.push(p);
+		}
+		return seen.length;
+	}
+	function selectByKey(items, key, lo, hi, k) {
+		let l = lo;
+		let r = hi - 1;
+		while (l < r) {
+			const pivot = key[items[l + r >> 1]];
+			let i = l;
+			let j = r;
+			while (i <= j) {
+				while (key[items[i]] < pivot) i++;
+				while (key[items[j]] > pivot) j--;
+				if (i <= j) {
+					const t = items[i];
+					items[i] = items[j];
+					items[j] = t;
+					i++;
+					j--;
+				}
+			}
+			if (k <= j) r = j;
+			else if (k >= i) l = i;
+			else return;
+		}
 	}
 	function outputPerimeter(ring) {
 		let length = 0;
@@ -712,7 +749,8 @@ See https://github.com/williamngan/pts for details. */
 			return h & 1 ? this.gu[h >> 1] : this.gv[h >> 1];
 		}
 		read(shapes) {
-			const list = Util.iterToArray(shapes);
+			let list = Util.iterToArray(shapes);
+			if (list.length > 0 && list[0] != null && typeof list[0][0] === "number") list = [list];
 			this.k = list.length;
 			const rings = [];
 			const ringShape = [];
@@ -766,6 +804,7 @@ See https://github.com/williamngan/pts for details. */
 					this.eb.push(ids[i === n - 1 ? 0 : i + 1]);
 					this.es.push(ringShape[r]);
 				}
+				else if (distinctPoints(ring) >= 3) Util.warn("Path dropped a ring whose points merge within the tolerance; use local coordinates for small shapes at large offsets");
 			}
 			return this.ea.length > 0;
 		}
@@ -802,14 +841,13 @@ See https://github.com/williamngan/pts for details. */
 		}
 		split() {
 			let boxes = this.boxes();
-			let pairs = this.sweep(boxes, this.tol);
-			for (let i = 0, n = pairs.length; i < n; i += 2) this.touchPair(pairs[i], pairs[i + 1], boxes);
+			const pairs = this.sweep(boxes, this.tol, true);
 			if (this.spE.length > 0) {
 				this.applySplits();
 				boxes = this.boxes();
-				pairs = this.sweep(boxes, 0);
-			}
-			for (let i = 0, n = pairs.length; i < n; i += 2) this.crossPair(pairs[i], pairs[i + 1]);
+				this.sweep(boxes, 0, false);
+			} else if (pairs) for (let i = 0; i < pairs.length; i += 2) this.crossPair(pairs[i], pairs[i + 1]);
+			else this.sweep(boxes, 0, false);
 		}
 		boxes() {
 			const E = this.ea.length;
@@ -840,9 +878,9 @@ See https://github.com/williamngan/pts for details. */
 				order
 			};
 		}
-		sweep(boxes, margin) {
+		sweep(boxes, margin, touching) {
 			const { minX, maxX, minY, maxY, order } = boxes;
-			const pairs = [];
+			let pairs = touching ? [] : void 0;
 			for (let i = 0, E = order.length; i < E; i++) {
 				const e1 = order[i];
 				const limit = maxX[e1] + margin;
@@ -852,7 +890,13 @@ See https://github.com/williamngan/pts for details. */
 					const e2 = order[j];
 					if (minX[e2] > limit) break;
 					if (minY[e2] > hi || maxY[e2] < lo) continue;
-					pairs.push(e1, e2);
+					if (touching) {
+						this.touchPair(e1, e2, boxes);
+						if (pairs) {
+							if (pairs.length < 2 * PAIR_BUFFER) pairs.push(e1, e2);
+							else pairs = void 0;
+						}
+					} else this.crossPair(e1, e2);
 				}
 			}
 			return pairs;
@@ -1013,9 +1057,20 @@ See https://github.com/williamngan/pts for details. */
 			}
 		}
 		indexRays() {
-			const edges = this.gu.map((_, e) => e).filter((e) => this.vy[this.gu[e]] !== this.vy[this.gv[e]]);
-			if (edges.length === 0) return void 0;
-			const build = (list) => {
+			const E = this.gu.length;
+			const vx = this.vx;
+			const vy = this.vy;
+			let n = 0;
+			const edges = new Uint32Array(E);
+			for (let e = 0; e < E; e++) if (vy[this.gu[e]] !== vy[this.gv[e]]) edges[n++] = e;
+			if (n === 0) return void 0;
+			const cx = new Float64Array(E);
+			const cy = new Float64Array(E);
+			for (let e = 0; e < E; e++) {
+				cx[e] = vx[this.gu[e]] + vx[this.gv[e]];
+				cy[e] = vy[this.gu[e]] + vy[this.gv[e]];
+			}
+			const build = (lo, hi) => {
 				const node = {
 					x0: Infinity,
 					x1: -Infinity,
@@ -1025,34 +1080,36 @@ See https://github.com/williamngan/pts for details. */
 					allY1: Infinity,
 					sum: /* @__PURE__ */ new Map()
 				};
-				for (const e of list) {
-					const u = this.gu[e], v = this.gv[e];
-					const y0 = Math.min(this.vy[u], this.vy[v]);
-					const y1 = Math.max(this.vy[u], this.vy[v]);
-					node.x0 = Math.min(node.x0, this.vx[u], this.vx[v]);
-					node.x1 = Math.max(node.x1, this.vx[u], this.vx[v]);
+				for (let i = lo; i < hi; i++) {
+					const e = edges[i];
+					const u = this.gu[e];
+					const v = this.gv[e];
+					const y0 = Math.min(vy[u], vy[v]);
+					const y1 = Math.max(vy[u], vy[v]);
+					node.x0 = Math.min(node.x0, vx[u], vx[v]);
+					node.x1 = Math.max(node.x1, vx[u], vx[v]);
 					node.y0 = Math.min(node.y0, y0);
 					node.y1 = Math.max(node.y1, y1);
 					node.allY0 = Math.max(node.allY0, y0);
 					node.allY1 = Math.min(node.allY1, y1);
 				}
-				if (list.length <= 8) {
-					node.edges = list;
-					if (node.allY0 < node.allY1) for (const e of list) {
-						const sign = this.vy[this.gv[e]] > this.vy[this.gu[e]] ? -1 : 1;
+				if (hi - lo <= 8) {
+					node.edges = Array.from(edges.subarray(lo, hi));
+					if (node.allY0 < node.allY1) for (const e of node.edges) {
+						const sign = vy[this.gv[e]] > vy[this.gu[e]] ? -1 : 1;
 						for (const [s, d] of this.deltas[e]) addWinding(node.sum, s, sign * d);
 					}
 				} else {
-					const axis = node.x1 - node.x0 >= node.y1 - node.y0 ? this.vx : this.vy;
-					list.sort((a, b) => axis[this.gu[a]] + axis[this.gv[a]] - (axis[this.gu[b]] + axis[this.gv[b]]));
-					const mid = list.length >> 1;
-					node.left = build(list.slice(0, mid));
-					node.right = build(list.slice(mid));
+					const key = node.x1 - node.x0 >= node.y1 - node.y0 ? cx : cy;
+					const mid = lo + hi >> 1;
+					selectByKey(edges, key, lo, hi, mid);
+					node.left = build(lo, mid);
+					node.right = build(mid, hi);
 					if (node.allY0 < node.allY1) for (const child of [node.left, node.right]) for (const [s, d] of child.sum) addWinding(node.sum, s, d);
 				}
 				return node;
 			};
-			return build(edges);
+			return build(0, n);
 		}
 		trace() {
 			const E = this.gu.length;
@@ -1129,7 +1186,7 @@ See https://github.com/williamngan/pts for details. */
 			this.next = next;
 			this.cycle = cycle;
 		}
-		label() {
+		label(full = false) {
 			const V = this.vx.length;
 			const E = this.gu.length;
 			const C = this.cycleArea.length;
@@ -1159,9 +1216,27 @@ See https://github.com/williamngan/pts for details. */
 				if (l < 0) components++;
 				if (l < 0 || vx[v] < vx[l] || vx[v] === vx[l] && vy[v] < vy[l]) leftmost[r] = v;
 			}
-			const labels = new Array(C);
+			const count = new Int32Array(C);
+			const hasFirst = new Uint8Array(C);
+			const hasLast = new Uint8Array(C);
+			const labels = full ? new Array(C) : void 0;
 			const labeled = new Uint8Array(C);
-			const queue = new Int32Array(C);
+			const last = this.k - 1;
+			const w = /* @__PURE__ */ new Map();
+			const record = (c) => {
+				count[c] = w.size;
+				hasFirst[c] = w.has(0) ? 1 : 0;
+				hasLast[c] = w.has(last) ? 1 : 0;
+				if (labels) labels[c] = new Map(w);
+				labeled[c] = 1;
+			};
+			const step = (h, dir) => {
+				const sign = (h & 1 ? 1 : -1) * dir;
+				for (const [s, d] of this.deltas[h >> 1]) addWinding(w, s, sign * d);
+			};
+			const fc = new Int32Array(C);
+			const fh = new Int32Array(C);
+			const fvia = new Int32Array(C);
 			if (components > 1) this.expectRayQueries(components);
 			for (let r = 0; r < V; r++) {
 				const p = leftmost[r];
@@ -1169,30 +1244,35 @@ See https://github.com/williamngan/pts for details. */
 				const g = this.out[offset[p + 1] - 1];
 				const c0 = this.cycle[g];
 				if (labeled[c0]) continue;
-				labels[c0] = /* @__PURE__ */ new Map();
-				if (components > 1) this.windingWest(p, labels[c0]);
-				labeled[c0] = 1;
-				let head = 0;
-				let tail = 0;
-				queue[tail++] = c0;
-				while (head < tail) {
-					const c = queue[head++];
-					const start = this.cycleStart[c];
-					let h = start;
-					do {
-						const c2 = this.cycle[h ^ 1];
-						if (!labeled[c2]) {
-							const nextLabel = new Map(labels[c]);
-							const sign = h & 1 ? 1 : -1;
-							for (const [s, d] of this.deltas[h >> 1]) addWinding(nextLabel, s, sign * d);
-							labels[c2] = nextLabel;
-							labeled[c2] = 1;
-							queue[tail++] = c2;
-						}
-						h = this.next[h];
-					} while (h !== start);
+				w.clear();
+				if (components > 1) this.windingWest(p, w);
+				record(c0);
+				let depth = 0;
+				fc[0] = c0;
+				fh[0] = this.cycleStart[c0];
+				fvia[0] = -1;
+				while (depth >= 0) {
+					const h = fh[depth];
+					if (h < 0) {
+						if (fvia[depth] >= 0) step(fvia[depth], -1);
+						depth--;
+						continue;
+					}
+					const hn = this.next[h];
+					fh[depth] = hn === this.cycleStart[fc[depth]] ? -1 : hn;
+					const c2 = this.cycle[h ^ 1];
+					if (labeled[c2]) continue;
+					step(h, 1);
+					record(c2);
+					depth++;
+					fc[depth] = c2;
+					fh[depth] = this.cycleStart[c2];
+					fvia[depth] = h;
 				}
 			}
+			this.count = count;
+			this.hasFirst = hasFirst;
+			this.hasLast = hasLast;
 			this.labels = labels;
 		}
 		windingWest(p, labels) {
@@ -1244,12 +1324,11 @@ See https://github.com/williamngan/pts for details. */
 		select(mode) {
 			const C = this.cycleArea.length;
 			const k = this.k;
-			const labels = this.labels;
 			const keep = new Uint8Array(C);
 			for (let c = 0; c < C; c++) {
-				const count = labels[c].size;
-				const first = labels[c].has(0);
-				const last = labels[c].has(k - 1);
+				const count = this.count[c];
+				const first = this.hasFirst[c] === 1;
+				const last = this.hasLast[c] === 1;
 				let on = false;
 				switch (mode) {
 					case "intersect":
@@ -1305,6 +1384,38 @@ See https://github.com/williamngan/pts for details. */
 			}
 			return rings;
 		}
+		simpleRings(walks, ringOf) {
+			const at = new Int32Array(this.vx.length).fill(-1);
+			const rings = [];
+			const walk = [];
+			const emit = (seq, w) => {
+				for (let i = 0; i < seq.length; i++) ringOf[seq[i]] = rings.length;
+				rings.push(seq);
+				walk.push(w);
+			};
+			for (let w = 0; w < walks.length; w++) {
+				const seq = walks[w];
+				const open = [];
+				for (let i = 0; i < seq.length; i++) {
+					const h = seq[i];
+					const o = this.origin(h);
+					const pos = at[o];
+					if (pos >= 0) {
+						const loop = open.splice(pos);
+						for (let j = 0; j < loop.length; j++) at[this.origin(loop[j])] = -1;
+						emit(loop, w);
+					}
+					at[o] = open.length;
+					open.push(h);
+				}
+				for (let j = 0; j < open.length; j++) at[this.origin(open[j])] = -1;
+				emit(open, w);
+			}
+			return {
+				rings,
+				walk
+			};
+		}
 		faceRings(keep, ringOf) {
 			const rings = [];
 			for (let c = 0, C = this.cycleArea.length; c < C; c++) {
@@ -1322,7 +1433,7 @@ See https://github.com/williamngan/pts for details. */
 			}
 			return rings;
 		}
-		assemble(rings, ringOf) {
+		assemble(rings, ringOf, walk) {
 			const R = rings.length;
 			const vx = this.vx;
 			const vy = this.vy;
@@ -1342,17 +1453,46 @@ See https://github.com/williamngan/pts for details. */
 				left[r] = l;
 			}
 			const sliver = this.tol * this.tol;
-			let holes = 0;
-			for (let r = 0; r < R; r++) if (area[r] < 0) holes++;
-			this.expectRayQueries(holes);
 			const parent = new Int32Array(R).fill(-2);
+			const rayFrom = left;
+			const pieces = /* @__PURE__ */ new Map();
+			if (walk.length > 0 && walk[walk.length - 1] !== R - 1) for (let r = 0; r < R; r++) {
+				const list = pieces.get(walk[r]);
+				if (list) list.push(r);
+				else pieces.set(walk[r], [r]);
+			}
+			for (const list of pieces.values()) {
+				if (list.length < 2) continue;
+				let l = left[list[0]];
+				for (const q of list) {
+					const v = left[q];
+					if (vx[v] < vx[l] || vx[v] === vx[l] && vy[v] < vy[l]) l = v;
+				}
+				for (const r of list) {
+					if (area[r] >= 0) continue;
+					const o = this.origin(rings[r][0]);
+					const t = this.target(rings[r][0]);
+					const mx = (vx[o] + vx[t]) / 2;
+					const my = (vy[o] + vy[t]) / 2;
+					let best = -1;
+					for (const q of list) {
+						if (area[q] <= sliver || best >= 0 && area[q] >= area[best]) continue;
+						if (this.encloses(rings[q], mx, my)) best = q;
+					}
+					if (best >= 0) parent[r] = best;
+					else rayFrom[r] = l;
+				}
+			}
+			let holes = 0;
+			for (let r = 0; r < R; r++) if (area[r] < 0 && parent[r] === -2) holes++;
+			this.expectRayQueries(holes);
 			const resolve = (r) => {
 				const chain = [];
 				let p = r;
 				while (p >= 0 && area[p] < 0 && parent[p] === -2) {
 					chain.push(p);
 					parent[p] = -1;
-					p = this.westHit(left[p], ringOf);
+					p = this.westHit(rayFrom[p], ringOf);
 				}
 				if (p >= 0 && area[p] < 0) p = parent[p];
 				if (p >= 0 && !(area[p] > sliver)) p = -1;
@@ -1379,6 +1519,20 @@ See https://github.com/williamngan/pts for details. */
 				}
 			}
 			return polygons;
+		}
+		encloses(seq, x, y) {
+			const vx = this.vx;
+			const vy = this.vy;
+			let inside = false;
+			for (let i = 0; i < seq.length; i++) {
+				const o = this.origin(seq[i]);
+				const t = this.target(seq[i]);
+				const oy = vy[o];
+				const ty = vy[t];
+				if (oy > y === ty > y) continue;
+				if (vx[o] + (y - oy) * (vx[t] - vx[o]) / (ty - oy) < x) inside = !inside;
+			}
+			return inside;
 		}
 		westHit(p, ringOf) {
 			const px = this.vx[p];
@@ -1472,8 +1626,9 @@ See https://github.com/williamngan/pts for details. */
 		ov.label();
 		const keep = ov.select(mode);
 		const ringOf = new Int32Array(2 * ov.gu.length).fill(-1);
-		const rings = faces ? ov.faceRings(keep, ringOf) : ov.mergedRings(keep, ringOf);
-		const polygons = ov.assemble(rings, ringOf);
+		const walks = faces ? ov.faceRings(keep, ringOf) : ov.mergedRings(keep, ringOf);
+		const { rings, walk } = ov.simpleRings(walks, ringOf);
+		const polygons = ov.assemble(rings, ringOf, walk);
 		if (faces) return polygons;
 		const flat = [];
 		for (let i = 0; i < polygons.length; i++) for (let j = 0; j < polygons[i].length; j++) flat.push(polygons[i][j]);
@@ -2474,7 +2629,7 @@ See https://github.com/williamngan/pts for details. */
 		}
 		static cardinalToBezier(pts, tension = .5, alpha = 0) {
 			const out = new Group();
-			if (!(alpha >= 0)) return Util.warn("cardinalToBezier needs an alpha of 0 or more", out);
+			if (!(alpha >= 0) || alpha === Infinity) return Util.warn("cardinalToBezier needs a finite alpha of 0 or more", out);
 			const p = Util.iterToArray(pts);
 			const n = p.length;
 			if (n < 2) return out;
@@ -2484,7 +2639,8 @@ See https://github.com/williamngan/pts for details. */
 				const dx = p[i + 1][0] - p[i][0];
 				const dy = p[i + 1][1] - p[i][1];
 				const dz = dim3 ? p[i + 1][2] - p[i][2] : 0;
-				dt[i] = Math.pow(Math.hypot(dx, dy, dz), alpha);
+				const d = Math.pow(Math.hypot(dx, dy, dz), alpha);
+				dt[i] = d < Infinity ? d : 0;
 			}
 			const control = (o, k, mx, my, mz) => {
 				const pt = new Pt(dim3 ? 3 : 2);
@@ -4078,7 +4234,15 @@ See https://github.com/williamngan/pts for details. */
 			const b = this[1];
 			const n = b ? b.length : 0;
 			if (this._size.length !== n) this._size = new Pt(n);
-			for (let i = 0; i < n; i++) this._size[i] = Math.abs(b[i] - (a ? a[i] || 0 : 0));
+			for (let i = 0; i < n; i++) {
+				let lo = a ? a[i] || 0 : 0;
+				if (a && b[i] < lo) {
+					a[i] = b[i];
+					b[i] = lo;
+					lo = a[i];
+				}
+				this._size[i] = Math.abs(b[i] - lo);
+			}
 			this._updateCenter();
 		}
 		_updateCenter() {
@@ -6238,7 +6402,7 @@ See https://github.com/williamngan/pts for details. */
 		}
 		bezier(pts) {
 			const p = Util.iterToArray(pts);
-			if (p.length >= 4) {
+			if (Util.arrayCheck(p, 4)) {
 				CanvasForm.bezier(this._ctx, p);
 				this._paint();
 			}
@@ -6262,6 +6426,10 @@ See https://github.com/williamngan/pts for details. */
 			for (const ring of rings) {
 				const p = Util.iterToArray(ring);
 				if (p.length < 2) continue;
+				if (typeof p[0][0] !== "number") {
+					Util.warn("compound expects rings of points; draw each polygon of a divide or crop result separately");
+					return;
+				}
 				if (!started) {
 					ctx.beginPath();
 					started = true;
@@ -6276,6 +6444,7 @@ See https://github.com/williamngan/pts for details. */
 			let drawable = false;
 			for (const ring of rings) {
 				const p = Util.iterToArray(ring);
+				if (p.length > 0 && typeof p[0][0] !== "number") return Util.warn("compound expects rings of points; draw each polygon of a divide or crop result separately", this);
 				if (p.length >= 2) drawable = true;
 				list.push(p);
 			}
@@ -7623,6 +7792,11 @@ See https://github.com/williamngan/pts for details. */
 			super(..._args4);
 			this._radius = 0;
 			this._candidates = 8;
+			this._dist = 0;
+			this._cos = 1;
+			this._sin = 0;
+			this._narrowX = false;
+			this._narrowY = false;
 			this._x0 = 0;
 			this._y0 = 0;
 			this._x1 = 0;
@@ -7668,9 +7842,14 @@ See https://github.com/williamngan/pts for details. */
 			this._cols = cols;
 			this._rows = rows;
 			this._grid = new Int32Array(cols * rows).fill(-1);
+			this._dist = radius * 1.001;
+			this._cos = Math.cos(Const.two_pi / this._candidates);
+			this._sin = Math.sin(Const.two_pi / this._candidates);
+			this._narrowX = width < this._dist && width <= height;
+			this._narrowY = height < this._dist && !this._narrowX;
 			if (options.start !== void 0) {
 				const s = options.start;
-				if (!this._tryAdd(Math.fround(s[0]), Math.fround(s[1]))) throw new Error("PoissonDisk start point must lie inside the bound");
+				if (!this._tryAdd(Math.fround(s[0]), Math.fround(s[1]))) throw new Error("PoissonDisk start point must lie on or after the bound's top-left edges and before its bottom-right edges");
 			} else if (cols * rows > 0) while (!this._tryAdd(Math.fround(x0 + Num.random() * width), Math.fround(y0 + Num.random() * height)));
 			return this;
 		}
@@ -7689,13 +7868,13 @@ See https://github.com/williamngan/pts for details. */
 		step() {
 			const active = this._active;
 			const k = this._candidates;
-			const dist = this._radius * 1.001;
-			const cos = Math.cos(Const.two_pi / k);
-			const sin = Math.sin(Const.two_pi / k);
+			const dist = this._dist;
+			const cos = this._cos;
+			const sin = this._sin;
 			const width = this._x1 - this._x0;
 			const height = this._y1 - this._y0;
-			const narrowX = width < dist && width <= height;
-			const narrowY = height < dist && !narrowX;
+			const narrowX = this._narrowX;
+			const narrowY = this._narrowY;
 			while (active.length > 0) {
 				const ai = Math.floor(Num.random() * active.length);
 				const p = this[active[ai]];
@@ -9428,6 +9607,12 @@ See https://github.com/williamngan/pts for details. */
 		static rect(ctx, pts) {
 			return "style" in ctx ? SVGForm.rectElement(ctx, pts) : CanvasForm.rect(ctx, pts);
 		}
+		static bezier(ctx, pts) {
+			return "style" in ctx ? SVGForm.bezierElement(ctx, pts) : CanvasForm.bezier(ctx, pts);
+		}
+		static compound(ctx, rings) {
+			return "style" in ctx ? SVGForm.compoundElement(ctx, rings) : CanvasForm.compound(ctx, rings);
+		}
 		static text(ctx, pt, txt, maxWidth) {
 			return "style" in ctx ? SVGForm.textElement(ctx, pt, txt) : CanvasForm.text(ctx, pt, txt, maxWidth);
 		}
@@ -9513,6 +9698,34 @@ See https://github.com/williamngan/pts for details. */
 		static polygonElement(ctx, pts) {
 			let points = SVGForm.pointsString(pts);
 			return SVGForm._poly(ctx, points.string, true);
+		}
+		static bezierElement(ctx, pts) {
+			const p = Util.iterToArray(pts);
+			if (p.length < 4) return;
+			let d = `M${p[0][0]} ${p[0][1]}`;
+			for (let i = 3; i < p.length; i += 3) d += `C${p[i - 2][0]} ${p[i - 2][1]} ${p[i - 1][0]} ${p[i - 1][1]} ${p[i][0]} ${p[i][1]}`;
+			return SVGForm._pathElement(ctx, d);
+		}
+		static compoundElement(ctx, rings) {
+			let d = "";
+			for (const ring of rings) {
+				const p = Util.iterToArray(ring);
+				if (p.length < 2 || typeof p[0][0] !== "number") continue;
+				d += `M${p[0][0]} ${p[0][1]}`;
+				for (let i = 1; i < p.length; i++) d += `L${p[i][0]} ${p[i][1]}`;
+				d += "Z";
+			}
+			if (d === "") return;
+			return SVGForm._pathElement(ctx, d);
+		}
+		static _pathElement(ctx, d) {
+			const elem = SVGSpace.svgElement(ctx.group, "path", SVGForm.getID(ctx));
+			DOMSpace.setAttr(elem, {
+				d,
+				class: `pts-svgform pts-path ${ctx.currentClass}`
+			});
+			SVGForm.style(elem, ctx.style);
+			return elem;
 		}
 		static rectElement(ctx, pts) {
 			if (!Util.arrayCheck(pts)) return;

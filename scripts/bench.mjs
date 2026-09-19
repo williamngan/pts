@@ -64,6 +64,7 @@ const { values: flags } = parseArgs({
     compare: { type: "boolean", default: false },
     baseline: { type: "string" },
     against: { type: "string" },
+    "skip-missing": { type: "boolean" },
     rounds: { type: "string" },
     threshold: { type: "string" },
     gate: { type: "boolean", default: false },
@@ -205,6 +206,7 @@ async function runRounds(makeCases, timing, rounds) {
     collected.push(
       await runCases(cases, {
         timing,
+        skipMissing: flags["skip-missing"],
         onCase: (testCase, index, total) => {
           if (process.stderr.isTTY) {
             const label = testCase.label ? `${testCase.label} ` : "";
@@ -343,6 +345,7 @@ async function measureBuildInChildProcess(distPath) {
   if (flags.quick) args.push("--quick");
   if (flags.time) args.push("--time", flags.time);
   if (flags.filter) args.push("--filter", flags.filter);
+  if (distPath !== DIST) args.push("--skip-missing"); // the ref may lack newer cases
   for (const suite of flags.suite ?? []) args.push("--suite", suite);
 
   const result = spawnSync(process.execPath, args, {

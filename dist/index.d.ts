@@ -481,7 +481,7 @@ type FlockOptions = {
 type PoissonDiskOptions = {
   /** Maximum candidates tried per visit to an active sample. More candidates generally pack tighter and take longer. Rounded down; default is 8. */
   candidates?: number;
-  /** The first sample, which must lie inside the bound. Default is a random point inside the bound. */
+  /** The first sample, which must lie on or after the bound's top-left edges and strictly before its bottom-right edges (the bound is half-open). Default is a random point inside the bound. */
   start?: PtLike;
 };
 /**
@@ -3114,11 +3114,17 @@ declare class Flock extends Group {
  * 8000 times the radius.
  *
  * Treat the Group as read-only while sampling: pushing or moving its Pts by hand would
- * desynchronize the grid that enforces the spacing.
+ * desynchronize the grid that enforces the spacing. A PoissonDisk produced by `map`, `filter`
+ * or `slice` is a plain copy that reports radius 0 and `done`, and needs `setup` before sampling.
  */
 declare class PoissonDisk extends Group {
-  protected _radius: number;
-  protected _candidates: number;
+  private _radius;
+  private _candidates;
+  private _dist;
+  private _cos;
+  private _sin;
+  private _narrowX;
+  private _narrowY;
   private _x0;
   private _y0;
   private _x1;
@@ -3134,6 +3140,8 @@ declare class PoissonDisk extends Group {
    * @param bound the rectangular boundary
    * @param radius minimum distance between any two points
    * @param options optional [`PoissonDiskOptions`](#link)
+   * @returns this
+   * @example `new PoissonDisk().setup( space.innerBound, 12 ).sample( 40 )`
    */
   setup(bound: Bound, radius: number, options?: PoissonDiskOptions): this;
   /**
@@ -4230,56 +4238,56 @@ declare class Polygon {
 declare class Path {
   /**
    * Unite: merge all shapes into one polygon (the area inside any shape).
-   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes. A single ring is taken as one shape.
    * @returns the rings of the merged polygon: each outer ring followed by its holes; empty if the shapes have no area
    * @example `form.fillOnly("#f03").compound( Path.unite( [star, disc] ) )`
    */
-  static unite(shapes: Iterable<PolygonLike>): Group[];
+  static unite(shapes: Iterable<PolygonLike> | PtLikeIterable): Group[];
   /**
    * Intersect: keep only the area inside every shape.
-   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes. A single ring is taken as one shape.
    * @returns the rings of the common polygon: each outer ring followed by its holes; empty if the shapes do not all overlap
    * @example `Path.intersect( [a, b, c] )`
    */
-  static intersect(shapes: Iterable<PolygonLike>): Group[];
+  static intersect(shapes: Iterable<PolygonLike> | PtLikeIterable): Group[];
   /**
    * Exclude: keep the area inside an odd number of shapes, so where two shapes overlap becomes a hole.
-   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes. A single ring is taken as one shape.
    * @returns the rings of the result: each outer ring followed by its holes; empty if the shapes cancel out
    * @example `Path.exclude( [a, b] )`
    */
-  static exclude(shapes: Iterable<PolygonLike>): Group[];
+  static exclude(shapes: Iterable<PolygonLike> | PtLikeIterable): Group[];
   /**
    * Minus Front: subtract every shape in front from the backmost (first) shape.
-   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes. A single ring is taken as one shape.
    * @returns the rings of what remains of the first shape: each outer ring followed by its holes; empty if nothing remains
    * @example `Path.minusFront( [disc, hole] )` cuts `hole` out of `disc`
    */
-  static minusFront(shapes: Iterable<PolygonLike>): Group[];
+  static minusFront(shapes: Iterable<PolygonLike> | PtLikeIterable): Group[];
   /**
    * Minus Back: subtract every shape behind from the frontmost (last) shape.
-   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes. A single ring is taken as one shape.
    * @returns the rings of what remains of the last shape: each outer ring followed by its holes; empty if nothing remains
    * @example `Path.minusBack( [wall, window] )` keeps the part of `window` not covered by `wall`
    */
-  static minusBack(shapes: Iterable<PolygonLike>): Group[];
+  static minusBack(shapes: Iterable<PolygonLike> | PtLikeIterable): Group[];
   /**
    * Divide: split the shapes at every crossing into separate faces. Each face is the largest area not cut by any edge, so
    * a region inside two shapes is its own face, and a self-overlapping region of one shape is too.
-   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes. A single ring is taken as one shape.
    * @returns an array of polygons, one per face, each an outer ring followed by its holes
    * @example `Path.divide( [a, b] ).forEach( (face, i) => form.fillOnly( colors[i] ).compound( face ) )`
    */
-  static divide(shapes: Iterable<PolygonLike>): Group[][];
+  static divide(shapes: Iterable<PolygonLike> | PtLikeIterable): Group[][];
   /**
    * Crop: use the frontmost (last) shape as a mask, keeping the faces of the other shapes inside it and deleting the mask itself.
    * Like [`Path.divide`](#link), the shapes under the mask stay divided where they overlap.
    * See a [demo here](https://ptsjs.org/demo/?name=path.crop).
-   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes.
+   * @param shapes an Array/Iterable of polygons in stacking order, back to front. Each is a Group or an Iterable<PtLike>, or a list of rings for a polygon with holes. A single ring is taken as one shape.
    * @returns an array of polygons, one per face inside the mask, each an outer ring followed by its holes
    * @example `Path.crop( [photo, frame] )`
    */
-  static crop(shapes: Iterable<PolygonLike>): Group[][];
+  static crop(shapes: Iterable<PolygonLike> | PtLikeIterable): Group[][];
 }
 /**
  * Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.
@@ -5780,6 +5788,12 @@ declare class SVGForm extends CanvasForm<SVGSpace> {
   static rect(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement | undefined;
   static rect(ctx: RenderingContext2D, pts: PtLikeIterable): void;
   /** Draw through a rendering context, or use the legacy per-element DOM context. */
+  static bezier(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement | undefined;
+  static bezier(ctx: RenderingContext2D, pts: PtLikeIterable): void;
+  /** Draw through a rendering context, or use the legacy per-element DOM context. */
+  static compound(ctx: DOMFormContext, rings: Iterable<PtLikeIterable>): SVGElement | undefined;
+  static compound(ctx: RenderingContext2D, rings: Iterable<PtLikeIterable>): void;
+  /** Draw through a rendering context, or use the legacy per-element DOM context. */
   static text(ctx: DOMFormContext, pt: PtLike, txt: string): SVGElement;
   static text(ctx: RenderingContext2D, pt: PtLike, txt: string, maxWidth?: number): void;
   /**
@@ -5843,6 +5857,19 @@ declare class SVGForm extends CanvasForm<SVGSpace> {
    * @param pts a Group or an Iterable<PtLike> representing a polygon
    */
   static polygonElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
+  /**
+   * A static function to draw a chain of cubic Bezier curves as one path element.
+   * @param ctx a context object of SVGForm
+   * @param pts a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#link); an incomplete trailing segment is ignored
+   */
+  static bezierElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement | undefined;
+  /**
+   * A static function to draw a compound polygon as one path element, so that a ring inside another with the opposite orientation becomes a hole.
+   * @param ctx a context object of SVGForm
+   * @param rings an Array/Iterable of rings, each a Group or an Iterable<PtLike>; rings with fewer than 2 points are skipped
+   */
+  static compoundElement(ctx: DOMFormContext, rings: Iterable<PtLikeIterable>): SVGElement | undefined;
+  protected static _pathElement(ctx: DOMFormContext, d: string): SVGElement;
   /**
    * A static function to draw a rectangle element.
    * @param ctx a context object of SVGForm

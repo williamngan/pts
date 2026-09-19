@@ -266,7 +266,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1695,
+          1709,
           2
         ]
       ],
@@ -611,7 +611,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1391,
+          1398,
           2
         ]
       ],
@@ -957,7 +957,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1488,
+          1502,
           2
         ]
       ],
@@ -998,7 +998,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1538,
+          1552,
           2
         ]
       ],
@@ -1091,7 +1091,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1712,
+          1726,
           2
         ]
       ],
@@ -1147,7 +1147,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1612,
+          1626,
           2
         ]
       ],
@@ -1345,7 +1345,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1426,
+          1440,
           2
         ]
       ],
@@ -1651,7 +1651,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1566,
+          1580,
           2
         ]
       ],
@@ -1692,7 +1692,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1579,
+          1593,
           2
         ]
       ],
@@ -1935,7 +1935,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1392,
+          1422,
           9
         ]
       ],
@@ -1995,8 +1995,75 @@
       "name": "bezier",
       "source": [
         [
-          "src/Canvas.ts",
-          1312,
+          "src/Svg.ts",
+          1320,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1324,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1325,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": "CanvasForm.bezier",
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "SVGElement | undefined",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "",
+              "type": "DOMFormContext",
+              "default": false
+            },
+            {
+              "name": "pts",
+              "comment": "",
+              "type": "PtLikeIterable",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "",
+              "type": "RenderingContext2D",
+              "default": false
+            },
+            {
+              "name": "pts",
+              "comment": "",
+              "type": "PtLikeIterable",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "bezierElement",
+      "source": [
+        [
+          "src/Svg.ts",
+          1557,
           9
         ]
       ],
@@ -2004,22 +2071,22 @@
         "isStatic": true
       },
       "overrides": false,
-      "inherits": "CanvasForm.bezier",
+      "inherits": false,
       "signatures": [
         {
-          "comment": "A static function to draw a chain of cubic Bezier curves as one native path.",
-          "returns": "void",
+          "comment": "A static function to draw a chain of cubic Bezier curves as one path element.",
+          "returns": "SVGElement | undefined",
           "returns_comment": false,
           "parameters": [
             {
               "name": "ctx",
-              "comment": "canvas rendering context",
-              "type": "RenderingContext2D",
+              "comment": "a context object of SVGForm",
+              "type": "DOMFormContext",
               "default": false
             },
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#link): an anchor followed by 2 control points and an anchor per segment",
+              "comment": "a Group or an Iterable<PtLike> in the layout of [`Curve.bezier`](#link); an incomplete trailing segment is ignored",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -2112,7 +2179,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1365,
+          1395,
           9
         ]
       ],
@@ -2154,8 +2221,75 @@
       "name": "compound",
       "source": [
         [
-          "src/Canvas.ts",
-          1369,
+          "src/Svg.ts",
+          1332,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1336,
+          9
+        ],
+        [
+          "src/Svg.ts",
+          1340,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": "CanvasForm.compound",
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "SVGElement | undefined",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "",
+              "type": "DOMFormContext",
+              "default": false
+            },
+            {
+              "name": "rings",
+              "comment": "",
+              "type": "Iterable",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "Draw through a rendering context, or use the legacy per-element DOM context.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "",
+              "type": "RenderingContext2D",
+              "default": false
+            },
+            {
+              "name": "rings",
+              "comment": "",
+              "type": "Iterable",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "compoundElement",
+      "source": [
+        [
+          "src/Svg.ts",
+          1575,
           9
         ]
       ],
@@ -2163,17 +2297,17 @@
         "isStatic": true
       },
       "overrides": false,
-      "inherits": "CanvasForm.compound",
+      "inherits": false,
       "signatures": [
         {
-          "comment": "A static function to draw a compound polygon: several rings as one path, so that a ring inside another with the opposite orientation becomes a hole (the nonzero winding rule).",
-          "returns": "void",
+          "comment": "A static function to draw a compound polygon as one path element, so that a ring inside another with the opposite orientation becomes a hole.",
+          "returns": "SVGElement | undefined",
           "returns_comment": false,
           "parameters": [
             {
               "name": "ctx",
-              "comment": "canvas rendering context",
-              "type": "RenderingContext2D",
+              "comment": "a context object of SVGForm",
+              "type": "DOMFormContext",
               "default": false
             },
             {
@@ -2290,7 +2424,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1439,
+          1453,
           9
         ]
       ],
@@ -2339,7 +2473,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1509,
+          1523,
           9
         ]
       ],
@@ -2449,7 +2583,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1443,
+          1473,
           9
         ]
       ],
@@ -2577,7 +2711,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1346,
+          1376,
           9
         ]
       ],
@@ -2631,7 +2765,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1499,
+          1529,
           19
         ]
       ],
@@ -2730,7 +2864,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1517,
+          1547,
           9
         ]
       ],
@@ -2834,7 +2968,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1527,
+          1606,
           9
         ]
       ],
@@ -3012,7 +3146,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1425,
+          1455,
           9
         ]
       ],
@@ -3097,17 +3231,17 @@
       "source": [
         [
           "src/Svg.ts",
-          1320,
+          1350,
           9
         ],
         [
           "src/Svg.ts",
-          1321,
+          1351,
           9
         ],
         [
           "src/Svg.ts",
-          1327,
+          1357,
           9
         ]
       ],
@@ -3182,7 +3316,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1555,
+          1634,
           9
         ]
       ],

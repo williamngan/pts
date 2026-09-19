@@ -81,6 +81,25 @@ for (let trial = 0; trial < trials; trial++) {
       ]),
     ),
   );
+  // Every fifth trial uses smooth shapes with many vertices: discs of 64 to
+  // 256 points, one of them a copy shifted by a fraction of an edge length,
+  // so shallow crossings and near-coincident edges are covered too.
+  if (trial % 5 === 4) {
+    const n = 64 + Math.floor(random() * 193);
+    const discAt = (cx, cy, r, dx = 0, dy = 0) =>
+      Array.from({ length: n }, (_, i) => {
+        const a = (i / n) * Math.PI * 2;
+        return [cx + r * Math.cos(a) + dx, cy + r * Math.sin(a) + dy];
+      });
+    const cx = 10 + random() * 10;
+    const cy = 10 + random() * 10;
+    const r = 5 + random() * 8;
+    shapes = [
+      [discAt(cx, cy, r)],
+      [discAt(cx, cy, r, random() * 0.1, random() * 0.1)],
+      [discAt(cx + random() * 10 - 5, cy + random() * 10 - 5, r * 0.7)],
+    ];
+  }
   // Exercise both double arrays and the Float32 data sketches normally use.
   if (trial % 2 === 0)
     shapes = shapes.map((rings) => rings.map((ring) => Group.fromArray(ring)));
@@ -126,6 +145,20 @@ for (let trial = 0; trial < trials; trial++) {
         ins.at(-1) && ins.slice(0, -1).some(Boolean) ? 1 : 0,
         `crop at ${x},${y}`,
       );
+    }
+    // A result is valid input: uniting the divided faces gives the union back.
+    if (trial % 4 === 0) {
+      const reunited = Path.unite(divided);
+      for (let i = 0; i < 36; i++) {
+        const x = (i % 6) * 5 + 1.314159,
+          y = Math.floor(i / 6) * 5 + 2.718281;
+        if (nearBoundary(shapes, x, y)) continue;
+        assert.equal(
+          inside(reunited, x, y),
+          inside(results.unite, x, y),
+          `unite of divide at ${x},${y}`,
+        );
+      }
     }
   } catch (error) {
     console.error(

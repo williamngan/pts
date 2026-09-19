@@ -75,12 +75,12 @@ const sizeLimits = {
   // The declarations keep their doc comments since 1.0; the triangulation and
   // the flock are full implementations. Keep approximately 2% headroom above the
   // measured build.
-  "index.d.mts": 316200,
-  "index.d.ts": 316200,
-  "index.js": 307600,
-  "index.mjs": 306700,
-  "pts.js": 321000,
-  "pts.min.js": 184900,
+  "index.d.mts": 318300,
+  "index.d.ts": 318300,
+  "index.js": 315700,
+  "index.mjs": 314800,
+  "pts.js": 329400,
+  "pts.min.js": 189700,
 };
 const banner = "Copyright © 2017-present William Ngan and contributors.";
 

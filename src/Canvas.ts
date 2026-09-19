@@ -1330,7 +1330,7 @@ export class CanvasForm<
    */
   bezier(pts: PtLikeIterable): this {
     const p = Util.iterToArray(pts);
-    if (p.length >= 4) {
+    if (Util.arrayCheck(p, 4)) {
       CanvasForm.bezier(this._ctx, p);
       this._paint();
     }
@@ -1371,6 +1371,13 @@ export class CanvasForm<
     for (const ring of rings) {
       const p = Util.iterToArray(ring);
       if (p.length < 2) continue;
+      if (typeof p[0][0] !== "number") {
+        // a list of polygons (such as a Path.divide result) instead of a list of rings
+        Util.warn(
+          "compound expects rings of points; draw each polygon of a divide or crop result separately",
+        );
+        return;
+      }
       if (!started) {
         ctx.beginPath();
         started = true;
@@ -1393,6 +1400,13 @@ export class CanvasForm<
     let drawable = false;
     for (const ring of rings) {
       const p = Util.iterToArray(ring);
+      if (p.length > 0 && typeof p[0][0] !== "number") {
+        // a list of polygons (such as a Path.divide result) instead of a list of rings
+        return Util.warn(
+          "compound expects rings of points; draw each polygon of a divide or crop result separately",
+          this,
+        );
+      }
       if (p.length >= 2) drawable = true;
       list.push(p);
     }
