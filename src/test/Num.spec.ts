@@ -32,7 +32,7 @@ describe("Num", () => {
   });
 
   it("treats the equality threshold as inclusive, like Pt.equals", () => {
-    // a number equals itself at any threshold, including 0
+    // identical finite values compare equal at threshold 0
     expect(Num.equals(5, 5, 0)).toBe(true);
     expect(Num.equals(0, 0, 0)).toBe(true);
     expect(Num.equals(-3.5, -3.5, 0)).toBe(true);
