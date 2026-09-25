@@ -348,6 +348,7 @@ pre:focus-visible {
   margin-left: 30%;
   width: 50%;
   min-width: 300px;
+  max-width: 600px;
   padding: 0 0px 30px;
   color: #123;
   font-size: 1.3em;
