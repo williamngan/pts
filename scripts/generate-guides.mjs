@@ -14,7 +14,7 @@ const exampleDirectory = path.join(guideDirectory, "js", "examples");
 const assetsDirectory = path.join(guideDirectory, "assets");
 
 const markdown = new MarkdownIt({
-  html: false,
+  html: true,
   xhtmlOut: false,
   breaks: false,
   linkify: false,

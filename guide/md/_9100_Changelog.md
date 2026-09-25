@@ -1,78 +1,49 @@
 # Changelog
 
-The revamp is a full modernization of Pts. Most existing sketches should continue to work, while the library is now faster, more predictable, easier to integrate, and better tested. This page summarizes the major changes made since work on the revamp began in August 2026.
+## Pts reaches v1.0
 
-### 1.0.1
+<small>Sep 24, 2026</small>
 
-- **Path booleans.** The new `Path` class unites, intersects, excludes, subtracts, divides and crops polygons, returning rings with holes that `form.compound` draws as one path.
-- **Curve conversions.** `Curve.cardinalToBezier` and `Curve.bsplineToBezier` turn curve anchors into cubic Bezier control points that `form.bezier` draws as one native path, and `Curve.bezierToCardinal` and `Curve.bezierToBspline` convert back.
-- **Poisson-disk sampling.** `Create.sampling` returns a `PoissonDisk` group of randomly placed points that are never closer than a given radius, and a `PoissonDisk` can also grow one point or one batch at a time.
+Pts was released 9 years ago in 2017. I wanted to build a graphics library from scratch, because it's challenging and fun.
 
-### New capabilities
+Do you know what's more challenging and fun? Being a new parent. That's why Pts didn't get an update for a long while.
 
-- **Modern color spaces.** `Color` now supports Oklab and Oklch, alongside corrected conversions for RGB, HSL, HSB, XYZ, LAB, LCH, and LUV. Hex colors now handle alpha correctly too.
-- **A new SVG renderer.** `SVGForm` now follows the supported subset of the Canvas drawing API and automatically keeps SVG elements in sync between frames. It can also serve as a reference for custom renderers.
-- **Simpler UI interactions.** Spaces can track and untrack UI elements directly. UI also gains custom shape registration, line and polyline hit testing, typed actions, state helpers, and one-time or abortable handlers.
-- **Improved image handling.** `Img.load` is now promise-based, images clean up through `dispose`, and loading, cropping, scaling, pixel access, and canvas drawing are more reliable.
-- **Stronger sound controls.** Sound sources share audio contexts when appropriate, can be restarted safely, expose volume and cleanup controls, and report loading or input failures consistently.
+Now my child is 6yo, and AI writes better code than I can, it's time to clear years of backlog.
 
-### Correctness and reliability
+V1.0 is a full modernization of Pts. The build system gets an upgrade, and tests and benchmarks have full coverage. The library is optimized and it's now very fast.
 
-Every core module received a detailed review. Around sixty confirmed bugs were fixed and covered by tests. The most visible fixes include:
+We are now in 2026. A crazy timeline is unfolding. I hope Pts is still fun and relevant for humans, even in the age of AI.
 
-- Points, Groups, and Bounds now handle equality, wrapped angles, empty collections, missing dimensions, and generated Groups correctly.
-- Geometry operations now return accurate intersections, centers, curves, Voronoi cells, and Delaunay triangulations across edge cases.
-- Perlin noise no longer repeats every twelve units, seeded noise covers the full table, and non-square noise grids keep their intended layout.
-- Physics bodies no longer create duplicate or self-links, and collision and constraint behavior is more stable.
-- Canvas text, image data, gradients, dashed strokes, style caching, and multiple forms sharing a context now render consistently.
-- Space playback no longer starts parallel animation loops or produces large timing spikes after a pause. Mounting, resizing, input listeners, and disposal are safer in frameworks such as React.
-- UI handlers keep stable identities, receive current pointer positions, and preserve built-in button and drag behavior.
-- Seeded random-number sequences remain compatible with Pts 0.12 while becoming substantially faster.
+Let's go through the new features.
 
-### Faster everyday drawing
+### SVG, Canvas, React, CLI, AI
 
-Hot paths throughout the library were measured and optimized. Major improvements include polygon hit testing, curve generation, Bound coordinate access, Group insertion and segmentation, pointer dispatch, UI tracking, matrix operations, noise generation, random distribution, Delaunay triangulation, image processing, typography, sound analysis, and canvas state updates.
+**A new SVG renderer.** Swap `CanvasForm` with `SVGForm`, and render svg directly without additional code changes. [Demo](../demo?name=svgspace.getForm)
 
-Benchmarks now compare changes against the previous build in both Node.js and Chromium. Recorded baselines and correctness checks help prevent performance work from changing results accidentally.
+**New CLI support.** Generate png or svg directly in the command line. Learn more at [cli.ptsjs.org](https://cli.ptsjs.org) (or point your AI agent to it)
 
-### TypeScript and packages
+**React compoent.** [react-pts-canvas](https://react.ptsjs.org) also gets an update with bug fixes and performance improvements.
 
-- The codebase now uses TypeScript 6 in strict mode, with more accurate public types for optional geometry results, UI events, rendering contexts, form styles, and callbacks.
-- Packages include explicit ESM and CommonJS entry points, matching type declarations, source maps, browser bundles, and checked export maps.
-- Server-side imports are tested, package contents are validated before publishing, and artifact sizes have fixed budgets.
-- Build scripts now use pnpm and tsdown, replacing the older collection of build tools and manual steps.
+**AI ready.** Markdown formatted [documentations](https://ptsjs.org/docs.md) and [guide](https://ptsjs.org/guide.md) and [skill](https://ptsjs.org/SKILL.md). Just point your AI agent to [ptsjs.org](https://ptsjs.org) to get started.
 
-### Documentation, demos, and accessibility
+### New features
 
-- API docs and guides are generated reproducibly from source and are also available as machine-readable Markdown.
-- Documentation links now point to exact classes and members, preserve deep links and browser history, and fail the build when a target is missing.
-- The documentation app was upgraded to Vue 3 with safer Markdown rendering and more dependable search and navigation.
-- Guide demos load only when needed, include keyboard playback controls and visible source links, and work reliably with touch input and slow-loading assets.
-- The homepage, guides, documentation, demos, and editor now adapt better to narrow screens. Navigation, menus, zoom, focus, and keyboard behavior received a broad accessibility pass.
-- The live editor was rebuilt around a reproducible Monaco bundle and can export a self-contained, responsive HTML file using the exact version of Pts shown in the preview.
-- Google Analytics was removed, and obsolete demo assets and dependencies were cleaned up.
+**Path operations.** The new `Path` class unites, intersects, subtracts and crops polygons, and `form.compound` draws compound path. [Demo](../demo?name=path.crop)
 
-### Testing and project maintenance
+**Curve conversions.** Convert back and forth between cardinal, b-spline and bezier curves via convenient functions like `Curve.cardinalToBezier` and `Curve.bezierToCardinal`. [Demo](../demo?name=curve.cardinal)
 
-The old test setup was replaced by a larger Vitest suite covering Node.js, real-browser behavior, type contracts, integrations, and visual regressions. CI now checks formatting, linting, types, tests, documentation, bundles, package publishing, benchmarks, browser behavior, and the generated website before a change is merged.
+**Sampling.** `Create.sampling` uses Poisson-disc technique to sample uniformly distributed points in an area. [Demo](../demo?name=create.sampling)
 
-The repository also gained consistent formatting and line-ending rules, cleaner package metadata, documented implementation plans, and repeatable generation scripts for builds, docs, guides, and the editor.
+**Flocking.** `Create.flock` runs a flocking simulation based on Craig Reynolds' Boids algorithm. [Demo](../demo?name=create.flock)
 
-### Compatibility notes
+**OKLab color space.** `Color` now supports Oklab and Oklch, alongside corrected conversions for RGB, HSL, HSB, XYZ, LAB, LCH, and LUV.
 
-Most API changes are additive, but corrected bugs may produce different results when old code depended on incorrect behavior. TypeScript users may also see new compile errors where a function can legitimately return `undefined`; check the result before using it.
+### Fixes
 
-`Img.load` now returns a Promise instead of an `Img`: use `const img = await Img.load(url)`, or use `.then(...)`. If you need the instance before loading finishes, use `const img = new Img()` and then `await img.load(url)`.
+**Big performance gains.** Physcis engine is now 31x faster, delaunay/voronoi tessellation 268x faster, and polygon collison 100x faster. See more results [here](https://github.com/williamngan/pts/blob/master/CHANGELOG.md#performance)
 
-The original SVG static drawing helpers still accept a legacy DOM context; the explicit `*Element` names are available too, such as `SVGForm.circleElement(ctx, pt, radius)`. `SVGForm.styleTo` is no longer available: use the form's `fill`, `stroke`, `alpha`, and `font` methods. Use `form.text([10, 14], message)` instead of `form.log(message)`.
+**Under-the-hood optimizations.** Improved image and sound handling in `Img` and `Sound`. Simplified API for managing `UI` interactions. Many bug fixes to improve stability.
 
-The following older APIs remain available but are deprecated:
+**Modernized build system.** The codebase is updated to TypeScript 6 in strict mode. Build scripts now use pnpm and tsdown. Packages include explicit ESM and CommonJS entry points, matching type declarations and source maps.
 
-- `HTMLSpace` and `HTMLForm`: use `SVGSpace` and `SVGForm`.
-- `Img.loadAsync`: use `Img.load`.
-- `Img.cleanup`: use `Img.dispose`.
-- `SVGForm.scope` and `SVGForm.updateScope`: SVG elements are now reconciled automatically.
-- The initial-box form of `Typography.fontSizeToBox`: use `fontSizeToBox(ratio, byHeight)`.
-- `Util.randomInt`: use `Num.randomRange`.
-
-For exact behavioral and TypeScript migration details, see the [full project changelog](../CHANGELOG.md).
+**New demo editor.** The live editor was rebuilt and can export a self-contained html demo. [Try it](demo/edit/?name=circle.withinBound).

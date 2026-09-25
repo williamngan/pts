@@ -6,6 +6,9 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const docsJsonDirectory = path.join(projectRoot, "docs", "json");
 const guideMarkdownDirectory = path.join(projectRoot, "guide", "md");
+// Guide pages published on the website only. The changelog is release news,
+// not tutorial material for guide.md readers.
+const websiteOnlyGuides = new Set(["_9100_Changelog.md"]);
 const demoDirectory = path.join(projectRoot, "demo");
 const studyDirectory = path.join(projectRoot, "study");
 const siteOrigin = "https://ptsjs.org";
@@ -670,8 +673,15 @@ async function guideMarkdown(version) {
       declarations.map((name) => declarationAnchor(moduleName, name)),
     ),
   );
-  const guideFiles = (await readdir(guideMarkdownDirectory))
-    .filter((file) => file.endsWith(".md"))
+  const markdownFiles = await readdir(guideMarkdownDirectory);
+  for (const file of websiteOnlyGuides) {
+    assert.ok(
+      markdownFiles.includes(file),
+      `Website-only guide ${file} is missing`,
+    );
+  }
+  const guideFiles = markdownFiles
+    .filter((file) => file.endsWith(".md") && !websiteOnlyGuides.has(file))
     .sort();
   const demoFiles = await javascriptFiles(demoDirectory);
   const studyFiles = await javascriptFiles(studyDirectory);

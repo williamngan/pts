@@ -17,9 +17,15 @@ Learn more at [react.ptsjs.org](https://react.ptsjs.org) and install it from [np
 
 ### Render Pts.js in the command line
 
-`pts-render` is a CLI tool for Pts.js. Use it to work directly from the terminal without a browser. 
+[`pts-render`](https://cli.ptsjs.org) is a CLI tool for Pts.js. Use it to work directly from the terminal without a browser.
 
 Learn more at [cli.ptsjs.org](https://cli.ptsjs.org) and install it from [npm](https://www.npmjs.com/package/pts-render).
+
+### Python
+
+[`Pts.py`](https://ptspy.org) is a new take on Pts ideas implemented in Python. It's an early-stage library.
+
+Learn more at [ptspy.org](https://ptspy.org). Give it a try!
 
 ### Your contribution
 

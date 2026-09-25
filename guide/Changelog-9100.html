@@ -25,44 +25,35 @@
     <a href="https://github.com/williamngan/pts">github</a>
   </nav>
 </header>
-<a href="#menu" id="toc" aria-label="Open guide menu">&#x2261;</a>
-
-<main id="post">
-  <h1>Changelog</h1>
-  <h2>Pts reaches v1.0</h2>
-  <p><small>Sep 24, 2026</small></p>
-  <p>Pts was released 9 years ago in 2017. I wanted to build a graphics library from scratch, because it's challenging and fun. </p>
-  <p>Do you know what's more challenging and fun? Being a new parent. That's why Pts didn't get an update for a long while.</p>
-  <p>Now my child is 6yo, and AI writes better code than I can, it's time to clear years of backlog.</p>
-  <p>V1.0 is a full modernization of Pts. The build system gets an upgrade, and tests and benchmarks have full coverage. The library is optimized and it's now very fast.</p>
-  <p>We are now in 2026. A crazy timeline is unfolding. I hope Pts is still fun and relevant for humans, even in the age of AI. </p>
-  <p>Let's go through the new features.</p>
-  <h3>SVG, Canvas, React, CLI, AI</h3>
-  <p><strong>A new SVG renderer.</strong> Swap <code>CanvasForm</code> with <code>SVGForm</code>, and render svg directly without additional code changes. <a href="../demo?name=svgspace.getForm">Demo</a></p>
-  <p><strong>New CLI support.</strong> Generate png or svg directly in the command line. Learn more at <a href="https://cli.ptsjs.org">cli.ptsjs.org</a> (or point your AI agent to it)</p>
-  <p><strong>React compoent.</strong> <a href="https://react.ptsjs.org">react-pts-canvas</a> also gets an update with bug fixes and performance improvements.</p>
-  <p><strong>AI ready.</strong> Markdown formatted <a href="https://ptsjs.org/docs.md">documentations</a> and <a href="https://ptsjs.org/guide.md">guide</a> and <a href="https://ptsjs.org/SKILL.md">skill</a>. Just point your AI agent to <a href="https://ptsjs.org">ptsjs.org</a> to get started.</p>
-
-  <h3>New features</h3>
-  <p><strong>Path operations.</strong> The new <code>Path</code> class unites, intersects, subtracts and crops polygons, and <code>form.compound</code> draws compound path. <a href="../demo?name=path.crop">Demo</a></p>
-  <p><strong>Curve conversions.</strong> Convert back and forth between cardinal, b-spline and bezier curves via convenient functions like <code>Curve.cardinalToBezier</code> and <code>Curve.bezierToCardinal</code>. <a href="../demo?name=curve.cardinal">Demo</a></p>
-  <p><strong>Sampling.</strong> <code>Create.sampling</code> uses Poisson-disc technique to sample uniformly distributed points in an area. <a href="../demo?name=create.sampling">Demo</a></p>
-  <p><strong>Flocking.</strong> <code>Create.flock</code> runs a flocking simulation based on Craig Reynolds' Boids algorithm. <a href="../demo?name=create.flock">Demo</a></p>
-  <p><strong>OKLab color space.</strong> <code>Color</code> now supports Oklab and Oklch, alongside corrected conversions for RGB, HSL, HSB, XYZ, LAB, LCH, and LUV.</p>
-
-  <h3>Fixes</h3>
-  <p><strong>Big performance gains.</strong> Physcis engine is now 31x faster, delaunay/voronoi tessellation 268x faster, and polygon collison 100x faster. See more results <a href="https://github.com/williamngan/pts/blob/master/CHANGELOG.md#performance">here</a></p>
-  <p><strong>Under-the-hood optimizations.</strong> Improved image and sound handling in <code>Img</code> and <code>Sound</code>. Simplified API for managing <code>UI</code> interactions. Many bug fixes to improve stability.</p>
-  <p><strong>Modernized build system.</strong> The codebase is updated to TypeScript 6 in strict mode. Build scripts now use pnpm and tsdown. Packages include explicit ESM and CommonJS entry points, matching type declarations and source maps.</p>
-  <p><strong>New demo editor.</strong> The live editor was rebuilt and can export a self-contained html demo. <a href="demo/edit/?name=circle.withinBound">Try it</a>.</p>
-
+    <a href="#menu" id="toc" aria-label="Open guide menu">&#x2261;</a>
+    <main id="post"><h1>Changelog</h1>
+<h2>Pts reaches v1.0</h2>
+<p><small>Sep 24, 2026</small></p>
+<p>Pts was released 9 years ago in 2017. I wanted to build a graphics library from scratch, because it's challenging and fun.</p>
+<p>Do you know what's more challenging and fun? Being a new parent. That's why Pts didn't get an update for a long while.</p>
+<p>Now my child is 6yo, and AI writes better code than I can, it's time to clear years of backlog.</p>
+<p>V1.0 is a full modernization of Pts. The build system gets an upgrade, and tests and benchmarks have full coverage. The library is optimized and it's now very fast.</p>
+<p>We are now in 2026. A crazy timeline is unfolding. I hope Pts is still fun and relevant for humans, even in the age of AI.</p>
+<p>Let's go through the new features.</p>
+<h3>SVG, Canvas, React, CLI, AI</h3>
+<p><strong>A new SVG renderer.</strong> Swap <code>CanvasForm</code> with <code>SVGForm</code>, and render svg directly without additional code changes. <a href="../demo?name=svgspace.getForm">Demo</a></p>
+<p><strong>New CLI support.</strong> Generate png or svg directly in the command line. Learn more at <a href="https://cli.ptsjs.org">cli.ptsjs.org</a> (or point your AI agent to it)</p>
+<p><strong>React compoent.</strong> <a href="https://react.ptsjs.org">react-pts-canvas</a> also gets an update with bug fixes and performance improvements.</p>
+<p><strong>AI ready.</strong> Markdown formatted <a href="https://ptsjs.org/docs.md">documentations</a> and <a href="https://ptsjs.org/guide.md">guide</a> and <a href="https://ptsjs.org/SKILL.md">skill</a>. Just point your AI agent to <a href="https://ptsjs.org">ptsjs.org</a> to get started.</p>
+<h3>New features</h3>
+<p><strong>Path operations.</strong> The new <code>Path</code> class unites, intersects, subtracts and crops polygons, and <code>form.compound</code> draws compound path. <a href="../demo?name=path.crop">Demo</a></p>
+<p><strong>Curve conversions.</strong> Convert back and forth between cardinal, b-spline and bezier curves via convenient functions like <code>Curve.cardinalToBezier</code> and <code>Curve.bezierToCardinal</code>. <a href="../demo?name=curve.cardinal">Demo</a></p>
+<p><strong>Sampling.</strong> <code>Create.sampling</code> uses Poisson-disc technique to sample uniformly distributed points in an area. <a href="../demo?name=create.sampling">Demo</a></p>
+<p><strong>Flocking.</strong> <code>Create.flock</code> runs a flocking simulation based on Craig Reynolds' Boids algorithm. <a href="../demo?name=create.flock">Demo</a></p>
+<p><strong>OKLab color space.</strong> <code>Color</code> now supports Oklab and Oklch, alongside corrected conversions for RGB, HSL, HSB, XYZ, LAB, LCH, and LUV.</p>
+<h3>Fixes</h3>
+<p><strong>Big performance gains.</strong> Physcis engine is now 31x faster, delaunay/voronoi tessellation 268x faster, and polygon collison 100x faster. See more results <a href="https://github.com/williamngan/pts/blob/master/CHANGELOG.md#performance">here</a></p>
+<p><strong>Under-the-hood optimizations.</strong> Improved image and sound handling in <code>Img</code> and <code>Sound</code>. Simplified API for managing <code>UI</code> interactions. Many bug fixes to improve stability.</p>
+<p><strong>Modernized build system.</strong> The codebase is updated to TypeScript 6 in strict mode. Build scripts now use pnpm and tsdown. Packages include explicit ESM and CommonJS entry points, matching type declarations and source maps.</p>
+<p><strong>New demo editor.</strong> The live editor was rebuilt and can export a self-contained html demo. <a href="demo/edit/?name=circle.withinBound">Try it</a>.</p>
 </main>
 
-<nav id="menu" aria-label="Guide chapters">
-  <a id="close" href="#" aria-label="Close guide menu">&times;</a><ol><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Ecosystem-8000.html">Ecosystem</a></li><li><a href="Changelog-9100.html">Changelog</a></li></ol>
-</nav> 
-
-<div id="footer">
+    <nav id="menu" aria-label="Guide chapters"><a id="close" href="#" aria-label="Close guide menu">&times;</a><ol><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Ecosystem-8000.html">Ecosystem</a></li><li><a href="Changelog-9100.html">Changelog</a></li></ol></nav> <div id="footer">
   Copyright &copy; 2017-current by
   <a href="https://twitter.com/williamngan">William Ngan</a> and contributors.
   Pts is an
