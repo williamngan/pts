@@ -25,8 +25,8 @@ Pts.quickStart( "#pt", "#0c6" );
         let d = pts[i].$subtract( space.pointer );
 
         // push out if inside threshold (100 radius)
-        if ( d.magnitudeSq() < 100*100 ) {
-          temp[i].to( space.pointer.$add( d.unit().$multiply( 100 ) ) );
+        if ( d.magnitudeSq() < 180*180 ) {
+          temp[i].to( space.pointer.$add( d.unit().$multiply( 180 ) ) );
 
         // pull in if outside threshold
         } else {
@@ -40,12 +40,10 @@ Pts.quickStart( "#pt", "#0c6" );
       
       form.fillOnly("rgba(255, 230, 0, 0.9)").line( Curve.catmullRom( temp, 10 ) );
       form.strokeOnly("#123", 8).line( Curve.cardinal( temp, 10 ) );
-      form.stroke("#f06", 2).line( Curve.cardinal( temp, 10, 0.1 ) );
 
       // convert to Bezier control points (centripetal) and draw handles
       let bezier = Curve.cardinalToBezier( temp, 0.5, 0.5 );
-      form.strokeOnly("#fff", 2).bezier( bezier );
-      form.strokeOnly("#ffffff", 1);
+      form.strokeOnly("#fff", 1).bezier( bezier );
       for (let i=0, len=bezier.length-1; i<len; i+=3) {
         form.line( [bezier[i], bezier[i+1]] ).line( [bezier[i+2], bezier[i+3]] );
         form.point(bezier[i], 2, "circle");

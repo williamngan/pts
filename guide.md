@@ -1993,7 +1993,7 @@ In a field of points that revolves around a center, draw a perpendicular line fr
 <a id="demo-path-crop"></a>
 ### `path.crop`
 
-Nested squares are cropped by a shape that follows the pointer. Click to switch the cropping shape.
+Shapes scattered by Poisson-disk sampling, some merged from bubbles and some with holes, are cropped by a donut that follows the pointer. The cropped areas are filled in each shape's own color. Click to switch the cropping shape.
 
 [Open live](https://ptsjs.org/demo/?name=path.crop) · [Source code](https://ptsjs.org/demo/path.crop.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/path.crop.js)
 
