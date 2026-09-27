@@ -10,11 +10,14 @@ test/visual/output/
 test/integrations/*/dist/
 temp/
 .DS_Store
-*.mp4
 dogfood-output/
 .pnpm-store/
 .wt/
 test/visual/**/*.png
 !test/visual/baselines/*.png
+
+*.mp4
+!assets/v1_changelog_pts.mp4
+!assets/v1_changelog_cli.mp4
 
 dist/

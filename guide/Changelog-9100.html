@@ -29,18 +29,23 @@
     <main id="post"><h1>Changelog</h1>
 <h2>Pts reaches v1.0</h2>
 <p><small>Sep 24, 2026</small></p>
-<p>Pts was released 9 years ago in 2017. I wanted to build a graphics library from scratch, because it's challenging and fun.</p>
-<p>Do you know what's more challenging and fun? Being a new parent. That's why Pts didn't get an update for a long while.</p>
-<p>Now my child is 6yo, and AI writes better code than I can, it's time to clear years of backlog.</p>
-<p>V1.0 is a full modernization of Pts. The build system gets an upgrade, and tests and benchmarks have full coverage. The library is optimized and it's now very fast.</p>
-<p>We are now in 2026. A crazy timeline is unfolding. I hope Pts is still fun and relevant for humans, even in the age of AI.</p>
-<p>Let's go through the new features.</p>
+<p>It felt like so long ago, when I <a href="https://medium.com/@williamngan/pt-93382bf5943e">wrote these words</a> and released Pt in 2015.</p>
+<blockquote>
+<p>...can code, through its variables and functions and classes, produce a new form of humanistic expression? Does form follow <em>function()</em>?</p>
+</blockquote>
+<p>I spent many nights and weekends to hand craft <a href="https://williamngan.github.io/pt/">Pt</a> (2015) and <a href="https://ptsjs.org">Pts</a> (2017) from scratch - It sounds so quaint now in 2026. But at that time I wanted a new material to reflect my way of thinking, a foundation that I can build upon. It was challenging and fun.</p>
+<p>But you know what's more challenging and fun? Being a new parent. And so years passed by. Now my child is 6 and I'm almost a competent parent, and AI writes better code than I can, it's time to clear years of backlog.</p>
+<p>V1.0 is a full modernization of Pts. The build system gets an upgrade, and tests and benchmarks have full coverage. The library is now very fast.</p>
+<p>I hope Pts is still fun and relevant for humans. It's easy to use it with AI or without. Let's go through the new features.</p>
 <h3>SVG, Canvas, React, CLI, AI</h3>
 <p><strong>A new SVG renderer.</strong> Swap <code>CanvasForm</code> with <code>SVGForm</code>, and render svg directly without additional code changes. <a href="../demo?name=svgspace.getForm">Demo</a></p>
 <p><strong>New CLI support.</strong> Generate png or svg directly in the command line. Learn more at <a href="https://cli.ptsjs.org">cli.ptsjs.org</a> (or point your AI agent to it)</p>
+<p><video src="../assets/v1_changelog_cli.mp4" width="1280" height="720" autoplay loop muted playsinline></video></p>
 <p><strong>React compoent.</strong> <a href="https://react.ptsjs.org">react-pts-canvas</a> also gets an update with bug fixes and performance improvements.</p>
-<p><strong>AI ready.</strong> Markdown formatted <a href="https://ptsjs.org/docs.md">documentations</a> and <a href="https://ptsjs.org/guide.md">guide</a> and <a href="https://ptsjs.org/SKILL.md">skill</a>. Just point your AI agent to <a href="https://ptsjs.org">ptsjs.org</a> to get started.</p>
+<p><strong>AI ready.</strong> Markdown formatted <a href="https://ptsjs.org/docs.md">documentations</a> and <a href="https://ptsjs.org/guide.md">guide</a> and <a href="https://ptsjs.org/SKILL.md">skill</a>. Just point your AI agent to <a href="https://ptsjs.org">ptsjs.org</a> to get started. Try this prompt with your AI agent for fun:</p>
+<blockquote>Create a react vite app and then use Pts (ptsjs.org) to create a beautifully chaotic and dynamic interactive composition. Be as creative as you can, using the Pts library well and push the boundary. The demo is a full page interactive media.</blockquote>
 <h3>New features</h3>
+<p><video src="../assets/v1_changelog_pts.mp4" width="1280" height="720" autoplay loop muted playsinline></video></p>
 <p><strong>Path operations.</strong> The new <code>Path</code> class unites, intersects, subtracts and crops polygons, and <code>form.compound</code> draws compound path. <a href="../demo?name=path.crop">Demo</a></p>
 <p><strong>Curve conversions.</strong> Convert back and forth between cardinal, b-spline and bezier curves via convenient functions like <code>Curve.cardinalToBezier</code> and <code>Curve.bezierToCardinal</code>. <a href="../demo?name=curve.cardinal">Demo</a></p>
 <p><strong>Sampling.</strong> <code>Create.sampling</code> uses Poisson-disc technique to sample uniformly distributed points in an area. <a href="../demo?name=create.sampling">Demo</a></p>
@@ -51,7 +56,13 @@
 <p><strong>Under-the-hood optimizations.</strong> Improved image and sound handling in <code>Img</code> and <code>Sound</code>. Simplified API for managing <code>UI</code> interactions. Many bug fixes to improve stability.</p>
 <p><strong>Modernized build system.</strong> The codebase is updated to TypeScript 6 in strict mode. Build scripts now use pnpm and tsdown. Packages include explicit ESM and CommonJS entry points, matching type declarations and source maps.</p>
 <p><strong>New demo editor.</strong> The live editor was rebuilt and can export a self-contained html demo. <a href="demo/edit/?name=circle.withinBound">Try it</a>.</p>
-</main>
+<p>* * *</p>
+<blockquote>
+And if you find her poor, Ithaka won’t have fooled you. <br />
+Wise as you will have become, so full of experience, <br />
+you’ll have understood by then what these Ithakas mean. <br />
+- C. P. Cavafy
+</blockquote></main>
 
     <nav id="menu" aria-label="Guide chapters"><a id="close" href="#" aria-label="Close guide menu">&times;</a><ol><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Ecosystem-8000.html">Ecosystem</a></li><li><a href="Changelog-9100.html">Changelog</a></li></ol></nav> <div id="footer">
   Copyright &copy; 2017-current by

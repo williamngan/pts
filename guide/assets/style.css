@@ -348,7 +348,7 @@ pre:focus-visible {
   margin-left: 30%;
   width: 50%;
   min-width: 300px;
-  max-width: 600px;
+  max-width: 640px;
   padding: 0 0px 30px;
   color: #123;
   font-size: 1.3em;
@@ -363,6 +363,12 @@ pre:focus-visible {
 #post img {
   max-width: 100%;
   width: 100%;
+}
+
+#post video {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 h1 {
@@ -453,7 +459,7 @@ a:hover > code {
   color: #0ca;
 }
 
-pre {
+pre, blockquote {
   border-left: 2px solid #0ca;
   padding: 5px 0 5px 20px;
   font-size: 0.9em;
