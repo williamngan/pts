@@ -1895,7 +1895,7 @@ Generate Delaunay and Voronoi tessellations. When 100 points are added, the diag
 <a id="demo-create-flock"></a>
 ### `create.flock`
 
-Move the pointer to scatter the flock. They will turn white and move away.
+A flock roams freely, each agent trailing a line colored by its heading. Move the pointer to scatter the flock and light up their heads, or hold it down to stir a vortex.
 
 [Open live](https://ptsjs.org/demo/?name=create.flock) · [Source code](https://ptsjs.org/demo/create.flock.js) · [GitHub](https://github.com/williamngan/pts/blob/master/demo/create.flock.js)
 
