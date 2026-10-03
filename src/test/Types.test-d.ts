@@ -11,6 +11,7 @@ import type {
   UIHandler,
 } from "../Types";
 import { type Bound, type Group, type Pt } from "../Pt";
+import type { Color } from "../Color";
 import type { Space } from "../Space";
 import type { UI, UIPointerAction } from "../UI";
 import type { CanvasForm, CanvasSpace } from "../Canvas";
@@ -94,5 +95,16 @@ describe("public type contract", () => {
 
   it("IntersectContext.other requires narrowing", () => {
     expectTypeOf<IntersectContext["other"]>().toEqualTypeOf<unknown>();
+  });
+
+  it("Color.ranges stays a writable map of Groups", () => {
+    expectTypeOf<typeof Color.ranges>().toEqualTypeOf<{
+      [name: string]: Group;
+    }>();
+    // fails to compile if ranges ever becomes read-only
+    const assign = (c: typeof Color, v: { [name: string]: Group }) => {
+      c.ranges = v;
+    };
+    expectTypeOf(assign).toBeFunction();
   });
 });

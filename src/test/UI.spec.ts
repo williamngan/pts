@@ -445,3 +445,56 @@ describe("UI API modernization", () => {
     expect(u.getState("maybe")).toBeUndefined();
   });
 });
+
+describe("UI ids", () => {
+  it("numbers ids in one sequence across UI subclasses", () => {
+    const a = new UI(rect(), UIShape.rectangle);
+    expect(a.id).toMatch(/^ui_\d+$/);
+    const n = Number(a.id.slice(3));
+    expect(new UIButton(rect(), UIShape.rectangle).id).toBe(`ui_${n + 1}`);
+    expect(new UIDragger(rect(), UIShape.rectangle).id).toBe(`ui_${n + 2}`);
+    expect(new UI(rect(), UIShape.rectangle, {}, "named").id).toBe("named");
+    expect(new UI(rect(), UIShape.rectangle).id).toBe(`ui_${n + 3}`);
+  });
+
+  it("keeps the shared sequence when a subclass sets its own counter", () => {
+    // TypeScript compiles `protected static _counter = 100` in a subclass to
+    // this assignment; it must not reset the ids of every UI
+    class Numbered extends UI {
+      static reset() {
+        Numbered._counter = 100;
+      }
+    }
+    const n = Number(new UI(rect(), UIShape.rectangle).id.slice(3));
+    Numbered.reset();
+    expect(new Numbered(rect(), UIShape.rectangle).id).toBe(`ui_${n + 1}`);
+    expect(new UIButton(rect(), UIShape.rectangle).id).toBe(`ui_${n + 2}`);
+  });
+
+  it("counts from a _counter redefined on UI, as with a static field", () => {
+    const descriptor = Object.getOwnPropertyDescriptor(UI, "_counter")!;
+    try {
+      Object.defineProperty(UI, "_counter", {
+        value: 100,
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      });
+      expect(new UI(rect(), UIShape.rectangle).id).toBe("ui_100");
+      expect(new UIButton(rect(), UIShape.rectangle).id).toBe("ui_101");
+      expect(Reflect.get(UI, "_counter")).toBe(102);
+    } finally {
+      Object.defineProperty(UI, "_counter", descriptor);
+    }
+  });
+
+  it("counts from a _counter assigned through a Proxy of UI", () => {
+    const descriptor = Object.getOwnPropertyDescriptor(UI, "_counter")!;
+    try {
+      Reflect.set(new Proxy(UI, {}), "_counter", 500);
+      expect(new UI(rect(), UIShape.rectangle).id).toBe("ui_500");
+    } finally {
+      Object.defineProperty(UI, "_counter", descriptor);
+    }
+  });
+});

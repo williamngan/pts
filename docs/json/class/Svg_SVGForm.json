@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Svg.ts",
-      985,
+      986,
       13
     ]
   ],
@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1018,
+          1019,
           2
         ]
       ],
@@ -82,12 +82,12 @@
       "source": [
         [
           "src/Svg.ts",
-          1053,
+          1054,
           6
         ],
         [
           "src/Svg.ts",
-          1056,
+          1057,
           6
         ]
       ],
@@ -149,12 +149,12 @@
       "source": [
         [
           "src/Svg.ts",
-          1061,
+          1062,
           6
         ],
         [
           "src/Svg.ts",
-          1064,
+          1065,
           6
         ]
       ],
@@ -198,12 +198,12 @@
       "source": [
         [
           "src/Svg.ts",
-          1007,
+          1008,
           13
         ],
         [
           "src/Svg.ts",
-          1010,
+          1011,
           13
         ]
       ],
@@ -231,12 +231,12 @@
       "source": [
         [
           "src/Svg.ts",
-          1001,
+          1002,
           13
         ],
         [
           "src/Svg.ts",
-          1004,
+          1005,
           13
         ]
       ],
@@ -973,7 +973,7 @@
             {
               "name": "ptOrRect",
               "comment": "a target area to place the image. Either a PtLike specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a bounding box. Default is (0,0) at top-left.",
-              "type": "PtLike | PtLikeIterable",
+              "type": "PtLikeIterable | PtLike",
               "default": false
             },
             {
@@ -1014,7 +1014,7 @@
             {
               "name": "ptOrRect",
               "comment": "a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.",
-              "type": "PtLike | PtLikeIterable",
+              "type": "PtLikeIterable | PtLike",
               "default": false
             },
             {
@@ -1403,7 +1403,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1080,
+          1081,
           2
         ]
       ],
@@ -1785,7 +1785,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1072,
+          1073,
           2
         ]
       ],
@@ -2448,7 +2448,7 @@
             {
               "name": "ptOrRect",
               "comment": "a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.",
-              "type": "PtLike | PtLikeIterable",
+              "type": "PtLikeIterable | PtLike",
               "default": false
             },
             {
@@ -2497,7 +2497,7 @@
             {
               "name": "ptOrRect",
               "comment": "a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that places a region of the image data of that size at that position. Note that `putImageData` cannot resize: the rect clips, not scales. Default is (0,0) at top-left.",
-              "type": "PtLike | PtLikeIterable",
+              "type": "PtLikeIterable | PtLike",
               "default": false
             },
             {

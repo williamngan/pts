@@ -5,26 +5,20 @@ import { Util } from "./Util";
 import { Num, Geom } from "./Num";
 import { type PtLike, type ColorType } from "./Types";
 
-/**
- * Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.
- * Convert non-RGB colors to RGB before using `.hex`, `.rgb`, or `.rgba` for rendering. These getters format the channels; they don't convert between color spaces.
- * @example
- * ```
- * const color = Color.hsl(268, 0.37, 0.51);
- * form.fill(Color.HSLtoRGB(color).rgb);
- * ```
- */
-export class Color extends Pt {
-  // XYZ property for Standard Observer 2deg, Daylight/sRGB illuminant D65
-  private static D65: PtLike = new Pt(95.047, 100, 108.883, 1);
+// Module state behind Color's static accessors: a static field would be
+// emitted as an assignment after the class, which bundlers keep, and with it
+// the class and everything it references (see Util.ts). The initializers are
+// marked pure so a bundle without Color drops them. Internal code reads
+// `Color.ranges`, not `_colorRanges`, so redefining the static still reaches
+// the conversions.
 
-  protected _mode: ColorType = "rgb";
-  private _isNorm: boolean = false;
+// XYZ property for Standard Observer 2deg, Daylight/sRGB illuminant D65
+const D65 = /* @__PURE__ */ new Pt(95.047, 100, 108.883, 1);
 
-  /**
-   * Value range for each color space
-   */
-  static ranges: { [name: string]: Group } = {
+let _colorRanges: { [name: string]: Group } = /* @__PURE__ */ colorRanges();
+
+function colorRanges(): { [name: string]: Group } {
+  return {
     rgb: new Group(new Pt(0, 255), new Pt(0, 255), new Pt(0, 255)),
     hsl: new Group(new Pt(0, 360), new Pt(0, 1), new Pt(0, 1)),
     hsb: new Group(new Pt(0, 360), new Pt(0, 1), new Pt(0, 1)),
@@ -35,6 +29,40 @@ export class Color extends Pt {
     oklab: new Group(new Pt(0, 1), new Pt(-0.4, 0.4), new Pt(-0.4, 0.4)),
     oklch: new Group(new Pt(0, 1), new Pt(0, 0.4), new Pt(0, 360)),
   };
+}
+
+/**
+ * Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.
+ * Convert non-RGB colors to RGB before using `.hex`, `.rgb`, or `.rgba` for rendering. These getters format the channels; they don't convert between color spaces.
+ * @example
+ * ```
+ * const color = Color.hsl(268, 0.37, 0.51);
+ * form.fill(Color.HSLtoRGB(color).rgb);
+ * ```
+ */
+export class Color extends Pt {
+  protected _mode: ColorType = "rgb";
+  private _isNorm: boolean = false;
+
+  /**
+   * Value range for each color space
+   */
+  static get ranges(): { [name: string]: Group } {
+    return _colorRanges;
+  }
+  static set ranges(value: { [name: string]: Group }) {
+    // as with a static field, an assignment on a subclass stays on the subclass
+    if (this === Color) {
+      _colorRanges = value;
+    } else {
+      Object.defineProperty(this, "ranges", {
+        value,
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      });
+    }
+  }
 
   /**
    * Create a Color. Same as creating a Pt. Optionally you may use [`Color.from`](#link) to create a color.
@@ -779,7 +807,7 @@ export class Color extends Pt {
     const kap = 24389 / 27;
 
     // adjust for D65
-    c.divide(Color.D65);
+    c.divide(D65);
 
     const fn = (n: number) => (n > eps ? Math.cbrt(n) : (kap * n + 16) / 116);
     const cy = fn(c[1]);
@@ -812,7 +840,7 @@ export class Color extends Pt {
     const eps = 216 / 24389;
     const kap = 24389 / 27;
 
-    const d = Color.D65;
+    const d = D65;
     const xxx = Math.pow(x, 3);
     const zzz = Math.pow(z, 3);
 
@@ -850,12 +878,8 @@ export class Color extends Pt {
     y = y / 100;
     const L = y > eps ? 116 * Math.cbrt(y) - 16 : kap * y;
 
-    const refU =
-      (4 * Color.D65[0]) /
-      (Color.D65[0] + 15 * Color.D65[1] + 3 * Color.D65[2]);
-    const refV =
-      (9 * Color.D65[1]) /
-      (Color.D65[0] + 15 * Color.D65[1] + 3 * Color.D65[2]);
+    const refU = (4 * D65[0]) / (D65[0] + 15 * D65[1] + 3 * D65[2]);
+    const refV = (9 * D65[1]) / (D65[0] + 15 * D65[1] + 3 * D65[2]);
 
     const cc = Color.luv(
       L,
@@ -891,12 +915,8 @@ export class Color extends Pt {
     const fy = (l + 16) / 116;
     let y = l > kap * eps ? fy * fy * fy : l / kap;
 
-    const refU =
-      (4 * Color.D65[0]) /
-      (Color.D65[0] + 15 * Color.D65[1] + 3 * Color.D65[2]);
-    const refV =
-      (9 * Color.D65[1]) /
-      (Color.D65[0] + 15 * Color.D65[1] + 3 * Color.D65[2]);
+    const refU = (4 * D65[0]) / (D65[0] + 15 * D65[1] + 3 * D65[2]);
+    const refV = (9 * D65[1]) / (D65[0] + 15 * D65[1] + 3 * D65[2]);
 
     u = u / (13 * l) + refU;
     v = v / (13 * l) + refV;

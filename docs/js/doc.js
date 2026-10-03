@@ -161,7 +161,18 @@ var app = Vue.createApp({
     },
 
     jumpTo: function (id, ignoreHistory) {
-      if (!ignoreHistory) {
+      // An old link to a member that changed kind (a property that became an
+      // accessor) jumps to the member and shows its current anchor instead.
+      const alias = id && !document.getElementById(id) ? memberAlias(id) : "";
+      if (alias) {
+        // replace the entry when it is the old address (a page load or a
+        // history step); a click on an old link adds an entry, as any link does
+        const replace = ignoreHistory || lastHistory === this.selected + id;
+        id = alias;
+        this.selHash = id;
+        if (replace) replaceHistory(this.selected, id);
+        else setHistory(this.selected, id);
+      } else if (!ignoreHistory) {
         this.selHash = id || "";
         setHistory(this.selected, this.selHash);
       }
@@ -326,10 +337,12 @@ function loadContents(id, hash, reloading) {
     } else lastHistory = id + hash;
 
     setTimeout(function () {
-      if (request !== contentRequest || app.selHash !== hash) return;
+      // `updated` may already have replaced an old anchor with its alias
+      const current = app.selHash === hash || app.selHash === memberAlias(hash);
+      if (request !== contentRequest || !current) return;
       document.getElementById("members").scrollTo(0, 0);
       document.getElementById("contents").scrollTo(0, 0);
-      app.jumpTo(hash, reloading);
+      app.jumpTo(app.selHash, reloading);
     }, 100);
   });
 }
@@ -388,6 +401,26 @@ function sortInherited(a, b) {
   );
 }
 
+// Anchor prefixes a member can move between, as the page template writes
+// them: a property that became an accessor, or a function that became static
+// (anchors before 1.0 had no static prefix). The static prefix comes first so
+// it matches before its plain form.
+const memberKindPairs = [
+  ["property", "accessor"],
+  ["function_static", "function"],
+];
+
+// The anchor of the same member under the other kind of its pair, or "".
+function memberAlias(id) {
+  for (const pair of memberKindPairs) {
+    const kind = pair.find((k) => id.indexOf(k + "_") === 0);
+    if (!kind) continue;
+    const other = `${pair.find((k) => k !== kind)}_${id.slice(kind.length + 1)}`;
+    return document.getElementById(other) ? other : "";
+  }
+  return "";
+}
+
 function memberAnchor(prefix, member) {
   let qualifier =
     prefix === "function" && member.flags && member.flags.isStatic
@@ -424,6 +457,15 @@ function setHistory(id, hash) {
       toggleMenu(false);
       if (!hash) document.querySelector("#contents").scrollTo(0, 0);
     }
+  }
+}
+
+// Show a corrected anchor without adding a history entry.
+function replaceHistory(id, hash) {
+  lastHistory = id + hash;
+  if (history.replaceState && id) {
+    const url = getRoot() + "?p=" + id + (hash ? "#" + hash : "");
+    window.history.replaceState({ path: url }, "", url);
   }
 }
 

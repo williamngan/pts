@@ -1,7 +1,6 @@
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 import { Pt, Group } from "./Pt";
-import { Line } from "./Op";
 import { type PtLike, type GroupLike } from "./Types";
 
 /**
@@ -506,17 +505,19 @@ export class Mat {
    * @param p1 second end point to define the reflection line
    */
   static reflectAt2DMatrix(p1: PtLike, p2: PtLike) {
-    const intercept = Line.intercept(p1, p2);
-
-    if (intercept == undefined) {
+    // The slope and y-intercept as `Line.intercept` computes them, inlined so
+    // this module does not import Op: a Pt-only bundle would otherwise keep
+    // every geometry class.
+    if (p2[0] - p1[0] === 0) {
       return [
         new Pt([-1, 0, 0]),
         new Pt([0, 1, 0]),
         new Pt([p1[0] + p2[0], 0, 1]),
       ];
     } else {
-      const yi = intercept.yi;
-      const ang2 = Math.atan(intercept.slope) * 2;
+      const slope = (p2[1] - p1[1]) / (p2[0] - p1[0]);
+      const yi = p1[1] - slope * p1[0];
+      const ang2 = Math.atan(slope) * 2;
       const cosA = Math.cos(ang2);
       const sinA = Math.sin(ang2);
 

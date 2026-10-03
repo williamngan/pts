@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Geom, Num, Range, Shaping } from "../Num";
+import { Curve } from "../Op";
 import { Group, Pt } from "../Pt";
+import type { PtLike } from "../Types";
 
 function values(value: ArrayLike<number>) {
   return Array.from(value);
@@ -470,5 +472,68 @@ describe("Num and Geom correctness pins", () => {
     Geom.shear2D(h, [0.5, 0], [0, 0]);
     expect(h[1][0]).toBeCloseTo(2);
     expect(h[1][1]).toBeCloseTo(2 * Math.tan(0.5));
+  });
+});
+
+describe("Shaping.cubicBezier", () => {
+  // The curve evaluated through Curve, as cubicBezier did before it was
+  // inlined (so Num does not depend on Op); results must match bit for bit.
+  const viaCurve = (t: number, c: number, p1: PtLike, p2: PtLike) => {
+    const curve = new Group(new Pt(0, 0), new Pt(p1), new Pt(p2), new Pt(1, 1));
+    return (
+      c *
+      Curve.bezierStep(
+        new Pt(t * t * t, t * t, t, 1),
+        Curve.controlPoints(curve),
+      ).y
+    );
+  };
+
+  it("matches the Curve evaluation bit for bit over a grid", () => {
+    const ys = [-1, -0.37, 0, 0.1, 1 / 3, 0.7, 1, 1.3, 2];
+    const mismatches: string[] = [];
+    for (let i = 0; i <= 200; i++) {
+      const t = -0.5 + i / 100 + (i % 3) / 7e5;
+      for (const a of ys) {
+        for (const b of ys) {
+          const p1 = [0.25, a];
+          const p2 = [0.75, b];
+          const got = Shaping.cubicBezier(t, 1.7, p1, p2);
+          const want = viaCurve(t, 1.7, p1, p2);
+          if (!Object.is(got, want)) mismatches.push(`${t} ${a} ${b}`);
+        }
+      }
+    }
+    expect(mismatches).toEqual([]);
+  });
+
+  it("matches the Curve evaluation at edge inputs", () => {
+    const cases: [number, number, PtLike, PtLike][] = [
+      [0, 1, [0.1, 0.7], [0.9, 0.2]],
+      [1, 1, [0.1, 0.7], [0.9, 0.2]],
+      [NaN, 1, [0.1, 0.7], [0.9, 0.2]],
+      [Infinity, 1, [0.1, 0.7], [0.9, 0.2]],
+      [-Infinity, 1, [0.1, 0.7], [0.9, 0.2]],
+      [0.5, 0, [0.1, 0.7], [0.9, 0.2]],
+      [0.5, -2.5, [0.1, 0.7], [0.9, 0.2]],
+      [0.5, 1e20, [0.1, 0.7], [0.9, 0.2]],
+      [0.3, 1, new Pt(0.3, 0.6), new Pt(0.8, 0.9)],
+      [0.3, 1, Float32Array.from([0.2, 0.9]), [0.4, 0.1]],
+      [0.3, 1, [0.1, 0.2, 0.3], [0.4, 0.5, 0.6]],
+      [0.3, 1, [0.5], [0.4, 0.1]],
+      [0.3, 1, [0.1, NaN], [0.4, Infinity]],
+      [0.6, 1, [0.1, 1e30], [0.4, -1e30]],
+      [-0, 1, [0.1, 0.7], [0.9, 0.2]],
+      [0.5, -0, [0.1, 0.7], [0.9, 0.2]],
+      [0.3, 1, { x: 0.2, y: 0.9 } as unknown as PtLike, [0.4, 0.1]],
+      // t³ overflows float32, so only the `w0 * 0` term makes the sum NaN
+      [1e15, 1, [0.1, 0.7], [0.9, -0.2]],
+    ];
+    for (const [t, c, p1, p2] of cases) {
+      expect(Shaping.cubicBezier(t, c, p1, p2)).toBe(viaCurve(t, c, p1, p2));
+    }
+    expect(Shaping.cubicBezier(0.42)).toBe(
+      viaCurve(0.42, 1, [0.1, 0.7], [0.9, 0.2]),
+    );
   });
 });

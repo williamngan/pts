@@ -2,6 +2,1520 @@
 Licensed under Apache 2.0 License.
 See https://github.com/williamngan/pts for details. */
 Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+//#region src/LinearAlgebra.ts
+var Vec = class Vec {
+	static add(a, b) {
+		if (typeof b == "number") for (let i = 0, len = a.length; i < len; i++) a[i] += b;
+		else for (let i = 0, len = a.length; i < len; i++) a[i] += b[i] || 0;
+		return a;
+	}
+	static subtract(a, b) {
+		if (typeof b == "number") for (let i = 0, len = a.length; i < len; i++) a[i] -= b;
+		else for (let i = 0, len = a.length; i < len; i++) a[i] -= b[i] || 0;
+		return a;
+	}
+	static multiply(a, b) {
+		if (typeof b == "number") for (let i = 0, len = a.length; i < len; i++) a[i] *= b;
+		else {
+			if (a.length != b.length) throw new Error(`Cannot do element-wise multiply since the array lengths don't match: ${a.toString()} multiply-with ${b.toString()}`);
+			for (let i = 0, len = a.length; i < len; i++) a[i] *= b[i];
+		}
+		return a;
+	}
+	static divide(a, b) {
+		if (typeof b == "number") {
+			if (b === 0) throw new Error("Cannot divide by zero");
+			for (let i = 0, len = a.length; i < len; i++) a[i] /= b;
+		} else {
+			if (a.length != b.length) throw new Error(`Cannot do element-wise divide since the array lengths don't match. ${a.toString()} divide-by ${b.toString()}`);
+			for (let i = 0, len = a.length; i < len; i++) a[i] /= b[i];
+		}
+		return a;
+	}
+	static dot(a, b) {
+		if (a.length != b.length) throw new Error("Array lengths don't match");
+		let d = 0;
+		for (let i = 0, len = a.length; i < len; i++) d += a[i] * b[i];
+		return d;
+	}
+	static cross2D(a, b) {
+		return a[0] * b[1] - a[1] * b[0];
+	}
+	static cross(a, b) {
+		return new Pt(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]);
+	}
+	static magnitude(a) {
+		return Math.sqrt(Vec.dot(a, a));
+	}
+	static unit(a, magnitude = void 0) {
+		const m = magnitude === void 0 ? Vec.magnitude(a) : magnitude;
+		if (m === 0) return a;
+		return Vec.divide(a, m);
+	}
+	static abs(a) {
+		return Vec.map(a, Math.abs);
+	}
+	static floor(a) {
+		return Vec.map(a, Math.floor);
+	}
+	static ceil(a) {
+		return Vec.map(a, Math.ceil);
+	}
+	static round(a) {
+		return Vec.map(a, Math.round);
+	}
+	static max(a) {
+		let m = -Infinity;
+		let index = 0;
+		for (let i = 0, len = a.length; i < len; i++) if (a[i] >= m) {
+			m = a[i];
+			index = i;
+		}
+		return {
+			value: m,
+			index
+		};
+	}
+	static min(a) {
+		let m = Infinity;
+		let index = 0;
+		for (let i = 0, len = a.length; i < len; i++) if (a[i] <= m) {
+			m = a[i];
+			index = i;
+		}
+		return {
+			value: m,
+			index
+		};
+	}
+	static sum(a) {
+		let s = 0;
+		for (let i = 0, len = a.length; i < len; i++) s += a[i];
+		return s;
+	}
+	static map(a, fn) {
+		for (let i = 0, len = a.length; i < len; i++) a[i] = fn(a[i], i, a);
+		return a;
+	}
+};
+var Mat = class Mat {
+	constructor() {
+		this.reset();
+	}
+	get value() {
+		return this._33;
+	}
+	get domMatrix() {
+		return new DOMMatrix(Mat.toDOMMatrix(this._33));
+	}
+	reset() {
+		this._33 = Mat.scale2DMatrix(1, 1);
+	}
+	scale2D(val, at = [0, 0]) {
+		var _val$, _val$2;
+		const m = Mat.scaleAt2DMatrix((_val$ = val[0]) !== null && _val$ !== void 0 ? _val$ : 1, (_val$2 = val[1]) !== null && _val$2 !== void 0 ? _val$2 : 1, at);
+		this._33 = Mat.multiply(this._33, m);
+		return this;
+	}
+	rotate2D(ang, at = [0, 0]) {
+		const m = Mat.rotateAt2DMatrix(Math.cos(ang), Math.sin(ang), at);
+		this._33 = Mat.multiply(this._33, m);
+		return this;
+	}
+	translate2D(val) {
+		const m = Mat.translate2DMatrix(val[0] || 0, val[1] || 0);
+		this._33 = Mat.multiply(this._33, m);
+		return this;
+	}
+	shear2D(val, at = [0, 0]) {
+		var _val$3, _val$4;
+		const m = Mat.shearAt2DMatrix(Math.tan((_val$3 = val[0]) !== null && _val$3 !== void 0 ? _val$3 : 0), Math.tan((_val$4 = val[1]) !== null && _val$4 !== void 0 ? _val$4 : 0), at);
+		this._33 = Mat.multiply(this._33, m);
+		return this;
+	}
+	static add(a, b) {
+		if (typeof b != "number") {
+			if (a[0].length != b[0].length) throw new Error("Cannot add matrix if rows' and columns' size don't match.");
+			if (a.length != b.length) throw new Error("Cannot add matrix if rows' and columns' size don't match.");
+		}
+		const g = new Group();
+		const isNum = typeof b == "number";
+		for (let i = 0, len = a.length; i < len; i++) g.push(a[i].$add(isNum ? b : b[i]));
+		return g;
+	}
+	static multiply(a, b, transposed = false, elementwise = false) {
+		const g = new Group();
+		if (typeof b != "number") {
+			if (elementwise) {
+				if (a.length != b.length) throw new Error("Cannot multiply matrix element-wise because the matrices' sizes don't match.");
+				for (let ai = 0, alen = a.length; ai < alen; ai++) g.push(a[ai].$multiply(b[ai]));
+			} else {
+				if (!transposed && a[0].length != b.length) throw new Error("Cannot multiply matrix if rows in matrix-a don't match columns in matrix-b.");
+				if (transposed && a[0].length != b[0].length) throw new Error("Cannot multiply matrix if transposed and the columns in both matrices don't match.");
+				if (!transposed) b = Mat.transpose(b);
+				for (let ai = 0, alen = a.length; ai < alen; ai++) {
+					const p = Pt.make(b.length, 0);
+					for (let bi = 0, blen = b.length; bi < blen; bi++) p[bi] = Vec.dot(a[ai], b[bi]);
+					g.push(p);
+				}
+			}
+		} else for (let ai = 0, alen = a.length; ai < alen; ai++) g.push(a[ai].$multiply(b));
+		return g;
+	}
+	static zipSlice(g, index, defaultValue = false) {
+		const z = [];
+		for (let i = 0, len = g.length; i < len; i++) if (g[i].length - 1 < index) {
+			if (defaultValue === false) throw new Error(`Index ${index} is out of bounds`);
+			z.push(defaultValue);
+		} else z.push(g[i][index]);
+		return new Pt(z);
+	}
+	static zip(g, defaultValue = false, useLongest = false) {
+		const ps = new Group();
+		const len = useLongest ? g.reduce((a, b) => Math.max(a, b.length), 0) : g[0].length;
+		for (let i = 0; i < len; i++) ps.push(Mat.zipSlice(g, i, defaultValue));
+		return ps;
+	}
+	static transpose(g, defaultValue = false, useLongest = false) {
+		return Mat.zip(g, defaultValue, useLongest);
+	}
+	static toDOMMatrix(m) {
+		return [
+			m[0][0],
+			m[0][1],
+			m[1][0],
+			m[1][1],
+			m[2][0],
+			m[2][1]
+		];
+	}
+	static transform2D(pt, m) {
+		const x = pt[0] * m[0][0] + pt[1] * m[1][0] + m[2][0];
+		const y = pt[0] * m[0][1] + pt[1] * m[1][1] + m[2][1];
+		return new Pt(x, y);
+	}
+	static scale2DMatrix(x, y) {
+		return new Group(new Pt(x, 0, 0), new Pt(0, y, 0), new Pt(0, 0, 1));
+	}
+	static rotate2DMatrix(cosA, sinA) {
+		return new Group(new Pt(cosA, sinA, 0), new Pt(-sinA, cosA, 0), new Pt(0, 0, 1));
+	}
+	static shear2DMatrix(tanX, tanY) {
+		return new Group(new Pt(1, tanX, 0), new Pt(tanY, 1, 0), new Pt(0, 0, 1));
+	}
+	static translate2DMatrix(x, y) {
+		return new Group(new Pt(1, 0, 0), new Pt(0, 1, 0), new Pt(x, y, 1));
+	}
+	static scaleAt2DMatrix(sx, sy, at) {
+		const m = Mat.scale2DMatrix(sx, sy);
+		m[2][0] = -at[0] * sx + at[0];
+		m[2][1] = -at[1] * sy + at[1];
+		return m;
+	}
+	static rotateAt2DMatrix(cosA, sinA, at) {
+		const m = Mat.rotate2DMatrix(cosA, sinA);
+		m[2][0] = at[0] * (1 - cosA) + at[1] * sinA;
+		m[2][1] = at[1] * (1 - cosA) - at[0] * sinA;
+		return m;
+	}
+	static shearAt2DMatrix(tanX, tanY, at) {
+		const m = Mat.shear2DMatrix(tanX, tanY);
+		m[2][0] = -at[1] * tanY;
+		m[2][1] = -at[0] * tanX;
+		return m;
+	}
+	static reflectAt2DMatrix(p1, p2) {
+		if (p2[0] - p1[0] === 0) return [
+			new Pt([
+				-1,
+				0,
+				0
+			]),
+			new Pt([
+				0,
+				1,
+				0
+			]),
+			new Pt([
+				p1[0] + p2[0],
+				0,
+				1
+			])
+		];
+		else {
+			const slope = (p2[1] - p1[1]) / (p2[0] - p1[0]);
+			const yi = p1[1] - slope * p1[0];
+			const ang2 = Math.atan(slope) * 2;
+			const cosA = Math.cos(ang2);
+			const sinA = Math.sin(ang2);
+			return [
+				new Pt([
+					cosA,
+					sinA,
+					0
+				]),
+				new Pt([
+					sinA,
+					-cosA,
+					0
+				]),
+				new Pt([
+					-yi * sinA,
+					yi + yi * cosA,
+					1
+				])
+			];
+		}
+	}
+};
+
+//#endregion
+//#region src/uheprng.ts
+function Mash() {
+	let n = 4022871197;
+	return function(data) {
+		if (data) {
+			data = data.toString();
+			for (let i = 0; i < data.length; i++) {
+				n += data.charCodeAt(i);
+				let h = .02519603282416938 * n;
+				n = h >>> 0;
+				h -= n;
+				h *= n;
+				n = h >>> 0;
+				h -= n;
+				n += h * 4294967296;
+			}
+			return (n >>> 0) * 23283064365386963e-26;
+		}
+		n = 4022871197;
+		return 0;
+	};
+}
+function uheprng(seed) {
+	const o = 48;
+	let c = 1;
+	let p = o;
+	const s = new Array(o);
+	const mash = Mash();
+	function initState() {
+		mash();
+		for (let i = 0; i < o; i++) s[i] = mash(" ");
+		c = 1;
+		p = o;
+	}
+	function cleanString(inStr) {
+		inStr = inStr.replace(/(^\s*)|(\s*$)/gi, "");
+		inStr = inStr.replace(/[\x00-\x1F]/gi, "");
+		return inStr;
+	}
+	function hashString(inStr) {
+		inStr = cleanString(inStr);
+		mash(inStr);
+		for (let i = 0; i < inStr.length; i++) {
+			const k = inStr.charCodeAt(i).toString();
+			for (let j = 0; j < o; j++) {
+				s[j] -= mash(k);
+				if (s[j] < 0) s[j] += 1;
+			}
+		}
+	}
+	initState();
+	hashString(seed);
+	return { random() {
+		if (++p >= o) p = 0;
+		const t = 1768863 * s[p] + c * 23283064365386963e-26;
+		return s[p] = t - (c = t | 0);
+	} };
+}
+
+//#endregion
+//#region src/Num.ts
+var Num = class Num {
+	static equals(a, b, threshold = 1e-5) {
+		return a === b || Math.abs(a - b) <= threshold;
+	}
+	static lerp(a, b, t) {
+		return (1 - t) * a + t * b;
+	}
+	static clamp(val, min, max) {
+		return Math.max(min, Math.min(max, val));
+	}
+	static boundValue(val, min, max) {
+		const len = Math.abs(max - min);
+		let a = (val - min) % len;
+		if (a < 0) a += len;
+		return a + min;
+	}
+	static within(p, a, b) {
+		return p >= Math.min(a, b) && p <= Math.max(a, b);
+	}
+	static randomRange(a, b = 0) {
+		const r = a > b ? a - b : b - a;
+		return Math.min(a, b) + Num.random() * r;
+	}
+	static randomPt(a, b) {
+		const p = new Pt(a.length);
+		const range = b ? Vec.subtract(b.slice(), a) : a;
+		const start = b ? a : new Pt(a.length).fill(0);
+		for (let i = 0, len = p.length; i < len; i++) p[i] = Num.random() * range[i] + start[i];
+		return p;
+	}
+	static normalizeValue(n, a, b) {
+		const min = Math.min(a, b);
+		const max = Math.max(a, b);
+		return (n - min) / (max - min);
+	}
+	static sum(pts) {
+		const _pts = Util.iterToArray(pts);
+		const c = new Pt(_pts[0]);
+		for (let i = 1, len = _pts.length; i < len; i++) Vec.add(c, _pts[i]);
+		return c;
+	}
+	static average(pts) {
+		const _pts = Util.iterToArray(pts);
+		return Num.sum(_pts).divide(_pts.length);
+	}
+	static cycle(t, method = Shaping.sineInOut) {
+		return method(t > .5 ? 2 - t * 2 : t * 2);
+	}
+	static mapToRange(n, currA, currB, targetA, targetB) {
+		if (currA == currB) throw new Error("[currMin, currMax] must define a range that is not zero");
+		return targetA + (n - currA) / (currB - currA) * (targetB - targetA);
+	}
+	static seed(seed) {
+		this.generator = uheprng(seed);
+	}
+	static random() {
+		return this.generator ? this.generator.random() : Math.random();
+	}
+};
+var Geom = class Geom {
+	static boundAngle(angle) {
+		return Num.boundValue(angle, 0, 360);
+	}
+	static boundRadian(radian) {
+		return Num.boundValue(radian, 0, Const.two_pi);
+	}
+	static toRadian(angle) {
+		return angle * Const.deg_to_rad;
+	}
+	static toDegree(radian) {
+		return radian * Const.rad_to_deg;
+	}
+	static boundingBox(pts) {
+		let minPt, maxPt;
+		for (const p of pts) if (minPt == void 0) {
+			minPt = p.clone();
+			maxPt = p.clone();
+		} else for (let i = 0, len = Math.min(minPt.length, p.length); i < len; i++) {
+			minPt[i] = Math.min(minPt[i], p[i]);
+			maxPt[i] = Math.max(maxPt[i], p[i]);
+		}
+		return new Group(minPt, maxPt);
+	}
+	static centroid(pts) {
+		return Num.average(pts);
+	}
+	static anchor(pts, ptOrIndex = 0, direction = "to") {
+		const method = direction == "to" ? "subtract" : "add";
+		let i = 0;
+		for (const p of pts) {
+			if (typeof ptOrIndex == "number") {
+				if (ptOrIndex !== i) p[method](pts[ptOrIndex]);
+			} else p[method](ptOrIndex);
+			i++;
+		}
+	}
+	static interpolate(a, b, t = .5) {
+		const len = Math.min(a.length, b.length);
+		const d = Pt.make(len);
+		for (let i = 0; i < len; i++) d[i] = a[i] * (1 - t) + b[i] * t;
+		return d;
+	}
+	static perpendicular(pt, axis = Const.xy) {
+		const y = axis[1];
+		const x = axis[0];
+		const p = new Pt(pt);
+		const pa = new Pt(p);
+		pa[x] = -p[y];
+		pa[y] = p[x];
+		const pb = new Pt(p);
+		pb[x] = p[y];
+		pb[y] = -p[x];
+		return new Group(pa, pb);
+	}
+	static isPerpendicular(p1, p2) {
+		let dot = 0;
+		let ma = 0;
+		let mb = 0;
+		for (let i = 0, len = Math.min(p1.length, p2.length); i < len; i++) {
+			dot += p1[i] * p2[i];
+			ma += p1[i] * p1[i];
+			mb += p2[i] * p2[i];
+		}
+		return Math.abs(dot) <= Const.epsilon * Math.sqrt(ma * mb);
+	}
+	static withinBound(pt, boundPt1, boundPt2) {
+		for (let i = 0, len = Math.min(pt.length, boundPt1.length, boundPt2.length); i < len; i++) if (!Num.within(pt[i], boundPt1[i], boundPt2[i])) return false;
+		return true;
+	}
+	static sortEdges(pts) {
+		const _pts = Util.iterToArray(pts);
+		const bounds = Geom.boundingBox(_pts);
+		const center = bounds[1].add(bounds[0]).divide(2);
+		const cx = center[0];
+		const cy = center[1];
+		const fn = (a, b) => {
+			if (a.length < 2 || b.length < 2) throw new Error("Pt dimension cannot be less than 2");
+			const dax = a[0] - cx;
+			const day = a[1] - cy;
+			const dbx = b[0] - cx;
+			const dby = b[1] - cy;
+			if (dax >= 0 && dbx < 0) return 1;
+			if (dax < 0 && dbx >= 0) return -1;
+			if (dax == 0 && dbx == 0) {
+				if (day >= 0 || dby >= 0) return day > dby ? 1 : -1;
+				return dby > day ? 1 : -1;
+			}
+			const det = dax * dby - day * dbx;
+			if (det < 0) return 1;
+			if (det > 0) return -1;
+			return dax * dax + day * day > dbx * dbx + dby * dby ? 1 : -1;
+		};
+		return _pts.sort(fn);
+	}
+	static scale(ps, scale, anchor) {
+		const pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
+		const scs = typeof scale == "number" ? Pt.make(pts[0].length, scale) : scale;
+		if (!anchor) anchor = Pt.make(pts[0].length, 0);
+		for (let i = 0, len = pts.length; i < len; i++) {
+			const p = pts[i];
+			for (let k = 0, lenP = p.length; k < lenP; k++) p[k] = anchor && anchor[k] ? anchor[k] + (p[k] - anchor[k]) * scs[k] : p[k] * scs[k];
+		}
+		return Geom;
+	}
+	static rotate2D(ps, angle, anchor, axis) {
+		const pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
+		const fn = anchor ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
+		if (!anchor) anchor = Pt.make(pts[0].length, 0);
+		const mat = fn(Math.cos(angle), Math.sin(angle), anchor);
+		for (let i = 0, len = pts.length; i < len; i++) {
+			const p = axis ? pts[i].$take(axis) : pts[i];
+			p.to(Mat.transform2D(p, mat));
+			if (axis) for (let k = 0; k < axis.length; k++) pts[i][axis[k]] = p[k];
+		}
+		return Geom;
+	}
+	static shear2D(ps, scale, anchor, axis) {
+		const pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
+		const s = typeof scale == "number" ? [scale, scale] : scale;
+		if (!anchor) anchor = Pt.make(pts[0].length, 0);
+		const mat = (anchor ? Mat.shearAt2DMatrix : Mat.shear2DMatrix)(Math.tan(s[0]), Math.tan(s[1]), anchor);
+		for (let i = 0, len = pts.length; i < len; i++) {
+			const p = axis ? pts[i].$take(axis) : pts[i];
+			p.to(Mat.transform2D(p, mat));
+			if (axis) for (let k = 0; k < axis.length; k++) pts[i][axis[k]] = p[k];
+		}
+		return Geom;
+	}
+	static reflect2D(ps, line, axis) {
+		const pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
+		const _line = Util.iterToArray(line);
+		const mat = Mat.reflectAt2DMatrix(_line[0], _line[1]);
+		for (let i = 0, len = pts.length; i < len; i++) {
+			const p = axis ? pts[i].$take(axis) : pts[i];
+			p.to(Mat.transform2D(p, mat));
+			if (axis) for (let k = 0; k < axis.length; k++) pts[i][axis[k]] = p[k];
+		}
+		return Geom;
+	}
+	static cosTable() {
+		const cos = /* @__PURE__ */ new Float64Array(360);
+		for (let i = 0; i < 360; i++) cos[i] = Math.cos(i * Math.PI / 180);
+		const find = (rad) => cos[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
+		return {
+			table: cos,
+			cos: find
+		};
+	}
+	static sinTable() {
+		const sin = /* @__PURE__ */ new Float64Array(360);
+		for (let i = 0; i < 360; i++) sin[i] = Math.sin(i * Math.PI / 180);
+		const find = (rad) => sin[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
+		return {
+			table: sin,
+			sin: find
+		};
+	}
+};
+var Shaping = class Shaping {
+	static linear(t, c = 1) {
+		return c * t;
+	}
+	static quadraticIn(t, c = 1) {
+		return c * t * t;
+	}
+	static quadraticOut(t, c = 1) {
+		return -c * t * (t - 2);
+	}
+	static quadraticInOut(t, c = 1) {
+		const dt = t * 2;
+		return t < .5 ? c / 2 * t * t * 4 : -c / 2 * ((dt - 1) * (dt - 3) - 1);
+	}
+	static cubicIn(t, c = 1) {
+		return c * t * t * t;
+	}
+	static cubicOut(t, c = 1) {
+		const dt = t - 1;
+		return c * (dt * dt * dt + 1);
+	}
+	static cubicInOut(t, c = 1) {
+		const dt = t * 2;
+		return t < .5 ? c / 2 * dt * dt * dt : c / 2 * ((dt - 2) * (dt - 2) * (dt - 2) + 2);
+	}
+	static exponentialIn(t, c = 1, p = .25) {
+		return c * Math.pow(t, 1 / p);
+	}
+	static exponentialOut(t, c = 1, p = .25) {
+		return c * Math.pow(t, p);
+	}
+	static sineIn(t, c = 1) {
+		return -c * Math.cos(t * Const.half_pi) + c;
+	}
+	static sineOut(t, c = 1) {
+		return c * Math.sin(t * Const.half_pi);
+	}
+	static sineInOut(t, c = 1) {
+		return -c / 2 * (Math.cos(Math.PI * t) - 1);
+	}
+	static cosineApprox(t, c = 1) {
+		const t2 = t * t;
+		const t4 = t2 * t2;
+		return c * (4 * (t4 * t2) / 9 - 17 * t4 / 9 + 22 * t2 / 9);
+	}
+	static circularIn(t, c = 1) {
+		return -c * (Math.sqrt(1 - t * t) - 1);
+	}
+	static circularOut(t, c = 1) {
+		const dt = t - 1;
+		return c * Math.sqrt(1 - dt * dt);
+	}
+	static circularInOut(t, c = 1) {
+		const dt = t * 2;
+		return t < .5 ? -c / 2 * (Math.sqrt(1 - dt * dt) - 1) : c / 2 * (Math.sqrt(1 - (dt - 2) * (dt - 2)) + 1);
+	}
+	static elasticIn(t, c = 1, p = .7) {
+		const dt = t - 1;
+		const s = p / Const.two_pi * 1.5707963267948966;
+		return c * (-Math.pow(2, 10 * dt) * Math.sin((dt - s) * Const.two_pi / p));
+	}
+	static elasticOut(t, c = 1, p = .7) {
+		const s = p / Const.two_pi * 1.5707963267948966;
+		return c * (Math.pow(2, -10 * t) * Math.sin((t - s) * Const.two_pi / p)) + c;
+	}
+	static elasticInOut(t, c = 1, p = .6) {
+		let dt = t * 2;
+		const s = p / Const.two_pi * 1.5707963267948966;
+		if (t < .5) {
+			dt -= 1;
+			return c * (-.5 * (Math.pow(2, 10 * dt) * Math.sin((dt - s) * Const.two_pi / p)));
+		} else {
+			dt -= 1;
+			return c * (.5 * (Math.pow(2, -10 * dt) * Math.sin((dt - s) * Const.two_pi / p))) + c;
+		}
+	}
+	static bounceIn(t, c = 1) {
+		return c - Shaping.bounceOut(1 - t, c);
+	}
+	static bounceOut(t, c = 1) {
+		if (t < 1 / 2.75) return c * (7.5625 * t * t);
+		else if (t < 2 / 2.75) {
+			t -= 1.5 / 2.75;
+			return c * (7.5625 * t * t + .75);
+		} else if (t < 2.5 / 2.75) {
+			t -= 2.25 / 2.75;
+			return c * (7.5625 * t * t + .9375);
+		} else {
+			t -= 2.625 / 2.75;
+			return c * (7.5625 * t * t + .984375);
+		}
+	}
+	static bounceInOut(t, c = 1) {
+		return t < .5 ? Shaping.bounceIn(t * 2, c) / 2 : Shaping.bounceOut(t * 2 - 1, c) / 2 + c / 2;
+	}
+	static sigmoid(t, c = 1, p = 10) {
+		const d = p * (t - .5);
+		return c / (1 + Math.exp(-d));
+	}
+	static logSigmoid(t, c = 1, p = .7) {
+		p = Math.max(Const.epsilon, Math.min(1 - Const.epsilon, p));
+		p = 1 / (1 - p);
+		const A = 1 / (1 + Math.exp((t - .5) * p * -2));
+		const B = 1 / (1 + Math.exp(p));
+		const C = 1 / (1 + Math.exp(-p));
+		return c * (A - B) / (C - B);
+	}
+	static seat(t, c = 1, p = .5) {
+		if (t < .5) return c * Math.pow(2 * t, 1 - p) / 2;
+		else return c * (1 - Math.pow(2 * (1 - t), 1 - p) / 2);
+	}
+	static quadraticBezier(t, c = 1, p = [.05, .95]) {
+		const a = typeof p != "number" ? p[0] : p;
+		const b = typeof p != "number" ? p[1] : .5;
+		let om2a = 1 - 2 * a;
+		if (om2a === 0) om2a = Const.epsilon;
+		const d = (Math.sqrt(a * a + om2a * t) - a) / om2a;
+		return c * ((1 - 2 * b) * (d * d) + 2 * b * d);
+	}
+	static cubicBezier(t, c = 1, p1 = [.1, .7], p2 = [.9, .2]) {
+		const t3 = Math.fround(t * t * t);
+		const t2 = Math.fround(t * t);
+		const t1 = Math.fround(t);
+		const y = (-t3 + 3 * t2 - 3 * t1 + 1) * 0 + (3 * t3 - 6 * t2 + 3 * t1) * new Pt(p1)[1] + (-3 * t3 + 3 * t2) * new Pt(p2)[1] + t3 * 1;
+		return c * Math.fround(y);
+	}
+	static quadraticTarget(t, c = 1, p1 = [.2, .35]) {
+		const a = Math.min(1 - Const.epsilon, Math.max(Const.epsilon, p1[0]));
+		const b = Math.min(1, Math.max(0, p1[1]));
+		const A = (1 - b) / (1 - a) - b / a;
+		const B = (A * (a * a) - b) / a;
+		const y = A * (t * t) - B * t;
+		return c * Math.min(1, Math.max(0, y));
+	}
+	static cliff(t, c = 1, p = .5) {
+		return t > p ? c : 0;
+	}
+	static step(fn, steps, t, c, ...args) {
+		const s = 1 / steps;
+		return fn(Math.floor(t / s) * s, c, ...args);
+	}
+};
+var Range = class {
+	constructor(g) {
+		this._dims = 0;
+		this._source = Group.fromPtArray(g);
+		this.calc();
+	}
+	get max() {
+		return this._max.clone();
+	}
+	get min() {
+		return this._min.clone();
+	}
+	get magnitude() {
+		return this._mag.clone();
+	}
+	calc() {
+		if (!this._source) return;
+		const dims = this._source[0].length;
+		this._dims = dims;
+		const max = new Pt(dims);
+		const min = new Pt(dims);
+		const mag = new Pt(dims);
+		for (let i = 0; i < dims; i++) {
+			max[i] = -Infinity;
+			min[i] = Infinity;
+			mag[i] = 0;
+			const s = this._source.zipSlice(i);
+			for (let k = 0, len = s.length; k < len; k++) {
+				max[i] = Math.max(max[i], s[k]);
+				min[i] = Math.min(min[i], s[k]);
+				mag[i] = max[i] - min[i];
+			}
+		}
+		this._max = max;
+		this._min = min;
+		this._mag = mag;
+		return this;
+	}
+	mapTo(min, max, exclude) {
+		const target = new Group();
+		for (let i = 0, len = this._source.length; i < len; i++) {
+			const g = this._source[i];
+			const n = new Pt(this._dims);
+			for (let k = 0; k < this._dims; k++) n[k] = exclude && exclude[k] ? g[k] : Num.mapToRange(g[k], this._min[k], this._max[k], min, max);
+			target.push(n);
+		}
+		return target;
+	}
+	append(pts, update = true) {
+		const _pts = Util.iterToArray(pts);
+		if (_pts[0].length !== this._dims) throw new Error(`Dimensions don't match. ${this._dims} dimensions in Range and ${_pts[0].length} provided in parameter. `);
+		this._source = this._source.concat(_pts);
+		if (update) this.calc();
+		return this;
+	}
+	ticks(count) {
+		const g = new Group();
+		for (let i = 0; i <= count; i++) {
+			const p = new Pt(this._dims);
+			const t = count > 0 ? i / count : 0;
+			for (let k = 0, len = this._max.length; k < len; k++) p[k] = Num.lerp(this._min[k], this._max[k], t);
+			g.push(p);
+		}
+		return g;
+	}
+};
+
+//#endregion
+//#region src/Util.ts
+const Const = {
+	xy: "xy",
+	yz: "yz",
+	xz: "xz",
+	xyz: "xyz",
+	horizontal: 0,
+	vertical: 1,
+	identical: 0,
+	right: 4,
+	bottom_right: 5,
+	bottom: 6,
+	bottom_left: 7,
+	left: 8,
+	top_left: 1,
+	top: 2,
+	top_right: 3,
+	epsilon: 1e-4,
+	max: Number.MAX_VALUE,
+	min: Number.MIN_VALUE,
+	pi: Math.PI,
+	two_pi: 6.283185307179586,
+	half_pi: 1.5707963267948966,
+	quarter_pi: .7853981633974483,
+	one_degree: .017453292519943295,
+	rad_to_deg: 57.29577951308232,
+	deg_to_rad: .017453292519943295,
+	gravity: 9.81,
+	newton: .10197,
+	gaussian: .3989422804014327
+};
+let _utilWarnLevel = "mute";
+var Util = class Util {
+	static get _warnLevel() {
+		return _utilWarnLevel;
+	}
+	static set _warnLevel(lv) {
+		if (this === Util) _utilWarnLevel = lv;
+		else Object.defineProperty(this, "_warnLevel", {
+			value: lv,
+			writable: true,
+			enumerable: true,
+			configurable: true
+		});
+	}
+	static warnLevel(lv) {
+		if (lv) Util._warnLevel = lv;
+		return Util._warnLevel;
+	}
+	static getArgs(args) {
+		if (args.length < 1) return [];
+		let pos = [];
+		let isArray = Array.isArray(args[0]) || ArrayBuffer.isView(args[0]);
+		if (typeof args[0] === "number") pos = Array.prototype.slice.call(args);
+		else if (typeof args[0] === "object" && !isArray) {
+			let a = [
+				"x",
+				"y",
+				"z",
+				"w"
+			];
+			let p = args[0];
+			for (let i = 0; i < a.length; i++) {
+				if (p.length && i >= p.length || !(a[i] in p)) break;
+				pos.push(p[a[i]]);
+			}
+		} else if (isArray) pos = Util.toNumericArray(args[0]);
+		return pos;
+	}
+	static toNumericArray(a) {
+		if (Array.isArray(a)) return a.slice();
+		const out = [];
+		for (let i = 0, len = a.length; i < len; i++) out.push(a[i]);
+		return out;
+	}
+	static getPtLike(args) {
+		const a0 = args[0];
+		if (typeof a0 === "number") return args;
+		if (args.length === 1 && (Array.isArray(a0) || ArrayBuffer.isView(a0))) return a0;
+		return Util.getArgs(args);
+	}
+	static warn(message = "error", defaultReturn = void 0) {
+		if (Util.warnLevel() == "error") throw new Error(message);
+		else if (Util.warnLevel() == "warn") console.warn(message);
+		return defaultReturn;
+	}
+	static randomInt(range, start = 0) {
+		Util.warn("Util.randomInt is deprecated. Please use `Num.randomRange`");
+		return Math.floor(Num.random() * range) + start;
+	}
+	static split(pts, size, stride, loopBack = false, matchSize = true) {
+		let chunks = [];
+		let part = [];
+		let st = stride || size;
+		let index = 0;
+		if (pts.length <= 0 || st <= 0) return [];
+		while (index < pts.length) {
+			part = [];
+			for (let k = 0; k < size; k++) if (loopBack) part.push(pts[(index + k) % pts.length]);
+			else {
+				if (index + k >= pts.length) break;
+				part.push(pts[index + k]);
+			}
+			index += st;
+			if (!matchSize || matchSize && part.length === size) chunks.push(part);
+		}
+		return chunks;
+	}
+	static flatten(pts, flattenAsGroup = true) {
+		const arr = flattenAsGroup ? new Group() : [];
+		for (let i = 0, len = pts.length; i < len; i++) {
+			const p = pts[i];
+			if (Array.isArray(p)) for (let k = 0, lenP = p.length; k < lenP; k++) arr.push(p[k]);
+			else arr.push(p);
+		}
+		return arr;
+	}
+	static combine(a, b, op) {
+		let result = [];
+		for (let i = 0, len = a.length; i < len; i++) for (let k = 0, lenB = b.length; k < lenB; k++) result.push(op(a[i], b[k]));
+		return result;
+	}
+	static zip(arrays) {
+		let z = [];
+		for (let i = 0, len = arrays[0].length; i < len; i++) {
+			let p = [];
+			for (let k = 0; k < arrays.length; k++) p.push(arrays[k][i]);
+			z.push(p);
+		}
+		return z;
+	}
+	static stepper(max, min = 0, stride = 1, callback) {
+		let c = min;
+		return function() {
+			c += stride;
+			if (c >= max) c = min + (c - min) % (max - min);
+			if (callback) callback(c);
+			return c;
+		};
+	}
+	static forRange(fn, range, start = 0, step = 1) {
+		let temp = [];
+		for (let i = start, len = range; i < len; i += step) temp[i] = fn(i);
+		return temp;
+	}
+	static load(url, callback) {
+		let request = new XMLHttpRequest();
+		request.open("GET", url, true);
+		request.onload = function() {
+			if (request.status >= 200 && request.status < 400) callback(request.responseText, true);
+			else callback(`Server error (${request.status}) when loading "${url}"`, false);
+		};
+		request.onerror = function() {
+			callback(`Unknown network error`, false);
+		};
+		request.send();
+	}
+	static download(space, filename = "pts_canvas_image", filetype = "png", quality = 1) {
+		const ftype = filetype === "jpg" ? "jpeg" : filetype;
+		space.element.toBlob(function(blob) {
+			const link = document.createElement("a");
+			const url = URL.createObjectURL(blob);
+			link.href = url;
+			link.download = `${filename}.${filetype}`;
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+			URL.revokeObjectURL(url);
+		}, `image/${ftype}`, quality);
+	}
+	static performance(avgFrames = 10) {
+		let last = Date.now();
+		let avg = [];
+		return function() {
+			const now = Date.now();
+			avg.push(now - last);
+			if (avg.length > avgFrames) avg.shift();
+			last = now;
+			return Math.floor(avg.reduce((a, b) => a + b, 0) / avg.length);
+		};
+	}
+	static arrayCheck(pts, minRequired = 2) {
+		if (Array.isArray(pts) && pts.length < minRequired) {
+			Util.warn(`Requires ${minRequired} or more Pts in this Group.`);
+			return false;
+		}
+		return true;
+	}
+	static iterToArray(it) {
+		return !Array.isArray(it) ? [...it] : it;
+	}
+	static isMobile() {
+		return /iPhone|iPad|Android/i.test(navigator.userAgent);
+	}
+	static uniqueId(useCrypto = false) {
+		var _crypto;
+		return useCrypto && typeof crypto !== "undefined" && ((_crypto = crypto) === null || _crypto === void 0 ? void 0 : _crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).substring(2);
+	}
+};
+
+//#endregion
+//#region src/Pt.ts
+var Pt = class Pt extends Float32Array {
+	constructor(...args) {
+		let params;
+		const a0 = args[0];
+		if (args.length === 1 && typeof a0 == "number") params = a0;
+		else if (args.length === 0) params = 2;
+		else if (args.length === 1 && (Array.isArray(a0) || ArrayBuffer.isView(a0))) params = a0;
+		else if (typeof a0 === "number") params = args;
+		else params = Util.getArgs(args);
+		super(params);
+	}
+	static make(dimensions, defaultValue = 0, randomize = false) {
+		const p = new Pt(dimensions);
+		if (defaultValue) p.fill(defaultValue);
+		if (randomize) for (let i = 0, len = p.length; i < len; i++) p[i] = p[i] * Num.random();
+		return p;
+	}
+	get id() {
+		return this._id;
+	}
+	set id(s) {
+		this._id = s;
+	}
+	get x() {
+		return this[0];
+	}
+	set x(n) {
+		this[0] = n;
+	}
+	get y() {
+		return this[1];
+	}
+	set y(n) {
+		this[1] = n;
+	}
+	get z() {
+		return this[2];
+	}
+	set z(n) {
+		this[2] = n;
+	}
+	get w() {
+		return this[3];
+	}
+	set w(n) {
+		this[3] = n;
+	}
+	clone() {
+		return new Pt(this);
+	}
+	equals(p, threshold = 1e-6) {
+		for (let i = 0, len = this.length; i < len; i++) if (!(Math.abs(this[i] - p[i]) <= threshold)) return false;
+		return true;
+	}
+	to(...args) {
+		const p = Util.getPtLike(args);
+		for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) this[i] = p[i];
+		return this;
+	}
+	$to(...args) {
+		return this.clone().to(...args);
+	}
+	toAngle(radian, magnitude, anchorFromPt = false) {
+		const m = magnitude != void 0 ? magnitude : this.magnitude();
+		const change = [Math.cos(radian) * m, Math.sin(radian) * m];
+		return anchorFromPt ? this.add(change) : this.to(change);
+	}
+	op(fn) {
+		const self = this;
+		return (...params) => {
+			return fn(self, ...params);
+		};
+	}
+	ops(fns) {
+		const _ops = [];
+		for (let i = 0, len = fns.length; i < len; i++) _ops.push(this.op(fns[i]));
+		return _ops;
+	}
+	$take(axis) {
+		const p = [];
+		for (let i = 0, len = axis.length; i < len; i++) p.push(this[axis[i]] || 0);
+		return new Pt(p);
+	}
+	$concat(...args) {
+		return new Pt(this.toArray().concat(Util.getArgs(args)));
+	}
+	add(...args) {
+		args.length === 1 && typeof args[0] == "number" ? Vec.add(this, args[0]) : Vec.add(this, Util.getPtLike(args));
+		return this;
+	}
+	$add(...args) {
+		return this.clone().add(...args);
+	}
+	subtract(...args) {
+		args.length === 1 && typeof args[0] == "number" ? Vec.subtract(this, args[0]) : Vec.subtract(this, Util.getPtLike(args));
+		return this;
+	}
+	$subtract(...args) {
+		return this.clone().subtract(...args);
+	}
+	multiply(...args) {
+		args.length === 1 && typeof args[0] == "number" ? Vec.multiply(this, args[0]) : Vec.multiply(this, Util.getPtLike(args));
+		return this;
+	}
+	$multiply(...args) {
+		return this.clone().multiply(...args);
+	}
+	divide(...args) {
+		args.length === 1 && typeof args[0] == "number" ? Vec.divide(this, args[0]) : Vec.divide(this, Util.getPtLike(args));
+		return this;
+	}
+	$divide(...args) {
+		return this.clone().divide(...args);
+	}
+	magnitudeSq() {
+		return Vec.dot(this, this);
+	}
+	magnitude() {
+		return Vec.magnitude(this);
+	}
+	unit(magnitude = void 0) {
+		Vec.unit(this, magnitude);
+		return this;
+	}
+	$unit(magnitude = void 0) {
+		return this.clone().unit(magnitude);
+	}
+	dot(...args) {
+		return Vec.dot(this, Util.getPtLike(args));
+	}
+	$cross2D(...args) {
+		return Vec.cross2D(this, Util.getPtLike(args));
+	}
+	$cross(...args) {
+		return Vec.cross(this, Util.getPtLike(args));
+	}
+	$project(...args) {
+		return this.$multiply(this.dot(...args) / this.magnitudeSq());
+	}
+	projectScalar(...args) {
+		return this.dot(...args) / this.magnitude();
+	}
+	abs() {
+		Vec.abs(this);
+		return this;
+	}
+	$abs() {
+		return this.clone().abs();
+	}
+	floor() {
+		Vec.floor(this);
+		return this;
+	}
+	$floor() {
+		return this.clone().floor();
+	}
+	ceil() {
+		Vec.ceil(this);
+		return this;
+	}
+	$ceil() {
+		return this.clone().ceil();
+	}
+	round() {
+		Vec.round(this);
+		return this;
+	}
+	$round() {
+		return this.clone().round();
+	}
+	minValue() {
+		return Vec.min(this);
+	}
+	maxValue() {
+		return Vec.max(this);
+	}
+	$min(...args) {
+		const p = Util.getPtLike(args);
+		const m = this.clone();
+		for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) m[i] = Math.min(this[i], p[i]);
+		return m;
+	}
+	$max(...args) {
+		const p = Util.getPtLike(args);
+		const m = this.clone();
+		for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) m[i] = Math.max(this[i], p[i]);
+		return m;
+	}
+	angle(axis = Const.xy) {
+		return Math.atan2(this[axis[1]], this[axis[0]]);
+	}
+	angleBetween(p, axis = Const.xy) {
+		return Geom.boundRadian(this.angle(axis) - p.angle(axis) + Math.PI) - Math.PI;
+	}
+	scale(scale, anchor) {
+		Geom.scale(this, scale, anchor || Pt.make(this.length, 0));
+		return this;
+	}
+	rotate2D(angle, anchor, axis) {
+		Geom.rotate2D(this, angle, anchor || Pt.make(this.length, 0), axis);
+		return this;
+	}
+	shear2D(scale, anchor, axis) {
+		Geom.shear2D(this, scale, anchor || Pt.make(this.length, 0), axis);
+		return this;
+	}
+	reflect2D(line, axis) {
+		Geom.reflect2D(this, line, axis);
+		return this;
+	}
+	toString() {
+		return `Pt(${this.join(", ")})`;
+	}
+	toArray() {
+		const a = [];
+		for (let i = 0, len = this.length; i < len; i++) a.push(this[i]);
+		return a;
+	}
+	toGroup() {
+		return new Group(Pt.make(this.length), this.clone());
+	}
+	toBound() {
+		return new Bound(Pt.make(this.length), this.clone());
+	}
+};
+var Group = class Group extends Array {
+	constructor(...args) {
+		super(...args);
+	}
+	get id() {
+		return this._id;
+	}
+	set id(s) {
+		this._id = s;
+	}
+	get p1() {
+		return this[0];
+	}
+	get p2() {
+		return this[1];
+	}
+	get p3() {
+		return this[2];
+	}
+	get p4() {
+		return this[3];
+	}
+	get q1() {
+		return this[this.length - 1];
+	}
+	get q2() {
+		return this[this.length - 2];
+	}
+	get q3() {
+		return this[this.length - 3];
+	}
+	get q4() {
+		return this[this.length - 4];
+	}
+	clone() {
+		const group = new Group();
+		for (let i = 0, len = this.length; i < len; i++) group.push(this[i].clone());
+		return group;
+	}
+	static fromArray(list) {
+		const g = new Group();
+		for (const li of list) {
+			const p = li instanceof Pt ? li : new Pt(li);
+			g.push(p);
+		}
+		return g;
+	}
+	static fromPtArray(list) {
+		return Group.from(list);
+	}
+	split(chunkSize, stride, loopBack = false) {
+		const st = stride || chunkSize;
+		const chunks = [];
+		if (this.length <= 0 || st <= 0) return chunks;
+		let index = 0;
+		while (index < this.length) {
+			const g = new Group();
+			let size = 0;
+			for (let k = 0; k < chunkSize; k++) if (loopBack) g[size++] = this[(index + k) % this.length];
+			else {
+				if (index + k >= this.length) break;
+				g[size++] = this[index + k];
+			}
+			index += st;
+			if (size === chunkSize) chunks.push(g);
+		}
+		return chunks;
+	}
+	insert(pts, index = 0) {
+		let _pts = Util.iterToArray(pts);
+		if (_pts === this) _pts = _pts.slice();
+		const len = this.length;
+		const n = _pts.length;
+		if (n === 0) return this;
+		let start = Math.trunc(index) || 0;
+		start = start < 0 ? Math.max(len + start, 0) : Math.min(start, len);
+		this.length = len + n;
+		for (let i = len - 1; i >= start; i--) this[i + n] = this[i];
+		for (let i = 0; i < n; i++) this[start + i] = _pts[i];
+		return this;
+	}
+	remove(index = 0, count = 1) {
+		const param = index < 0 ? [index * -1 - 1, count] : [index, count];
+		return Group.prototype.splice.apply(this, param);
+	}
+	segments(pts_per_segment = 2, stride = 1, loopBack = false) {
+		return this.split(pts_per_segment, stride, loopBack);
+	}
+	lines() {
+		return this.segments(2, 1);
+	}
+	centroid() {
+		return Geom.centroid(this);
+	}
+	boundingBox() {
+		return Geom.boundingBox(this);
+	}
+	anchorTo(ptOrIndex = 0) {
+		Geom.anchor(this, ptOrIndex, "to");
+	}
+	anchorFrom(ptOrIndex = 0) {
+		Geom.anchor(this, ptOrIndex, "from");
+	}
+	op(fn) {
+		const self = this;
+		return (...params) => {
+			return fn(self, ...params);
+		};
+	}
+	ops(fns) {
+		const _ops = [];
+		for (let i = 0, len = fns.length; i < len; i++) _ops.push(this.op(fns[i]));
+		return _ops;
+	}
+	interpolate(t) {
+		t = Num.clamp(t, 0, 1);
+		const chunk = this.length - 1;
+		const tc = 1 / (this.length - 1);
+		const idx = Math.floor(t / tc);
+		return Geom.interpolate(this[idx], this[Math.min(this.length - 1, idx + 1)], (t - idx * tc) * chunk);
+	}
+	moveBy(...args) {
+		return this.add(...args);
+	}
+	moveTo(...args) {
+		const d = new Pt(...args).subtract(this[0]);
+		this.moveBy(d);
+		return this;
+	}
+	scale(scale, anchor) {
+		for (let i = 0, len = this.length; i < len; i++) Geom.scale(this[i], scale, anchor || this[0]);
+		return this;
+	}
+	rotate2D(angle, anchor, axis) {
+		for (let i = 0, len = this.length; i < len; i++) Geom.rotate2D(this[i], angle, anchor || this[0], axis);
+		return this;
+	}
+	shear2D(scale, anchor, axis) {
+		for (let i = 0, len = this.length; i < len; i++) Geom.shear2D(this[i], scale, anchor || this[0], axis);
+		return this;
+	}
+	reflect2D(line, axis) {
+		for (let i = 0, len = this.length; i < len; i++) Geom.reflect2D(this[i], line, axis);
+		return this;
+	}
+	sortByDimension(dim, desc = false) {
+		return this.sort((a, b) => desc ? b[dim] - a[dim] : a[dim] - b[dim]);
+	}
+	forEachPt(ptFn, ...args) {
+		if (this.length === 0) return this;
+		if (!this[0][ptFn]) {
+			Util.warn(`${ptFn} is not a function of Pt`);
+			return this;
+		}
+		for (let i = 0, len = this.length; i < len; i++) this[i] = this[i][ptFn](...args);
+		return this;
+	}
+	_vecOp(fn, args) {
+		const b = args.length === 1 && typeof args[0] == "number" ? args[0] : Util.getPtLike(args);
+		for (let i = 0, len = this.length; i < len; i++) fn(this[i], b);
+		return this;
+	}
+	add(...args) {
+		return this._vecOp(Vec.add, args);
+	}
+	subtract(...args) {
+		return this._vecOp(Vec.subtract, args);
+	}
+	multiply(...args) {
+		return this._vecOp(Vec.multiply, args);
+	}
+	divide(...args) {
+		return this._vecOp(Vec.divide, args);
+	}
+	$matrixAdd(g) {
+		return Mat.add(this, g);
+	}
+	$matrixMultiply(g, transposed = false, elementwise = false) {
+		return Mat.multiply(this, g, transposed, elementwise);
+	}
+	zipSlice(index, defaultValue = false) {
+		return Mat.zipSlice(this, index, defaultValue);
+	}
+	$zip(defaultValue = void 0, useLongest = false) {
+		return Mat.zip(this, defaultValue, useLongest);
+	}
+	toBound() {
+		return Bound.fromGroup(this);
+	}
+	toString() {
+		return "Group[ " + this.reduce((p, c) => p + c.toString() + " ", "") + " ]";
+	}
+};
+var Bound = class Bound extends Group {
+	constructor(...args) {
+		super(...args);
+		this._center = new Pt();
+		this._size = new Pt();
+		this._inited = false;
+		this.init();
+	}
+	static fromBoundingRect(rect) {
+		const b = new Bound(new Pt(rect.left || 0, rect.top || 0), new Pt(rect.right || 0, rect.bottom || 0));
+		if (rect.width && rect.height) b.size = new Pt(rect.width, rect.height);
+		return b;
+	}
+	static fromGroup(g) {
+		const _g = Util.iterToArray(g);
+		if (_g.length < 2) throw new Error("Cannot create a Bound from a group that has less than 2 Pt");
+		const first = _g[0];
+		const last = _g[_g.length - 1];
+		return new Bound(first instanceof Pt ? first : new Pt(first), last instanceof Pt ? last : new Pt(last));
+	}
+	init() {
+		if (this.p1) {
+			this._size = this.p1.clone();
+			this._inited = true;
+		}
+		if (this.p1 && this.p2) {
+			this._updateSize();
+			this._inited = true;
+		}
+	}
+	clone() {
+		return new Bound(this.topLeft, this.bottomRight);
+	}
+	_updateSize() {
+		const a = this[0];
+		const b = this[1];
+		const n = b ? b.length : 0;
+		if (this._size.length !== n) this._size = new Pt(n);
+		for (let i = 0; i < n; i++) {
+			let lo = a ? a[i] || 0 : 0;
+			if (a && b[i] < lo) {
+				a[i] = b[i];
+				b[i] = lo;
+				lo = a[i];
+			}
+			this._size[i] = Math.abs(b[i] - lo);
+		}
+		this._updateCenter();
+	}
+	_updateCenter() {
+		const a = this[0];
+		const n = this._size.length;
+		if (this._center.length !== n) this._center = new Pt(n);
+		for (let i = 0; i < n; i++) this._center[i] = this._size[i] * .5 + (a ? a[i] || 0 : 0);
+	}
+	_updatePosFromTop() {
+		this.bottomRight = this.topLeft.$add(this._size);
+		this._updateCenter();
+	}
+	_updatePosFromBottom() {
+		this.topLeft = this.bottomRight.$subtract(this._size);
+		this._updateCenter();
+	}
+	_updatePosFromCenter() {
+		const half = this._size.$multiply(.5);
+		const center = this._center;
+		this[0] = center.$subtract(half);
+		this[1] = center.$add(half);
+	}
+	get size() {
+		return new Pt(this._size);
+	}
+	set size(p) {
+		this._size = new Pt(p);
+		this._updatePosFromTop();
+	}
+	get center() {
+		return new Pt(this._center);
+	}
+	set center(p) {
+		this._center = new Pt(p);
+		this._updatePosFromCenter();
+	}
+	get topLeft() {
+		return new Pt(this[0]);
+	}
+	set topLeft(p) {
+		this[0] = new Pt(p);
+		this._updateSize();
+	}
+	get bottomRight() {
+		return new Pt(this[1]);
+	}
+	set bottomRight(p) {
+		this[1] = new Pt(p);
+		this._updateSize();
+	}
+	get width() {
+		return this._size.length > 0 ? this._size.x : 0;
+	}
+	set width(w) {
+		this._size.x = w;
+		this._updatePosFromTop();
+	}
+	get height() {
+		return this._size.length > 1 ? this._size.y : 0;
+	}
+	set height(h) {
+		this._size.y = h;
+		this._updatePosFromTop();
+	}
+	get depth() {
+		return this._size.length > 2 ? this._size.z : 0;
+	}
+	set depth(d) {
+		this._size.z = d;
+		this._updatePosFromTop();
+	}
+	get x() {
+		return this[0] ? this[0][0] : void 0;
+	}
+	get y() {
+		return this[0] ? this[0][1] : void 0;
+	}
+	get z() {
+		return this[0] ? this[0][2] : void 0;
+	}
+	get inited() {
+		return this._inited;
+	}
+	update() {
+		this._updateSize();
+		return this;
+	}
+};
+
+//#endregion
 //#region src/_triangulate.ts
 const EMPTY = {
 	triangles: /* @__PURE__ */ new Uint32Array(0),
@@ -9,8 +1523,9 @@ const EMPTY = {
 	hull: /* @__PURE__ */ new Uint32Array(0)
 };
 const EPS = 11102230246251565e-32;
-const ORIENT_BOUND = 3.0000000000000018 * EPS;
-const INCIRCLE_BOUND = 10.00000000000001 * EPS;
+const errorBound = (a, b) => (a + b * EPS) * EPS;
+const ORIENT_BOUND = /* @__PURE__ */ errorBound(3, 16);
+const INCIRCLE_BOUND = /* @__PURE__ */ errorBound(10, 96);
 const INT_LIMIT = 2147483648;
 const _input = /* @__PURE__ */ new Float64Array(8);
 let _presetScale = 0;
@@ -182,11 +1697,15 @@ function _incircleInt(adx, ady, bdx, bdy, cdx, cdy) {
 	if (sc !== 0) _mulAdd44(_liftC, _crossC, sc);
 	return _accSign(7, _carry(7));
 }
-const _bits = /* @__PURE__ */ new Float64Array(1);
-const _words = new Uint32Array(_bits.buffer);
-_bits[0] = 1;
-const HI = _words[1] === 1072693248 ? 1 : 0;
-const LO = HI ^ 1;
+const _buffer = /* @__PURE__ */ new ArrayBuffer(8);
+const _bits = /* @__PURE__ */ new Float64Array(_buffer);
+const _words = /* @__PURE__ */ new Uint32Array(_buffer);
+const HI = /* @__PURE__ */ wordIndex(true);
+const LO = /* @__PURE__ */ wordIndex(false);
+function wordIndex(high) {
+	const probe = new Float64Array([1]);
+	return high === (new Uint32Array(probe.buffer)[1] === 1072693248) ? 1 : 0;
+}
 const _mant = /* @__PURE__ */ new Float64Array(8);
 const _expo = /* @__PURE__ */ new Int32Array(8);
 function _scaled(values, count) {
@@ -209,8 +1728,8 @@ function _scaled(values, count) {
 	for (let i = 0; i < count; i++) out.push(_mant[i] === 0 ? BigInt(0) : BigInt(_mant[i]) << BigInt(_expo[i] - minExpo));
 	return out;
 }
-const FINITE_LIMIT = BigInt(1) << BigInt(1023);
-const SHIFT_STEP = BigInt(64);
+let _finiteLimit;
+let _shiftStep;
 function crossingParameter(ax, ay, bx, by, cx, cy, dx, dy) {
 	_input.set([
 		ax,
@@ -231,11 +1750,15 @@ function crossingParameter(ax, ay, bx, by, cx, cy, dx, dy) {
 		numerator = -numerator;
 		denominator = -denominator;
 	}
+	if (_finiteLimit === void 0) {
+		_finiteLimit = BigInt(1) << BigInt(1023);
+		_shiftStep = BigInt(64);
+	}
 	let shift = BigInt(0);
 	let scaled = denominator;
-	while (scaled >= FINITE_LIMIT) {
-		scaled >>= SHIFT_STEP;
-		shift += SHIFT_STEP;
+	while (scaled >= _finiteLimit) {
+		scaled >>= _shiftStep;
+		shift += _shiftStep;
 	}
 	return Number(numerator >> shift) / Number(scaled);
 }
@@ -2788,1505 +4311,6 @@ var Curve = class Curve {
 };
 
 //#endregion
-//#region src/LinearAlgebra.ts
-var Vec = class Vec {
-	static add(a, b) {
-		if (typeof b == "number") for (let i = 0, len = a.length; i < len; i++) a[i] += b;
-		else for (let i = 0, len = a.length; i < len; i++) a[i] += b[i] || 0;
-		return a;
-	}
-	static subtract(a, b) {
-		if (typeof b == "number") for (let i = 0, len = a.length; i < len; i++) a[i] -= b;
-		else for (let i = 0, len = a.length; i < len; i++) a[i] -= b[i] || 0;
-		return a;
-	}
-	static multiply(a, b) {
-		if (typeof b == "number") for (let i = 0, len = a.length; i < len; i++) a[i] *= b;
-		else {
-			if (a.length != b.length) throw new Error(`Cannot do element-wise multiply since the array lengths don't match: ${a.toString()} multiply-with ${b.toString()}`);
-			for (let i = 0, len = a.length; i < len; i++) a[i] *= b[i];
-		}
-		return a;
-	}
-	static divide(a, b) {
-		if (typeof b == "number") {
-			if (b === 0) throw new Error("Cannot divide by zero");
-			for (let i = 0, len = a.length; i < len; i++) a[i] /= b;
-		} else {
-			if (a.length != b.length) throw new Error(`Cannot do element-wise divide since the array lengths don't match. ${a.toString()} divide-by ${b.toString()}`);
-			for (let i = 0, len = a.length; i < len; i++) a[i] /= b[i];
-		}
-		return a;
-	}
-	static dot(a, b) {
-		if (a.length != b.length) throw new Error("Array lengths don't match");
-		let d = 0;
-		for (let i = 0, len = a.length; i < len; i++) d += a[i] * b[i];
-		return d;
-	}
-	static cross2D(a, b) {
-		return a[0] * b[1] - a[1] * b[0];
-	}
-	static cross(a, b) {
-		return new Pt(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]);
-	}
-	static magnitude(a) {
-		return Math.sqrt(Vec.dot(a, a));
-	}
-	static unit(a, magnitude = void 0) {
-		const m = magnitude === void 0 ? Vec.magnitude(a) : magnitude;
-		if (m === 0) return a;
-		return Vec.divide(a, m);
-	}
-	static abs(a) {
-		return Vec.map(a, Math.abs);
-	}
-	static floor(a) {
-		return Vec.map(a, Math.floor);
-	}
-	static ceil(a) {
-		return Vec.map(a, Math.ceil);
-	}
-	static round(a) {
-		return Vec.map(a, Math.round);
-	}
-	static max(a) {
-		let m = -Infinity;
-		let index = 0;
-		for (let i = 0, len = a.length; i < len; i++) if (a[i] >= m) {
-			m = a[i];
-			index = i;
-		}
-		return {
-			value: m,
-			index
-		};
-	}
-	static min(a) {
-		let m = Infinity;
-		let index = 0;
-		for (let i = 0, len = a.length; i < len; i++) if (a[i] <= m) {
-			m = a[i];
-			index = i;
-		}
-		return {
-			value: m,
-			index
-		};
-	}
-	static sum(a) {
-		let s = 0;
-		for (let i = 0, len = a.length; i < len; i++) s += a[i];
-		return s;
-	}
-	static map(a, fn) {
-		for (let i = 0, len = a.length; i < len; i++) a[i] = fn(a[i], i, a);
-		return a;
-	}
-};
-var Mat = class Mat {
-	constructor() {
-		this.reset();
-	}
-	get value() {
-		return this._33;
-	}
-	get domMatrix() {
-		return new DOMMatrix(Mat.toDOMMatrix(this._33));
-	}
-	reset() {
-		this._33 = Mat.scale2DMatrix(1, 1);
-	}
-	scale2D(val, at = [0, 0]) {
-		var _val$, _val$2;
-		const m = Mat.scaleAt2DMatrix((_val$ = val[0]) !== null && _val$ !== void 0 ? _val$ : 1, (_val$2 = val[1]) !== null && _val$2 !== void 0 ? _val$2 : 1, at);
-		this._33 = Mat.multiply(this._33, m);
-		return this;
-	}
-	rotate2D(ang, at = [0, 0]) {
-		const m = Mat.rotateAt2DMatrix(Math.cos(ang), Math.sin(ang), at);
-		this._33 = Mat.multiply(this._33, m);
-		return this;
-	}
-	translate2D(val) {
-		const m = Mat.translate2DMatrix(val[0] || 0, val[1] || 0);
-		this._33 = Mat.multiply(this._33, m);
-		return this;
-	}
-	shear2D(val, at = [0, 0]) {
-		var _val$3, _val$4;
-		const m = Mat.shearAt2DMatrix(Math.tan((_val$3 = val[0]) !== null && _val$3 !== void 0 ? _val$3 : 0), Math.tan((_val$4 = val[1]) !== null && _val$4 !== void 0 ? _val$4 : 0), at);
-		this._33 = Mat.multiply(this._33, m);
-		return this;
-	}
-	static add(a, b) {
-		if (typeof b != "number") {
-			if (a[0].length != b[0].length) throw new Error("Cannot add matrix if rows' and columns' size don't match.");
-			if (a.length != b.length) throw new Error("Cannot add matrix if rows' and columns' size don't match.");
-		}
-		const g = new Group();
-		const isNum = typeof b == "number";
-		for (let i = 0, len = a.length; i < len; i++) g.push(a[i].$add(isNum ? b : b[i]));
-		return g;
-	}
-	static multiply(a, b, transposed = false, elementwise = false) {
-		const g = new Group();
-		if (typeof b != "number") {
-			if (elementwise) {
-				if (a.length != b.length) throw new Error("Cannot multiply matrix element-wise because the matrices' sizes don't match.");
-				for (let ai = 0, alen = a.length; ai < alen; ai++) g.push(a[ai].$multiply(b[ai]));
-			} else {
-				if (!transposed && a[0].length != b.length) throw new Error("Cannot multiply matrix if rows in matrix-a don't match columns in matrix-b.");
-				if (transposed && a[0].length != b[0].length) throw new Error("Cannot multiply matrix if transposed and the columns in both matrices don't match.");
-				if (!transposed) b = Mat.transpose(b);
-				for (let ai = 0, alen = a.length; ai < alen; ai++) {
-					const p = Pt.make(b.length, 0);
-					for (let bi = 0, blen = b.length; bi < blen; bi++) p[bi] = Vec.dot(a[ai], b[bi]);
-					g.push(p);
-				}
-			}
-		} else for (let ai = 0, alen = a.length; ai < alen; ai++) g.push(a[ai].$multiply(b));
-		return g;
-	}
-	static zipSlice(g, index, defaultValue = false) {
-		const z = [];
-		for (let i = 0, len = g.length; i < len; i++) if (g[i].length - 1 < index) {
-			if (defaultValue === false) throw new Error(`Index ${index} is out of bounds`);
-			z.push(defaultValue);
-		} else z.push(g[i][index]);
-		return new Pt(z);
-	}
-	static zip(g, defaultValue = false, useLongest = false) {
-		const ps = new Group();
-		const len = useLongest ? g.reduce((a, b) => Math.max(a, b.length), 0) : g[0].length;
-		for (let i = 0; i < len; i++) ps.push(Mat.zipSlice(g, i, defaultValue));
-		return ps;
-	}
-	static transpose(g, defaultValue = false, useLongest = false) {
-		return Mat.zip(g, defaultValue, useLongest);
-	}
-	static toDOMMatrix(m) {
-		return [
-			m[0][0],
-			m[0][1],
-			m[1][0],
-			m[1][1],
-			m[2][0],
-			m[2][1]
-		];
-	}
-	static transform2D(pt, m) {
-		const x = pt[0] * m[0][0] + pt[1] * m[1][0] + m[2][0];
-		const y = pt[0] * m[0][1] + pt[1] * m[1][1] + m[2][1];
-		return new Pt(x, y);
-	}
-	static scale2DMatrix(x, y) {
-		return new Group(new Pt(x, 0, 0), new Pt(0, y, 0), new Pt(0, 0, 1));
-	}
-	static rotate2DMatrix(cosA, sinA) {
-		return new Group(new Pt(cosA, sinA, 0), new Pt(-sinA, cosA, 0), new Pt(0, 0, 1));
-	}
-	static shear2DMatrix(tanX, tanY) {
-		return new Group(new Pt(1, tanX, 0), new Pt(tanY, 1, 0), new Pt(0, 0, 1));
-	}
-	static translate2DMatrix(x, y) {
-		return new Group(new Pt(1, 0, 0), new Pt(0, 1, 0), new Pt(x, y, 1));
-	}
-	static scaleAt2DMatrix(sx, sy, at) {
-		const m = Mat.scale2DMatrix(sx, sy);
-		m[2][0] = -at[0] * sx + at[0];
-		m[2][1] = -at[1] * sy + at[1];
-		return m;
-	}
-	static rotateAt2DMatrix(cosA, sinA, at) {
-		const m = Mat.rotate2DMatrix(cosA, sinA);
-		m[2][0] = at[0] * (1 - cosA) + at[1] * sinA;
-		m[2][1] = at[1] * (1 - cosA) - at[0] * sinA;
-		return m;
-	}
-	static shearAt2DMatrix(tanX, tanY, at) {
-		const m = Mat.shear2DMatrix(tanX, tanY);
-		m[2][0] = -at[1] * tanY;
-		m[2][1] = -at[0] * tanX;
-		return m;
-	}
-	static reflectAt2DMatrix(p1, p2) {
-		const intercept = Line.intercept(p1, p2);
-		if (intercept == void 0) return [
-			new Pt([
-				-1,
-				0,
-				0
-			]),
-			new Pt([
-				0,
-				1,
-				0
-			]),
-			new Pt([
-				p1[0] + p2[0],
-				0,
-				1
-			])
-		];
-		else {
-			const yi = intercept.yi;
-			const ang2 = Math.atan(intercept.slope) * 2;
-			const cosA = Math.cos(ang2);
-			const sinA = Math.sin(ang2);
-			return [
-				new Pt([
-					cosA,
-					sinA,
-					0
-				]),
-				new Pt([
-					sinA,
-					-cosA,
-					0
-				]),
-				new Pt([
-					-yi * sinA,
-					yi + yi * cosA,
-					1
-				])
-			];
-		}
-	}
-};
-
-//#endregion
-//#region src/uheprng.ts
-function Mash() {
-	let n = 4022871197;
-	return function(data) {
-		if (data) {
-			data = data.toString();
-			for (let i = 0; i < data.length; i++) {
-				n += data.charCodeAt(i);
-				let h = .02519603282416938 * n;
-				n = h >>> 0;
-				h -= n;
-				h *= n;
-				n = h >>> 0;
-				h -= n;
-				n += h * 4294967296;
-			}
-			return (n >>> 0) * 23283064365386963e-26;
-		}
-		n = 4022871197;
-		return 0;
-	};
-}
-function uheprng(seed) {
-	const o = 48;
-	let c = 1;
-	let p = o;
-	const s = new Array(o);
-	const mash = Mash();
-	function initState() {
-		mash();
-		for (let i = 0; i < o; i++) s[i] = mash(" ");
-		c = 1;
-		p = o;
-	}
-	function cleanString(inStr) {
-		inStr = inStr.replace(/(^\s*)|(\s*$)/gi, "");
-		inStr = inStr.replace(/[\x00-\x1F]/gi, "");
-		return inStr;
-	}
-	function hashString(inStr) {
-		inStr = cleanString(inStr);
-		mash(inStr);
-		for (let i = 0; i < inStr.length; i++) {
-			const k = inStr.charCodeAt(i).toString();
-			for (let j = 0; j < o; j++) {
-				s[j] -= mash(k);
-				if (s[j] < 0) s[j] += 1;
-			}
-		}
-	}
-	initState();
-	hashString(seed);
-	return { random() {
-		if (++p >= o) p = 0;
-		const t = 1768863 * s[p] + c * 23283064365386963e-26;
-		return s[p] = t - (c = t | 0);
-	} };
-}
-
-//#endregion
-//#region src/Num.ts
-var Num = class Num {
-	static equals(a, b, threshold = 1e-5) {
-		return a === b || Math.abs(a - b) <= threshold;
-	}
-	static lerp(a, b, t) {
-		return (1 - t) * a + t * b;
-	}
-	static clamp(val, min, max) {
-		return Math.max(min, Math.min(max, val));
-	}
-	static boundValue(val, min, max) {
-		const len = Math.abs(max - min);
-		let a = (val - min) % len;
-		if (a < 0) a += len;
-		return a + min;
-	}
-	static within(p, a, b) {
-		return p >= Math.min(a, b) && p <= Math.max(a, b);
-	}
-	static randomRange(a, b = 0) {
-		const r = a > b ? a - b : b - a;
-		return Math.min(a, b) + Num.random() * r;
-	}
-	static randomPt(a, b) {
-		const p = new Pt(a.length);
-		const range = b ? Vec.subtract(b.slice(), a) : a;
-		const start = b ? a : new Pt(a.length).fill(0);
-		for (let i = 0, len = p.length; i < len; i++) p[i] = Num.random() * range[i] + start[i];
-		return p;
-	}
-	static normalizeValue(n, a, b) {
-		const min = Math.min(a, b);
-		const max = Math.max(a, b);
-		return (n - min) / (max - min);
-	}
-	static sum(pts) {
-		const _pts = Util.iterToArray(pts);
-		const c = new Pt(_pts[0]);
-		for (let i = 1, len = _pts.length; i < len; i++) Vec.add(c, _pts[i]);
-		return c;
-	}
-	static average(pts) {
-		const _pts = Util.iterToArray(pts);
-		return Num.sum(_pts).divide(_pts.length);
-	}
-	static cycle(t, method = Shaping.sineInOut) {
-		return method(t > .5 ? 2 - t * 2 : t * 2);
-	}
-	static mapToRange(n, currA, currB, targetA, targetB) {
-		if (currA == currB) throw new Error("[currMin, currMax] must define a range that is not zero");
-		return targetA + (n - currA) / (currB - currA) * (targetB - targetA);
-	}
-	static seed(seed) {
-		this.generator = uheprng(seed);
-	}
-	static random() {
-		return this.generator ? this.generator.random() : Math.random();
-	}
-};
-var Geom = class Geom {
-	static boundAngle(angle) {
-		return Num.boundValue(angle, 0, 360);
-	}
-	static boundRadian(radian) {
-		return Num.boundValue(radian, 0, Const.two_pi);
-	}
-	static toRadian(angle) {
-		return angle * Const.deg_to_rad;
-	}
-	static toDegree(radian) {
-		return radian * Const.rad_to_deg;
-	}
-	static boundingBox(pts) {
-		let minPt, maxPt;
-		for (const p of pts) if (minPt == void 0) {
-			minPt = p.clone();
-			maxPt = p.clone();
-		} else for (let i = 0, len = Math.min(minPt.length, p.length); i < len; i++) {
-			minPt[i] = Math.min(minPt[i], p[i]);
-			maxPt[i] = Math.max(maxPt[i], p[i]);
-		}
-		return new Group(minPt, maxPt);
-	}
-	static centroid(pts) {
-		return Num.average(pts);
-	}
-	static anchor(pts, ptOrIndex = 0, direction = "to") {
-		const method = direction == "to" ? "subtract" : "add";
-		let i = 0;
-		for (const p of pts) {
-			if (typeof ptOrIndex == "number") {
-				if (ptOrIndex !== i) p[method](pts[ptOrIndex]);
-			} else p[method](ptOrIndex);
-			i++;
-		}
-	}
-	static interpolate(a, b, t = .5) {
-		const len = Math.min(a.length, b.length);
-		const d = Pt.make(len);
-		for (let i = 0; i < len; i++) d[i] = a[i] * (1 - t) + b[i] * t;
-		return d;
-	}
-	static perpendicular(pt, axis = Const.xy) {
-		const y = axis[1];
-		const x = axis[0];
-		const p = new Pt(pt);
-		const pa = new Pt(p);
-		pa[x] = -p[y];
-		pa[y] = p[x];
-		const pb = new Pt(p);
-		pb[x] = p[y];
-		pb[y] = -p[x];
-		return new Group(pa, pb);
-	}
-	static isPerpendicular(p1, p2) {
-		let dot = 0;
-		let ma = 0;
-		let mb = 0;
-		for (let i = 0, len = Math.min(p1.length, p2.length); i < len; i++) {
-			dot += p1[i] * p2[i];
-			ma += p1[i] * p1[i];
-			mb += p2[i] * p2[i];
-		}
-		return Math.abs(dot) <= Const.epsilon * Math.sqrt(ma * mb);
-	}
-	static withinBound(pt, boundPt1, boundPt2) {
-		for (let i = 0, len = Math.min(pt.length, boundPt1.length, boundPt2.length); i < len; i++) if (!Num.within(pt[i], boundPt1[i], boundPt2[i])) return false;
-		return true;
-	}
-	static sortEdges(pts) {
-		const _pts = Util.iterToArray(pts);
-		const bounds = Geom.boundingBox(_pts);
-		const center = bounds[1].add(bounds[0]).divide(2);
-		const cx = center[0];
-		const cy = center[1];
-		const fn = (a, b) => {
-			if (a.length < 2 || b.length < 2) throw new Error("Pt dimension cannot be less than 2");
-			const dax = a[0] - cx;
-			const day = a[1] - cy;
-			const dbx = b[0] - cx;
-			const dby = b[1] - cy;
-			if (dax >= 0 && dbx < 0) return 1;
-			if (dax < 0 && dbx >= 0) return -1;
-			if (dax == 0 && dbx == 0) {
-				if (day >= 0 || dby >= 0) return day > dby ? 1 : -1;
-				return dby > day ? 1 : -1;
-			}
-			const det = dax * dby - day * dbx;
-			if (det < 0) return 1;
-			if (det > 0) return -1;
-			return dax * dax + day * day > dbx * dbx + dby * dby ? 1 : -1;
-		};
-		return _pts.sort(fn);
-	}
-	static scale(ps, scale, anchor) {
-		const pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
-		const scs = typeof scale == "number" ? Pt.make(pts[0].length, scale) : scale;
-		if (!anchor) anchor = Pt.make(pts[0].length, 0);
-		for (let i = 0, len = pts.length; i < len; i++) {
-			const p = pts[i];
-			for (let k = 0, lenP = p.length; k < lenP; k++) p[k] = anchor && anchor[k] ? anchor[k] + (p[k] - anchor[k]) * scs[k] : p[k] * scs[k];
-		}
-		return Geom;
-	}
-	static rotate2D(ps, angle, anchor, axis) {
-		const pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
-		const fn = anchor ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
-		if (!anchor) anchor = Pt.make(pts[0].length, 0);
-		const mat = fn(Math.cos(angle), Math.sin(angle), anchor);
-		for (let i = 0, len = pts.length; i < len; i++) {
-			const p = axis ? pts[i].$take(axis) : pts[i];
-			p.to(Mat.transform2D(p, mat));
-			if (axis) for (let k = 0; k < axis.length; k++) pts[i][axis[k]] = p[k];
-		}
-		return Geom;
-	}
-	static shear2D(ps, scale, anchor, axis) {
-		const pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
-		const s = typeof scale == "number" ? [scale, scale] : scale;
-		if (!anchor) anchor = Pt.make(pts[0].length, 0);
-		const mat = (anchor ? Mat.shearAt2DMatrix : Mat.shear2DMatrix)(Math.tan(s[0]), Math.tan(s[1]), anchor);
-		for (let i = 0, len = pts.length; i < len; i++) {
-			const p = axis ? pts[i].$take(axis) : pts[i];
-			p.to(Mat.transform2D(p, mat));
-			if (axis) for (let k = 0; k < axis.length; k++) pts[i][axis[k]] = p[k];
-		}
-		return Geom;
-	}
-	static reflect2D(ps, line, axis) {
-		const pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
-		const _line = Util.iterToArray(line);
-		const mat = Mat.reflectAt2DMatrix(_line[0], _line[1]);
-		for (let i = 0, len = pts.length; i < len; i++) {
-			const p = axis ? pts[i].$take(axis) : pts[i];
-			p.to(Mat.transform2D(p, mat));
-			if (axis) for (let k = 0; k < axis.length; k++) pts[i][axis[k]] = p[k];
-		}
-		return Geom;
-	}
-	static cosTable() {
-		const cos = /* @__PURE__ */ new Float64Array(360);
-		for (let i = 0; i < 360; i++) cos[i] = Math.cos(i * Math.PI / 180);
-		const find = (rad) => cos[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
-		return {
-			table: cos,
-			cos: find
-		};
-	}
-	static sinTable() {
-		const sin = /* @__PURE__ */ new Float64Array(360);
-		for (let i = 0; i < 360; i++) sin[i] = Math.sin(i * Math.PI / 180);
-		const find = (rad) => sin[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
-		return {
-			table: sin,
-			sin: find
-		};
-	}
-};
-var Shaping = class Shaping {
-	static linear(t, c = 1) {
-		return c * t;
-	}
-	static quadraticIn(t, c = 1) {
-		return c * t * t;
-	}
-	static quadraticOut(t, c = 1) {
-		return -c * t * (t - 2);
-	}
-	static quadraticInOut(t, c = 1) {
-		const dt = t * 2;
-		return t < .5 ? c / 2 * t * t * 4 : -c / 2 * ((dt - 1) * (dt - 3) - 1);
-	}
-	static cubicIn(t, c = 1) {
-		return c * t * t * t;
-	}
-	static cubicOut(t, c = 1) {
-		const dt = t - 1;
-		return c * (dt * dt * dt + 1);
-	}
-	static cubicInOut(t, c = 1) {
-		const dt = t * 2;
-		return t < .5 ? c / 2 * dt * dt * dt : c / 2 * ((dt - 2) * (dt - 2) * (dt - 2) + 2);
-	}
-	static exponentialIn(t, c = 1, p = .25) {
-		return c * Math.pow(t, 1 / p);
-	}
-	static exponentialOut(t, c = 1, p = .25) {
-		return c * Math.pow(t, p);
-	}
-	static sineIn(t, c = 1) {
-		return -c * Math.cos(t * Const.half_pi) + c;
-	}
-	static sineOut(t, c = 1) {
-		return c * Math.sin(t * Const.half_pi);
-	}
-	static sineInOut(t, c = 1) {
-		return -c / 2 * (Math.cos(Math.PI * t) - 1);
-	}
-	static cosineApprox(t, c = 1) {
-		const t2 = t * t;
-		const t4 = t2 * t2;
-		return c * (4 * (t4 * t2) / 9 - 17 * t4 / 9 + 22 * t2 / 9);
-	}
-	static circularIn(t, c = 1) {
-		return -c * (Math.sqrt(1 - t * t) - 1);
-	}
-	static circularOut(t, c = 1) {
-		const dt = t - 1;
-		return c * Math.sqrt(1 - dt * dt);
-	}
-	static circularInOut(t, c = 1) {
-		const dt = t * 2;
-		return t < .5 ? -c / 2 * (Math.sqrt(1 - dt * dt) - 1) : c / 2 * (Math.sqrt(1 - (dt - 2) * (dt - 2)) + 1);
-	}
-	static elasticIn(t, c = 1, p = .7) {
-		const dt = t - 1;
-		const s = p / Const.two_pi * 1.5707963267948966;
-		return c * (-Math.pow(2, 10 * dt) * Math.sin((dt - s) * Const.two_pi / p));
-	}
-	static elasticOut(t, c = 1, p = .7) {
-		const s = p / Const.two_pi * 1.5707963267948966;
-		return c * (Math.pow(2, -10 * t) * Math.sin((t - s) * Const.two_pi / p)) + c;
-	}
-	static elasticInOut(t, c = 1, p = .6) {
-		let dt = t * 2;
-		const s = p / Const.two_pi * 1.5707963267948966;
-		if (t < .5) {
-			dt -= 1;
-			return c * (-.5 * (Math.pow(2, 10 * dt) * Math.sin((dt - s) * Const.two_pi / p)));
-		} else {
-			dt -= 1;
-			return c * (.5 * (Math.pow(2, -10 * dt) * Math.sin((dt - s) * Const.two_pi / p))) + c;
-		}
-	}
-	static bounceIn(t, c = 1) {
-		return c - Shaping.bounceOut(1 - t, c);
-	}
-	static bounceOut(t, c = 1) {
-		if (t < 1 / 2.75) return c * (7.5625 * t * t);
-		else if (t < 2 / 2.75) {
-			t -= 1.5 / 2.75;
-			return c * (7.5625 * t * t + .75);
-		} else if (t < 2.5 / 2.75) {
-			t -= 2.25 / 2.75;
-			return c * (7.5625 * t * t + .9375);
-		} else {
-			t -= 2.625 / 2.75;
-			return c * (7.5625 * t * t + .984375);
-		}
-	}
-	static bounceInOut(t, c = 1) {
-		return t < .5 ? Shaping.bounceIn(t * 2, c) / 2 : Shaping.bounceOut(t * 2 - 1, c) / 2 + c / 2;
-	}
-	static sigmoid(t, c = 1, p = 10) {
-		const d = p * (t - .5);
-		return c / (1 + Math.exp(-d));
-	}
-	static logSigmoid(t, c = 1, p = .7) {
-		p = Math.max(Const.epsilon, Math.min(1 - Const.epsilon, p));
-		p = 1 / (1 - p);
-		const A = 1 / (1 + Math.exp((t - .5) * p * -2));
-		const B = 1 / (1 + Math.exp(p));
-		const C = 1 / (1 + Math.exp(-p));
-		return c * (A - B) / (C - B);
-	}
-	static seat(t, c = 1, p = .5) {
-		if (t < .5) return c * Math.pow(2 * t, 1 - p) / 2;
-		else return c * (1 - Math.pow(2 * (1 - t), 1 - p) / 2);
-	}
-	static quadraticBezier(t, c = 1, p = [.05, .95]) {
-		const a = typeof p != "number" ? p[0] : p;
-		const b = typeof p != "number" ? p[1] : .5;
-		let om2a = 1 - 2 * a;
-		if (om2a === 0) om2a = Const.epsilon;
-		const d = (Math.sqrt(a * a + om2a * t) - a) / om2a;
-		return c * ((1 - 2 * b) * (d * d) + 2 * b * d);
-	}
-	static cubicBezier(t, c = 1, p1 = [.1, .7], p2 = [.9, .2]) {
-		const curve = new Group(new Pt(0, 0), new Pt(p1), new Pt(p2), new Pt(1, 1));
-		return c * Curve.bezierStep(new Pt(t * t * t, t * t, t, 1), Curve.controlPoints(curve)).y;
-	}
-	static quadraticTarget(t, c = 1, p1 = [.2, .35]) {
-		const a = Math.min(1 - Const.epsilon, Math.max(Const.epsilon, p1[0]));
-		const b = Math.min(1, Math.max(0, p1[1]));
-		const A = (1 - b) / (1 - a) - b / a;
-		const B = (A * (a * a) - b) / a;
-		const y = A * (t * t) - B * t;
-		return c * Math.min(1, Math.max(0, y));
-	}
-	static cliff(t, c = 1, p = .5) {
-		return t > p ? c : 0;
-	}
-	static step(fn, steps, t, c, ...args) {
-		const s = 1 / steps;
-		return fn(Math.floor(t / s) * s, c, ...args);
-	}
-};
-var Range = class {
-	constructor(g) {
-		this._dims = 0;
-		this._source = Group.fromPtArray(g);
-		this.calc();
-	}
-	get max() {
-		return this._max.clone();
-	}
-	get min() {
-		return this._min.clone();
-	}
-	get magnitude() {
-		return this._mag.clone();
-	}
-	calc() {
-		if (!this._source) return;
-		const dims = this._source[0].length;
-		this._dims = dims;
-		const max = new Pt(dims);
-		const min = new Pt(dims);
-		const mag = new Pt(dims);
-		for (let i = 0; i < dims; i++) {
-			max[i] = -Infinity;
-			min[i] = Infinity;
-			mag[i] = 0;
-			const s = this._source.zipSlice(i);
-			for (let k = 0, len = s.length; k < len; k++) {
-				max[i] = Math.max(max[i], s[k]);
-				min[i] = Math.min(min[i], s[k]);
-				mag[i] = max[i] - min[i];
-			}
-		}
-		this._max = max;
-		this._min = min;
-		this._mag = mag;
-		return this;
-	}
-	mapTo(min, max, exclude) {
-		const target = new Group();
-		for (let i = 0, len = this._source.length; i < len; i++) {
-			const g = this._source[i];
-			const n = new Pt(this._dims);
-			for (let k = 0; k < this._dims; k++) n[k] = exclude && exclude[k] ? g[k] : Num.mapToRange(g[k], this._min[k], this._max[k], min, max);
-			target.push(n);
-		}
-		return target;
-	}
-	append(pts, update = true) {
-		const _pts = Util.iterToArray(pts);
-		if (_pts[0].length !== this._dims) throw new Error(`Dimensions don't match. ${this._dims} dimensions in Range and ${_pts[0].length} provided in parameter. `);
-		this._source = this._source.concat(_pts);
-		if (update) this.calc();
-		return this;
-	}
-	ticks(count) {
-		const g = new Group();
-		for (let i = 0; i <= count; i++) {
-			const p = new Pt(this._dims);
-			const t = count > 0 ? i / count : 0;
-			for (let k = 0, len = this._max.length; k < len; k++) p[k] = Num.lerp(this._min[k], this._max[k], t);
-			g.push(p);
-		}
-		return g;
-	}
-};
-
-//#endregion
-//#region src/Util.ts
-const Const = {
-	xy: "xy",
-	yz: "yz",
-	xz: "xz",
-	xyz: "xyz",
-	horizontal: 0,
-	vertical: 1,
-	identical: 0,
-	right: 4,
-	bottom_right: 5,
-	bottom: 6,
-	bottom_left: 7,
-	left: 8,
-	top_left: 1,
-	top: 2,
-	top_right: 3,
-	epsilon: 1e-4,
-	max: Number.MAX_VALUE,
-	min: Number.MIN_VALUE,
-	pi: Math.PI,
-	two_pi: 6.283185307179586,
-	half_pi: 1.5707963267948966,
-	quarter_pi: .7853981633974483,
-	one_degree: .017453292519943295,
-	rad_to_deg: 57.29577951308232,
-	deg_to_rad: .017453292519943295,
-	gravity: 9.81,
-	newton: .10197,
-	gaussian: .3989422804014327
-};
-var Util = class Util {
-	static warnLevel(lv) {
-		if (lv) Util._warnLevel = lv;
-		return Util._warnLevel;
-	}
-	static getArgs(args) {
-		if (args.length < 1) return [];
-		let pos = [];
-		let isArray = Array.isArray(args[0]) || ArrayBuffer.isView(args[0]);
-		if (typeof args[0] === "number") pos = Array.prototype.slice.call(args);
-		else if (typeof args[0] === "object" && !isArray) {
-			let a = [
-				"x",
-				"y",
-				"z",
-				"w"
-			];
-			let p = args[0];
-			for (let i = 0; i < a.length; i++) {
-				if (p.length && i >= p.length || !(a[i] in p)) break;
-				pos.push(p[a[i]]);
-			}
-		} else if (isArray) pos = Util.toNumericArray(args[0]);
-		return pos;
-	}
-	static toNumericArray(a) {
-		if (Array.isArray(a)) return a.slice();
-		const out = [];
-		for (let i = 0, len = a.length; i < len; i++) out.push(a[i]);
-		return out;
-	}
-	static getPtLike(args) {
-		const a0 = args[0];
-		if (typeof a0 === "number") return args;
-		if (args.length === 1 && (Array.isArray(a0) || ArrayBuffer.isView(a0))) return a0;
-		return Util.getArgs(args);
-	}
-	static warn(message = "error", defaultReturn = void 0) {
-		if (Util.warnLevel() == "error") throw new Error(message);
-		else if (Util.warnLevel() == "warn") console.warn(message);
-		return defaultReturn;
-	}
-	static randomInt(range, start = 0) {
-		Util.warn("Util.randomInt is deprecated. Please use `Num.randomRange`");
-		return Math.floor(Num.random() * range) + start;
-	}
-	static split(pts, size, stride, loopBack = false, matchSize = true) {
-		let chunks = [];
-		let part = [];
-		let st = stride || size;
-		let index = 0;
-		if (pts.length <= 0 || st <= 0) return [];
-		while (index < pts.length) {
-			part = [];
-			for (let k = 0; k < size; k++) if (loopBack) part.push(pts[(index + k) % pts.length]);
-			else {
-				if (index + k >= pts.length) break;
-				part.push(pts[index + k]);
-			}
-			index += st;
-			if (!matchSize || matchSize && part.length === size) chunks.push(part);
-		}
-		return chunks;
-	}
-	static flatten(pts, flattenAsGroup = true) {
-		const arr = flattenAsGroup ? new Group() : [];
-		for (let i = 0, len = pts.length; i < len; i++) {
-			const p = pts[i];
-			if (Array.isArray(p)) for (let k = 0, lenP = p.length; k < lenP; k++) arr.push(p[k]);
-			else arr.push(p);
-		}
-		return arr;
-	}
-	static combine(a, b, op) {
-		let result = [];
-		for (let i = 0, len = a.length; i < len; i++) for (let k = 0, lenB = b.length; k < lenB; k++) result.push(op(a[i], b[k]));
-		return result;
-	}
-	static zip(arrays) {
-		let z = [];
-		for (let i = 0, len = arrays[0].length; i < len; i++) {
-			let p = [];
-			for (let k = 0; k < arrays.length; k++) p.push(arrays[k][i]);
-			z.push(p);
-		}
-		return z;
-	}
-	static stepper(max, min = 0, stride = 1, callback) {
-		let c = min;
-		return function() {
-			c += stride;
-			if (c >= max) c = min + (c - min) % (max - min);
-			if (callback) callback(c);
-			return c;
-		};
-	}
-	static forRange(fn, range, start = 0, step = 1) {
-		let temp = [];
-		for (let i = start, len = range; i < len; i += step) temp[i] = fn(i);
-		return temp;
-	}
-	static load(url, callback) {
-		let request = new XMLHttpRequest();
-		request.open("GET", url, true);
-		request.onload = function() {
-			if (request.status >= 200 && request.status < 400) callback(request.responseText, true);
-			else callback(`Server error (${request.status}) when loading "${url}"`, false);
-		};
-		request.onerror = function() {
-			callback(`Unknown network error`, false);
-		};
-		request.send();
-	}
-	static download(space, filename = "pts_canvas_image", filetype = "png", quality = 1) {
-		const ftype = filetype === "jpg" ? "jpeg" : filetype;
-		space.element.toBlob(function(blob) {
-			const link = document.createElement("a");
-			const url = URL.createObjectURL(blob);
-			link.href = url;
-			link.download = `${filename}.${filetype}`;
-			document.body.appendChild(link);
-			link.click();
-			document.body.removeChild(link);
-			URL.revokeObjectURL(url);
-		}, `image/${ftype}`, quality);
-	}
-	static performance(avgFrames = 10) {
-		let last = Date.now();
-		let avg = [];
-		return function() {
-			const now = Date.now();
-			avg.push(now - last);
-			if (avg.length > avgFrames) avg.shift();
-			last = now;
-			return Math.floor(avg.reduce((a, b) => a + b, 0) / avg.length);
-		};
-	}
-	static arrayCheck(pts, minRequired = 2) {
-		if (Array.isArray(pts) && pts.length < minRequired) {
-			Util.warn(`Requires ${minRequired} or more Pts in this Group.`);
-			return false;
-		}
-		return true;
-	}
-	static iterToArray(it) {
-		return !Array.isArray(it) ? [...it] : it;
-	}
-	static isMobile() {
-		return /iPhone|iPad|Android/i.test(navigator.userAgent);
-	}
-	static uniqueId(useCrypto = false) {
-		var _crypto;
-		return useCrypto && typeof crypto !== "undefined" && ((_crypto = crypto) === null || _crypto === void 0 ? void 0 : _crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).substring(2);
-	}
-};
-Util._warnLevel = "mute";
-
-//#endregion
-//#region src/Pt.ts
-var Pt = class Pt extends Float32Array {
-	constructor(...args) {
-		let params;
-		const a0 = args[0];
-		if (args.length === 1 && typeof a0 == "number") params = a0;
-		else if (args.length === 0) params = 2;
-		else if (args.length === 1 && (Array.isArray(a0) || ArrayBuffer.isView(a0))) params = a0;
-		else if (typeof a0 === "number") params = args;
-		else params = Util.getArgs(args);
-		super(params);
-	}
-	static make(dimensions, defaultValue = 0, randomize = false) {
-		const p = new Pt(dimensions);
-		if (defaultValue) p.fill(defaultValue);
-		if (randomize) for (let i = 0, len = p.length; i < len; i++) p[i] = p[i] * Num.random();
-		return p;
-	}
-	get id() {
-		return this._id;
-	}
-	set id(s) {
-		this._id = s;
-	}
-	get x() {
-		return this[0];
-	}
-	set x(n) {
-		this[0] = n;
-	}
-	get y() {
-		return this[1];
-	}
-	set y(n) {
-		this[1] = n;
-	}
-	get z() {
-		return this[2];
-	}
-	set z(n) {
-		this[2] = n;
-	}
-	get w() {
-		return this[3];
-	}
-	set w(n) {
-		this[3] = n;
-	}
-	clone() {
-		return new Pt(this);
-	}
-	equals(p, threshold = 1e-6) {
-		for (let i = 0, len = this.length; i < len; i++) if (!(Math.abs(this[i] - p[i]) <= threshold)) return false;
-		return true;
-	}
-	to(...args) {
-		const p = Util.getPtLike(args);
-		for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) this[i] = p[i];
-		return this;
-	}
-	$to(...args) {
-		return this.clone().to(...args);
-	}
-	toAngle(radian, magnitude, anchorFromPt = false) {
-		const m = magnitude != void 0 ? magnitude : this.magnitude();
-		const change = [Math.cos(radian) * m, Math.sin(radian) * m];
-		return anchorFromPt ? this.add(change) : this.to(change);
-	}
-	op(fn) {
-		const self = this;
-		return (...params) => {
-			return fn(self, ...params);
-		};
-	}
-	ops(fns) {
-		const _ops = [];
-		for (let i = 0, len = fns.length; i < len; i++) _ops.push(this.op(fns[i]));
-		return _ops;
-	}
-	$take(axis) {
-		const p = [];
-		for (let i = 0, len = axis.length; i < len; i++) p.push(this[axis[i]] || 0);
-		return new Pt(p);
-	}
-	$concat(...args) {
-		return new Pt(this.toArray().concat(Util.getArgs(args)));
-	}
-	add(...args) {
-		args.length === 1 && typeof args[0] == "number" ? Vec.add(this, args[0]) : Vec.add(this, Util.getPtLike(args));
-		return this;
-	}
-	$add(...args) {
-		return this.clone().add(...args);
-	}
-	subtract(...args) {
-		args.length === 1 && typeof args[0] == "number" ? Vec.subtract(this, args[0]) : Vec.subtract(this, Util.getPtLike(args));
-		return this;
-	}
-	$subtract(...args) {
-		return this.clone().subtract(...args);
-	}
-	multiply(...args) {
-		args.length === 1 && typeof args[0] == "number" ? Vec.multiply(this, args[0]) : Vec.multiply(this, Util.getPtLike(args));
-		return this;
-	}
-	$multiply(...args) {
-		return this.clone().multiply(...args);
-	}
-	divide(...args) {
-		args.length === 1 && typeof args[0] == "number" ? Vec.divide(this, args[0]) : Vec.divide(this, Util.getPtLike(args));
-		return this;
-	}
-	$divide(...args) {
-		return this.clone().divide(...args);
-	}
-	magnitudeSq() {
-		return Vec.dot(this, this);
-	}
-	magnitude() {
-		return Vec.magnitude(this);
-	}
-	unit(magnitude = void 0) {
-		Vec.unit(this, magnitude);
-		return this;
-	}
-	$unit(magnitude = void 0) {
-		return this.clone().unit(magnitude);
-	}
-	dot(...args) {
-		return Vec.dot(this, Util.getPtLike(args));
-	}
-	$cross2D(...args) {
-		return Vec.cross2D(this, Util.getPtLike(args));
-	}
-	$cross(...args) {
-		return Vec.cross(this, Util.getPtLike(args));
-	}
-	$project(...args) {
-		return this.$multiply(this.dot(...args) / this.magnitudeSq());
-	}
-	projectScalar(...args) {
-		return this.dot(...args) / this.magnitude();
-	}
-	abs() {
-		Vec.abs(this);
-		return this;
-	}
-	$abs() {
-		return this.clone().abs();
-	}
-	floor() {
-		Vec.floor(this);
-		return this;
-	}
-	$floor() {
-		return this.clone().floor();
-	}
-	ceil() {
-		Vec.ceil(this);
-		return this;
-	}
-	$ceil() {
-		return this.clone().ceil();
-	}
-	round() {
-		Vec.round(this);
-		return this;
-	}
-	$round() {
-		return this.clone().round();
-	}
-	minValue() {
-		return Vec.min(this);
-	}
-	maxValue() {
-		return Vec.max(this);
-	}
-	$min(...args) {
-		const p = Util.getPtLike(args);
-		const m = this.clone();
-		for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) m[i] = Math.min(this[i], p[i]);
-		return m;
-	}
-	$max(...args) {
-		const p = Util.getPtLike(args);
-		const m = this.clone();
-		for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) m[i] = Math.max(this[i], p[i]);
-		return m;
-	}
-	angle(axis = Const.xy) {
-		return Math.atan2(this[axis[1]], this[axis[0]]);
-	}
-	angleBetween(p, axis = Const.xy) {
-		return Geom.boundRadian(this.angle(axis) - p.angle(axis) + Math.PI) - Math.PI;
-	}
-	scale(scale, anchor) {
-		Geom.scale(this, scale, anchor || Pt.make(this.length, 0));
-		return this;
-	}
-	rotate2D(angle, anchor, axis) {
-		Geom.rotate2D(this, angle, anchor || Pt.make(this.length, 0), axis);
-		return this;
-	}
-	shear2D(scale, anchor, axis) {
-		Geom.shear2D(this, scale, anchor || Pt.make(this.length, 0), axis);
-		return this;
-	}
-	reflect2D(line, axis) {
-		Geom.reflect2D(this, line, axis);
-		return this;
-	}
-	toString() {
-		return `Pt(${this.join(", ")})`;
-	}
-	toArray() {
-		const a = [];
-		for (let i = 0, len = this.length; i < len; i++) a.push(this[i]);
-		return a;
-	}
-	toGroup() {
-		return new Group(Pt.make(this.length), this.clone());
-	}
-	toBound() {
-		return new Bound(Pt.make(this.length), this.clone());
-	}
-};
-var Group = class Group extends Array {
-	constructor(...args) {
-		super(...args);
-	}
-	get id() {
-		return this._id;
-	}
-	set id(s) {
-		this._id = s;
-	}
-	get p1() {
-		return this[0];
-	}
-	get p2() {
-		return this[1];
-	}
-	get p3() {
-		return this[2];
-	}
-	get p4() {
-		return this[3];
-	}
-	get q1() {
-		return this[this.length - 1];
-	}
-	get q2() {
-		return this[this.length - 2];
-	}
-	get q3() {
-		return this[this.length - 3];
-	}
-	get q4() {
-		return this[this.length - 4];
-	}
-	clone() {
-		const group = new Group();
-		for (let i = 0, len = this.length; i < len; i++) group.push(this[i].clone());
-		return group;
-	}
-	static fromArray(list) {
-		const g = new Group();
-		for (const li of list) {
-			const p = li instanceof Pt ? li : new Pt(li);
-			g.push(p);
-		}
-		return g;
-	}
-	static fromPtArray(list) {
-		return Group.from(list);
-	}
-	split(chunkSize, stride, loopBack = false) {
-		const st = stride || chunkSize;
-		const chunks = [];
-		if (this.length <= 0 || st <= 0) return chunks;
-		let index = 0;
-		while (index < this.length) {
-			const g = new Group();
-			let size = 0;
-			for (let k = 0; k < chunkSize; k++) if (loopBack) g[size++] = this[(index + k) % this.length];
-			else {
-				if (index + k >= this.length) break;
-				g[size++] = this[index + k];
-			}
-			index += st;
-			if (size === chunkSize) chunks.push(g);
-		}
-		return chunks;
-	}
-	insert(pts, index = 0) {
-		let _pts = Util.iterToArray(pts);
-		if (_pts === this) _pts = _pts.slice();
-		const len = this.length;
-		const n = _pts.length;
-		if (n === 0) return this;
-		let start = Math.trunc(index) || 0;
-		start = start < 0 ? Math.max(len + start, 0) : Math.min(start, len);
-		this.length = len + n;
-		for (let i = len - 1; i >= start; i--) this[i + n] = this[i];
-		for (let i = 0; i < n; i++) this[start + i] = _pts[i];
-		return this;
-	}
-	remove(index = 0, count = 1) {
-		const param = index < 0 ? [index * -1 - 1, count] : [index, count];
-		return Group.prototype.splice.apply(this, param);
-	}
-	segments(pts_per_segment = 2, stride = 1, loopBack = false) {
-		return this.split(pts_per_segment, stride, loopBack);
-	}
-	lines() {
-		return this.segments(2, 1);
-	}
-	centroid() {
-		return Geom.centroid(this);
-	}
-	boundingBox() {
-		return Geom.boundingBox(this);
-	}
-	anchorTo(ptOrIndex = 0) {
-		Geom.anchor(this, ptOrIndex, "to");
-	}
-	anchorFrom(ptOrIndex = 0) {
-		Geom.anchor(this, ptOrIndex, "from");
-	}
-	op(fn) {
-		const self = this;
-		return (...params) => {
-			return fn(self, ...params);
-		};
-	}
-	ops(fns) {
-		const _ops = [];
-		for (let i = 0, len = fns.length; i < len; i++) _ops.push(this.op(fns[i]));
-		return _ops;
-	}
-	interpolate(t) {
-		t = Num.clamp(t, 0, 1);
-		const chunk = this.length - 1;
-		const tc = 1 / (this.length - 1);
-		const idx = Math.floor(t / tc);
-		return Geom.interpolate(this[idx], this[Math.min(this.length - 1, idx + 1)], (t - idx * tc) * chunk);
-	}
-	moveBy(...args) {
-		return this.add(...args);
-	}
-	moveTo(...args) {
-		const d = new Pt(...args).subtract(this[0]);
-		this.moveBy(d);
-		return this;
-	}
-	scale(scale, anchor) {
-		for (let i = 0, len = this.length; i < len; i++) Geom.scale(this[i], scale, anchor || this[0]);
-		return this;
-	}
-	rotate2D(angle, anchor, axis) {
-		for (let i = 0, len = this.length; i < len; i++) Geom.rotate2D(this[i], angle, anchor || this[0], axis);
-		return this;
-	}
-	shear2D(scale, anchor, axis) {
-		for (let i = 0, len = this.length; i < len; i++) Geom.shear2D(this[i], scale, anchor || this[0], axis);
-		return this;
-	}
-	reflect2D(line, axis) {
-		for (let i = 0, len = this.length; i < len; i++) Geom.reflect2D(this[i], line, axis);
-		return this;
-	}
-	sortByDimension(dim, desc = false) {
-		return this.sort((a, b) => desc ? b[dim] - a[dim] : a[dim] - b[dim]);
-	}
-	forEachPt(ptFn, ...args) {
-		if (this.length === 0) return this;
-		if (!this[0][ptFn]) {
-			Util.warn(`${ptFn} is not a function of Pt`);
-			return this;
-		}
-		for (let i = 0, len = this.length; i < len; i++) this[i] = this[i][ptFn](...args);
-		return this;
-	}
-	_vecOp(fn, args) {
-		const b = args.length === 1 && typeof args[0] == "number" ? args[0] : Util.getPtLike(args);
-		for (let i = 0, len = this.length; i < len; i++) fn(this[i], b);
-		return this;
-	}
-	add(...args) {
-		return this._vecOp(Vec.add, args);
-	}
-	subtract(...args) {
-		return this._vecOp(Vec.subtract, args);
-	}
-	multiply(...args) {
-		return this._vecOp(Vec.multiply, args);
-	}
-	divide(...args) {
-		return this._vecOp(Vec.divide, args);
-	}
-	$matrixAdd(g) {
-		return Mat.add(this, g);
-	}
-	$matrixMultiply(g, transposed = false, elementwise = false) {
-		return Mat.multiply(this, g, transposed, elementwise);
-	}
-	zipSlice(index, defaultValue = false) {
-		return Mat.zipSlice(this, index, defaultValue);
-	}
-	$zip(defaultValue = void 0, useLongest = false) {
-		return Mat.zip(this, defaultValue, useLongest);
-	}
-	toBound() {
-		return Bound.fromGroup(this);
-	}
-	toString() {
-		return "Group[ " + this.reduce((p, c) => p + c.toString() + " ", "") + " ]";
-	}
-};
-var Bound = class Bound extends Group {
-	constructor(...args) {
-		super(...args);
-		this._center = new Pt();
-		this._size = new Pt();
-		this._inited = false;
-		this.init();
-	}
-	static fromBoundingRect(rect) {
-		const b = new Bound(new Pt(rect.left || 0, rect.top || 0), new Pt(rect.right || 0, rect.bottom || 0));
-		if (rect.width && rect.height) b.size = new Pt(rect.width, rect.height);
-		return b;
-	}
-	static fromGroup(g) {
-		const _g = Util.iterToArray(g);
-		if (_g.length < 2) throw new Error("Cannot create a Bound from a group that has less than 2 Pt");
-		const first = _g[0];
-		const last = _g[_g.length - 1];
-		return new Bound(first instanceof Pt ? first : new Pt(first), last instanceof Pt ? last : new Pt(last));
-	}
-	init() {
-		if (this.p1) {
-			this._size = this.p1.clone();
-			this._inited = true;
-		}
-		if (this.p1 && this.p2) {
-			this._updateSize();
-			this._inited = true;
-		}
-	}
-	clone() {
-		return new Bound(this.topLeft, this.bottomRight);
-	}
-	_updateSize() {
-		const a = this[0];
-		const b = this[1];
-		const n = b ? b.length : 0;
-		if (this._size.length !== n) this._size = new Pt(n);
-		for (let i = 0; i < n; i++) {
-			let lo = a ? a[i] || 0 : 0;
-			if (a && b[i] < lo) {
-				a[i] = b[i];
-				b[i] = lo;
-				lo = a[i];
-			}
-			this._size[i] = Math.abs(b[i] - lo);
-		}
-		this._updateCenter();
-	}
-	_updateCenter() {
-		const a = this[0];
-		const n = this._size.length;
-		if (this._center.length !== n) this._center = new Pt(n);
-		for (let i = 0; i < n; i++) this._center[i] = this._size[i] * .5 + (a ? a[i] || 0 : 0);
-	}
-	_updatePosFromTop() {
-		this.bottomRight = this.topLeft.$add(this._size);
-		this._updateCenter();
-	}
-	_updatePosFromBottom() {
-		this.topLeft = this.bottomRight.$subtract(this._size);
-		this._updateCenter();
-	}
-	_updatePosFromCenter() {
-		const half = this._size.$multiply(.5);
-		const center = this._center;
-		this[0] = center.$subtract(half);
-		this[1] = center.$add(half);
-	}
-	get size() {
-		return new Pt(this._size);
-	}
-	set size(p) {
-		this._size = new Pt(p);
-		this._updatePosFromTop();
-	}
-	get center() {
-		return new Pt(this._center);
-	}
-	set center(p) {
-		this._center = new Pt(p);
-		this._updatePosFromCenter();
-	}
-	get topLeft() {
-		return new Pt(this[0]);
-	}
-	set topLeft(p) {
-		this[0] = new Pt(p);
-		this._updateSize();
-	}
-	get bottomRight() {
-		return new Pt(this[1]);
-	}
-	set bottomRight(p) {
-		this[1] = new Pt(p);
-		this._updateSize();
-	}
-	get width() {
-		return this._size.length > 0 ? this._size.x : 0;
-	}
-	set width(w) {
-		this._size.x = w;
-		this._updatePosFromTop();
-	}
-	get height() {
-		return this._size.length > 1 ? this._size.y : 0;
-	}
-	set height(h) {
-		this._size.y = h;
-		this._updatePosFromTop();
-	}
-	get depth() {
-		return this._size.length > 2 ? this._size.z : 0;
-	}
-	set depth(d) {
-		this._size.z = d;
-		this._updatePosFromTop();
-	}
-	get x() {
-		return this[0] ? this[0][0] : void 0;
-	}
-	get y() {
-		return this[0] ? this[0][1] : void 0;
-	}
-	get z() {
-		return this[0] ? this[0][2] : void 0;
-	}
-	get inited() {
-		return this._inited;
-	}
-	update() {
-		this._updateSize();
-		return this;
-	}
-};
-
-//#endregion
 //#region \0@oxc-project+runtime@0.143.0/helpers/esm/typeof.js
 function _typeof(o) {
 	"@babel/helpers - typeof";
@@ -4407,7 +4431,20 @@ const UIPointerActions = {
 	contextmenu: "contextmenu",
 	all: "all"
 };
+let _uiCounter = 0;
 var UI = class UI {
+	static get _counter() {
+		return _uiCounter;
+	}
+	static set _counter(n) {
+		if (this === UI) _uiCounter = n;
+		else Object.defineProperty(this, "_counter", {
+			value: n,
+			writable: true,
+			enumerable: true,
+			configurable: true
+		});
+	}
 	constructor(group, shape, states = {}, id) {
 		this._abortCleanup = {};
 		this._holds = /* @__PURE__ */ new Map();
@@ -4581,7 +4618,6 @@ var UI = class UI {
 		return false;
 	}
 };
-UI._counter = 0;
 var UIButton = class extends UI {
 	constructor(group, shape, states = {}, id) {
 		super(group, shape, states, id);
@@ -6907,7 +6943,7 @@ const __noise_permTable = [
 	156,
 	180
 ];
-const __noise_permDoubled = __noise_permTable.concat(__noise_permTable);
+const __noise_permDoubled = /* @__PURE__ */ __noise_permTable.concat(__noise_permTable);
 let __noise_lastSeed = void 0;
 let __noise_lastPerm = null;
 function __noise_seededPerm(seed) {
@@ -7865,7 +7901,34 @@ var PoissonDisk = class extends Group {
 
 //#endregion
 //#region src/Color.ts
+const D65 = /* @__PURE__ */ new Pt(95.047, 100, 108.883, 1);
+let _colorRanges = /* @__PURE__ */ colorRanges();
+function colorRanges() {
+	return {
+		rgb: new Group(new Pt(0, 255), new Pt(0, 255), new Pt(0, 255)),
+		hsl: new Group(new Pt(0, 360), new Pt(0, 1), new Pt(0, 1)),
+		hsb: new Group(new Pt(0, 360), new Pt(0, 1), new Pt(0, 1)),
+		lab: new Group(new Pt(0, 100), new Pt(-128, 127), new Pt(-128, 127)),
+		lch: new Group(new Pt(0, 100), new Pt(0, 100), new Pt(0, 360)),
+		luv: new Group(new Pt(0, 100), new Pt(-134, 220), new Pt(-140, 122)),
+		xyz: new Group(new Pt(0, 100), new Pt(0, 100), new Pt(0, 100)),
+		oklab: new Group(new Pt(0, 1), new Pt(-.4, .4), new Pt(-.4, .4)),
+		oklch: new Group(new Pt(0, 1), new Pt(0, .4), new Pt(0, 360))
+	};
+}
 var Color = class Color extends Pt {
+	static get ranges() {
+		return _colorRanges;
+	}
+	static set ranges(value) {
+		if (this === Color) _colorRanges = value;
+		else Object.defineProperty(this, "ranges", {
+			value,
+			writable: true,
+			enumerable: true,
+			configurable: true
+		});
+	}
 	constructor(...args) {
 		super(...args);
 		this._mode = "rgb";
@@ -8234,7 +8297,7 @@ var Color = class Color extends Pt {
 		const c = normalizedInput ? Color._denorm(xyz) : xyz.clone();
 		const eps = 216 / 24389;
 		const kap = 24389 / 27;
-		c.divide(Color.D65);
+		c.divide(D65);
 		const fn = (n) => n > eps ? Math.cbrt(n) : (kap * n + 16) / 116;
 		const cy = fn(c[1]);
 		const cc = Color.lab(116 * cy - 16, 500 * (fn(c[0]) - cy), 200 * (cy - fn(c[2])), xyz.alpha);
@@ -8247,7 +8310,7 @@ var Color = class Color extends Pt {
 		const z = y - c[2] / 200;
 		const eps = 216 / 24389;
 		const kap = 24389 / 27;
-		const d = Color.D65;
+		const d = D65;
 		const xxx = Math.pow(x, 3);
 		const zzz = Math.pow(z, 3);
 		const cc = Color.xyz(d[0] * (xxx > eps ? xxx : (116 * x - 16) / kap), d[1] * (c[0] > kap * eps ? Math.pow((c[0] + 16) / 116, 3) : c[0] / kap), d[2] * (zzz > eps ? zzz : (116 * z - 16) / kap), lab.alpha);
@@ -8262,8 +8325,8 @@ var Color = class Color extends Pt {
 		const kap = 24389 / 27;
 		y = y / 100;
 		const L = y > eps ? 116 * Math.cbrt(y) - 16 : kap * y;
-		const refU = 4 * Color.D65[0] / (Color.D65[0] + 15 * Color.D65[1] + 3 * Color.D65[2]);
-		const refV = 9 * Color.D65[1] / (Color.D65[0] + 15 * Color.D65[1] + 3 * Color.D65[2]);
+		const refU = 4 * D65[0] / (D65[0] + 15 * D65[1] + 3 * D65[2]);
+		const refV = 9 * D65[1] / (D65[0] + 15 * D65[1] + 3 * D65[2]);
 		const cc = Color.luv(L, 13 * L * (u - refU), 13 * L * (v - refV), xyz.alpha);
 		return normalizedOutput ? Color._normOut(cc) : cc;
 	}
@@ -8277,8 +8340,8 @@ var Color = class Color extends Pt {
 		}
 		const fy = (l + 16) / 116;
 		let y = l > kap * eps ? fy * fy * fy : l / kap;
-		const refU = 4 * Color.D65[0] / (Color.D65[0] + 15 * Color.D65[1] + 3 * Color.D65[2]);
-		const refV = 9 * Color.D65[1] / (Color.D65[0] + 15 * Color.D65[1] + 3 * Color.D65[2]);
+		const refU = 4 * D65[0] / (D65[0] + 15 * D65[1] + 3 * D65[2]);
+		const refV = 9 * D65[1] / (D65[0] + 15 * D65[1] + 3 * D65[2]);
 		u = u / (13 * l) + refU;
 		v = v / (13 * l) + refV;
 		y = y * 100;
@@ -8353,18 +8416,6 @@ var Color = class Color extends Pt {
 		const cc = Color.oklab(c[0], Math.cos(rad) * c[1], Math.sin(rad) * c[1], oklch.alpha);
 		return normalizedOutput ? Color._normOut(cc) : cc;
 	}
-};
-Color.D65 = new Pt(95.047, 100, 108.883, 1);
-Color.ranges = {
-	rgb: new Group(new Pt(0, 255), new Pt(0, 255), new Pt(0, 255)),
-	hsl: new Group(new Pt(0, 360), new Pt(0, 1), new Pt(0, 1)),
-	hsb: new Group(new Pt(0, 360), new Pt(0, 1), new Pt(0, 1)),
-	lab: new Group(new Pt(0, 100), new Pt(-128, 127), new Pt(-128, 127)),
-	lch: new Group(new Pt(0, 100), new Pt(0, 100), new Pt(0, 360)),
-	luv: new Group(new Pt(0, 100), new Pt(-134, 220), new Pt(-140, 122)),
-	xyz: new Group(new Pt(0, 100), new Pt(0, 100), new Pt(0, 100)),
-	oklab: new Group(new Pt(0, 1), new Pt(-.4, .4), new Pt(-.4, .4)),
-	oklch: new Group(new Pt(0, 1), new Pt(0, .4), new Pt(0, 360))
 };
 
 //#endregion
@@ -9374,6 +9425,7 @@ var SVGSpace = class SVGSpace extends DOMSpace {
 };
 let _svgFormGroupID = 0;
 let _svgFormDomID = 0;
+let _svgFormOffscreenWarned = false;
 const _legacyStyleKeys = {
 	fillStyle: "fill",
 	strokeStyle: "stroke",
@@ -9447,8 +9499,8 @@ var SVGForm = class SVGForm extends CanvasForm {
 		SVGForm._warnOffscreen();
 	}
 	static _warnOffscreen() {
-		if (SVGForm._offscreenWarned) return;
-		SVGForm._offscreenWarned = true;
+		if (_svgFormOffscreenWarned) return;
+		_svgFormOffscreenWarned = true;
 		Util.warn("offscreen canvases are not supported in SVG output; use CanvasSpace");
 	}
 	get space() {
@@ -9670,7 +9722,6 @@ var SVGForm = class SVGForm extends CanvasForm {
 		return elem;
 	}
 };
-SVGForm._offscreenWarned = false;
 
 //#endregion
 //#region src/Physics.ts

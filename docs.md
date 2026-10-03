@@ -486,14 +486,14 @@ c1 = Circle.fromCenter(...); grad = form.gradient(["#f00", "#00f"]); form.fill( 
 ##### `image`
 
 ```ts
-image(ptOrRect: PtLike | PtLikeIterable, img: Img | CanvasImageSource, orig: PtLikeIterable): CanvasForm
+image(ptOrRect: PtLikeIterable | PtLike, img: Img | CanvasImageSource, orig: PtLikeIterable): CanvasForm
 ```
 
 Draw an image.
 
 **Parameters**
 
-- `ptOrRect` (`PtLike | PtLikeIterable`) — a target area to place the image. Either a PtLike specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a bounding box. Default is (0,0) at top-left.
+- `ptOrRect` (`PtLikeIterable | PtLike`) — a target area to place the image. Either a PtLike specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a bounding box. Default is (0,0) at top-left.
 - `img` (`Img | CanvasImageSource`) — either an [Img](#image-img) instance or an [`CanvasImageSource`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
 - `orig` (`PtLikeIterable`) — optionally a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a cropping box  in the original target.
 
@@ -501,14 +501,14 @@ Draw an image.
 ##### `imageData`
 
 ```ts
-imageData(ptOrRect: PtLike | PtLikeIterable, img: ImageData): CanvasForm
+imageData(ptOrRect: PtLikeIterable | PtLike, img: ImageData): CanvasForm
 ```
 
 Draw ImageData on canvas using ImageData
 
 **Parameters**
 
-- `ptOrRect` (`PtLike | PtLikeIterable`) — a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
+- `ptOrRect` (`PtLikeIterable | PtLike`) — a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
 - `img` (`ImageData`) — an ImageData object
 
 <a id="canvas-canvasform-line"></a>
@@ -833,7 +833,7 @@ A static function to draw an ellipse.
 *static*
 
 ```ts
-static image(ctx: RenderingContext2D, ptOrRect: PtLike | PtLikeIterable, img: Img | CanvasImageSource, orig: PtLikeIterable): void
+static image(ctx: RenderingContext2D, ptOrRect: PtLikeIterable | PtLike, img: Img | CanvasImageSource, orig: PtLikeIterable): void
 ```
 
 A static function to draw an image.
@@ -841,7 +841,7 @@ A static function to draw an image.
 **Parameters**
 
 - `ctx` (`RenderingContext2D`) — canvas rendering context
-- `ptOrRect` (`PtLike | PtLikeIterable`) — a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
+- `ptOrRect` (`PtLikeIterable | PtLike`) — a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
 - `img` (`Img | CanvasImageSource`) — either an [Img](#image-img) instance or an [`CanvasImageSource`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
 - `orig` (`PtLikeIterable`) — optionally a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a cropping box in the original target.
 
@@ -851,7 +851,7 @@ A static function to draw an image.
 *static*
 
 ```ts
-static imageData(ctx: RenderingContext2D, ptOrRect: PtLike | PtLikeIterable, img: ImageData): void
+static imageData(ctx: RenderingContext2D, ptOrRect: PtLikeIterable | PtLike, img: ImageData): void
 ```
 
 A static function to draw ImageData on canvas
@@ -859,7 +859,7 @@ A static function to draw ImageData on canvas
 **Parameters**
 
 - `ctx` (`RenderingContext2D`) — canvas rendering context
-- `ptOrRect` (`PtLike | PtLikeIterable`) — a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that places a region of the image data of that size at that position. Note that `putImageData` cannot resize: the rect clips, not scales. Default is (0,0) at top-left.
+- `ptOrRect` (`PtLikeIterable | PtLike`) — a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that places a region of the image data of that size at that position. Note that `putImageData` cannot resize: the rect clips, not scales. Default is (0,0) at top-left.
 - `img` (`ImageData`) — an ImageData object
 
 <a id="canvas-canvasform-static-line"></a>
@@ -1265,7 +1265,7 @@ space.setup({ bgcolor: "#f00", retina: true, resize: true })
 <a id="color-color"></a>
 ### `Color`
 
-**Kind:** Class · **Source:** [`src/Color.ts:17`](https://github.com/williamngan/pts/blob/master/src/Color.ts#L17)
+**Kind:** Class · **Source:** [`src/Color.ts:43`](https://github.com/williamngan/pts/blob/master/src/Color.ts#L43)
 
 **Extends:** `Pt`
 
@@ -1455,6 +1455,18 @@ set v(n: number): void
 ```
 
 the `v` value in LUV color mode. Same as `z`.
+
+<a id="color-color-static-ranges"></a>
+##### `ranges`
+
+*static*
+
+```ts
+get ranges():
+set ranges(value: ): void
+```
+
+Value range for each color space
 
 #### Methods
 
@@ -2169,19 +2181,6 @@ A static function to convert XYZ to RGB.
 
 **Returns:** a new RGB Color
 
-#### Properties
-
-<a id="color-color-static-ranges"></a>
-##### `ranges`
-
-*static*
-
-```ts
-static ranges:
-```
-
-Value range for each color space
-
 #### Inherited API
 
 - From [`Pt`](#pt-pt): [`id`](#pt-pt-id), [`w`](#pt-pt-w), [`x`](#pt-pt-x), [`y`](#pt-pt-y), [`z`](#pt-pt-z), [`$abs`](#pt-pt-dollar-abs), [`$add`](#pt-pt-dollar-add), [`$ceil`](#pt-pt-dollar-ceil), [`$concat`](#pt-pt-dollar-concat), [`$cross`](#pt-pt-dollar-cross), [`$cross2D`](#pt-pt-dollar-cross2-d), [`$divide`](#pt-pt-dollar-divide), [`$floor`](#pt-pt-dollar-floor), [`$max`](#pt-pt-dollar-max), [`$min`](#pt-pt-dollar-min), [`$multiply`](#pt-pt-dollar-multiply), [`$project`](#pt-pt-dollar-project), [`$round`](#pt-pt-dollar-round), [`$subtract`](#pt-pt-dollar-subtract), [`$take`](#pt-pt-dollar-take), [`$to`](#pt-pt-dollar-to), [`$unit`](#pt-pt-dollar-unit), [`abs`](#pt-pt-abs), [`add`](#pt-pt-add), [`angle`](#pt-pt-angle), [`angleBetween`](#pt-pt-angle-between), [`ceil`](#pt-pt-ceil), [`divide`](#pt-pt-divide), [`dot`](#pt-pt-dot), [`equals`](#pt-pt-equals), [`floor`](#pt-pt-floor), [`magnitude`](#pt-pt-magnitude), [`magnitudeSq`](#pt-pt-magnitude-sq), [`maxValue`](#pt-pt-max-value), [`minValue`](#pt-pt-min-value), [`multiply`](#pt-pt-multiply), [`op`](#pt-pt-op), [`ops`](#pt-pt-ops), [`projectScalar`](#pt-pt-project-scalar), [`reflect2D`](#pt-pt-reflect2-d), [`rotate2D`](#pt-pt-rotate2-d), [`round`](#pt-pt-round), [`scale`](#pt-pt-scale), [`shear2D`](#pt-pt-shear2-d), [`subtract`](#pt-pt-subtract), [`to`](#pt-pt-to), [`toAngle`](#pt-pt-to-angle), [`toArray`](#pt-pt-to-array), [`toBound`](#pt-pt-to-bound), [`toGroup`](#pt-pt-to-group), [`unit`](#pt-pt-unit), [`make`](#pt-pt-static-make).
@@ -2193,7 +2192,7 @@ Value range for each color space
 <a id="create-boid"></a>
 ### `Boid`
 
-**Kind:** Class · **Source:** [`src/Create.ts:905`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L905)
+**Kind:** Class · **Source:** [`src/Create.ts:906`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L906)
 
 **Extends:** `Pt`
 
@@ -2440,7 +2439,7 @@ Create.sampling( space.innerBound, 10 )
 <a id="create-delaunay"></a>
 ### `Delaunay`
 
-**Kind:** Class · **Source:** [`src/Create.ts:528`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L528)
+**Kind:** Class · **Source:** [`src/Create.ts:529`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L529)
 
 **Extends:** `Group`
 
@@ -2531,7 +2530,7 @@ Generate Voronoi cells. `delaunay()` must be called before calling this function
 <a id="create-flock"></a>
 ### `Flock`
 
-**Kind:** Class · **Source:** [`src/Create.ts:947`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L947)
+**Kind:** Class · **Source:** [`src/Create.ts:948`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L948)
 
 **Extends:** `Group`
 
@@ -2741,7 +2740,7 @@ the flock down instead of teleporting it. A non-positive or NaN time is a no-op.
 <a id="create-noise"></a>
 ### `Noise`
 
-**Kind:** Class · **Source:** [`src/Create.ts:297`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L297)
+**Kind:** Class · **Source:** [`src/Create.ts:298`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L298)
 
 **Extends:** `Pt`
 
@@ -2841,7 +2840,7 @@ perm: number[]
 <a id="create-poissondisk"></a>
 ### `PoissonDisk`
 
-**Kind:** Class · **Source:** [`src/Create.ts:1602`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L1602)
+**Kind:** Class · **Source:** [`src/Create.ts:1603`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L1603)
 
 **Extends:** `Group`
 
@@ -4869,7 +4868,7 @@ type ImgOptions = { crossOrigin:boolean, editable:boolean, pixelScale:number, sp
 <a id="linearalgebra-mat"></a>
 ### `Mat`
 
-**Kind:** Class · **Source:** [`src/LinearAlgebra.ts:213`](https://github.com/williamngan/pts/blob/master/src/LinearAlgebra.ts#L213)
+**Kind:** Class · **Source:** [`src/LinearAlgebra.ts:212`](https://github.com/williamngan/pts/blob/master/src/LinearAlgebra.ts#L212)
 
 Mat provides various static functions for matrix operations as well as a convenient way to chain a 3x3 transformation matrix. It's not fully optimized but good enough to use.
 
@@ -5222,7 +5221,7 @@ Zip one slice of an array of Pts. For example, if the input `g` are organized in
 <a id="linearalgebra-vec"></a>
 ### `Vec`
 
-**Kind:** Class · **Source:** [`src/LinearAlgebra.ts:10`](https://github.com/williamngan/pts/blob/master/src/LinearAlgebra.ts#L10)
+**Kind:** Class · **Source:** [`src/LinearAlgebra.ts:9`](https://github.com/williamngan/pts/blob/master/src/LinearAlgebra.ts#L9)
 
 Vec provides various static functions for vector operations. It's not fully optimized but good enough to use.
 
@@ -5520,7 +5519,7 @@ Unit vector of `a`. If magnitude of `a` is already known, pass it in the second 
 <a id="num-geom"></a>
 ### `Geom`
 
-**Kind:** Class · **Source:** [`src/Num.ts:204`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L204)
+**Kind:** Class · **Source:** [`src/Num.ts:203`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L203)
 
 Geom class provides static helper functions for basic geometric operations.
 
@@ -5821,7 +5820,7 @@ Check if a Pt is within the rectangular boundary defined by two Pts.
 <a id="num-num"></a>
 ### `Num`
 
-**Kind:** Class · **Source:** [`src/Num.ts:19`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L19)
+**Kind:** Class · **Source:** [`src/Num.ts:18`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L18)
 
 Num class provides static helper functions for basic numeric operations.
 
@@ -6088,7 +6087,7 @@ static generator: any
 <a id="num-range"></a>
 ### `Range`
 
-**Kind:** Class · **Source:** [`src/Num.ts:969`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L969)
+**Kind:** Class · **Source:** [`src/Num.ts:974`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L974)
 
 Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension.
 It also provides convenient functions such as mapping the Group to another range. This class may be useful for visualizing data in charts.
@@ -6193,7 +6192,7 @@ Create a number of evenly spaced "ticks" that span this Range's min and max valu
 <a id="num-shaping"></a>
 ### `Shaping`
 
-**Kind:** Class · **Source:** [`src/Num.ts:577`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L577)
+**Kind:** Class · **Source:** [`src/Num.ts:576`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L576)
 
 Shaping provides shaping functions to interpolate a value. These are useful for easing and transitions.
 
@@ -6337,7 +6336,7 @@ A faster way to approximate cosine ease in-out using Blinn-Wyvill Approximation.
 static cubicBezier(t: number, c: number = 1, p1: PtLike = ..., p2: PtLike = ...): number
 ```
 
-Cubic bezier curve. This reuses the bezier functions in Curve class. Note that `t` is the curve parameter, not the x position: unlike CSS `cubic-bezier(...)`, this returns the curve's y value at parameter `t` rather than solving y at x = t.
+Cubic bezier curve from (0, 0) to (1, 1) with two control points. Note that `t` is the curve parameter, not the x position: unlike CSS `cubic-bezier(...)`, this returns the curve's y value at parameter `t` rather than solving y at x = t.
 
 **Parameters**
 
@@ -12438,7 +12437,7 @@ textBaseline: string
 <a id="svg-svgform"></a>
 ### `SVGForm`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:985`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L985)
+**Kind:** Class · **Source:** [`src/Svg.ts:986`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L986)
 
 **Extends:** `CanvasForm`
 
@@ -13550,7 +13549,7 @@ Truncate text to fit width. The result is guaranteed to fit: the largest prefix 
 <a id="ui-ui"></a>
 ### `UI`
 
-**Kind:** Class · **Source:** [`src/UI.ts:105`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L105)
+**Kind:** Class · **Source:** [`src/UI.ts:110`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L110)
 
 **[Experimental]** An abstract class that represents an UI element. It wraps a [`Group`](#pt-group) and supports UI event handling.
 Extend this class to create custom UI elements.
@@ -13854,7 +13853,7 @@ A static function to listen for a list of UIs. See also [`UI.listen`](#ui-ui-lis
 <a id="ui-uibutton"></a>
 ### `UIButton`
 
-**Kind:** Class · **Source:** [`src/UI.ts:484`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L484)
+**Kind:** Class · **Source:** [`src/UI.ts:504`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L504)
 
 **Extends:** `UI`
 
@@ -13981,7 +13980,7 @@ Add handlers for hover events. Remember this button will also need to be tracked
 <a id="ui-uidragger"></a>
 ### `UIDragger`
 
-**Kind:** Class · **Source:** [`src/UI.ts:612`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L612)
+**Kind:** Class · **Source:** [`src/UI.ts:632`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L632)
 
 **Extends:** `UIButton`
 
@@ -14317,7 +14316,7 @@ rectangle: rectangle
 <a id="util-util"></a>
 ### `Util`
 
-**Kind:** Class · **Source:** [`src/Util.ts:100`](https://github.com/williamngan/pts/blob/master/src/Util.ts#L100)
+**Kind:** Class · **Source:** [`src/Util.ts:107`](https://github.com/williamngan/pts/blob/master/src/Util.ts#L107)
 
 Util class provides static helper functions.
 

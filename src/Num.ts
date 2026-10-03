@@ -1,7 +1,6 @@
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 import { Const, Util } from "./Util";
-import { Curve } from "./Op";
 import { Pt, Group } from "./Pt";
 import { Vec, Mat } from "./LinearAlgebra";
 import {
@@ -890,7 +889,7 @@ export class Shaping {
   }
 
   /**
-   * Cubic bezier curve. This reuses the bezier functions in Curve class. Note that `t` is the curve parameter, not the x position: unlike CSS `cubic-bezier(...)`, this returns the curve's y value at parameter `t` rather than solving y at x = t.
+   * Cubic bezier curve from (0, 0) to (1, 1) with two control points. Note that `t` is the curve parameter, not the x position: unlike CSS `cubic-bezier(...)`, this returns the curve's y value at parameter `t` rather than solving y at x = t.
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    * @param p1` a Pt object specifying the first control Pt. Default is `Pt(0.1, 0.7).
@@ -902,14 +901,20 @@ export class Shaping {
     p1: PtLike = [0.1, 0.7],
     p2: PtLike = [0.9, 0.2],
   ): number {
-    const curve = new Group(new Pt(0, 0), new Pt(p1), new Pt(p2), new Pt(1, 1));
-    return (
-      c *
-      Curve.bezierStep(
-        new Pt(t * t * t, t * t, t, 1),
-        Curve.controlPoints(curve),
-      ).y
-    );
+    // `Curve.bezierStep` on the controls (0, 0), p1, p2, (1, 1), inlined so
+    // this module does not import Op (a Pt-only bundle would otherwise keep
+    // every geometry class). The float32 rounding of that Pt-based evaluation
+    // is kept: the powers of t, the control values and the result are float32,
+    // and the weighted sum has the same terms in the same order.
+    const t3 = Math.fround(t * t * t);
+    const t2 = Math.fround(t * t);
+    const t1 = Math.fround(t);
+    const y =
+      (-t3 + 3 * t2 - 3 * t1 + 1) * 0 +
+      (3 * t3 - 6 * t2 + 3 * t1) * new Pt(p1)[1] +
+      (-3 * t3 + 3 * t2) * new Pt(p2)[1] +
+      t3 * 1;
+    return c * Math.fround(y);
   }
 
   /**

@@ -94,11 +94,33 @@ export const Const = {
   gaussian: 0.3989422804014327,
 };
 
+// Mutable statics live in module state behind accessors: a static field would
+// be emitted as an assignment after the class, which bundlers keep, and with
+// it the class and everything it references (see Svg.ts). Internal code still
+// goes through the public static, so redefining it (Object.defineProperty, an
+// assignment through a Proxy) takes effect as it did with a field.
+let _utilWarnLevel: WarningType = "mute";
+
 /**
  * Util class provides static helper functions.
  */
 export class Util {
-  static _warnLevel: WarningType = "mute";
+  static get _warnLevel(): WarningType {
+    return _utilWarnLevel;
+  }
+  static set _warnLevel(lv: WarningType) {
+    // as with a static field, an assignment on a subclass stays on the subclass
+    if (this === Util) {
+      _utilWarnLevel = lv;
+    } else {
+      Object.defineProperty(this, "_warnLevel", {
+        value: lv,
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      });
+    }
+  }
 
   /**
    * Set a global warning level setting. If no parameter is passed, this will return the current warn-level. See [`Util.warn`](#link).

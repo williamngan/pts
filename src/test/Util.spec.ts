@@ -216,3 +216,52 @@ describe("Util correctness pins", () => {
     expect(asGroup).toHaveLength(2);
   });
 });
+
+describe("Util._warnLevel", () => {
+  it("stays in step with warnLevel in both directions", () => {
+    Util.warnLevel("warn");
+    expect(Util._warnLevel).toBe("warn");
+    Util._warnLevel = "error";
+    expect(Util.warnLevel()).toBe("error");
+    expect(() => Util.warn("boom")).toThrow("boom");
+  });
+
+  it("gives a subclass its own value when assigned on the subclass", () => {
+    class Quiet extends Util {}
+    Util.warnLevel("warn");
+    Quiet._warnLevel = "error";
+    expect(Quiet._warnLevel).toBe("error");
+    expect(Util._warnLevel).toBe("warn");
+    expect(Util.warnLevel()).toBe("warn");
+  });
+
+  it("warns at a _warnLevel redefined with defineProperty", () => {
+    const descriptor = Object.getOwnPropertyDescriptor(Util, "_warnLevel")!;
+    try {
+      Object.defineProperty(Util, "_warnLevel", {
+        value: "error",
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      });
+      expect(Util.warnLevel()).toBe("error");
+      expect(() => Util.warn("boom")).toThrow("boom");
+      expect(Util.warnLevel("mute")).toBe("mute");
+      expect(Util._warnLevel).toBe("mute");
+      expect(() => Util.warn("quiet")).not.toThrow();
+    } finally {
+      Object.defineProperty(Util, "_warnLevel", descriptor);
+    }
+  });
+
+  it("warns at a _warnLevel assigned through a Proxy", () => {
+    const descriptor = Object.getOwnPropertyDescriptor(Util, "_warnLevel")!;
+    try {
+      new Proxy(Util, {})._warnLevel = "error";
+      expect(Util.warnLevel()).toBe("error");
+      expect(() => Util.warn("boom")).toThrow("boom");
+    } finally {
+      Object.defineProperty(Util, "_warnLevel", descriptor);
+    }
+  });
+});

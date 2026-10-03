@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { Mat, Vec } from "../LinearAlgebra";
+import { Line } from "../Op";
 import { Group, Pt } from "../Pt";
+import type { PtLike } from "../Types";
 
 function values(value: ArrayLike<number>) {
   return Array.from(value);
@@ -299,5 +301,93 @@ describe("Vec and Mat correctness pins", () => {
       [2, 99],
     ]);
     expect(() => Mat.zipSlice([[1]], 5)).toThrow(Error);
+  });
+});
+
+describe("Mat.reflectAt2DMatrix", () => {
+  // The matrix built from Line.intercept, as reflectAt2DMatrix did before the
+  // intercept was inlined (so LinearAlgebra does not depend on Op).
+  const viaIntercept = (p1: PtLike, p2: PtLike) => {
+    const intercept = Line.intercept(p1, p2);
+    if (intercept == undefined) {
+      return [
+        new Pt([-1, 0, 0]),
+        new Pt([0, 1, 0]),
+        new Pt([p1[0] + p2[0], 0, 1]),
+      ];
+    }
+    const yi = intercept.yi;
+    const ang2 = Math.atan(intercept.slope) * 2;
+    const cosA = Math.cos(ang2);
+    const sinA = Math.sin(ang2);
+    return [
+      new Pt([cosA, sinA, 0]),
+      new Pt([sinA, -cosA, 0]),
+      new Pt([-yi * sinA, yi + yi * cosA, 1]),
+    ];
+  };
+  const rows = (m: Pt[]) => m.map((row) => Array.from(row));
+
+  it("matches the Line.intercept construction bit for bit", () => {
+    const values = [-7.25, -1, 0, 1 / 3, 0.5, 2, 1e-7, 123.456];
+    const mismatches: string[] = [];
+    for (const a of values) {
+      for (const b of values) {
+        for (const c of values) {
+          for (const d of values) {
+            const got = rows(Mat.reflectAt2DMatrix([a, b], [c, d]));
+            const want = rows(viaIntercept([a, b], [c, d]));
+            const same = got.every((row, i) =>
+              row.every((v, j) => Object.is(v, want[i][j])),
+            );
+            if (!same) mismatches.push(`${a} ${b} ${c} ${d}`);
+          }
+        }
+      }
+    }
+    expect(mismatches).toEqual([]);
+  });
+
+  it("matches at vertical, horizontal, repeated, NaN and infinite points", () => {
+    const pairs: [PtLike, PtLike][] = [
+      [
+        [2, 0],
+        [2, 5],
+      ],
+      [
+        [0, 2],
+        [5, 2],
+      ],
+      [
+        [3, 3],
+        [3, 3],
+      ],
+      [
+        [NaN, 1],
+        [2, 3],
+      ],
+      [
+        [1, NaN],
+        [2, 3],
+      ],
+      [new Pt(0.1, 0.2), new Pt(0.3, 0.7)],
+      [
+        [Infinity, 1],
+        [Infinity, 3],
+      ],
+      [
+        [-Infinity, 1],
+        [2, 3],
+      ],
+      [
+        [1, 1],
+        [Infinity, 3],
+      ],
+    ];
+    for (const [p1, p2] of pairs) {
+      expect(rows(Mat.reflectAt2DMatrix(p1, p2))).toEqual(
+        rows(viaIntercept(p1, p2)),
+      );
+    }
   });
 });

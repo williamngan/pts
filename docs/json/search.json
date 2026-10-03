@@ -732,12 +732,6 @@
     0
   ],
   [
-    "Color_Color#property_ranges",
-    "Color.ranges",
-    "Variable",
-    0
-  ],
-  [
     "Color_Color#accessor_a",
     "Color.a",
     "Accessor",
@@ -860,6 +854,12 @@
   [
     "Color_Color#accessor_z",
     "Color.z",
+    "Accessor",
+    6
+  ],
+  [
+    "Color_Color#accessor_ranges",
+    "Color.ranges",
     "Accessor",
     6
   ],

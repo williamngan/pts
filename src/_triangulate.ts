@@ -43,9 +43,12 @@ const EMPTY: Triangulation = {
 const EPS = 1.1102230246251565e-16;
 // Bounds on the rounding error of the determinants below, relative to the sum
 // of the absolute values of their terms (the classic forward error analysis
-// of the orientation and in-circle determinants).
-const ORIENT_BOUND = (3 + 16 * EPS) * EPS;
-const INCIRCLE_BOUND = (10 + 96 * EPS) * EPS;
+// of the orientation and in-circle determinants). Computed through a function
+// marked pure so bundles that never triangulate drop them: a bundler that
+// turns these consts into vars cannot prove the bare products side-effect free.
+const errorBound = (a: number, b: number) => (a + b * EPS) * EPS;
+const ORIENT_BOUND = /* @__PURE__ */ errorBound(3, 16);
+const INCIRCLE_BOUND = /* @__PURE__ */ errorBound(10, 96);
 // Coordinates that become integers below 2^31 when scaled by one power of two
 // (pixel grids, halves, quarters, every Float32 value in a sane range) keep
 // their differences exact in a double; the products those differences form are
@@ -322,15 +325,28 @@ function _incircleInt(
 // Exact evaluation: each double is sign * mantissa * 2^exponent with an
 // integer mantissa, so scaling every input to the smallest exponent gives
 // exact integers whose determinant has the same sign as the real one.
-const _bits = new Float64Array(1);
-const _words = new Uint32Array(_bits.buffer);
-_bits[0] = 1;
-const HI = _words[1] === 0x3ff00000 ? 1 : 0;
-const LO = HI ^ 1;
+// Views over one buffer, and the indices of the words holding a double's
+// high bits (sign, exponent, top of the mantissa) and low bits. Every
+// initializer is a call marked pure, so a bundle that never triangulates
+// drops all of it (a bundler cannot prove `HI ^ 1` free of side effects).
+const _buffer = /* @__PURE__ */ new ArrayBuffer(8);
+const _bits = /* @__PURE__ */ new Float64Array(_buffer);
+const _words = /* @__PURE__ */ new Uint32Array(_buffer);
+const HI = /* @__PURE__ */ wordIndex(true);
+const LO = /* @__PURE__ */ wordIndex(false);
+
+function wordIndex(high: boolean): number {
+  // little-endian hosts store the high word of 1.0 (0x3ff00000) second
+  const probe = new Float64Array([1]);
+  const highSecond = new Uint32Array(probe.buffer)[1] === 0x3ff00000;
+  return high === highSecond ? 1 : 0;
+}
+
 const _mant = new Float64Array(8);
 const _expo = new Int32Array(8);
-// BigInt is only touched inside the exact fallback, so loading this module
-// never requires it
+// BigInt is used only when called: by `crossingParameter` (every proper
+// crossing in the polygon overlay) and by the exact predicates below, so
+// loading this module never requires it
 
 function _scaled(values: Float64Array, count: number): bigint[] {
   let minExpo = 0x7fffffff;
@@ -360,8 +376,9 @@ function _scaled(values: Float64Array, count: number): bigint[] {
 }
 
 // `Number(bigint)` is finite below 2^1024; shift in whole limbs until then.
-const FINITE_LIMIT = BigInt(1) << BigInt(1023);
-const SHIFT_STEP = BigInt(64);
+// Created on first use, so loading this module never evaluates BigInt.
+let _finiteLimit: bigint | undefined;
+let _shiftStep: bigint;
 
 /**
  * Parameter of a known proper crossing along a→b. Evaluate the determinants
@@ -391,11 +408,15 @@ export function crossingParameter(
   // Keep the conversion finite even when the input doubles span hundreds of
   // binary exponents. The numerator is between zero and the denominator, and
   // a denominator of ordinary size needs no shift at all.
+  if (_finiteLimit === undefined) {
+    _finiteLimit = BigInt(1) << BigInt(1023);
+    _shiftStep = BigInt(64);
+  }
   let shift = BigInt(0);
   let scaled = denominator;
-  while (scaled >= FINITE_LIMIT) {
-    scaled >>= SHIFT_STEP;
-    shift += SHIFT_STEP;
+  while (scaled >= _finiteLimit) {
+    scaled >>= _shiftStep;
+    shift += _shiftStep;
   }
   return Number(numerator >> shift) / Number(scaled);
 }

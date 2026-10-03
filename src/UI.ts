@@ -98,6 +98,11 @@ export const UIPointerActions = {
 export type UIPointerAction =
   (typeof UIPointerActions)[keyof typeof UIPointerActions];
 
+// module state behind the `_counter` accessor, so no static field assignment
+// follows the class (which would defeat tree-shaking); internal code still
+// uses `UI._counter` (see Util.ts)
+let _uiCounter = 0;
+
 /**
  * **[Experimental]** An abstract class that represents an UI element. It wraps a [`Group`](#link) and supports UI event handling.
  * Extend this class to create custom UI elements.
@@ -107,7 +112,22 @@ export class UI {
   _group: Group;
   _shape: string;
 
-  protected static _counter: number = 0;
+  protected static get _counter(): number {
+    return _uiCounter;
+  }
+  protected static set _counter(n: number) {
+    // as with a static field, an assignment on a subclass stays on the subclass
+    if (this === UI) {
+      _uiCounter = n;
+    } else {
+      Object.defineProperty(this, "_counter", {
+        value: n,
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      });
+    }
+  }
   protected _id: string;
   protected _actions: { [type: string]: (UIHandler | null)[] };
   // built-in machinery (UIButton hover, UIDragger drag) registers here, so

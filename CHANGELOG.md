@@ -1,5 +1,56 @@
 # Changelog
 
+## Unreleased
+
+### Performance
+
+- **Tree-shaking works per class.** Bundling the ESM build now keeps only the
+  classes a sketch uses and what they reference. With Vite, a bundle that
+  imports only `Pt` drops from 116 KB to 26 KB minified (35 KB to 8 KB
+  gzipped), `Color` to 35 KB, `CanvasSpace` to 80 KB, and `Const` or `Form` to
+  about 1 KB; esbuild and rollup give about the same sizes, and webpack too,
+  except that no webpack bundle goes below about 26 KB. Import statements,
+  names and results are unchanged, and CommonJS and classic-script users load
+  the whole library as before. Five static fields that were emitted as
+  assignments after their class (`Util._warnLevel`, `UI._counter`,
+  `Color.D65`, `Color.ranges`, `SVGForm._offscreenWarned`) now keep their
+  values in module state, two methods no longer call geometry classes
+  (`Mat.reflectAt2DMatrix` and `Shaping.cubicBezier` compute the same values
+  inline), and module-level constants in the triangulation and noise code are
+  marked removable.
+
+### Changed
+
+- `Color.ranges`, `Util._warnLevel` and `UI._counter` are static accessors
+  instead of static data properties. Reading and assigning them works as
+  before, including an assignment on a subclass, which still gives the
+  subclass its own value, and redefining them with `Object.defineProperty` or
+  assigning through a `Proxy` still changes what Pts uses. They are no longer
+  enumerable own properties, so `Object.keys`, `for…in`, spread and
+  `Object.assign` on `Color`, `Util` or `UI` no longer list them. Freezing
+  `Color`, `Util` or `UI` (`Object.freeze`, `harden`) no longer stops these
+  values from changing: assigning `Color.ranges`, calling `Util.warnLevel(lv)`
+  or creating a `UI` works on a frozen class instead of throwing a
+  `TypeError`, and an assignment on a frozen subclass throws in sloppy mode
+  instead of being ignored. The private `Color.D65` and
+  `SVGForm._offscreenWarned` no longer exist at runtime. In the API docs,
+  `Color.ranges` is listed under accessors (`#accessor_ranges`); links to its
+  old anchor, `#property_ranges`, still land on it, as do old links to any
+  member that moved between a property and an accessor, or between a static
+  and an instance function.
+
+### Internal / tooling
+
+- `check-artifacts` bundles `Const` and `Form` with Vite, parses the result,
+  and fails if any top-level statement other than an inert declaration
+  survives; five negative controls inject side effects into a copy of the
+  build, and a positive control harmless code, to prove it tells them apart.
+  It also runs tree-shaken bundles of several exports and compares their
+  results with the whole library's, with a control for an initialization the
+  bundler wrongly drops. `check-package` sets absolute ceilings for the
+  `Pt`-only, `CanvasSpace` and full Vite bundles. See
+  `plans/TREE-SHAKING-PLAN.md` and `plans/TREE-SHAKING-REVIEW.md`.
+
 ## 1.0.1 (2026-09-19)
 
 ### New

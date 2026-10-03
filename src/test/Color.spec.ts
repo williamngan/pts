@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Color } from "../Color";
+import { Group, Pt } from "../Pt";
 
 function expectColor(
   actual: ArrayLike<number>,
@@ -473,5 +474,86 @@ describe("Color conversion flags", () => {
       Color.HSLtoRGB(Color.hsl(780, 1, 0.5)),
       Color.HSLtoRGB(Color.hsl(60, 1, 0.5)),
     );
+  });
+});
+
+describe("Color.ranges", () => {
+  it("returns one shared object, and conversions follow its values", () => {
+    expect(Color.ranges).toBe(Color.ranges);
+    const red = Color.ranges.rgb[0];
+    const max = red[1];
+    try {
+      red[1] = 100;
+      expect(Color.maxValues("rgb")[0]).toBe(100);
+      expect(Color.rgb(50, 0, 0).normalize()[0]).toBeCloseTo(0.5);
+    } finally {
+      red[1] = max;
+    }
+    expect(Color.maxValues("rgb")[0]).toBe(255);
+  });
+
+  it("replaces the ranges that conversions use when assigned on Color", () => {
+    const original = Color.ranges;
+    try {
+      Color.ranges = Object.assign({}, original, {
+        rgb: new Group(new Pt(0, 1), new Pt(0, 1), new Pt(0, 1)),
+      });
+      expect(Array.from(Color.maxValues("rgb"))).toEqual([1, 1, 1]);
+      expect(Color.rgb(0.5, 0, 0).normalize()[0]).toBeCloseTo(0.5);
+    } finally {
+      Color.ranges = original;
+    }
+    expect(Color.ranges).toBe(original);
+    expect(Color.maxValues("rgb")[0]).toBe(255);
+  });
+
+  it("gives a subclass its own ranges when assigned on the subclass", () => {
+    class Tinted extends Color {}
+    const original = Color.ranges;
+    const custom = { rgb: new Group(new Pt(0, 1), new Pt(0, 1), new Pt(0, 1)) };
+    expect(Tinted.ranges).toBe(original);
+    Tinted.ranges = custom;
+    expect(Tinted.ranges).toBe(custom);
+    expect(Object.prototype.hasOwnProperty.call(Tinted, "ranges")).toBe(true);
+    expect(Color.ranges).toBe(original);
+    expect(Color.maxValues("rgb")[0]).toBe(255);
+  });
+
+  // Redefining the static, rather than assigning it, must reach conversions
+  // too, as it did when `ranges` was a static field.
+  const unitRgb = () =>
+    Object.assign({}, Color.ranges, {
+      rgb: new Group(new Pt(0, 1), new Pt(0, 1), new Pt(0, 1)),
+    });
+
+  it("follows Color.ranges when it is redefined with defineProperty", () => {
+    const descriptor = Object.getOwnPropertyDescriptor(Color, "ranges")!;
+    try {
+      Object.defineProperty(Color, "ranges", {
+        value: unitRgb(),
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      });
+      expect(Array.from(Color.maxValues("rgb"))).toEqual([1, 1, 1]);
+      expect(Color.rgb(0.5, 0, 0).normalize()[0]).toBeCloseTo(0.5);
+      expect(Color.RGBtoHSL(Color.rgb(1, 0, 0), false, true)[0]).toBe(0);
+    } finally {
+      Object.defineProperty(Color, "ranges", descriptor);
+    }
+    expect(Color.maxValues("rgb")[0]).toBe(255);
+  });
+
+  it("follows Color.ranges when it is assigned through a Proxy", () => {
+    const descriptor = Object.getOwnPropertyDescriptor(Color, "ranges")!;
+    const custom = unitRgb();
+    try {
+      new Proxy(Color, {}).ranges = custom;
+      expect(Color.ranges).toBe(custom);
+      expect(Array.from(Color.maxValues("rgb"))).toEqual([1, 1, 1]);
+    } finally {
+      Object.defineProperty(Color, "ranges", descriptor);
+    }
+    expect(Color.maxValues("rgb")[0]).toBe(255);
   });
 });

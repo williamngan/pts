@@ -261,7 +261,8 @@ const __noise_permTable = [
 // The doubled base permutation table, built once and shared by every unseeded
 // Noise instance (a per-instance copy would allocate 512 entries per point in
 // `Create.noisePts`). `seed()` swaps in a seeded table instead of mutating.
-const __noise_permDoubled = __noise_permTable.concat(__noise_permTable);
+const __noise_permDoubled =
+  /* @__PURE__ */ __noise_permTable.concat(__noise_permTable);
 
 // Memoize the last seeded table: `Create.noisePts` seeds every point with the
 // same value, so all its Noise Pts share one table.

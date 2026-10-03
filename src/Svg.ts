@@ -963,6 +963,7 @@ export class SVGSpace extends DOMSpace {
 
 let _svgFormGroupID = 0;
 let _svgFormDomID = 0;
+let _svgFormOffscreenWarned = false;
 
 // rendering-context style keys and their legacy inline-style names
 const _legacyStyleKeys: Record<string, string> = {
@@ -1081,10 +1082,9 @@ export class SVGForm extends CanvasForm<SVGSpace> {
     SVGForm._warnOffscreen();
   }
 
-  private static _offscreenWarned = false;
   private static _warnOffscreen() {
-    if (SVGForm._offscreenWarned) return;
-    SVGForm._offscreenWarned = true;
+    if (_svgFormOffscreenWarned) return;
+    _svgFormOffscreenWarned = true;
     Util.warn(
       "offscreen canvases are not supported in SVG output; use CanvasSpace",
     );

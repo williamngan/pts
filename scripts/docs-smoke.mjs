@@ -291,9 +291,82 @@ try {
     .getByRole("link", { name: "Color.ranges", exact: true })
     .press("Enter");
   await page.waitForURL(
-    `${documentation.origin}/index.html?p=Color_Color#property_ranges`,
+    `${documentation.origin}/index.html?p=Color_Color#accessor_ranges`,
   );
-  await page.locator("#property_ranges").waitFor();
+  await page.locator("#accessor_ranges").waitFor();
+
+  // Old member anchors: `ranges` was a property before 1.0.2, and static
+  // functions had no static prefix before 1.0. Links to them land on the
+  // member and the address bar shows its current anchor.
+  const colorPage = `${documentation.origin}/index.html?p=Color_Color`;
+  const inView = (hash) =>
+    page.waitForFunction((hash) => {
+      const target = document.getElementById(hash);
+      const contents = document.getElementById("contents");
+      return (
+        target !== null &&
+        contents.scrollTop > 0 &&
+        target.getBoundingClientRect().top >=
+          contents.getBoundingClientRect().top - 1 &&
+        target.getBoundingClientRect().top <
+          contents.getBoundingClientRect().bottom
+      );
+    }, hash);
+  // A link inside the page, clicked through the page's own handler; added,
+  // clicked and removed at once so a re-render cannot drop it first.
+  const clickInjectedLink = (href) =>
+    page.evaluate((href) => {
+      const link = document.createElement("a");
+      link.href = href;
+      document.getElementById("contents").prepend(link);
+      link.click();
+      link.remove();
+    }, href);
+  for (const [hash, current] of [
+    ["accessor_ranges", "accessor_ranges"],
+    ["property_ranges", "accessor_ranges"],
+    // the static Color.rgb(), not the rgb accessor
+    ["function_rgb", "function_static_rgb"],
+  ]) {
+    await page.goto("about:blank");
+    await page.goto(`${colorPage}#${hash}`);
+    await page.waitForURL(`${colorPage}#${current}`);
+    await inView(current);
+  }
+
+  // Clicking an old link inside the page adds a history entry, as any link
+  // does, so Back returns to the member the reader was at.
+  await page.goto("about:blank");
+  await page.goto(`${colorPage}#function_static_maxValues`);
+  await inView("function_static_maxValues");
+  await clickInjectedLink("?p=Color_Color#accessor_hex");
+  await page.waitForURL(`${colorPage}#accessor_hex`);
+  await inView("accessor_hex");
+  await clickInjectedLink("?p=Color_Color#property_ranges");
+  await page.waitForURL(`${colorPage}#accessor_ranges`);
+  await inView("accessor_ranges");
+  await page.goBack();
+  await page.waitForURL(`${colorPage}#accessor_hex`);
+
+  // Following an old link from another page resets the member list as any
+  // page load does.
+  await page.goto(`${documentation.origin}/index.html?p=Pt_Pt`);
+  await page
+    .locator("#contents")
+    .getByRole("heading", { name: "Pt", exact: true })
+    .waitFor();
+  await page.evaluate(() =>
+    document.getElementById("members").scrollTo(0, 100000),
+  );
+  assert.ok(
+    await page.evaluate(() => document.getElementById("members").scrollTop > 0),
+  );
+  await clickInjectedLink("?p=Color_Color#property_ranges");
+  await page.waitForURL(`${colorPage}#accessor_ranges`);
+  await inView("accessor_ranges");
+  await page.waitForFunction(
+    () => document.getElementById("members").scrollTop === 0,
+  );
 
   await page.goto(
     `${documentation.origin}/index.html?p=Types_CanvasSpaceOptions`,

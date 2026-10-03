@@ -49,7 +49,8 @@ declare class UI {
   private _abortCleanup;
   _group: Group;
   _shape: string;
-  protected static _counter: number;
+  protected static get _counter(): number;
+  protected static set _counter(n: number);
   protected _id: string;
   protected _actions: {
     [type: string]: (UIHandler | null)[];
@@ -3576,7 +3577,7 @@ declare class Shaping {
    */
   static quadraticBezier(t: number, c?: number, p?: number | PtLike): number;
   /**
-   * Cubic bezier curve. This reuses the bezier functions in Curve class. Note that `t` is the curve parameter, not the x position: unlike CSS `cubic-bezier(...)`, this returns the curve's y value at parameter `t` rather than solving y at x = t.
+   * Cubic bezier curve from (0, 0) to (1, 1) with two control points. Note that `t` is the curve parameter, not the x position: unlike CSS `cubic-bezier(...)`, this returns the curve's y value at parameter `t` rather than solving y at x = t.
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    * @param p1` a Pt object specifying the first control Pt. Default is `Pt(0.1, 0.7).
@@ -4462,15 +4463,17 @@ declare class Curve {
  * ```
  */
 declare class Color extends Pt {
-  private static D65;
   protected _mode: ColorType;
   private _isNorm;
   /**
    * Value range for each color space
    */
-  static ranges: {
+  static get ranges(): {
     [name: string]: Group;
   };
+  static set ranges(value: {
+    [name: string]: Group;
+  });
   /**
    * Create a Color. Same as creating a Pt. Optionally you may use [`Color.from`](#link) to create a color.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
@@ -4915,7 +4918,8 @@ declare const Const: {
  * Util class provides static helper functions.
  */
 declare class Util {
-  static _warnLevel: WarningType;
+  static get _warnLevel(): WarningType;
+  static set _warnLevel(lv: WarningType);
   /**
    * Set a global warning level setting. If no parameter is passed, this will return the current warn-level. See [`Util.warn`](#link).
    * @param lv a [`WarningType`](#link) option, where "error" will throw an error, "warn" will log in console, and "mute" will ignore the error.
@@ -5716,7 +5720,6 @@ declare class SVGForm extends CanvasForm<SVGSpace> {
    * Offscreen buffers require Canvas output. In SVG this warns once and does nothing.
    */
   renderOffscreen(_offset?: PtLike): void;
-  private static _offscreenWarned;
   private static _warnOffscreen;
   /**
    * Get the [`SVGSpace`](#link) instance that this form is associated with.

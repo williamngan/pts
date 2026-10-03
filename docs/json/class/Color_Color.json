@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Color.ts",
-      17,
+      43,
       13
     ]
   ],
@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Color.ts",
-          43,
+          71,
           2
         ]
       ],
@@ -46,12 +46,12 @@
       "source": [
         [
           "src/Color.ts",
-          322,
+          350,
           6
         ],
         [
           "src/Color.ts",
-          325,
+          353,
           6
         ]
       ],
@@ -77,12 +77,12 @@
       "source": [
         [
           "src/Color.ts",
-          362,
+          390,
           6
         ],
         [
           "src/Color.ts",
-          365,
+          393,
           6
         ]
       ],
@@ -108,12 +108,12 @@
       "source": [
         [
           "src/Color.ts",
-          278,
+          306,
           6
         ],
         [
           "src/Color.ts",
-          281,
+          309,
           6
         ]
       ],
@@ -139,12 +139,12 @@
       "source": [
         [
           "src/Color.ts",
-          332,
+          360,
           6
         ],
         [
           "src/Color.ts",
-          335,
+          363,
           6
         ]
       ],
@@ -170,12 +170,12 @@
       "source": [
         [
           "src/Color.ts",
-          268,
+          296,
           6
         ],
         [
           "src/Color.ts",
-          271,
+          299,
           6
         ]
       ],
@@ -201,12 +201,12 @@
       "source": [
         [
           "src/Color.ts",
-          289,
+          317,
           6
         ],
         [
           "src/Color.ts",
-          292,
+          320,
           6
         ]
       ],
@@ -232,7 +232,7 @@
       "source": [
         [
           "src/Color.ts",
-          167,
+          195,
           13
         ]
       ],
@@ -283,12 +283,12 @@
       "source": [
         [
           "src/Color.ts",
-          310,
+          338,
           6
         ],
         [
           "src/Color.ts",
-          313,
+          341,
           6
         ]
       ],
@@ -314,7 +314,7 @@
       "source": [
         [
           "src/Color.ts",
-          250,
+          278,
           6
         ]
       ],
@@ -332,12 +332,12 @@
       "source": [
         [
           "src/Color.ts",
-          372,
+          400,
           6
         ],
         [
           "src/Color.ts",
-          375,
+          403,
           6
         ]
       ],
@@ -363,12 +363,12 @@
       "source": [
         [
           "src/Color.ts",
-          258,
+          286,
           6
         ],
         [
           "src/Color.ts",
-          261,
+          289,
           6
         ]
       ],
@@ -394,7 +394,7 @@
       "source": [
         [
           "src/Color.ts",
-          175,
+          203,
           13
         ]
       ],
@@ -414,7 +414,7 @@
       "source": [
         [
           "src/Color.ts",
-          183,
+          211,
           13
         ]
       ],
@@ -434,12 +434,12 @@
       "source": [
         [
           "src/Color.ts",
-          300,
+          328,
           6
         ],
         [
           "src/Color.ts",
-          303,
+          331,
           6
         ]
       ],
@@ -465,12 +465,12 @@
       "source": [
         [
           "src/Color.ts",
-          342,
+          370,
           6
         ],
         [
           "src/Color.ts",
-          345,
+          373,
           6
         ]
       ],
@@ -496,12 +496,12 @@
       "source": [
         [
           "src/Color.ts",
-          352,
+          380,
           6
         ],
         [
           "src/Color.ts",
-          355,
+          383,
           6
         ]
       ],
@@ -642,6 +642,39 @@
           "name": "n",
           "comment": "",
           "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "ranges",
+      "source": [
+        [
+          "src/Color.ts",
+          50,
+          13
+        ],
+        [
+          "src/Color.ts",
+          53,
+          13
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "comment": "Value range for each color space",
+      "getter": {
+        "type": ""
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "value",
+          "comment": "",
+          "type": "",
           "default": false
         }
       }
@@ -951,7 +984,7 @@
       "source": [
         [
           "src/Color.ts",
-          404,
+          432,
           2
         ]
       ],
@@ -1284,7 +1317,7 @@
       "source": [
         [
           "src/Color.ts",
-          190,
+          218,
           2
         ]
       ],
@@ -1929,7 +1962,7 @@
       "source": [
         [
           "src/Color.ts",
-          383,
+          411,
           2
         ]
       ],
@@ -2790,7 +2823,7 @@
       "source": [
         [
           "src/Color.ts",
-          233,
+          261,
           2
         ]
       ],
@@ -2825,7 +2858,7 @@
       "source": [
         [
           "src/Color.ts",
-          413,
+          441,
           2
         ]
       ],
@@ -2905,7 +2938,7 @@
       "source": [
         [
           "src/Color.ts",
-          51,
+          79,
           9
         ]
       ],
@@ -2936,7 +2969,7 @@
       "source": [
         [
           "src/Color.ts",
-          64,
+          92,
           9
         ]
       ],
@@ -2967,7 +3000,7 @@
       "source": [
         [
           "src/Color.ts",
-          102,
+          130,
           9
         ]
       ],
@@ -2998,7 +3031,7 @@
       "source": [
         [
           "src/Color.ts",
-          566,
+          594,
           9
         ]
       ],
@@ -3041,7 +3074,7 @@
       "source": [
         [
           "src/Color.ts",
-          94,
+          122,
           9
         ]
       ],
@@ -3072,7 +3105,7 @@
       "source": [
         [
           "src/Color.ts",
-          481,
+          509,
           9
         ]
       ],
@@ -3115,7 +3148,7 @@
       "source": [
         [
           "src/Color.ts",
-          110,
+          138,
           9
         ]
       ],
@@ -3146,7 +3179,7 @@
       "source": [
         [
           "src/Color.ts",
-          919,
+          939,
           9
         ]
       ],
@@ -3189,7 +3222,7 @@
       "source": [
         [
           "src/Color.ts",
-          621,
+          649,
           9
         ]
       ],
@@ -3232,7 +3265,7 @@
       "source": [
         [
           "src/Color.ts",
-          803,
+          831,
           9
         ]
       ],
@@ -3275,7 +3308,7 @@
       "source": [
         [
           "src/Color.ts",
-          118,
+          146,
           9
         ]
       ],
@@ -3306,7 +3339,7 @@
       "source": [
         [
           "src/Color.ts",
-          942,
+          962,
           9
         ]
       ],
@@ -3349,7 +3382,7 @@
       "source": [
         [
           "src/Color.ts",
-          653,
+          681,
           9
         ]
       ],
@@ -3392,7 +3425,7 @@
       "source": [
         [
           "src/Color.ts",
-          126,
+          154,
           9
         ]
       ],
@@ -3423,7 +3456,7 @@
       "source": [
         [
           "src/Color.ts",
-          685,
+          713,
           9
         ]
       ],
@@ -3466,7 +3499,7 @@
       "source": [
         [
           "src/Color.ts",
-          876,
+          900,
           9
         ]
       ],
@@ -3552,7 +3585,7 @@
       "source": [
         [
           "src/Color.ts",
-          159,
+          187,
           9
         ]
       ],
@@ -3588,7 +3621,7 @@
       "source": [
         [
           "src/Color.ts",
-          142,
+          170,
           9
         ]
       ],
@@ -3619,7 +3652,7 @@
       "source": [
         [
           "src/Color.ts",
-          1071,
+          1091,
           9
         ]
       ],
@@ -3662,7 +3695,7 @@
       "source": [
         [
           "src/Color.ts",
-          998,
+          1018,
           9
         ]
       ],
@@ -3705,7 +3738,7 @@
       "source": [
         [
           "src/Color.ts",
-          150,
+          178,
           9
         ]
       ],
@@ -3736,7 +3769,7 @@
       "source": [
         [
           "src/Color.ts",
-          1094,
+          1114,
           9
         ]
       ],
@@ -3779,7 +3812,7 @@
       "source": [
         [
           "src/Color.ts",
-          1055,
+          1075,
           9
         ]
       ],
@@ -3822,7 +3855,7 @@
       "source": [
         [
           "src/Color.ts",
-          86,
+          114,
           9
         ]
       ],
@@ -3853,7 +3886,7 @@
       "source": [
         [
           "src/Color.ts",
-          530,
+          558,
           9
         ]
       ],
@@ -3896,7 +3929,7 @@
       "source": [
         [
           "src/Color.ts",
-          439,
+          467,
           9
         ]
       ],
@@ -3939,7 +3972,7 @@
       "source": [
         [
           "src/Color.ts",
-          605,
+          633,
           9
         ]
       ],
@@ -3982,7 +4015,7 @@
       "source": [
         [
           "src/Color.ts",
-          637,
+          665,
           9
         ]
       ],
@@ -4025,7 +4058,7 @@
       "source": [
         [
           "src/Color.ts",
-          669,
+          697,
           9
         ]
       ],
@@ -4068,7 +4101,7 @@
       "source": [
         [
           "src/Color.ts",
-          965,
+          985,
           9
         ]
       ],
@@ -4111,7 +4144,7 @@
       "source": [
         [
           "src/Color.ts",
-          1039,
+          1059,
           9
         ]
       ],
@@ -4154,7 +4187,7 @@
       "source": [
         [
           "src/Color.ts",
-          701,
+          729,
           9
         ]
       ],
@@ -4197,7 +4230,7 @@
       "source": [
         [
           "src/Color.ts",
-          134,
+          162,
           9
         ]
       ],
@@ -4228,7 +4261,7 @@
       "source": [
         [
           "src/Color.ts",
-          772,
+          800,
           9
         ]
       ],
@@ -4271,7 +4304,7 @@
       "source": [
         [
           "src/Color.ts",
-          837,
+          865,
           9
         ]
       ],
@@ -4314,7 +4347,7 @@
       "source": [
         [
           "src/Color.ts",
-          731,
+          759,
           9
         ]
       ],
@@ -4439,23 +4472,6 @@
       "overrides": false,
       "inherits": "Float32Array.length",
       "comment": "The length of the array."
-    },
-    {
-      "name": "ranges",
-      "source": [
-        [
-          "src/Color.ts",
-          27,
-          9
-        ]
-      ],
-      "flags": {
-        "isStatic": true
-      },
-      "type": "",
-      "overrides": false,
-      "inherits": false,
-      "comment": "Value range for each color space"
     }
   ],
   "flags": {},

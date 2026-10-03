@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Num.ts",
-      577,
+      576,
       13
     ]
   ],
@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Num.ts",
-          795,
+          794,
           9
         ]
       ],
@@ -54,7 +54,7 @@
       "source": [
         [
           "src/Num.ts",
-          824,
+          823,
           9
         ]
       ],
@@ -91,7 +91,7 @@
       "source": [
         [
           "src/Num.ts",
-          804,
+          803,
           9
         ]
       ],
@@ -128,7 +128,7 @@
       "source": [
         [
           "src/Num.ts",
-          710,
+          709,
           9
         ]
       ],
@@ -165,7 +165,7 @@
       "source": [
         [
           "src/Num.ts",
-          729,
+          728,
           9
         ]
       ],
@@ -202,7 +202,7 @@
       "source": [
         [
           "src/Num.ts",
-          719,
+          718,
           9
         ]
       ],
@@ -239,7 +239,7 @@
       "source": [
         [
           "src/Num.ts",
-          940,
+          945,
           9
         ]
       ],
@@ -282,7 +282,7 @@
       "source": [
         [
           "src/Num.ts",
-          698,
+          697,
           9
         ]
       ],
@@ -319,7 +319,7 @@
       "source": [
         [
           "src/Num.ts",
-          899,
+          898,
           9
         ]
       ],
@@ -330,7 +330,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Cubic bezier curve. This reuses the bezier functions in Curve class. Note that `t` is the curve parameter, not the x position: unlike CSS `cubic-bezier(...)`, this returns the curve's y value at parameter `t` rather than solving y at x = t.",
+          "comment": "Cubic bezier curve from (0, 0) to (1, 1) with two control points. Note that `t` is the curve parameter, not the x position: unlike CSS `cubic-bezier(...)`, this returns the curve's y value at parameter `t` rather than solving y at x = t.",
           "returns": "number",
           "returns_comment": false,
           "parameters": [
@@ -368,7 +368,7 @@
       "source": [
         [
           "src/Num.ts",
-          620,
+          619,
           9
         ]
       ],
@@ -405,7 +405,7 @@
       "source": [
         [
           "src/Num.ts",
-          639,
+          638,
           9
         ]
       ],
@@ -442,7 +442,7 @@
       "source": [
         [
           "src/Num.ts",
-          629,
+          628,
           9
         ]
       ],
@@ -479,7 +479,7 @@
       "source": [
         [
           "src/Num.ts",
-          742,
+          741,
           9
         ]
       ],
@@ -522,7 +522,7 @@
       "source": [
         [
           "src/Num.ts",
-          769,
+          768,
           9
         ]
       ],
@@ -565,7 +565,7 @@
       "source": [
         [
           "src/Num.ts",
-          756,
+          755,
           9
         ]
       ],
@@ -608,7 +608,7 @@
       "source": [
         [
           "src/Num.ts",
-          652,
+          651,
           9
         ]
       ],
@@ -651,7 +651,7 @@
       "source": [
         [
           "src/Num.ts",
-          662,
+          661,
           9
         ]
       ],
@@ -694,7 +694,7 @@
       "source": [
         [
           "src/Num.ts",
-          583,
+          582,
           9
         ]
       ],
@@ -731,7 +731,7 @@
       "source": [
         [
           "src/Num.ts",
-          847,
+          846,
           9
         ]
       ],
@@ -774,7 +774,7 @@
       "source": [
         [
           "src/Num.ts",
-          877,
+          876,
           9
         ]
       ],
@@ -817,7 +817,7 @@
       "source": [
         [
           "src/Num.ts",
-          592,
+          591,
           9
         ]
       ],
@@ -854,7 +854,7 @@
       "source": [
         [
           "src/Num.ts",
-          610,
+          609,
           9
         ]
       ],
@@ -891,7 +891,7 @@
       "source": [
         [
           "src/Num.ts",
-          601,
+          600,
           9
         ]
       ],
@@ -928,7 +928,7 @@
       "source": [
         [
           "src/Num.ts",
-          921,
+          926,
           9
         ]
       ],
@@ -971,7 +971,7 @@
       "source": [
         [
           "src/Num.ts",
-          863,
+          862,
           9
         ]
       ],
@@ -1014,7 +1014,7 @@
       "source": [
         [
           "src/Num.ts",
-          836,
+          835,
           9
         ]
       ],
@@ -1057,7 +1057,7 @@
       "source": [
         [
           "src/Num.ts",
-          671,
+          670,
           9
         ]
       ],
@@ -1094,7 +1094,7 @@
       "source": [
         [
           "src/Num.ts",
-          689,
+          688,
           9
         ]
       ],
@@ -1131,7 +1131,7 @@
       "source": [
         [
           "src/Num.ts",
-          680,
+          679,
           9
         ]
       ],
@@ -1168,7 +1168,7 @@
       "source": [
         [
           "src/Num.ts",
-          952,
+          957,
           9
         ]
       ],

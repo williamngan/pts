@@ -284,6 +284,16 @@ try {
     bundleSizes.small < bundleSizes.full * 0.75,
     `tree-shaking regression: small=${bundleSizes.small}, full=${bundleSizes.full}`,
   );
+  // Absolute ceilings about 2% above the measured Vite 8.2.1 bundles: a
+  // single class keeps only what it references (a Pt-only bundle was 116 KB
+  // before the tree-shaking repair). Re-baseline after a Vite upgrade.
+  const bundleCeilings = { small: 26100, canvas: 82000, full: 189000 };
+  for (const [name, ceiling] of Object.entries(bundleCeilings)) {
+    assert.ok(
+      bundleSizes[name] <= ceiling,
+      `tree-shaking regression: the ${name} Vite bundle is ${bundleSizes[name]} bytes; ceiling is ${ceiling}`,
+    );
+  }
 
   const productionTree = JSON.parse(
     run("npm", ["ls", "--omit=dev", "--all", "--json"], consumer, {
