@@ -364,6 +364,7 @@ export abstract class MultiTouchSpace extends Space {
   protected _dragged = false;
   private _pressId: number | null = null;
   private _pressIsTouch = false;
+  private _pressType = "";
 
   protected _hasMouse = false;
   protected _hasTouch = false;
@@ -492,6 +493,8 @@ export abstract class MultiTouchSpace extends Space {
       this.bindCanvas("contextmenu", this._contextMenuBind, {}, customTarget);
       this._hasMouse = true;
     } else if (this._hasMouse) {
+      // the press can no longer receive its release
+      if (this._pressed && !this._pressIsTouch) this._abandonPress();
       const target = this._mouseTarget;
       this.unbindCanvas("pointerdown", this._mouseDownBind, {}, target);
       this.unbindCanvas("pointerup", this._mouseUpBind, {}, target);
@@ -549,6 +552,8 @@ export abstract class MultiTouchSpace extends Space {
       this.bindCanvas("touchcancel", this._mouseOutBind, {}, customTarget);
       this._hasTouch = true;
     } else if (this._hasTouch) {
+      // the press can no longer receive its release
+      if (this._pressed && this._pressIsTouch) this._abandonPress();
       const target = this._touchTarget;
       const options = { passive: this._touchPassive };
       this.unbindCanvas("touchstart", this._touchStartBind, options, target);
@@ -781,16 +786,58 @@ export abstract class MultiTouchSpace extends Space {
   }
 
   /**
+   * Take the press for a new contact. A press of the same kind whose release
+   * was lost is replaced when its contact goes down again, or when a contact
+   * starts while no other contact of that kind is down (a primary pointer, or
+   * a touchstart whose new touches are all the active touches). So drag and
+   * drop keep working, while a second finger still cannot take the press.
+   */
+  private _beginPress(
+    evt: PointerEvent | TouchEvent,
+    id: number,
+    touch: boolean,
+    type: string,
+  ): void {
+    if (
+      this._pressed &&
+      this._pressType === type &&
+      (id === this._pressId ||
+        ("changedTouches" in evt
+          ? evt.touches.length === evt.changedTouches.length
+          : evt.isPrimary !== false))
+    )
+      this._abandonPress();
+    if (!this._pressed) {
+      this._pressId = id;
+      this._pressIsTouch = touch;
+      this._pressType = type;
+      this._pressed = true;
+    }
+  }
+
+  /**
+   * End a press whose release can no longer arrive, and drop tracked draggers
+   * still dragging, without sending actions to players.
+   */
+  private _abandonPress(): void {
+    this._releasePress();
+    for (const ui of this._trackedUIs.slice()) {
+      if (ui.state("dragging"))
+        ui.listen(
+          UIA.drop,
+          this._pointer,
+          new Event("pointercancel") as unknown as UIActionEvent,
+        );
+    }
+  }
+
+  /**
    * MouseDown handler.
    * @param evt
    */
   protected _mouseDown(evt: PointerEvent) {
     if (this._isTouchHandled(evt)) return false;
-    if (!this._pressed) {
-      this._pressId = evt.pointerId;
-      this._pressIsTouch = false;
-      this._pressed = true;
-    }
+    this._beginPress(evt, evt.pointerId, false, evt.pointerType || "mouse");
     this._mouseAction(UIA.down, evt);
     this._mouseAction(UIA.pointerdown, evt);
     if (typeof Element !== "undefined" && evt.target instanceof Element) {
@@ -927,11 +974,13 @@ export abstract class MultiTouchSpace extends Space {
    * @param evt
    */
   protected _touchStart(evt: TouchEvent) {
-    if (!this._pressed && evt.changedTouches.length) {
-      this._pressId = evt.changedTouches.item(0)!.identifier;
-      this._pressIsTouch = true;
-      this._pressed = true;
-    }
+    if (evt.changedTouches.length)
+      this._beginPress(
+        evt,
+        evt.changedTouches.item(0)!.identifier,
+        true,
+        "touchevent",
+      );
     this._mouseAction(UIA.down, evt);
     this._mouseAction(UIA.pointerdown, evt);
     if (!this._touchPassive) evt.preventDefault();

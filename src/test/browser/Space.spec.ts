@@ -91,6 +91,98 @@ describe("Space animation loop", () => {
       space.dispose();
     },
   );
+  it("recovers a press whose release was lost", async () => {
+    const space = new CanvasSpace(host()).setup({ retina: false });
+    await ready(space);
+    space.bindMouse();
+    space.bindTouch();
+    space.play(10);
+    const seen: string[] = [];
+    space.add({ animate() {}, action: (type: string) => seen.push(type) });
+    const dragger = UIDragger.fromRectangle(
+      [
+        [0, 0],
+        [100, 80],
+      ],
+      {},
+    ) as UIDragger;
+    space.track(dragger);
+    const pointer = (
+      type: string,
+      pointerId: number,
+      pointerType: string,
+      isPrimary = true,
+    ) =>
+      space.element.dispatchEvent(
+        new PointerEvent(type, {
+          pointerId,
+          pointerType,
+          isPrimary,
+          clientX: 40,
+          clientY: 50,
+        }),
+      );
+    const touch = (type: string, id: number, active: number[]) => {
+      const contact = (n: number) =>
+        new Touch({
+          identifier: n,
+          target: space.element,
+          clientX: 40,
+          clientY: 50,
+        });
+      space.element.dispatchEvent(
+        new TouchEvent(type, {
+          changedTouches: [contact(id)],
+          touches: active.map(contact),
+        }),
+      );
+    };
+    const mouseDrag = () => {
+      seen.length = 0;
+      pointer("pointerdown", 1, "mouse");
+      pointer("pointermove", 1, "mouse");
+      pointer("pointerup", 1, "mouse");
+      return seen.filter((t) => t === "drag" || t === "drop").join(",");
+    };
+
+    // touch input is unbound while a touch is down: its touchend never arrives
+    touch("touchstart", 3, [3]);
+    expect(dragger.state("dragging")).toBe(true);
+    space.bindTouch(false);
+    expect(dragger.state("dragging")).toBe(false);
+    expect(mouseDrag()).toBe("drag,drop");
+
+    // a pen's pointerup is lost; its next primary press takes over
+    pointer("pointerdown", 7, "pen");
+    pointer("pointerdown", 8, "pen");
+    seen.length = 0;
+    pointer("pointermove", 8, "pen");
+    pointer("pointerup", 8, "pen");
+    expect(seen).toContain("drag");
+    expect(seen).toContain("drop");
+
+    // a palm's primary touch cannot take a pen press
+    pointer("pointerdown", 9, "pen");
+    pointer("pointerdown", 10, "touch");
+    seen.length = 0;
+    pointer("pointermove", 9, "pen");
+    expect(seen).toContain("drag");
+    pointer("pointerup", 10, "touch");
+    pointer("pointerup", 9, "pen");
+    expect(mouseDrag()).toBe("drag,drop");
+
+    // a lost touchend: the next touch sequence starts with only its touch
+    space.bindTouch();
+    touch("touchstart", 4, [4]);
+    touch("touchstart", 5, [5]);
+    seen.length = 0;
+    touch("touchmove", 5, [5]);
+    touch("touchend", 5, []);
+    expect(seen).toContain("drag");
+    expect(seen).toContain("drop");
+    space.dispose();
+  });
+
   it("keeps scheduling when the first real RAF timestamp is zero", async () => {
     const space = new CanvasSpace(host()).setup({ retina: false });
     await ready(space);
