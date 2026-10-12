@@ -723,6 +723,10 @@ describe("Sound input", () => {
     expect(sound.progress).toBe(0);
     sound.start().stop();
     expect(track.stop).toHaveBeenCalledOnce();
+    sound.start();
+    expect(sound.playing).toBe(false);
+    sound.toggle();
+    expect(sound.playing).toBe(false);
   });
 
   it("rejects when microphone access fails", async () => {

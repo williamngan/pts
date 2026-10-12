@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Warn and leave playing false when restarting a stopped microphone stream; acquire a new input instead of silently playing dead tracks.
 - Prune Path candidate pairs with a y-interval hierarchy while preserving deterministic pair order. Full-width disjoint bars no longer trigger quadratic x-only scanning; genuinely overlapping boxes can still yield quadratic candidates.
 - After stalls, advance Tempo to the current period count and phase with one callback per listener; preserve rhythm boundaries and use the current period for alternating-beat progress.
 - Return a deterministic shared endpoint for collinear overlapping line segments, independent of argument order and endpoint direction.

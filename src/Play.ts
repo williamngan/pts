@@ -1,5 +1,6 @@
 import { Pt, Group, type Bound } from "./Pt";
 import { Num } from "./Num";
+import { Util } from "./Util";
 import {
   type ITempoListener,
   type ITempoStartFn,
@@ -263,6 +264,7 @@ export class Sound {
   protected _bufferPlayed: boolean = false; // An AudioBufferSourceNode can only start once
 
   protected _generated: boolean = false; // Whether _node is an oscillator created by _gen
+  private _inputStopped = false;
 
   // A single AudioContext shared by all Sound instances that don't provide their own
   protected static _sharedContext: AudioContext;
@@ -766,9 +768,25 @@ export class Sound {
   /**
    * Start playing. Internally this connects the `AudioNode` to `AudioContext`'s destination.
    * Calling `start( timeAt )` while a file or buffer sound is playing seeks to that time; a generated sound that is already playing is unaffected.
+   * An input whose microphone tracks were stopped cannot restart. This warns and
+   * leaves `playing` false; acquire a new stream with `Sound.input()` instead.
    * @param timeAt optional parameter to play from a specific time, in seconds
    */
   start(timeAt: number = 0): this {
+    if (
+      this._type === "input" &&
+      this._stream &&
+      (this._inputStopped ||
+        this._stream
+          .getAudioTracks()
+          .every((track) => track.readyState === "ended"))
+    ) {
+      this._playing = false;
+      Util.warn(
+        "Cannot restart a stopped input stream; use Sound.input() to acquire a new stream",
+      );
+      return this;
+    }
     if (this._ctx.state === "suspended") this._ctx.resume();
 
     if (this._type === "file") {
@@ -832,6 +850,7 @@ export class Sound {
       if (this._generated) (this._node as OscillatorNode).stop();
     } else if (this._type === "input" && this._stream) {
       // an input created from a node without its MediaStream has no tracks to stop
+      this._inputStopped = true;
       this._stream.getAudioTracks().forEach((track) => track.stop());
     }
 
