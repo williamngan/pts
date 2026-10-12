@@ -236,7 +236,7 @@ export class Geom {
   /**
    * Get a bounding box for a set of Pts.
    * @param pts a Group or an Iterable<Pt>
-   * @return a Group of two Pts, representing the top-left and bottom-right corners
+   * @return a Group of two Pts, representing the top-left and bottom-right corners, or an empty Group for empty input
    */
   static boundingBox(pts: PtIterable): Group {
     let minPt: Pt | undefined, maxPt: Pt | undefined;
@@ -252,7 +252,7 @@ export class Geom {
         }
       }
     }
-    return new Group(minPt!, maxPt!);
+    return minPt ? new Group(minPt, maxPt!) : new Group();
   }
 
   /**
@@ -362,6 +362,7 @@ export class Geom {
    */
   static sortEdges(pts: PtIterable): GroupLike {
     const _pts = Util.iterToArray(pts);
+    if (_pts.length < 2) return _pts;
     const bounds = Geom.boundingBox(_pts);
     const center = bounds[1].add(bounds[0]).divide(2);
     const cx = center[0];

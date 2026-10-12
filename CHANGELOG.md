@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Return empty results for empty bounding boxes and edge sorts; handle singleton edge sorts.
 - Detect polygon-circle collisions when either shape contains the other.
 - Fix convex hulls for repeated, collinear, tied-x, and nearly collinear points using exact orientation predicates.
 ## 1.0.2 (2026-10-03)

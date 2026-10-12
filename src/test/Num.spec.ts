@@ -12,6 +12,14 @@ function groupValues(value: ArrayLike<ArrayLike<number>>) {
   return Array.from(value, values);
 }
 
+it("handles empty and singleton geometry collections", () => {
+  expect(Geom.boundingBox([])).toEqual(new Group());
+  expect(new Group().boundingBox()).toEqual(new Group());
+  expect(Geom.sortEdges([])).toHaveLength(0);
+  const point = new Pt(1, 2);
+  expect(Geom.sortEdges(new Set([point]))).toEqual([point]);
+});
+
 afterEach(() => {
   Num.generator = undefined;
 });
