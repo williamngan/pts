@@ -693,13 +693,17 @@ export class Delaunay extends Group {
         const first = (h / 3) | 0;
         for (;;) {
           const t = (h / 3) | 0;
-          cell.push(shapes[t].circle[0]);
+          const center = shapes[t].circle[0];
+          if (!cell.length || !center.equals(cell[cell.length - 1], 0))
+            cell.push(center);
           // the edge entering this point leads to the next triangle around it
           const twin = neighbors[3 * t + ((h + 2) % 3)];
           if (twin === -1 || ((twin / 3) | 0) === first) break;
           h = twin;
         }
       }
+      if (cell.length > 1 && cell[0].equals(cell[cell.length - 1], 0))
+        cell.pop();
       vs.push(cell);
     }
     return vs;

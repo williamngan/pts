@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Remove consecutive and closing duplicate Voronoi vertices for cocircular sites, preventing zero-length edges and biased vertex means.
 - Clamp hexadecimal color channels to valid CSS bytes and map NaN to zero.
 - Restore shared typed-array subarray views in Pt and its Color and Particle subclasses, including SharedArrayBuffer views.
 - Keep wrapped values inside their half-open range, including reversed and equal endpoints and tiny negative angles.

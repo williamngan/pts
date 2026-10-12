@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Create, Delaunay, Noise } from "../Create";
 import { type DelaunayShape } from "../Types";
 import { Num } from "../Num";
+import { Polygon } from "../Op";
 import { Bound, Group, Pt } from "../Pt";
 
 function expectPt(
@@ -273,6 +274,20 @@ describe("Delaunay invariants", () => {
 });
 
 describe("Voronoi half-edge assembly", () => {
+  it("omits repeated circumcenters for cocircular grid sites", () => {
+    const points = new Group();
+    for (let x = 0; x < 4; x++)
+      for (let y = 0; y < 4; y++) points.push(new Pt(x, y));
+    const d = Create.delaunay(points);
+    d.delaunay();
+    const cells = d.voronoi();
+    for (const cell of cells)
+      expect(new Set(cell.map((p) => `${p[0]},${p[1]}`)).size).toBe(
+        cell.length,
+      );
+    expect(cells[5]).toHaveLength(4);
+    expect(Array.from(Polygon.centroid(cells[5]))).toEqual([1, 1]);
+  });
   function seededPts2(count: number, seed = 777) {
     let a = seed;
     const rand = () => {
