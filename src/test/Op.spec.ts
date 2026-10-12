@@ -503,6 +503,22 @@ describe("Polygon", () => {
   });
 
   it("checks points, circle SAT, and polygon SAT", () => {
+    const enclosed = Group.fromArray([
+      [50, 0],
+      [60, 0],
+      [55, 10],
+    ]);
+    for (const polygon of [enclosed, enclosed.slice().reverse()]) {
+      const hit = Polygon.hasIntersectCircle(
+        polygon,
+        Circle.fromCenter([0, 0], 100),
+      );
+      expect(hit).toBeTruthy();
+      expect(Number.isFinite(hit!.dist)).toBe(true);
+    }
+    expect(
+      Polygon.hasIntersectCircle(square(), Circle.fromCenter([5, 5], 1)),
+    ).toBeTruthy();
     expect(Polygon.hasIntersectPoint(square(), [5, 5])).toBe(true);
     expect(Polygon.hasIntersectPoint(square(), [15, 5])).toBe(false);
     expect(

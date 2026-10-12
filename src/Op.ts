@@ -1515,6 +1515,9 @@ export class Polygon {
     let minAx = 0;
     let minAy = 0;
     let which = -1;
+    const contained =
+      _poly.some((p) => (p[0] - c[0]) ** 2 + (p[1] - c[1]) ** 2 <= r * r) ||
+      Polygon.hasIntersectPoint(_poly, c);
 
     for (let i = 0, len = _poly.length; i < len; i++) {
       const ea = _poly[i];
@@ -1543,6 +1546,7 @@ export class Polygon {
         // Fix edge case and make sure the circle is intersecting. To be improved.
         const edge = Polygon.lineAt(_poly, i);
         const check =
+          contained ||
           Rectangle.withinBound(edge, Line.perpendicularFromPt(edge, c)!) ||
           Circle.intersectLine2D(_circle, edge).length > 0;
 
