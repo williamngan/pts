@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fade Sound stops, playback seeks, restarts, and volume changes over 10 ms to avoid clicks; stop marks playing false immediately and releases sources after the fade.
 - Warn and leave playing false when restarting a stopped microphone stream; acquire a new input instead of silently playing dead tracks.
 - Prune Path candidate pairs with a y-interval hierarchy while preserving deterministic pair order. Full-width disjoint bars no longer trigger quadratic x-only scanning; genuinely overlapping boxes can still yield quadratic candidates.
 - After stalls, advance Tempo to the current period count and phase with one callback per listener; preserve rhythm boundaries and use the current period for alternating-beat progress.
