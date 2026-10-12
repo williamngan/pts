@@ -180,17 +180,7 @@ export abstract class Space {
    */
   protected playItems(time: number) {
     this._playing = true;
-
-    // clear before draw if refresh is true
-    if (this._refresh) this.clear();
-
-    // animate all players
-    if (this._isReady) {
-      for (const k in this.players) {
-        if (this.players[k].animate)
-          this.players[k].animate(time, this._time.diff, this);
-      }
-    }
+    this._animatePlayers(time, this._time.diff);
 
     // resolve a stop period against the frame clock
     if (this._stopAfter >= 0) {
@@ -204,6 +194,24 @@ export abstract class Space {
       this._animID = -1;
       this._playing = false;
       this._firstFrame = true;
+    }
+  }
+
+  /**
+   * Clear the space if it refreshes on each frame, then call every player's
+   * `animate` callback. This draws one frame without changing the play state.
+   * @param time current time
+   * @param ftime time elapsed since the previous frame
+   */
+  protected _animatePlayers(time: number, ftime: number): void {
+    // clear before draw if refresh is true
+    if (this._refresh) this.clear();
+
+    // animate all players
+    if (this._isReady) {
+      for (const k in this.players) {
+        if (this.players[k].animate) this.players[k].animate(time, ftime, this);
+      }
     }
   }
 

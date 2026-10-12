@@ -804,20 +804,30 @@ describe("style cache survives context resets", () => {
     });
     await ready(space);
     const form = space.getForm();
-    space.add(() =>
-      form.fillOnly("#ff0000").rect([
-        [0, 0],
-        [10, 10],
-      ]),
-    );
+    const frames: [number, number][] = [];
+    const action = vi.fn();
+    space.add({
+      animate: (time: number, ftime: number) => {
+        frames.push([time, ftime]);
+        form.fillOnly("#ff0000").rect([
+          [0, 0],
+          [10, 10],
+        ]);
+      },
+      action,
+    });
+    space.bindMouse();
     resized();
     expect(space.isPlaying).toBe(false);
+    expect(frames).toEqual([]);
     space.play();
     space.play(10);
     expect(space.isPlaying).toBe(true);
     space.stop();
     space.play(20);
     expect(space.isPlaying).toBe(false);
+    frames.length = 0;
+    const raf = vi.spyOn(globalThis, "requestAnimationFrame");
     container.style.width = "250px";
     resized();
     expect(Array.from(space.ctx.getImageData(5, 5, 1, 1).data)).toEqual([
@@ -826,6 +836,15 @@ describe("style cache survives context resets", () => {
     expect(Array.from(space.ctx.getImageData(20, 20, 1, 1).data)).toEqual([
       255, 255, 255, 255,
     ]);
+    // one redraw at the last frame's time, without restarting the loop, so
+    // time does not jump and input stays suspended while stopped
+    expect(frames).toEqual([[20, 0]]);
+    expect(raf).not.toHaveBeenCalled();
+    expect(space.isPlaying).toBe(false);
+    space.element.dispatchEvent(
+      new PointerEvent("pointermove", { clientX: 30, clientY: 40 }),
+    );
+    expect(action).not.toHaveBeenCalled();
     space.dispose();
   });
   it("re-applies styles after a space resize resets the canvas context", async () => {

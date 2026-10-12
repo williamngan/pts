@@ -282,10 +282,10 @@ export class CanvasSpace extends MultiTouchSpace {
 
     this.render(this._ctx);
 
-    // Observer resizes have no event. Do not schedule a stop during initial
-    // setup, before the first play(), but repaint a previously drawn scene.
+    // Resizing clears the canvas, so redraw a stopped scene. Observer resizes
+    // have no event; before the first play() there is no scene to redraw.
     if (this._isReady && !this.isPlaying && (evt || this._hasPlayed))
-      this.playOnce(0);
+      this._repaint();
 
     return this;
   }
@@ -459,19 +459,39 @@ export class CanvasSpace extends MultiTouchSpace {
    * @param time current time
    */
   protected playItems(time: number) {
-    if (this._isReady) this._hasPlayed = true;
     if (this._isReady) {
-      this._ctx.save();
-      if (this._offscreen) this._offCtx.save();
+      this._hasPlayed = true;
+      this._beginDraw();
       super.playItems(time);
-      this._ctx.restore();
-      if (this._offscreen) this._offCtx.restore();
-      // restore() reverted the context's style state without going through the
-      // forms' style cache, so the cached values no longer describe the context
-      CanvasForm.resetStyleCache(this._ctx);
-      if (this._offscreen) CanvasForm.resetStyleCache(this._offCtx);
-      this.render(this._ctx);
+      this._endDraw();
     }
+  }
+
+  /**
+   * Redraw a stopped space after a resize cleared its canvas. Unlike
+   * `playOnce()`, this neither restarts the animation loop nor advances time:
+   * players animate once at the last frame's time with no elapsed time, and
+   * input stays suspended.
+   */
+  protected _repaint(): void {
+    this._beginDraw();
+    this._animatePlayers(this._time.prev, 0);
+    this._endDraw();
+  }
+
+  private _beginDraw(): void {
+    this._ctx.save();
+    if (this._offscreen) this._offCtx.save();
+  }
+
+  private _endDraw(): void {
+    this._ctx.restore();
+    if (this._offscreen) this._offCtx.restore();
+    // a context the forms cannot observe was reverted by restore() without
+    // going through their style cache, so forget the cached values
+    CanvasForm.resetStyleCache(this._ctx);
+    if (this._offscreen) CanvasForm.resetStyleCache(this._offCtx);
+    this.render(this._ctx);
   }
 
   /**
