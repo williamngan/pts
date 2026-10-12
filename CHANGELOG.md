@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+
+- Fix convex hulls for repeated, collinear, tied-x, and nearly collinear points using exact orientation predicates.
 ## 1.0.2 (2026-10-03)
 
 ### Performance

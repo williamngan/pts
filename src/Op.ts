@@ -5,6 +5,7 @@ import { Geom, Num } from "./Num";
 import { Pt, Group } from "./Pt";
 import { Mat } from "./LinearAlgebra";
 import { overlay } from "./_path";
+import { orient2d } from "./_triangulate";
 import {
   type PtLike,
   type GroupLike,
@@ -1267,40 +1268,62 @@ export class Polygon {
    * Get a convex hull of a set of points, using Melkman's algorithm. ([Reference](http://geomalgorithms.com/a12-_hull-3.html)).
    * @param pts a Group or an Iterable<PtLike>
    * @param sorted a boolean value to indicate if the group is pre-sorted by x position. Default is false.
+   * Exact duplicates and collinear interior points are omitted. For collinear input
+   * with at least three points, returns the distinct endpoints (one point if all coincide).
    * @returns a group of Pt that defines the convex hull polygon
    */
   static convexHull(pts: PtLikeIterable, sorted: boolean = false): Group {
     let _pts = Util.iterToArray(pts);
     if (_pts.length < 3) return _errorLength(new Group(), 3);
 
-    if (!sorted) {
-      _pts = _pts.slice();
-      _pts.sort((a, b) => a[0] - b[0]);
-    }
+    const compare = (a: PtLike, b: PtLike) => a[0] - b[0] || a[1] - b[1];
+    if (!sorted || _pts.some((p, i) => i > 0 && compare(_pts[i - 1], p) > 0))
+      _pts = _pts.slice().sort(compare);
+    _pts = _pts.filter((p, i) => i === 0 || compare(_pts[i - 1], p) !== 0);
 
     // check if is on left of ray a-b
     let left = (a: PtLike, b: PtLike, c: PtLike) => {
-      return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]) > 0;
+      return orient2d(a[0], a[1], b[0], b[1], c[0], c[1]) > 0;
     };
+
+    let seed = 2;
+    while (
+      seed < _pts.length &&
+      orient2d(
+        _pts[0][0],
+        _pts[0][1],
+        _pts[1][0],
+        _pts[1][1],
+        _pts[seed][0],
+        _pts[seed][1],
+      ) === 0
+    )
+      seed++;
+    if (seed >= _pts.length) {
+      const hull = new Group();
+      hull.push(_pts[0] as Pt);
+      if (_pts.length > 1) hull.push(_pts[_pts.length - 1] as Pt);
+      return hull;
+    }
 
     // double end queue
     let dq = [];
     let bot = _pts.length - 2;
     let top = bot + 3;
-    dq[bot] = _pts[2];
-    dq[top] = _pts[2];
+    dq[bot] = _pts[seed];
+    dq[top] = _pts[seed];
 
     // first 3 pt as counter-clockwise triangle
-    if (left(_pts[0], _pts[1], _pts[2])) {
+    if (left(_pts[0], _pts[seed - 1], _pts[seed])) {
       dq[bot + 1] = _pts[0];
-      dq[bot + 2] = _pts[1];
+      dq[bot + 2] = _pts[seed - 1];
     } else {
-      dq[bot + 1] = _pts[1];
+      dq[bot + 1] = _pts[seed - 1];
       dq[bot + 2] = _pts[0];
     }
 
     // remaining pts
-    for (let i = 3, len = _pts.length; i < len; i++) {
+    for (let i = seed + 1, len = _pts.length; i < len; i++) {
       let pt = _pts[i];
 
       // if inside the hull
@@ -1309,14 +1332,14 @@ export class Polygon {
       }
 
       // rightmost tangent
-      while (!left(dq[bot], dq[bot + 1], pt)) {
+      while (bot + 1 < top && !left(dq[bot], dq[bot + 1], pt)) {
         bot += 1;
       }
       bot -= 1;
       dq[bot] = pt;
 
       // leftmost tangent
-      while (!left(dq[top - 1], dq[top], pt)) {
+      while (top - 1 > bot && !left(dq[top - 1], dq[top], pt)) {
         top -= 1;
       }
       top += 1;

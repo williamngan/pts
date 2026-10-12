@@ -3,6 +3,7 @@ import { Circle, Curve, Line, Polygon, Rectangle, Triangle } from "../Op";
 import { Num } from "../Num";
 import { Group, Pt } from "../Pt";
 import { Util } from "../Util";
+import { orient2d } from "../_triangulate";
 
 function values(value: ArrayLike<number>) {
   return Array.from(value);
@@ -381,6 +382,61 @@ describe("Triangle", () => {
 
 describe("Polygon", () => {
   const square = () => Rectangle.corners(rect());
+
+  it("handles repeated, collinear, tied-x and nearly collinear hull points", () => {
+    for (const sorted of [false, true]) {
+      const pts = [
+        [0, 10],
+        [0, 0],
+        [0, 5],
+        [10, 5],
+      ];
+      expect(Polygon.area(Polygon.convexHull(pts, sorted))).toBe(50);
+      expect(pts[0]).toEqual([0, 10]);
+    }
+    expect(
+      groupValues(
+        Polygon.convexHull([
+          [0, 0],
+          [1, 1],
+          [2, 2],
+          [3, 3],
+        ]),
+      ),
+    ).toEqual([
+      [0, 0],
+      [3, 3],
+    ]);
+    expect(
+      groupValues(
+        Polygon.convexHull([
+          [1, 1],
+          [1, 1],
+          [1, 1],
+        ]),
+      ),
+    ).toEqual([[1, 1]]);
+    let seed = 42;
+    const random = () =>
+      (seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 2 ** 32;
+    for (let trial = 0; trial < 300; trial++) {
+      const pts = Array.from({ length: 25 }, () => {
+        const x = Math.floor(random() * 5);
+        return trial % 2
+          ? [x, x + (random() - 0.5) * 1e-14]
+          : [x, Math.floor(random() * 5)];
+      });
+      const hull = Polygon.convexHull(pts);
+      for (let i = 0; i < hull.length; i++) {
+        const a = hull[i],
+          b = hull[(i + 1) % hull.length];
+        for (const p of pts)
+          expect(
+            orient2d(a[0], a[1], b[0], b[1], p[0], p[1]),
+          ).toBeGreaterThanOrEqual(0);
+      }
+    }
+  });
 
   it("constructs polygons and derives lines, sides, midpoints, and bisectors", () => {
     expect(values(Polygon.centroid(square()))).toEqual([5, 5]);
