@@ -38,6 +38,7 @@ export class CanvasSpace extends MultiTouchSpace {
   protected _resizeObserver: ResizeObserver | undefined;
   protected _autoResize = true;
   protected _initialResize = false;
+  private _hasPlayed = false;
 
   private _readyObserver: MutationObserver | undefined;
   private _readyTimer: number | undefined;
@@ -281,8 +282,10 @@ export class CanvasSpace extends MultiTouchSpace {
 
     this.render(this._ctx);
 
-    // if it's a valid resize event and space is not playing, repaint the canvas once
-    if (evt && !this.isPlaying) this.playOnce(0);
+    // Observer resizes have no event. Do not schedule a stop during initial
+    // setup, before the first play(), but repaint a previously drawn scene.
+    if (this._isReady && !this.isPlaying && (evt || this._hasPlayed))
+      this.playOnce(0);
 
     return this;
   }
@@ -456,6 +459,7 @@ export class CanvasSpace extends MultiTouchSpace {
    * @param time current time
    */
   protected playItems(time: number) {
+    if (this._isReady) this._hasPlayed = true;
     if (this._isReady) {
       this._ctx.save();
       if (this._offscreen) this._offCtx.save();
