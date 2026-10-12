@@ -52,16 +52,21 @@ export class Num {
 
   /**
    * Different from [`Num.clamp`](#link) in that the value out-of-bound will be "looped back" to the other end.
+   * Endpoints may be reversed. The lower endpoint is included and the upper is excluded;
+   * equal endpoints return that endpoint.
    * @param val value to bound
    * @param min min value
    * @param max max value
    * @example `boundValue(361, 0, 360)` will return 1
    */
   static boundValue(val: number, min: number, max: number): number {
+    const base = Math.min(min, max);
     const len = Math.abs(max - min);
-    let a = (val - min) % len;
+    if (len === 0) return base;
+    let a = (val - base) % len;
     if (a < 0) a += len;
-    return a + min;
+    const result = a + base;
+    return a === len || result === Math.max(min, max) ? base : result;
   }
 
   /**
