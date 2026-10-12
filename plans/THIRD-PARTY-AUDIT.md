@@ -1,5 +1,28 @@
 # Third-party code and package audit
 
+## October 12, 2026: solver patent follow-up
+
+The concern warrants legal review. [US11270041B2, Position-based dynamics
+simulation](https://patents.google.com/patent/US11270041B2/en) includes claims
+1, 11, and 19 involving incremental constraint forces or multipliers and
+their accumulated values. The former `Body.solveEdges` stored per-link
+`_lambdas`, used them in the correction numerator, and accumulated corrections
+across iterations. This is a technical correspondence to investigate, not a
+conclusion that any claim is infringed.
+
+The iteration-stiffness fix removes that storage, feedback term, and
+accumulation. The solver now applies mass-weighted position corrections using
+a per-pass geometric stiffness. Regression tests check an isolated link across
+iteration counts, substep counts, and masses. Its documentation no longer calls
+the implementation XPBD.
+
+This change does not establish patent clearance or settle the status of prior
+releases. Qualified patent counsel would need to assess the relevant claims,
+jurisdictions, history, and implementation. No licensing or non-infringement
+conclusion is recorded here.
+
+## Original audit
+
 September 5, 2026. Baseline reviewed: `revamp` at `8f59499`, compared with
 `master` and the earlier package/source history.
 
