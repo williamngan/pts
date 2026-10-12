@@ -106,6 +106,8 @@ export class Num {
 
   /**
    * Normalize a value within a range.
+   * Reversed endpoints are reordered from low to high, unlike `mapToRange`, which
+   * preserves the direction of its source and target ranges.
    * @param n the value to normalize
    * @param a range value 1
    * @param b range value 1
