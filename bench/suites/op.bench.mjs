@@ -632,6 +632,19 @@ export default defineSuite("op", (b, { Pts, fx }) => {
       ),
     run: (shapes) => sink(ringsValue(Path.unite(shapes))),
   });
+  for (const count of [1000, 2000, 4000]) {
+    b.case(`Path.unite (${count} full-width bars)`, {
+      batch: 1,
+      setup: () =>
+        Array.from({ length: count }, (_, i) => [
+          [0, i * 3],
+          [1000, i * 3],
+          [1000, i * 3 + 1],
+          [0, i * 3 + 1],
+        ]),
+      run: (shapes) => sink(ringsValue(Path.unite(shapes))),
+    });
+  }
   b.case("Path.unite (1000 holes)", {
     batch: 1,
     setupOnce: () => [

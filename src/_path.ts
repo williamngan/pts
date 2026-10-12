@@ -437,15 +437,54 @@ export class Overlay {
   ): number[] | undefined {
     const { minX, maxX, minY, maxY, order } = boxes;
     let pairs: number[] | undefined = touching ? [] : undefined;
+    // A static interval hierarchy prunes y-disjoint edges even when their x
+    // ranges all overlap (eg, horizontal bars). Leaves store positions in the
+    // x order; maxOrder excludes already visited pairs. Candidate sorting keeps
+    // the original deterministic touch/split order.
+    const E = order.length;
+    let size = 1;
+    while (size < E) size *= 2;
+    const low = new Float64Array(2 * size).fill(Infinity);
+    const high = new Float64Array(2 * size).fill(-Infinity);
+    const left = new Float64Array(2 * size).fill(Infinity);
+    const maxOrder = new Int32Array(2 * size).fill(-1);
+    const byY = Array.from({ length: E }, (_, i) => i).sort(
+      (a, b) => minY[order[a]] - minY[order[b]] || a - b,
+    );
+    for (let i = 0; i < E; i++) {
+      const pos = byY[i],
+        edge = order[pos],
+        node = size + i;
+      low[node] = minY[edge];
+      high[node] = maxY[edge];
+      left[node] = minX[edge];
+      maxOrder[node] = pos;
+    }
+    for (let n = size - 1; n > 0; n--) {
+      low[n] = Math.min(low[2 * n], low[2 * n + 1]);
+      high[n] = Math.max(high[2 * n], high[2 * n + 1]);
+      left[n] = Math.min(left[2 * n], left[2 * n + 1]);
+      maxOrder[n] = Math.max(maxOrder[2 * n], maxOrder[2 * n + 1]);
+    }
+    const stack: number[] = [],
+      candidates: number[] = [];
     for (let i = 0, E = order.length; i < E; i++) {
       const e1 = order[i];
       const limit = maxX[e1] + margin;
       const lo = minY[e1] - margin;
       const hi = maxY[e1] + margin;
-      for (let j = i + 1; j < E; j++) {
+      stack.push(1);
+      candidates.length = 0;
+      while (stack.length) {
+        const n = stack.pop()!;
+        if (maxOrder[n] <= i || left[n] > limit || low[n] > hi || high[n] < lo)
+          continue;
+        if (n >= size) candidates.push(maxOrder[n]);
+        else stack.push(2 * n + 1, 2 * n);
+      }
+      candidates.sort((a, b) => a - b);
+      for (const j of candidates) {
         const e2 = order[j];
-        if (minX[e2] > limit) break;
-        if (minY[e2] > hi || maxY[e2] < lo) continue;
         if (touching) {
           this.touchPair(e1, e2, boxes);
           if (pairs) {
