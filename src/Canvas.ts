@@ -597,15 +597,18 @@ export class CanvasForm<
   }
 
   /**
-   * Write a context style property only when it differs from the last value
-   * written to this context. After setting style properties directly on
-   * [`CanvasForm.ctx`](#link), call [`CanvasForm.reset`](#link) to resync.
+   * Skip a repeated style write only while the context still holds its last
+   * read-back value (browsers can normalize CSS strings on assignment).
    */
   protected _set(key: string, value: unknown): void {
     const cache = this._cacheForCtx();
-    if (cache[key] !== value) {
+    if (
+      cache[key] !== value ||
+      cache[`actual:${key}`] !== (this._ctx as any)[key]
+    ) {
       cache[key] = value;
       (this._ctx as any)[key] = value;
+      cache[`actual:${key}`] = (this._ctx as any)[key];
     }
   }
 
@@ -669,6 +672,8 @@ export class CanvasForm<
 
   /**
    * Get the rendering context of canvas to perform other canvas functions.
+   * Form style setters detect direct context writes and `save()`/`restore()`.
+   * Call `form.reset()` to reapply all the form's saved styles at once.
    * @example `form.ctx.clip()`
    */
   get ctx(): RenderingContext2D {
@@ -898,8 +903,13 @@ export class CanvasForm<
    * @param offset Dash offset. Defaults to 0. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineDashOffset)
    */
   dash(segments: PtLike | boolean = true, offset: number = 0): this {
-    // dedupe via a compact key since getLineDash() allocates
+    // Validate the compact key against context state, including direct writes
+    // and save/restore. Custom renderers without getLineDash cannot be checked.
     const cache = this._cacheForCtx();
+    if (typeof this._ctx.getLineDash === "function") {
+      const actual = `${this._ctx.getLineDash().join(",")}/${this._ctx.lineDashOffset}`;
+      if (cache.actualDash !== actual) delete cache.dash;
+    }
     if (segments === false || (segments !== true && segments.length === 0)) {
       // false or [], deactivate dashed strokes
       if (cache.dash !== "/0") {
@@ -916,6 +926,8 @@ export class CanvasForm<
         this._ctx.lineDashOffset = offset;
       }
     }
+    if (typeof this._ctx.getLineDash === "function")
+      cache.actualDash = `${this._ctx.getLineDash().join(",")}/${this._ctx.lineDashOffset}`;
     return this;
   }
 

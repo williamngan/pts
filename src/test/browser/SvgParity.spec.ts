@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { CanvasSpace } from "../../Canvas";
-import { SVGSpace } from "../../Svg";
+import { CanvasForm, CanvasSpace } from "../../Canvas";
+import { SVGContext2D, SVGSpace } from "../../Svg";
 import { Bound, Pt } from "../../Pt";
 
 // The swap-promise test: the identical drawing code runs on CanvasForm and
@@ -66,6 +66,29 @@ async function ready(space: {
 }
 
 describe("canvas-svg rendering parity", () => {
+  it("revalidates form styles after direct writes and context restore", () => {
+    const canvas = document.createElement("canvas").getContext("2d")!;
+    const svg = new SVGContext2D(
+      document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+    );
+    for (const ctx of [canvas, svg]) {
+      const form = new CanvasForm(ctx as any);
+      form.fillOnly("#ff0000");
+      ctx.fillStyle = "#0000ff";
+      form.fillOnly("#ff0000");
+      expect(ctx.fillStyle).toBe("#ff0000");
+      ctx.save();
+      form.fillOnly("#00ff00").dash([3], 2);
+      ctx.restore();
+      form.fillOnly("#00ff00").dash([3], 2);
+      expect(ctx.fillStyle).toBe("#00ff00");
+      expect(ctx.getLineDash().every((n) => n === 3)).toBe(true);
+      expect(ctx.lineDashOffset).toBe(2);
+      ctx.setLineDash([7, 2]);
+      form.dash([3], 2);
+      expect(ctx.getLineDash().every((n) => n === 3)).toBe(true);
+    }
+  });
   it("renders the same scene within an antialiasing tolerance", async () => {
     // canvas side
     const canvasElem = document.createElement("canvas");

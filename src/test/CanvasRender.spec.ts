@@ -7,7 +7,9 @@ import { Util } from "../Util";
 // context surface as a renderer, which makes the drawing logic testable here.
 function recordingCtx() {
   const calls: [string, ...unknown[]][] = [];
+  let dash: number[] = [];
   const target: Record<string, unknown> = {
+    getLineDash: () => dash.slice(),
     measureText: (t: string) => ({ width: t.length * 10 }),
     createLinearGradient: () => ({
       addColorStop: (...a: unknown[]) => calls.push(["addColorStop", ...a]),
@@ -27,7 +29,10 @@ function recordingCtx() {
     "closePath",
     "arc",
   ]) {
-    target[fn] = (...a: unknown[]) => calls.push([fn, ...a]);
+    target[fn] = (...a: unknown[]) => {
+      if (fn === "setLineDash") dash = Array.from(a[0] as number[]);
+      calls.push([fn, ...a]);
+    };
   }
   const ctx = new Proxy(target, {
     get(t, k: string) {

@@ -90,8 +90,8 @@ describe("CanvasForm style write dedup", () => {
     form.fill("#f03");
     // user mutates the context directly, desyncing the cache
     ctx.fillStyle = "#000";
-    form.fill("#f03"); // cache believes #f03 is set — skip is expected
-    expect(state.fillStyle).toBe("#000");
+    form.fill("#f03"); // a cache hit must also match the context's live state
+    expect(state.fillStyle).toBe("#f03");
     form.reset(); // the documented recovery point
     expect(state.fillStyle).toBe("#f03");
     form.fill("#f03");
