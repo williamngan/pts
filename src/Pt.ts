@@ -22,9 +22,11 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].
    * Note that `new Pt(3)` will only instantiate Pt with length of 3 (ie, same as `new Float32Array(3)` ). If you need a Pt with 1 dimension of value 3, use `new Pt([3])`.
    * @example `new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`
-   * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
+   * @param args a list of numeric parameters, an array of numbers, an object with {x,y,z,w} properties, or a buffer with optional byte offset and length (a shared view)
    */
-  constructor(...args: Array<number | number[] | IPt | Float32Array>) {
+  constructor(
+    ...args: Array<number | number[] | IPt | Float32Array | ArrayBufferLike>
+  ) {
     // each branch below produces a valid Float32Array constructor argument
     let params: any;
     const a0 = args[0];
@@ -42,7 +44,21 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
     } else {
       params = Util.getArgs(args);
     }
-    super(params);
+    if (
+      a0 instanceof ArrayBuffer ||
+      (typeof SharedArrayBuffer !== "undefined" &&
+        a0 instanceof SharedArrayBuffer)
+    ) {
+      // Float32Array's inherited static factories specialize subclasses to
+      // ArrayBuffer in TypeScript; at runtime its view constructor accepts both.
+      super(
+        a0 as ArrayBuffer,
+        args[1] as number | undefined,
+        args[2] as number | undefined,
+      );
+    } else {
+      super(params);
+    }
   }
 
   /**

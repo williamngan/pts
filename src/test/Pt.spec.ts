@@ -2,6 +2,8 @@ import { describe, expect, it, vi } from "vitest";
 import { Num } from "../Num";
 import { Bound, Group, Pt } from "../Pt";
 import { Util } from "../Util";
+import { Color } from "../Color";
+import { Particle } from "../Physics";
 
 function values(value: ArrayLike<number>) {
   return Array.from(value);
@@ -12,6 +14,29 @@ function groupValues(value: ArrayLike<ArrayLike<number>>) {
 }
 
 describe("Pt construction and accessors", () => {
+  it("creates subarrays as shared views, including derived classes and shared buffers", () => {
+    for (const Type of [Pt, Color, Particle]) {
+      const p = new Type(1, 2, 3, 4);
+      const view = p.subarray(1, 3);
+      expect(view).toBeInstanceOf(Type);
+      expect(values(view)).toEqual([2, 3]);
+      expect(view.buffer).toBe(p.buffer);
+      view[0] = 9;
+      expect(p[1]).toBe(9);
+      p[2] = 8;
+      expect(view[1]).toBe(8);
+      expect(values(p.subarray(-2))).toEqual([8, 4]);
+      expect(p.subarray(3, 1)).toHaveLength(0);
+      expect(p.slice().buffer).not.toBe(p.buffer);
+    }
+    for (const buffer of [new ArrayBuffer(16), new SharedArrayBuffer(16)]) {
+      const p = new Pt(buffer, 4, 2);
+      p[0] = 7;
+      expect(new Float32Array(buffer)[1]).toBe(7);
+      expect(new Pt(buffer, 8)).toHaveLength(2);
+    }
+    expect(() => new Pt(new ArrayBuffer(16), 1)).toThrow(RangeError);
+  });
   it("constructs defaults, lengths, arrays, typed arrays, objects, and positional values", () => {
     expect(values(new Pt())).toEqual([0, 0]);
     expect(values(new Pt(3))).toEqual([0, 0, 0]);

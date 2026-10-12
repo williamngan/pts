@@ -684,7 +684,13 @@ async function buildOutput() {
     // BigInt library only types the exact-arithmetic fallback of the
     // triangulation, which is internal and not documented.
     compilerOptions: {
-      lib: ["es2016", "es2020.bigint", "dom", "dom.iterable"],
+      lib: [
+        "es2016",
+        "es2017.sharedmemory",
+        "es2020.bigint",
+        "dom",
+        "dom.iterable",
+      ],
     },
     entryPoints: await sourceEntryPoints(),
     entryPointStrategy: EntryPointStrategy.Resolve,
