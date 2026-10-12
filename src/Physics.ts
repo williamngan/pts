@@ -7,7 +7,7 @@ import { type PtLike, type PtIterable } from "./Types";
 
 /**
  * A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation.
- * It advances with a substepped position-based (XPBD-style) solver and a spatial-hash broad phase.
+ * It advances with a substepped position-based solver and a spatial-hash broad phase.
  * See a [Particle demo](https://ptsjs.org/demo/?name=physics.particles) and a [Body demo](https://ptsjs.org/demo/?name=physics.shapes) on the demo page.
  */
 // Velocities are expressed per 60 Hz frame: `hit`, drag deltas, `changed`, friction, and
@@ -953,7 +953,6 @@ export class Body extends Group {
   protected _stiff: number = 1;
   protected _locks: { [index: string]: Particle } = {};
   protected _mass: number = 1;
-  protected _lambdas: Float32Array = new Float32Array(0); // XPBD multipliers, one per link
 
   /**
    * Create an empty Body, this is usually followed by [`Body.init`](#link) to populate the Body. Alternatively, use static function [`Body.fromGroup`](#link) to create and initate a body directly.
@@ -1096,7 +1095,7 @@ export class Body extends Group {
   }
 
   /**
-   * Solve all edge constraints for one substep in XPBD form. A link's `stiff` value is a
+   * Solve all edge constraints for one substep by position projection. A link's `stiff` value is a
    * geometric knob: it is the fraction of the remaining constraint violation resolved per
    * update, independent of the particles' masses and of the substep/iteration counts
    * (per Müller et al. 2007, the per-pass fraction is `1-(1-stiff)^(1/passes)`), and
@@ -1113,9 +1112,6 @@ export class Body extends Group {
     const clen = cs.length;
     if (clen === 0) return this;
 
-    if (this._lambdas.length < clen) this._lambdas = new Float32Array(clen);
-    const lambdas = this._lambdas;
-    lambdas.fill(0, 0, clen);
     const invPasses = 1 / Math.max(1, iterations * substeps);
 
     for (let iter = 0; iter < iterations; iter++) {
@@ -1142,8 +1138,7 @@ export class Body extends Group {
           const sEff = 1 - Math.pow(1 - stiff, invPasses);
           alpha = sEff > 0.000001 ? (w * (1 - sEff)) / sEff : w * 1000000;
         }
-        const dl = (-(dist - c[2]) - alpha * lambdas[ci]) / (w + alpha);
-        lambdas[ci] += dl;
+        const dl = -(dist - c[2]) / (w + alpha);
 
         const s = dl / dist;
         const fx = dx * s;

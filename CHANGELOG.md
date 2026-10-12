@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Correct soft-link stiffness for multiple solver iterations by removing accumulated multipliers; default one-iteration behavior is unchanged.
 - Remove consecutive and closing duplicate Voronoi vertices for cocircular sites, preventing zero-length edges and biased vertex means.
 - Clamp hexadecimal color channels to valid CSS bytes and map NaN to zero.
 - Restore shared typed-array subarray views in Pt and its Color and Particle subclasses, including SharedArrayBuffer views.
