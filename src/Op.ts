@@ -825,7 +825,7 @@ export class Circle {
       return new Group();
     } else if (dr < Math.abs(ar - br)) {
       // completely enclosed
-      return new Group(_pts[0].clone());
+      return new Group();
     } else if (dr === 0) {
       // coincident circles: no discrete intersection points
       return new Group();

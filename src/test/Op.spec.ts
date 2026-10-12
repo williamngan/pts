@@ -331,7 +331,10 @@ describe("Circle", () => {
     ).toHaveLength(2);
     expect(
       Circle.intersectCircle2D(circle, Circle.fromCenter([1, 0], 1)),
-    ).toHaveLength(1);
+    ).toHaveLength(0);
+    expect(
+      Circle.intersectCircle2D(Circle.fromCenter([1, 0], 1), circle),
+    ).toHaveLength(0);
     // coincident circles have no discrete intersection points
     expect(
       Circle.intersectCircle2D(circle, Circle.fromCenter([0, 0], 5)),
@@ -795,7 +798,7 @@ describe("Geometry correctness pins", () => {
       Circle.intersectCircle2D(c, Circle.fromCenter([0, 0], 5)),
     ).toHaveLength(0);
     const enclosed = Circle.intersectCircle2D(c, Circle.fromCenter([1, 0], 1));
-    expect(enclosed).toHaveLength(1); // legacy enclosed-marker behavior kept
+    expect(enclosed).toHaveLength(0); // boundaries of enclosed circles do not intersect
     expect(Circle.intersectRay2D(c, line([1, 1], [1, 1]))).toHaveLength(0);
   });
 
