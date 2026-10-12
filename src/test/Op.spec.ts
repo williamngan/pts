@@ -18,6 +18,35 @@ const rect = (a = [0, 0], b = [10, 10]) =>
   Rectangle.fromTopLeft(a, new Pt(b).subtract(a));
 
 describe("Line", () => {
+  it("returns a deterministic endpoint of collinear segment overlaps", () => {
+    for (const coords of [
+      [
+        [0, 0],
+        [4, 4],
+        [1, 1],
+        [5, 5],
+      ],
+      [
+        [2, 0],
+        [2, 4],
+        [2, 1],
+        [2, 5],
+      ],
+    ]) {
+      const [a, b, c, d] = coords;
+      for (const first of [line(a, b), line(b, a)])
+        for (const second of [line(c, d), line(d, c)]) {
+          expect(values(Line.intersectLine2D(first, second)!)).toEqual(c);
+          expect(values(Line.intersectLine2D(second, first)!)).toEqual(c);
+        }
+    }
+    expect(
+      Line.intersectLine2D(line([0, 0], [1, 1]), line([2, 2], [3, 3])),
+    ).toBeUndefined();
+    expect(
+      Line.intersectLine2D(line([1, 0], [1, 0]), line([0, 0], [2, 2])),
+    ).toBeUndefined();
+  });
   it("constructs lines and calculates scalar properties", () => {
     const angled = Line.fromAngle([1, 2], 0, 5);
     expect(groupValues(angled)).toEqual([

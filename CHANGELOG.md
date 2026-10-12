@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Return a deterministic shared endpoint for collinear overlapping line segments, independent of argument order and endpoint direction.
 - Return no circle-boundary intersection points for strict containment, matching the documented contract in either argument order.
 - Clarify that SVGSpace.removeAll clears user SVG children too, whereas dispose preserves unmanaged content.
 - Clarify that color normalization uses nominal ranges without clamping, including LCH chroma above 100.

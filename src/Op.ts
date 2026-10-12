@@ -196,6 +196,8 @@ export class Line {
 
   /**
    * Given two line segemnts, find their intersection point if any.
+   * Collinear overlaps return the lexicographically smallest shared endpoint,
+   * independent of argument order and segment direction.
    * @param la a Group or an Iterable<Pt> with 2 Pt representing a line segment
    * @param lb a Group or an Iterable<Pt> with 2 Pt representing a line segment
    * @returns an intersection Pt or undefined if no intersection
@@ -203,6 +205,41 @@ export class Line {
   static intersectLine2D(la: PtIterable, lb: PtIterable): Pt | undefined {
     let _la = Util.iterToArray(la);
     let _lb = Util.iterToArray(lb);
+
+    if (
+      orient2d(
+        _la[0][0],
+        _la[0][1],
+        _la[1][0],
+        _la[1][1],
+        _lb[0][0],
+        _lb[0][1],
+      ) === 0 &&
+      orient2d(
+        _la[0][0],
+        _la[0][1],
+        _la[1][0],
+        _la[1][1],
+        _lb[1][0],
+        _lb[1][1],
+      ) === 0 &&
+      orient2d(
+        _lb[0][0],
+        _lb[0][1],
+        _lb[1][0],
+        _lb[1][1],
+        _la[0][0],
+        _la[0][1],
+      ) === 0
+    ) {
+      const shared = [..._la, ..._lb].filter(
+        (p) =>
+          Geom.withinBound(p, _la[0], _la[1]) &&
+          Geom.withinBound(p, _lb[0], _lb[1]),
+      );
+      shared.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+      return shared.length ? new Pt(shared[0]) : undefined;
+    }
 
     let pt = Line.intersectRay2D(_la, _lb);
     return pt &&
