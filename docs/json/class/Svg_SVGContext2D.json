@@ -3,19 +3,19 @@
   "source": [
     [
       "src/Svg.ts",
-      147,
+      253,
       13
     ]
   ],
   "kind": "Class",
-  "comment": "**`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that\n[`CanvasForm`](#link) draws through, and renders it as SVG. Filled and translucent shapes\nuse separate elements so overlaps composite independently. Consecutive opaque solid\nstrokes with matching state may share a `<path>` element (a \"style run\").\n\nCapability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,\n`clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so\n`textBox` layout matches canvas exactly.\nDrawing must occur in an animate callback (or be committed explicitly on this context).\n`SVGSpace.refresh(false)` preserves the last nonempty frame; it does not accumulate\ntrails. Draws in action handlers are discarded at the next frame's start.\n\n**Writing your own renderer**: this class is the reference implementation of the rendering\ncontract — any object implementing the same context surface can be handed to\n[`CanvasForm`](#link)'s constructor to become a Pts renderer (a PDF writer, a command\nrecorder, a test snapshotter, and so on). The surface is the subset of\n`CanvasRenderingContext2D` that `CanvasForm` draws through:\n- path verbs: `beginPath`, `moveTo`, `lineTo`, `quadraticCurveTo`, `bezierCurveTo`,\n  `rect`, `arc`, `ellipse`, `closePath`\n- paint: `fill`, `stroke`, `fillRect`, `clearRect`\n- state: `save`, `restore`, `clip`, `scale`\n- style fields: `fillStyle`, `strokeStyle`, `lineWidth`, `lineJoin`, `lineCap`,\n  `globalAlpha`, `globalCompositeOperation`, `setLineDash`, `lineDashOffset`\n- text: `font`, `textAlign`, `textBaseline`, `fillText`, `measureText`\n- images: `drawImage`, `putImageData`\n- gradients: `createLinearGradient`, `createRadialGradient`\n\nA renderer driven by a Space should also expose a frame lifecycle like\n[`SVGContext2D.beginFrame`](#link) / [`SVGContext2D.commitFrame`](#link), called around the\nplayers' animate callbacks. The unit test \"implements every context member that CanvasForm\nuses\" is the compatibility alarm: it fails when a new `CanvasForm` feature touches a\ncontext member a renderer does not implement.",
+  "comment": "**`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that\n[`CanvasForm`](#link) draws through, and renders it as SVG. Consecutive shapes with the\nsame paint state share one `<path>` element (a \"style run\") when that renders the same as\nseparate elements: shapes with one opaque paint (fills only when their subpaths are\ncircles, rectangles or convex polygons winding the same way), or shapes that do not\noverlap. Classed shapes, and overlapping translucent, blended, or differently filled and\nstroked shapes, keep separate elements, so they composite like canvas.\n\nCapability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,\n`clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so\n`textBox` layout matches canvas exactly.\nDrawing must occur in an animate callback (or be committed explicitly on this context).\n`SVGSpace.refresh(false)` preserves the last nonempty frame; it does not accumulate\ntrails. Draws in action handlers are discarded at the next frame's start.\n\n**Writing your own renderer**: this class is the reference implementation of the rendering\ncontract — any object implementing the same context surface can be handed to\n[`CanvasForm`](#link)'s constructor to become a Pts renderer (a PDF writer, a command\nrecorder, a test snapshotter, and so on). The surface is the subset of\n`CanvasRenderingContext2D` that `CanvasForm` draws through:\n- path verbs: `beginPath`, `moveTo`, `lineTo`, `quadraticCurveTo`, `bezierCurveTo`,\n  `rect`, `arc`, `ellipse`, `closePath`\n- paint: `fill`, `stroke`, `fillRect`, `clearRect`\n- state: `save`, `restore`, `clip`, `scale`\n- style fields: `fillStyle`, `strokeStyle`, `lineWidth`, `lineJoin`, `lineCap`,\n  `globalAlpha`, `globalCompositeOperation`, `setLineDash`, `lineDashOffset`\n- text: `font`, `textAlign`, `textBaseline`, `fillText`, `measureText`\n- images: `drawImage`, `putImageData`\n- gradients: `createLinearGradient`, `createRadialGradient`\n\nA renderer driven by a Space should also expose a frame lifecycle like\n[`SVGContext2D.beginFrame`](#link) / [`SVGContext2D.commitFrame`](#link), called around the\nplayers' animate callbacks. The unit test \"implements every context member that CanvasForm\nuses\" is the compatibility alarm: it fails when a new `CanvasForm` feature touches a\ncontext member a renderer does not implement.",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
           "src/Svg.ts",
-          190,
+          405,
           2
         ]
       ],
@@ -46,7 +46,7 @@
       "source": [
         [
           "src/Svg.ts",
-          214,
+          430,
           6
         ]
       ],
@@ -60,11 +60,135 @@
       "setter": false
     },
     {
+      "name": "fillStyle",
+      "source": [
+        [
+          "src/Svg.ts",
+          273,
+          6
+        ],
+        [
+          "src/Svg.ts",
+          276,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "string | SVGGradient"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "v",
+          "comment": "",
+          "type": "string | SVGGradient",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "font",
+      "source": [
+        [
+          "src/Svg.ts",
+          329,
+          6
+        ],
+        [
+          "src/Svg.ts",
+          332,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "string"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "v",
+          "comment": "",
+          "type": "string",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "globalAlpha",
+      "source": [
+        [
+          "src/Svg.ts",
+          313,
+          6
+        ],
+        [
+          "src/Svg.ts",
+          316,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "v",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "globalCompositeOperation",
+      "source": [
+        [
+          "src/Svg.ts",
+          321,
+          6
+        ],
+        [
+          "src/Svg.ts",
+          324,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "string"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "v",
+          "comment": "",
+          "type": "string",
+          "default": false
+        }
+      }
+    },
+    {
       "name": "group",
       "source": [
         [
           "src/Svg.ts",
-          219,
+          435,
           6
         ]
       ],
@@ -78,11 +202,135 @@
       "setter": false
     },
     {
+      "name": "lineCap",
+      "source": [
+        [
+          "src/Svg.ts",
+          305,
+          6
+        ],
+        [
+          "src/Svg.ts",
+          308,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "string"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "v",
+          "comment": "",
+          "type": "string",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "lineDashOffset",
+      "source": [
+        [
+          "src/Svg.ts",
+          337,
+          6
+        ],
+        [
+          "src/Svg.ts",
+          340,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "v",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "lineJoin",
+      "source": [
+        [
+          "src/Svg.ts",
+          297,
+          6
+        ],
+        [
+          "src/Svg.ts",
+          300,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "string"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "v",
+          "comment": "",
+          "type": "string",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "lineWidth",
+      "source": [
+        [
+          "src/Svg.ts",
+          289,
+          6
+        ],
+        [
+          "src/Svg.ts",
+          292,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "v",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
       "name": "runs",
       "source": [
         [
           "src/Svg.ts",
-          293,
+          509,
           6
         ]
       ],
@@ -94,6 +342,37 @@
         "type": "SVGRun[]"
       },
       "setter": false
+    },
+    {
+      "name": "strokeStyle",
+      "source": [
+        [
+          "src/Svg.ts",
+          281,
+          6
+        ],
+        [
+          "src/Svg.ts",
+          284,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "string | SVGGradient"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "v",
+          "comment": "",
+          "type": "string | SVGGradient",
+          "default": false
+        }
+      }
     }
   ],
   "methods": [
@@ -102,7 +381,7 @@
       "source": [
         [
           "src/Svg.ts",
-          357,
+          591,
           2
         ]
       ],
@@ -161,7 +440,7 @@
       "source": [
         [
           "src/Svg.ts",
-          204,
+          419,
           2
         ]
       ],
@@ -183,7 +462,7 @@
       "source": [
         [
           "src/Svg.ts",
-          321,
+          537,
           2
         ]
       ],
@@ -205,7 +484,7 @@
       "source": [
         [
           "src/Svg.ts",
-          342,
+          568,
           2
         ]
       ],
@@ -264,7 +543,7 @@
       "source": [
         [
           "src/Svg.ts",
-          453,
+          696,
           2
         ]
       ],
@@ -286,7 +565,7 @@
       "source": [
         [
           "src/Svg.ts",
-          577,
+          824,
           2
         ]
       ],
@@ -308,7 +587,7 @@
       "source": [
         [
           "src/Svg.ts",
-          326,
+          542,
           2
         ]
       ],
@@ -330,7 +609,7 @@
       "source": [
         [
           "src/Svg.ts",
-          227,
+          443,
           2
         ]
       ],
@@ -352,7 +631,7 @@
       "source": [
         [
           "src/Svg.ts",
-          589,
+          837,
           2
         ]
       ],
@@ -399,7 +678,7 @@
       "source": [
         [
           "src/Svg.ts",
-          598,
+          846,
           2
         ]
       ],
@@ -458,7 +737,7 @@
       "source": [
         [
           "src/Svg.ts",
-          309,
+          525,
           2
         ]
       ],
@@ -480,7 +759,7 @@
       "source": [
         [
           "src/Svg.ts",
-          500,
+          743,
           2
         ]
       ],
@@ -539,7 +818,7 @@
       "source": [
         [
           "src/Svg.ts",
-          368,
+          602,
           2
         ]
       ],
@@ -610,7 +889,7 @@
       "source": [
         [
           "src/Svg.ts",
-          419,
+          662,
           2
         ]
       ],
@@ -632,7 +911,7 @@
       "source": [
         [
           "src/Svg.ts",
-          447,
+          690,
           2
         ]
       ],
@@ -679,7 +958,7 @@
       "source": [
         [
           "src/Svg.ts",
-          457,
+          700,
           2
         ]
       ],
@@ -726,7 +1005,7 @@
       "source": [
         [
           "src/Svg.ts",
-          585,
+          833,
           2
         ]
       ],
@@ -748,7 +1027,7 @@
       "source": [
         [
           "src/Svg.ts",
-          334,
+          554,
           2
         ]
       ],
@@ -783,7 +1062,7 @@
       "source": [
         [
           "src/Svg.ts",
-          492,
+          735,
           2
         ]
       ],
@@ -812,7 +1091,7 @@
       "source": [
         [
           "src/Svg.ts",
-          330,
+          547,
           2
         ]
       ],
@@ -847,7 +1126,7 @@
       "source": [
         [
           "src/Svg.ts",
-          542,
+          785,
           2
         ]
       ],
@@ -869,7 +1148,7 @@
       "source": [
         [
           "src/Svg.ts",
-          338,
+          561,
           2
         ]
       ],
@@ -916,7 +1195,7 @@
       "source": [
         [
           "src/Svg.ts",
-          353,
+          583,
           2
         ]
       ],
@@ -963,7 +1242,7 @@
       "source": [
         [
           "src/Svg.ts",
-          298,
+          514,
           2
         ]
       ],
@@ -985,7 +1264,7 @@
       "source": [
         [
           "src/Svg.ts",
-          568,
+          811,
           2
         ]
       ],
@@ -1007,7 +1286,7 @@
       "source": [
         [
           "src/Svg.ts",
-          551,
+          794,
           2
         ]
       ],
@@ -1029,7 +1308,7 @@
       "source": [
         [
           "src/Svg.ts",
-          573,
+          820,
           2
         ]
       ],
@@ -1051,7 +1330,7 @@
       "source": [
         [
           "src/Svg.ts",
-          581,
+          828,
           2
         ]
       ],
@@ -1080,7 +1359,7 @@
       "source": [
         [
           "src/Svg.ts",
-          424,
+          667,
           2
         ]
       ],
@@ -1105,7 +1384,7 @@
       "source": [
         [
           "src/Svg.ts",
-          165,
+          362,
           2
         ]
       ],
@@ -1116,146 +1395,11 @@
       "comment": "Optional CSS class applied to emitted elements (see `SVGForm.cls`)."
     },
     {
-      "name": "fillStyle",
-      "source": [
-        [
-          "src/Svg.ts",
-          149,
-          2
-        ]
-      ],
-      "flags": {},
-      "type": "string | SVGGradient",
-      "overrides": false,
-      "inherits": false,
-      "comment": ""
-    },
-    {
-      "name": "font",
-      "source": [
-        [
-          "src/Svg.ts",
-          156,
-          2
-        ]
-      ],
-      "flags": {},
-      "type": "string",
-      "overrides": false,
-      "inherits": false,
-      "comment": ""
-    },
-    {
-      "name": "globalAlpha",
-      "source": [
-        [
-          "src/Svg.ts",
-          154,
-          2
-        ]
-      ],
-      "flags": {},
-      "type": "number",
-      "overrides": false,
-      "inherits": false,
-      "comment": ""
-    },
-    {
-      "name": "globalCompositeOperation",
-      "source": [
-        [
-          "src/Svg.ts",
-          155,
-          2
-        ]
-      ],
-      "flags": {},
-      "type": "string",
-      "overrides": false,
-      "inherits": false,
-      "comment": ""
-    },
-    {
-      "name": "lineCap",
-      "source": [
-        [
-          "src/Svg.ts",
-          153,
-          2
-        ]
-      ],
-      "flags": {},
-      "type": "string",
-      "overrides": false,
-      "inherits": false,
-      "comment": ""
-    },
-    {
-      "name": "lineDashOffset",
-      "source": [
-        [
-          "src/Svg.ts",
-          159,
-          2
-        ]
-      ],
-      "flags": {},
-      "type": "number",
-      "overrides": false,
-      "inherits": false,
-      "comment": ""
-    },
-    {
-      "name": "lineJoin",
-      "source": [
-        [
-          "src/Svg.ts",
-          152,
-          2
-        ]
-      ],
-      "flags": {},
-      "type": "string",
-      "overrides": false,
-      "inherits": false,
-      "comment": ""
-    },
-    {
-      "name": "lineWidth",
-      "source": [
-        [
-          "src/Svg.ts",
-          151,
-          2
-        ]
-      ],
-      "flags": {},
-      "type": "number",
-      "overrides": false,
-      "inherits": false,
-      "comment": ""
-    },
-    {
-      "name": "strokeStyle",
-      "source": [
-        [
-          "src/Svg.ts",
-          150,
-          2
-        ]
-      ],
-      "flags": {},
-      "type": "string | SVGGradient",
-      "overrides": false,
-      "inherits": false,
-      "comment": ""
-    },
-    {
       "name": "textAlign",
       "source": [
         [
           "src/Svg.ts",
-          157,
+          266,
           2
         ]
       ],
@@ -1270,7 +1414,7 @@
       "source": [
         [
           "src/Svg.ts",
-          158,
+          267,
           2
         ]
       ],

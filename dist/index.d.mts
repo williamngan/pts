@@ -576,10 +576,6 @@ type CanvasPatternRepetition = "repeat" | "repeat-x" | "repeat-y" | "no-repeat";
 type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
 //#endregion
 //#region src/Pt.d.ts
-/**
- * Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.
- * See [Pt guide](../guide/Pt-0200.html) for details.
- */
 declare class Pt extends Float32Array implements IPt, Iterable<number> {
   protected _id: string;
   /**
@@ -1474,6 +1470,13 @@ declare abstract class Space {
    */
   protected playItems(time: number): void;
   /**
+   * Clear the space if it refreshes on each frame, then call every player's
+   * `animate` callback. This draws one frame without changing the play state.
+   * @param time current time
+   * @param ftime time elapsed since the previous frame
+   */
+  protected _animatePlayers(time: number, ftime: number): void;
+  /**
    * Pause the animation.
    * @param toggle a boolean value to set if this function call should be a toggle (between pause and resume)
    */
@@ -1561,6 +1564,7 @@ declare abstract class MultiTouchSpace extends Space {
   protected _dragged: boolean;
   private _pressId;
   private _pressIsTouch;
+  private _pressType;
   protected _hasMouse: boolean;
   protected _hasTouch: boolean;
   protected _hasKeyboard: boolean;
@@ -1664,6 +1668,19 @@ declare abstract class MultiTouchSpace extends Space {
   private _isTouchHandled;
   private _ownsPress;
   private _releasePress;
+  /**
+   * Take the press for a new contact. A press of the same kind whose release
+   * was lost is replaced when its contact goes down again, or when a contact
+   * starts while no other contact of that kind is down (a primary pointer, or
+   * a touchstart whose new touches are all the active touches). So drag and
+   * drop keep working, while a second finger still cannot take the press.
+   */
+  private _beginPress;
+  /**
+   * End a press whose release can no longer arrive, and drop tracked draggers
+   * still dragging, without sending actions to players.
+   */
+  private _abandonPress;
   /**
    * MouseDown handler.
    * @param evt
@@ -2301,6 +2318,15 @@ declare class CanvasSpace extends MultiTouchSpace {
    */
   protected playItems(time: number): void;
   /**
+   * Redraw a stopped space after a resize cleared its canvas. Unlike
+   * `playOnce()`, this neither restarts the animation loop nor advances time:
+   * players animate once at the last frame's time with no elapsed time, and
+   * input stays suspended.
+   */
+  protected _repaint(): void;
+  private _beginDraw;
+  private _endDraw;
+  /**
    * Dispose of browser resources held by this space and remove all players. Call this before unmounting the canvas.
    */
   dispose(): this;
@@ -2332,8 +2358,10 @@ declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends Visual
    */
   static resetStyleCache(ctx: RenderingContext2D | object): void;
   /**
-   * Skip a repeated style write only while the context still holds its last
-   * read-back value (browsers can normalize CSS strings on assignment).
+   * Write a context style property only when it differs from the last value
+   * written to this context. Direct writes of the cached styles on the
+   * context, `setLineDash`, `save()`, `restore()` and `reset()` are observed,
+   * so the cache stays accurate (see [`CanvasForm.ctx`](#link)).
    */
   protected _set(key: string, value: unknown): void;
   /**
@@ -2354,8 +2382,10 @@ declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends Visual
   get space(): S;
   /**
    * Get the rendering context of canvas to perform other canvas functions.
-   * Form style setters detect direct context writes and `save()`/`restore()`.
-   * Call `form.reset()` to reapply all the form's saved styles at once.
+   * Form style setters observe direct style writes, `setLineDash`, `save()`,
+   * `restore()` and `reset()` on canvas contexts. For a custom renderer whose
+   * style members are its own properties (rather than inherited accessors), or
+   * a frozen one, call `form.reset()` after setting its styles directly.
    * @example `form.ctx.clip()`
    */
   get ctx(): RenderingContext2D;
@@ -5495,12 +5525,18 @@ type SVGRun = {
   attrs: Record<string, string | number>;
   text?: string;
   shapeEnds?: number[];
+  free?: boolean;
+  wind?: number;
+  boxes?: number[];
 };
 /**
  * **`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that
- * [`CanvasForm`](#link) draws through, and renders it as SVG. Filled and translucent shapes
- * use separate elements so overlaps composite independently. Consecutive opaque solid
- * strokes with matching state may share a `<path>` element (a "style run").
+ * [`CanvasForm`](#link) draws through, and renders it as SVG. Consecutive shapes with the
+ * same paint state share one `<path>` element (a "style run") when that renders the same as
+ * separate elements: shapes with one opaque paint (fills only when their subpaths are
+ * circles, rectangles or convex polygons winding the same way), or shapes that do not
+ * overlap. Classed shapes, and overlapping translucent, blended, or differently filled and
+ * stroked shapes, keep separate elements, so they composite like canvas.
  *
  * Capability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,
  * `clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so
@@ -5531,19 +5567,47 @@ type SVGRun = {
  * context member a renderer does not implement.
  */
 declare class SVGContext2D {
-  fillStyle: string | SVGGradient;
-  strokeStyle: string | SVGGradient;
-  lineWidth: number;
-  lineJoin: string;
-  lineCap: string;
-  globalAlpha: number;
-  globalCompositeOperation: string;
-  font: string;
+  protected _fillStyle: string | SVGGradient;
+  protected _strokeStyle: string | SVGGradient;
+  protected _lineWidth: number;
+  protected _lineJoin: string;
+  protected _lineCap: string;
+  protected _globalAlpha: number;
+  protected _globalCompositeOperation: string;
+  protected _font: string;
+  protected _lineDashOffset: number;
   textAlign: string;
   textBaseline: string;
-  lineDashOffset: number;
   protected _dash: number[];
   protected _stateStack: object[];
+  protected _styleCache: Record<string, unknown> | null;
+  get fillStyle(): string | SVGGradient;
+  set fillStyle(v: string | SVGGradient);
+  get strokeStyle(): string | SVGGradient;
+  set strokeStyle(v: string | SVGGradient);
+  get lineWidth(): number;
+  set lineWidth(v: number);
+  get lineJoin(): string;
+  set lineJoin(v: string);
+  get lineCap(): string;
+  set lineCap(v: string);
+  get globalAlpha(): number;
+  set globalAlpha(v: number);
+  get globalCompositeOperation(): string;
+  set globalCompositeOperation(v: string);
+  get font(): string;
+  set font(v: string);
+  get lineDashOffset(): number;
+  set lineDashOffset(v: number);
+  /**
+   * Bind the style cache of the CanvasForms drawing on this context, so that
+   * style writes made directly on this context, `setLineDash` and `restore()`
+   * keep it accurate. Called by `CanvasForm`; a custom renderer may implement
+   * the same method instead of being observed.
+   * @param cache the style values last written, keyed by property name
+   */
+  _bindStyleCache(cache: Record<string, unknown>): void;
+  protected _wrote(key: string, v: unknown): void;
   /** Optional CSS class applied to emitted elements (see `SVGForm.cls`). */
   className: string;
   protected _d: string;
@@ -5554,6 +5618,18 @@ declare class SVGContext2D {
   protected _shapeClass: string;
   protected _shapeAlpha: number;
   protected _shapeBlend: string;
+  protected _pts: number[];
+  protected _ptsLength: number;
+  protected _rings: number[];
+  protected _ringsLength: number;
+  protected _ringStart: number;
+  protected _wind: number;
+  protected _windDone: boolean;
+  protected _x0: number;
+  protected _y0: number;
+  protected _x1: number;
+  protected _y1: number;
+  protected _boxDone: boolean;
   protected _runs: SVGRun[];
   protected _drawCount: number;
   protected _host: SVGElement;
@@ -5617,6 +5693,29 @@ declare class SVGContext2D {
    * with the previous run when the paint state matches.
    */
   protected _flushShape(): void;
+  /**
+   * Whether the current shape can join the previous path run, which has the
+   * same attributes, without changing the rendered pixels: 1 when it is order
+   * independent, 2 when it does not overlap the run's shapes, 0 otherwise.
+   * One opaque paint gives the same pixels in any order, and same-oriented
+   * simple fills do not cancel under the nonzero rule. Translucent paint,
+   * group opacity, blends, distinct fill and stroke paints, and fills of
+   * unknown winding composite per element, so they join only shapes they do
+   * not overlap.
+   */
+  protected _joinable(run: SVGRun): number;
+  protected _resetShape(): void;
+  protected _point(x: number, y: number): void;
+  /** Fold a subpath's orientation into the shape's. */
+  protected _orient(o: number): void;
+  /** Record the open moveTo/lineTo subpath, implicitly closed by a fill. */
+  protected _endRing(): void;
+  /** The current shape's fill orientation, evaluating its polygon subpaths. */
+  protected _shapeWind(): number;
+  /** Compute the current shape's bounds into `_x0`, `_y0`, `_x1`, `_y1`. */
+  protected _shapeBox(): void;
+  /** The current subpath has curves: its winding is not tracked. */
+  protected _curve(): void;
 }
 /**
  * SVGSpace extends [`DOMSpace`](#link) to support SVG elements. Use it with [`SVGForm`](#link),

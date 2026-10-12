@@ -342,13 +342,17 @@ var Num = class Num {
 		return Math.max(min, Math.min(max, val));
 	}
 	static boundValue(val, min, max) {
-		const base = Math.min(min, max);
-		const len = Math.abs(max - min);
-		if (len === 0) return base;
-		let a = (val - base) % len;
+		if (min > max) {
+			const t = min;
+			min = max;
+			max = t;
+		}
+		const len = max - min;
+		if (len === 0) return min;
+		let a = (val - min) % len;
 		if (a < 0) a += len;
-		const result = a + base;
-		return a === len || result === Math.max(min, max) ? base : result;
+		const result = a + min;
+		return result >= max ? min : result;
 	}
 	static within(p, a, b) {
 		return p >= Math.min(a, b) && p <= Math.max(a, b);
@@ -965,17 +969,25 @@ var Util = class Util {
 
 //#endregion
 //#region src/Pt.ts
+function _isBuffer(a) {
+	return a instanceof ArrayBuffer || typeof SharedArrayBuffer !== "undefined" && a instanceof SharedArrayBuffer;
+}
 var Pt = class Pt extends Float32Array {
 	constructor(...args) {
 		let params;
+		let offset;
+		let length;
 		const a0 = args[0];
 		if (args.length === 1 && typeof a0 == "number") params = a0;
 		else if (args.length === 0) params = 2;
 		else if (args.length === 1 && (Array.isArray(a0) || ArrayBuffer.isView(a0))) params = a0;
 		else if (typeof a0 === "number") params = args;
-		else params = Util.getArgs(args);
-		if (a0 instanceof ArrayBuffer || typeof SharedArrayBuffer !== "undefined" && a0 instanceof SharedArrayBuffer) super(a0, args[1], args[2]);
-		else super(params);
+		else if (_isBuffer(a0)) {
+			params = a0;
+			offset = args[1];
+			length = args[2];
+		} else params = Util.getArgs(args);
+		super(params, offset, length);
 	}
 	static make(dimensions, defaultValue = 0, randomize = false) {
 		const p = new Pt(dimensions);
@@ -1767,6 +1779,15 @@ function crossingParameter(ax, ay, bx, by, cx, cy, dx, dy) {
 	}
 	return Number(numerator >> shift) / Number(scaled);
 }
+function orient2dFiltered(ax, ay, bx, by, cx, cy) {
+	const left = (ax - cx) * (by - cy);
+	const right = (ay - cy) * (bx - cx);
+	const det = left - right;
+	const bound = ORIENT_BOUND * (Math.abs(left) + Math.abs(right));
+	if (det > bound) return 1;
+	if (-det > bound) return -1;
+	return orient2dExact(ax, ay, bx, by, cx, cy);
+}
 function orient2dExact(ax, ay, bx, by, cx, cy) {
 	_input[0] = ax;
 	_input[1] = ay;
@@ -2232,6 +2253,53 @@ function outputArea(ring) {
 	}
 	return area / 2;
 }
+const SWEEP_SCAN = 256;
+const SWEEP_SAMPLES = 64;
+const SWEEP_TRIAL = 32;
+const SWEEP_BLOCK_BITS = 4;
+const SWEEP_BLOCK = 16;
+function windowEnd(minX, order, from, limit) {
+	let end = order.length;
+	for (let a = from; a < end;) {
+		const mid = a + end >> 1;
+		if (minX[order[mid]] > limit) end = mid;
+		else a = mid + 1;
+	}
+	return end;
+}
+function blockSpan(from, to) {
+	return (to - 1 >> SWEEP_BLOCK_BITS) - (from >> SWEEP_BLOCK_BITS) + 1;
+}
+function sweepTree(boxes) {
+	const { minY, maxY, order } = boxes;
+	const E = order.length;
+	const blocks = E + SWEEP_BLOCK - 1 >> SWEEP_BLOCK_BITS;
+	let size = 1;
+	let depth = 0;
+	while (size < blocks) {
+		size *= 2;
+		depth++;
+	}
+	const low = new Float64Array(2 * size).fill(Infinity);
+	const high = new Float64Array(2 * size).fill(-Infinity);
+	for (let j = 0; j < E; j++) {
+		const e = order[j];
+		const leaf = size + (j >> SWEEP_BLOCK_BITS);
+		if (minY[e] < low[leaf]) low[leaf] = minY[e];
+		if (maxY[e] > high[leaf]) high[leaf] = maxY[e];
+	}
+	for (let n = size - 1; n > 0; n--) {
+		low[n] = Math.min(low[2 * n], low[2 * n + 1]);
+		high[n] = Math.max(high[2 * n], high[2 * n + 1]);
+	}
+	return {
+		low,
+		high,
+		size,
+		stack: new Int32Array(3 * (depth + 2)),
+		scanned: 0
+	};
+}
 var Overlay = class {
 	constructor() {
 		this.tol = 0;
@@ -2251,6 +2319,8 @@ var Overlay = class {
 		this.deltas = [];
 		this.cycleArea = [];
 		this.cycleStart = [];
+		this.touching = false;
+		this.dryRun = false;
 	}
 	origin(h) {
 		return h & 1 ? this.gv[h >> 1] : this.gu[h >> 1];
@@ -2389,46 +2459,19 @@ var Overlay = class {
 		};
 	}
 	sweep(boxes, margin, touching) {
+		const tree = this.searchTree(boxes, margin);
+		if (tree) return this.searchSweep(boxes, margin, touching, tree);
 		const { minX, maxX, minY, maxY, order } = boxes;
 		let pairs = touching ? [] : void 0;
-		const E = order.length;
-		let size = 1;
-		while (size < E) size *= 2;
-		const low = new Float64Array(2 * size).fill(Infinity);
-		const high = new Float64Array(2 * size).fill(-Infinity);
-		const left = new Float64Array(2 * size).fill(Infinity);
-		const maxOrder = new Int32Array(2 * size).fill(-1);
-		const byY = Array.from({ length: E }, (_, i) => i).sort((a, b) => minY[order[a]] - minY[order[b]] || a - b);
-		for (let i = 0; i < E; i++) {
-			const pos = byY[i], edge = order[pos], node = size + i;
-			low[node] = minY[edge];
-			high[node] = maxY[edge];
-			left[node] = minX[edge];
-			maxOrder[node] = pos;
-		}
-		for (let n = size - 1; n > 0; n--) {
-			low[n] = Math.min(low[2 * n], low[2 * n + 1]);
-			high[n] = Math.max(high[2 * n], high[2 * n + 1]);
-			left[n] = Math.min(left[2 * n], left[2 * n + 1]);
-			maxOrder[n] = Math.max(maxOrder[2 * n], maxOrder[2 * n + 1]);
-		}
-		const stack = [], candidates = [];
 		for (let i = 0, E = order.length; i < E; i++) {
 			const e1 = order[i];
 			const limit = maxX[e1] + margin;
 			const lo = minY[e1] - margin;
 			const hi = maxY[e1] + margin;
-			stack.push(1);
-			candidates.length = 0;
-			while (stack.length) {
-				const n = stack.pop();
-				if (maxOrder[n] <= i || left[n] > limit || low[n] > hi || high[n] < lo) continue;
-				if (n >= size) candidates.push(maxOrder[n]);
-				else stack.push(2 * n + 1, 2 * n);
-			}
-			candidates.sort((a, b) => a - b);
-			for (const j of candidates) {
+			for (let j = i + 1; j < E; j++) {
 				const e2 = order[j];
+				if (minX[e2] > limit) break;
+				if (minY[e2] > hi || maxY[e2] < lo) continue;
 				if (touching) {
 					this.touchPair(e1, e2, boxes);
 					if (pairs) {
@@ -2439,6 +2482,105 @@ var Overlay = class {
 			}
 		}
 		return pairs;
+	}
+	searchTree(boxes, margin) {
+		const { minX, maxX, minY, maxY, order } = boxes;
+		const E = order.length;
+		if (E <= 2 * SWEEP_SCAN) return void 0;
+		let tree;
+		let long = 0;
+		let windowBlocks = 0;
+		for (let k = 0; k < SWEEP_SAMPLES; k++) {
+			var _tree;
+			const i = Math.floor(k * E / SWEEP_SAMPLES);
+			const e1 = order[i];
+			const end = windowEnd(minX, order, i + 1, maxX[e1] + margin);
+			if (end - i - 1 <= SWEEP_SCAN) continue;
+			long++;
+			(_tree = tree) !== null && _tree !== void 0 || (tree = sweepTree(boxes));
+			this.dryRun = true;
+			this.searchPairs(e1, i + 1, end, minY[e1] - margin, maxY[e1] + margin, boxes, tree);
+			this.dryRun = false;
+			windowBlocks += blockSpan(i + 1, end);
+		}
+		if (!tree || long * 8 < SWEEP_SAMPLES || tree.scanned * 2 > windowBlocks) return void 0;
+		tree.scanned = 0;
+		return tree;
+	}
+	searchSweep(boxes, margin, touching, tree) {
+		const { minX, maxX, minY, maxY, order } = boxes;
+		this.pairs = touching ? [] : void 0;
+		this.touching = touching;
+		let searchable = true;
+		let searches = 0;
+		let windowBlocks = 0;
+		for (let i = 0, E = order.length; i < E; i++) {
+			const e1 = order[i];
+			const limit = maxX[e1] + margin;
+			const lo = minY[e1] - margin;
+			const hi = maxY[e1] + margin;
+			const end = windowEnd(minX, order, i + 1, limit);
+			if (!searchable || end - i - 1 <= SWEEP_SCAN) {
+				for (let j = i + 1; j < end; j++) {
+					const e2 = order[j];
+					if (minY[e2] > hi || maxY[e2] < lo) continue;
+					this.visitPair(e1, e2, boxes);
+				}
+				continue;
+			}
+			this.searchPairs(e1, i + 1, end, lo, hi, boxes, tree);
+			windowBlocks += blockSpan(i + 1, end);
+			if (++searches === SWEEP_TRIAL) searchable = tree.scanned * 2 <= windowBlocks;
+		}
+		const pairs = this.pairs;
+		this.pairs = void 0;
+		return pairs;
+	}
+	visitPair(e1, e2, boxes) {
+		if (this.dryRun) return;
+		if (this.touching) {
+			this.touchPair(e1, e2, boxes);
+			const pairs = this.pairs;
+			if (pairs) {
+				if (pairs.length < 2 * PAIR_BUFFER) pairs.push(e1, e2);
+				else this.pairs = void 0;
+			}
+		} else this.crossPair(e1, e2);
+	}
+	searchPairs(e1, from, to, lo, hi, boxes, tree) {
+		const { low, high, size } = tree;
+		const first = from >> SWEEP_BLOCK_BITS;
+		const last = to - 1 >> SWEEP_BLOCK_BITS;
+		const stack = tree.stack;
+		let top = 0;
+		stack[top++] = 1;
+		stack[top++] = 0;
+		stack[top++] = size - 1;
+		while (top > 0) {
+			const b1 = stack[--top];
+			const b0 = stack[--top];
+			const n = stack[--top];
+			if (b1 < first || b0 > last || low[n] > hi || high[n] < lo) continue;
+			if (n >= size) {
+				tree.scanned++;
+				const start = b0 << SWEEP_BLOCK_BITS;
+				const { minY, maxY, order } = boxes;
+				const stopAt = start + SWEEP_BLOCK < to ? start + SWEEP_BLOCK : to;
+				for (let j = start > from ? start : from; j < stopAt; j++) {
+					const e2 = order[j];
+					if (minY[e2] > hi || maxY[e2] < lo) continue;
+					this.visitPair(e1, e2, boxes);
+				}
+			} else {
+				const mid = b0 + b1 >> 1;
+				stack[top++] = 2 * n + 1;
+				stack[top++] = mid + 1;
+				stack[top++] = b1;
+				stack[top++] = 2 * n;
+				stack[top++] = b0;
+				stack[top++] = mid;
+			}
+		}
 	}
 	touchPair(e1, e2, boxes) {
 		const a = this.ea[e1];
@@ -3254,12 +3396,29 @@ var Line = class Line {
 	static intersectLine2D(la, lb) {
 		let _la = Util.iterToArray(la);
 		let _lb = Util.iterToArray(lb);
-		if (orient2d(_la[0][0], _la[0][1], _la[1][0], _la[1][1], _lb[0][0], _lb[0][1]) === 0 && orient2d(_la[0][0], _la[0][1], _la[1][0], _la[1][1], _lb[1][0], _lb[1][1]) === 0 && orient2d(_lb[0][0], _lb[0][1], _lb[1][0], _lb[1][1], _la[0][0], _la[0][1]) === 0) {
+		const rx = _la[1][0] - _la[0][0];
+		const ry = _la[1][1] - _la[0][1];
+		const sx = _lb[1][0] - _lb[0][0];
+		const sy = _lb[1][1] - _lb[0][1];
+		const m = rx * sy;
+		const cross = m - ry * sx;
+		if (Math.abs(cross) <= 1e-12 * Math.abs(m) && orient2dFiltered(_la[0][0], _la[0][1], _la[1][0], _la[1][1], _lb[0][0], _lb[0][1]) === 0 && orient2dFiltered(_la[0][0], _la[0][1], _la[1][0], _la[1][1], _lb[1][0], _lb[1][1]) === 0 && orient2dFiltered(_lb[0][0], _lb[0][1], _lb[1][0], _lb[1][1], _la[0][0], _la[0][1]) === 0) {
 			const shared = [..._la, ..._lb].filter((p) => Geom.withinBound(p, _la[0], _la[1]) && Geom.withinBound(p, _lb[0], _lb[1]));
 			shared.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
 			return shared.length ? new Pt(shared[0]) : void 0;
 		}
-		let pt = Line.intersectRay2D(_la, _lb);
+		const pa = _la[0];
+		const pb = _lb[0];
+		if (rx === 0 && ry === 0 || sx === 0 && sy === 0) return void 0;
+		let pt;
+		if (cross === 0) {
+			const qpx = pb[0] - pa[0];
+			const qpy = pb[1] - pa[1];
+			if (qpx * ry - qpy * rx === 0) pt = new Pt(pa[0], pa[1]);
+		} else {
+			const t = ((pb[0] - pa[0]) * sy - (pb[1] - pa[1]) * sx) / cross;
+			pt = new Pt(pa[0] + t * rx, pa[1] + t * ry);
+		}
 		return pt && Geom.withinBound(pt, _la[0], _la[1]) && Geom.withinBound(pt, _lb[0], _lb[1]) ? pt : void 0;
 	}
 	static intersectLineWithRay2D(line, ray) {
@@ -3732,13 +3891,30 @@ var Polygon = class Polygon {
 		let _pts = Util.iterToArray(pts);
 		if (_pts.length < 3) return _errorLength(new Group(), 3);
 		const compare = (a, b) => a[0] - b[0] || a[1] - b[1];
-		if (!sorted || _pts.some((p, i) => i > 0 && compare(_pts[i - 1], p) > 0)) _pts = _pts.slice().sort(compare);
-		_pts = _pts.filter((p, i) => i === 0 || compare(_pts[i - 1], p) !== 0);
+		let unsorted = !sorted;
+		let duplicates = unsorted;
+		for (let i = 1, len = _pts.length; !unsorted && i < len; i++) {
+			const c = compare(_pts[i - 1], _pts[i]);
+			if (c > 0) unsorted = duplicates = true;
+			else if (c === 0) duplicates = true;
+		}
+		if (unsorted) _pts = _pts.slice().sort(compare);
+		else if (duplicates) _pts = _pts.slice();
+		if (duplicates) {
+			let n = 1;
+			const len = _pts.length;
+			while (n < len && compare(_pts[n - 1], _pts[n]) !== 0) n++;
+			for (let i = n + 1; i < len; i++) if (compare(_pts[n - 1], _pts[i]) !== 0) _pts[n++] = _pts[i];
+			if (n < len) _pts.length = n;
+		}
 		let left = (a, b, c) => {
-			return orient2d(a[0], a[1], b[0], b[1], c[0], c[1]) > 0;
+			const l = (b[0] - a[0]) * (c[1] - a[1]);
+			const r = (c[0] - a[0]) * (b[1] - a[1]);
+			const bound = 33306690738754716e-32 * (Math.abs(l) + Math.abs(r));
+			return l - r > bound ? true : r - l > bound ? false : orient2dFiltered(a[0], a[1], b[0], b[1], c[0], c[1]) > 0;
 		};
 		let seed = 2;
-		while (seed < _pts.length && orient2d(_pts[0][0], _pts[0][1], _pts[1][0], _pts[1][1], _pts[seed][0], _pts[seed][1]) === 0) seed++;
+		while (seed < _pts.length && orient2dFiltered(_pts[0][0], _pts[0][1], _pts[1][0], _pts[1][1], _pts[seed][0], _pts[seed][1]) === 0) seed++;
 		if (seed >= _pts.length) {
 			const hull = new Group();
 			hull.push(_pts[0]);
@@ -4904,10 +5080,7 @@ var Space = class {
 	}
 	playItems(time) {
 		this._playing = true;
-		if (this._refresh) this.clear();
-		if (this._isReady) {
-			for (const k in this.players) if (this.players[k].animate) this.players[k].animate(time, this._time.diff, this);
-		}
+		this._animatePlayers(time, this._time.diff);
 		if (this._stopAfter >= 0) {
 			this._time.end = time + this._stopAfter;
 			this._stopAfter = -1;
@@ -4917,6 +5090,12 @@ var Space = class {
 			this._animID = -1;
 			this._playing = false;
 			this._firstFrame = true;
+		}
+	}
+	_animatePlayers(time, ftime) {
+		if (this._refresh) this.clear();
+		if (this._isReady) {
+			for (const k in this.players) if (this.players[k].animate) this.players[k].animate(time, ftime, this);
 		}
 	}
 	pause(toggle = false) {
@@ -4983,6 +5162,7 @@ var MultiTouchSpace = class extends Space {
 		this._dragged = false;
 		this._pressId = null;
 		this._pressIsTouch = false;
+		this._pressType = "";
 		this._hasMouse = false;
 		this._hasTouch = false;
 		this._hasKeyboard = false;
@@ -5035,6 +5215,7 @@ var MultiTouchSpace = class extends Space {
 			this.bindCanvas("contextmenu", this._contextMenuBind, {}, customTarget);
 			this._hasMouse = true;
 		} else if (this._hasMouse) {
+			if (this._pressed && !this._pressIsTouch) this._abandonPress();
 			const target = this._mouseTarget;
 			this.unbindCanvas("pointerdown", this._mouseDownBind, {}, target);
 			this.unbindCanvas("pointerup", this._mouseUpBind, {}, target);
@@ -5063,6 +5244,7 @@ var MultiTouchSpace = class extends Space {
 			this.bindCanvas("touchcancel", this._mouseOutBind, {}, customTarget);
 			this._hasTouch = true;
 		} else if (this._hasTouch) {
+			if (this._pressed && this._pressIsTouch) this._abandonPress();
 			const target = this._touchTarget;
 			const options = { passive: this._touchPassive };
 			this.unbindCanvas("touchstart", this._touchStartBind, options, target);
@@ -5189,13 +5371,22 @@ var MultiTouchSpace = class extends Space {
 		this._pressed = this._dragged = false;
 		this._pressId = null;
 	}
-	_mouseDown(evt) {
-		if (this._isTouchHandled(evt)) return false;
+	_beginPress(evt, id, touch, type) {
+		if (this._pressed && this._pressType === type && (id === this._pressId || ("changedTouches" in evt ? evt.touches.length === evt.changedTouches.length : evt.isPrimary !== false))) this._abandonPress();
 		if (!this._pressed) {
-			this._pressId = evt.pointerId;
-			this._pressIsTouch = false;
+			this._pressId = id;
+			this._pressIsTouch = touch;
+			this._pressType = type;
 			this._pressed = true;
 		}
+	}
+	_abandonPress() {
+		this._releasePress();
+		for (const ui of this._trackedUIs.slice()) if (ui.state("dragging")) ui.listen(UIPointerActions.drop, this._pointer, new Event("pointercancel"));
+	}
+	_mouseDown(evt) {
+		if (this._isTouchHandled(evt)) return false;
+		this._beginPress(evt, evt.pointerId, false, evt.pointerType || "mouse");
 		this._mouseAction(UIPointerActions.down, evt);
 		this._mouseAction(UIPointerActions.pointerdown, evt);
 		if (typeof Element !== "undefined" && evt.target instanceof Element) try {
@@ -5255,11 +5446,7 @@ var MultiTouchSpace = class extends Space {
 		return false;
 	}
 	_touchStart(evt) {
-		if (!this._pressed && evt.changedTouches.length) {
-			this._pressId = evt.changedTouches.item(0).identifier;
-			this._pressIsTouch = true;
-			this._pressed = true;
-		}
+		if (evt.changedTouches.length) this._beginPress(evt, evt.changedTouches.item(0).identifier, true, "touchevent");
 		this._mouseAction(UIPointerActions.down, evt);
 		this._mouseAction(UIPointerActions.pointerdown, evt);
 		if (!this._touchPassive) evt.preventDefault();
@@ -6010,7 +6197,7 @@ var CanvasSpace = class extends MultiTouchSpace {
 			if (p.resize) p.resize(this.bound, evt);
 		}
 		this.render(this._ctx);
-		if (this._isReady && !this.isPlaying && (evt || this._hasPlayed)) this.playOnce(0);
+		if (this._isReady && !this.isPlaying && (evt || this._hasPlayed)) this._repaint();
 		return this;
 	}
 	_resizeHandler(evt) {
@@ -6079,17 +6266,28 @@ var CanvasSpace = class extends MultiTouchSpace {
 		return this;
 	}
 	playItems(time) {
-		if (this._isReady) this._hasPlayed = true;
 		if (this._isReady) {
-			this._ctx.save();
-			if (this._offscreen) this._offCtx.save();
+			this._hasPlayed = true;
+			this._beginDraw();
 			super.playItems(time);
-			this._ctx.restore();
-			if (this._offscreen) this._offCtx.restore();
-			CanvasForm.resetStyleCache(this._ctx);
-			if (this._offscreen) CanvasForm.resetStyleCache(this._offCtx);
-			this.render(this._ctx);
+			this._endDraw();
 		}
+	}
+	_repaint() {
+		this._beginDraw();
+		this._animatePlayers(this._time.prev, 0);
+		this._endDraw();
+	}
+	_beginDraw() {
+		this._ctx.save();
+		if (this._offscreen) this._offCtx.save();
+	}
+	_endDraw() {
+		this._ctx.restore();
+		if (this._offscreen) this._offCtx.restore();
+		CanvasForm.resetStyleCache(this._ctx);
+		if (this._offscreen) CanvasForm.resetStyleCache(this._offCtx);
+		this.render(this._ctx);
 	}
 	dispose() {
 		if (this._disposed) return this;
@@ -6136,6 +6334,107 @@ var CanvasSpace = class extends MultiTouchSpace {
 	}
 };
 const _ctxStyleCache = /* @__PURE__ */ new WeakMap();
+const _ctxSaved = /* @__PURE__ */ new WeakMap();
+const _observedStyles = [
+	"fillStyle",
+	"strokeStyle",
+	"lineWidth",
+	"lineJoin",
+	"lineCap",
+	"globalAlpha",
+	"globalCompositeOperation",
+	"font"
+];
+function _forgetStyles(cache) {
+	for (const k in cache) cache[k] = void 0;
+}
+function _findDescriptor(obj, key) {
+	for (let o = obj; o; o = Object.getPrototypeOf(o)) {
+		const d = Object.getOwnPropertyDescriptor(o, key);
+		if (d) return d;
+	}
+}
+function _observeProperty(ctx, key, cache, cacheKey, forget) {
+	if (Object.getOwnPropertyDescriptor(ctx, key)) return;
+	const d = _findDescriptor(ctx, key);
+	let get;
+	let set;
+	if (d && (d.get || d.set)) {
+		const g = d.get;
+		const s = d.set;
+		if (!s) return;
+		get = function() {
+			return g ? g.call(this) : void 0;
+		};
+		set = forget ? function(v) {
+			s.call(this, v);
+			cache[cacheKey] = void 0;
+		} : function(v) {
+			s.call(this, v);
+			cache[cacheKey] = v;
+		};
+	} else {
+		if (d && d.writable === false) return;
+		let value = d ? d.value : void 0;
+		get = () => value;
+		set = (v) => {
+			value = v;
+			cache[cacheKey] = forget ? void 0 : v;
+		};
+	}
+	try {
+		Object.defineProperty(ctx, key, {
+			get,
+			set,
+			configurable: true,
+			enumerable: d ? d.enumerable : true
+		});
+	} catch (_unused) {}
+}
+function _observeMethod(ctx, key, after) {
+	const fn = ctx[key];
+	if (typeof fn !== "function") return;
+	const own = Object.getOwnPropertyDescriptor(ctx, key);
+	if (own && !own.configurable) return;
+	try {
+		Object.defineProperty(ctx, key, {
+			value: function(...args) {
+				const result = fn.apply(this, args);
+				after();
+				return result;
+			},
+			configurable: true,
+			writable: true,
+			enumerable: own ? own.enumerable : false
+		});
+	} catch (_unused2) {}
+}
+function _observeContext(ctx, cache) {
+	if (typeof ctx._bindStyleCache === "function") {
+		ctx._bindStyleCache(cache);
+		return;
+	}
+	if (!Object.isExtensible(ctx)) return;
+	const stack = [];
+	_ctxSaved.set(ctx, stack);
+	for (const key of _observedStyles) _observeProperty(ctx, key, cache, key, false);
+	_observeProperty(ctx, "lineDashOffset", cache, "dash", true);
+	_observeMethod(ctx, "setLineDash", () => {
+		cache.dash = void 0;
+	});
+	_observeMethod(ctx, "save", () => {
+		stack.push(Object.assign({}, cache));
+	});
+	_observeMethod(ctx, "restore", () => {
+		const saved = stack.pop();
+		if (saved) for (const k in cache) cache[k] = saved[k];
+		else _forgetStyles(cache);
+	});
+	_observeMethod(ctx, "reset", () => {
+		stack.length = 0;
+		_forgetStyles(cache);
+	});
+}
 var CanvasForm = class CanvasForm extends VisualForm {
 	_cacheForCtx() {
 		if (this._styleCacheCtx !== this._ctx) {
@@ -6143,6 +6442,7 @@ var CanvasForm = class CanvasForm extends VisualForm {
 			if (!cache) {
 				cache = {};
 				_ctxStyleCache.set(this._ctx, cache);
+				_observeContext(this._ctx, cache);
 			}
 			this._styleCache = cache;
 			this._styleCacheCtx = this._ctx;
@@ -6151,14 +6451,15 @@ var CanvasForm = class CanvasForm extends VisualForm {
 	}
 	static resetStyleCache(ctx) {
 		const cache = _ctxStyleCache.get(ctx);
-		if (cache) for (const k in cache) delete cache[k];
+		if (cache) _forgetStyles(cache);
+		const saved = _ctxSaved.get(ctx);
+		if (saved) saved.length = 0;
 	}
 	_set(key, value) {
 		const cache = this._cacheForCtx();
-		if (cache[key] !== value || cache[`actual:${key}`] !== this._ctx[key]) {
-			cache[key] = value;
+		if (cache[key] !== value) {
 			this._ctx[key] = value;
-			cache[`actual:${key}`] = this._ctx[key];
+			cache[key] = value;
 		}
 	}
 	constructor(space) {
@@ -6286,26 +6587,21 @@ var CanvasForm = class CanvasForm extends VisualForm {
 	}
 	dash(segments = true, offset = 0) {
 		const cache = this._cacheForCtx();
-		if (typeof this._ctx.getLineDash === "function") {
-			const actual = `${this._ctx.getLineDash().join(",")}/${this._ctx.lineDashOffset}`;
-			if (cache.actualDash !== actual) delete cache.dash;
-		}
 		if (segments === false || segments !== true && segments.length === 0) {
 			if (cache.dash !== "/0") {
-				cache.dash = "/0";
 				this._ctx.setLineDash([]);
 				this._ctx.lineDashOffset = 0;
+				cache.dash = "/0";
 			}
 		} else {
 			const seg = segments === true ? [5, 5] : segments;
 			const key = `${Array.prototype.join.call(seg, ",")}/${offset}`;
 			if (cache.dash !== key) {
-				cache.dash = key;
 				this._ctx.setLineDash(seg);
 				this._ctx.lineDashOffset = offset;
+				cache.dash = key;
 			}
 		}
-		if (typeof this._ctx.getLineDash === "function") cache.actualDash = `${this._ctx.getLineDash().join(",")}/${this._ctx.lineDashOffset}`;
 		return this;
 	}
 	font(sizeOrFont, weight, style, lineHeight, family) {
@@ -7997,6 +8293,13 @@ var PoissonDisk = class extends Group {
 const D65 = /* @__PURE__ */ new Pt(95.047, 100, 108.883, 1);
 const D50 = /* @__PURE__ */ new Pt(34.57 / .3585, 100, 100 * .2958 / .3585, 1);
 let _colorRanges = /* @__PURE__ */ colorRanges();
+function _hslChannel(p, q, t) {
+	t = t < 0 ? t + 1 : t > 1 ? t - 1 : t;
+	if (t * 6 < 1) return p + (q - p) * t * 6;
+	if (t * 2 < 1) return q;
+	if (t * 3 < 2) return p + (q - p) * (2 / 3 - t) * 6;
+	return p;
+}
 function colorRanges() {
 	return {
 		rgb: new Group(new Pt(0, 255), new Pt(0, 255), new Pt(0, 255)),
@@ -8222,7 +8525,9 @@ var Color = class Color extends Pt {
 		const v = this._isNorm && format !== "mode" ? Color._denorm(this) : this;
 		if (format == "hex") {
 			const _hex = (n) => {
-				const s = Math.floor(Number.isNaN(n) ? 0 : Num.clamp(n, 0, 255)).toString(16);
+				let b = Math.floor(n);
+				if (!(b >= 0 && b <= 255)) b = b > 255 ? 255 : 0;
+				const s = b.toString(16);
 				return s.length < 2 ? "0" + s : s;
 			};
 			return `#${_hex(v[0])}${_hex(v[1])}${_hex(v[2])}`;
@@ -8253,29 +8558,27 @@ var Color = class Color extends Pt {
 		return cc;
 	}
 	static HSLtoRGB(hsl, normalizedInput = false, normalizedOutput = false) {
-		let [h, s, l] = hsl;
+		let h = hsl[0];
+		const s = hsl[1];
+		const l = hsl[2];
 		if (!normalizedInput) h = h / 360;
 		h = h - Math.floor(h);
-		const sc = normalizedOutput ? 1 : 255;
-		if (s == 0) {
-			const gray = Color.rgb(sc * l, sc * l, sc * l, hsl.alpha);
-			if (normalizedOutput) gray.normalized = true;
-			else for (let i = 0; i < 3; i++) gray[i] = Math.round(gray[i]);
-			return gray;
+		let r = l;
+		let g = l;
+		let b = l;
+		if (s != 0) {
+			const q = l <= .5 ? l * (1 + s) : l + s - l * s;
+			const p = 2 * l - q;
+			r = _hslChannel(p, q, h + 1 / 3);
+			g = _hslChannel(p, q, h);
+			b = _hslChannel(p, q, h - 1 / 3);
 		}
-		const q = l <= .5 ? l * (1 + s) : l + s - l * s;
-		const p = 2 * l - q;
-		const convert = (t) => {
-			t = t < 0 ? t + 1 : t > 1 ? t - 1 : t;
-			if (t * 6 < 1) return p + (q - p) * t * 6;
-			else if (t * 2 < 1) return q;
-			else if (t * 3 < 2) return p + (q - p) * (2 / 3 - t) * 6;
-			else return p;
-		};
-		const cc = Color.rgb(sc * convert(h + 1 / 3), sc * convert(h), sc * convert(h - 1 / 3), hsl.alpha);
-		if (normalizedOutput) cc.normalized = true;
-		else for (let i = 0; i < 3; i++) cc[i] = Math.round(cc[i]);
-		return cc;
+		if (normalizedOutput) {
+			const cc = Color.rgb(r, g, b, hsl.alpha);
+			cc.normalized = true;
+			return cc;
+		}
+		return Color.rgb(Math.round(255 * r), Math.round(255 * g), Math.round(255 * b), hsl.alpha);
 	}
 	static RGBtoHSB(rgb, normalizedInput = false, normalizedOutput = false) {
 		const [r, g, b] = !normalizedInput ? rgb.$normalize() : rgb;
@@ -8295,7 +8598,9 @@ var Color = class Color extends Pt {
 		return cc;
 	}
 	static HSBtoRGB(hsb, normalizedInput = false, normalizedOutput = false) {
-		let [h, s, v] = hsb;
+		let h = hsb[0];
+		const s = hsb[1];
+		const v = hsb[2];
 		if (!normalizedInput) h = h / 360;
 		h = h - Math.floor(h);
 		const i = Math.floor(h * 6);
@@ -8303,43 +8608,44 @@ var Color = class Color extends Pt {
 		const p = v * (1 - s);
 		const q = v * (1 - f * s);
 		const t = v * (1 - (1 - f) * s);
-		const c = [
-			[
-				v,
-				t,
-				p
-			],
-			[
-				q,
-				v,
-				p
-			],
-			[
-				p,
-				v,
-				t
-			],
-			[
-				p,
-				q,
-				v
-			],
-			[
-				t,
-				p,
-				v
-			],
-			[
-				v,
-				p,
-				q
-			]
-		][i % 6];
-		const sc = normalizedOutput ? 1 : 255;
-		const cc = Color.rgb(sc * c[0], sc * c[1], sc * c[2], hsb.alpha);
-		if (normalizedOutput) cc.normalized = true;
-		else for (let i = 0; i < 3; i++) cc[i] = Math.round(cc[i]);
-		return cc;
+		let r, g, b;
+		switch (i % 6) {
+			case 0:
+				r = v;
+				g = t;
+				b = p;
+				break;
+			case 1:
+				r = q;
+				g = v;
+				b = p;
+				break;
+			case 2:
+				r = p;
+				g = v;
+				b = t;
+				break;
+			case 3:
+				r = p;
+				g = q;
+				b = v;
+				break;
+			case 4:
+				r = t;
+				g = p;
+				b = v;
+				break;
+			default:
+				r = v;
+				g = p;
+				b = q;
+		}
+		if (normalizedOutput) {
+			const cc = Color.rgb(r, g, b, hsb.alpha);
+			cc.normalized = true;
+			return cc;
+		}
+		return Color.rgb(Math.round(255 * r), Math.round(255 * g), Math.round(255 * b), hsb.alpha);
 	}
 	static RGBtoLAB(rgb, normalizedInput = false, normalizedOutput = false) {
 		const c = normalizedInput ? Color._denorm(rgb) : rgb;
@@ -9017,23 +9323,164 @@ var SVGGradient = class {
 		}
 	}
 };
+const RUN_BOXES = 32;
+const _opaquePaint = /* @__PURE__ */ new Map();
+let _lastPaint = "";
+let _lastOpaque = false;
+function isOpaquePaint(paint) {
+	if (paint === _lastPaint) return _lastOpaque;
+	let known = _opaquePaint.get(paint);
+	if (known === void 0) {
+		known = _parseOpaque(paint);
+		if (_opaquePaint.size < 512) _opaquePaint.set(paint, known);
+	}
+	_lastPaint = paint;
+	_lastOpaque = known;
+	return known;
+}
+function _parseOpaque(paint) {
+	const p = paint.trim().toLowerCase();
+	if (p[0] === "#") {
+		if (p.length === 4 || p.length === 7) return true;
+		if (p.length === 5) return p[4] === "f";
+		if (p.length === 9) return p.slice(7) === "ff";
+		return false;
+	}
+	const fn = /^(rgba?|hsla?|hwb|lab|lch|oklab|oklch)\((.*)\)$/.exec(p);
+	if (fn) {
+		const args = fn[2];
+		if (/var\(|calc\(|from /.test(args)) return false;
+		const slash = args.indexOf("/");
+		let alpha;
+		if (slash >= 0) alpha = args.slice(slash + 1);
+		else {
+			const parts = args.split(",");
+			if (parts.length === 4) alpha = parts[3];
+			else if (parts.length !== 1 && parts.length !== 3) return false;
+		}
+		if (alpha === void 0) return true;
+		const a = alpha.trim();
+		return a === "1" || a === "100%" || parseFloat(a) >= (a.endsWith("%") ? 100 : 1);
+	}
+	return /^[a-z]+$/.test(p) && p !== "transparent" && p !== "currentcolor" && p !== "none" && p !== "inherit";
+}
+function convexOrientation(p, start, end) {
+	let ex0 = p[start] - p[end - 2];
+	let ey0 = p[start + 1] - p[end - 1];
+	let sign = 0;
+	let flips = 0;
+	let lastDx = ex0 > 0 ? 1 : ex0 < 0 ? -1 : 0;
+	let firstDx = lastDx;
+	for (let i = start; i < end; i += 2) {
+		const j = i + 2 < end ? i + 2 : start;
+		const ex = p[j] - p[i];
+		const ey = p[j + 1] - p[i + 1];
+		const cross = ex0 * ey - ey0 * ex;
+		if (cross !== 0) {
+			const s = cross > 0 ? 1 : -1;
+			if (!sign) sign = s;
+			else if (s !== sign) return NaN;
+		}
+		if (ex !== 0) {
+			const d = ex > 0 ? 1 : -1;
+			if (!firstDx) firstDx = d;
+			else if (d !== lastDx) flips++;
+			lastDx = d;
+		}
+		ex0 = ex;
+		ey0 = ey;
+	}
+	if (firstDx && lastDx !== firstDx) flips++;
+	return sign && flips === 2 ? sign : NaN;
+}
 let _svgMeasurer = null;
 const _svgWarned = {};
 var SVGContext2D = class SVGContext2D {
+	get fillStyle() {
+		return this._fillStyle;
+	}
+	set fillStyle(v) {
+		this._fillStyle = v;
+		this._wrote("fillStyle", v);
+	}
+	get strokeStyle() {
+		return this._strokeStyle;
+	}
+	set strokeStyle(v) {
+		this._strokeStyle = v;
+		this._wrote("strokeStyle", v);
+	}
+	get lineWidth() {
+		return this._lineWidth;
+	}
+	set lineWidth(v) {
+		this._lineWidth = v;
+		this._wrote("lineWidth", v);
+	}
+	get lineJoin() {
+		return this._lineJoin;
+	}
+	set lineJoin(v) {
+		this._lineJoin = v;
+		this._wrote("lineJoin", v);
+	}
+	get lineCap() {
+		return this._lineCap;
+	}
+	set lineCap(v) {
+		this._lineCap = v;
+		this._wrote("lineCap", v);
+	}
+	get globalAlpha() {
+		return this._globalAlpha;
+	}
+	set globalAlpha(v) {
+		this._globalAlpha = v;
+		this._wrote("globalAlpha", v);
+	}
+	get globalCompositeOperation() {
+		return this._globalCompositeOperation;
+	}
+	set globalCompositeOperation(v) {
+		this._globalCompositeOperation = v;
+		this._wrote("globalCompositeOperation", v);
+	}
+	get font() {
+		return this._font;
+	}
+	set font(v) {
+		this._font = v;
+		this._wrote("font", v);
+	}
+	get lineDashOffset() {
+		return this._lineDashOffset;
+	}
+	set lineDashOffset(v) {
+		this._lineDashOffset = v;
+		this._wrote("dash", void 0);
+	}
+	_bindStyleCache(cache) {
+		this._styleCache = cache;
+	}
+	_wrote(key, v) {
+		const cache = this._styleCache;
+		if (cache) cache[key] = v;
+	}
 	constructor(host) {
-		this.fillStyle = "#f03";
-		this.strokeStyle = "#fff";
-		this.lineWidth = 1;
-		this.lineJoin = "bevel";
-		this.lineCap = "butt";
-		this.globalAlpha = 1;
-		this.globalCompositeOperation = "source-over";
-		this.font = "10px sans-serif";
+		this._fillStyle = "#f03";
+		this._strokeStyle = "#fff";
+		this._lineWidth = 1;
+		this._lineJoin = "bevel";
+		this._lineCap = "butt";
+		this._globalAlpha = 1;
+		this._globalCompositeOperation = "source-over";
+		this._font = "10px sans-serif";
+		this._lineDashOffset = 0;
 		this.textAlign = "start";
 		this.textBaseline = "alphabetic";
-		this.lineDashOffset = 0;
 		this._dash = [];
 		this._stateStack = [];
+		this._styleCache = null;
 		this.className = "";
 		this._d = "";
 		this._shapeFill = null;
@@ -9043,6 +9490,18 @@ var SVGContext2D = class SVGContext2D {
 		this._shapeClass = "";
 		this._shapeAlpha = 1;
 		this._shapeBlend = "source-over";
+		this._pts = [];
+		this._ptsLength = 0;
+		this._rings = [];
+		this._ringsLength = 0;
+		this._ringStart = -1;
+		this._wind = 0;
+		this._windDone = false;
+		this._x0 = 0;
+		this._y0 = 0;
+		this._x1 = 0;
+		this._y1 = 0;
+		this._boxDone = false;
 		this._runs = [];
 		this._drawCount = 0;
 		this._group = null;
@@ -9060,6 +9519,7 @@ var SVGContext2D = class SVGContext2D {
 	beginFrame() {
 		this._runs = [];
 		this._d = "";
+		this._resetShape();
 		this._shapeFill = null;
 		this._shapeStroke = null;
 		this._shapePainted = false;
@@ -9137,21 +9597,38 @@ var SVGContext2D = class SVGContext2D {
 		this._d = "";
 	}
 	closePath() {
+		this._endRing();
 		this._d += "Z";
 	}
 	moveTo(x, y) {
+		this._endRing();
+		this._ringStart = this._ptsLength;
+		this._point(x, y);
 		this._d += `M${round2(x)} ${round2(y)}`;
 	}
 	lineTo(x, y) {
+		if (this._ringStart < 0) this._wind = NaN;
+		this._point(x, y);
 		this._d += `L${round2(x)} ${round2(y)}`;
 	}
 	quadraticCurveTo(cpx, cpy, x, y) {
+		this._curve();
+		this._point(cpx, cpy);
+		this._point(x, y);
 		this._d += `Q${round2(cpx)} ${round2(cpy)} ${round2(x)} ${round2(y)}`;
 	}
 	bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y) {
+		this._curve();
+		this._point(cp1x, cp1y);
+		this._point(cp2x, cp2y);
+		this._point(x, y);
 		this._d += `C${round2(cp1x)} ${round2(cp1y)} ${round2(cp2x)} ${round2(cp2y)} ${round2(x)} ${round2(y)}`;
 	}
 	rect(x, y, w, h) {
+		this._endRing();
+		this._orient(w * h > 0 ? 1 : w * h < 0 ? -1 : NaN);
+		this._point(x, y);
+		this._point(x + w, y + h);
 		this._d += `M${round2(x)} ${round2(y)}h${round2(w)}v${round2(h)}h${round2(-w)}Z`;
 	}
 	arc(x, y, radius, startAngle, endAngle, ccw = false) {
@@ -9172,6 +9649,11 @@ var SVGContext2D = class SVGContext2D {
 		const sweepFlag = ccw ? 0 : 1;
 		const rotDeg = round2(rotation * 180 / Math.PI);
 		const [sx, sy] = ptAt(startAngle);
+		const r = Math.max(Math.abs(rx), Math.abs(ry));
+		if (full && this._d.length === 0) this._orient(rx && ry ? ccw ? -1 : 1 : NaN);
+		else this._curve();
+		this._point(x - r, y - r);
+		this._point(x + r, y + r);
 		this._d += this._d.length > 0 ? `L${round2(sx)} ${round2(sy)}` : `M${round2(sx)} ${round2(sy)}`;
 		const sweep = full ? Const.two_pi : delta;
 		const segments = Math.max(1, Math.ceil(sweep / Const.pi - 1e-6));
@@ -9293,7 +9775,10 @@ var SVGContext2D = class SVGContext2D {
 	}
 	restore() {
 		const s = this._stateStack.pop();
-		if (s) Object.assign(this, s);
+		if (s) {
+			Object.assign(this, s);
+			this._wrote("dash", void 0);
+		}
 	}
 	scale() {}
 	clip() {
@@ -9301,6 +9786,7 @@ var SVGContext2D = class SVGContext2D {
 	}
 	setLineDash(segments) {
 		this._dash = segments;
+		this._wrote("dash", void 0);
 	}
 	getLineDash() {
 		return this._dash;
@@ -9353,8 +9839,10 @@ var SVGContext2D = class SVGContext2D {
 		var _this$_shapeFill, _this$_shapeStroke;
 		if (!this._shapePainted || this._d.length === 0) {
 			this._shapePainted = false;
+			this._resetShape();
 			return;
 		}
+		this._endRing();
 		const attrs = {
 			d: this._d,
 			fill: (_this$_shapeFill = this._shapeFill) !== null && _this$_shapeFill !== void 0 ? _this$_shapeFill : "none",
@@ -9368,32 +9856,119 @@ var SVGContext2D = class SVGContext2D {
 			else SVGContext2D._warnOnce(`composite-${this._shapeBlend}`, `composite operation "${this._shapeBlend}" has no SVG equivalent`);
 		}
 		const prev = this._runs[this._runs.length - 1];
-		if (this._shapeFill === null && this._shapeAlpha === 1 && this._shapeBlend === "source-over" && !this._shapeClass && /^#(?:[\da-f]{3}|[\da-f]{6})$/i.test(this._shapeStroke || "") && prev && prev.tag === "path" && sameRunStyle(prev.attrs, attrs)) {
-			prev.shapeEnds.push(prev.attrs.d.length);
+		const join = prev && prev.tag === "path" && !this._shapeClass && sameRunStyle(prev.attrs, attrs) ? this._joinable(prev) : 0;
+		if (join) {
+			const ends = prev.shapeEnds;
+			ends.push(prev.attrs.d.length);
 			prev.attrs.d = prev.attrs.d + this._d;
-		} else this._runs.push({
-			tag: "path",
-			attrs,
-			shapeEnds: []
-		});
+			if (join === 2 && this._shapeFill !== null && this._shapeWind() !== prev.wind) prev.wind = NaN;
+			if (ends.length < RUN_BOXES) {
+				this._shapeBox();
+				prev.boxes.push(this._x0, this._y0, this._x1, this._y1);
+			}
+		} else {
+			this._shapeBox();
+			const fill = this._shapeFill;
+			const stroke = this._shapeStroke;
+			this._runs.push({
+				tag: "path",
+				attrs,
+				shapeEnds: [],
+				free: this._shapeAlpha === 1 && this._shapeBlend === "source-over" && (fill === null || isOpaquePaint(fill)) && (stroke === null || isOpaquePaint(stroke)) && (fill === null || stroke === null || fill === stroke),
+				wind: this._shapeFill !== null ? this._shapeWind() : NaN,
+				boxes: [
+					this._x0,
+					this._y0,
+					this._x1,
+					this._y1
+				]
+			});
+		}
 		this._d = "";
 		this._shapeFill = null;
 		this._shapeStroke = null;
 		this._shapePainted = false;
+		this._resetShape();
+	}
+	_joinable(run) {
+		if (run.free && (this._shapeFill === null || (run.wind === 1 || run.wind === -1) && this._shapeWind() === run.wind)) return 1;
+		const stroke = this._shapeStroke;
+		const boxes = run.boxes;
+		if (run.shapeEnds.length >= RUN_BOXES) return 0;
+		this._shapeBox();
+		const gap = 2 * (1 + (stroke ? Number(this._shapeStrokeStyle["stroke-width"]) : 0) * (this._shapeStrokeStyle["stroke-linejoin"] === "miter" ? 5 : 1));
+		for (let i = 0; i < boxes.length; i += 4) if (this._x0 <= boxes[i + 2] + gap && boxes[i] <= this._x1 + gap && this._y0 <= boxes[i + 3] + gap && boxes[i + 1] <= this._y1 + gap) return 0;
+		return 2;
+	}
+	_resetShape() {
+		this._ptsLength = 0;
+		this._ringsLength = 0;
+		this._ringStart = -1;
+		this._wind = 0;
+		this._windDone = false;
+		this._boxDone = false;
+	}
+	_point(x, y) {
+		this._pts[this._ptsLength++] = x;
+		this._pts[this._ptsLength++] = y;
+	}
+	_orient(o) {
+		if (this._wind === 0) this._wind = o;
+		else if (this._wind !== o) this._wind = NaN;
+	}
+	_endRing() {
+		const start = this._ringStart;
+		if (start < 0) return;
+		this._ringStart = -1;
+		if (this._ptsLength - start >= 6) {
+			this._rings[this._ringsLength++] = start;
+			this._rings[this._ringsLength++] = this._ptsLength;
+		}
+	}
+	_shapeWind() {
+		if (!this._windDone) {
+			this._windDone = true;
+			for (let i = 0; i < this._ringsLength; i += 2) this._orient(convexOrientation(this._pts, this._rings[i], this._rings[i + 1]));
+		}
+		return this._wind;
+	}
+	_shapeBox() {
+		if (this._boxDone) return;
+		this._boxDone = true;
+		const p = this._pts;
+		let x0 = Infinity;
+		let y0 = Infinity;
+		let x1 = -Infinity;
+		let y1 = -Infinity;
+		for (let i = 0, n = this._ptsLength; i < n; i += 2) {
+			const x = p[i];
+			const y = p[i + 1];
+			if (x < x0) x0 = x;
+			if (x > x1) x1 = x;
+			if (y < y0) y0 = y;
+			if (y > y1) y1 = y;
+		}
+		this._x0 = x0;
+		this._y0 = y0;
+		this._x1 = x1;
+		this._y1 = y1;
+	}
+	_curve() {
+		this._ringStart = -1;
+		this._wind = NaN;
 	}
 };
 function round2(n) {
 	return Math.round(n * 100) / 100;
 }
 function sameRunStyle(a, b) {
-	const keysA = Object.keys(a);
-	const keysB = Object.keys(b);
-	if (keysA.length !== keysB.length) return false;
-	for (const k of keysA) {
-		if (k === "d") continue;
-		if (a[k] !== b[k]) return false;
+	let count = 0;
+	for (const k in a) {
+		if (k !== "d" && a[k] !== b[k]) return false;
+		count++;
 	}
-	return true;
+	for (const k in b) count--;
+	return count === 0;
 }
 var SVGSpace = class SVGSpace extends DOMSpace {
 	constructor(elem = "pt", callback) {
@@ -10848,7 +11423,9 @@ var Sound = class Sound {
 		this._cancelAudioTimer(true);
 		for (const node of this._retiring) {
 			node.onended = null;
-			node.stop();
+			try {
+				node.stop();
+			} catch (_unused2) {}
 			node.disconnect();
 		}
 		this._retiring.clear();
@@ -10885,11 +11462,15 @@ var Sound = class Sound {
 	}
 	_afterFade(callback) {
 		this._cancelAudioTimer();
+		if (this._ctx.state !== "running") {
+			callback();
+			return;
+		}
 		this._finishAudio = callback;
 		const end = this._ctx.currentTime + .01;
 		const finish = () => {
 			const remaining = end - this._ctx.currentTime;
-			if (remaining > 0 && this._ctx.state !== "closed") this._audioTimer = setTimeout(finish, Math.max(10, remaining * 1e3));
+			if (remaining > 0 && this._ctx.state === "running") this._audioTimer = setTimeout(finish, Math.max(10, remaining * 1e3));
 			else this._cancelAudioTimer(true);
 		};
 		this._audioTimer = setTimeout(finish, 10);

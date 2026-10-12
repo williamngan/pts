@@ -83,14 +83,15 @@ const expectedExports = [
   "World",
 ];
 const sizeLimits = {
-  // Measured after the 1.x correctness fixes and D50 adaptation, including
-  // documented declarations. Keep approximately 2% headroom above this build.
-  "index.d.mts": 321600,
-  "index.d.ts": 321600,
-  "index.js": 327200,
-  "index.mjs": 326200,
-  "pts.js": 341100,
-  "pts.min.js": 197100,
+  // Measured after the 1.x correctness fixes, D50 adaptation, exact SVG run
+  // merging and the sweep block search, including documented declarations.
+  // Keep approximately 2% headroom above this build.
+  "index.d.mts": 326100,
+  "index.d.ts": 326100,
+  "index.js": 342900,
+  "index.mjs": 341900,
+  "pts.js": 357400,
+  "pts.min.js": 206100,
 };
 const banner = "Copyright © 2017-present William Ngan and contributors.";
 

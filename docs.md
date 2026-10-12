@@ -138,7 +138,7 @@ Complete API reference for [Pts 1.0.2](https://ptsjs.org), generated from the sa
 <a id="canvas-canvasform"></a>
 ### `CanvasForm`
 
-**Kind:** Class · **Source:** [`src/Canvas.ts:559`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L559)
+**Kind:** Class · **Source:** [`src/Canvas.ts:723`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L723)
 
 **Extends:** `VisualForm`
 
@@ -170,8 +170,10 @@ get ctx(): RenderingContext2D
 ```
 
 Get the rendering context of canvas to perform other canvas functions.
-Form style setters detect direct context writes and `save()`/`restore()`.
-Call `form.reset()` to reapply all the form's saved styles at once.
+Form style setters observe direct style writes, `setLineDash`, `save()`,
+`restore()` and `reset()` on canvas contexts. For a custom renderer whose
+style members are its own properties (rather than inherited accessors), or
+a frozen one, call `form.reset()` after setting its styles directly.
 
 <a id="canvas-canvasform-space"></a>
 ##### `space`
@@ -1267,7 +1269,7 @@ space.setup({ bgcolor: "#f00", retina: true, resize: true })
 <a id="color-color"></a>
 ### `Color`
 
-**Kind:** Class · **Source:** [`src/Color.ts:52`](https://github.com/williamngan/pts/blob/master/src/Color.ts#L52)
+**Kind:** Class · **Source:** [`src/Color.ts:62`](https://github.com/williamngan/pts/blob/master/src/Color.ts#L62)
 
 **Extends:** `Pt`
 
@@ -5531,7 +5533,7 @@ Unit vector of `a`. If magnitude of `a` is already known, pass it in the second 
 <a id="num-geom"></a>
 ### `Geom`
 
-**Kind:** Class · **Source:** [`src/Num.ts:210`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L210)
+**Kind:** Class · **Source:** [`src/Num.ts:215`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L215)
 
 Geom class provides static helper functions for basic geometric operations.
 
@@ -6103,7 +6105,7 @@ static generator: any
 <a id="num-range"></a>
 ### `Range`
 
-**Kind:** Class · **Source:** [`src/Num.ts:982`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L982)
+**Kind:** Class · **Source:** [`src/Num.ts:987`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L987)
 
 Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension.
 It also provides convenient functions such as mapping the Group to another range. This class may be useful for visualizing data in charts.
@@ -6208,7 +6210,7 @@ Create a number of evenly spaced "ticks" that span this Range's min and max valu
 <a id="num-shaping"></a>
 ### `Shaping`
 
-**Kind:** Class · **Source:** [`src/Num.ts:584`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L584)
+**Kind:** Class · **Source:** [`src/Num.ts:589`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L589)
 
 Shaping provides shaping functions to interpolate a value. These are useful for easing and transitions.
 
@@ -6716,7 +6718,7 @@ Convert any shaping functions into a series of steps.
 <a id="op-circle"></a>
 ### `Circle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:722`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L722)
+**Kind:** Class · **Source:** [`src/Op.ts:744`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L744)
 
 Circle class provides static functions to create and operate on circles. A circle is usually represented as a Group of 2 Pts, where the first Pt specifies the center, and the second Pt specifies the radius.
 To move a circle without changing its radius, move only its center, eg `circle[0].to(20, 20)`. Group transforms such as `circle.moveTo(20, 20)` affect both Pts, including the radius.
@@ -6906,7 +6908,7 @@ Check if a point is within a circle.
 <a id="op-curve"></a>
 ### `Curve`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1887`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1887)
+**Kind:** Class · **Source:** [`src/Op.ts:1934`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1934)
 
 Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -7613,7 +7615,7 @@ Convert this line to a new rectangle representation.
 <a id="op-path"></a>
 ### `Path`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1807`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1807)
+**Kind:** Class · **Source:** [`src/Op.ts:1854`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1854)
 
 Path class provides static functions to combine polygons with boolean operations:
 unite, intersect, exclude, subtract the shapes in front or behind, divide into faces, or crop by the top shape.
@@ -7796,7 +7798,7 @@ form.fillOnly("#f03").compound( Path.unite( [star, disc] ) )
 <a id="op-polygon"></a>
 ### `Polygon`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1106`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1106)
+**Kind:** Class · **Source:** [`src/Op.ts:1128`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1128)
 
 Polygon class provides static functions to create and operate on polygons. A polygon is usually represented as a Group of 3 or more Pts.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -8128,7 +8130,7 @@ Get a bounding box for each polygon group, as well as a union bounding-box for a
 <a id="op-rectangle"></a>
 ### `Rectangle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:463`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L463)
+**Kind:** Class · **Source:** [`src/Op.ts:485`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L485)
 
 Rectangle class provides static functions to create and operate on rectangles. A rectangle is usually represented as a Group of 2 Pts, marking the top-left and bottom-right corners of the rectangle.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -8412,7 +8414,7 @@ Check if a point is within a rectangle.
 <a id="op-triangle"></a>
 ### `Triangle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:945`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L945)
+**Kind:** Class · **Source:** [`src/Op.ts:967`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L967)
 
 Triangle class provides static functions to create and operate on trianges. A triange is a polygon represented as a Group of 3 Pts.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -9962,7 +9964,7 @@ animateID: string
 <a id="pt-bound"></a>
 ### `Bound`
 
-**Kind:** Class · **Source:** [`src/Pt.ts:1076`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L1076)
+**Kind:** Class · **Source:** [`src/Pt.ts:1077`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L1077)
 
 **Extends:** `Group`
 
@@ -10173,7 +10175,7 @@ Create a Bound from a Group or an array of Pts
 <a id="pt-group"></a>
 ### `Group`
 
-**Kind:** Class · **Source:** [`src/Pt.ts:586`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L586)
+**Kind:** Class · **Source:** [`src/Pt.ts:587`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L587)
 
 **Extends:** `Array`
 
@@ -10747,14 +10749,13 @@ Convert an Array/Iterable of Pt into a Group.
 <a id="pt-pt"></a>
 ### `Pt`
 
-**Kind:** Class · **Source:** [`src/Pt.ts:18`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L18)
+**Kind:** Class · **Source:** [`src/Pt.ts:26`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L26)
 
 **Extends:** `Float32Array`
 
 **Implements:** `IPt`, `Iterable`
 
-Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.
-See [Pt guide](https://ptsjs.org/guide/Pt-0200.html) for details.
+Typescript interface: IPt is an interface that represents an object with x, y, z, w properties.
 
 #### Constructors
 
@@ -11449,7 +11450,7 @@ Create an n-dimensional Pt with either default value or random values.
 <a id="space-multitouchspace"></a>
 ### `MultiTouchSpace`
 
-**Kind:** Class · **Source:** [`src/Space.ts:353`](https://github.com/williamngan/pts/blob/master/src/Space.ts#L353)
+**Kind:** Class · **Source:** [`src/Space.ts:361`](https://github.com/williamngan/pts/blob/master/src/Space.ts#L361)
 
 **Extends:** `Space`
 
@@ -11978,12 +11979,15 @@ players: ISpacePlayers
 <a id="svg-svgcontext2d"></a>
 ### `SVGContext2D`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:147`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L147)
+**Kind:** Class · **Source:** [`src/Svg.ts:253`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L253)
 
 **`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that
-[`CanvasForm`](#canvas-canvasform) draws through, and renders it as SVG. Filled and translucent shapes
-use separate elements so overlaps composite independently. Consecutive opaque solid
-strokes with matching state may share a `<path>` element (a "style run").
+[`CanvasForm`](#canvas-canvasform) draws through, and renders it as SVG. Consecutive shapes with the
+same paint state share one `<path>` element (a "style run") when that renders the same as
+separate elements: shapes with one opaque paint (fills only when their subpaths are
+circles, rectangles or convex polygons winding the same way), or shapes that do not
+overlap. Classed shapes, and overlapping translucent, blended, or differently filled and
+stroked shapes, keep separate elements, so they composite like canvas.
 
 Capability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,
 `clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so
@@ -12037,6 +12041,38 @@ get drawCount(): number
 
 Number of paint calls since `beginFrame` — used to skip empty commits.
 
+<a id="svg-svgcontext2d-fill-style"></a>
+##### `fillStyle`
+
+```ts
+get fillStyle(): string | SVGGradient
+set fillStyle(v: string | SVGGradient): void
+```
+
+<a id="svg-svgcontext2d-font"></a>
+##### `font`
+
+```ts
+get font(): string
+set font(v: string): void
+```
+
+<a id="svg-svgcontext2d-global-alpha"></a>
+##### `globalAlpha`
+
+```ts
+get globalAlpha(): number
+set globalAlpha(v: number): void
+```
+
+<a id="svg-svgcontext2d-global-composite-operation"></a>
+##### `globalCompositeOperation`
+
+```ts
+get globalCompositeOperation(): string
+set globalCompositeOperation(v: string): void
+```
+
 <a id="svg-svgcontext2d-group"></a>
 ##### `group`
 
@@ -12046,6 +12082,38 @@ get group(): SVGElement | null
 
 The `<g>` element holding this context's rendered output.
 
+<a id="svg-svgcontext2d-line-cap"></a>
+##### `lineCap`
+
+```ts
+get lineCap(): string
+set lineCap(v: string): void
+```
+
+<a id="svg-svgcontext2d-line-dash-offset"></a>
+##### `lineDashOffset`
+
+```ts
+get lineDashOffset(): number
+set lineDashOffset(v: number): void
+```
+
+<a id="svg-svgcontext2d-line-join"></a>
+##### `lineJoin`
+
+```ts
+get lineJoin(): string
+set lineJoin(v: string): void
+```
+
+<a id="svg-svgcontext2d-line-width"></a>
+##### `lineWidth`
+
+```ts
+get lineWidth(): number
+set lineWidth(v: number): void
+```
+
 <a id="svg-svgcontext2d-runs"></a>
 ##### `runs`
 
@@ -12054,6 +12122,14 @@ get runs(): SVGRun[]
 ```
 
 The current frame's run list (used by expanded export).
+
+<a id="svg-svgcontext2d-stroke-style"></a>
+##### `strokeStyle`
+
+```ts
+get strokeStyle(): string | SVGGradient
+set strokeStyle(v: string | SVGGradient): void
+```
 
 #### Methods
 
@@ -12381,69 +12457,6 @@ className: string
 
 Optional CSS class applied to emitted elements (see `SVGForm.cls`).
 
-<a id="svg-svgcontext2d-fill-style"></a>
-##### `fillStyle`
-
-```ts
-fillStyle: string | SVGGradient
-```
-
-<a id="svg-svgcontext2d-font"></a>
-##### `font`
-
-```ts
-font: string
-```
-
-<a id="svg-svgcontext2d-global-alpha"></a>
-##### `globalAlpha`
-
-```ts
-globalAlpha: number
-```
-
-<a id="svg-svgcontext2d-global-composite-operation"></a>
-##### `globalCompositeOperation`
-
-```ts
-globalCompositeOperation: string
-```
-
-<a id="svg-svgcontext2d-line-cap"></a>
-##### `lineCap`
-
-```ts
-lineCap: string
-```
-
-<a id="svg-svgcontext2d-line-dash-offset"></a>
-##### `lineDashOffset`
-
-```ts
-lineDashOffset: number
-```
-
-<a id="svg-svgcontext2d-line-join"></a>
-##### `lineJoin`
-
-```ts
-lineJoin: string
-```
-
-<a id="svg-svgcontext2d-line-width"></a>
-##### `lineWidth`
-
-```ts
-lineWidth: number
-```
-
-<a id="svg-svgcontext2d-stroke-style"></a>
-##### `strokeStyle`
-
-```ts
-strokeStyle: string | SVGGradient
-```
-
 <a id="svg-svgcontext2d-text-align"></a>
 ##### `textAlign`
 
@@ -12461,7 +12474,7 @@ textBaseline: string
 <a id="svg-svgform"></a>
 ### `SVGForm`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:1004`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L1004)
+**Kind:** Class · **Source:** [`src/Svg.ts:1394`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L1394)
 
 **Extends:** `CanvasForm`
 
@@ -13230,7 +13243,7 @@ A static function to draw a text element.
 <a id="svg-svgspace"></a>
 ### `SVGSpace`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:738`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L738)
+**Kind:** Class · **Source:** [`src/Svg.ts:1128`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L1128)
 
 **Extends:** `DOMSpace`
 
