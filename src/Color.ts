@@ -444,7 +444,9 @@ export class Color extends Pt {
       this._isNorm && format !== "mode" ? Color._denorm(this) : this;
     if (format == "hex") {
       const _hex = (n: number) => {
-        const s = Math.floor(n).toString(16);
+        const s = Math.floor(
+          Number.isNaN(n) ? 0 : Num.clamp(n, 0, 255),
+        ).toString(16);
         return s.length < 2 ? "0" + s : s;
       };
       return `#${_hex(v[0])}${_hex(v[1])}${_hex(v[2])}`;

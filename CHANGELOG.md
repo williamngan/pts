@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Clamp hexadecimal color channels to valid CSS bytes and map NaN to zero.
 - Restore shared typed-array subarray views in Pt and its Color and Particle subclasses, including SharedArrayBuffer views.
 - Keep wrapped values inside their half-open range, including reversed and equal endpoints and tiny negative angles.
 - Return empty results for empty bounding boxes and edge sorts; handle singleton edge sorts.

@@ -14,6 +14,12 @@ function expectColor(
 }
 
 describe("Color construction and representation", () => {
+  it("formats out-of-range hex channels as valid CSS", () => {
+    expect(Color.rgb(300, -5, 0).hex).toBe("#ff0000");
+    expect((Color.rgb(250, 250, 250).$add(10) as Color).hex).toBe("#ffffff");
+    expect(Color.rgb(NaN, Infinity, -Infinity).hex).toBe("#00ff00");
+    expect(Color.rgb(12.9, 15.9, 16.9).hex).toBe("#0c0f10");
+  });
   it("converts HSL before formatting the documented rendering example", () => {
     const color = Color.hsl(268, 0.37, 0.51);
     const original = Array.from(color);
