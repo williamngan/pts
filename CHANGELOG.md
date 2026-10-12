@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Round full-range HSL/HSB-to-RGB conversion to the nearest integer channel, fixing lossy RGB round trips; normalized conversions retain fractional precision and direct formatting still floors.
 - Regenerate the docs markdown runtime and third-party notices from the locked dependencies.
 - Document Img pixel-cache refresh after form drawing and reversed normalizeValue ranges; remove the unused Vue 2 docs runtime.
 - Keep drag/drop owned by the contact that began the press, including tracked UIDraggers; other contacts continue to send ordinary actions. Touch now emits matching pointerdown/pointerup actions.

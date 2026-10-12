@@ -503,6 +503,7 @@ export class Color extends Pt {
 
   /**
    * A static function to convert HSL to RGB.
+   * Full-range output is rounded to integer RGB channels; normalized output retains fractions.
    * @param hsl a HSL Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -521,6 +522,7 @@ export class Color extends Pt {
     if (s == 0) {
       const gray = Color.rgb(sc * l, sc * l, sc * l, hsl.alpha);
       if (normalizedOutput) gray.normalized = true;
+      else for (let i = 0; i < 3; i++) gray[i] = Math.round(gray[i]);
       return gray;
     }
 
@@ -547,6 +549,7 @@ export class Color extends Pt {
       hsl.alpha,
     );
     if (normalizedOutput) cc.normalized = true;
+    else for (let i = 0; i < 3; i++) cc[i] = Math.round(cc[i]);
     return cc;
   }
 
@@ -588,6 +591,7 @@ export class Color extends Pt {
 
   /**
    * A static function to convert HSB to RGB.
+   * Full-range output is rounded to integer RGB channels; normalized output retains fractions.
    * @param hsb a HSB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -622,6 +626,7 @@ export class Color extends Pt {
 
     const cc = Color.rgb(sc * c[0], sc * c[1], sc * c[2], hsb.alpha);
     if (normalizedOutput) cc.normalized = true;
+    else for (let i = 0; i < 3; i++) cc[i] = Math.round(cc[i]);
     return cc;
   }
 

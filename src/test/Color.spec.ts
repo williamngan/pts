@@ -20,13 +20,23 @@ describe("Color construction and representation", () => {
     expect(Color.rgb(NaN, Infinity, -Infinity).hex).toBe("#00ff00");
     expect(Color.rgb(12.9, 15.9, 16.9).hex).toBe("#0c0f10");
   });
+  it("preserves integer RGB channels through HSL and HSB round trips", () => {
+    for (let r = 0; r <= 255; r += 51)
+      for (let g = 0; g <= 255; g += 51)
+        for (let b = 0; b <= 255; b += 51) {
+          const rgb = Color.rgb(r, g, b, 0.5);
+          expect(Color.HSLtoRGB(Color.RGBtoHSL(rgb)).hex).toBe(rgb.hex);
+          expect(Color.HSBtoRGB(Color.RGBtoHSB(rgb)).hex).toBe(rgb.hex);
+        }
+  });
+
   it("converts HSL before formatting the documented rendering example", () => {
     const color = Color.hsl(268, 0.37, 0.51);
     const original = Array.from(color);
     const rgb = Color.HSLtoRGB(color);
-    expect(rgb.rgb).toBe("rgb(126,83,176)");
-    expect(rgb.hex).toBe("#7e53b0");
-    expect(rgb.rgba).toBe("rgba(126,83,176,1)");
+    expect(rgb.rgb).toBe("rgb(127,84,176)");
+    expect(rgb.hex).toBe("#7f54b0");
+    expect(rgb.rgba).toBe("rgba(127,84,176,1)");
     expect(color.mode).toBe("hsl");
     expect(Array.from(color)).toEqual(original);
   });
@@ -163,10 +173,7 @@ describe("Color-space conversions", () => {
       expectColor(Color.HSLtoRGB(hsl), sample, 3);
     }
 
-    expectColor(
-      Color.HSLtoRGB(Color.hsl(0, 0, 0.25)),
-      [63.75, 63.75, 63.75, 1],
-    );
+    expectColor(Color.HSLtoRGB(Color.hsl(0, 0, 0.25)), [64, 64, 64, 1]);
     expectColor(Color.RGBtoHSL(Color.rgb(1, 0, 0), true, true), [0, 1, 0.5, 1]);
     expectColor(
       Color.HSLtoRGB(Color.hsl(0.5, 1, 0.5), true, true),
