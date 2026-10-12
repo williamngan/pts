@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Play.ts",
-      206,
+      224,
       13
     ]
   ],
@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Play.ts",
-          259,
+          282,
           2
         ]
       ],
@@ -52,7 +52,7 @@
       "source": [
         [
           "src/Play.ts",
-          531,
+          561,
           6
         ]
       ],
@@ -70,12 +70,12 @@
       "source": [
         [
           "src/Play.ts",
-          474,
+          504,
           6
         ],
         [
           "src/Play.ts",
-          477,
+          507,
           6
         ]
       ],
@@ -101,7 +101,7 @@
       "source": [
         [
           "src/Play.ts",
-          439,
+          469,
           6
         ]
       ],
@@ -119,12 +119,12 @@
       "source": [
         [
           "src/Play.ts",
-          545,
+          575,
           6
         ],
         [
           "src/Play.ts",
-          551,
+          581,
           6
         ]
       ],
@@ -150,7 +150,7 @@
       "source": [
         [
           "src/Play.ts",
-          446,
+          476,
           6
         ]
       ],
@@ -168,7 +168,7 @@
       "source": [
         [
           "src/Play.ts",
-          453,
+          483,
           6
         ]
       ],
@@ -186,7 +186,7 @@
       "source": [
         [
           "src/Play.ts",
-          519,
+          549,
           6
         ]
       ],
@@ -204,7 +204,7 @@
       "source": [
         [
           "src/Play.ts",
-          491,
+          521,
           6
         ]
       ],
@@ -222,7 +222,7 @@
       "source": [
         [
           "src/Play.ts",
-          498,
+          528,
           6
         ]
       ],
@@ -240,7 +240,7 @@
       "source": [
         [
           "src/Play.ts",
-          538,
+          568,
           6
         ]
       ],
@@ -258,7 +258,7 @@
       "source": [
         [
           "src/Play.ts",
-          467,
+          497,
           6
         ]
       ],
@@ -276,7 +276,7 @@
       "source": [
         [
           "src/Play.ts",
-          460,
+          490,
           6
         ]
       ],
@@ -294,7 +294,7 @@
       "source": [
         [
           "src/Play.ts",
-          484,
+          514,
           6
         ]
       ],
@@ -312,19 +312,19 @@
       "source": [
         [
           "src/Play.ts",
-          559,
+          589,
           6
         ],
         [
           "src/Play.ts",
-          562,
+          592,
           6
         ]
       ],
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "Get and set the volume of this sound. Default is 1. Values above 1 amplify the sound. Can be set before or during playback.",
+      "comment": "Get and set the volume of this sound. Default is 1. Values above 1 amplify the sound. Can be set before or during playback. Changes during playback ramp over 10 ms to avoid clicks.",
       "getter": {
         "type": "number"
       },
@@ -345,7 +345,7 @@
       "source": [
         [
           "src/Play.ts",
-          604,
+          638,
           2
         ]
       ],
@@ -392,7 +392,7 @@
       "source": [
         [
           "src/Play.ts",
-          571,
+          605,
           2
         ]
       ],
@@ -421,7 +421,7 @@
       "source": [
         [
           "src/Play.ts",
-          375,
+          398,
           2
         ]
       ],
@@ -450,7 +450,7 @@
       "source": [
         [
           "src/Play.ts",
-          841,
+          984,
           2
         ]
       ],
@@ -472,7 +472,7 @@
       "source": [
         [
           "src/Play.ts",
-          707,
+          741,
           2
         ]
       ],
@@ -494,7 +494,7 @@
       "source": [
         [
           "src/Play.ts",
-          720,
+          754,
           2
         ]
       ],
@@ -546,7 +546,7 @@
       "source": [
         [
           "src/Play.ts",
-          592,
+          626,
           2
         ]
       ],
@@ -568,7 +568,7 @@
       "source": [
         [
           "src/Play.ts",
-          732,
+          766,
           2
         ]
       ],
@@ -590,7 +590,7 @@
       "source": [
         [
           "src/Play.ts",
-          583,
+          617,
           2
         ]
       ],
@@ -619,7 +619,7 @@
       "source": [
         [
           "src/Play.ts",
-          754,
+          844,
           2
         ]
       ],
@@ -628,7 +628,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Start playing. Internally this connects the `AudioNode` to `AudioContext`'s destination.\nCalling `start( timeAt )` while a file or buffer sound is playing seeks to that time; a generated sound that is already playing is unaffected.",
+          "comment": "Start playing. Internally this connects the `AudioNode` to `AudioContext`'s destination.\nCalling `start( timeAt )` while a file or buffer sound is playing seeks to that time; a generated sound that is already playing is unaffected.\nAn input whose microphone tracks were stopped cannot restart. This warns and\nleaves `playing` false; acquire a new stream with `Sound.input()` instead.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
@@ -648,7 +648,7 @@
       "source": [
         [
           "src/Play.ts",
-          803,
+          929,
           2
         ]
       ],
@@ -657,7 +657,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Stop playing. Internally this also disconnects the `AudioNode` from `AudioContext`'s destination. Calling `stop` when the sound is not playing has no effect.",
+          "comment": "Stop playing with a 10 ms fade, then stop/disconnect the source. `playing` becomes\nfalse immediately. Restarting during the fade restores volume; replacement one-shot\nsources start at the fade boundary. Calling `stop` while idle has no effect.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [],
@@ -670,7 +670,7 @@
       "source": [
         [
           "src/Play.ts",
-          682,
+          716,
           2
         ]
       ],
@@ -692,7 +692,7 @@
       "source": [
         [
           "src/Play.ts",
-          695,
+          729,
           2
         ]
       ],
@@ -744,7 +744,7 @@
       "source": [
         [
           "src/Play.ts",
-          828,
+          971,
           2
         ]
       ],
@@ -766,7 +766,7 @@
       "source": [
         [
           "src/Play.ts",
-          288,
+          311,
           9
         ]
       ],
@@ -815,7 +815,7 @@
       "source": [
         [
           "src/Play.ts",
-          401,
+          427,
           9
         ]
       ],
@@ -857,7 +857,7 @@
       "source": [
         [
           "src/Play.ts",
-          428,
+          458,
           15
         ]
       ],
@@ -893,7 +893,7 @@
       "source": [
         [
           "src/Play.ts",
-          307,
+          330,
           9
         ]
       ],
@@ -935,7 +935,7 @@
       "source": [
         [
           "src/Play.ts",
-          357,
+          380,
           15
         ]
       ],
@@ -969,7 +969,7 @@
       "source": [
         [
           "src/Play.ts",
-          232,
+          250,
           2
         ]
       ],

@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Num.ts",
-          133,
+          140,
           9
         ]
       ],
@@ -48,7 +48,7 @@
       "source": [
         [
           "src/Num.ts",
-          60,
+          62,
           9
         ]
       ],
@@ -59,7 +59,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Different from [`Num.clamp`](#link) in that the value out-of-bound will be \"looped back\" to the other end.",
+          "comment": "Different from [`Num.clamp`](#link) in that the value out-of-bound will be \"looped back\" to the other end.\nEndpoints may be reversed. The lower endpoint is included and the upper is excluded;\nequal endpoints return that endpoint.",
           "returns": "number",
           "returns_comment": false,
           "parameters": [
@@ -139,7 +139,7 @@
       "source": [
         [
           "src/Num.ts",
-          144,
+          151,
           9
         ]
       ],
@@ -262,7 +262,7 @@
       "source": [
         [
           "src/Num.ts",
-          160,
+          167,
           9
         ]
       ],
@@ -317,7 +317,7 @@
       "source": [
         [
           "src/Num.ts",
-          108,
+          115,
           9
         ]
       ],
@@ -328,7 +328,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Normalize a value within a range.",
+          "comment": "Normalize a value within a range.\nReversed endpoints are reordered from low to high, unlike `mapToRange`, which\npreserves the direction of its source and target ranges.",
           "returns": "number",
           "returns_comment": false,
           "parameters": [
@@ -360,7 +360,7 @@
       "source": [
         [
           "src/Num.ts",
-          195,
+          202,
           9
         ]
       ],
@@ -384,7 +384,7 @@
       "source": [
         [
           "src/Num.ts",
-          92,
+          97,
           9
         ]
       ],
@@ -421,7 +421,7 @@
       "source": [
         [
           "src/Num.ts",
-          82,
+          87,
           9
         ]
       ],
@@ -458,7 +458,7 @@
       "source": [
         [
           "src/Num.ts",
-          185,
+          192,
           9
         ]
       ],
@@ -489,7 +489,7 @@
       "source": [
         [
           "src/Num.ts",
-          119,
+          126,
           9
         ]
       ],
@@ -520,7 +520,7 @@
       "source": [
         [
           "src/Num.ts",
-          73,
+          78,
           9
         ]
       ],

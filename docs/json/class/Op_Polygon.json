@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Op.ts",
-      1068,
+      1106,
       13
     ]
   ],
@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Op.ts",
-          1170,
+          1208,
           9
         ]
       ],
@@ -60,7 +60,7 @@
       "source": [
         [
           "src/Op.ts",
-          1249,
+          1287,
           9
         ]
       ],
@@ -91,7 +91,7 @@
       "source": [
         [
           "src/Op.ts",
-          1198,
+          1236,
           9
         ]
       ],
@@ -128,7 +128,7 @@
       "source": [
         [
           "src/Op.ts",
-          1073,
+          1111,
           9
         ]
       ],
@@ -159,7 +159,7 @@
       "source": [
         [
           "src/Op.ts",
-          1272,
+          1312,
           9
         ]
       ],
@@ -182,7 +182,7 @@
             },
             {
               "name": "sorted",
-              "comment": "a boolean value to indicate if the group is pre-sorted by x position. Default is false.",
+              "comment": "a boolean value to indicate if the group is pre-sorted by x position. Default is false.\nExact duplicates and collinear interior points are omitted. For collinear input\nwith at least three points, returns the distinct endpoints (one point if all coincide).",
               "type": "boolean",
               "default": "false"
             }
@@ -196,7 +196,7 @@
       "source": [
         [
           "src/Op.ts",
-          1097,
+          1135,
           9
         ]
       ],
@@ -239,7 +239,7 @@
       "source": [
         [
           "src/Op.ts",
-          1463,
+          1523,
           9
         ]
       ],
@@ -276,7 +276,7 @@
       "source": [
         [
           "src/Op.ts",
-          1438,
+          1498,
           9
         ]
       ],
@@ -313,7 +313,7 @@
       "source": [
         [
           "src/Op.ts",
-          1590,
+          1654,
           9
         ]
       ],
@@ -350,7 +350,7 @@
       "source": [
         [
           "src/Op.ts",
-          1701,
+          1765,
           9
         ]
       ],
@@ -387,7 +387,7 @@
       "source": [
         [
           "src/Op.ts",
-          1113,
+          1151,
           9
         ]
       ],
@@ -424,7 +424,7 @@
       "source": [
         [
           "src/Op.ts",
-          1129,
+          1167,
           9
         ]
       ],
@@ -461,7 +461,7 @@
       "source": [
         [
           "src/Op.ts",
-          1151,
+          1189,
           9
         ]
       ],
@@ -504,7 +504,7 @@
       "source": [
         [
           "src/Op.ts",
-          1355,
+          1415,
           9
         ]
       ],
@@ -541,7 +541,7 @@
       "source": [
         [
           "src/Op.ts",
-          1340,
+          1400,
           9
         ]
       ],
@@ -578,7 +578,7 @@
       "source": [
         [
           "src/Op.ts",
-          1215,
+          1253,
           9
         ]
       ],
@@ -615,7 +615,7 @@
       "source": [
         [
           "src/Op.ts",
-          1378,
+          1438,
           9
         ]
       ],
@@ -652,7 +652,7 @@
       "source": [
         [
           "src/Op.ts",
-          1083,
+          1121,
           9
         ]
       ],
@@ -695,7 +695,7 @@
       "source": [
         [
           "src/Op.ts",
-          1718,
+          1782,
           9
         ]
       ],

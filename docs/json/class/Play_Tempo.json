@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Play.ts",
-      19,
+      20,
       13
     ]
   ],
@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Play.ts",
-          31,
+          32,
           2
         ]
       ],
@@ -46,12 +46,12 @@
       "source": [
         [
           "src/Play.ts",
-          46,
+          47,
           6
         ],
         [
           "src/Play.ts",
-          49,
+          50,
           6
         ]
       ],
@@ -77,12 +77,12 @@
       "source": [
         [
           "src/Play.ts",
-          57,
+          58,
           6
         ],
         [
           "src/Play.ts",
-          60,
+          61,
           6
         ]
       ],
@@ -110,7 +110,7 @@
       "source": [
         [
           "src/Play.ts",
-          198,
+          216,
           2
         ]
       ],
@@ -157,7 +157,7 @@
       "source": [
         [
           "src/Play.ts",
-          184,
+          202,
           2
         ]
       ],
@@ -192,7 +192,7 @@
       "source": [
         [
           "src/Play.ts",
-          79,
+          80,
           2
         ]
       ],
@@ -226,7 +226,7 @@
       "source": [
         [
           "src/Play.ts",
-          191,
+          209,
           2
         ]
       ],
@@ -261,7 +261,7 @@
       "source": [
         [
           "src/Play.ts",
-          177,
+          195,
           2
         ]
       ],
@@ -290,7 +290,7 @@
       "source": [
         [
           "src/Play.ts",
-          131,
+          134,
           2
         ]
       ],
@@ -299,7 +299,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Usually you can add a tempo instance to a space via [`Space.add`](#link) and it will track time automatically.\nBut if necessary, you can track time manually via this function.",
+          "comment": "Usually you can add a tempo instance to a space via [`Space.add`](#link) and it will track time automatically.\nBut if necessary, you can track time manually via this function.\nAfter a stall, skips missed periods and invokes each listener once at its\ncurrent count and phase, preserving the rhythm's original period boundaries.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
@@ -319,7 +319,7 @@
       "source": [
         [
           "src/Play.ts",
-          39,
+          40,
           9
         ]
       ],
@@ -353,7 +353,7 @@
       "source": [
         [
           "src/Play.ts",
-          25,
+          26,
           9
         ]
       ],

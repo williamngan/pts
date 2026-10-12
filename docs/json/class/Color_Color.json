@@ -3,19 +3,19 @@
   "source": [
     [
       "src/Color.ts",
-      43,
+      52,
       13
     ]
   ],
   "kind": "Class",
-  "comment": "Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.\nConvert non-RGB colors to RGB before using `.hex`, `.rgb`, or `.rgba` for rendering. These getters format the channels; they don't convert between color spaces.",
+  "comment": "Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.\nConvert non-RGB colors to RGB before using `.hex`, `.rgb`, or `.rgba` for rendering. These getters format the channels; they don't convert between color spaces.\nLAB and LCH use the D50 reference white, as in CSS `lab()` and `lch()`.\nXYZ and LUV use D65; conversions between XYZ and LAB apply Bradford chromatic adaptation.",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
           "src/Color.ts",
-          71,
+          80,
           2
         ]
       ],
@@ -46,12 +46,12 @@
       "source": [
         [
           "src/Color.ts",
-          350,
+          359,
           6
         ],
         [
           "src/Color.ts",
-          353,
+          362,
           6
         ]
       ],
@@ -77,12 +77,12 @@
       "source": [
         [
           "src/Color.ts",
-          390,
+          399,
           6
         ],
         [
           "src/Color.ts",
-          393,
+          402,
           6
         ]
       ],
@@ -108,12 +108,12 @@
       "source": [
         [
           "src/Color.ts",
-          306,
+          315,
           6
         ],
         [
           "src/Color.ts",
-          309,
+          318,
           6
         ]
       ],
@@ -139,12 +139,12 @@
       "source": [
         [
           "src/Color.ts",
-          360,
+          369,
           6
         ],
         [
           "src/Color.ts",
-          363,
+          372,
           6
         ]
       ],
@@ -170,12 +170,12 @@
       "source": [
         [
           "src/Color.ts",
-          296,
+          305,
           6
         ],
         [
           "src/Color.ts",
-          299,
+          308,
           6
         ]
       ],
@@ -201,12 +201,12 @@
       "source": [
         [
           "src/Color.ts",
-          317,
+          326,
           6
         ],
         [
           "src/Color.ts",
-          320,
+          329,
           6
         ]
       ],
@@ -232,7 +232,7 @@
       "source": [
         [
           "src/Color.ts",
-          195,
+          204,
           13
         ]
       ],
@@ -252,12 +252,12 @@
       "source": [
         [
           "src/Pt.ts",
-          72,
+          88,
           6
         ],
         [
           "src/Pt.ts",
-          75,
+          91,
           6
         ]
       ],
@@ -283,12 +283,12 @@
       "source": [
         [
           "src/Color.ts",
-          338,
+          347,
           6
         ],
         [
           "src/Color.ts",
-          341,
+          350,
           6
         ]
       ],
@@ -314,7 +314,7 @@
       "source": [
         [
           "src/Color.ts",
-          278,
+          287,
           6
         ]
       ],
@@ -332,12 +332,12 @@
       "source": [
         [
           "src/Color.ts",
-          400,
+          409,
           6
         ],
         [
           "src/Color.ts",
-          403,
+          412,
           6
         ]
       ],
@@ -363,12 +363,12 @@
       "source": [
         [
           "src/Color.ts",
-          286,
+          295,
           6
         ],
         [
           "src/Color.ts",
-          289,
+          298,
           6
         ]
       ],
@@ -394,7 +394,7 @@
       "source": [
         [
           "src/Color.ts",
-          203,
+          212,
           13
         ]
       ],
@@ -414,7 +414,7 @@
       "source": [
         [
           "src/Color.ts",
-          211,
+          220,
           13
         ]
       ],
@@ -434,12 +434,12 @@
       "source": [
         [
           "src/Color.ts",
-          328,
+          337,
           6
         ],
         [
           "src/Color.ts",
-          331,
+          340,
           6
         ]
       ],
@@ -465,12 +465,12 @@
       "source": [
         [
           "src/Color.ts",
-          370,
+          379,
           6
         ],
         [
           "src/Color.ts",
-          373,
+          382,
           6
         ]
       ],
@@ -496,12 +496,12 @@
       "source": [
         [
           "src/Color.ts",
-          380,
+          389,
           6
         ],
         [
           "src/Color.ts",
-          383,
+          392,
           6
         ]
       ],
@@ -527,12 +527,12 @@
       "source": [
         [
           "src/Pt.ts",
-          112,
+          128,
           6
         ],
         [
           "src/Pt.ts",
-          115,
+          131,
           6
         ]
       ],
@@ -558,12 +558,12 @@
       "source": [
         [
           "src/Pt.ts",
-          82,
+          98,
           6
         ],
         [
           "src/Pt.ts",
-          85,
+          101,
           6
         ]
       ],
@@ -589,12 +589,12 @@
       "source": [
         [
           "src/Pt.ts",
-          92,
+          108,
           6
         ],
         [
           "src/Pt.ts",
-          95,
+          111,
           6
         ]
       ],
@@ -620,12 +620,12 @@
       "source": [
         [
           "src/Pt.ts",
-          102,
+          118,
           6
         ],
         [
           "src/Pt.ts",
-          105,
+          121,
           6
         ]
       ],
@@ -651,12 +651,12 @@
       "source": [
         [
           "src/Color.ts",
-          50,
+          59,
           13
         ],
         [
           "src/Color.ts",
-          53,
+          62,
           13
         ]
       ],
@@ -686,7 +686,7 @@
       "source": [
         [
           "src/Pt.ts",
-          382,
+          398,
           2
         ]
       ],
@@ -708,7 +708,7 @@
       "source": [
         [
           "src/Pt.ts",
-          239,
+          255,
           2
         ]
       ],
@@ -737,7 +737,7 @@
       "source": [
         [
           "src/Pt.ts",
-          412,
+          428,
           2
         ]
       ],
@@ -759,7 +759,7 @@
       "source": [
         [
           "src/Pt.ts",
-          220,
+          236,
           2
         ]
       ],
@@ -788,7 +788,7 @@
       "source": [
         [
           "src/Pt.ts",
-          350,
+          366,
           2
         ]
       ],
@@ -817,7 +817,7 @@
       "source": [
         [
           "src/Pt.ts",
-          342,
+          358,
           2
         ]
       ],
@@ -846,7 +846,7 @@
       "source": [
         [
           "src/Pt.ts",
-          296,
+          312,
           2
         ]
       ],
@@ -875,7 +875,7 @@
       "source": [
         [
           "src/Pt.ts",
-          397,
+          413,
           2
         ]
       ],
@@ -897,7 +897,7 @@
       "source": [
         [
           "src/Pt.ts",
-          464,
+          480,
           2
         ]
       ],
@@ -926,7 +926,7 @@
       "source": [
         [
           "src/Pt.ts",
-          451,
+          467,
           2
         ]
       ],
@@ -955,7 +955,7 @@
       "source": [
         [
           "src/Pt.ts",
-          277,
+          293,
           2
         ]
       ],
@@ -984,7 +984,7 @@
       "source": [
         [
           "src/Color.ts",
-          432,
+          443,
           2
         ]
       ],
@@ -1013,7 +1013,7 @@
       "source": [
         [
           "src/Pt.ts",
-          359,
+          375,
           2
         ]
       ],
@@ -1042,7 +1042,7 @@
       "source": [
         [
           "src/Pt.ts",
-          427,
+          443,
           2
         ]
       ],
@@ -1064,7 +1064,7 @@
       "source": [
         [
           "src/Pt.ts",
-          258,
+          274,
           2
         ]
       ],
@@ -1093,7 +1093,7 @@
       "source": [
         [
           "src/Pt.ts",
-          208,
+          224,
           2
         ]
       ],
@@ -1122,7 +1122,7 @@
       "source": [
         [
           "src/Pt.ts",
-          155,
+          171,
           2
         ]
       ],
@@ -1151,7 +1151,7 @@
       "source": [
         [
           "src/Pt.ts",
-          326,
+          342,
           2
         ]
       ],
@@ -1180,7 +1180,7 @@
       "source": [
         [
           "src/Pt.ts",
-          374,
+          390,
           2
         ]
       ],
@@ -1202,7 +1202,7 @@
       "source": [
         [
           "src/Pt.ts",
-          228,
+          244,
           2
         ]
       ],
@@ -1231,7 +1231,7 @@
       "source": [
         [
           "src/Pt.ts",
-          477,
+          493,
           2
         ]
       ],
@@ -1260,7 +1260,7 @@
       "source": [
         [
           "src/Pt.ts",
-          486,
+          502,
           2
         ]
       ],
@@ -1295,7 +1295,7 @@
       "source": [
         [
           "src/Pt.ts",
-          404,
+          420,
           2
         ]
       ],
@@ -1317,7 +1317,7 @@
       "source": [
         [
           "src/Color.ts",
-          218,
+          227,
           2
         ]
       ],
@@ -1380,7 +1380,7 @@
       "source": [
         [
           "src/Pt.ts",
-          285,
+          301,
           2
         ]
       ],
@@ -1409,7 +1409,7 @@
       "source": [
         [
           "src/Pt.ts",
-          334,
+          350,
           2
         ]
       ],
@@ -1438,7 +1438,7 @@
       "source": [
         [
           "src/Pt.ts",
-          131,
+          147,
           2
         ]
       ],
@@ -1654,7 +1654,7 @@
       "source": [
         [
           "src/Pt.ts",
-          389,
+          405,
           2
         ]
       ],
@@ -1810,7 +1810,7 @@
       "source": [
         [
           "src/Pt.ts",
-          310,
+          326,
           2
         ]
       ],
@@ -1832,7 +1832,7 @@
       "source": [
         [
           "src/Pt.ts",
-          303,
+          319,
           2
         ]
       ],
@@ -1889,7 +1889,7 @@
       "source": [
         [
           "src/Pt.ts",
-          443,
+          459,
           2
         ]
       ],
@@ -1911,7 +1911,7 @@
       "source": [
         [
           "src/Pt.ts",
-          435,
+          451,
           2
         ]
       ],
@@ -1933,7 +1933,7 @@
       "source": [
         [
           "src/Pt.ts",
-          266,
+          282,
           2
         ]
       ],
@@ -1962,7 +1962,7 @@
       "source": [
         [
           "src/Color.ts",
-          411,
+          422,
           2
         ]
       ],
@@ -1971,7 +1971,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Normalize the color values to between 0 to 1, or revert it back to the min/max values in current color mode.",
+          "comment": "Normalize the color values to between 0 to 1, or revert it back to the min/max values in current color mode.\nUses the nominal `Color.ranges` without clamping. In particular LCH chroma uses\n0–100 for compatibility, although valid colors can exceed 100 (and normalize above 1).",
           "returns": "Color",
           "returns_comment": false,
           "parameters": [
@@ -1991,7 +1991,7 @@
       "source": [
         [
           "src/Pt.ts",
-          181,
+          197,
           2
         ]
       ],
@@ -2025,7 +2025,7 @@
       "source": [
         [
           "src/Pt.ts",
-          194,
+          210,
           2
         ]
       ],
@@ -2059,7 +2059,7 @@
       "source": [
         [
           "src/Pt.ts",
-          367,
+          383,
           2
         ]
       ],
@@ -2246,7 +2246,7 @@
       "source": [
         [
           "src/Pt.ts",
-          530,
+          546,
           2
         ]
       ],
@@ -2303,7 +2303,7 @@
       "source": [
         [
           "src/Pt.ts",
-          509,
+          525,
           2
         ]
       ],
@@ -2344,7 +2344,7 @@
       "source": [
         [
           "src/Pt.ts",
-          419,
+          435,
           2
         ]
       ],
@@ -2366,7 +2366,7 @@
       "source": [
         [
           "src/Pt.ts",
-          498,
+          514,
           2
         ]
       ],
@@ -2436,7 +2436,7 @@
       "source": [
         [
           "src/Pt.ts",
-          520,
+          536,
           2
         ]
       ],
@@ -2611,7 +2611,7 @@
       "source": [
         [
           "src/Pt.ts",
-          247,
+          263,
           2
         ]
       ],
@@ -2640,7 +2640,7 @@
       "source": [
         [
           "src/Pt.ts",
-          143,
+          159,
           2
         ]
       ],
@@ -2669,7 +2669,7 @@
       "source": [
         [
           "src/Pt.ts",
-          165,
+          181,
           2
         ]
       ],
@@ -2710,7 +2710,7 @@
       "source": [
         [
           "src/Pt.ts",
-          545,
+          561,
           2
         ]
       ],
@@ -2732,7 +2732,7 @@
       "source": [
         [
           "src/Pt.ts",
-          561,
+          577,
           2
         ]
       ],
@@ -2754,7 +2754,7 @@
       "source": [
         [
           "src/Pt.ts",
-          554,
+          570,
           2
         ]
       ],
@@ -2823,7 +2823,7 @@
       "source": [
         [
           "src/Color.ts",
-          261,
+          270,
           2
         ]
       ],
@@ -2858,7 +2858,7 @@
       "source": [
         [
           "src/Color.ts",
-          441,
+          452,
           2
         ]
       ],
@@ -2887,7 +2887,7 @@
       "source": [
         [
           "src/Pt.ts",
-          318,
+          334,
           2
         ]
       ],
@@ -2938,7 +2938,7 @@
       "source": [
         [
           "src/Color.ts",
-          79,
+          88,
           9
         ]
       ],
@@ -2969,7 +2969,7 @@
       "source": [
         [
           "src/Color.ts",
-          92,
+          101,
           9
         ]
       ],
@@ -3000,7 +3000,7 @@
       "source": [
         [
           "src/Color.ts",
-          130,
+          139,
           9
         ]
       ],
@@ -3031,7 +3031,7 @@
       "source": [
         [
           "src/Color.ts",
-          594,
+          611,
           9
         ]
       ],
@@ -3042,7 +3042,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "A static function to convert HSB to RGB.",
+          "comment": "A static function to convert HSB to RGB.\nFull-range output is rounded to integer RGB channels; normalized output retains fractions.",
           "returns": "Color",
           "returns_comment": "a new RGB Color",
           "parameters": [
@@ -3074,7 +3074,7 @@
       "source": [
         [
           "src/Color.ts",
-          122,
+          131,
           9
         ]
       ],
@@ -3105,7 +3105,7 @@
       "source": [
         [
           "src/Color.ts",
-          509,
+          523,
           9
         ]
       ],
@@ -3116,7 +3116,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "A static function to convert HSL to RGB.",
+          "comment": "A static function to convert HSL to RGB.\nFull-range output is rounded to integer RGB channels; normalized output retains fractions.",
           "returns": "Color",
           "returns_comment": "a new RGB Color",
           "parameters": [
@@ -3148,7 +3148,7 @@
       "source": [
         [
           "src/Color.ts",
-          138,
+          147,
           9
         ]
       ],
@@ -3159,7 +3159,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Create LAB Color. LAB color ranges are (0...100, -128...127, -128...127) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
+          "comment": "Create D50 LAB Color, using the same reference white as CSS `lab()`. LAB color ranges are (0...100, -128...127, -128...127) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
           "returns": "Color",
           "returns_comment": false,
           "parameters": [
@@ -3179,7 +3179,7 @@
       "source": [
         [
           "src/Color.ts",
-          939,
+          984,
           9
         ]
       ],
@@ -3222,7 +3222,7 @@
       "source": [
         [
           "src/Color.ts",
-          649,
+          667,
           9
         ]
       ],
@@ -3265,7 +3265,7 @@
       "source": [
         [
           "src/Color.ts",
-          831,
+          866,
           9
         ]
       ],
@@ -3276,7 +3276,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "A static function to convert LAB to XYZ.",
+          "comment": "Convert D50 LAB (CSS Lab) to D65 XYZ, with inverse Bradford chromatic adaptation.",
           "returns": "Color",
           "returns_comment": "a new XYZ Color",
           "parameters": [
@@ -3308,7 +3308,7 @@
       "source": [
         [
           "src/Color.ts",
-          146,
+          155,
           9
         ]
       ],
@@ -3319,7 +3319,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Create LCH Color. LCH color ranges are (0...100, 0...100, 0...360) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
+          "comment": "Create D50 LCH Color, using the same reference white as CSS `lch()`. LCH color ranges are (0...100, 0...100, 0...360) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
           "returns": "Color",
           "returns_comment": false,
           "parameters": [
@@ -3339,7 +3339,7 @@
       "source": [
         [
           "src/Color.ts",
-          962,
+          1007,
           9
         ]
       ],
@@ -3382,7 +3382,7 @@
       "source": [
         [
           "src/Color.ts",
-          681,
+          699,
           9
         ]
       ],
@@ -3425,7 +3425,7 @@
       "source": [
         [
           "src/Color.ts",
-          154,
+          163,
           9
         ]
       ],
@@ -3456,7 +3456,7 @@
       "source": [
         [
           "src/Color.ts",
-          713,
+          731,
           9
         ]
       ],
@@ -3499,7 +3499,7 @@
       "source": [
         [
           "src/Color.ts",
-          900,
+          945,
           9
         ]
       ],
@@ -3542,7 +3542,7 @@
       "source": [
         [
           "src/Pt.ts",
-          54,
+          70,
           9
         ]
       ],
@@ -3585,7 +3585,7 @@
       "source": [
         [
           "src/Color.ts",
-          187,
+          196,
           9
         ]
       ],
@@ -3621,7 +3621,7 @@
       "source": [
         [
           "src/Color.ts",
-          170,
+          179,
           9
         ]
       ],
@@ -3652,7 +3652,7 @@
       "source": [
         [
           "src/Color.ts",
-          1091,
+          1136,
           9
         ]
       ],
@@ -3695,7 +3695,7 @@
       "source": [
         [
           "src/Color.ts",
-          1018,
+          1063,
           9
         ]
       ],
@@ -3738,7 +3738,7 @@
       "source": [
         [
           "src/Color.ts",
-          178,
+          187,
           9
         ]
       ],
@@ -3769,7 +3769,7 @@
       "source": [
         [
           "src/Color.ts",
-          1114,
+          1159,
           9
         ]
       ],
@@ -3812,7 +3812,7 @@
       "source": [
         [
           "src/Color.ts",
-          1075,
+          1120,
           9
         ]
       ],
@@ -3855,7 +3855,7 @@
       "source": [
         [
           "src/Color.ts",
-          114,
+          123,
           9
         ]
       ],
@@ -3886,7 +3886,7 @@
       "source": [
         [
           "src/Color.ts",
-          558,
+          574,
           9
         ]
       ],
@@ -3929,7 +3929,7 @@
       "source": [
         [
           "src/Color.ts",
-          467,
+          480,
           9
         ]
       ],
@@ -3972,7 +3972,7 @@
       "source": [
         [
           "src/Color.ts",
-          633,
+          651,
           9
         ]
       ],
@@ -4015,7 +4015,7 @@
       "source": [
         [
           "src/Color.ts",
-          665,
+          683,
           9
         ]
       ],
@@ -4058,7 +4058,7 @@
       "source": [
         [
           "src/Color.ts",
-          697,
+          715,
           9
         ]
       ],
@@ -4101,7 +4101,7 @@
       "source": [
         [
           "src/Color.ts",
-          985,
+          1030,
           9
         ]
       ],
@@ -4144,7 +4144,7 @@
       "source": [
         [
           "src/Color.ts",
-          1059,
+          1104,
           9
         ]
       ],
@@ -4187,7 +4187,7 @@
       "source": [
         [
           "src/Color.ts",
-          729,
+          747,
           9
         ]
       ],
@@ -4230,7 +4230,7 @@
       "source": [
         [
           "src/Color.ts",
-          162,
+          171,
           9
         ]
       ],
@@ -4261,7 +4261,7 @@
       "source": [
         [
           "src/Color.ts",
-          800,
+          818,
           9
         ]
       ],
@@ -4272,7 +4272,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "A static function to convert XYZ to LAB.",
+          "comment": "Convert D65 XYZ to D50 LAB (CSS Lab), with Bradford chromatic adaptation.",
           "returns": "Color",
           "returns_comment": "a new LAB Color",
           "parameters": [
@@ -4304,7 +4304,7 @@
       "source": [
         [
           "src/Color.ts",
-          865,
+          910,
           9
         ]
       ],
@@ -4347,7 +4347,7 @@
       "source": [
         [
           "src/Color.ts",
-          759,
+          777,
           9
         ]
       ],

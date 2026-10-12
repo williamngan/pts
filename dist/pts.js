@@ -370,10 +370,13 @@ See https://github.com/williamngan/pts for details. */
 			return Math.max(min, Math.min(max, val));
 		}
 		static boundValue(val, min, max) {
+			const base = Math.min(min, max);
 			const len = Math.abs(max - min);
-			let a = (val - min) % len;
+			if (len === 0) return base;
+			let a = (val - base) % len;
 			if (a < 0) a += len;
-			return a + min;
+			const result = a + base;
+			return a === len || result === Math.max(min, max) ? base : result;
 		}
 		static within(p, a, b) {
 			return p >= Math.min(a, b) && p <= Math.max(a, b);
@@ -440,7 +443,7 @@ See https://github.com/williamngan/pts for details. */
 				minPt[i] = Math.min(minPt[i], p[i]);
 				maxPt[i] = Math.max(maxPt[i], p[i]);
 			}
-			return new Group(minPt, maxPt);
+			return minPt ? new Group(minPt, maxPt) : new Group();
 		}
 		static centroid(pts) {
 			return Num.average(pts);
@@ -490,6 +493,7 @@ See https://github.com/williamngan/pts for details. */
 		}
 		static sortEdges(pts) {
 			const _pts = Util.iterToArray(pts);
+			if (_pts.length < 2) return _pts;
 			const bounds = Geom.boundingBox(_pts);
 			const center = bounds[1].add(bounds[0]).divide(2);
 			const cx = center[0];
@@ -1007,7 +1011,8 @@ See https://github.com/williamngan/pts for details. */
 			else if (args.length === 1 && (Array.isArray(a0) || ArrayBuffer.isView(a0))) params = a0;
 			else if (typeof a0 === "number") params = args;
 			else params = Util.getArgs(args);
-			super(params);
+			if (a0 instanceof ArrayBuffer || typeof SharedArrayBuffer !== "undefined" && a0 instanceof SharedArrayBuffer) super(a0, args[1], args[2]);
+			else super(params);
 		}
 		static make(dimensions, defaultValue = 0, randomize = false) {
 			const p = new Pt(dimensions);
@@ -2423,15 +2428,44 @@ See https://github.com/williamngan/pts for details. */
 		sweep(boxes, margin, touching) {
 			const { minX, maxX, minY, maxY, order } = boxes;
 			let pairs = touching ? [] : void 0;
+			const E = order.length;
+			let size = 1;
+			while (size < E) size *= 2;
+			const low = new Float64Array(2 * size).fill(Infinity);
+			const high = new Float64Array(2 * size).fill(-Infinity);
+			const left = new Float64Array(2 * size).fill(Infinity);
+			const maxOrder = new Int32Array(2 * size).fill(-1);
+			const byY = Array.from({ length: E }, (_, i) => i).sort((a, b) => minY[order[a]] - minY[order[b]] || a - b);
+			for (let i = 0; i < E; i++) {
+				const pos = byY[i], edge = order[pos], node = size + i;
+				low[node] = minY[edge];
+				high[node] = maxY[edge];
+				left[node] = minX[edge];
+				maxOrder[node] = pos;
+			}
+			for (let n = size - 1; n > 0; n--) {
+				low[n] = Math.min(low[2 * n], low[2 * n + 1]);
+				high[n] = Math.max(high[2 * n], high[2 * n + 1]);
+				left[n] = Math.min(left[2 * n], left[2 * n + 1]);
+				maxOrder[n] = Math.max(maxOrder[2 * n], maxOrder[2 * n + 1]);
+			}
+			const stack = [], candidates = [];
 			for (let i = 0, E = order.length; i < E; i++) {
 				const e1 = order[i];
 				const limit = maxX[e1] + margin;
 				const lo = minY[e1] - margin;
 				const hi = maxY[e1] + margin;
-				for (let j = i + 1; j < E; j++) {
+				stack.push(1);
+				candidates.length = 0;
+				while (stack.length) {
+					const n = stack.pop();
+					if (maxOrder[n] <= i || left[n] > limit || low[n] > hi || high[n] < lo) continue;
+					if (n >= size) candidates.push(maxOrder[n]);
+					else stack.push(2 * n + 1, 2 * n);
+				}
+				candidates.sort((a, b) => a - b);
+				for (const j of candidates) {
 					const e2 = order[j];
-					if (minX[e2] > limit) break;
-					if (minY[e2] > hi || maxY[e2] < lo) continue;
 					if (touching) {
 						this.touchPair(e1, e2, boxes);
 						if (pairs) {
@@ -3266,6 +3300,11 @@ See https://github.com/williamngan/pts for details. */
 		static intersectLine2D(la, lb) {
 			let _la = Util.iterToArray(la);
 			let _lb = Util.iterToArray(lb);
+			if (orient2d(_la[0][0], _la[0][1], _la[1][0], _la[1][1], _lb[0][0], _lb[0][1]) === 0 && orient2d(_la[0][0], _la[0][1], _la[1][0], _la[1][1], _lb[1][0], _lb[1][1]) === 0 && orient2d(_lb[0][0], _lb[0][1], _lb[1][0], _lb[1][1], _la[0][0], _la[0][1]) === 0) {
+				const shared = [..._la, ..._lb].filter((p) => Geom.withinBound(p, _la[0], _la[1]) && Geom.withinBound(p, _lb[0], _lb[1]));
+				shared.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+				return shared.length ? new Pt(shared[0]) : void 0;
+			}
 			let pt = Line.intersectRay2D(_la, _lb);
 			return pt && Geom.withinBound(pt, _la[0], _la[1]) && Geom.withinBound(pt, _lb[0], _lb[1]) ? pt : void 0;
 		}
@@ -3526,7 +3565,7 @@ See https://github.com/williamngan/pts for details. */
 			let ar2 = ar * ar;
 			let br2 = br * br;
 			if (dr > ar + br) return new Group();
-			else if (dr < Math.abs(ar - br)) return new Group(_pts[0].clone());
+			else if (dr < Math.abs(ar - br)) return new Group();
 			else if (dr === 0) return new Group();
 			else {
 				let a = (ar2 - br2 + dr2) / (2 * dr);
@@ -3738,32 +3777,39 @@ See https://github.com/williamngan/pts for details. */
 		static convexHull(pts, sorted = false) {
 			let _pts = Util.iterToArray(pts);
 			if (_pts.length < 3) return _errorLength(new Group(), 3);
-			if (!sorted) {
-				_pts = _pts.slice();
-				_pts.sort((a, b) => a[0] - b[0]);
-			}
+			const compare = (a, b) => a[0] - b[0] || a[1] - b[1];
+			if (!sorted || _pts.some((p, i) => i > 0 && compare(_pts[i - 1], p) > 0)) _pts = _pts.slice().sort(compare);
+			_pts = _pts.filter((p, i) => i === 0 || compare(_pts[i - 1], p) !== 0);
 			let left = (a, b, c) => {
-				return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]) > 0;
+				return orient2d(a[0], a[1], b[0], b[1], c[0], c[1]) > 0;
 			};
+			let seed = 2;
+			while (seed < _pts.length && orient2d(_pts[0][0], _pts[0][1], _pts[1][0], _pts[1][1], _pts[seed][0], _pts[seed][1]) === 0) seed++;
+			if (seed >= _pts.length) {
+				const hull = new Group();
+				hull.push(_pts[0]);
+				if (_pts.length > 1) hull.push(_pts[_pts.length - 1]);
+				return hull;
+			}
 			let dq = [];
 			let bot = _pts.length - 2;
 			let top = bot + 3;
-			dq[bot] = _pts[2];
-			dq[top] = _pts[2];
-			if (left(_pts[0], _pts[1], _pts[2])) {
+			dq[bot] = _pts[seed];
+			dq[top] = _pts[seed];
+			if (left(_pts[0], _pts[seed - 1], _pts[seed])) {
 				dq[bot + 1] = _pts[0];
-				dq[bot + 2] = _pts[1];
+				dq[bot + 2] = _pts[seed - 1];
 			} else {
-				dq[bot + 1] = _pts[1];
+				dq[bot + 1] = _pts[seed - 1];
 				dq[bot + 2] = _pts[0];
 			}
-			for (let i = 3, len = _pts.length; i < len; i++) {
+			for (let i = seed + 1, len = _pts.length; i < len; i++) {
 				let pt = _pts[i];
 				if (left(dq[bot], dq[bot + 1], pt) && left(dq[top - 1], dq[top], pt)) continue;
-				while (!left(dq[bot], dq[bot + 1], pt)) bot += 1;
+				while (bot + 1 < top && !left(dq[bot], dq[bot + 1], pt)) bot += 1;
 				bot -= 1;
 				dq[bot] = pt;
-				while (!left(dq[top - 1], dq[top], pt)) top -= 1;
+				while (top - 1 > bot && !left(dq[top - 1], dq[top], pt)) top -= 1;
 				top += 1;
 				dq[top] = pt;
 			}
@@ -3861,6 +3907,7 @@ See https://github.com/williamngan/pts for details. */
 			let minAx = 0;
 			let minAy = 0;
 			let which = -1;
+			const contained = _poly.some((p) => Math.pow(p[0] - c[0], 2) + Math.pow(p[1] - c[1], 2) <= r * r) || Polygon.hasIntersectPoint(_poly, c);
 			for (let i = 0, len = _poly.length; i < len; i++) {
 				const ea = _poly[i];
 				const eb = _poly[i === len - 1 ? 0 : i + 1];
@@ -3882,7 +3929,7 @@ See https://github.com/williamngan/pts for details. */
 				if (dist > 0) return null;
 				else if (Math.abs(dist) < minDist) {
 					const edge = Polygon.lineAt(_poly, i);
-					if (Rectangle.withinBound(edge, Line.perpendicularFromPt(edge, c)) || Circle.intersectLine2D(_circle, edge).length > 0) {
+					if (contained || Rectangle.withinBound(edge, Line.perpendicularFromPt(edge, c)) || Circle.intersectLine2D(_circle, edge).length > 0) {
 						minEdge = edge;
 						minAx = ax;
 						minAy = ay;
@@ -4723,6 +4770,12 @@ See https://github.com/williamngan/pts for details. */
 		}
 	};
 	var UIDragger = class extends UIButton {
+		_ownsDrag(evt) {
+			if (!this._dragPointer) return true;
+			if ("pointerId" in evt) return !this._dragPointer.touch && evt.pointerId === this._dragPointer.id;
+			if ("changedTouches" in evt) return this._dragPointer.touch && Array.from(evt.changedTouches).some((t) => t.identifier === this._dragPointer.id);
+			return true;
+		}
 		constructor(group, shape, states = {}, id) {
 			super(group, shape, states, id);
 			this._draggingID = -1;
@@ -4738,6 +4791,13 @@ See https://github.com/williamngan/pts for details. */
 			const UA = UIPointerActions;
 			this._sysOn(UA.down, (target, pt, type, evt) => {
 				if (this._moveHoldID === -1) {
+					this._dragPointer = "pointerId" in evt ? {
+						id: evt.pointerId,
+						touch: false
+					} : "changedTouches" in evt && evt.changedTouches.length ? {
+						id: evt.changedTouches.item(0).identifier,
+						touch: true
+					} : void 0;
 					this.state("dragging", true);
 					this.state("offset", new Pt(pt).subtract(target.group[0]));
 					this._moveHoldID = this.hold(UA.move);
@@ -4748,6 +4808,7 @@ See https://github.com/williamngan/pts for details. */
 				if (this._upHoldID === -1) this._upHoldID = this.hold(UA.up);
 				if (this._draggingID === -1) {
 					const drag = (t, p, ty, e) => {
+						if (!this._ownsDrag(e)) return;
 						const paired = ty === UA.drag && e === this._lastMoveEvent;
 						this._lastMoveEvent = ty === UA.move ? e : void 0;
 						if (paired) return;
@@ -4761,6 +4822,8 @@ See https://github.com/williamngan/pts for details. */
 				}
 			});
 			const endDrag = (target, pt, type, evt) => {
+				if (!this._ownsDrag(evt)) return;
+				this._dragPointer = void 0;
 				this.state("dragging", false);
 				this._sysOff(UA.move, this._draggingID);
 				this._sysOff(UA.drag, this._dragID);
@@ -4975,6 +5038,8 @@ See https://github.com/williamngan/pts for details. */
 			super(..._args);
 			this._pressed = false;
 			this._dragged = false;
+			this._pressId = null;
+			this._pressIsTouch = false;
 			this._hasMouse = false;
 			this._hasTouch = false;
 			this._hasKeyboard = false;
@@ -5068,7 +5133,7 @@ See https://github.com/williamngan/pts for details. */
 		}
 		bindKeyboard(bind = true, customTarget) {
 			if (bind) {
-				const target = customTarget || document;
+				const target = customTarget || (typeof document !== "undefined" ? document : this._canvas);
 				if (this._hasKeyboard) {
 					if (this._keyboardTarget === target) return this;
 					this.bindKeyboard(false);
@@ -5147,15 +5212,15 @@ See https://github.com/williamngan/pts for details. */
 			}
 			return ts;
 		}
-		_mouseAction(type, evt) {
+		_mouseAction(type, evt, touchId) {
 			if (!this.isPlaying) return;
 			const [left, top, scaleX, scaleY] = this._inputTransform();
 			let px = 0, py = 0;
-			if (evt instanceof MouseEvent) {
+			if (typeof MouseEvent !== "undefined" && evt instanceof MouseEvent || "clientX" in evt) {
 				px = (evt.clientX - left) * scaleX;
 				py = (evt.clientY - top) * scaleY;
 			} else {
-				const touch = evt.changedTouches && evt.changedTouches.length > 0 ? evt.changedTouches.item(0) : null;
+				const touch = touchId != null ? Array.from(evt.changedTouches).find((t) => t.identifier === touchId) : evt.changedTouches && evt.changedTouches.length > 0 ? evt.changedTouches.item(0) : null;
 				if (touch) {
 					px = (touch.clientX - left) * scaleX;
 					py = (touch.clientY - top) * scaleY;
@@ -5173,29 +5238,42 @@ See https://github.com/williamngan/pts for details. */
 		_isTouchHandled(evt) {
 			return "pointerType" in evt && evt.pointerType === "touch" && this._hasTouch && evt.composedPath().includes(this._touchTarget || this._canvas);
 		}
+		_ownsPress(evt) {
+			if (!this._pressed) return false;
+			return "changedTouches" in evt ? this._pressIsTouch && Array.from(evt.changedTouches).some((t) => t.identifier === this._pressId) : !this._pressIsTouch && evt.pointerId === this._pressId;
+		}
+		_releasePress() {
+			this._pressed = this._dragged = false;
+			this._pressId = null;
+		}
 		_mouseDown(evt) {
 			if (this._isTouchHandled(evt)) return false;
+			if (!this._pressed) {
+				this._pressId = evt.pointerId;
+				this._pressIsTouch = false;
+				this._pressed = true;
+			}
 			this._mouseAction(UIPointerActions.down, evt);
 			this._mouseAction(UIPointerActions.pointerdown, evt);
-			this._pressed = true;
-			if (evt.target instanceof Element) try {
+			if (typeof Element !== "undefined" && evt.target instanceof Element) try {
 				evt.target.setPointerCapture(evt.pointerId);
 			} catch (_unused) {}
 			return false;
 		}
 		_mouseUp(evt) {
 			if (this._isTouchHandled(evt)) return false;
-			this._mouseAction(UIPointerActions.pointerup, evt);
-			if (this._dragged) this._mouseAction(UIPointerActions.drop, evt);
-			else this._mouseAction(UIPointerActions.up, evt);
-			this._pressed = false;
-			this._dragged = false;
-			if (evt instanceof PointerEvent && evt.target instanceof Element && evt.target.hasPointerCapture(evt.pointerId)) evt.target.releasePointerCapture(evt.pointerId);
+			const owns = this._ownsPress(evt);
+			const touchId = owns && this._pressIsTouch ? this._pressId : void 0;
+			this._mouseAction(UIPointerActions.pointerup, evt, touchId);
+			if (owns && this._dragged) this._mouseAction(UIPointerActions.drop, evt, touchId);
+			else this._mouseAction(UIPointerActions.up, evt, touchId);
+			if (owns || "touches" in evt && evt.touches.length === 0 && this._pressIsTouch) this._releasePress();
+			if (typeof PointerEvent !== "undefined" && evt instanceof PointerEvent && typeof Element !== "undefined" && evt.target instanceof Element && evt.target.hasPointerCapture(evt.pointerId)) evt.target.releasePointerCapture(evt.pointerId);
 			return false;
 		}
 		_mouseMove(evt) {
 			if (this._isTouchHandled(evt)) return false;
-			if (this._pressed) {
+			if (this._ownsPress(evt)) {
 				this._dragged = true;
 				this._mouseAction(UIPointerActions.drag, evt);
 			} else this._mouseAction(UIPointerActions.move, evt);
@@ -5208,16 +5286,15 @@ See https://github.com/williamngan/pts for details. */
 		}
 		_mouseOut(evt) {
 			if (this._isTouchHandled(evt)) return false;
-			this._mouseAction(UIPointerActions.out, evt);
-			if (this._dragged) this._mouseAction(UIPointerActions.drop, evt);
-			this._pressed = false;
-			this._dragged = false;
+			this._mouseAction(UIPointerActions.out, evt, this._ownsPress(evt) && this._pressIsTouch ? this._pressId : void 0);
+			if (this._ownsPress(evt)) {
+				if (this._dragged) this._mouseAction(UIPointerActions.drop, evt, this._pressIsTouch ? this._pressId : void 0);
+				this._releasePress();
+			} else if ("touches" in evt && evt.touches.length === 0 && this._pressIsTouch) this._releasePress();
 			return false;
 		}
 		_mouseClick(evt) {
 			this._mouseAction(UIPointerActions.click, evt);
-			this._pressed = false;
-			this._dragged = false;
 			return false;
 		}
 		_contextMenu(evt) {
@@ -5225,17 +5302,23 @@ See https://github.com/williamngan/pts for details. */
 			return false;
 		}
 		_touchMove(evt) {
-			this._mouseAction(UIPointerActions.move, evt);
-			if (this._pressed) {
+			const owns = this._ownsPress(evt);
+			this._mouseAction(UIPointerActions.move, evt, owns ? this._pressId : void 0);
+			if (owns) {
 				this._dragged = true;
-				this._mouseAction(UIPointerActions.drag, evt);
+				this._mouseAction(UIPointerActions.drag, evt, this._pressId);
 			}
 			if (!this._touchPassive) evt.preventDefault();
 			return false;
 		}
 		_touchStart(evt) {
+			if (!this._pressed && evt.changedTouches.length) {
+				this._pressId = evt.changedTouches.item(0).identifier;
+				this._pressIsTouch = true;
+				this._pressed = true;
+			}
 			this._mouseAction(UIPointerActions.down, evt);
-			this._pressed = true;
+			this._mouseAction(UIPointerActions.pointerdown, evt);
 			if (!this._touchPassive) evt.preventDefault();
 			return false;
 		}
@@ -5871,6 +5954,7 @@ See https://github.com/williamngan/pts for details. */
 			this._offscreen = false;
 			this._autoResize = true;
 			this._initialResize = false;
+			this._hasPlayed = false;
 			this._disposed = false;
 			this._ownsCanvas = false;
 			this._ownsContainer = false;
@@ -5994,7 +6078,7 @@ See https://github.com/williamngan/pts for details. */
 				if (p.resize) p.resize(this.bound, evt);
 			}
 			this.render(this._ctx);
-			if (evt && !this.isPlaying) this.playOnce(0);
+			if (this._isReady && !this.isPlaying && (evt || this._hasPlayed)) this.playOnce(0);
 			return this;
 		}
 		_resizeHandler(evt) {
@@ -6063,6 +6147,7 @@ See https://github.com/williamngan/pts for details. */
 			return this;
 		}
 		playItems(time) {
+			if (this._isReady) this._hasPlayed = true;
 			if (this._isReady) {
 				this._ctx.save();
 				if (this._offscreen) this._offCtx.save();
@@ -6138,9 +6223,10 @@ See https://github.com/williamngan/pts for details. */
 		}
 		_set(key, value) {
 			const cache = this._cacheForCtx();
-			if (cache[key] !== value) {
+			if (cache[key] !== value || cache[`actual:${key}`] !== this._ctx[key]) {
 				cache[key] = value;
 				this._ctx[key] = value;
+				cache[`actual:${key}`] = this._ctx[key];
 			}
 		}
 		constructor(space) {
@@ -6268,6 +6354,10 @@ See https://github.com/williamngan/pts for details. */
 		}
 		dash(segments = true, offset = 0) {
 			const cache = this._cacheForCtx();
+			if (typeof this._ctx.getLineDash === "function") {
+				const actual = `${this._ctx.getLineDash().join(",")}/${this._ctx.lineDashOffset}`;
+				if (cache.actualDash !== actual) delete cache.dash;
+			}
 			if (segments === false || segments !== true && segments.length === 0) {
 				if (cache.dash !== "/0") {
 					cache.dash = "/0";
@@ -6283,6 +6373,7 @@ See https://github.com/williamngan/pts for details. */
 					this._ctx.lineDashOffset = offset;
 				}
 			}
+			if (typeof this._ctx.getLineDash === "function") cache.actualDash = `${this._ctx.getLineDash().join(",")}/${this._ctx.lineDashOffset}`;
 			return this;
 		}
 		font(sizeOrFont, weight, style, lineHeight, family) {
@@ -7291,12 +7382,14 @@ See https://github.com/williamngan/pts for details. */
 					const first = h / 3 | 0;
 					for (;;) {
 						const t = h / 3 | 0;
-						cell.push(shapes[t].circle[0]);
+						const center = shapes[t].circle[0];
+						if (!cell.length || !center.equals(cell[cell.length - 1], 0)) cell.push(center);
 						const twin = neighbors[3 * t + (h + 2) % 3];
 						if (twin === -1 || (twin / 3 | 0) === first) break;
 						h = twin;
 					}
 				}
+				if (cell.length > 1 && cell[0].equals(cell[cell.length - 1], 0)) cell.pop();
 				vs.push(cell);
 			}
 			return vs;
@@ -7979,6 +8072,7 @@ See https://github.com/williamngan/pts for details. */
 //#region src/Color.ts
 	var Color_exports = /* @__PURE__ */ __exportAll({ Color: () => Color });
 	const D65 = /* @__PURE__ */ new Pt(95.047, 100, 108.883, 1);
+	const D50 = /* @__PURE__ */ new Pt(34.57 / .3585, 100, 100 * .2958 / .3585, 1);
 	let _colorRanges = /* @__PURE__ */ colorRanges();
 	function colorRanges() {
 		return {
@@ -8205,7 +8299,7 @@ See https://github.com/williamngan/pts for details. */
 			const v = this._isNorm && format !== "mode" ? Color._denorm(this) : this;
 			if (format == "hex") {
 				const _hex = (n) => {
-					const s = Math.floor(n).toString(16);
+					const s = Math.floor(Number.isNaN(n) ? 0 : Num.clamp(n, 0, 255)).toString(16);
 					return s.length < 2 ? "0" + s : s;
 				};
 				return `#${_hex(v[0])}${_hex(v[1])}${_hex(v[2])}`;
@@ -8243,6 +8337,7 @@ See https://github.com/williamngan/pts for details. */
 			if (s == 0) {
 				const gray = Color.rgb(sc * l, sc * l, sc * l, hsl.alpha);
 				if (normalizedOutput) gray.normalized = true;
+				else for (let i = 0; i < 3; i++) gray[i] = Math.round(gray[i]);
 				return gray;
 			}
 			const q = l <= .5 ? l * (1 + s) : l + s - l * s;
@@ -8256,6 +8351,7 @@ See https://github.com/williamngan/pts for details. */
 			};
 			const cc = Color.rgb(sc * convert(h + 1 / 3), sc * convert(h), sc * convert(h - 1 / 3), hsl.alpha);
 			if (normalizedOutput) cc.normalized = true;
+			else for (let i = 0; i < 3; i++) cc[i] = Math.round(cc[i]);
 			return cc;
 		}
 		static RGBtoHSB(rgb, normalizedInput = false, normalizedOutput = false) {
@@ -8319,6 +8415,7 @@ See https://github.com/williamngan/pts for details. */
 			const sc = normalizedOutput ? 1 : 255;
 			const cc = Color.rgb(sc * c[0], sc * c[1], sc * c[2], hsb.alpha);
 			if (normalizedOutput) cc.normalized = true;
+			else for (let i = 0; i < 3; i++) cc[i] = Math.round(cc[i]);
 			return cc;
 		}
 		static RGBtoLAB(rgb, normalizedInput = false, normalizedOutput = false) {
@@ -8374,10 +8471,13 @@ See https://github.com/williamngan/pts for details. */
 			const c = normalizedInput ? Color._denorm(xyz) : xyz.clone();
 			const eps = 216 / 24389;
 			const kap = 24389 / 27;
-			c.divide(D65);
+			const [x, y, z] = c;
+			const adaptedX = (1.047883741175648 * x + .022926020580292167 * y - .050156960798235464 * z) / D50[0];
+			const adaptedY = (.029599712470291525 * x + .9904433289480559 * y - .01706140321234148 * z) / D50[1];
+			const adaptedZ = (-.009237076612309065 * x + .015045841479768444 * y + .7520350516043767 * z) / D50[2];
 			const fn = (n) => n > eps ? Math.cbrt(n) : (kap * n + 16) / 116;
-			const cy = fn(c[1]);
-			const cc = Color.lab(116 * cy - 16, 500 * (fn(c[0]) - cy), 200 * (cy - fn(c[2])), xyz.alpha);
+			const cy = fn(adaptedY);
+			const cc = Color.lab(116 * cy - 16, 500 * (fn(adaptedX) - cy), 200 * (cy - fn(adaptedZ)), xyz.alpha);
 			return normalizedOutput ? Color._normOut(cc) : cc;
 		}
 		static LABtoXYZ(lab, normalizedInput = false, normalizedOutput = false) {
@@ -8387,10 +8487,13 @@ See https://github.com/williamngan/pts for details. */
 			const z = y - c[2] / 200;
 			const eps = 216 / 24389;
 			const kap = 24389 / 27;
-			const d = D65;
+			const d = D50;
 			const xxx = Math.pow(x, 3);
 			const zzz = Math.pow(z, 3);
-			const cc = Color.xyz(d[0] * (xxx > eps ? xxx : (116 * x - 16) / kap), d[1] * (c[0] > kap * eps ? Math.pow((c[0] + 16) / 116, 3) : c[0] / kap), d[2] * (zzz > eps ? zzz : (116 * z - 16) / kap), lab.alpha);
+			const ax = d[0] * (xxx > eps ? xxx : (116 * x - 16) / kap);
+			const ay = d[1] * (c[0] > kap * eps ? Math.pow((c[0] + 16) / 116, 3) : c[0] / kap);
+			const az = d[2] * (zzz > eps ? zzz : (116 * z - 16) / kap);
+			const cc = Color.xyz(.9555133603984794 * ax - .023077627346345685 * ay + .06320438037157042 * az, -.028343880155626656 * ax + 1.0099856019019258 * ay + .02102312741027628 * az, .012303426046551184 * ax - .020490072958726607 * ay + 1.3300809728580483 * az, lab.alpha);
 			return normalizedOutput ? Color._normOut(cc) : cc;
 		}
 		static XYZtoLUV(xyz, normalizedInput = false, normalizedOutput = false) {
@@ -9352,7 +9455,7 @@ See https://github.com/williamngan/pts for details. */
 				else SVGContext2D._warnOnce(`composite-${this._shapeBlend}`, `composite operation "${this._shapeBlend}" has no SVG equivalent`);
 			}
 			const prev = this._runs[this._runs.length - 1];
-			if (prev && prev.tag === "path" && sameRunStyle(prev.attrs, attrs)) {
+			if (this._shapeFill === null && this._shapeAlpha === 1 && this._shapeBlend === "source-over" && !this._shapeClass && /^#(?:[\da-f]{3}|[\da-f]{6})$/i.test(this._shapeStroke || "") && prev && prev.tag === "path" && sameRunStyle(prev.attrs, attrs)) {
 				prev.shapeEnds.push(prev.attrs.d.length);
 				prev.attrs.d = prev.attrs.d + this._d;
 			} else this._runs.push({
@@ -10322,7 +10425,6 @@ See https://github.com/williamngan/pts for details. */
 			this._stiff = 1;
 			this._locks = {};
 			this._mass = 1;
-			this._lambdas = /* @__PURE__ */ new Float32Array(0);
 		}
 		static fromGroup(body, stiff = 1, autoLink = true, autoMass = true) {
 			let b = new Body().init(body);
@@ -10402,9 +10504,6 @@ See https://github.com/williamngan/pts for details. */
 			const cs = this._cs;
 			const clen = cs.length;
 			if (clen === 0) return this;
-			if (this._lambdas.length < clen) this._lambdas = new Float32Array(clen);
-			const lambdas = this._lambdas;
-			lambdas.fill(0, 0, clen);
 			const invPasses = 1 / Math.max(1, iterations * substeps);
 			for (let iter = 0; iter < iterations; iter++) for (let ci = 0; ci < clen; ci++) {
 				const c = cs[ci];
@@ -10424,9 +10523,7 @@ See https://github.com/williamngan/pts for details. */
 					const sEff = 1 - Math.pow(1 - stiff, invPasses);
 					alpha = sEff > 1e-6 ? w * (1 - sEff) / sEff : w * 1e6;
 				}
-				const dl = (-(dist - c[2]) - alpha * lambdas[ci]) / (w + alpha);
-				lambdas[ci] += dl;
-				const s = dl / dist;
+				const s = -(dist - c[2]) / (w + alpha) / dist;
 				const fx = dx * s;
 				const fy = dy * s;
 				p1[0] -= fx * w1;
@@ -10551,19 +10648,30 @@ See https://github.com/williamngan/pts for details. */
 			for (const k in this._listeners) if (this._listeners.hasOwnProperty(k)) {
 				const li = this._listeners[k];
 				const _t = li.offset ? time + li.offset : time;
-				const ms = li.period * this._ms;
+				let ms = li.period * this._ms;
 				let isStart = false;
 				if (li.duration < 0) {
 					li.duration = _t - _t % this._ms;
 					li.count = li.count || 0;
 					isStart = true;
-				} else if (_t > li.duration + ms) {
-					li.duration = _t - _t % this._ms;
+				} else if (ms > 0 && _t > li.duration + ms) {
 					if (Array.isArray(li.beats)) {
-						li.index = (li.index + 1) % li.beats.length;
-						li.period = li.beats[li.index];
+						const cycle = li.beats.reduce((sum, beat) => sum + beat, 0) * this._ms;
+						const cycles = cycle > 0 ? Math.max(0, Math.ceil((_t - li.duration) / cycle) - 1) : 0;
+						li.duration += cycles * cycle;
+						li.count = (li.count || 0) + cycles * li.beats.length;
+						while (ms > 0 && _t > li.duration + ms) {
+							li.duration += ms;
+							li.index = ((li.index || 0) + 1) % li.beats.length;
+							li.period = li.beats[li.index];
+							ms = li.period * this._ms;
+							li.count++;
+						}
+					} else {
+						const passed = Math.ceil((_t - li.duration) / ms) - 1;
+						li.duration += passed * ms;
+						li.count = (li.count || 0) + passed;
 					}
-					li.count = (li.count || 0) + 1;
 					isStart = true;
 				}
 				let done;
@@ -10590,6 +10698,9 @@ See https://github.com/williamngan/pts for details. */
 			this._connected = [];
 			this._bufferPlayed = false;
 			this._generated = false;
+			this._inputStopped = false;
+			this._fadeEnd = 0;
+			this._retiring = /* @__PURE__ */ new Set();
 			this._type = type;
 			this._ctx = ctx || Sound._getContext();
 		}
@@ -10653,7 +10764,7 @@ See https://github.com/williamngan/pts for details. */
 			})();
 		}
 		createBuffer(buf) {
-			if (this._node) {
+			if (this._node && !this._retiring.has(this._node)) {
 				this._node.onended = null;
 				this._node.disconnect();
 			}
@@ -10672,7 +10783,7 @@ See https://github.com/williamngan/pts for details. */
 			return new Sound("gen")._gen(type, val);
 		}
 		_gen(type, val) {
-			if (this._node) this._node.disconnect();
+			if (this._node && !this._retiring.has(this._node)) this._node.disconnect();
 			this._node = this._ctx.createOscillator();
 			this._generated = true;
 			const osc = this._node;
@@ -10759,7 +10870,7 @@ See https://github.com/williamngan/pts for details. */
 		}
 		set volume(v) {
 			this._volume = Math.max(0, v || 0);
-			if (this._gain) this._gain.gain.value = this._volume;
+			if (this._gain && this._playing) this._rampVolume(this._volume, Math.max(this._ctx.currentTime, this._fadeEnd));
 		}
 		connect(node) {
 			this._connected.push(node);
@@ -10830,6 +10941,14 @@ See https://github.com/williamngan/pts for details. */
 		}
 		reset() {
 			this.stop();
+			this._cancelAudioTimer(true);
+			for (const node of this._retiring) {
+				node.onended = null;
+				node.stop();
+				node.disconnect();
+			}
+			this._retiring.clear();
+			this._fadeEnd = 0;
 			if (this._node) this._node.disconnect();
 			if (this._outputNode) this._outputNode.disconnect();
 			return this;
@@ -10842,18 +10961,74 @@ See https://github.com/williamngan/pts for details. */
 			}
 			return this._gain;
 		}
+		_rampVolume(value, when = this._ctx.currentTime) {
+			const gain = this._getGain().gain;
+			const current = when > this._ctx.currentTime ? 0 : gain.value;
+			if (typeof gain.cancelAndHoldAtTime === "function") gain.cancelAndHoldAtTime(when);
+			else {
+				gain.cancelScheduledValues(when);
+				if (when > this._ctx.currentTime) gain.linearRampToValueAtTime(0, when);
+			}
+			gain.setValueAtTime(current, when);
+			gain.linearRampToValueAtTime(value, when + .01);
+		}
+		_cancelAudioTimer(finish = false) {
+			if (this._audioTimer !== void 0) clearTimeout(this._audioTimer);
+			this._audioTimer = void 0;
+			const callback = this._finishAudio;
+			this._finishAudio = void 0;
+			if (finish) callback === null || callback === void 0 || callback();
+		}
+		_afterFade(callback) {
+			this._cancelAudioTimer();
+			this._finishAudio = callback;
+			const end = this._ctx.currentTime + .01;
+			const finish = () => {
+				const remaining = end - this._ctx.currentTime;
+				if (remaining > 0 && this._ctx.state !== "closed") this._audioTimer = setTimeout(finish, Math.max(10, remaining * 1e3));
+				else this._cancelAudioTimer(true);
+			};
+			this._audioTimer = setTimeout(finish, 10);
+		}
+		_retireSource(when) {
+			const node = this._node;
+			this._retiring.add(node);
+			node.onended = () => {
+				node.disconnect();
+				this._retiring.delete(node);
+				if (this._node === node) this._playing = false;
+			};
+			node.stop(when);
+		}
 		start(timeAt = 0) {
-			if (this._ctx.state === "suspended") this._ctx.resume();
+			if (this._type === "input" && this._stream && (this._inputStopped || this._stream.getAudioTracks().every((track) => track.readyState === "ended"))) {
+				this._playing = false;
+				Util.warn("Cannot restart a stopped input stream; use Sound.input() to acquire a new stream");
+				return this;
+			}
+			if (this._ctx.state === "suspended" && !("startRendering" in this._ctx)) this._ctx.resume();
+			this._cancelAudioTimer();
+			let when = 0;
 			if (this._type === "file") {
 				if (this._buffer) {
 					if (this._playing || this._bufferPlayed || !this._node) {
-						if (this._playing && this.progress < 1) this._node.stop();
+						if (this._playing && this.progress < 1) this.stop();
+						if (this._retiring.has(this._node)) when = Math.max(this._ctx.currentTime, this._fadeEnd);
 						this.createBuffer();
 					}
-					this._node.start(0, timeAt);
+					this._node.start(when, timeAt);
 					this._bufferPlayed = true;
-					this._timestamp = this._ctx.currentTime - timeAt;
+					this._timestamp = (when || this._ctx.currentTime) - timeAt;
 				} else {
+					if (this._playing && timeAt > 0) {
+						this._rampVolume(0);
+						this._fadeEnd = this._ctx.currentTime + .01;
+						this._afterFade(() => {
+							this._source.currentTime = timeAt;
+							this._rampVolume(this._volume);
+						});
+						return this;
+					}
 					if (timeAt > 0) this._source.currentTime = timeAt;
 					const played = this._source.play();
 					if (played && played.catch) played.catch(() => {
@@ -10863,25 +11038,40 @@ See https://github.com/williamngan/pts for details. */
 			} else if (this._type === "gen" && this._generated) {
 				if (this._playing) return this;
 				const osc = this._node;
+				if (this._retiring.has(osc)) when = Math.max(this._ctx.currentTime, this._fadeEnd);
 				this._gen(osc.type, osc.type === "custom" ? this._wave : osc.frequency.value);
-				this._node.start();
+				this._node.start(when);
 			}
 			if (this.analyzer) this._node.connect(this.analyzer.node);
 			for (const n of this._connected) this._node.connect(n);
 			(this._outputNode || this._node).connect(this._getGain());
+			if (when) this._rampVolume(this._volume, when);
+			else this._rampVolume(this._volume);
 			this._playing = true;
 			return this;
 		}
 		stop() {
 			if (!this._playing) return this;
-			(this._outputNode || this._node).disconnect(this._gain);
+			this._cancelAudioTimer();
+			this._rampVolume(0);
+			this._fadeEnd = this._ctx.currentTime + .01;
 			if (this._type === "file") {
 				if (this._buffer) {
-					if (this.progress < 1) this._node.stop();
-				} else this._source.pause();
+					if (this.progress < 1) this._retireSource(this._fadeEnd);
+				} else this._afterFade(() => {
+					this._source.pause();
+					(this._outputNode || this._node).disconnect(this._gain);
+				});
 			} else if (this._type === "gen") {
-				if (this._generated) this._node.stop();
-			} else if (this._type === "input" && this._stream) this._stream.getAudioTracks().forEach((track) => track.stop());
+				if (this._generated) this._retireSource(this._fadeEnd);
+				else this._afterFade(() => (this._outputNode || this._node).disconnect(this._gain));
+			} else if (this._type === "input" && this._stream) {
+				this._inputStopped = true;
+				this._afterFade(() => {
+					this._stream.getAudioTracks().forEach((track) => track.stop());
+					(this._outputNode || this._node).disconnect(this._gain);
+				});
+			} else this._afterFade(() => (this._outputNode || this._node).disconnect(this._gain));
 			this._playing = false;
 			return this;
 		}

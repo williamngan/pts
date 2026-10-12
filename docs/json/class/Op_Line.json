@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Op.ts",
-      27,
+      28,
       13
     ]
   ],
@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Op.ts",
-          90,
+          91,
           9
         ]
       ],
@@ -66,7 +66,7 @@
       "source": [
         [
           "src/Op.ts",
-          349,
+          387,
           9
         ]
       ],
@@ -115,7 +115,7 @@
       "source": [
         [
           "src/Op.ts",
-          150,
+          151,
           9
         ]
       ],
@@ -157,7 +157,7 @@
       "source": [
         [
           "src/Op.ts",
-          35,
+          36,
           9
         ]
       ],
@@ -200,7 +200,7 @@
       "source": [
         [
           "src/Op.ts",
-          56,
+          57,
           9
         ]
       ],
@@ -237,7 +237,7 @@
       "source": [
         [
           "src/Op.ts",
-          300,
+          338,
           9
         ]
       ],
@@ -274,7 +274,7 @@
       "source": [
         [
           "src/Op.ts",
-          282,
+          320,
           9
         ]
       ],
@@ -311,7 +311,7 @@
       "source": [
         [
           "src/Op.ts",
-          202,
+          205,
           9
         ]
       ],
@@ -322,7 +322,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Given two line segemnts, find their intersection point if any.",
+          "comment": "Given two line segemnts, find their intersection point if any.\nCollinear overlaps return the lexicographically smallest shared endpoint,\nindependent of argument order and segment direction.",
           "returns": "Pt | undefined",
           "returns_comment": "an intersection Pt or undefined if no intersection",
           "parameters": [
@@ -348,7 +348,7 @@
       "source": [
         [
           "src/Op.ts",
-          260,
+          298,
           9
         ]
       ],
@@ -391,7 +391,7 @@
       "source": [
         [
           "src/Op.ts",
-          220,
+          258,
           9
         ]
       ],
@@ -428,7 +428,7 @@
       "source": [
         [
           "src/Op.ts",
-          236,
+          274,
           9
         ]
       ],
@@ -471,7 +471,7 @@
       "source": [
         [
           "src/Op.ts",
-          167,
+          168,
           9
         ]
       ],
@@ -508,7 +508,7 @@
       "source": [
         [
           "src/Op.ts",
-          319,
+          357,
           9
         ]
       ],
@@ -545,7 +545,7 @@
       "source": [
         [
           "src/Op.ts",
-          109,
+          110,
           9
         ]
       ],
@@ -576,7 +576,7 @@
       "source": [
         [
           "src/Op.ts",
-          118,
+          119,
           9
         ]
       ],
@@ -607,7 +607,7 @@
       "source": [
         [
           "src/Op.ts",
-          387,
+          425,
           9
         ]
       ],
@@ -656,7 +656,7 @@
       "source": [
         [
           "src/Op.ts",
-          130,
+          131,
           9
         ]
       ],
@@ -699,7 +699,7 @@
       "source": [
         [
           "src/Op.ts",
-          75,
+          76,
           9
         ]
       ],
@@ -736,7 +736,7 @@
       "source": [
         [
           "src/Op.ts",
-          46,
+          47,
           9
         ]
       ],
@@ -773,7 +773,7 @@
       "source": [
         [
           "src/Op.ts",
-          332,
+          370,
           9
         ]
       ],
@@ -810,7 +810,7 @@
       "source": [
         [
           "src/Op.ts",
-          414,
+          452,
           9
         ]
       ],

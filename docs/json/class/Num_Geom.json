@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Num.ts",
-      203,
+      210,
       13
     ]
   ],
@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Num.ts",
-          273,
+          280,
           9
         ]
       ],
@@ -60,7 +60,7 @@
       "source": [
         [
           "src/Num.ts",
-          208,
+          215,
           9
         ]
       ],
@@ -91,7 +91,7 @@
       "source": [
         [
           "src/Num.ts",
-          241,
+          248,
           9
         ]
       ],
@@ -104,7 +104,7 @@
         {
           "comment": "Get a bounding box for a set of Pts.",
           "returns": "Group",
-          "returns_comment": "a Group of two Pts, representing the top-left and bottom-right corners",
+          "returns_comment": "a Group of two Pts, representing the top-left and bottom-right corners, or an empty Group for empty input",
           "parameters": [
             {
               "name": "pts",
@@ -122,7 +122,7 @@
       "source": [
         [
           "src/Num.ts",
-          216,
+          223,
           9
         ]
       ],
@@ -153,7 +153,7 @@
       "source": [
         [
           "src/Num.ts",
-          263,
+          270,
           9
         ]
       ],
@@ -184,7 +184,7 @@
       "source": [
         [
           "src/Num.ts",
-          548,
+          556,
           9
         ]
       ],
@@ -208,7 +208,7 @@
       "source": [
         [
           "src/Num.ts",
-          297,
+          304,
           9
         ]
       ],
@@ -251,7 +251,7 @@
       "source": [
         [
           "src/Num.ts",
-          329,
+          336,
           9
         ]
       ],
@@ -288,7 +288,7 @@
       "source": [
         [
           "src/Num.ts",
-          311,
+          318,
           9
         ]
       ],
@@ -325,7 +325,7 @@
       "source": [
         [
           "src/Num.ts",
-          518,
+          526,
           9
         ]
       ],
@@ -368,7 +368,7 @@
       "source": [
         [
           "src/Num.ts",
-          441,
+          449,
           9
         ]
       ],
@@ -417,7 +417,7 @@
       "source": [
         [
           "src/Num.ts",
-          407,
+          415,
           9
         ]
       ],
@@ -460,7 +460,7 @@
       "source": [
         [
           "src/Num.ts",
-          480,
+          488,
           9
         ]
       ],
@@ -509,7 +509,7 @@
       "source": [
         [
           "src/Num.ts",
-          562,
+          570,
           9
         ]
       ],
@@ -533,7 +533,7 @@
       "source": [
         [
           "src/Num.ts",
-          363,
+          370,
           9
         ]
       ],
@@ -564,7 +564,7 @@
       "source": [
         [
           "src/Num.ts",
-          232,
+          239,
           9
         ]
       ],
@@ -595,7 +595,7 @@
       "source": [
         [
           "src/Num.ts",
-          224,
+          231,
           9
         ]
       ],
@@ -626,7 +626,7 @@
       "source": [
         [
           "src/Num.ts",
-          348,
+          355,
           9
         ]
       ],

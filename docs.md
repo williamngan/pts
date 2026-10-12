@@ -138,7 +138,7 @@ Complete API reference for [Pts 1.0.2](https://ptsjs.org), generated from the sa
 <a id="canvas-canvasform"></a>
 ### `CanvasForm`
 
-**Kind:** Class · **Source:** [`src/Canvas.ts:555`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L555)
+**Kind:** Class · **Source:** [`src/Canvas.ts:559`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L559)
 
 **Extends:** `VisualForm`
 
@@ -170,6 +170,8 @@ get ctx(): RenderingContext2D
 ```
 
 Get the rendering context of canvas to perform other canvas functions.
+Form style setters detect direct context writes and `save()`/`restore()`.
+Call `form.reset()` to reapply all the form's saved styles at once.
 
 <a id="canvas-canvasform-space"></a>
 ##### `space`
@@ -1265,12 +1267,14 @@ space.setup({ bgcolor: "#f00", retina: true, resize: true })
 <a id="color-color"></a>
 ### `Color`
 
-**Kind:** Class · **Source:** [`src/Color.ts:43`](https://github.com/williamngan/pts/blob/master/src/Color.ts#L43)
+**Kind:** Class · **Source:** [`src/Color.ts:52`](https://github.com/williamngan/pts/blob/master/src/Color.ts#L52)
 
 **Extends:** `Pt`
 
 Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.
 Convert non-RGB colors to RGB before using `.hex`, `.rgb`, or `.rgba` for rendering. These getters format the channels; they don't convert between color spaces.
+LAB and LCH use the D50 reference white, as in CSS `lab()` and `lch()`.
+XYZ and LUV use D65; conversions between XYZ and LAB apply Bradford chromatic adaptation.
 
 #### Constructors
 
@@ -1504,6 +1508,8 @@ normalize(toNorm: boolean = true): Color
 ```
 
 Normalize the color values to between 0 to 1, or revert it back to the min/max values in current color mode.
+Uses the nominal `Color.ranges` without clamping. In particular LCH chroma uses
+0–100 for compatibility, although valid colors can exceed 100 (and normalize above 1).
 
 **Parameters**
 
@@ -1594,6 +1600,7 @@ static HSBtoRGB(hsb: Color, normalizedInput: boolean = false, normalizedOutput: 
 ```
 
 A static function to convert HSB to RGB.
+Full-range output is rounded to integer RGB channels; normalized output retains fractions.
 
 **Parameters**
 
@@ -1628,6 +1635,7 @@ static HSLtoRGB(hsl: Color, normalizedInput: boolean = false, normalizedOutput: 
 ```
 
 A static function to convert HSL to RGB.
+Full-range output is rounded to integer RGB channels; normalized output retains fractions.
 
 **Parameters**
 
@@ -1646,7 +1654,7 @@ A static function to convert HSL to RGB.
 static lab(args: any[]): Color
 ```
 
-Create LAB Color. LAB color ranges are (0...100, -128...127, -128...127) respectively. You may use [`Color.normalize`](#color-color-normalize) to convert the ranges to 0...1.
+Create D50 LAB Color, using the same reference white as CSS `lab()`. LAB color ranges are (0...100, -128...127, -128...127) respectively. You may use [`Color.normalize`](#color-color-normalize) to convert the ranges to 0...1.
 
 **Parameters**
 
@@ -1699,7 +1707,7 @@ A static function to convert LAB to RGB.
 static LABtoXYZ(lab: Color, normalizedInput: boolean = false, normalizedOutput: boolean = false): Color
 ```
 
-A static function to convert LAB to XYZ.
+Convert D50 LAB (CSS Lab) to D65 XYZ, with inverse Bradford chromatic adaptation.
 
 **Parameters**
 
@@ -1718,7 +1726,7 @@ A static function to convert LAB to XYZ.
 static lch(args: any[]): Color
 ```
 
-Create LCH Color. LCH color ranges are (0...100, 0...100, 0...360) respectively. You may use [`Color.normalize`](#color-color-normalize) to convert the ranges to 0...1.
+Create D50 LCH Color, using the same reference white as CSS `lch()`. LCH color ranges are (0...100, 0...100, 0...360) respectively. You may use [`Color.normalize`](#color-color-normalize) to convert the ranges to 0...1.
 
 **Parameters**
 
@@ -2133,7 +2141,7 @@ Create XYZ Color. XYZ color ranges are (0...100, 0...100, 0...100) respectively.
 static XYZtoLAB(xyz: Color, normalizedInput: boolean = false, normalizedOutput: boolean = false): Color
 ```
 
-A static function to convert XYZ to LAB.
+Convert D65 XYZ to D50 LAB (CSS Lab), with Bradford chromatic adaptation.
 
 **Parameters**
 
@@ -2192,7 +2200,7 @@ A static function to convert XYZ to RGB.
 <a id="create-boid"></a>
 ### `Boid`
 
-**Kind:** Class · **Source:** [`src/Create.ts:906`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L906)
+**Kind:** Class · **Source:** [`src/Create.ts:910`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L910)
 
 **Extends:** `Pt`
 
@@ -2530,7 +2538,7 @@ Generate Voronoi cells. `delaunay()` must be called before calling this function
 <a id="create-flock"></a>
 ### `Flock`
 
-**Kind:** Class · **Source:** [`src/Create.ts:948`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L948)
+**Kind:** Class · **Source:** [`src/Create.ts:952`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L952)
 
 **Extends:** `Group`
 
@@ -2840,7 +2848,7 @@ perm: number[]
 <a id="create-poissondisk"></a>
 ### `PoissonDisk`
 
-**Kind:** Class · **Source:** [`src/Create.ts:1603`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L1603)
+**Kind:** Class · **Source:** [`src/Create.ts:1607`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L1607)
 
 **Extends:** `Group`
 
@@ -4579,6 +4587,8 @@ getForm(): CanvasForm | undefined
 ```
 
 Get a CanvasForm for drawing on the internal canvas if this Img is editable
+Drawing through this form does not refresh the pixel cache. Call `loadPixels()`
+afterwards before reading the updated image through `pixel()`.
 
 <a id="image-img-init-canvas"></a>
 ##### `initCanvas`
@@ -4644,6 +4654,8 @@ pixel(p: PtLike, rescale: number | boolean = true): Pt
 ```
 
 Get the RGBA values of a pixel in the image
+After drawing through `getForm()` or directly on the canvas, call `loadPixels()`
+to refresh the pixel cache before reading the updated pixels.
 
 **Parameters**
 
@@ -5519,7 +5531,7 @@ Unit vector of `a`. If magnitude of `a` is already known, pass it in the second 
 <a id="num-geom"></a>
 ### `Geom`
 
-**Kind:** Class · **Source:** [`src/Num.ts:203`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L203)
+**Kind:** Class · **Source:** [`src/Num.ts:210`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L210)
 
 Geom class provides static helper functions for basic geometric operations.
 
@@ -5572,7 +5584,7 @@ Get a bounding box for a set of Pts.
 
 - `pts` (`PtIterable`) — a Group or an Iterable<Pt>
 
-**Returns:** a Group of two Pts, representing the top-left and bottom-right corners
+**Returns:** a Group of two Pts, representing the top-left and bottom-right corners, or an empty Group for empty input
 
 <a id="num-geom-static-bound-radian"></a>
 ##### `boundRadian`
@@ -5853,6 +5865,8 @@ static boundValue(val: number, min: number, max: number): number
 ```
 
 Different from [`Num.clamp`](#num-num-static-clamp) in that the value out-of-bound will be "looped back" to the other end.
+Endpoints may be reversed. The lower endpoint is included and the upper is excluded;
+equal endpoints return that endpoint.
 
 **Parameters**
 
@@ -5966,6 +5980,8 @@ static normalizeValue(n: number, a: number, b: number): number
 ```
 
 Normalize a value within a range.
+Reversed endpoints are reordered from low to high, unlike `mapToRange`, which
+preserves the direction of its source and target ranges.
 
 **Parameters**
 
@@ -6087,7 +6103,7 @@ static generator: any
 <a id="num-range"></a>
 ### `Range`
 
-**Kind:** Class · **Source:** [`src/Num.ts:974`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L974)
+**Kind:** Class · **Source:** [`src/Num.ts:982`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L982)
 
 Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension.
 It also provides convenient functions such as mapping the Group to another range. This class may be useful for visualizing data in charts.
@@ -6192,7 +6208,7 @@ Create a number of evenly spaced "ticks" that span this Range's min and max valu
 <a id="num-shaping"></a>
 ### `Shaping`
 
-**Kind:** Class · **Source:** [`src/Num.ts:576`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L576)
+**Kind:** Class · **Source:** [`src/Num.ts:584`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L584)
 
 Shaping provides shaping functions to interpolate a value. These are useful for easing and transitions.
 
@@ -6700,7 +6716,7 @@ Convert any shaping functions into a series of steps.
 <a id="op-circle"></a>
 ### `Circle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:684`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L684)
+**Kind:** Class · **Source:** [`src/Op.ts:722`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L722)
 
 Circle class provides static functions to create and operate on circles. A circle is usually represented as a Group of 2 Pts, where the first Pt specifies the center, and the second Pt specifies the radius.
 To move a circle without changing its radius, move only its center, eg `circle[0].to(20, 20)`. Group transforms such as `circle.moveTo(20, 20)` affect both Pts, including the radius.
@@ -6890,7 +6906,7 @@ Check if a point is within a circle.
 <a id="op-curve"></a>
 ### `Curve`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1823`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1823)
+**Kind:** Class · **Source:** [`src/Op.ts:1887`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1887)
 
 Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -7215,7 +7231,7 @@ Get a precalculated coefficients per step.
 <a id="op-line"></a>
 ### `Line`
 
-**Kind:** Class · **Source:** [`src/Op.ts:27`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L27)
+**Kind:** Class · **Source:** [`src/Op.ts:28`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L28)
 
 Line class provides static functions to create and operate on lines. A line is usually represented as a Group of 2 Pts.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -7362,6 +7378,8 @@ static intersectLine2D(la: PtIterable, lb: PtIterable): Pt | undefined
 ```
 
 Given two line segemnts, find their intersection point if any.
+Collinear overlaps return the lexicographically smallest shared endpoint,
+independent of argument order and segment direction.
 
 **Parameters**
 
@@ -7595,7 +7613,7 @@ Convert this line to a new rectangle representation.
 <a id="op-path"></a>
 ### `Path`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1743`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1743)
+**Kind:** Class · **Source:** [`src/Op.ts:1807`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1807)
 
 Path class provides static functions to combine polygons with boolean operations:
 unite, intersect, exclude, subtract the shapes in front or behind, divide into faces, or crop by the top shape.
@@ -7778,7 +7796,7 @@ form.fillOnly("#f03").compound( Path.unite( [star, disc] ) )
 <a id="op-polygon"></a>
 ### `Polygon`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1068`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1068)
+**Kind:** Class · **Source:** [`src/Op.ts:1106`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1106)
 
 Polygon class provides static functions to create and operate on polygons. A polygon is usually represented as a Group of 3 or more Pts.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -7865,7 +7883,7 @@ Get a convex hull of a set of points, using Melkman's algorithm. ([Reference](ht
 **Parameters**
 
 - `pts` (`PtLikeIterable`) — a Group or an Iterable<PtLike>
-- `sorted` (`boolean`; default `false`) — a boolean value to indicate if the group is pre-sorted by x position. Default is false.
+- `sorted` (`boolean`; default `false`) — a boolean value to indicate if the group is pre-sorted by x position. Default is false. Exact duplicates and collinear interior points are omitted. For collinear input with at least three points, returns the distinct endpoints (one point if all coincide).
 
 **Returns:** a group of Pt that defines the convex hull polygon
 
@@ -8110,7 +8128,7 @@ Get a bounding box for each polygon group, as well as a union bounding-box for a
 <a id="op-rectangle"></a>
 ### `Rectangle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:425`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L425)
+**Kind:** Class · **Source:** [`src/Op.ts:463`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L463)
 
 Rectangle class provides static functions to create and operate on rectangles. A rectangle is usually represented as a Group of 2 Pts, marking the top-left and bottom-right corners of the rectangle.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -8394,7 +8412,7 @@ Check if a point is within a rectangle.
 <a id="op-triangle"></a>
 ### `Triangle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:907`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L907)
+**Kind:** Class · **Source:** [`src/Op.ts:945`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L945)
 
 Triangle class provides static functions to create and operate on trianges. A triange is a polygon represented as a Group of 3 Pts.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -8728,7 +8746,7 @@ Check and respond to collisions between this body and a particle.
 solveEdges(dt: number, iterations: number = 1, substeps: number = 1): this
 ```
 
-Solve all edge constraints for one substep in XPBD form. A link's `stiff` value is a
+Solve all edge constraints for one substep by position projection. A link's `stiff` value is a
 geometric knob: it is the fraction of the remaining constraint violation resolved per
 update, independent of the particles' masses and of the substep/iteration counts
 (per Müller et al. 2007, the per-pass fraction is `1-(1-stiff)^(1/passes)`), and
@@ -9306,7 +9324,7 @@ Static function to calculate edge constraints between 2 particles.
 <a id="play-sound"></a>
 ### `Sound`
 
-**Kind:** Class · **Source:** [`src/Play.ts:206`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L206)
+**Kind:** Class · **Source:** [`src/Play.ts:224`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L224)
 
 Sound class simplifies common tasks like audio inputs and visualizations using a subset of Web Audio API. It can be used with other audio libraries like tone.js, and extended to support additional web audio functions. See [the guide](https://ptsjs.org/guide/Sound-0800.html) to get started.
 
@@ -9457,7 +9475,7 @@ get volume(): number
 set volume(v: number): void
 ```
 
-Get and set the volume of this sound. Default is 1. Values above 1 amplify the sound. Can be set before or during playback.
+Get and set the volume of this sound. Default is 1. Values above 1 amplify the sound. Can be set before or during playback. Changes during playback ramp over 10 ms to avoid clicks.
 
 #### Methods
 
@@ -9589,6 +9607,8 @@ start(timeAt: number = 0): this
 
 Start playing. Internally this connects the `AudioNode` to `AudioContext`'s destination.
 Calling `start( timeAt )` while a file or buffer sound is playing seeks to that time; a generated sound that is already playing is unaffected.
+An input whose microphone tracks were stopped cannot restart. This warns and
+leaves `playing` false; acquire a new stream with `Sound.input()` instead.
 
 **Parameters**
 
@@ -9601,7 +9621,9 @@ Calling `start( timeAt )` while a file or buffer sound is playing seeks to that 
 stop(): this
 ```
 
-Stop playing. Internally this also disconnects the `AudioNode` from `AudioContext`'s destination. Calling `stop` when the sound is not playing has no effect.
+Stop playing with a 10 ms fade, then stop/disconnect the source. `playing` becomes
+false immediately. Restarting during the fade restores volume; replacement one-shot
+sources start at the fade boundary. Calling `stop` while idle has no effect.
 
 <a id="play-sound-time-domain"></a>
 ##### `timeDomain`
@@ -9766,7 +9788,7 @@ Analyzer if any
 <a id="play-tempo"></a>
 ### `Tempo`
 
-**Kind:** Class · **Source:** [`src/Play.ts:19`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L19)
+**Kind:** Class · **Source:** [`src/Play.ts:20`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L20)
 
 **Implements:** `IPlayer`
 
@@ -9901,6 +9923,8 @@ track(time: number): void
 
 Usually you can add a tempo instance to a space via [`Space.add`](#space-space-add) and it will track time automatically.
 But if necessary, you can track time manually via this function.
+After a stall, skips missed periods and invokes each listener once at its
+current count and phase, preserving the rhythm's original period boundaries.
 
 **Parameters**
 
@@ -9938,7 +9962,7 @@ animateID: string
 <a id="pt-bound"></a>
 ### `Bound`
 
-**Kind:** Class · **Source:** [`src/Pt.ts:1060`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L1060)
+**Kind:** Class · **Source:** [`src/Pt.ts:1076`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L1076)
 
 **Extends:** `Group`
 
@@ -10149,7 +10173,7 @@ Create a Bound from a Group or an array of Pts
 <a id="pt-group"></a>
 ### `Group`
 
-**Kind:** Class · **Source:** [`src/Pt.ts:570`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L570)
+**Kind:** Class · **Source:** [`src/Pt.ts:586`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L586)
 
 **Extends:** `Array`
 
@@ -10738,7 +10762,7 @@ See [Pt guide](https://ptsjs.org/guide/Pt-0200.html) for details.
 ##### Constructor
 
 ```ts
-new Pt(args: (number | number[] | Float32Array | IPt)[]): Pt
+new Pt(args: (number | ArrayBufferLike | number[] | IPt | Float32Array)[]): Pt
 ```
 
 Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].
@@ -10746,7 +10770,7 @@ Note that `new Pt(3)` will only instantiate Pt with length of 3 (ie, same as `ne
 
 **Parameters**
 
-- `args` (`(number | number[] | Float32Array | IPt)[]`) — a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
+- `args` (`(number | ArrayBufferLike | number[] | IPt | Float32Array)[]`) — a list of numeric parameters, an array of numbers, an object with {x,y,z,w} properties, or a buffer with optional byte offset and length (a shared view)
 
 **Example**
 
@@ -11957,16 +11981,16 @@ players: ISpacePlayers
 **Kind:** Class · **Source:** [`src/Svg.ts:147`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L147)
 
 **`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that
-[`CanvasForm`](#canvas-canvasform) draws through, and renders it as SVG. Consecutive shapes that share
-paint state are merged into single `<path>` elements ("style runs"), so the DOM cost per
-frame is proportional to the number of style changes, not the number of shapes. This is
-what lets sketches using the supported subset run unchanged on canvas and SVG.
+[`CanvasForm`](#canvas-canvasform) draws through, and renders it as SVG. Filled and translucent shapes
+use separate elements so overlaps composite independently. Consecutive opaque solid
+strokes with matching state may share a `<path>` element (a "style run").
 
 Capability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,
 `clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so
-`textBox` layout matches canvas exactly. When shapes with both fill and stroke are merged,
-all fills in a run paint before its strokes — visible only for overlapping same-styled
-shapes.
+`textBox` layout matches canvas exactly.
+Drawing must occur in an animate callback (or be committed explicitly on this context).
+`SVGSpace.refresh(false)` preserves the last nonempty frame; it does not accumulate
+trails. Draws in action handlers are discarded at the next frame's start.
 
 **Writing your own renderer**: this class is the reference implementation of the rendering
 contract — any object implementing the same context surface can be handed to
@@ -12437,7 +12461,7 @@ textBaseline: string
 <a id="svg-svgform"></a>
 ### `SVGForm`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:986`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L986)
+**Kind:** Class · **Source:** [`src/Svg.ts:1004`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L1004)
 
 **Extends:** `CanvasForm`
 
@@ -13206,7 +13230,7 @@ A static function to draw a text element.
 <a id="svg-svgspace"></a>
 ### `SVGSpace`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:725`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L725)
+**Kind:** Class · **Source:** [`src/Svg.ts:738`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L738)
 
 **Extends:** `DOMSpace`
 
@@ -13323,6 +13347,9 @@ refresh(b: boolean): this
 ```
 
 Set whether the rendering should be repainted on each frame.
+With `false`, empty frames preserve the last nonempty frame. New nonempty frames
+replace it: canvas-style accumulation and drawing from action handlers are unsupported.
+Store input in action handlers and redraw it in an animate callback, or use CanvasSpace.
 
 **Parameters**
 
@@ -13368,6 +13395,8 @@ removeAll(): this
 Remove all items from this Space. This clears the contents of the space's
 `<svg>` element but never touches its container, so the space keeps
 rendering after items are re-added.
+This includes user-supplied SVG children. Use `dispose()` to remove only
+elements managed by this space while preserving other SVG content.
 
 <a id="svg-svgspace-resize"></a>
 ##### `resize`

@@ -284,6 +284,8 @@ declare class UIDragger extends UIButton {
   private _upHoldID;
   private _outHoldID;
   private _lastMoveEvent;
+  private _dragPointer;
+  private _ownsDrag;
   /**
    * Create a dragger which has all the states in UIButton, with additional "dragging" (a boolean indicating whether it's currently being dragged) and "offset" (a Pt representing the offset between this UI's position and the pointer's position when dragged) states. (See [`UI.state`](#link)) You may also create a new UIDragger using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).
    * @param group a Group or an Iterable<PtLike> that defines the UI's appearance
@@ -584,9 +586,9 @@ declare class Pt extends Float32Array implements IPt, Iterable<number> {
    * Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].
    * Note that `new Pt(3)` will only instantiate Pt with length of 3 (ie, same as `new Float32Array(3)` ). If you need a Pt with 1 dimension of value 3, use `new Pt([3])`.
    * @example `new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`
-   * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
+   * @param args a list of numeric parameters, an array of numbers, an object with {x,y,z,w} properties, or a buffer with optional byte offset and length (a shared view)
    */
-  constructor(...args: Array<number | number[] | IPt | Float32Array>);
+  constructor(...args: Array<number | number[] | IPt | Float32Array | ArrayBufferLike>);
   /**
    * Create an n-dimensional Pt with either default value or random values.
    * @param dimensions number of dimensions
@@ -1557,6 +1559,8 @@ declare abstract class Space {
 declare abstract class MultiTouchSpace extends Space {
   protected _pressed: boolean;
   protected _dragged: boolean;
+  private _pressId;
+  private _pressIsTouch;
   protected _hasMouse: boolean;
   protected _hasTouch: boolean;
   protected _hasKeyboard: boolean;
@@ -1656,8 +1660,10 @@ declare abstract class MultiTouchSpace extends Space {
    * @param evt mouse or touch event
    * @see [`Space.add`](#link)
    */
-  protected _mouseAction(type: string, evt: MouseEvent | TouchEvent | PointerEvent): void;
+  protected _mouseAction(type: string, evt: MouseEvent | TouchEvent | PointerEvent, touchId?: number | null): void;
   private _isTouchHandled;
+  private _ownsPress;
+  private _releasePress;
   /**
    * MouseDown handler.
    * @param evt
@@ -2044,6 +2050,8 @@ declare class Img {
   sync(): Promise<Img>;
   /**
    * Get the RGBA values of a pixel in the image
+   * After drawing through `getForm()` or directly on the canvas, call `loadPixels()`
+   * to refresh the pixel cache before reading the updated pixels.
    * @param p position of the pixel
    * @param rescale Specify if the pixel position should be scaled. Usually use rescale when tracking image and don't rescale when tracking canvas. You may also set a custom scale value.
    * @returns [R,G,B,A] values of the pixel at the specific position
@@ -2120,6 +2128,8 @@ declare class Img {
   toBlob(): Promise<Blob>;
   /**
    * Get a CanvasForm for drawing on the internal canvas if this Img is editable
+   * Drawing through this form does not refresh the pixel cache. Call `loadPixels()`
+   * afterwards before reading the updated image through `pixel()`.
    */
   getForm(): CanvasForm | undefined;
   /**
@@ -2183,6 +2193,7 @@ declare class CanvasSpace extends MultiTouchSpace {
   protected _resizeObserver: ResizeObserver | undefined;
   protected _autoResize: boolean;
   protected _initialResize: boolean;
+  private _hasPlayed;
   private _readyObserver;
   private _readyTimer;
   private _disposed;
@@ -2321,9 +2332,8 @@ declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends Visual
    */
   static resetStyleCache(ctx: RenderingContext2D | object): void;
   /**
-   * Write a context style property only when it differs from the last value
-   * written to this context. After setting style properties directly on
-   * [`CanvasForm.ctx`](#link), call [`CanvasForm.reset`](#link) to resync.
+   * Skip a repeated style write only while the context still holds its last
+   * read-back value (browsers can normalize CSS strings on assignment).
    */
   protected _set(key: string, value: unknown): void;
   /**
@@ -2344,6 +2354,8 @@ declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends Visual
   get space(): S;
   /**
    * Get the rendering context of canvas to perform other canvas functions.
+   * Form style setters detect direct context writes and `save()`/`restore()`.
+   * Call `form.reset()` to reapply all the form's saved styles at once.
    * @example `form.ctx.clip()`
    */
   get ctx(): RenderingContext2D;
@@ -3209,6 +3221,8 @@ declare class Num {
   static clamp(val: number, min: number, max: number): number;
   /**
    * Different from [`Num.clamp`](#link) in that the value out-of-bound will be "looped back" to the other end.
+   * Endpoints may be reversed. The lower endpoint is included and the upper is excluded;
+   * equal endpoints return that endpoint.
    * @param val value to bound
    * @param min min value
    * @param max max value
@@ -3236,6 +3250,8 @@ declare class Num {
   static randomPt(a: PtLike, b?: PtLike): Pt;
   /**
    * Normalize a value within a range.
+   * Reversed endpoints are reordered from low to high, unlike `mapToRange`, which
+   * preserves the direction of its source and target ranges.
    * @param n the value to normalize
    * @param a range value 1
    * @param b range value 1
@@ -3314,7 +3330,7 @@ declare class Geom {
   /**
    * Get a bounding box for a set of Pts.
    * @param pts a Group or an Iterable<Pt>
-   * @return a Group of two Pts, representing the top-left and bottom-right corners
+   * @return a Group of two Pts, representing the top-left and bottom-right corners, or an empty Group for empty input
    */
   static boundingBox(pts: PtIterable): Group;
   /**
@@ -3740,6 +3756,8 @@ declare class Line {
   static intersectRay2D(la: PtIterable, lb: PtIterable): Pt | undefined;
   /**
    * Given two line segemnts, find their intersection point if any.
+   * Collinear overlaps return the lexicographically smallest shared endpoint,
+   * independent of argument order and segment direction.
    * @param la a Group or an Iterable<Pt> with 2 Pt representing a line segment
    * @param lb a Group or an Iterable<Pt> with 2 Pt representing a line segment
    * @returns an intersection Pt or undefined if no intersection
@@ -4156,6 +4174,8 @@ declare class Polygon {
    * Get a convex hull of a set of points, using Melkman's algorithm. ([Reference](http://geomalgorithms.com/a12-_hull-3.html)).
    * @param pts a Group or an Iterable<PtLike>
    * @param sorted a boolean value to indicate if the group is pre-sorted by x position. Default is false.
+   * Exact duplicates and collinear interior points are omitted. For collinear input
+   * with at least three points, returns the distinct endpoints (one point if all coincide).
    * @returns a group of Pt that defines the convex hull polygon
    */
   static convexHull(pts: PtLikeIterable, sorted?: boolean): Group;
@@ -4456,6 +4476,8 @@ declare class Curve {
 /**
  * Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.
  * Convert non-RGB colors to RGB before using `.hex`, `.rgb`, or `.rgba` for rendering. These getters format the channels; they don't convert between color spaces.
+ * LAB and LCH use the D50 reference white, as in CSS `lab()` and `lch()`.
+ * XYZ and LUV use D65; conversions between XYZ and LAB apply Bradford chromatic adaptation.
  * @example
  * ```
  * const color = Color.hsl(268, 0.37, 0.51);
@@ -4505,12 +4527,12 @@ declare class Color extends Pt {
    */
   static hsb(...args: any[]): Color;
   /**
-   * Create LAB Color. LAB color ranges are (0...100, -128...127, -128...127) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
+   * Create D50 LAB Color, using the same reference white as CSS `lab()`. LAB color ranges are (0...100, -128...127, -128...127) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static lab(...args: any[]): Color;
   /**
-   * Create LCH Color. LCH color ranges are (0...100, 0...100, 0...360) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
+   * Create D50 LCH Color, using the same reference white as CSS `lch()`. LCH color ranges are (0...100, 0...100, 0...360) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static lch(...args: any[]): Color;
@@ -4643,6 +4665,8 @@ declare class Color extends Pt {
   set normalized(b: boolean);
   /**
    * Normalize the color values to between 0 to 1, or revert it back to the min/max values in current color mode.
+   * Uses the nominal `Color.ranges` without clamping. In particular LCH chroma uses
+   * 0–100 for compatibility, although valid colors can exceed 100 (and normalize above 1).
    * @param toNorm a boolean value specifying whether to normalize (`true`) or revert (`false`)
    */
   normalize(toNorm?: boolean): Color;
@@ -4668,6 +4692,7 @@ declare class Color extends Pt {
   static RGBtoHSL(rgb: Color, normalizedInput?: boolean, normalizedOutput?: boolean): Color;
   /**
    * A static function to convert HSL to RGB.
+   * Full-range output is rounded to integer RGB channels; normalized output retains fractions.
    * @param hsl a HSL Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -4684,6 +4709,7 @@ declare class Color extends Pt {
   static RGBtoHSB(rgb: Color, normalizedInput?: boolean, normalizedOutput?: boolean): Color;
   /**
    * A static function to convert HSB to RGB.
+   * Full-range output is rounded to integer RGB channels; normalized output retains fractions.
    * @param hsb a HSB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -4755,7 +4781,7 @@ declare class Color extends Pt {
    */
   static XYZtoRGB(xyz: Color, normalizedInput?: boolean, normalizedOutput?: boolean): Color;
   /**
-   * A static function to convert XYZ to LAB.
+   * Convert D65 XYZ to D50 LAB (CSS Lab), with Bradford chromatic adaptation.
    * @param xyz a XYZ Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -4763,7 +4789,7 @@ declare class Color extends Pt {
    */
   static XYZtoLAB(xyz: Color, normalizedInput?: boolean, normalizedOutput?: boolean): Color;
   /**
-   * A static function to convert LAB to XYZ.
+   * Convert D50 LAB (CSS Lab) to D65 XYZ, with inverse Bradford chromatic adaptation.
    * @param lab a LAB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -5472,16 +5498,16 @@ type SVGRun = {
 };
 /**
  * **`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that
- * [`CanvasForm`](#link) draws through, and renders it as SVG. Consecutive shapes that share
- * paint state are merged into single `<path>` elements ("style runs"), so the DOM cost per
- * frame is proportional to the number of style changes, not the number of shapes. This is
- * what lets sketches using the supported subset run unchanged on canvas and SVG.
+ * [`CanvasForm`](#link) draws through, and renders it as SVG. Filled and translucent shapes
+ * use separate elements so overlaps composite independently. Consecutive opaque solid
+ * strokes with matching state may share a `<path>` element (a "style run").
  *
  * Capability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,
  * `clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so
- * `textBox` layout matches canvas exactly. When shapes with both fill and stroke are merged,
- * all fills in a run paint before its strokes — visible only for overlapping same-styled
- * shapes.
+ * `textBox` layout matches canvas exactly.
+ * Drawing must occur in an animate callback (or be committed explicitly on this context).
+ * `SVGSpace.refresh(false)` preserves the last nonempty frame; it does not accumulate
+ * trails. Draws in action handlers are discarded at the next frame's start.
  *
  * **Writing your own renderer**: this class is the reference implementation of the rendering
  * contract — any object implementing the same context surface can be handed to
@@ -5646,6 +5672,9 @@ declare class SVGSpace extends DOMSpace {
   protected playItems(time: number): void;
   /**
    * Set whether the rendering should be repainted on each frame.
+   * With `false`, empty frames preserve the last nonempty frame. New nonempty frames
+   * replace it: canvas-style accumulation and drawing from action handlers are unsupported.
+   * Store input in action handlers and redraw it in an animate callback, or use CanvasSpace.
    * @param b a boolean value to set whether to repaint each frame
    */
   refresh(b: boolean): this;
@@ -5671,6 +5700,8 @@ declare class SVGSpace extends DOMSpace {
    * Remove all items from this Space. This clears the contents of the space's
    * `<svg>` element but never touches its container, so the space keeps
    * rendering after items are re-added.
+   * This includes user-supplied SVG children. Use `dispose()` to remove only
+   * elements managed by this space while preserving other SVG content.
    */
   removeAll(): this;
   /**
@@ -6245,7 +6276,6 @@ declare class Body extends Group {
     [index: string]: Particle;
   };
   protected _mass: number;
-  protected _lambdas: Float32Array;
   /**
    * Create an empty Body, this is usually followed by [`Body.init`](#link) to populate the Body. Alternatively, use static function [`Body.fromGroup`](#link) to create and initate a body directly.
    */
@@ -6295,7 +6325,7 @@ declare class Body extends Group {
    */
   processEdges(): void;
   /**
-   * Solve all edge constraints for one substep in XPBD form. A link's `stiff` value is a
+   * Solve all edge constraints for one substep by position projection. A link's `stiff` value is a
    * geometric knob: it is the fraction of the remaining constraint violation resolved per
    * update, independent of the particles' masses and of the substep/iteration counts
    * (per Müller et al. 2007, the per-pass fraction is `1-(1-stiff)^(1/passes)`), and
@@ -6366,6 +6396,8 @@ declare class Tempo implements IPlayer {
   /**
    * Usually you can add a tempo instance to a space via [`Space.add`](#link) and it will track time automatically.
    * But if necessary, you can track time manually via this function.
+   * After a stall, skips missed periods and invokes each listener once at its
+   * current count and phase, preserving the rhythm's original period boundaries.
    * @param time current time in milliseconds
    */
   track(time: number): void;
@@ -6417,6 +6449,11 @@ declare class Sound {
   protected _connected: AudioNode[];
   protected _bufferPlayed: boolean;
   protected _generated: boolean;
+  private _inputStopped;
+  private _fadeEnd;
+  private _retiring;
+  private _audioTimer;
+  private _finishAudio;
   protected static _sharedContext: AudioContext;
   /**
    * Construct a `Sound` instance. Usually, it's more convenient to use one of the static methods like [`Sound.load`](#function_load) or [`Sound.from`](#function_from).
@@ -6529,7 +6566,7 @@ declare class Sound {
   get frequency(): number;
   set frequency(f: number);
   /**
-   * Get and set the volume of this sound. Default is 1. Values above 1 amplify the sound. Can be set before or during playback.
+   * Get and set the volume of this sound. Default is 1. Values above 1 amplify the sound. Can be set before or during playback. Changes during playback ramp over 10 ms to avoid clicks.
    */
   get volume(): number;
   set volume(v: number);
@@ -6593,14 +6630,22 @@ declare class Sound {
    */
   reset(): this;
   protected _getGain(): GainNode;
+  private _rampVolume;
+  private _cancelAudioTimer;
+  private _afterFade;
+  private _retireSource;
   /**
    * Start playing. Internally this connects the `AudioNode` to `AudioContext`'s destination.
    * Calling `start( timeAt )` while a file or buffer sound is playing seeks to that time; a generated sound that is already playing is unaffected.
+   * An input whose microphone tracks were stopped cannot restart. This warns and
+   * leaves `playing` false; acquire a new stream with `Sound.input()` instead.
    * @param timeAt optional parameter to play from a specific time, in seconds
    */
   start(timeAt?: number): this;
   /**
-   * Stop playing. Internally this also disconnects the `AudioNode` from `AudioContext`'s destination. Calling `stop` when the sound is not playing has no effect.
+   * Stop playing with a 10 ms fade, then stop/disconnect the source. `playing` becomes
+   * false immediately. Restarting during the fade restores volume; replacement one-shot
+   * sources start at the fade boundary. Calling `stop` while idle has no effect.
    */
   stop(): this;
   /**

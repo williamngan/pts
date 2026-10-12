@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Svg.ts",
-      725,
+      738,
       13
     ]
   ],
@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Svg.ts",
-          737,
+          750,
           2
         ]
       ],
@@ -168,7 +168,7 @@
       "source": [
         [
           "src/Svg.ts",
-          772,
+          785,
           6
         ]
       ],
@@ -278,7 +278,7 @@
       "source": [
         [
           "src/Space.ts",
-          407,
+          409,
           13
         ]
       ],
@@ -383,7 +383,7 @@
       "source": [
         [
           "src/Space.ts",
-          420,
+          422,
           2
         ]
       ],
@@ -430,7 +430,7 @@
       "source": [
         [
           "src/Space.ts",
-          447,
+          449,
           2
         ]
       ],
@@ -471,7 +471,7 @@
       "source": [
         [
           "src/Space.ts",
-          558,
+          560,
           2
         ]
       ],
@@ -506,7 +506,7 @@
       "source": [
         [
           "src/Space.ts",
-          467,
+          469,
           2
         ]
       ],
@@ -546,7 +546,7 @@
       "source": [
         [
           "src/Space.ts",
-          509,
+          511,
           2
         ]
       ],
@@ -592,7 +592,7 @@
       "source": [
         [
           "src/Svg.ts",
-          805,
+          818,
           2
         ]
       ],
@@ -621,7 +621,7 @@
       "source": [
         [
           "src/Svg.ts",
-          952,
+          970,
           2
         ]
       ],
@@ -643,7 +643,7 @@
       "source": [
         [
           "src/Svg.ts",
-          765,
+          778,
           2
         ]
       ],
@@ -757,7 +757,7 @@
       "source": [
         [
           "src/Svg.ts",
-          834,
+          847,
           12
         ]
       ],
@@ -817,7 +817,7 @@
       "source": [
         [
           "src/Svg.ts",
-          848,
+          864,
           2
         ]
       ],
@@ -826,7 +826,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Set whether the rendering should be repainted on each frame.",
+          "comment": "Set whether the rendering should be repainted on each frame.\nWith `false`, empty frames preserve the last nonempty frame. New nonempty frames\nreplace it: canvas-style accumulation and drawing from action handlers are unsupported.\nStore input in action handlers and redraw it in an animate callback, or use CanvasSpace.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
@@ -846,7 +846,7 @@
       "source": [
         [
           "src/Svg.ts",
-          777,
+          790,
           2
         ]
       ],
@@ -875,7 +875,7 @@
       "source": [
         [
           "src/Svg.ts",
-          924,
+          940,
           2
         ]
       ],
@@ -904,7 +904,7 @@
       "source": [
         [
           "src/Svg.ts",
-          939,
+          957,
           2
         ]
       ],
@@ -913,7 +913,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Remove all items from this Space. This clears the contents of the space's\n`<svg>` element but never touches its container, so the space keeps\nrendering after items are re-added.",
+          "comment": "Remove all items from this Space. This clears the contents of the space's\n`<svg>` element but never touches its container, so the space keeps\nrendering after items are re-added.\nThis includes user-supplied SVG children. Use `dispose()` to remove only\nelements managed by this space while preserving other SVG content.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [],
@@ -979,7 +979,7 @@
       "source": [
         [
           "src/Svg.ts",
-          787,
+          800,
           2
         ]
       ],
@@ -1175,7 +1175,7 @@
       "source": [
         [
           "src/Svg.ts",
-          858,
+          874,
           2
         ]
       ],
@@ -1204,7 +1204,7 @@
       "source": [
         [
           "src/Space.ts",
-          683,
+          687,
           2
         ]
       ],
@@ -1239,7 +1239,7 @@
       "source": [
         [
           "src/Space.ts",
-          609,
+          613,
           2
         ]
       ],
@@ -1268,7 +1268,7 @@
       "source": [
         [
           "src/Space.ts",
-          437,
+          439,
           2
         ]
       ],
@@ -1315,7 +1315,7 @@
       "source": [
         [
           "src/Space.ts",
-          453,
+          455,
           2
         ]
       ],
@@ -1356,7 +1356,7 @@
       "source": [
         [
           "src/Space.ts",
-          630,
+          634,
           2
         ]
       ],
@@ -1501,7 +1501,7 @@
       "source": [
         [
           "src/Svg.ts",
-          898,
+          914,
           9
         ]
       ],
