@@ -112,16 +112,13 @@ const _svgWarned: { [k: string]: boolean } = {};
 
 /**
  * **`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that
- * [`CanvasForm`](#link) draws through, and renders it as SVG. Consecutive shapes that share
- * paint state are merged into single `<path>` elements ("style runs"), so the DOM cost per
- * frame is proportional to the number of style changes, not the number of shapes. This is
- * what lets sketches using the supported subset run unchanged on canvas and SVG.
+ * [`CanvasForm`](#link) draws through, and renders it as SVG. Filled and translucent shapes
+ * use separate elements so overlaps composite independently. Consecutive opaque solid
+ * strokes with matching state may share a `<path>` element (a "style run").
  *
  * Capability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,
  * `clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so
- * `textBox` layout matches canvas exactly. When shapes with both fill and stroke are merged,
- * all fills in a run paint before its strokes — visible only for overlapping same-styled
- * shapes.
+ * `textBox` layout matches canvas exactly.
  *
  * **Writing your own renderer**: this class is the reference implementation of the rendering
  * contract — any object implementing the same context surface can be handed to
@@ -684,7 +681,20 @@ export class SVGContext2D {
     }
 
     const prev = this._runs[this._runs.length - 1];
-    if (prev && prev.tag === "path" && sameRunStyle(prev.attrs, attrs)) {
+    // Only batch known-opaque, stroke-only source-over paint. Gradients, CSS
+    // variables/classes, alpha colors, fills and blends need independent compositing.
+    const mergeable =
+      this._shapeFill === null &&
+      this._shapeAlpha === 1 &&
+      this._shapeBlend === "source-over" &&
+      !this._shapeClass &&
+      /^#(?:[\da-f]{3}|[\da-f]{6})$/i.test(this._shapeStroke || "");
+    if (
+      mergeable &&
+      prev &&
+      prev.tag === "path" &&
+      sameRunStyle(prev.attrs, attrs)
+    ) {
       prev.shapeEnds!.push((prev.attrs.d as string).length);
       prev.attrs.d = (prev.attrs.d as string) + this._d;
     } else {

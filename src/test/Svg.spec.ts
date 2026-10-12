@@ -31,9 +31,9 @@ describe("SVGContext2D surface", () => {
     }
   });
 
-  it("merges consecutive same-styled shapes into one path run", () => {
+  it("merges consecutive opaque stroke-only shapes into one path run", () => {
     const { ctx, form } = makeForm();
-    form.fill("#123").stroke("#456");
+    form.strokeOnly("#456");
     form
       .point([10, 10], 2)
       .point([30, 10], 2)
@@ -45,6 +45,22 @@ describe("SVGContext2D surface", () => {
     const paths = ctx._runs.filter((r: any) => r.tag === "path");
     expect(paths).toHaveLength(1);
     expect(paths[0].shapeEnds).toHaveLength(2); // three shapes, two boundaries
+  });
+
+  it("keeps filled, translucent, gradient, classed and blended shapes separate", () => {
+    for (const setup of [
+      (f: CanvasForm) => f.fillOnly("#123"),
+      (f: CanvasForm) => f.strokeOnly("rgba(0,0,0,0.5)"),
+      (f: CanvasForm) => f.strokeOnly("#123").alpha(0.5),
+      (f: CanvasForm) => f.strokeOnly("#123").composite("multiply"),
+      (f: CanvasForm) => f.fill("#123").stroke("#456"),
+    ]) {
+      const { ctx, form } = makeForm();
+      setup(form);
+      form.point([10, 10], 5).point([12, 10], 5);
+      ctx._flushShape();
+      expect(ctx.runs).toHaveLength(2);
+    }
   });
 
   it("splits runs on any paint state change", () => {

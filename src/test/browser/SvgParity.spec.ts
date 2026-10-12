@@ -66,6 +66,48 @@ async function ready(space: {
 }
 
 describe("canvas-svg rendering parity", () => {
+  it("composites overlapping fills independently, including reversed winding", async () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = W;
+    canvas.height = H;
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("width", `${W}`);
+    svg.setAttribute("height", `${H}`);
+    svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    const ctx = new SVGContext2D(svg);
+    for (const style of ["rgba(0,0,0,0.5)", "#000000"]) {
+      ctx.beginFrame();
+      for (const f of [
+        new CanvasForm(canvas.getContext("2d")!),
+        new CanvasForm(ctx as any),
+      ]) {
+        f.alpha(1)
+          .fillOnly("#ffffff")
+          .rect([
+            [0, 0],
+            [W, H],
+          ]);
+        f.fillOnly(style).polygon([
+          [10, 10],
+          [70, 10],
+          [70, 70],
+          [10, 70],
+        ]);
+        f.polygon([
+          [40, 40],
+          [40, 100],
+          [100, 100],
+          [100, 40],
+        ]);
+      }
+      ctx.commitFrame();
+      const raster = await rasterize(svg.outerHTML);
+      const actual = raster.getContext("2d")!.getImageData(50, 50, 1, 1).data;
+      const expected = canvas.getContext("2d")!.getImageData(50, 50, 1, 1).data;
+      for (let i = 0; i < 4; i++)
+        expect(Math.abs(actual[i] - expected[i])).toBeLessThanOrEqual(1);
+    }
+  });
   it("revalidates form styles after direct writes and context restore", () => {
     const canvas = document.createElement("canvas").getContext("2d")!;
     const svg = new SVGContext2D(
@@ -167,7 +209,7 @@ describe("canvas-svg rendering parity", () => {
     const space = new SVGSpace(host);
     space.resize(Bound.fromGroup([new Pt(0, 0), new Pt(W, H)]));
     const form = space.getForm();
-    form.fillOnly("#f03");
+    form.strokeOnly("#f03");
     form.point([10, 10], 2).point([30, 10], 2).point([50, 10], 2);
     form.svgContext.commitFrame();
 

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Render SVG fills and translucent strokes independently so overlaps match canvas; retain batching for known-opaque solid strokes. SVGForm benchmarks now include frame reconciliation.
 - Guard DOM globals and support keyboard/pointer dispatch on non-DOM MultiTouchSpace event targets.
 - Repaint previously played, stopped CanvasSpaces after ResizeObserver resizing without scheduling a stop during initial setup.
 - Revalidate cached form styles against live canvas/SVG context state, including save/restore and direct dash changes.
