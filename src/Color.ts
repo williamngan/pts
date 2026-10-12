@@ -406,6 +406,8 @@ export class Color extends Pt {
 
   /**
    * Normalize the color values to between 0 to 1, or revert it back to the min/max values in current color mode.
+   * Uses the nominal `Color.ranges` without clamping. In particular LCH chroma uses
+   * 0–100 for compatibility, although valid colors can exceed 100 (and normalize above 1).
    * @param toNorm a boolean value specifying whether to normalize (`true`) or revert (`false`)
    */
   normalize(toNorm: boolean = true): Color {
