@@ -557,7 +557,9 @@ export abstract class MultiTouchSpace extends Space {
    */
   bindKeyboard(bind: boolean = true, customTarget?: EventTarget): this {
     if (bind) {
-      const target = customTarget || document;
+      const target =
+        customTarget ||
+        (typeof document !== "undefined" ? document : this._canvas);
       if (this._hasKeyboard) {
         if (this._keyboardTarget === target) return this;
         this.bindKeyboard(false);
@@ -709,7 +711,10 @@ export abstract class MultiTouchSpace extends Space {
     let px = 0,
       py = 0;
 
-    if (evt instanceof MouseEvent) {
+    if (
+      (typeof MouseEvent !== "undefined" && evt instanceof MouseEvent) ||
+      "clientX" in evt
+    ) {
       px = (evt.clientX - left) * scaleX;
       py = (evt.clientY - top) * scaleY;
     } else {
@@ -756,7 +761,7 @@ export abstract class MultiTouchSpace extends Space {
     this._mouseAction(UIA.down, evt);
     this._mouseAction(UIA.pointerdown, evt);
     this._pressed = true;
-    if (evt.target instanceof Element) {
+    if (typeof Element !== "undefined" && evt.target instanceof Element) {
       try {
         evt.target.setPointerCapture(evt.pointerId);
       } catch {
@@ -782,7 +787,9 @@ export abstract class MultiTouchSpace extends Space {
     this._pressed = false;
     this._dragged = false;
     if (
+      typeof PointerEvent !== "undefined" &&
       evt instanceof PointerEvent &&
+      typeof Element !== "undefined" &&
       evt.target instanceof Element &&
       evt.target.hasPointerCapture(evt.pointerId)
     ) {

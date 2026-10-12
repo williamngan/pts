@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Guard DOM globals and support keyboard/pointer dispatch on non-DOM MultiTouchSpace event targets.
 - Repaint previously played, stopped CanvasSpaces after ResizeObserver resizing without scheduling a stop during initial setup.
 - Revalidate cached form styles against live canvas/SVG context state, including save/restore and direct dash changes.
 - Correct soft-link stiffness for multiple solver iterations by removing accumulated multipliers; default one-iteration behavior is unchanged.
