@@ -28,6 +28,69 @@ afterEach(() => {
 });
 
 describe("Space animation loop", () => {
+  it.each([false, true])(
+    "keeps a drag owned by the first contact (touch=%s)",
+    async (touch) => {
+      const space = new CanvasSpace(host()).setup({ retina: false });
+      await ready(space);
+      space.bindMouse();
+      if (touch) space.bindTouch();
+      space.play(10);
+      const action = vi.fn();
+      space.add({ animate() {}, action });
+      const dragger = UIDragger.fromRectangle(
+        [
+          [0, 0],
+          [100, 80],
+        ],
+        {},
+      ) as UIDragger;
+      const drag = vi.fn(),
+        drop = vi.fn();
+      dragger.onDrag(drag);
+      dragger.onDrop(drop);
+      space.track(dragger);
+      const send = (type: string, id: number, x: number, ids: number[]) => {
+        if (touch) {
+          const contact = (n: number) =>
+            new Touch({
+              identifier: n,
+              target: space.element,
+              clientX: n === id ? x : 40,
+              clientY: 50,
+            });
+          space.element.dispatchEvent(
+            new TouchEvent(type, {
+              changedTouches: [contact(id)],
+              touches: ids.map(contact),
+            }),
+          );
+        } else
+          space.element.dispatchEvent(
+            new PointerEvent(type, { pointerId: id, clientX: x, clientY: 50 }),
+          );
+      };
+      const types = touch
+        ? ["touchstart", "touchmove", "touchend"]
+        : ["pointerdown", "pointermove", "pointerup"];
+      send(types[0], 1, 40, [1]);
+      send(types[1], 1, 45, [1]);
+      expect(drag).toHaveBeenCalledTimes(1);
+      send(types[0], 2, 80, [1, 2]);
+      send(types[1], 2, 85, [1, 2]);
+      send(types[2], 2, 85, [1]);
+      expect(drag).toHaveBeenCalledTimes(1);
+      expect(drop).not.toHaveBeenCalled();
+      expect(dragger.state("dragging")).toBe(true);
+      expect(action.mock.calls.map((c) => c[0])).toContain("up");
+      send(types[1], 1, 50, [1]);
+      expect(drag).toHaveBeenCalledTimes(2);
+      send(types[2], 1, 50, []);
+      expect(drop).toHaveBeenCalledOnce();
+      expect(dragger.state("dragging")).toBe(false);
+      space.dispose();
+    },
+  );
   it("keeps scheduling when the first real RAF timestamp is zero", async () => {
     const space = new CanvasSpace(host()).setup({ retina: false });
     await ready(space);

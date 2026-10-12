@@ -354,6 +354,8 @@ export abstract class MultiTouchSpace extends Space {
   // track mouse dragging
   protected _pressed = false;
   protected _dragged = false;
+  private _pressId: number | null = null;
+  private _pressIsTouch = false;
 
   protected _hasMouse = false;
   protected _hasTouch = false;
@@ -702,6 +704,7 @@ export abstract class MultiTouchSpace extends Space {
   protected _mouseAction(
     type: string,
     evt: MouseEvent | TouchEvent | PointerEvent,
+    touchId?: number | null,
   ) {
     if (!this.isPlaying) return;
 
@@ -719,9 +722,11 @@ export abstract class MultiTouchSpace extends Space {
       py = (evt.clientY - top) * scaleY;
     } else {
       const touch =
-        evt.changedTouches && evt.changedTouches.length > 0
-          ? evt.changedTouches.item(0)
-          : null;
+        touchId != null
+          ? Array.from(evt.changedTouches).find((t) => t.identifier === touchId)
+          : evt.changedTouches && evt.changedTouches.length > 0
+            ? evt.changedTouches.item(0)
+            : null;
       if (touch) {
         px = (touch.clientX - left) * scaleX;
         py = (touch.clientY - top) * scaleY;
@@ -752,15 +757,34 @@ export abstract class MultiTouchSpace extends Space {
     );
   }
 
+  private _ownsPress(evt: PointerEvent | TouchEvent): boolean {
+    if (!this._pressed) return false;
+    return "changedTouches" in evt
+      ? this._pressIsTouch &&
+          Array.from(evt.changedTouches).some(
+            (t) => t.identifier === this._pressId,
+          )
+      : !this._pressIsTouch && evt.pointerId === this._pressId;
+  }
+
+  private _releasePress(): void {
+    this._pressed = this._dragged = false;
+    this._pressId = null;
+  }
+
   /**
    * MouseDown handler.
    * @param evt
    */
   protected _mouseDown(evt: PointerEvent) {
     if (this._isTouchHandled(evt)) return false;
+    if (!this._pressed) {
+      this._pressId = evt.pointerId;
+      this._pressIsTouch = false;
+      this._pressed = true;
+    }
     this._mouseAction(UIA.down, evt);
     this._mouseAction(UIA.pointerdown, evt);
-    this._pressed = true;
     if (typeof Element !== "undefined" && evt.target instanceof Element) {
       try {
         evt.target.setPointerCapture(evt.pointerId);
@@ -778,14 +802,19 @@ export abstract class MultiTouchSpace extends Space {
    */
   protected _mouseUp(evt: PointerEvent | TouchEvent) {
     if (this._isTouchHandled(evt)) return false;
-    this._mouseAction(UIA.pointerup, evt);
-    if (this._dragged) {
-      this._mouseAction(UIA.drop, evt);
+    const owns = this._ownsPress(evt);
+    const touchId = owns && this._pressIsTouch ? this._pressId : undefined;
+    this._mouseAction(UIA.pointerup, evt, touchId);
+    if (owns && this._dragged) {
+      this._mouseAction(UIA.drop, evt, touchId);
     } else {
-      this._mouseAction(UIA.up, evt);
+      this._mouseAction(UIA.up, evt, touchId);
     }
-    this._pressed = false;
-    this._dragged = false;
+    if (
+      owns ||
+      ("touches" in evt && evt.touches.length === 0 && this._pressIsTouch)
+    )
+      this._releasePress();
     if (
       typeof PointerEvent !== "undefined" &&
       evt instanceof PointerEvent &&
@@ -804,7 +833,7 @@ export abstract class MultiTouchSpace extends Space {
    */
   protected _mouseMove(evt: PointerEvent) {
     if (this._isTouchHandled(evt)) return false;
-    if (this._pressed) {
+    if (this._ownsPress(evt)) {
       this._dragged = true;
       this._mouseAction(UIA.drag, evt);
     } else {
@@ -829,10 +858,25 @@ export abstract class MultiTouchSpace extends Space {
    */
   protected _mouseOut(evt: PointerEvent | TouchEvent) {
     if (this._isTouchHandled(evt)) return false;
-    this._mouseAction(UIA.out, evt);
-    if (this._dragged) this._mouseAction(UIA.drop, evt);
-    this._pressed = false;
-    this._dragged = false;
+    this._mouseAction(
+      UIA.out,
+      evt,
+      this._ownsPress(evt) && this._pressIsTouch ? this._pressId : undefined,
+    );
+    if (this._ownsPress(evt)) {
+      if (this._dragged)
+        this._mouseAction(
+          UIA.drop,
+          evt,
+          this._pressIsTouch ? this._pressId : undefined,
+        );
+      this._releasePress();
+    } else if (
+      "touches" in evt &&
+      evt.touches.length === 0 &&
+      this._pressIsTouch
+    )
+      this._releasePress();
     return false;
   }
 
@@ -842,8 +886,6 @@ export abstract class MultiTouchSpace extends Space {
    */
   protected _mouseClick(evt: MouseEvent | TouchEvent) {
     this._mouseAction(UIA.click, evt);
-    this._pressed = false;
-    this._dragged = false;
     return false;
   }
 
@@ -861,10 +903,11 @@ export abstract class MultiTouchSpace extends Space {
    * @param evt
    */
   protected _touchMove(evt: TouchEvent) {
-    this._mouseAction(UIA.move, evt);
-    if (this._pressed) {
+    const owns = this._ownsPress(evt);
+    this._mouseAction(UIA.move, evt, owns ? this._pressId : undefined);
+    if (owns) {
       this._dragged = true;
-      this._mouseAction(UIA.drag, evt);
+      this._mouseAction(UIA.drag, evt, this._pressId);
     }
     // preventDefault is ignored (and logs an error) inside passive listeners
     if (!this._touchPassive) evt.preventDefault();
@@ -876,8 +919,13 @@ export abstract class MultiTouchSpace extends Space {
    * @param evt
    */
   protected _touchStart(evt: TouchEvent) {
+    if (!this._pressed && evt.changedTouches.length) {
+      this._pressId = evt.changedTouches.item(0)!.identifier;
+      this._pressIsTouch = true;
+      this._pressed = true;
+    }
     this._mouseAction(UIA.down, evt);
-    this._pressed = true;
+    this._mouseAction(UIA.pointerdown, evt);
     if (!this._touchPassive) evt.preventDefault();
     return false;
   }

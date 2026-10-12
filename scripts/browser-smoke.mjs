@@ -172,11 +172,22 @@ try {
       await page.evaluate(() => globalThis.inputProbe.space.dispose());
     }
     await setupDragger("auto", "mouse");
+    await page.evaluate(() =>
+      globalThis.inputProbe.space.element.addEventListener(
+        "pointerdown",
+        (evt) => (globalThis.inputProbe.pointerId = evt.pointerId),
+        { once: true },
+      ),
+    );
     await page.mouse.move(40, 40);
     await page.mouse.down();
     await page.evaluate(() =>
       globalThis.inputProbe.space.element.dispatchEvent(
-        new PointerEvent("pointercancel", { clientX: 300, clientY: 150 }),
+        new PointerEvent("pointercancel", {
+          clientX: 300,
+          clientY: 150,
+          pointerId: globalThis.inputProbe.pointerId,
+        }),
       ),
     );
     assert.equal((await dragState()).dragging, false);
