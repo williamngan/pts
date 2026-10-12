@@ -15,6 +15,14 @@ import {
  * Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.
  * See [Pt guide](../guide/Pt-0200.html) for details.
  */
+// Whether a constructor argument is a buffer to view.
+function _isBuffer(a: unknown): boolean {
+  return (
+    a instanceof ArrayBuffer ||
+    (typeof SharedArrayBuffer !== "undefined" && a instanceof SharedArrayBuffer)
+  );
+}
+
 export class Pt extends Float32Array implements IPt, Iterable<number> {
   protected _id!: string;
 
@@ -29,6 +37,8 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
   ) {
     // each branch below produces a valid Float32Array constructor argument
     let params: any;
+    let offset: number | undefined;
+    let length: number | undefined;
     const a0 = args[0];
     if (args.length === 1 && typeof a0 == "number") {
       params = a0; // init with the TypedArray's length. Needed this in order to make ".map", ".slice" etc work.
@@ -41,24 +51,15 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
       params = a0; // the Float32Array constructor copies array-likes natively
     } else if (typeof a0 === "number") {
       params = args; // a list of numbers; rest args are already a fresh array
+    } else if (_isBuffer(a0)) {
+      // a view on a buffer, as typed-array methods like `subarray` construct
+      params = a0;
+      offset = args[1] as number | undefined;
+      length = args[2] as number | undefined;
     } else {
       params = Util.getArgs(args);
     }
-    if (
-      a0 instanceof ArrayBuffer ||
-      (typeof SharedArrayBuffer !== "undefined" &&
-        a0 instanceof SharedArrayBuffer)
-    ) {
-      // Float32Array's inherited static factories specialize subclasses to
-      // ArrayBuffer in TypeScript; at runtime its view constructor accepts both.
-      super(
-        a0 as ArrayBuffer,
-        args[1] as number | undefined,
-        args[2] as number | undefined,
-      );
-    } else {
-      super(params);
-    }
+    super(params, offset, length);
   }
 
   /**
