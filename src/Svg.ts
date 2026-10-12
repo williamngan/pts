@@ -951,6 +951,8 @@ export class SVGSpace extends DOMSpace {
    * Remove all items from this Space. This clears the contents of the space's
    * `<svg>` element but never touches its container, so the space keeps
    * rendering after items are re-added.
+   * This includes user-supplied SVG children. Use `dispose()` to remove only
+   * elements managed by this space while preserving other SVG content.
    */
   removeAll(): this {
     this._canvas.innerHTML = "";

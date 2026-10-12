@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Clarify that SVGSpace.removeAll clears user SVG children too, whereas dispose preserves unmanaged content.
 - Clarify that color normalization uses nominal ranges without clamping, including LCH chroma above 100.
 - Round full-range HSL/HSB-to-RGB conversion to the nearest integer channel, fixing lossy RGB round trips; normalized conversions retain fractional precision and direct formatting still floors.
 - Regenerate the docs markdown runtime and third-party notices from the locked dependencies.
