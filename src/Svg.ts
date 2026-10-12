@@ -119,6 +119,9 @@ const _svgWarned: { [k: string]: boolean } = {};
  * Capability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,
  * `clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so
  * `textBox` layout matches canvas exactly.
+ * Drawing must occur in an animate callback (or be committed explicitly on this context).
+ * `SVGSpace.refresh(false)` preserves the last nonempty frame; it does not accumulate
+ * trails. Draws in action handlers are discarded at the next frame's start.
  *
  * **Writing your own renderer**: this class is the reference implementation of the rendering
  * contract — any object implementing the same context surface can be handed to
@@ -853,6 +856,9 @@ export class SVGSpace extends DOMSpace {
 
   /**
    * Set whether the rendering should be repainted on each frame.
+   * With `false`, empty frames preserve the last nonempty frame. New nonempty frames
+   * replace it: canvas-style accumulation and drawing from action handlers are unsupported.
+   * Store input in action handlers and redraw it in an animate callback, or use CanvasSpace.
    * @param b a boolean value to set whether to repaint each frame
    */
   refresh(b: boolean): this {

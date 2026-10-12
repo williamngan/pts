@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Document SVG refresh(false) as preserving only the last nonempty frame; trails and uncommitted action-handler drawing require CanvasSpace or retained scene data.
 - Render SVG fills and translucent strokes independently so overlaps match canvas; retain batching for known-opaque solid strokes. SVGForm benchmarks now include frame reconciliation.
 - Guard DOM globals and support keyboard/pointer dispatch on non-DOM MultiTouchSpace event targets.
 - Repaint previously played, stopped CanvasSpaces after ResizeObserver resizing without scheduling a stop during initial setup.
