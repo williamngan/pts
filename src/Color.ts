@@ -14,6 +14,13 @@ import { type PtLike, type ColorType } from "./Types";
 
 // XYZ property for Standard Observer 2deg, Daylight/sRGB illuminant D65
 const D65 = /* @__PURE__ */ new Pt(95.047, 100, 108.883, 1);
+// CSS Lab's D50 white (CIE x=0.3457, y=0.3585), on Pts' XYZ 0–100 scale.
+const D50 = /* @__PURE__ */ new Pt(
+  (100 * 0.3457) / 0.3585,
+  100,
+  (100 * (1 - 0.3457 - 0.3585)) / 0.3585,
+  1,
+);
 
 let _colorRanges: { [name: string]: Group } = /* @__PURE__ */ colorRanges();
 
@@ -34,6 +41,8 @@ function colorRanges(): { [name: string]: Group } {
 /**
  * Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.
  * Convert non-RGB colors to RGB before using `.hex`, `.rgb`, or `.rgba` for rendering. These getters format the channels; they don't convert between color spaces.
+ * LAB and LCH use the D50 reference white, as in CSS `lab()` and `lch()`.
+ * XYZ and LUV use D65; conversions between XYZ and LAB apply Bradford chromatic adaptation.
  * @example
  * ```
  * const color = Color.hsl(268, 0.37, 0.51);
@@ -132,7 +141,7 @@ export class Color extends Pt {
   }
 
   /**
-   * Create LAB Color. LAB color ranges are (0...100, -128...127, -128...127) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
+   * Create D50 LAB Color, using the same reference white as CSS `lab()`. LAB color ranges are (0...100, -128...127, -128...127) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static lab(...args: any[]): Color {
@@ -140,7 +149,7 @@ export class Color extends Pt {
   }
 
   /**
-   * Create LCH Color. LCH color ranges are (0...100, 0...100, 0...360) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
+   * Create D50 LCH Color, using the same reference white as CSS `lch()`. LCH color ranges are (0...100, 0...100, 0...360) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static lch(...args: any[]): Color {
@@ -800,7 +809,7 @@ export class Color extends Pt {
   }
 
   /**
-   * A static function to convert XYZ to LAB.
+   * Convert D65 XYZ to D50 LAB (CSS Lab), with Bradford chromatic adaptation.
    * @param xyz a XYZ Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -815,23 +824,40 @@ export class Color extends Pt {
     const eps = 216 / 24389;
     const kap = 24389 / 27;
 
-    // adjust for D65
-    c.divide(D65);
+    // Bradford matrix from this library's D65 (95.047,100,108.883) to CSS D50.
+    // B^-1 diag((B D50)/(B D65)) B, with the standard Bradford cone matrix B.
+    // See https://www.w3.org/TR/css-color-4/#color-conversion-code.
+    const [x, y, z] = c;
+    const adaptedX =
+      (1.047883741175648 * x +
+        0.022926020580292167 * y -
+        0.050156960798235464 * z) /
+      D50[0];
+    const adaptedY =
+      (0.029599712470291525 * x +
+        0.9904433289480559 * y -
+        0.01706140321234148 * z) /
+      D50[1];
+    const adaptedZ =
+      (-0.009237076612309065 * x +
+        0.015045841479768444 * y +
+        0.7520350516043767 * z) /
+      D50[2];
 
     const fn = (n: number) => (n > eps ? Math.cbrt(n) : (kap * n + 16) / 116);
-    const cy = fn(c[1]);
+    const cy = fn(adaptedY);
 
     const cc = Color.lab(
       116 * cy - 16,
-      500 * (fn(c[0]) - cy),
-      200 * (cy - fn(c[2])),
+      500 * (fn(adaptedX) - cy),
+      200 * (cy - fn(adaptedZ)),
       xyz.alpha,
     );
     return normalizedOutput ? Color._normOut(cc) : cc;
   }
 
   /**
-   * A static function to convert LAB to XYZ.
+   * Convert D50 LAB (CSS Lab) to D65 XYZ, with inverse Bradford chromatic adaptation.
    * @param lab a LAB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -849,15 +875,25 @@ export class Color extends Pt {
     const eps = 216 / 24389;
     const kap = 24389 / 27;
 
-    const d = D65;
+    const d = D50;
     const xxx = Math.pow(x, 3);
     const zzz = Math.pow(z, 3);
 
-    // adjusted
+    const ax = d[0] * (xxx > eps ? xxx : (116 * x - 16) / kap);
+    const ay =
+      d[1] * (c[0] > kap * eps ? Math.pow((c[0] + 16) / 116, 3) : c[0] / kap);
+    const az = d[2] * (zzz > eps ? zzz : (116 * z - 16) / kap);
+    // Inverse of the D65-to-D50 Bradford adaptation above.
     const cc = Color.xyz(
-      d[0] * (xxx > eps ? xxx : (116 * x - 16) / kap),
-      d[1] * (c[0] > kap * eps ? Math.pow((c[0] + 16) / 116, 3) : c[0] / kap),
-      d[2] * (zzz > eps ? zzz : (116 * z - 16) / kap),
+      0.9555133603984794 * ax -
+        0.023077627346345685 * ay +
+        0.06320438037157042 * az,
+      -0.028343880155626656 * ax +
+        1.0099856019019258 * ay +
+        0.02102312741027628 * az,
+      0.012303426046551184 * ax -
+        0.020490072958726607 * ay +
+        1.3300809728580483 * az,
       lab.alpha,
     );
 
