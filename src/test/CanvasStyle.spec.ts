@@ -1,14 +1,29 @@
 import { describe, expect, it } from "vitest";
 import { CanvasForm } from "../Canvas";
 
-// A minimal spy context that counts style property writes.
-function spyCtx() {
+// A minimal spy context that counts style property writes. Like a platform
+// context, its members are inherited from a prototype; `sealed` freezes it.
+function spyCtx(sealed = false) {
   const writes: Record<string, number> = {};
   const state: Record<string, unknown> = {};
-  const target = {
+  const saved: Record<string, unknown>[] = [];
+  const proto: Record<string, unknown> = {
     setLineDash(v: number[]) {
       writes.setLineDash = (writes.setLineDash ?? 0) + 1;
       state.dashSegments = v;
+    },
+    getLineDash() {
+      return (state.dashSegments as number[]) ?? [];
+    },
+    save() {
+      saved.push({ ...state });
+    },
+    restore() {
+      const s = saved.pop();
+      if (s) Object.assign(state, s);
+    },
+    reset() {
+      for (const k in state) delete state[k];
     },
   };
   const counted = [
@@ -23,7 +38,7 @@ function spyCtx() {
     "lineDashOffset",
   ];
   for (const key of counted) {
-    Object.defineProperty(target, key, {
+    Object.defineProperty(proto, key, {
       get: () => state[key],
       set: (v) => {
         writes[key] = (writes[key] ?? 0) + 1;
@@ -31,6 +46,8 @@ function spyCtx() {
       },
     });
   }
+  const target = Object.create(proto);
+  if (sealed) Object.freeze(target);
   return { ctx: target as any, writes, state };
 }
 
@@ -84,18 +101,61 @@ describe("CanvasForm style write dedup", () => {
     expect(writes.fillStyle).toBe(6); // every alternation is a real change
   });
 
-  it("reset force-writes and repairs a desynced context", () => {
+  it("observes direct writes made through any reference", () => {
     const { ctx, writes, state } = spyCtx();
     const form = makeForm(ctx);
     form.fill("#f03");
-    // user mutates the context directly, desyncing the cache
-    ctx.fillStyle = "#000";
-    form.fill("#f03"); // a cache hit must also match the context's live state
+    ctx.fillStyle = "#000"; // direct write, bypassing the form
+    form.fill("#f03");
     expect(state.fillStyle).toBe("#f03");
+    ctx.fillStyle = "#f03"; // a direct write of the cached value
+    form.fill("#f03");
+    expect(writes.fillStyle).toBe(4);
+    expect(ctx.fillStyle).toBe("#f03"); // reads reach the original getter
+    ctx.setLineDash([1, 1]);
+    form.dash([4, 2]);
+    form.dash([4, 2]);
+    expect(state.dashSegments).toEqual([4, 2]);
+    ctx.lineDashOffset = 3;
+    form.dash([4, 2]);
+    expect(state.lineDashOffset).toBe(0);
+    expect(writes.setLineDash).toBe(3);
+  });
+
+  it("restores the cache with save and restore", () => {
+    const { ctx, writes, state } = spyCtx();
+    const form = makeForm(ctx);
+    form.fill("#f03").dash([4, 2]);
+    ctx.save();
+    form.fill("#0c9").dash([1, 1]);
+    ctx.restore();
+    expect(state.fillStyle).toBe("#f03");
+    form.fill("#f03").dash([4, 2]); // matches the restored state: no writes
+    expect(writes.fillStyle).toBe(2);
+    expect(writes.setLineDash).toBe(2);
+    form.fill("#0c9");
+    expect(state.fillStyle).toBe("#0c9");
+    // an unmatched restore reveals unknown state, so the cache is dropped
+    ctx.restore();
+    form.fill("#0c9");
+    expect(writes.fillStyle).toBe(4);
+    ctx.reset();
+    form.fill("#0c9");
+    expect(state.fillStyle).toBe("#0c9");
+  });
+
+  it("reset force-writes and repairs an unobservable context", () => {
+    const { ctx, writes, state } = spyCtx(true);
+    const form = makeForm(ctx);
+    form.fill("#f03");
+    // a frozen context cannot be observed, so a direct write desyncs the cache
+    ctx.fillStyle = "#000";
+    form.fill("#f03"); // cache believes #f03 is set — skip is expected
+    expect(state.fillStyle).toBe("#000");
     form.reset(); // the documented recovery point
     expect(state.fillStyle).toBe("#f03");
     form.fill("#f03");
     expect(state.fillStyle).toBe("#f03");
-    expect(writes.fillStyle).toBeGreaterThanOrEqual(3);
+    expect(writes.fillStyle).toBe(3);
   });
 });

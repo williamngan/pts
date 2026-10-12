@@ -556,6 +556,150 @@ export class CanvasSpace extends MultiTouchSpace {
 // and a per-form cache would skip writes another form made stale.
 const _ctxStyleCache = new WeakMap<object, Record<string, unknown>>();
 
+// Cache snapshots per observed context, pushed by save() and popped by
+// restore().
+const _ctxSaved = new WeakMap<object, Record<string, unknown>[]>();
+
+// The style keys CanvasForm caches; direct writes to these are observed.
+const _observedStyles = [
+  "fillStyle",
+  "strokeStyle",
+  "lineWidth",
+  "lineJoin",
+  "lineCap",
+  "globalAlpha",
+  "globalCompositeOperation",
+  "font",
+];
+
+// Forget cached values by assigning undefined, not by deleting keys: deleting
+// would switch the cache object to a slower dictionary representation.
+function _forgetStyles(cache: Record<string, unknown>): void {
+  for (const k in cache) cache[k] = undefined;
+}
+
+function _findDescriptor(
+  obj: object,
+  key: string,
+): PropertyDescriptor | undefined {
+  for (let o: object | null = obj; o; o = Object.getPrototypeOf(o)) {
+    const d = Object.getOwnPropertyDescriptor(o, key);
+    if (d) return d;
+  }
+  return undefined;
+}
+
+// Add an own accessor over an inherited (or absent) context property that
+// forwards to the original and caches each written value (or forgets
+// `cacheKey` when `forget` is set). Writes made outside CanvasForm, directly on
+// the context, then keep the cache accurate without reading the context back
+// on every style call. Own properties are left alone: redefining them would
+// switch the context object to a slower dictionary representation.
+function _observeProperty(
+  ctx: object,
+  key: string,
+  cache: Record<string, unknown>,
+  cacheKey: string,
+  forget: boolean,
+): void {
+  if (Object.getOwnPropertyDescriptor(ctx, key)) return;
+  const d = _findDescriptor(ctx, key);
+  let get: (this: unknown) => unknown;
+  let set: (this: unknown, v: unknown) => void;
+  if (d && (d.get || d.set)) {
+    const g = d.get;
+    const s = d.set;
+    if (!s) return;
+    get = function () {
+      return g ? g.call(this) : undefined;
+    };
+    set = forget
+      ? function (v) {
+          s.call(this, v);
+          cache[cacheKey] = undefined;
+        }
+      : function (v) {
+          s.call(this, v);
+          cache[cacheKey] = v;
+        };
+  } else {
+    if (d && d.writable === false) return;
+    let value = d ? d.value : undefined;
+    get = () => value;
+    set = (v) => {
+      value = v;
+      cache[cacheKey] = forget ? undefined : v;
+    };
+  }
+  try {
+    Object.defineProperty(ctx, key, {
+      get,
+      set,
+      configurable: true,
+      enumerable: d ? d.enumerable : true,
+    });
+  } catch {
+    // an unobservable property keeps the documented `form.reset()` recovery
+  }
+}
+
+// Wrap a context method so `after` runs once the original returns.
+function _observeMethod(ctx: object, key: string, after: () => void): void {
+  const fn = (ctx as any)[key];
+  if (typeof fn !== "function") return;
+  const own = Object.getOwnPropertyDescriptor(ctx, key);
+  if (own && !own.configurable) return;
+  try {
+    Object.defineProperty(ctx, key, {
+      value: function (this: unknown, ...args: unknown[]) {
+        const result = fn.apply(this, args);
+        after();
+        return result;
+      },
+      configurable: true,
+      writable: true,
+      enumerable: own ? own.enumerable : false,
+    });
+  } catch {
+    // an unobservable method keeps the documented `form.reset()` recovery
+  }
+}
+
+// Mirror state changes made outside CanvasForm into the context's cache:
+// direct style writes, setLineDash/lineDashOffset, save()/restore() and
+// reset(). A cache hit then stays a single comparison. A renderer can report
+// these changes itself through `_bindStyleCache(cache)` (as SVGContext2D
+// does). Style members that are frozen or the context's own properties are not
+// observed; call `form.reset()` after writing them directly.
+function _observeContext(ctx: object, cache: Record<string, unknown>): void {
+  if (typeof (ctx as any)._bindStyleCache === "function") {
+    (ctx as any)._bindStyleCache(cache);
+    return;
+  }
+  if (!Object.isExtensible(ctx)) return;
+  const stack: Record<string, unknown>[] = [];
+  _ctxSaved.set(ctx, stack);
+  for (const key of _observedStyles)
+    _observeProperty(ctx, key, cache, key, false);
+  _observeProperty(ctx, "lineDashOffset", cache, "dash", true);
+  _observeMethod(ctx, "setLineDash", () => {
+    cache.dash = undefined;
+  });
+  _observeMethod(ctx, "save", () => {
+    stack.push(Object.assign({}, cache));
+  });
+  _observeMethod(ctx, "restore", () => {
+    // an unmatched restore reveals a state the cache never saw: forget it
+    const saved = stack.pop();
+    if (saved) for (const k in cache) cache[k] = saved[k];
+    else _forgetStyles(cache);
+  });
+  _observeMethod(ctx, "reset", () => {
+    stack.length = 0;
+    _forgetStyles(cache);
+  });
+}
+
 export class CanvasForm<
   S extends MultiTouchSpace = CanvasSpace,
 > extends VisualForm {
@@ -576,6 +720,7 @@ export class CanvasForm<
       if (!cache) {
         cache = {};
         _ctxStyleCache.set(this._ctx, cache);
+        _observeContext(this._ctx, cache);
       }
       this._styleCache = cache;
       this._styleCacheCtx = this._ctx;
@@ -595,24 +740,23 @@ export class CanvasForm<
     // clear the shared object in place: forms cache a reference to it, so
     // deleting the WeakMap entry would leave them holding stale values
     const cache = _ctxStyleCache.get(ctx);
-    if (cache) {
-      for (const k in cache) delete cache[k];
-    }
+    if (cache) _forgetStyles(cache);
+    // the reset also discards the context's saved states
+    const saved = _ctxSaved.get(ctx);
+    if (saved) saved.length = 0;
   }
 
   /**
-   * Skip a repeated style write only while the context still holds its last
-   * read-back value (browsers can normalize CSS strings on assignment).
+   * Write a context style property only when it differs from the last value
+   * written to this context. Direct writes of the cached styles on the
+   * context, `setLineDash`, `save()`, `restore()` and `reset()` are observed,
+   * so the cache stays accurate (see [`CanvasForm.ctx`](#link)).
    */
   protected _set(key: string, value: unknown): void {
     const cache = this._cacheForCtx();
-    if (
-      cache[key] !== value ||
-      cache[`actual:${key}`] !== (this._ctx as any)[key]
-    ) {
-      cache[key] = value;
+    if (cache[key] !== value) {
       (this._ctx as any)[key] = value;
-      cache[`actual:${key}`] = (this._ctx as any)[key];
+      cache[key] = value;
     }
   }
 
@@ -676,8 +820,10 @@ export class CanvasForm<
 
   /**
    * Get the rendering context of canvas to perform other canvas functions.
-   * Form style setters detect direct context writes and `save()`/`restore()`.
-   * Call `form.reset()` to reapply all the form's saved styles at once.
+   * Form style setters observe direct style writes, `setLineDash`, `save()`,
+   * `restore()` and `reset()` on canvas contexts. For a custom renderer whose
+   * style members are its own properties (rather than inherited accessors), or
+   * a frozen one, call `form.reset()` after setting its styles directly.
    * @example `form.ctx.clip()`
    */
   get ctx(): RenderingContext2D {
@@ -907,31 +1053,26 @@ export class CanvasForm<
    * @param offset Dash offset. Defaults to 0. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineDashOffset)
    */
   dash(segments: PtLike | boolean = true, offset: number = 0): this {
-    // Validate the compact key against context state, including direct writes
-    // and save/restore. Custom renderers without getLineDash cannot be checked.
+    // dedupe via a compact key since getLineDash() allocates. Direct
+    // setLineDash/lineDashOffset writes and restore() clear the key, so the
+    // key is stored after this form's own writes.
     const cache = this._cacheForCtx();
-    if (typeof this._ctx.getLineDash === "function") {
-      const actual = `${this._ctx.getLineDash().join(",")}/${this._ctx.lineDashOffset}`;
-      if (cache.actualDash !== actual) delete cache.dash;
-    }
     if (segments === false || (segments !== true && segments.length === 0)) {
       // false or [], deactivate dashed strokes
       if (cache.dash !== "/0") {
-        cache.dash = "/0";
         this._ctx.setLineDash([]);
         this._ctx.lineDashOffset = 0;
+        cache.dash = "/0";
       }
     } else {
       const seg: PtLike = segments === true ? [5, 5] : segments;
       const key = `${Array.prototype.join.call(seg, ",")}/${offset}`;
       if (cache.dash !== key) {
-        cache.dash = key;
         this._ctx.setLineDash(seg as number[]);
         this._ctx.lineDashOffset = offset;
+        cache.dash = key;
       }
     }
-    if (typeof this._ctx.getLineDash === "function")
-      cache.actualDash = `${this._ctx.getLineDash().join(",")}/${this._ctx.lineDashOffset}`;
     return this;
   }
 

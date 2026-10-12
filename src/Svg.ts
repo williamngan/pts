@@ -146,20 +146,111 @@ const _svgWarned: { [k: string]: boolean } = {};
  */
 export class SVGContext2D {
   // ---- canvas-compatible state ----
-  fillStyle: string | SVGGradient = "#f03";
-  strokeStyle: string | SVGGradient = "#fff";
-  lineWidth: number = 1;
-  lineJoin: string = "bevel";
-  lineCap: string = "butt";
-  globalAlpha: number = 1;
-  globalCompositeOperation: string = "source-over";
-  font: string = "10px sans-serif";
+  // The styles a CanvasForm caches are accessors that report writes to the
+  // bound style cache (see `_bindStyleCache`).
+  protected _fillStyle: string | SVGGradient = "#f03";
+  protected _strokeStyle: string | SVGGradient = "#fff";
+  protected _lineWidth: number = 1;
+  protected _lineJoin: string = "bevel";
+  protected _lineCap: string = "butt";
+  protected _globalAlpha: number = 1;
+  protected _globalCompositeOperation: string = "source-over";
+  protected _font: string = "10px sans-serif";
+  protected _lineDashOffset: number = 0;
   textAlign: string = "start";
   textBaseline: string = "alphabetic";
-  lineDashOffset: number = 0;
 
   protected _dash: number[] = [];
   protected _stateStack: object[] = [];
+  protected _styleCache: Record<string, unknown> | null = null;
+
+  get fillStyle(): string | SVGGradient {
+    return this._fillStyle;
+  }
+  set fillStyle(v: string | SVGGradient) {
+    this._fillStyle = v;
+    this._wrote("fillStyle", v);
+  }
+
+  get strokeStyle(): string | SVGGradient {
+    return this._strokeStyle;
+  }
+  set strokeStyle(v: string | SVGGradient) {
+    this._strokeStyle = v;
+    this._wrote("strokeStyle", v);
+  }
+
+  get lineWidth(): number {
+    return this._lineWidth;
+  }
+  set lineWidth(v: number) {
+    this._lineWidth = v;
+    this._wrote("lineWidth", v);
+  }
+
+  get lineJoin(): string {
+    return this._lineJoin;
+  }
+  set lineJoin(v: string) {
+    this._lineJoin = v;
+    this._wrote("lineJoin", v);
+  }
+
+  get lineCap(): string {
+    return this._lineCap;
+  }
+  set lineCap(v: string) {
+    this._lineCap = v;
+    this._wrote("lineCap", v);
+  }
+
+  get globalAlpha(): number {
+    return this._globalAlpha;
+  }
+  set globalAlpha(v: number) {
+    this._globalAlpha = v;
+    this._wrote("globalAlpha", v);
+  }
+
+  get globalCompositeOperation(): string {
+    return this._globalCompositeOperation;
+  }
+  set globalCompositeOperation(v: string) {
+    this._globalCompositeOperation = v;
+    this._wrote("globalCompositeOperation", v);
+  }
+
+  get font(): string {
+    return this._font;
+  }
+  set font(v: string) {
+    this._font = v;
+    this._wrote("font", v);
+  }
+
+  get lineDashOffset(): number {
+    return this._lineDashOffset;
+  }
+  set lineDashOffset(v: number) {
+    this._lineDashOffset = v;
+    this._wrote("dash", undefined);
+  }
+
+  /**
+   * Bind the style cache of the CanvasForms drawing on this context, so that
+   * style writes made directly on this context, `setLineDash` and `restore()`
+   * keep it accurate. Called by `CanvasForm`; a custom renderer may implement
+   * the same method instead of being observed.
+   * @param cache the style values last written, keyed by property name
+   */
+  _bindStyleCache(cache: Record<string, unknown>): void {
+    this._styleCache = cache;
+  }
+
+  protected _wrote(key: string, v: unknown): void {
+    const cache = this._styleCache;
+    if (cache) cache[key] = v;
+  }
 
   /** Optional CSS class applied to emitted elements (see `SVGForm.cls`). */
   className: string = "";
@@ -567,7 +658,11 @@ export class SVGContext2D {
 
   restore(): void {
     const s = this._stateStack.pop();
-    if (s) Object.assign(this, s);
+    if (s) {
+      // the style setters report the restored values to the style cache
+      Object.assign(this, s);
+      this._wrote("dash", undefined);
+    }
   }
 
   scale(): void {
@@ -580,6 +675,7 @@ export class SVGContext2D {
 
   setLineDash(segments: number[]): void {
     this._dash = segments;
+    this._wrote("dash", undefined);
   }
 
   getLineDash(): number[] {
