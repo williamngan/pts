@@ -24,6 +24,16 @@ const D50 = /* @__PURE__ */ new Pt(
 
 let _colorRanges: { [name: string]: Group } = /* @__PURE__ */ colorRanges();
 
+// One RGB channel (0...1) of an HSL color, given hue t and the HSL
+// conversion's p and q.
+function _hslChannel(p: number, q: number, t: number): number {
+  t = t < 0 ? t + 1 : t > 1 ? t - 1 : t;
+  if (t * 6 < 1) return p + (q - p) * t * 6;
+  if (t * 2 < 1) return q;
+  if (t * 3 < 2) return p + (q - p) * (2 / 3 - t) * 6;
+  return p;
+}
+
 function colorRanges(): { [name: string]: Group } {
   return {
     rgb: new Group(new Pt(0, 255), new Pt(0, 255), new Pt(0, 255)),
@@ -455,9 +465,10 @@ export class Color extends Pt {
       this._isNorm && format !== "mode" ? Color._denorm(this) : this;
     if (format == "hex") {
       const _hex = (n: number) => {
-        const s = Math.floor(
-          Number.isNaN(n) ? 0 : Num.clamp(n, 0, 255),
-        ).toString(16);
+        // clamp to a CSS byte; NaN fails the range test and becomes 0
+        let b = Math.floor(n);
+        if (!(b >= 0 && b <= 255)) b = b > 255 ? 255 : 0;
+        const s = b.toString(16);
         return s.length < 2 ? "0" + s : s;
       };
       return `#${_hex(v[0])}${_hex(v[1])}${_hex(v[2])}`;
@@ -525,43 +536,34 @@ export class Color extends Pt {
     normalizedInput: boolean = false,
     normalizedOutput: boolean = false,
   ): Color {
-    let [h, s, l] = hsl;
+    // indexed reads: destructuring a typed array goes through its iterator
+    let h = hsl[0];
+    const s = hsl[1];
+    const l = hsl[2];
     if (!normalizedInput) h = h / 360;
     h = h - Math.floor(h); // wrap hue into [0, 1)
 
-    const sc = normalizedOutput ? 1 : 255;
-    if (s == 0) {
-      const gray = Color.rgb(sc * l, sc * l, sc * l, hsl.alpha);
-      if (normalizedOutput) gray.normalized = true;
-      else for (let i = 0; i < 3; i++) gray[i] = Math.round(gray[i]);
-      return gray;
+    let r = l;
+    let g = l;
+    let b = l;
+    if (s != 0) {
+      const q = l <= 0.5 ? l * (1 + s) : l + s - l * s;
+      const p = 2 * l - q;
+      r = _hslChannel(p, q, h + 1 / 3);
+      g = _hslChannel(p, q, h);
+      b = _hslChannel(p, q, h - 1 / 3);
     }
-
-    const q = l <= 0.5 ? l * (1 + s) : l + s - l * s;
-    const p = 2 * l - q;
-
-    const convert = (t: number) => {
-      t = t < 0 ? t + 1 : t > 1 ? t - 1 : t;
-      if (t * 6 < 1) {
-        return p + (q - p) * t * 6;
-      } else if (t * 2 < 1) {
-        return q;
-      } else if (t * 3 < 2) {
-        return p + (q - p) * (2 / 3 - t) * 6;
-      } else {
-        return p;
-      }
-    };
-
-    const cc = Color.rgb(
-      sc * convert(h + 1 / 3),
-      sc * convert(h),
-      sc * convert(h - 1 / 3),
+    if (normalizedOutput) {
+      const cc = Color.rgb(r, g, b, hsl.alpha);
+      cc.normalized = true;
+      return cc;
+    }
+    return Color.rgb(
+      Math.round(255 * r),
+      Math.round(255 * g),
+      Math.round(255 * b),
       hsl.alpha,
     );
-    if (normalizedOutput) cc.normalized = true;
-    else for (let i = 0; i < 3; i++) cc[i] = Math.round(cc[i]);
-    return cc;
   }
 
   /**
@@ -613,7 +615,10 @@ export class Color extends Pt {
     normalizedInput: boolean = false,
     normalizedOutput: boolean = false,
   ): Color {
-    let [h, s, v] = hsb;
+    // indexed reads: destructuring a typed array goes through its iterator
+    let h = hsb[0];
+    const s = hsb[1];
+    const v = hsb[2];
     if (!normalizedInput) h = h / 360;
     h = h - Math.floor(h); // wrap hue into [0, 1)
 
@@ -623,22 +628,51 @@ export class Color extends Pt {
     const q = v * (1 - f * s);
     const t = v * (1 - (1 - f) * s);
 
-    const pick = [
-      [v, t, p],
-      [q, v, p],
-      [p, v, t],
-      [p, q, v],
-      [t, p, v],
-      [v, p, q],
-    ];
-    const c = pick[i % 6];
+    // the sextant of the hue picks the order of v, t, p and q
+    let r: number, g: number, b: number;
+    switch (i % 6) {
+      case 0:
+        r = v;
+        g = t;
+        b = p;
+        break;
+      case 1:
+        r = q;
+        g = v;
+        b = p;
+        break;
+      case 2:
+        r = p;
+        g = v;
+        b = t;
+        break;
+      case 3:
+        r = p;
+        g = q;
+        b = v;
+        break;
+      case 4:
+        r = t;
+        g = p;
+        b = v;
+        break;
+      default:
+        r = v;
+        g = p;
+        b = q;
+    }
 
-    const sc = normalizedOutput ? 1 : 255;
-
-    const cc = Color.rgb(sc * c[0], sc * c[1], sc * c[2], hsb.alpha);
-    if (normalizedOutput) cc.normalized = true;
-    else for (let i = 0; i < 3; i++) cc[i] = Math.round(cc[i]);
-    return cc;
+    if (normalizedOutput) {
+      const cc = Color.rgb(r, g, b, hsb.alpha);
+      cc.normalized = true;
+      return cc;
+    }
+    return Color.rgb(
+      Math.round(255 * r),
+      Math.round(255 * g),
+      Math.round(255 * b),
+      hsb.alpha,
+    );
   }
 
   /**
