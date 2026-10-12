@@ -60,13 +60,18 @@ export class Num {
    * @example `boundValue(361, 0, 360)` will return 1
    */
   static boundValue(val: number, min: number, max: number): number {
-    const base = Math.min(min, max);
-    const len = Math.abs(max - min);
-    if (len === 0) return base;
-    let a = (val - base) % len;
+    if (min > max) {
+      const t = min;
+      min = max;
+      max = t;
+    }
+    const len = max - min;
+    if (len === 0) return min;
+    let a = (val - min) % len;
     if (a < 0) a += len;
-    const result = a + base;
-    return a === len || result === Math.max(min, max) ? base : result;
+    const result = a + min;
+    // rounding can reach the excluded upper endpoint (eg, a tiny negative a)
+    return result >= max ? min : result;
   }
 
   /**

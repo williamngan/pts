@@ -5,7 +5,7 @@ import { Geom, Num } from "./Num";
 import { Pt, Group } from "./Pt";
 import { Mat } from "./LinearAlgebra";
 import { overlay } from "./_path";
-import { orient2d } from "./_triangulate";
+import { orient2dFiltered as orient2d } from "./_triangulate";
 import {
   type PtLike,
   type GroupLike,
@@ -206,7 +206,17 @@ export class Line {
     let _la = Util.iterToArray(la);
     let _lb = Util.iterToArray(lb);
 
+    // Exactly collinear segments have a cross product within a few ulps of
+    // its first term (both are zero when that term is), so this cheap test
+    // passes all of them; only those nearly parallel get the exact test.
+    const rx = _la[1][0] - _la[0][0];
+    const ry = _la[1][1] - _la[0][1];
+    const sx = _lb[1][0] - _lb[0][0];
+    const sy = _lb[1][1] - _lb[0][1];
+    const m = rx * sy;
+    const cross = m - ry * sx;
     if (
+      Math.abs(cross) <= 1e-12 * Math.abs(m) &&
       orient2d(
         _la[0][0],
         _la[0][1],
@@ -241,7 +251,19 @@ export class Line {
       return shared.length ? new Pt(shared[0]) : undefined;
     }
 
-    let pt = Line.intersectRay2D(_la, _lb);
+    // the ray intersection, as `intersectRay2D` computes it
+    const pa = _la[0];
+    const pb = _lb[0];
+    if ((rx === 0 && ry === 0) || (sx === 0 && sy === 0)) return undefined;
+    let pt: Pt | undefined;
+    if (cross === 0) {
+      const qpx = pb[0] - pa[0];
+      const qpy = pb[1] - pa[1];
+      if (qpx * ry - qpy * rx === 0) pt = new Pt(pa[0], pa[1]);
+    } else {
+      const t = ((pb[0] - pa[0]) * sy - (pb[1] - pa[1]) * sx) / cross;
+      pt = new Pt(pa[0] + t * rx, pa[1] + t * ry);
+    }
     return pt &&
       Geom.withinBound(pt, _la[0], _la[1]) &&
       Geom.withinBound(pt, _lb[0], _lb[1])
@@ -1314,13 +1336,38 @@ export class Polygon {
     if (_pts.length < 3) return _errorLength(new Group(), 3);
 
     const compare = (a: PtLike, b: PtLike) => a[0] - b[0] || a[1] - b[1];
-    if (!sorted || _pts.some((p, i) => i > 0 && compare(_pts[i - 1], p) > 0))
-      _pts = _pts.slice().sort(compare);
-    _pts = _pts.filter((p, i) => i === 0 || compare(_pts[i - 1], p) !== 0);
+    // verify a presorted input and look for duplicates in one pass
+    let unsorted = !sorted;
+    let duplicates = unsorted;
+    for (let i = 1, len = _pts.length; !unsorted && i < len; i++) {
+      const c = compare(_pts[i - 1], _pts[i]);
+      if (c > 0) unsorted = duplicates = true;
+      else if (c === 0) duplicates = true;
+    }
+    if (unsorted) _pts = _pts.slice().sort(compare);
+    else if (duplicates) _pts = _pts.slice();
+    if (duplicates) {
+      // compact the sorted copy in place from its first repeated point
+      let n = 1;
+      const len = _pts.length;
+      while (n < len && compare(_pts[n - 1], _pts[n]) !== 0) n++;
+      for (let i = n + 1; i < len; i++) {
+        if (compare(_pts[n - 1], _pts[i]) !== 0) _pts[n++] = _pts[i];
+      }
+      if (n < len) _pts.length = n;
+    }
 
-    // check if is on left of ray a-b
+    // check if is on left of ray a-b, exactly: the floating-point estimate
+    // decides unless it is within its rounding error of zero
     let left = (a: PtLike, b: PtLike, c: PtLike) => {
-      return orient2d(a[0], a[1], b[0], b[1], c[0], c[1]) > 0;
+      const l = (b[0] - a[0]) * (c[1] - a[1]);
+      const r = (c[0] - a[0]) * (b[1] - a[1]);
+      const bound = 3.3306690738754716e-16 * (Math.abs(l) + Math.abs(r));
+      return l - r > bound
+        ? true
+        : r - l > bound
+          ? false
+          : orient2d(a[0], a[1], b[0], b[1], c[0], c[1]) > 0;
     };
 
     let seed = 2;

@@ -421,6 +421,28 @@ export function crossingParameter(
   return Number(numerator >> shift) / Number(scaled);
 }
 
+/**
+ * Exact orientation like `orient2d`, without its integer limb tier: for
+ * callers outside the triangulation that rarely reach the exact test, so their
+ * bundles stay small. The floating-point filter decides almost every case.
+ */
+export function orient2dFiltered(
+  ax: number,
+  ay: number,
+  bx: number,
+  by: number,
+  cx: number,
+  cy: number,
+): number {
+  const left = (ax - cx) * (by - cy);
+  const right = (ay - cy) * (bx - cx);
+  const det = left - right;
+  const bound = ORIENT_BOUND * (Math.abs(left) + Math.abs(right));
+  if (det > bound) return 1;
+  if (-det > bound) return -1;
+  return orient2dExact(ax, ay, bx, by, cx, cy);
+}
+
 /** Exact orientation, evaluated in BigInt. Used when the fast filter cannot decide. */
 export function orient2dExact(
   ax: number,
