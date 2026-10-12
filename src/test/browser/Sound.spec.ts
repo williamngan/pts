@@ -806,6 +806,27 @@ describe("Sound input", () => {
     expect(sound.playing).toBe(false);
   });
 
+  it("releases the microphone at once when stopped while the context is suspended", async () => {
+    const track = { stop: vi.fn() };
+    const stream = {
+      getAudioTracks: () => [track],
+    } as unknown as MediaStream;
+    vi.stubGlobal("navigator", {
+      mediaDevices: { getUserMedia: vi.fn().mockResolvedValue(stream) },
+    });
+    const sound = await Sound.input();
+    const ctx = sound.ctx as unknown as FakeAudioContext;
+    sound.start();
+    // a suspended context's clock is frozen, so a fade would never complete
+    ctx.state = "suspended";
+    const timeout = vi.spyOn(globalThis, "setTimeout");
+    sound.stop();
+    expect(track.stop).toHaveBeenCalledOnce();
+    expect(timeout).not.toHaveBeenCalled();
+    ctx.state = "running";
+    sound.dispose();
+  });
+
   it("rejects when microphone access fails", async () => {
     vi.stubGlobal("navigator", {
       mediaDevices: {

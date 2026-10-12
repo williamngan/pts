@@ -768,7 +768,11 @@ export class Sound {
     this._cancelAudioTimer(true);
     for (const node of this._retiring) {
       node.onended = null;
-      node.stop();
+      try {
+        node.stop();
+      } catch {
+        // Safari throws InvalidStateError when the source already ended
+      }
       node.disconnect();
     }
     this._retiring.clear();
@@ -811,12 +815,18 @@ export class Sound {
 
   private _afterFade(callback: () => void): void {
     this._cancelAudioTimer();
+    // A context that is not running renders nothing to fade, and its clock is
+    // frozen: finish now, so a stopped input releases its microphone at once.
+    if (this._ctx.state !== "running") {
+      callback();
+      return;
+    }
     this._finishAudio = callback;
     const end = this._ctx.currentTime + 0.01;
     const finish = () => {
       // Wall-clock timers can run before the audio clock reaches the fade end.
       const remaining = end - this._ctx.currentTime;
-      if (remaining > 0 && this._ctx.state !== "closed")
+      if (remaining > 0 && this._ctx.state === "running")
         this._audioTimer = setTimeout(finish, Math.max(10, remaining * 1000));
       else this._cancelAudioTimer(true);
     };
