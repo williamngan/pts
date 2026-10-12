@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- After stalls, advance Tempo to the current period count and phase with one callback per listener; preserve rhythm boundaries and use the current period for alternating-beat progress.
 - Return a deterministic shared endpoint for collinear overlapping line segments, independent of argument order and endpoint direction.
 - Return no circle-boundary intersection points for strict containment, matching the documented contract in either argument order.
 - Clarify that SVGSpace.removeAll clears user SVG children too, whereas dispose preserves unmanaged content.

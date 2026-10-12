@@ -126,6 +126,8 @@ export class Tempo implements IPlayer {
   /**
    * Usually you can add a tempo instance to a space via [`Space.add`](#link) and it will track time automatically.
    * But if necessary, you can track time manually via this function.
+   * After a stall, skips missed periods and invokes each listener once at its
+   * current count and phase, preserving the rhythm's original period boundaries.
    * @param time current time in milliseconds
    */
   track(time: number) {
@@ -133,7 +135,7 @@ export class Tempo implements IPlayer {
       if (this._listeners.hasOwnProperty(k)) {
         const li = this._listeners[k];
         const _t = li.offset ? time + li.offset : time;
-        const ms = li.period! * this._ms; // time per period
+        let ms = li.period! * this._ms; // time per period
         let isStart = false;
 
         if (li.duration! < 0) {
@@ -141,14 +143,29 @@ export class Tempo implements IPlayer {
           li.duration = _t - (_t % this._ms);
           li.count = li.count || 0; // a hand-built listener may omit count
           isStart = true;
-        } else if (_t > li.duration! + ms) {
-          li.duration = _t - (_t % this._ms); // update
+        } else if (ms > 0 && _t > li.duration! + ms) {
           if (Array.isArray(li.beats)) {
-            // find next period from array
-            li.index = (li.index! + 1) % li.beats.length;
-            li.period = li.beats[li.index];
+            // Skip whole cycles in O(1), then at most one cycle's periods.
+            const cycle =
+              li.beats.reduce((sum, beat) => sum + beat, 0) * this._ms;
+            const cycles =
+              cycle > 0
+                ? Math.max(0, Math.ceil((_t - li.duration!) / cycle) - 1)
+                : 0;
+            li.duration! += cycles * cycle;
+            li.count = (li.count || 0) + cycles * li.beats.length;
+            while (ms > 0 && _t > li.duration! + ms) {
+              li.duration! += ms;
+              li.index = ((li.index || 0) + 1) % li.beats.length;
+              li.period = li.beats[li.index];
+              ms = li.period * this._ms;
+              li.count!++;
+            }
+          } else {
+            const passed = Math.ceil((_t - li.duration!) / ms) - 1;
+            li.duration! += passed * ms;
+            li.count = (li.count || 0) + passed;
           }
-          li.count = (li.count || 0) + 1;
           isStart = true;
         }
 
