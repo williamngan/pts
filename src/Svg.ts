@@ -252,8 +252,8 @@ const _svgWarned: { [k: string]: boolean } = {};
  */
 export class SVGContext2D {
   // ---- canvas-compatible state ----
-  // The styles a CanvasForm caches are accessors that report writes to the
-  // bound style cache (see `_bindStyleCache`).
+  // Like a canvas context's, the styles a CanvasForm caches are accessors, so
+  // the form can observe writes to them and skip repeated values.
   protected _fillStyle: string | SVGGradient = "#f03";
   protected _strokeStyle: string | SVGGradient = "#fff";
   protected _lineWidth: number = 1;
@@ -268,14 +268,12 @@ export class SVGContext2D {
 
   protected _dash: number[] = [];
   protected _stateStack: object[] = [];
-  protected _styleCache: Record<string, unknown> | null = null;
 
   get fillStyle(): string | SVGGradient {
     return this._fillStyle;
   }
   set fillStyle(v: string | SVGGradient) {
     this._fillStyle = v;
-    this._wrote("fillStyle", v);
   }
 
   get strokeStyle(): string | SVGGradient {
@@ -283,7 +281,6 @@ export class SVGContext2D {
   }
   set strokeStyle(v: string | SVGGradient) {
     this._strokeStyle = v;
-    this._wrote("strokeStyle", v);
   }
 
   get lineWidth(): number {
@@ -291,7 +288,6 @@ export class SVGContext2D {
   }
   set lineWidth(v: number) {
     this._lineWidth = v;
-    this._wrote("lineWidth", v);
   }
 
   get lineJoin(): string {
@@ -299,7 +295,6 @@ export class SVGContext2D {
   }
   set lineJoin(v: string) {
     this._lineJoin = v;
-    this._wrote("lineJoin", v);
   }
 
   get lineCap(): string {
@@ -307,7 +302,6 @@ export class SVGContext2D {
   }
   set lineCap(v: string) {
     this._lineCap = v;
-    this._wrote("lineCap", v);
   }
 
   get globalAlpha(): number {
@@ -315,7 +309,6 @@ export class SVGContext2D {
   }
   set globalAlpha(v: number) {
     this._globalAlpha = v;
-    this._wrote("globalAlpha", v);
   }
 
   get globalCompositeOperation(): string {
@@ -323,7 +316,6 @@ export class SVGContext2D {
   }
   set globalCompositeOperation(v: string) {
     this._globalCompositeOperation = v;
-    this._wrote("globalCompositeOperation", v);
   }
 
   get font(): string {
@@ -331,7 +323,6 @@ export class SVGContext2D {
   }
   set font(v: string) {
     this._font = v;
-    this._wrote("font", v);
   }
 
   get lineDashOffset(): number {
@@ -339,23 +330,6 @@ export class SVGContext2D {
   }
   set lineDashOffset(v: number) {
     this._lineDashOffset = v;
-    this._wrote("dash", undefined);
-  }
-
-  /**
-   * Bind the style cache of the CanvasForms drawing on this context, so that
-   * style writes made directly on this context, `setLineDash` and `restore()`
-   * keep it accurate. Called by `CanvasForm`; a custom renderer may implement
-   * the same method instead of being observed.
-   * @param cache the style values last written, keyed by property name
-   */
-  _bindStyleCache(cache: Record<string, unknown>): void {
-    this._styleCache = cache;
-  }
-
-  protected _wrote(key: string, v: unknown): void {
-    const cache = this._styleCache;
-    if (cache) cache[key] = v;
   }
 
   /** Optional CSS class applied to emitted elements (see `SVGForm.cls`). */
@@ -660,21 +634,21 @@ export class SVGContext2D {
   // ----------------------------------------------------------------- paint
 
   fill(): void {
-    this._shapeFill = this._resolvePaint(this.fillStyle);
+    this._shapeFill = this._resolvePaint(this._fillStyle);
     this._capturePaintState();
   }
 
   stroke(): void {
-    this._shapeStroke = this._resolvePaint(this.strokeStyle);
+    this._shapeStroke = this._resolvePaint(this._strokeStyle);
     this._shapeStrokeStyle = {
-      "stroke-width": this.lineWidth,
-      "stroke-linejoin": this.lineJoin,
-      "stroke-linecap": this.lineCap,
+      "stroke-width": this._lineWidth,
+      "stroke-linejoin": this._lineJoin,
+      "stroke-linecap": this._lineCap,
     };
     if (this._dash.length > 0) {
       this._shapeStrokeStyle["stroke-dasharray"] = this._dash.join(" ");
-      if (this.lineDashOffset)
-        this._shapeStrokeStyle["stroke-dashoffset"] = this.lineDashOffset;
+      if (this._lineDashOffset)
+        this._shapeStrokeStyle["stroke-dashoffset"] = this._lineDashOffset;
     }
     this._capturePaintState();
   }
@@ -682,8 +656,8 @@ export class SVGContext2D {
   protected _capturePaintState(): void {
     this._shapePainted = true;
     this._shapeClass = this.className;
-    this._shapeAlpha = this.globalAlpha;
-    this._shapeBlend = this.globalCompositeOperation;
+    this._shapeAlpha = this._globalAlpha;
+    this._shapeBlend = this._globalCompositeOperation;
     this._drawCount++;
   }
 
@@ -716,10 +690,10 @@ export class SVGContext2D {
     const attrs: Record<string, string | number> = {
       x: round2(x),
       y: round2(y),
-      fill: this._resolvePaint(this.fillStyle),
+      fill: this._resolvePaint(this._fillStyle),
       "text-anchor": anchor,
       "dominant-baseline": baseline,
-      style: `font: ${this.font}`,
+      style: `font: ${this._font}`,
       "pointer-events": "none",
     };
     // canvas maxWidth semantics: compress to fit only when text is wider
@@ -736,7 +710,7 @@ export class SVGContext2D {
     if (!_svgMeasurer) {
       _svgMeasurer = document.createElement("canvas").getContext("2d")!;
     }
-    _svgMeasurer!.font = this.font;
+    _svgMeasurer!.font = this._font;
     return _svgMeasurer!.measureText(txt);
   }
 
@@ -793,28 +767,24 @@ export class SVGContext2D {
 
   save(): void {
     this._stateStack.push({
-      fillStyle: this.fillStyle,
-      strokeStyle: this.strokeStyle,
-      lineWidth: this.lineWidth,
-      lineJoin: this.lineJoin,
-      lineCap: this.lineCap,
-      globalAlpha: this.globalAlpha,
-      globalCompositeOperation: this.globalCompositeOperation,
-      font: this.font,
+      fillStyle: this._fillStyle,
+      strokeStyle: this._strokeStyle,
+      lineWidth: this._lineWidth,
+      lineJoin: this._lineJoin,
+      lineCap: this._lineCap,
+      globalAlpha: this._globalAlpha,
+      globalCompositeOperation: this._globalCompositeOperation,
+      font: this._font,
       textAlign: this.textAlign,
       textBaseline: this.textBaseline,
-      lineDashOffset: this.lineDashOffset,
+      lineDashOffset: this._lineDashOffset,
       _dash: this._dash.slice(),
     });
   }
 
   restore(): void {
     const s = this._stateStack.pop();
-    if (s) {
-      // the style setters report the restored values to the style cache
-      Object.assign(this, s);
-      this._wrote("dash", undefined);
-    }
+    if (s) Object.assign(this, s);
   }
 
   scale(): void {
@@ -827,7 +797,6 @@ export class SVGContext2D {
 
   setLineDash(segments: number[]): void {
     this._dash = segments;
-    this._wrote("dash", undefined);
   }
 
   getLineDash(): number[] {
@@ -881,9 +850,9 @@ export class SVGContext2D {
     attrs.class = this.className
       ? `pts-svgform ${this.className}`
       : "pts-svgform";
-    if (this.globalAlpha !== 1) attrs.opacity = this.globalAlpha;
+    if (this._globalAlpha !== 1) attrs.opacity = this._globalAlpha;
     else attrs.opacity = 1;
-    const op = this.globalCompositeOperation;
+    const op = this._globalCompositeOperation;
     if (op !== "source-over") {
       if (BLEND_MODES.has(op)) {
         // text runs already carry their font in `style`; append, never replace

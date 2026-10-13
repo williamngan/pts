@@ -570,17 +570,28 @@ export class CanvasSpace extends MultiTouchSpace {
  * CanvasForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`CanvasSpace`](#link).
  * You may extend CanvasForm to implement your own expressions for CanvasSpace.
  */
-// Last-written style values per rendering context, so identical values are
-// not re-applied (color parsing in particular is costly). Keyed by context —
-// not by form — because multiple forms can share one context (see `reset()`),
-// and a per-form cache would skip writes another form made stale.
-const _ctxStyleCache = new WeakMap<object, Record<string, unknown>>();
+// Style state per observed rendering context, shared by all forms drawing on
+// it (see `reset()`): the values last written to the cached styles, so
+// identical values are not re-applied (color parsing in particular is costly),
+// and the snapshots that save() pushes. Stored on the context under a symbol,
+// which its observers read.
+interface StyleState {
+  styles: Record<string, unknown>;
+  saved: Record<string, unknown>[];
+}
+const _STATE = Symbol("pts.styleState");
 
-// Cache snapshots per observed context, pushed by save() and popped by
-// restore().
-const _ctxSaved = new WeakMap<object, Record<string, unknown>[]>();
+// The cache of a context that cannot be observed: always empty, so every style
+// call writes.
+const _uncached: Record<string, unknown> = /* @__PURE__ */ Object.freeze({});
 
-// The style keys CanvasForm caches; direct writes to these are observed.
+// Observers per context prototype, or null when its contexts cannot be
+// observed. All contexts of a kind share one set: functions made per context
+// would give each context its own hidden class, and every call on a context
+// (from Pts or inside the renderer) would slow down once a page has several.
+const _observers = new WeakMap<object, PropertyDescriptorMap | null>();
+
+// The style keys CanvasForm caches; writes to these are observed.
 const _observedStyles = [
   "fillStyle",
   "strokeStyle",
@@ -609,115 +620,114 @@ function _findDescriptor(
   return undefined;
 }
 
-// Add an own accessor over an inherited (or absent) context property that
-// forwards to the original and caches each written value (or forgets
-// `cacheKey` when `forget` is set). Writes made outside CanvasForm, directly on
-// the context, then keep the cache accurate without reading the context back
-// on every style call. Own properties are left alone: redefining them would
-// switch the context object to a slower dictionary representation.
-function _observeProperty(
-  ctx: object,
-  key: string,
-  cache: Record<string, unknown>,
-  cacheKey: string,
-  forget: boolean,
-): void {
-  if (Object.getOwnPropertyDescriptor(ctx, key)) return;
-  const d = _findDescriptor(ctx, key);
-  let get: (this: unknown) => unknown;
-  let set: (this: unknown, v: unknown) => void;
-  if (d && (d.get || d.set)) {
-    const g = d.get;
-    const s = d.set;
-    if (!s) return;
-    get = function () {
-      return g ? g.call(this) : undefined;
-    };
-    set = forget
-      ? function (v) {
-          s.call(this, v);
-          cache[cacheKey] = undefined;
-        }
-      : function (v) {
-          s.call(this, v);
-          cache[cacheKey] = v;
-        };
-  } else {
-    if (d && d.writable === false) return;
-    let value = d ? d.value : undefined;
-    get = () => value;
-    set = (v) => {
-      value = v;
-      cache[cacheKey] = forget ? undefined : v;
-    };
-  }
-  try {
-    Object.defineProperty(ctx, key, {
-      get,
-      set,
-      configurable: true,
-      enumerable: d ? d.enumerable : true,
-    });
-  } catch {
-    // an unobservable property keeps the documented `form.reset()` recovery
-  }
+function _method(value: (...args: never[]) => unknown): PropertyDescriptor {
+  return { value, configurable: true, writable: true, enumerable: false };
 }
 
-// Wrap a context method so `after` runs once the original returns.
-function _observeMethod(ctx: object, key: string, after: () => void): void {
-  const fn = (ctx as any)[key];
-  if (typeof fn !== "function") return;
-  const own = Object.getOwnPropertyDescriptor(ctx, key);
-  if (own && !own.configurable) return;
-  try {
-    Object.defineProperty(ctx, key, {
-      value: function (this: unknown, ...args: unknown[]) {
-        const result = fn.apply(this, args);
-        after();
-        return result;
-      },
+// Accessors over a prototype's style setters and wrappers over its state
+// methods, which keep a context's style state accurate whatever reference the
+// change is made through. A prototype without setters for every cached style
+// (such as a renderer with plain style fields) gets null.
+function _makeObservers(proto: any): PropertyDescriptorMap | null {
+  const observers: PropertyDescriptorMap = {};
+  for (const key of _observedStyles.concat("lineDashOffset")) {
+    const d = _findDescriptor(proto, key);
+    if (!d || !d.get || !d.set) return null;
+    const set = d.set;
+    observers[key] = {
+      get: d.get,
+      set:
+        key === "lineDashOffset"
+          ? function (this: any, v: unknown) {
+              set.call(this, v);
+              // the dash key covers the offset
+              const state: StyleState | undefined = this[_STATE];
+              if (state) state.styles.dash = undefined;
+            }
+          : function (this: any, v: unknown) {
+              set.call(this, v);
+              const state: StyleState | undefined = this[_STATE];
+              if (state) state.styles[key] = v;
+            },
       configurable: true,
-      writable: true,
-      enumerable: own ? own.enumerable : false,
-    });
-  } catch {
-    // an unobservable method keeps the documented `form.reset()` recovery
+      enumerable: d.enumerable,
+    };
   }
-}
 
-// Mirror state changes made outside CanvasForm into the context's cache:
-// direct style writes, setLineDash/lineDashOffset, save()/restore() and
-// reset(). A cache hit then stays a single comparison. A renderer can report
-// these changes itself through `_bindStyleCache(cache)` (as SVGContext2D
-// does). Style members that are frozen or the context's own properties are not
-// observed; call `form.reset()` after writing them directly.
-function _observeContext(ctx: object, cache: Record<string, unknown>): void {
-  if (typeof (ctx as any)._bindStyleCache === "function") {
-    (ctx as any)._bindStyleCache(cache);
-    return;
-  }
-  if (!Object.isExtensible(ctx)) return;
-  const stack: Record<string, unknown>[] = [];
-  _ctxSaved.set(ctx, stack);
-  for (const key of _observedStyles)
-    _observeProperty(ctx, key, cache, key, false);
-  _observeProperty(ctx, "lineDashOffset", cache, "dash", true);
-  _observeMethod(ctx, "setLineDash", () => {
-    cache.dash = undefined;
+  const { setLineDash, save, restore, reset } = proto;
+  if (
+    typeof setLineDash !== "function" ||
+    typeof save !== "function" ||
+    typeof restore !== "function"
+  )
+    return null;
+  observers.setLineDash = _method(function (this: any, segments: number[]) {
+    setLineDash.call(this, segments);
+    const state: StyleState | undefined = this[_STATE];
+    if (state) state.styles.dash = undefined;
   });
-  _observeMethod(ctx, "save", () => {
-    stack.push(Object.assign({}, cache));
+  observers.save = _method(function (this: any) {
+    save.call(this);
+    const state: StyleState | undefined = this[_STATE];
+    if (state) state.saved.push(Object.assign({}, state.styles));
   });
-  _observeMethod(ctx, "restore", () => {
+  observers.restore = _method(function (this: any) {
+    restore.call(this);
+    const state: StyleState | undefined = this[_STATE];
+    if (!state) return;
     // an unmatched restore reveals a state the cache never saw: forget it
-    const saved = stack.pop();
-    if (saved) for (const k in cache) cache[k] = saved[k];
-    else _forgetStyles(cache);
+    const saved = state.saved.pop();
+    if (saved) for (const k in state.styles) state.styles[k] = saved[k];
+    else _forgetStyles(state.styles);
   });
-  _observeMethod(ctx, "reset", () => {
-    stack.length = 0;
-    _forgetStyles(cache);
-  });
+  // reset() is recent, and older contexts lack it
+  if (typeof reset === "function")
+    observers.reset = _method(function (this: any) {
+      reset.call(this);
+      const state: StyleState | undefined = this[_STATE];
+      if (!state) return;
+      state.saved.length = 0;
+      _forgetStyles(state.styles);
+    });
+  return observers;
+}
+
+// Get a context's style state, observing the context the first time. A
+// context that cannot be observed (frozen, with style members of its own, or
+// not built on style setters) gets null and is not cached, since a write that
+// bypasses observers could leave the cache stale.
+function _styleState(ctx: any): StyleState | null {
+  if (Object.prototype.hasOwnProperty.call(ctx, _STATE)) return ctx[_STATE];
+  const proto = Object.getPrototypeOf(ctx);
+  if (!proto || !Object.isExtensible(ctx)) return null;
+  let observers = _observers.get(proto);
+  if (observers === undefined) {
+    try {
+      observers = _makeObservers(proto);
+    } catch {
+      observers = null; // eg, native members that throw on the prototype
+    }
+    _observers.set(proto, observers);
+  }
+  // Own members are left alone: they are not inherited setters, and
+  // redefining them would switch the context to a slower dictionary
+  // representation.
+  if (
+    !observers ||
+    Object.keys(observers).some((k) =>
+      Object.prototype.hasOwnProperty.call(ctx, k),
+    )
+  )
+    return null;
+  const state: StyleState = { styles: {}, saved: [] };
+  try {
+    Object.defineProperties(ctx, observers);
+    // linked last: a context observed only in part stays uncached
+    Object.defineProperty(ctx, _STATE, { value: state });
+  } catch {
+    return null;
+  }
+  return state;
 }
 
 export class CanvasForm<
@@ -728,21 +738,16 @@ export class CanvasForm<
   protected _estimateTextWidth: TextMeasure | undefined;
   protected _estimateMode: "sample" | "char" | undefined;
 
-  // the shared cache object for this._ctx, revalidated only when the context
-  // changes so the hot path avoids a WeakMap lookup per style write
+  // the style values last written to this._ctx, resolved only when the
+  // context changes so the hot path avoids a WeakMap lookup per style write
   private _styleCache: Record<string, unknown> | null = null;
   private _styleCacheCtx: RenderingContext2D | null = null;
 
   /** Get the style cache shared by all forms drawing on this context. */
   protected _cacheForCtx(): Record<string, unknown> {
     if (this._styleCacheCtx !== this._ctx) {
-      let cache = _ctxStyleCache.get(this._ctx);
-      if (!cache) {
-        cache = {};
-        _ctxStyleCache.set(this._ctx, cache);
-        _observeContext(this._ctx, cache);
-      }
-      this._styleCache = cache;
+      const state = _styleState(this._ctx);
+      this._styleCache = state ? state.styles : _uncached;
       this._styleCacheCtx = this._ctx;
     }
     return this._styleCache!;
@@ -750,33 +755,32 @@ export class CanvasForm<
 
   /**
    * Forget the cached style values for a rendering context, so every
-   * subsequent style write applies. Call this after anything that resets or
-   * desyncs a context's state outside a form — most commonly assigning a
-   * canvas's `width` or `height`, which resets the context to its defaults.
-   * (Within a form, [`CanvasForm.reset`](#link) is the equivalent recovery.)
+   * subsequent style write applies. Call this after resetting a context
+   * without its own methods: assigning a canvas's `width` or `height` resets
+   * the context to its defaults. (CanvasSpace does this when it resizes.)
    * @param ctx the rendering context to forget
    */
   static resetStyleCache(ctx: RenderingContext2D | object): void {
-    // clear the shared object in place: forms cache a reference to it, so
-    // deleting the WeakMap entry would leave them holding stale values
-    const cache = _ctxStyleCache.get(ctx);
-    if (cache) _forgetStyles(cache);
-    // the reset also discards the context's saved states
-    const saved = _ctxSaved.get(ctx);
-    if (saved) saved.length = 0;
+    // clear in place: forms hold a reference to the styles object
+    const state = Object.prototype.hasOwnProperty.call(ctx, _STATE)
+      ? ((ctx as any)[_STATE] as StyleState)
+      : null;
+    if (state) {
+      _forgetStyles(state.styles);
+      // the reset also discards the context's saved states
+      state.saved.length = 0;
+    }
   }
 
   /**
    * Write a context style property only when it differs from the last value
-   * written to this context. Direct writes of the cached styles on the
-   * context, `setLineDash`, `save()`, `restore()` and `reset()` are observed,
-   * so the cache stays accurate (see [`CanvasForm.ctx`](#link)).
+   * written to this context. The context's observers record the write (see
+   * [`CanvasForm.ctx`](#link)).
    */
   protected _set(key: string, value: unknown): void {
     const cache = this._cacheForCtx();
     if (cache[key] !== value) {
       (this._ctx as any)[key] = value;
-      cache[key] = value;
     }
   }
 
@@ -840,10 +844,12 @@ export class CanvasForm<
 
   /**
    * Get the rendering context of canvas to perform other canvas functions.
-   * Form style setters observe direct style writes, `setLineDash`, `save()`,
-   * `restore()` and `reset()` on canvas contexts. For a custom renderer whose
-   * style members are its own properties (rather than inherited accessors), or
-   * a frozen one, call `form.reset()` after setting its styles directly.
+   * You may set styles on the context directly, through this or any other
+   * reference to it: the form skips a style write only when it is sure the
+   * context already has that value. It observes canvas contexts' style
+   * setters, `setLineDash()`, `save()`, `restore()` and `reset()`; a context
+   * it cannot observe (such as a renderer with plain style fields) gets every
+   * style write.
    * @example `form.ctx.clip()`
    */
   get ctx(): RenderingContext2D {
@@ -1073,16 +1079,16 @@ export class CanvasForm<
    * @param offset Dash offset. Defaults to 0. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineDashOffset)
    */
   dash(segments: PtLike | boolean = true, offset: number = 0): this {
-    // dedupe via a compact key since getLineDash() allocates. Direct
-    // setLineDash/lineDashOffset writes and restore() clear the key, so the
-    // key is stored after this form's own writes.
+    // dedupe via a compact key since getLineDash() allocates. The observers
+    // clear the key on setLineDash/lineDashOffset writes, so it is stored
+    // after this form's own writes.
     const cache = this._cacheForCtx();
     if (segments === false || (segments !== true && segments.length === 0)) {
       // false or [], deactivate dashed strokes
       if (cache.dash !== "/0") {
         this._ctx.setLineDash([]);
         this._ctx.lineDashOffset = 0;
-        cache.dash = "/0";
+        if (cache !== _uncached) cache.dash = "/0";
       }
     } else {
       const seg: PtLike = segments === true ? [5, 5] : segments;
@@ -1090,7 +1096,7 @@ export class CanvasForm<
       if (cache.dash !== key) {
         this._ctx.setLineDash(seg as number[]);
         this._ctx.lineDashOffset = offset;
-        cache.dash = key;
+        if (cache !== _uncached) cache.dash = key;
       }
     }
     return this;
@@ -1218,19 +1224,16 @@ export class CanvasForm<
    * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
    */
   reset(): this {
-    // force-write and resync the cache — this is the documented recovery
-    // point after styles were set directly on the context
-    const cache = this._cacheForCtx();
+    // force-write; observing the context first lets the cache record it
+    this._cacheForCtx();
     for (const k in this._style) {
       if (this._style.hasOwnProperty(k)) {
         (this._ctx as any)[k] = (this._style as any)[k];
-        cache[k] = (this._style as any)[k];
       }
     }
     // same default as a fresh VisualForm (14px sans-serif)
     this._font = new Font(14, "sans-serif");
     this._ctx.font = this._font.value;
-    cache.font = this._font.value;
     return this;
   }
 

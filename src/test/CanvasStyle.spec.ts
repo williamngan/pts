@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { CanvasForm } from "../Canvas";
+import { SVGContext2D } from "../Svg";
 
 // A minimal spy context that counts style property writes. Like a platform
 // context, its members are inherited from a prototype; `sealed` freezes it.
@@ -144,18 +145,105 @@ describe("CanvasForm style write dedup", () => {
     expect(state.fillStyle).toBe("#0c9");
   });
 
-  it("reset force-writes and repairs an unobservable context", () => {
+  it("restores the cache through nested saves", () => {
+    const { ctx, writes, state } = spyCtx();
+    const form = makeForm(ctx);
+    form.fill("#a00");
+    ctx.save(); // outer: no change before the inner save
+    ctx.save();
+    form.fill("#b00");
+    ctx.restore();
+    form.fill("#a00"); // restored: no write
+    expect(writes.fillStyle).toBe(2);
+    form.fill("#c00");
+    ctx.save();
+    form.fill("#d00").dash([2, 2]);
+    ctx.restore();
+    expect(state.fillStyle).toBe("#c00");
+    form.fill("#c00").dash(false); // restored: no fill write, dash is unknown
+    expect(writes.fillStyle).toBe(4);
+    expect(writes.setLineDash).toBe(2);
+    ctx.restore();
+    expect(state.fillStyle).toBe("#a00");
+    form.fill("#a00");
+    expect(writes.fillStyle).toBe(4);
+    form.fill("#c00");
+    expect(state.fillStyle).toBe("#c00");
+  });
+
+  it("writes every style call on a context it cannot observe", () => {
     const { ctx, writes, state } = spyCtx(true);
     const form = makeForm(ctx);
     form.fill("#f03");
-    // a frozen context cannot be observed, so a direct write desyncs the cache
-    ctx.fillStyle = "#000";
-    form.fill("#f03"); // cache believes #f03 is set — skip is expected
-    expect(state.fillStyle).toBe("#000");
-    form.reset(); // the documented recovery point
-    expect(state.fillStyle).toBe("#f03");
+    form.fill("#f03");
+    expect(writes.fillStyle).toBe(2);
+    ctx.fillStyle = "#000"; // a direct write the form cannot see
     form.fill("#f03");
     expect(state.fillStyle).toBe("#f03");
-    expect(writes.fillStyle).toBe(3);
+    form.dash([4, 2]);
+    form.dash([4, 2]);
+    expect(writes.setLineDash).toBe(2);
+    form.reset();
+    expect(state.fillStyle).toBe("#f03");
+  });
+
+  it("observes the SVG context like a canvas context", () => {
+    const ctx = new SVGContext2D(null!);
+    const form = makeForm(ctx);
+    form.fill("#f03");
+    ctx.fillStyle = "#000";
+    form.fill("#f03");
+    expect(ctx.fillStyle).toBe("#f03");
+    ctx.save();
+    form.fill("#0c9").dash([4, 2]);
+    ctx.restore();
+    form.fill("#0c9").dash([4, 2]);
+    expect(ctx.fillStyle).toBe("#0c9");
+    expect(ctx.getLineDash()).toEqual([4, 2]);
+    expect(Object.getOwnPropertyNames(ctx)).toContain("save");
+    // styles read back through the observers like a canvas context's
+    form.stroke("#123", 2, "round", "square").composite("multiply");
+    expect([
+      ctx.strokeStyle,
+      ctx.lineWidth,
+      ctx.lineJoin,
+      ctx.lineCap,
+      ctx.globalCompositeOperation,
+    ]).toEqual(["#123", 2, "round", "square", "multiply"]);
+  });
+
+  it("does not cache a renderer with plain style fields", () => {
+    const dashes: number[][] = [];
+    const ctx: any = {
+      fillStyle: "#000",
+      lineDashOffset: 0,
+      setLineDash: (v: number[]) => dashes.push(v),
+      save() {},
+      restore() {},
+    };
+    const form = makeForm(ctx);
+    form.fill("#f03");
+    ctx.fillStyle = "#000"; // a write the form cannot see
+    form.fill("#f03");
+    expect(ctx.fillStyle).toBe("#f03");
+    form.dash([4, 2]);
+    form.dash([4, 2]);
+    expect(dashes).toHaveLength(2);
+    expect(Object.getOwnPropertySymbols(ctx)).toHaveLength(0);
+  });
+
+  it("shares one set of observers among contexts of a kind", () => {
+    // observers made per context would give each its own hidden class
+    const { ctx } = spyCtx();
+    const other = Object.create(Object.getPrototypeOf(ctx));
+    makeForm(ctx).fill("#f03");
+    makeForm(other).fill("#0c9");
+    for (const key of ["fillStyle", "lineDashOffset"]) {
+      const set = Object.getOwnPropertyDescriptor(ctx, key)!.set;
+      expect(set).toBeTypeOf("function");
+      expect(Object.getOwnPropertyDescriptor(other, key)!.set).toBe(set);
+    }
+    for (const key of ["save", "restore", "reset", "setLineDash"])
+      expect(other[key]).toBe(ctx[key]);
   });
 });

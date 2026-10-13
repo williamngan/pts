@@ -906,4 +906,29 @@ describe("style cache survives context resets", () => {
     expect((img.ctx as CanvasRenderingContext2D).fillStyle).toBe("#00cc99");
     img.dispose();
   });
+
+  it("sees style changes made through a stored context reference", () => {
+    const canvas = document.createElement("canvas");
+    const other = document.createElement("canvas");
+    const ctx = canvas.getContext("2d")!;
+    const form = new CanvasForm(ctx);
+    form.fillOnly("#ff0000");
+    ctx.save();
+    ctx.fillStyle = "#0000ff";
+    ctx.restore();
+    ctx.fillStyle = "#00ff00";
+    form.fillOnly("#ff0000").rect([
+      [0, 0],
+      [4, 4],
+    ]);
+    expect(Array.from(ctx.getImageData(1, 1, 1, 1).data)).toEqual([
+      255, 0, 0, 255,
+    ]);
+    // contexts of one kind share their observers, and so a hidden class
+    new CanvasForm(other.getContext("2d")!).fillOnly("#ff0000");
+    const setter = (c: object) =>
+      Object.getOwnPropertyDescriptor(c, "fillStyle")?.set;
+    expect(setter(ctx)).toBeTypeOf("function");
+    expect(setter(other.getContext("2d")!)).toBe(setter(ctx));
+  });
 });

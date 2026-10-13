@@ -95,15 +95,16 @@ describe("CanvasForm rendering pins", () => {
     form.dash(true);
     expect(calls.pop()).toEqual(["setLineDash", [5, 5]]);
 
-    // repeated identical pattern is deduped
+    // this mock's members are plain fields, which the form cannot observe, so
+    // repeats write again (CanvasStyle.spec covers deduping)
     form.dash(true);
-    expect(calls.filter((c) => c[0] === "setLineDash")).toHaveLength(0);
+    expect(calls.pop()).toEqual(["setLineDash", [5, 5]]);
 
     form.dash([]);
     expect(calls.pop()).toEqual(["setLineDash", []]);
 
     form.dash(false);
-    expect(calls.filter((c) => c[0] === "setLineDash")).toHaveLength(0);
+    expect(calls.pop()).toEqual(["setLineDash", []]);
   });
 
   it("keeps chaining through points() with empty input", () => {
