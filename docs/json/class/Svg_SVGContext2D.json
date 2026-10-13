@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Svg.ts",
-          405,
+          379,
           2
         ]
       ],
@@ -46,7 +46,7 @@
       "source": [
         [
           "src/Svg.ts",
-          430,
+          404,
           6
         ]
       ],
@@ -64,12 +64,12 @@
       "source": [
         [
           "src/Svg.ts",
-          273,
+          272,
           6
         ],
         [
           "src/Svg.ts",
-          276,
+          275,
           6
         ]
       ],
@@ -92,68 +92,6 @@
     },
     {
       "name": "font",
-      "source": [
-        [
-          "src/Svg.ts",
-          329,
-          6
-        ],
-        [
-          "src/Svg.ts",
-          332,
-          6
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "comment": "",
-      "getter": {
-        "type": "string"
-      },
-      "setter": {
-        "type": "void",
-        "parameters": {
-          "name": "v",
-          "comment": "",
-          "type": "string",
-          "default": false
-        }
-      }
-    },
-    {
-      "name": "globalAlpha",
-      "source": [
-        [
-          "src/Svg.ts",
-          313,
-          6
-        ],
-        [
-          "src/Svg.ts",
-          316,
-          6
-        ]
-      ],
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "comment": "",
-      "getter": {
-        "type": "number"
-      },
-      "setter": {
-        "type": "void",
-        "parameters": {
-          "name": "v",
-          "comment": "",
-          "type": "number",
-          "default": false
-        }
-      }
-    },
-    {
-      "name": "globalCompositeOperation",
       "source": [
         [
           "src/Svg.ts",
@@ -184,11 +122,73 @@
       }
     },
     {
+      "name": "globalAlpha",
+      "source": [
+        [
+          "src/Svg.ts",
+          307,
+          6
+        ],
+        [
+          "src/Svg.ts",
+          310,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "v",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "globalCompositeOperation",
+      "source": [
+        [
+          "src/Svg.ts",
+          314,
+          6
+        ],
+        [
+          "src/Svg.ts",
+          317,
+          6
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "string"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "v",
+          "comment": "",
+          "type": "string",
+          "default": false
+        }
+      }
+    },
+    {
       "name": "group",
       "source": [
         [
           "src/Svg.ts",
-          435,
+          409,
           6
         ]
       ],
@@ -206,12 +206,12 @@
       "source": [
         [
           "src/Svg.ts",
-          305,
+          300,
           6
         ],
         [
           "src/Svg.ts",
-          308,
+          303,
           6
         ]
       ],
@@ -237,12 +237,12 @@
       "source": [
         [
           "src/Svg.ts",
-          337,
+          328,
           6
         ],
         [
           "src/Svg.ts",
-          340,
+          331,
           6
         ]
       ],
@@ -268,12 +268,12 @@
       "source": [
         [
           "src/Svg.ts",
-          297,
+          293,
           6
         ],
         [
           "src/Svg.ts",
-          300,
+          296,
           6
         ]
       ],
@@ -299,12 +299,12 @@
       "source": [
         [
           "src/Svg.ts",
-          289,
+          286,
           6
         ],
         [
           "src/Svg.ts",
-          292,
+          289,
           6
         ]
       ],
@@ -330,7 +330,7 @@
       "source": [
         [
           "src/Svg.ts",
-          509,
+          483,
           6
         ]
       ],
@@ -348,12 +348,12 @@
       "source": [
         [
           "src/Svg.ts",
-          281,
+          279,
           6
         ],
         [
           "src/Svg.ts",
-          284,
+          282,
           6
         ]
       ],
@@ -381,7 +381,7 @@
       "source": [
         [
           "src/Svg.ts",
-          591,
+          565,
           2
         ]
       ],
@@ -440,7 +440,7 @@
       "source": [
         [
           "src/Svg.ts",
-          419,
+          393,
           2
         ]
       ],
@@ -462,7 +462,7 @@
       "source": [
         [
           "src/Svg.ts",
-          537,
+          511,
           2
         ]
       ],
@@ -484,7 +484,7 @@
       "source": [
         [
           "src/Svg.ts",
-          568,
+          542,
           2
         ]
       ],
@@ -543,7 +543,7 @@
       "source": [
         [
           "src/Svg.ts",
-          696,
+          670,
           2
         ]
       ],
@@ -565,7 +565,7 @@
       "source": [
         [
           "src/Svg.ts",
-          824,
+          794,
           2
         ]
       ],
@@ -587,7 +587,7 @@
       "source": [
         [
           "src/Svg.ts",
-          542,
+          516,
           2
         ]
       ],
@@ -609,7 +609,7 @@
       "source": [
         [
           "src/Svg.ts",
-          443,
+          417,
           2
         ]
       ],
@@ -631,7 +631,7 @@
       "source": [
         [
           "src/Svg.ts",
-          837,
+          806,
           2
         ]
       ],
@@ -678,7 +678,7 @@
       "source": [
         [
           "src/Svg.ts",
-          846,
+          815,
           2
         ]
       ],
@@ -737,7 +737,7 @@
       "source": [
         [
           "src/Svg.ts",
-          525,
+          499,
           2
         ]
       ],
@@ -759,7 +759,7 @@
       "source": [
         [
           "src/Svg.ts",
-          743,
+          717,
           2
         ]
       ],
@@ -818,7 +818,7 @@
       "source": [
         [
           "src/Svg.ts",
-          602,
+          576,
           2
         ]
       ],
@@ -889,7 +889,7 @@
       "source": [
         [
           "src/Svg.ts",
-          662,
+          636,
           2
         ]
       ],
@@ -911,7 +911,7 @@
       "source": [
         [
           "src/Svg.ts",
-          690,
+          664,
           2
         ]
       ],
@@ -958,7 +958,7 @@
       "source": [
         [
           "src/Svg.ts",
-          700,
+          674,
           2
         ]
       ],
@@ -1005,7 +1005,7 @@
       "source": [
         [
           "src/Svg.ts",
-          833,
+          802,
           2
         ]
       ],
@@ -1027,7 +1027,7 @@
       "source": [
         [
           "src/Svg.ts",
-          554,
+          528,
           2
         ]
       ],
@@ -1062,7 +1062,7 @@
       "source": [
         [
           "src/Svg.ts",
-          735,
+          709,
           2
         ]
       ],
@@ -1091,7 +1091,7 @@
       "source": [
         [
           "src/Svg.ts",
-          547,
+          521,
           2
         ]
       ],
@@ -1126,7 +1126,7 @@
       "source": [
         [
           "src/Svg.ts",
-          785,
+          759,
           2
         ]
       ],
@@ -1148,7 +1148,7 @@
       "source": [
         [
           "src/Svg.ts",
-          561,
+          535,
           2
         ]
       ],
@@ -1195,7 +1195,7 @@
       "source": [
         [
           "src/Svg.ts",
-          583,
+          557,
           2
         ]
       ],
@@ -1242,7 +1242,7 @@
       "source": [
         [
           "src/Svg.ts",
-          514,
+          488,
           2
         ]
       ],
@@ -1264,7 +1264,7 @@
       "source": [
         [
           "src/Svg.ts",
-          811,
+          785,
           2
         ]
       ],
@@ -1286,7 +1286,7 @@
       "source": [
         [
           "src/Svg.ts",
-          794,
+          768,
           2
         ]
       ],
@@ -1308,7 +1308,7 @@
       "source": [
         [
           "src/Svg.ts",
-          820,
+          790,
           2
         ]
       ],
@@ -1330,7 +1330,7 @@
       "source": [
         [
           "src/Svg.ts",
-          828,
+          798,
           2
         ]
       ],
@@ -1359,7 +1359,7 @@
       "source": [
         [
           "src/Svg.ts",
-          667,
+          641,
           2
         ]
       ],
@@ -1384,7 +1384,7 @@
       "source": [
         [
           "src/Svg.ts",
-          362,
+          336,
           2
         ]
       ],

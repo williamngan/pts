@@ -138,7 +138,7 @@ Complete API reference for [Pts 1.0.2](https://ptsjs.org), generated from the sa
 <a id="canvas-canvasform"></a>
 ### `CanvasForm`
 
-**Kind:** Class · **Source:** [`src/Canvas.ts:723`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L723)
+**Kind:** Class · **Source:** [`src/Canvas.ts:733`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L733)
 
 **Extends:** `VisualForm`
 
@@ -170,10 +170,12 @@ get ctx(): RenderingContext2D
 ```
 
 Get the rendering context of canvas to perform other canvas functions.
-Form style setters observe direct style writes, `setLineDash`, `save()`,
-`restore()` and `reset()` on canvas contexts. For a custom renderer whose
-style members are its own properties (rather than inherited accessors), or
-a frozen one, call `form.reset()` after setting its styles directly.
+You may set styles on the context directly, through this or any other
+reference to it: the form skips a style write only when it is sure the
+context already has that value. It observes canvas contexts' style
+setters, `setLineDash()`, `save()`, `restore()` and `reset()`; a context
+it cannot observe (such as a renderer with plain style fields) gets every
+style write.
 
 <a id="canvas-canvasform-space"></a>
 ##### `space`
@@ -948,10 +950,9 @@ static resetStyleCache(ctx: object | RenderingContext2D): void
 ```
 
 Forget the cached style values for a rendering context, so every
-subsequent style write applies. Call this after anything that resets or
-desyncs a context's state outside a form — most commonly assigning a
-canvas's `width` or `height`, which resets the context to its defaults.
-(Within a form, [`CanvasForm.reset`](#canvas-canvasform-reset) is the equivalent recovery.)
+subsequent style write applies. Call this after resetting a context
+without its own methods: assigning a canvas's `width` or `height` resets
+the context to its defaults. (CanvasSpace does this when it resizes.)
 
 **Parameters**
 
@@ -12474,7 +12475,7 @@ textBaseline: string
 <a id="svg-svgform"></a>
 ### `SVGForm`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:1394`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L1394)
+**Kind:** Class · **Source:** [`src/Svg.ts:1363`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L1363)
 
 **Extends:** `CanvasForm`
 
@@ -13243,7 +13244,7 @@ A static function to draw a text element.
 <a id="svg-svgspace"></a>
 ### `SVGSpace`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:1128`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L1128)
+**Kind:** Class · **Source:** [`src/Svg.ts:1097`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L1097)
 
 **Extends:** `DOMSpace`
 

@@ -6401,8 +6401,9 @@ See https://github.com/williamngan/pts for details. */
 			return recorder;
 		}
 	};
-	const _ctxStyleCache = /* @__PURE__ */ new WeakMap();
-	const _ctxSaved = /* @__PURE__ */ new WeakMap();
+	const _STATE = Symbol("pts.styleState");
+	const _uncached = /* @__PURE__ */ Object.freeze({});
+	const _observers = /* @__PURE__ */ new WeakMap();
 	const _observedStyles = [
 		"fillStyle",
 		"strokeStyle",
@@ -6422,113 +6423,108 @@ See https://github.com/williamngan/pts for details. */
 			if (d) return d;
 		}
 	}
-	function _observeProperty(ctx, key, cache, cacheKey, forget) {
-		if (Object.getOwnPropertyDescriptor(ctx, key)) return;
-		const d = _findDescriptor(ctx, key);
-		let get;
-		let set;
-		if (d && (d.get || d.set)) {
-			const g = d.get;
-			const s = d.set;
-			if (!s) return;
-			get = function() {
-				return g ? g.call(this) : void 0;
-			};
-			set = forget ? function(v) {
-				s.call(this, v);
-				cache[cacheKey] = void 0;
-			} : function(v) {
-				s.call(this, v);
-				cache[cacheKey] = v;
-			};
-		} else {
-			if (d && d.writable === false) return;
-			let value = d ? d.value : void 0;
-			get = () => value;
-			set = (v) => {
-				value = v;
-				cache[cacheKey] = forget ? void 0 : v;
-			};
-		}
-		try {
-			Object.defineProperty(ctx, key, {
-				get,
-				set,
-				configurable: true,
-				enumerable: d ? d.enumerable : true
-			});
-		} catch (_unused) {}
+	function _method(value) {
+		return {
+			value,
+			configurable: true,
+			writable: true,
+			enumerable: false
+		};
 	}
-	function _observeMethod(ctx, key, after) {
-		const fn = ctx[key];
-		if (typeof fn !== "function") return;
-		const own = Object.getOwnPropertyDescriptor(ctx, key);
-		if (own && !own.configurable) return;
-		try {
-			Object.defineProperty(ctx, key, {
-				value: function(...args) {
-					const result = fn.apply(this, args);
-					after();
-					return result;
+	function _makeObservers(proto) {
+		const observers = {};
+		for (const key of _observedStyles.concat("lineDashOffset")) {
+			const d = _findDescriptor(proto, key);
+			if (!d || !d.get || !d.set) return null;
+			const set = d.set;
+			observers[key] = {
+				get: d.get,
+				set: key === "lineDashOffset" ? function(v) {
+					set.call(this, v);
+					const state = this[_STATE];
+					if (state) state.styles.dash = void 0;
+				} : function(v) {
+					set.call(this, v);
+					const state = this[_STATE];
+					if (state) state.styles[key] = v;
 				},
 				configurable: true,
-				writable: true,
-				enumerable: own ? own.enumerable : false
-			});
-		} catch (_unused2) {}
-	}
-	function _observeContext(ctx, cache) {
-		if (typeof ctx._bindStyleCache === "function") {
-			ctx._bindStyleCache(cache);
-			return;
+				enumerable: d.enumerable
+			};
 		}
-		if (!Object.isExtensible(ctx)) return;
-		const stack = [];
-		_ctxSaved.set(ctx, stack);
-		for (const key of _observedStyles) _observeProperty(ctx, key, cache, key, false);
-		_observeProperty(ctx, "lineDashOffset", cache, "dash", true);
-		_observeMethod(ctx, "setLineDash", () => {
-			cache.dash = void 0;
+		const { setLineDash, save, restore, reset } = proto;
+		if (typeof setLineDash !== "function" || typeof save !== "function" || typeof restore !== "function") return null;
+		observers.setLineDash = _method(function(segments) {
+			setLineDash.call(this, segments);
+			const state = this[_STATE];
+			if (state) state.styles.dash = void 0;
 		});
-		_observeMethod(ctx, "save", () => {
-			stack.push(Object.assign({}, cache));
+		observers.save = _method(function() {
+			save.call(this);
+			const state = this[_STATE];
+			if (state) state.saved.push(Object.assign({}, state.styles));
 		});
-		_observeMethod(ctx, "restore", () => {
-			const saved = stack.pop();
-			if (saved) for (const k in cache) cache[k] = saved[k];
-			else _forgetStyles(cache);
+		observers.restore = _method(function() {
+			restore.call(this);
+			const state = this[_STATE];
+			if (!state) return;
+			const saved = state.saved.pop();
+			if (saved) for (const k in state.styles) state.styles[k] = saved[k];
+			else _forgetStyles(state.styles);
 		});
-		_observeMethod(ctx, "reset", () => {
-			stack.length = 0;
-			_forgetStyles(cache);
+		if (typeof reset === "function") observers.reset = _method(function() {
+			reset.call(this);
+			const state = this[_STATE];
+			if (!state) return;
+			state.saved.length = 0;
+			_forgetStyles(state.styles);
 		});
+		return observers;
+	}
+	function _styleState(ctx) {
+		if (Object.prototype.hasOwnProperty.call(ctx, _STATE)) return ctx[_STATE];
+		const proto = Object.getPrototypeOf(ctx);
+		if (!proto || !Object.isExtensible(ctx)) return null;
+		let observers = _observers.get(proto);
+		if (observers === void 0) {
+			try {
+				observers = _makeObservers(proto);
+			} catch (_unused) {
+				observers = null;
+			}
+			_observers.set(proto, observers);
+		}
+		if (!observers || Object.keys(observers).some((k) => Object.prototype.hasOwnProperty.call(ctx, k))) return null;
+		const state = {
+			styles: {},
+			saved: []
+		};
+		try {
+			Object.defineProperties(ctx, observers);
+			Object.defineProperty(ctx, _STATE, { value: state });
+		} catch (_unused2) {
+			return null;
+		}
+		return state;
 	}
 	var CanvasForm = class CanvasForm extends VisualForm {
 		_cacheForCtx() {
 			if (this._styleCacheCtx !== this._ctx) {
-				let cache = _ctxStyleCache.get(this._ctx);
-				if (!cache) {
-					cache = {};
-					_ctxStyleCache.set(this._ctx, cache);
-					_observeContext(this._ctx, cache);
-				}
-				this._styleCache = cache;
+				const state = _styleState(this._ctx);
+				this._styleCache = state ? state.styles : _uncached;
 				this._styleCacheCtx = this._ctx;
 			}
 			return this._styleCache;
 		}
 		static resetStyleCache(ctx) {
-			const cache = _ctxStyleCache.get(ctx);
-			if (cache) _forgetStyles(cache);
-			const saved = _ctxSaved.get(ctx);
-			if (saved) saved.length = 0;
+			const state = Object.prototype.hasOwnProperty.call(ctx, _STATE) ? ctx[_STATE] : null;
+			if (state) {
+				_forgetStyles(state.styles);
+				state.saved.length = 0;
+			}
 		}
 		_set(key, value) {
-			const cache = this._cacheForCtx();
-			if (cache[key] !== value) {
-				this._ctx[key] = value;
-				cache[key] = value;
-			}
+			if (this._cacheForCtx()[key] !== value) this._ctx[key] = value;
 		}
 		constructor(space) {
 			super();
@@ -6659,7 +6655,7 @@ See https://github.com/williamngan/pts for details. */
 				if (cache.dash !== "/0") {
 					this._ctx.setLineDash([]);
 					this._ctx.lineDashOffset = 0;
-					cache.dash = "/0";
+					if (cache !== _uncached) cache.dash = "/0";
 				}
 			} else {
 				const seg = segments === true ? [5, 5] : segments;
@@ -6667,7 +6663,7 @@ See https://github.com/williamngan/pts for details. */
 				if (cache.dash !== key) {
 					this._ctx.setLineDash(seg);
 					this._ctx.lineDashOffset = offset;
-					cache.dash = key;
+					if (cache !== _uncached) cache.dash = key;
 				}
 			}
 			return this;
@@ -6714,14 +6710,10 @@ See https://github.com/williamngan/pts for details. */
 			return offset ? new Pt(px + offset[0], py + offset[1]) : new Pt(px, py);
 		}
 		reset() {
-			const cache = this._cacheForCtx();
-			for (const k in this._style) if (this._style.hasOwnProperty(k)) {
-				this._ctx[k] = this._style[k];
-				cache[k] = this._style[k];
-			}
+			this._cacheForCtx();
+			for (const k in this._style) if (this._style.hasOwnProperty(k)) this._ctx[k] = this._style[k];
 			this._font = new Font(14, "sans-serif");
 			this._ctx.font = this._font.value;
-			cache.font = this._font.value;
 			return this;
 		}
 		_paint() {
@@ -9488,70 +9480,54 @@ See https://github.com/williamngan/pts for details. */
 		}
 		set fillStyle(v) {
 			this._fillStyle = v;
-			this._wrote("fillStyle", v);
 		}
 		get strokeStyle() {
 			return this._strokeStyle;
 		}
 		set strokeStyle(v) {
 			this._strokeStyle = v;
-			this._wrote("strokeStyle", v);
 		}
 		get lineWidth() {
 			return this._lineWidth;
 		}
 		set lineWidth(v) {
 			this._lineWidth = v;
-			this._wrote("lineWidth", v);
 		}
 		get lineJoin() {
 			return this._lineJoin;
 		}
 		set lineJoin(v) {
 			this._lineJoin = v;
-			this._wrote("lineJoin", v);
 		}
 		get lineCap() {
 			return this._lineCap;
 		}
 		set lineCap(v) {
 			this._lineCap = v;
-			this._wrote("lineCap", v);
 		}
 		get globalAlpha() {
 			return this._globalAlpha;
 		}
 		set globalAlpha(v) {
 			this._globalAlpha = v;
-			this._wrote("globalAlpha", v);
 		}
 		get globalCompositeOperation() {
 			return this._globalCompositeOperation;
 		}
 		set globalCompositeOperation(v) {
 			this._globalCompositeOperation = v;
-			this._wrote("globalCompositeOperation", v);
 		}
 		get font() {
 			return this._font;
 		}
 		set font(v) {
 			this._font = v;
-			this._wrote("font", v);
 		}
 		get lineDashOffset() {
 			return this._lineDashOffset;
 		}
 		set lineDashOffset(v) {
 			this._lineDashOffset = v;
-			this._wrote("dash", void 0);
-		}
-		_bindStyleCache(cache) {
-			this._styleCache = cache;
-		}
-		_wrote(key, v) {
-			const cache = this._styleCache;
-			if (cache) cache[key] = v;
 		}
 		constructor(host) {
 			this._fillStyle = "#f03";
@@ -9567,7 +9543,6 @@ See https://github.com/williamngan/pts for details. */
 			this.textBaseline = "alphabetic";
 			this._dash = [];
 			this._stateStack = [];
-			this._styleCache = null;
 			this.className = "";
 			this._d = "";
 			this._shapeFill = null;
@@ -9754,27 +9729,27 @@ See https://github.com/williamngan/pts for details. */
 			if (full) this._d += "Z";
 		}
 		fill() {
-			this._shapeFill = this._resolvePaint(this.fillStyle);
+			this._shapeFill = this._resolvePaint(this._fillStyle);
 			this._capturePaintState();
 		}
 		stroke() {
-			this._shapeStroke = this._resolvePaint(this.strokeStyle);
+			this._shapeStroke = this._resolvePaint(this._strokeStyle);
 			this._shapeStrokeStyle = {
-				"stroke-width": this.lineWidth,
-				"stroke-linejoin": this.lineJoin,
-				"stroke-linecap": this.lineCap
+				"stroke-width": this._lineWidth,
+				"stroke-linejoin": this._lineJoin,
+				"stroke-linecap": this._lineCap
 			};
 			if (this._dash.length > 0) {
 				this._shapeStrokeStyle["stroke-dasharray"] = this._dash.join(" ");
-				if (this.lineDashOffset) this._shapeStrokeStyle["stroke-dashoffset"] = this.lineDashOffset;
+				if (this._lineDashOffset) this._shapeStrokeStyle["stroke-dashoffset"] = this._lineDashOffset;
 			}
 			this._capturePaintState();
 		}
 		_capturePaintState() {
 			this._shapePainted = true;
 			this._shapeClass = this.className;
-			this._shapeAlpha = this.globalAlpha;
-			this._shapeBlend = this.globalCompositeOperation;
+			this._shapeAlpha = this._globalAlpha;
+			this._shapeBlend = this._globalCompositeOperation;
 			this._drawCount++;
 		}
 		fillRect(x, y, w, h) {
@@ -9790,10 +9765,10 @@ See https://github.com/williamngan/pts for details. */
 			const attrs = {
 				x: round2(x),
 				y: round2(y),
-				fill: this._resolvePaint(this.fillStyle),
+				fill: this._resolvePaint(this._fillStyle),
 				"text-anchor": anchor,
 				"dominant-baseline": baseline,
-				style: `font: ${this.font}`,
+				style: `font: ${this._font}`,
 				"pointer-events": "none"
 			};
 			if (maxWidth > 0 && this.measureText(txt).width > maxWidth) {
@@ -9810,7 +9785,7 @@ See https://github.com/williamngan/pts for details. */
 		}
 		measureText(txt) {
 			if (!_svgMeasurer) _svgMeasurer = document.createElement("canvas").getContext("2d");
-			_svgMeasurer.font = this.font;
+			_svgMeasurer.font = this._font;
 			return _svgMeasurer.measureText(txt);
 		}
 		drawImage(img, x, y, w, h, ...rest) {
@@ -9846,26 +9821,23 @@ See https://github.com/williamngan/pts for details. */
 		}
 		save() {
 			this._stateStack.push({
-				fillStyle: this.fillStyle,
-				strokeStyle: this.strokeStyle,
-				lineWidth: this.lineWidth,
-				lineJoin: this.lineJoin,
-				lineCap: this.lineCap,
-				globalAlpha: this.globalAlpha,
-				globalCompositeOperation: this.globalCompositeOperation,
-				font: this.font,
+				fillStyle: this._fillStyle,
+				strokeStyle: this._strokeStyle,
+				lineWidth: this._lineWidth,
+				lineJoin: this._lineJoin,
+				lineCap: this._lineCap,
+				globalAlpha: this._globalAlpha,
+				globalCompositeOperation: this._globalCompositeOperation,
+				font: this._font,
 				textAlign: this.textAlign,
 				textBaseline: this.textBaseline,
-				lineDashOffset: this.lineDashOffset,
+				lineDashOffset: this._lineDashOffset,
 				_dash: this._dash.slice()
 			});
 		}
 		restore() {
 			const s = this._stateStack.pop();
-			if (s) {
-				Object.assign(this, s);
-				this._wrote("dash", void 0);
-			}
+			if (s) Object.assign(this, s);
 		}
 		scale() {}
 		clip() {
@@ -9873,7 +9845,6 @@ See https://github.com/williamngan/pts for details. */
 		}
 		setLineDash(segments) {
 			this._dash = segments;
-			this._wrote("dash", void 0);
 		}
 		getLineDash() {
 			return this._dash;
@@ -9912,9 +9883,9 @@ See https://github.com/williamngan/pts for details. */
 		}
 		_applyCommon(attrs) {
 			attrs.class = this.className ? `pts-svgform ${this.className}` : "pts-svgform";
-			if (this.globalAlpha !== 1) attrs.opacity = this.globalAlpha;
+			if (this._globalAlpha !== 1) attrs.opacity = this._globalAlpha;
 			else attrs.opacity = 1;
-			const op = this.globalCompositeOperation;
+			const op = this._globalCompositeOperation;
 			if (op !== "source-over") {
 				if (BLEND_MODES.has(op)) {
 					const blend = `mix-blend-mode: ${op}`;

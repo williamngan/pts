@@ -2350,18 +2350,16 @@ declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends Visual
   protected _cacheForCtx(): Record<string, unknown>;
   /**
    * Forget the cached style values for a rendering context, so every
-   * subsequent style write applies. Call this after anything that resets or
-   * desyncs a context's state outside a form — most commonly assigning a
-   * canvas's `width` or `height`, which resets the context to its defaults.
-   * (Within a form, [`CanvasForm.reset`](#link) is the equivalent recovery.)
+   * subsequent style write applies. Call this after resetting a context
+   * without its own methods: assigning a canvas's `width` or `height` resets
+   * the context to its defaults. (CanvasSpace does this when it resizes.)
    * @param ctx the rendering context to forget
    */
   static resetStyleCache(ctx: RenderingContext2D | object): void;
   /**
    * Write a context style property only when it differs from the last value
-   * written to this context. Direct writes of the cached styles on the
-   * context, `setLineDash`, `save()`, `restore()` and `reset()` are observed,
-   * so the cache stays accurate (see [`CanvasForm.ctx`](#link)).
+   * written to this context. The context's observers record the write (see
+   * [`CanvasForm.ctx`](#link)).
    */
   protected _set(key: string, value: unknown): void;
   /**
@@ -2382,10 +2380,12 @@ declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends Visual
   get space(): S;
   /**
    * Get the rendering context of canvas to perform other canvas functions.
-   * Form style setters observe direct style writes, `setLineDash`, `save()`,
-   * `restore()` and `reset()` on canvas contexts. For a custom renderer whose
-   * style members are its own properties (rather than inherited accessors), or
-   * a frozen one, call `form.reset()` after setting its styles directly.
+   * You may set styles on the context directly, through this or any other
+   * reference to it: the form skips a style write only when it is sure the
+   * context already has that value. It observes canvas contexts' style
+   * setters, `setLineDash()`, `save()`, `restore()` and `reset()`; a context
+   * it cannot observe (such as a renderer with plain style fields) gets every
+   * style write.
    * @example `form.ctx.clip()`
    */
   get ctx(): RenderingContext2D;
@@ -5580,7 +5580,6 @@ declare class SVGContext2D {
   textBaseline: string;
   protected _dash: number[];
   protected _stateStack: object[];
-  protected _styleCache: Record<string, unknown> | null;
   get fillStyle(): string | SVGGradient;
   set fillStyle(v: string | SVGGradient);
   get strokeStyle(): string | SVGGradient;
@@ -5599,15 +5598,6 @@ declare class SVGContext2D {
   set font(v: string);
   get lineDashOffset(): number;
   set lineDashOffset(v: number);
-  /**
-   * Bind the style cache of the CanvasForms drawing on this context, so that
-   * style writes made directly on this context, `setLineDash` and `restore()`
-   * keep it accurate. Called by `CanvasForm`; a custom renderer may implement
-   * the same method instead of being observed.
-   * @param cache the style values last written, keyed by property name
-   */
-  _bindStyleCache(cache: Record<string, unknown>): void;
-  protected _wrote(key: string, v: unknown): void;
   /** Optional CSS class applied to emitted elements (see `SVGForm.cls`). */
   className: string;
   protected _d: string;
