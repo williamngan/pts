@@ -104,7 +104,8 @@ type SVGRun = {
   attrs: Record<string, string | number>;
   text?: string;
   shapeEnds?: number[]; // per-shape boundaries in the d string, for expanded export
-  // whether the run's paint gives the same pixels in any drawing order
+  // whether the run's paint is one opaque color, which looks the same in any
+  // drawing order (apart from shared edge pixels, see SVGContext2D)
   free?: boolean;
   // fill orientation shared by every shape in a path run (see `_wind`)
   wind?: number;
@@ -218,11 +219,18 @@ const _svgWarned: { [k: string]: boolean } = {};
 /**
  * **`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that
  * [`CanvasForm`](#link) draws through, and renders it as SVG. Consecutive shapes with the
- * same paint state share one `<path>` element (a "style run") when that renders the same as
- * separate elements: shapes with one opaque paint (fills only when their subpaths are
- * circles, rectangles or convex polygons winding the same way), or shapes that do not
- * overlap. Classed shapes, and overlapping translucent, blended, or differently filled and
- * stroked shapes, keep separate elements, so they composite like canvas.
+ * same paint state share one `<path>` element (a "style run") when they do not overlap, or
+ * when they have one opaque paint (fills only when their subpaths are circles, rectangles or
+ * convex polygons winding the same way). Classed shapes (see [`SVGForm.cls`](#link)), and
+ * overlapping translucent, blended, or differently filled and stroked shapes, keep separate
+ * elements, so they composite like canvas.
+ *
+ * Merged opaque shapes look the same as separate ones except at antialiased pixels that the
+ * edges of two shapes share. One path covers such a pixel once, whereas canvas draws each
+ * shape on its own and blends the pixel twice, so coincident or nearly parallel edges come
+ * out lighter than on canvas, and crossing edges can differ slightly. Separate elements for
+ * every overlapping shape would make such scenes up to three times slower to render; give
+ * the shapes a class when their edges must blend like canvas.
  *
  * Capability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,
  * `clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so
@@ -957,13 +965,14 @@ export class SVGContext2D {
 
   /**
    * Whether the current shape can join the previous path run, which has the
-   * same attributes, without changing the rendered pixels: 1 when it is order
-   * independent, 2 when it does not overlap the run's shapes, 0 otherwise.
-   * One opaque paint gives the same pixels in any order, and same-oriented
-   * simple fills do not cancel under the nonzero rule. Translucent paint,
-   * group opacity, blends, distinct fill and stroke paints, and fills of
-   * unknown winding composite per element, so they join only shapes they do
-   * not overlap.
+   * same attributes: 1 when it is order independent, 2 when it does not
+   * overlap the run's shapes, 0 otherwise. One opaque paint looks the same in
+   * any order, apart from edge pixels the shapes share (see the class notes),
+   * and same-oriented simple fills do not cancel under the nonzero rule.
+   * Translucent paint, group opacity, blends, distinct fill and stroke paints,
+   * and fills of unknown winding composite per element, so they join only
+   * shapes they do not overlap, by bounds grown a pixel past their
+   * antialiased edges.
    */
   protected _joinable(run: SVGRun): number {
     // the shape has the run's paint, so the run's paint verdict applies
@@ -1484,8 +1493,9 @@ export class SVGForm extends CanvasForm<SVGSpace> {
   }
 
   /**
-   * Add custom class to the created element(s). In batched rendering the class applies to
-   * the current style run.
+   * Add custom class to the created element(s). Classed shapes are never merged into a
+   * shared element, so each shape's element gets the class, and overlapping shapes blend
+   * their edges like canvas (see [`SVGContext2D`](#link)).
    * @param c custom class name or `false` to reset it
    * @example `form.fill("#f00").cls("myClass").rects(r)` `form.cls(false).circles(c)`
    */

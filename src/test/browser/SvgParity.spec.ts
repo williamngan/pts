@@ -142,6 +142,52 @@ describe("canvas-svg rendering parity", () => {
     expect(ctx.runs).toHaveLength(1);
   });
 
+  it("covers shared edges of merged opaque shapes once, and of classed shapes twice", async () => {
+    const draw = (form: CanvasForm, times: number) => {
+      form.fillOnly("#000");
+      for (let i = 0; i < times; i++) form.point([50.25, 50.25], 30, "circle");
+    };
+    // total coverage: the alpha channel's sum
+    const ink = (data: Uint8ClampedArray) => {
+      let sum = 0;
+      for (let i = 3; i < data.length; i += 4) sum += data[i];
+      return sum / 255;
+    };
+    const canvasInk = (times: number) => {
+      const canvas = document.createElement("canvas");
+      canvas.width = W;
+      canvas.height = H;
+      const g = canvas.getContext("2d")!;
+      draw(new CanvasForm(g), times);
+      return ink(g.getImageData(0, 0, W, H).data);
+    };
+    const svgInk = async (className: string) => {
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("width", `${W}`);
+      svg.setAttribute("height", `${H}`);
+      svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+      const ctx = new SVGContext2D(svg);
+      ctx.className = className;
+      ctx.beginFrame();
+      draw(new CanvasForm(ctx as any), 2);
+      ctx.commitFrame();
+      const raster = await rasterize(svg.outerHTML);
+      return {
+        elements: ctx.runs.length,
+        ink: ink(raster.getContext("2d")!.getImageData(0, 0, W, H).data),
+      };
+    };
+    // one path covers the shared edge once, like a single canvas draw...
+    const merged = await svgInk("");
+    expect(merged.elements).toBe(1);
+    expect(Math.abs(merged.ink - canvasInk(1))).toBeLessThan(3);
+    // ...while classed shapes keep separate elements and blend it twice
+    const classed = await svgInk("circle");
+    expect(classed.elements).toBe(2);
+    expect(Math.abs(classed.ink - canvasInk(2))).toBeLessThan(3);
+    expect(classed.ink - merged.ink).toBeGreaterThan(15);
+  });
+
   it("revalidates form styles after direct writes and context restore", () => {
     const canvas = document.createElement("canvas").getContext("2d")!;
     const svg = new SVGContext2D(
