@@ -37,8 +37,8 @@ These fixes change what some existing sketches draw or compute.
 
 ### Performance
 
-- Search long Path sweep windows block by block when a sample of the edges shows that most candidates can be skipped, as for full-width bars (2000 bars unite about seven times faster in order, and about 13 times faster shuffled). Edges with the same left side are ordered by y for the search when their input order scatters them. Other layouts keep the plain x-order scan; pair order and results are unchanged.
-- Write changed styles through the context observers at the speed of a plain context write, and compare repeated style calls by property name: in Chromium, style calls that repeat the current style are about 3.5 times faster than in 1.0.2, and on skia-canvas style calls take about two thirds of the time.
+- Search long Path sweep windows block by block when a sample of the edges shows that most candidates can be skipped, as for full-width bars (2000 bars unite about nine times faster in order, and about eleven times faster shuffled). Edges with the same left side are ordered by y for the search when their input order scatters them. Other layouts keep the plain x-order scan; pair order and results are unchanged.
+- Write changed styles through the context observers as fast as 1.0.2 wrote them to the context, by comparing and writing each style by name: style calls that repeat the current style take about 0.87 of 1.0.2's time in Chromium and 0.58 on skia-canvas.
 - Convert HSB to RGB without allocating, and compare SVG style runs without allocating key arrays.
 
 ### Documentation
