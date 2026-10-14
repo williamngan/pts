@@ -635,30 +635,79 @@ function _method(value: (...args: never[]) => unknown): PropertyDescriptor {
 // change is made through. A prototype without setters for every cached style
 // (such as a renderer with plain style fields) gets null.
 function _makeObservers(proto: any): PropertyDescriptorMap | null {
-  const observers: PropertyDescriptorMap = {};
+  const natives: Record<string, PropertyDescriptor> = {};
   for (const key of _observedStyles.concat("lineDashOffset")) {
     const d = _findDescriptor(proto, key);
     if (!d || !d.get || !d.set) return null;
-    const set = d.set;
-    observers[key] = {
-      get: d.get,
-      set:
-        key === "lineDashOffset"
-          ? function (this: any, v: unknown) {
-              set.call(this, v);
-              // the dash key covers the offset
-              const state: StyleState | undefined = this[_STATE];
-              if (state) state.styles.dash = undefined;
-            }
-          : function (this: any, v: unknown) {
-              set.call(this, v);
-              const state: StyleState | undefined = this[_STATE];
-              if (state) state.styles[key] = v;
-            },
-      configurable: true,
-      enumerable: d.enumerable,
-    };
+    natives[key] = d;
   }
+  const fill = natives.fillStyle.set!;
+  const stroke = natives.strokeStyle.set!;
+  const width = natives.lineWidth.set!;
+  const join = natives.lineJoin.set!;
+  const cap = natives.lineCap.set!;
+  const alpha = natives.globalAlpha.set!;
+  const composite = natives.globalCompositeOperation.set!;
+  const font = natives.font.set!;
+  const offset = natives.lineDashOffset.set!;
+  // One function per style: setters made from one function share V8's call
+  // feedback, so none of them could call its native setter directly.
+  const setters: Record<string, (this: any, v: any) => void> = {
+    fillStyle(v) {
+      fill.call(this, v);
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.fillStyle = v;
+    },
+    strokeStyle(v) {
+      stroke.call(this, v);
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.strokeStyle = v;
+    },
+    lineWidth(v) {
+      width.call(this, v);
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.lineWidth = v;
+    },
+    lineJoin(v) {
+      join.call(this, v);
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.lineJoin = v;
+    },
+    lineCap(v) {
+      cap.call(this, v);
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.lineCap = v;
+    },
+    globalAlpha(v) {
+      alpha.call(this, v);
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.globalAlpha = v;
+    },
+    globalCompositeOperation(v) {
+      composite.call(this, v);
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.globalCompositeOperation = v;
+    },
+    font(v) {
+      font.call(this, v);
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.font = v;
+    },
+    lineDashOffset(v) {
+      offset.call(this, v);
+      // the dash key covers the offset
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.dash = undefined;
+    },
+  };
+  const observers: PropertyDescriptorMap = {};
+  for (const key in setters)
+    observers[key] = {
+      get: natives[key].get,
+      set: setters[key],
+      configurable: true,
+      enumerable: natives[key].enumerable,
+    };
 
   const { setLineDash, save, restore, reset } = proto;
   if (
@@ -785,8 +834,38 @@ export class CanvasForm<
    */
   protected _set(key: string, value: unknown): void {
     const cache = this._cacheForCtx();
-    if (cache[key] !== value) {
-      (this._ctx as any)[key] = value;
+    const ctx = this._ctx as any;
+    // Each style is compared and written by name: a site that writes one
+    // property reaches the context's observer, and its native setter, much
+    // faster than a write through a variable key.
+    switch (key) {
+      case "fillStyle":
+        if (cache.fillStyle !== value) ctx.fillStyle = value;
+        return;
+      case "strokeStyle":
+        if (cache.strokeStyle !== value) ctx.strokeStyle = value;
+        return;
+      case "lineWidth":
+        if (cache.lineWidth !== value) ctx.lineWidth = value;
+        return;
+      case "lineJoin":
+        if (cache.lineJoin !== value) ctx.lineJoin = value;
+        return;
+      case "lineCap":
+        if (cache.lineCap !== value) ctx.lineCap = value;
+        return;
+      case "globalAlpha":
+        if (cache.globalAlpha !== value) ctx.globalAlpha = value;
+        return;
+      case "globalCompositeOperation":
+        if (cache.globalCompositeOperation !== value)
+          ctx.globalCompositeOperation = value;
+        return;
+      case "font":
+        if (cache.font !== value) ctx.font = value;
+        return;
+      default:
+        if (cache[key] !== value) ctx[key] = value;
     }
   }
 
