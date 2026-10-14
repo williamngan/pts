@@ -2267,12 +2267,59 @@ function windowEnd(minX, order, from, limit) {
 	}
 	return end;
 }
+function runStart(minX, order, i) {
+	const x = minX[order[i]];
+	let a = 0;
+	for (let b = i; a < b;) {
+		const mid = a + b >> 1;
+		if (minX[order[mid]] < x) a = mid + 1;
+		else b = mid;
+	}
+	return a;
+}
+function scattered(boxes, r0, r1) {
+	const { minY, maxY, order } = boxes;
+	let lo = Infinity;
+	let hi = -Infinity;
+	let blockLo = Infinity;
+	let blockHi = -Infinity;
+	let spans = 0;
+	for (let j = r0; j < r1; j++) {
+		const e = order[j];
+		if (minY[e] < blockLo) blockLo = minY[e];
+		if (maxY[e] > blockHi) blockHi = maxY[e];
+		if ((j + 1 & 15) === 0 || j + 1 === r1) {
+			spans += blockHi - blockLo;
+			if (blockLo < lo) lo = blockLo;
+			if (blockHi > hi) hi = blockHi;
+			blockLo = Infinity;
+			blockHi = -Infinity;
+		}
+	}
+	return spans > 2 * (hi - lo);
+}
 function blockSpan(from, to) {
 	return (to - 1 >> SWEEP_BLOCK_BITS) - (from >> SWEEP_BLOCK_BITS) + 1;
 }
 function sweepTree(boxes) {
-	const { minY, maxY, order } = boxes;
+	const { minX, minY, maxY, order } = boxes;
 	const E = order.length;
+	let edges = order;
+	for (let r0 = 0, r1 = 1; r0 < E; r0 = r1++) {
+		while (r1 < E && minX[order[r1]] === minX[order[r0]]) r1++;
+		if (r1 - r0 > SWEEP_BLOCK && scattered(boxes, r0, r1)) {
+			if (edges === order) edges = order.slice();
+			edges.subarray(r0, r1).sort((p, q) => minY[p] - minY[q]);
+		}
+	}
+	let ties;
+	if (edges !== order) {
+		ties = {
+			rank: new Uint32Array(E),
+			found: new Uint32Array(E)
+		};
+		for (let j = 0; j < E; j++) ties.rank[order[j]] = j;
+	}
 	const blocks = E + SWEEP_BLOCK - 1 >> SWEEP_BLOCK_BITS;
 	let size = 1;
 	let depth = 0;
@@ -2283,7 +2330,7 @@ function sweepTree(boxes) {
 	const low = new Float64Array(2 * size).fill(Infinity);
 	const high = new Float64Array(2 * size).fill(-Infinity);
 	for (let j = 0; j < E; j++) {
-		const e = order[j];
+		const e = edges[j];
 		const leaf = size + (j >> SWEEP_BLOCK_BITS);
 		if (minY[e] < low[leaf]) low[leaf] = minY[e];
 		if (maxY[e] > high[leaf]) high[leaf] = maxY[e];
@@ -2296,6 +2343,8 @@ function sweepTree(boxes) {
 		low,
 		high,
 		size,
+		edges,
+		ties,
 		stack: new Int32Array(3 * (depth + 2)),
 		scanned: 0
 	};
@@ -2499,9 +2548,8 @@ var Overlay = class {
 			long++;
 			(_tree = tree) !== null && _tree !== void 0 || (tree = sweepTree(boxes));
 			this.dryRun = true;
-			this.searchPairs(e1, i + 1, end, minY[e1] - margin, maxY[e1] + margin, boxes, tree);
+			windowBlocks += this.searchPairs(e1, i, end, minY[e1] - margin, maxY[e1] + margin, boxes, tree);
 			this.dryRun = false;
-			windowBlocks += blockSpan(i + 1, end);
 		}
 		if (!tree || long * 8 < SWEEP_SAMPLES || tree.scanned * 2 > windowBlocks) return void 0;
 		tree.scanned = 0;
@@ -2528,8 +2576,7 @@ var Overlay = class {
 				}
 				continue;
 			}
-			this.searchPairs(e1, i + 1, end, lo, hi, boxes, tree);
-			windowBlocks += blockSpan(i + 1, end);
+			windowBlocks += this.searchPairs(e1, i, end, lo, hi, boxes, tree);
 			if (++searches === SWEEP_TRIAL) searchable = tree.scanned * 2 <= windowBlocks;
 		}
 		const pairs = this.pairs;
@@ -2537,7 +2584,6 @@ var Overlay = class {
 		return pairs;
 	}
 	visitPair(e1, e2, boxes) {
-		if (this.dryRun) return;
 		if (this.touching) {
 			this.touchPair(e1, e2, boxes);
 			const pairs = this.pairs;
@@ -2547,10 +2593,15 @@ var Overlay = class {
 			}
 		} else this.crossPair(e1, e2);
 	}
-	searchPairs(e1, from, to, lo, hi, boxes, tree) {
-		const { low, high, size } = tree;
+	searchPairs(e1, i, to, lo, hi, boxes, tree) {
+		const { minX, minY, maxY, order } = boxes;
+		const { low, high, size, edges, ties } = tree;
+		let from = i + 1;
+		if (ties && from < to && minX[order[from]] === minX[e1]) from = runStart(minX, order, i);
 		const first = from >> SWEEP_BLOCK_BITS;
 		const last = to - 1 >> SWEEP_BLOCK_BITS;
+		let count = 0;
+		let sorted = true;
 		const stack = tree.stack;
 		let top = 0;
 		stack[top++] = 1;
@@ -2564,12 +2615,16 @@ var Overlay = class {
 			if (n >= size) {
 				tree.scanned++;
 				const start = b0 << SWEEP_BLOCK_BITS;
-				const { minY, maxY, order } = boxes;
 				const stopAt = start + SWEEP_BLOCK < to ? start + SWEEP_BLOCK : to;
 				for (let j = start > from ? start : from; j < stopAt; j++) {
-					const e2 = order[j];
+					const e2 = edges[j];
 					if (minY[e2] > hi || maxY[e2] < lo) continue;
-					this.visitPair(e1, e2, boxes);
+					if (ties) {
+						const r = ties.rank[e2];
+						if (r <= i) continue;
+						if (count > 0 && r < ties.found[count - 1]) sorted = false;
+						ties.found[count++] = r;
+					} else if (!this.dryRun) this.visitPair(e1, e2, boxes);
 				}
 			} else {
 				const mid = b0 + b1 >> 1;
@@ -2581,6 +2636,12 @@ var Overlay = class {
 				stack[top++] = mid;
 			}
 		}
+		if (ties && !this.dryRun) {
+			const found = ties.found;
+			if (!sorted) found.subarray(0, count).sort();
+			for (let k = 0; k < count; k++) this.visitPair(e1, order[found[k]], boxes);
+		}
+		return blockSpan(from, to);
 	}
 	touchPair(e1, e2, boxes) {
 		const a = this.ea[e1];
@@ -5163,6 +5224,7 @@ var MultiTouchSpace = class extends Space {
 		this._pressId = null;
 		this._pressIsTouch = false;
 		this._pressType = "";
+		this._pressCapture = null;
 		this._hasMouse = false;
 		this._hasTouch = false;
 		this._hasKeyboard = false;
@@ -5351,6 +5413,9 @@ var MultiTouchSpace = class extends Space {
 				py = (touch.clientY - top) * scaleY;
 			}
 		}
+		this._sendAction(type, px, py, evt);
+	}
+	_sendAction(type, px, py, evt) {
 		if (type) {
 			this._pointer.to(px, py);
 			this._pointer.id = type;
@@ -5370,9 +5435,14 @@ var MultiTouchSpace = class extends Space {
 	_releasePress() {
 		this._pressed = this._dragged = false;
 		this._pressId = null;
+		this._pressCapture = null;
 	}
 	_beginPress(evt, id, touch, type) {
-		if (this._pressed && this._pressType === type && (id === this._pressId || ("changedTouches" in evt ? evt.touches.length === evt.changedTouches.length : evt.isPrimary !== false))) this._abandonPress();
+		if (this._pressed) {
+			const first = "changedTouches" in evt ? evt.touches.length === evt.changedTouches.length : evt.isPrimary !== false;
+			const capture = this._pressCapture;
+			if (this._pressType === type ? id === this._pressId || first : first && !!capture && !capture.hasPointerCapture(this._pressId)) this._abandonPress();
+		}
 		if (!this._pressed) {
 			this._pressId = id;
 			this._pressIsTouch = touch;
@@ -5381,8 +5451,12 @@ var MultiTouchSpace = class extends Space {
 		}
 	}
 	_abandonPress() {
+		const dragged = this._dragged;
 		this._releasePress();
-		for (const ui of this._trackedUIs.slice()) if (ui.state("dragging")) ui.listen(UIPointerActions.drop, this._pointer, new Event("pointercancel"));
+		if (!this.isPlaying) return;
+		const evt = new Event("pointercancel");
+		this._sendAction(UIPointerActions.out, this._pointer.x, this._pointer.y, evt);
+		if (dragged) this._sendAction(UIPointerActions.drop, this._pointer.x, this._pointer.y, evt);
 	}
 	_mouseDown(evt) {
 		if (this._isTouchHandled(evt)) return false;
@@ -5391,6 +5465,7 @@ var MultiTouchSpace = class extends Space {
 		this._mouseAction(UIPointerActions.pointerdown, evt);
 		if (typeof Element !== "undefined" && evt.target instanceof Element) try {
 			evt.target.setPointerCapture(evt.pointerId);
+			if (!this._pressIsTouch && this._pressId === evt.pointerId) this._pressCapture = evt.target;
 		} catch (_unused) {}
 		return false;
 	}
@@ -6074,6 +6149,7 @@ var CanvasSpace = class extends MultiTouchSpace {
 		this._autoResize = true;
 		this._initialResize = false;
 		this._hasPlayed = false;
+		this._frameTime = 0;
 		this._disposed = false;
 		this._ownsCanvas = false;
 		this._ownsContainer = false;
@@ -6197,7 +6273,7 @@ var CanvasSpace = class extends MultiTouchSpace {
 			if (p.resize) p.resize(this.bound, evt);
 		}
 		this.render(this._ctx);
-		if (this._isReady && !this.isPlaying && (evt || this._hasPlayed)) this._repaint();
+		if (this._isReady && (!this.isPlaying || this._pause) && (evt || this._hasPlayed)) this._repaint();
 		return this;
 	}
 	_resizeHandler(evt) {
@@ -6268,6 +6344,7 @@ var CanvasSpace = class extends MultiTouchSpace {
 	playItems(time) {
 		if (this._isReady) {
 			this._hasPlayed = true;
+			this._frameTime = time;
 			this._beginDraw();
 			super.playItems(time);
 			this._endDraw();
@@ -6275,7 +6352,7 @@ var CanvasSpace = class extends MultiTouchSpace {
 	}
 	_repaint() {
 		this._beginDraw();
-		this._animatePlayers(this._time.prev, 0);
+		this._animatePlayers(this._frameTime, 0);
 		this._endDraw();
 	}
 	_beginDraw() {
@@ -6285,8 +6362,6 @@ var CanvasSpace = class extends MultiTouchSpace {
 	_endDraw() {
 		this._ctx.restore();
 		if (this._offscreen) this._offCtx.restore();
-		CanvasForm.resetStyleCache(this._ctx);
-		if (this._offscreen) CanvasForm.resetStyleCache(this._offCtx);
 		this.render(this._ctx);
 	}
 	dispose() {
@@ -6364,26 +6439,75 @@ function _method(value) {
 	};
 }
 function _makeObservers(proto) {
-	const observers = {};
+	const natives = {};
 	for (const key of _observedStyles.concat("lineDashOffset")) {
 		const d = _findDescriptor(proto, key);
 		if (!d || !d.get || !d.set) return null;
-		const set = d.set;
-		observers[key] = {
-			get: d.get,
-			set: key === "lineDashOffset" ? function(v) {
-				set.call(this, v);
-				const state = this[_STATE];
-				if (state) state.styles.dash = void 0;
-			} : function(v) {
-				set.call(this, v);
-				const state = this[_STATE];
-				if (state) state.styles[key] = v;
-			},
-			configurable: true,
-			enumerable: d.enumerable
-		};
+		natives[key] = d;
 	}
+	const fill = natives.fillStyle.set;
+	const stroke = natives.strokeStyle.set;
+	const width = natives.lineWidth.set;
+	const join = natives.lineJoin.set;
+	const cap = natives.lineCap.set;
+	const alpha = natives.globalAlpha.set;
+	const composite = natives.globalCompositeOperation.set;
+	const font = natives.font.set;
+	const offset = natives.lineDashOffset.set;
+	const setters = {
+		fillStyle(v) {
+			fill.call(this, v);
+			const state = this[_STATE];
+			if (state) state.styles.fillStyle = v;
+		},
+		strokeStyle(v) {
+			stroke.call(this, v);
+			const state = this[_STATE];
+			if (state) state.styles.strokeStyle = v;
+		},
+		lineWidth(v) {
+			width.call(this, v);
+			const state = this[_STATE];
+			if (state) state.styles.lineWidth = v;
+		},
+		lineJoin(v) {
+			join.call(this, v);
+			const state = this[_STATE];
+			if (state) state.styles.lineJoin = v;
+		},
+		lineCap(v) {
+			cap.call(this, v);
+			const state = this[_STATE];
+			if (state) state.styles.lineCap = v;
+		},
+		globalAlpha(v) {
+			alpha.call(this, v);
+			const state = this[_STATE];
+			if (state) state.styles.globalAlpha = v;
+		},
+		globalCompositeOperation(v) {
+			composite.call(this, v);
+			const state = this[_STATE];
+			if (state) state.styles.globalCompositeOperation = v;
+		},
+		font(v) {
+			font.call(this, v);
+			const state = this[_STATE];
+			if (state) state.styles.font = v;
+		},
+		lineDashOffset(v) {
+			offset.call(this, v);
+			const state = this[_STATE];
+			if (state) state.styles.dash = void 0;
+		}
+	};
+	const observers = {};
+	for (const key in setters) observers[key] = {
+		get: natives[key].get,
+		set: setters[key],
+		configurable: true,
+		enumerable: natives[key].enumerable
+	};
 	const { setLineDash, save, restore, reset } = proto;
 	if (typeof setLineDash !== "function" || typeof save !== "function" || typeof restore !== "function") return null;
 	observers.setLineDash = _method(function(segments) {
@@ -6456,7 +6580,35 @@ var CanvasForm = class CanvasForm extends VisualForm {
 		}
 	}
 	_set(key, value) {
-		if (this._cacheForCtx()[key] !== value) this._ctx[key] = value;
+		const cache = this._cacheForCtx();
+		const ctx = this._ctx;
+		switch (key) {
+			case "fillStyle":
+				if (cache.fillStyle !== value) ctx.fillStyle = value;
+				return;
+			case "strokeStyle":
+				if (cache.strokeStyle !== value) ctx.strokeStyle = value;
+				return;
+			case "lineWidth":
+				if (cache.lineWidth !== value) ctx.lineWidth = value;
+				return;
+			case "lineJoin":
+				if (cache.lineJoin !== value) ctx.lineJoin = value;
+				return;
+			case "lineCap":
+				if (cache.lineCap !== value) ctx.lineCap = value;
+				return;
+			case "globalAlpha":
+				if (cache.globalAlpha !== value) ctx.globalAlpha = value;
+				return;
+			case "globalCompositeOperation":
+				if (cache.globalCompositeOperation !== value) ctx.globalCompositeOperation = value;
+				return;
+			case "font":
+				if (cache.font !== value) ctx.font = value;
+				return;
+			default: if (cache[key] !== value) ctx[key] = value;
+		}
 	}
 	constructor(space) {
 		super();
@@ -9354,7 +9506,7 @@ function _parseOpaque(paint) {
 		const a = alpha.trim();
 		return a === "1" || a === "100%" || parseFloat(a) >= (a.endsWith("%") ? 100 : 1);
 	}
-	return /^[a-z]+$/.test(p) && p !== "transparent" && p !== "currentcolor" && p !== "none" && p !== "inherit";
+	return /^[a-z]+$/.test(p) && !/^(?:transparent|currentcolor|none|inherit|initial|unset|revert)$/.test(p) && (typeof CSS === "undefined" || !CSS.supports || CSS.supports("color", p));
 }
 function convexOrientation(p, start, end) {
 	let ex0 = p[start] - p[end - 2];

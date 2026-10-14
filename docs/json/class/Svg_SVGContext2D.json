@@ -3,19 +3,19 @@
   "source": [
     [
       "src/Svg.ts",
-      253,
+      263,
       13
     ]
   ],
   "kind": "Class",
-  "comment": "**`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that\n[`CanvasForm`](#link) draws through, and renders it as SVG. Consecutive shapes with the\nsame paint state share one `<path>` element (a \"style run\") when that renders the same as\nseparate elements: shapes with one opaque paint (fills only when their subpaths are\ncircles, rectangles or convex polygons winding the same way), or shapes that do not\noverlap. Classed shapes, and overlapping translucent, blended, or differently filled and\nstroked shapes, keep separate elements, so they composite like canvas.\n\nCapability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,\n`clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so\n`textBox` layout matches canvas exactly.\nDrawing must occur in an animate callback (or be committed explicitly on this context).\n`SVGSpace.refresh(false)` preserves the last nonempty frame; it does not accumulate\ntrails. Draws in action handlers are discarded at the next frame's start.\n\n**Writing your own renderer**: this class is the reference implementation of the rendering\ncontract — any object implementing the same context surface can be handed to\n[`CanvasForm`](#link)'s constructor to become a Pts renderer (a PDF writer, a command\nrecorder, a test snapshotter, and so on). The surface is the subset of\n`CanvasRenderingContext2D` that `CanvasForm` draws through:\n- path verbs: `beginPath`, `moveTo`, `lineTo`, `quadraticCurveTo`, `bezierCurveTo`,\n  `rect`, `arc`, `ellipse`, `closePath`\n- paint: `fill`, `stroke`, `fillRect`, `clearRect`\n- state: `save`, `restore`, `clip`, `scale`\n- style fields: `fillStyle`, `strokeStyle`, `lineWidth`, `lineJoin`, `lineCap`,\n  `globalAlpha`, `globalCompositeOperation`, `setLineDash`, `lineDashOffset`\n- text: `font`, `textAlign`, `textBaseline`, `fillText`, `measureText`\n- images: `drawImage`, `putImageData`\n- gradients: `createLinearGradient`, `createRadialGradient`\n\nA renderer driven by a Space should also expose a frame lifecycle like\n[`SVGContext2D.beginFrame`](#link) / [`SVGContext2D.commitFrame`](#link), called around the\nplayers' animate callbacks. The unit test \"implements every context member that CanvasForm\nuses\" is the compatibility alarm: it fails when a new `CanvasForm` feature touches a\ncontext member a renderer does not implement.",
+  "comment": "**`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that\n[`CanvasForm`](#link) draws through, and renders it as SVG. Consecutive shapes with the\nsame paint state share one `<path>` element (a \"style run\") when they do not overlap, or\nwhen they have one opaque paint (fills only when their subpaths are circles, rectangles or\nconvex polygons winding the same way). Classed shapes (see [`SVGForm.cls`](#link)), and\noverlapping translucent, blended, or differently filled and stroked shapes, keep separate\nelements, so they composite like canvas.\n\nMerged opaque shapes look the same as separate ones except at antialiased pixels that the\nedges of two shapes share. One path covers such a pixel once, whereas canvas draws each\nshape on its own and blends the pixel twice, so coincident or nearly parallel edges come\nout lighter than on canvas, and crossing edges can differ slightly. Separate elements for\nevery overlapping shape would make such scenes up to three times slower to render; give\nthe shapes a class when their edges must blend like canvas.\n\nCapability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,\n`clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so\n`textBox` layout matches canvas exactly.\nDrawing must occur in an animate callback (or be committed explicitly on this context).\n`SVGSpace.refresh(false)` preserves the last nonempty frame; it does not accumulate\ntrails. Draws in action handlers are discarded at the next frame's start.\n\n**Writing your own renderer**: this class is the reference implementation of the rendering\ncontract — any object implementing the same context surface can be handed to\n[`CanvasForm`](#link)'s constructor to become a Pts renderer (a PDF writer, a command\nrecorder, a test snapshotter, and so on). The surface is the subset of\n`CanvasRenderingContext2D` that `CanvasForm` draws through:\n- path verbs: `beginPath`, `moveTo`, `lineTo`, `quadraticCurveTo`, `bezierCurveTo`,\n  `rect`, `arc`, `ellipse`, `closePath`\n- paint: `fill`, `stroke`, `fillRect`, `clearRect`\n- state: `save`, `restore`, `clip`, `scale`\n- style fields: `fillStyle`, `strokeStyle`, `lineWidth`, `lineJoin`, `lineCap`,\n  `globalAlpha`, `globalCompositeOperation`, `setLineDash`, `lineDashOffset`\n- text: `font`, `textAlign`, `textBaseline`, `fillText`, `measureText`\n- images: `drawImage`, `putImageData`\n- gradients: `createLinearGradient`, `createRadialGradient`\n\nA renderer driven by a Space should also expose a frame lifecycle like\n[`SVGContext2D.beginFrame`](#link) / [`SVGContext2D.commitFrame`](#link), called around the\nplayers' animate callbacks. The unit test \"implements every context member that CanvasForm\nuses\" is the compatibility alarm: it fails when a new `CanvasForm` feature touches a\ncontext member a renderer does not implement.",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
           "src/Svg.ts",
-          379,
+          389,
           2
         ]
       ],
@@ -46,7 +46,7 @@
       "source": [
         [
           "src/Svg.ts",
-          404,
+          414,
           6
         ]
       ],
@@ -64,12 +64,12 @@
       "source": [
         [
           "src/Svg.ts",
-          272,
+          282,
           6
         ],
         [
           "src/Svg.ts",
-          275,
+          285,
           6
         ]
       ],
@@ -95,12 +95,12 @@
       "source": [
         [
           "src/Svg.ts",
-          321,
+          331,
           6
         ],
         [
           "src/Svg.ts",
-          324,
+          334,
           6
         ]
       ],
@@ -126,12 +126,12 @@
       "source": [
         [
           "src/Svg.ts",
-          307,
+          317,
           6
         ],
         [
           "src/Svg.ts",
-          310,
+          320,
           6
         ]
       ],
@@ -157,12 +157,12 @@
       "source": [
         [
           "src/Svg.ts",
-          314,
+          324,
           6
         ],
         [
           "src/Svg.ts",
-          317,
+          327,
           6
         ]
       ],
@@ -188,7 +188,7 @@
       "source": [
         [
           "src/Svg.ts",
-          409,
+          419,
           6
         ]
       ],
@@ -206,12 +206,12 @@
       "source": [
         [
           "src/Svg.ts",
-          300,
+          310,
           6
         ],
         [
           "src/Svg.ts",
-          303,
+          313,
           6
         ]
       ],
@@ -237,12 +237,12 @@
       "source": [
         [
           "src/Svg.ts",
-          328,
+          338,
           6
         ],
         [
           "src/Svg.ts",
-          331,
+          341,
           6
         ]
       ],
@@ -268,12 +268,12 @@
       "source": [
         [
           "src/Svg.ts",
-          293,
+          303,
           6
         ],
         [
           "src/Svg.ts",
-          296,
+          306,
           6
         ]
       ],
@@ -299,12 +299,12 @@
       "source": [
         [
           "src/Svg.ts",
-          286,
+          296,
           6
         ],
         [
           "src/Svg.ts",
-          289,
+          299,
           6
         ]
       ],
@@ -330,7 +330,7 @@
       "source": [
         [
           "src/Svg.ts",
-          483,
+          493,
           6
         ]
       ],
@@ -348,12 +348,12 @@
       "source": [
         [
           "src/Svg.ts",
-          279,
+          289,
           6
         ],
         [
           "src/Svg.ts",
-          282,
+          292,
           6
         ]
       ],
@@ -381,7 +381,7 @@
       "source": [
         [
           "src/Svg.ts",
-          565,
+          575,
           2
         ]
       ],
@@ -440,7 +440,7 @@
       "source": [
         [
           "src/Svg.ts",
-          393,
+          403,
           2
         ]
       ],
@@ -462,7 +462,7 @@
       "source": [
         [
           "src/Svg.ts",
-          511,
+          521,
           2
         ]
       ],
@@ -484,7 +484,7 @@
       "source": [
         [
           "src/Svg.ts",
-          542,
+          552,
           2
         ]
       ],
@@ -543,7 +543,7 @@
       "source": [
         [
           "src/Svg.ts",
-          670,
+          680,
           2
         ]
       ],
@@ -565,7 +565,7 @@
       "source": [
         [
           "src/Svg.ts",
-          794,
+          804,
           2
         ]
       ],
@@ -587,7 +587,7 @@
       "source": [
         [
           "src/Svg.ts",
-          516,
+          526,
           2
         ]
       ],
@@ -609,7 +609,7 @@
       "source": [
         [
           "src/Svg.ts",
-          417,
+          427,
           2
         ]
       ],
@@ -631,7 +631,7 @@
       "source": [
         [
           "src/Svg.ts",
-          806,
+          816,
           2
         ]
       ],
@@ -678,7 +678,7 @@
       "source": [
         [
           "src/Svg.ts",
-          815,
+          825,
           2
         ]
       ],
@@ -737,7 +737,7 @@
       "source": [
         [
           "src/Svg.ts",
-          499,
+          509,
           2
         ]
       ],
@@ -759,7 +759,7 @@
       "source": [
         [
           "src/Svg.ts",
-          717,
+          727,
           2
         ]
       ],
@@ -818,7 +818,7 @@
       "source": [
         [
           "src/Svg.ts",
-          576,
+          586,
           2
         ]
       ],
@@ -889,7 +889,7 @@
       "source": [
         [
           "src/Svg.ts",
-          636,
+          646,
           2
         ]
       ],
@@ -911,7 +911,7 @@
       "source": [
         [
           "src/Svg.ts",
-          664,
+          674,
           2
         ]
       ],
@@ -958,7 +958,7 @@
       "source": [
         [
           "src/Svg.ts",
-          674,
+          684,
           2
         ]
       ],
@@ -1005,7 +1005,7 @@
       "source": [
         [
           "src/Svg.ts",
-          802,
+          812,
           2
         ]
       ],
@@ -1027,7 +1027,7 @@
       "source": [
         [
           "src/Svg.ts",
-          528,
+          538,
           2
         ]
       ],
@@ -1062,7 +1062,7 @@
       "source": [
         [
           "src/Svg.ts",
-          709,
+          719,
           2
         ]
       ],
@@ -1091,7 +1091,7 @@
       "source": [
         [
           "src/Svg.ts",
-          521,
+          531,
           2
         ]
       ],
@@ -1126,7 +1126,7 @@
       "source": [
         [
           "src/Svg.ts",
-          759,
+          769,
           2
         ]
       ],
@@ -1148,7 +1148,7 @@
       "source": [
         [
           "src/Svg.ts",
-          535,
+          545,
           2
         ]
       ],
@@ -1195,7 +1195,7 @@
       "source": [
         [
           "src/Svg.ts",
-          557,
+          567,
           2
         ]
       ],
@@ -1242,7 +1242,7 @@
       "source": [
         [
           "src/Svg.ts",
-          488,
+          498,
           2
         ]
       ],
@@ -1264,7 +1264,7 @@
       "source": [
         [
           "src/Svg.ts",
-          785,
+          795,
           2
         ]
       ],
@@ -1286,7 +1286,7 @@
       "source": [
         [
           "src/Svg.ts",
-          768,
+          778,
           2
         ]
       ],
@@ -1308,7 +1308,7 @@
       "source": [
         [
           "src/Svg.ts",
-          790,
+          800,
           2
         ]
       ],
@@ -1330,7 +1330,7 @@
       "source": [
         [
           "src/Svg.ts",
-          798,
+          808,
           2
         ]
       ],
@@ -1359,7 +1359,7 @@
       "source": [
         [
           "src/Svg.ts",
-          641,
+          651,
           2
         ]
       ],
@@ -1384,7 +1384,7 @@
       "source": [
         [
           "src/Svg.ts",
-          336,
+          346,
           2
         ]
       ],
@@ -1399,7 +1399,7 @@
       "source": [
         [
           "src/Svg.ts",
-          266,
+          276,
           2
         ]
       ],
@@ -1414,7 +1414,7 @@
       "source": [
         [
           "src/Svg.ts",
-          267,
+          277,
           2
         ]
       ],

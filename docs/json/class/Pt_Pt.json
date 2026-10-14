@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "comment": "Typescript interface: IPt is an interface that represents an object with x, y, z, w properties.",
+  "comment": "Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.\nSee [Pt guide](../guide/Pt-0200.html) for details.",
   "constructor": [
     {
       "name": "constructor",

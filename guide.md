@@ -1092,7 +1092,7 @@ SVG does not currently support clipping, image-data writes, source-cropped image
 
 `SVGSpace.refresh(false)` keeps the last nonempty frame; it does not accumulate trails across frames. Drawing in `action` callbacks is discarded when the next frame begins. Store input in your action callback and draw the stored scene in `animate`, or use `CanvasSpace` for persistent drawing.
 
-Consecutive shapes that share styles are merged into single svg elements when that looks the same as drawing them separately: shapes in one opaque color, or shapes that do not overlap. Overlapping translucent shapes keep separate elements, so they blend like canvas. To export the current frame as an svg file, use [`SVGSpace.toSVG`](https://ptsjs.org/docs.md#svg-svgspace) — pass `true` to get one element per shape, which is easier to edit in vector graphics tools.
+Consecutive shapes that share styles are merged into single svg elements when they do not overlap, or when they are in one opaque color. Overlapping translucent shapes keep separate elements, so they blend like canvas. Where the edges of merged opaque shapes coincide or run close together, their antialiased pixels are blended once rather than twice, so those edges can look slightly lighter than on canvas. Give the shapes a class with `form.cls("name")` to keep each one as its own element. To export the current frame as an svg file, use [`SVGSpace.toSVG`](https://ptsjs.org/docs.md#svg-svgspace) — pass `true` to get one element per shape, which is easier to edit in vector graphics tools.
 
 (In earlier versions of Pts, SVG rendering required a `form.scope(this)` call in each animate callback. This is no longer needed — existing code that calls it will still run, as the function is kept as a harmless no-op.)
 

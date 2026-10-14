@@ -576,6 +576,10 @@ type CanvasPatternRepetition = "repeat" | "repeat-x" | "repeat-y" | "no-repeat";
 type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
 //#endregion
 //#region src/Pt.d.ts
+/**
+ * Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.
+ * See [Pt guide](../guide/Pt-0200.html) for details.
+ */
 declare class Pt extends Float32Array implements IPt, Iterable<number> {
   protected _id: string;
   /**
@@ -1417,7 +1421,7 @@ declare abstract class Space {
   protected _ctx: any;
   private _animID;
   private _fromFrame;
-  private _pause;
+  protected _pause: boolean;
   private _refresh;
   private _renderFunc;
   protected _pointer: Pt;
@@ -1565,6 +1569,7 @@ declare abstract class MultiTouchSpace extends Space {
   private _pressId;
   private _pressIsTouch;
   private _pressType;
+  private _pressCapture;
   protected _hasMouse: boolean;
   protected _hasTouch: boolean;
   protected _hasKeyboard: boolean;
@@ -1665,20 +1670,25 @@ declare abstract class MultiTouchSpace extends Space {
    * @see [`Space.add`](#link)
    */
   protected _mouseAction(type: string, evt: MouseEvent | TouchEvent | PointerEvent, touchId?: number | null): void;
+  /** Record the pointer and send an action to the players. */
+  private _sendAction;
   private _isTouchHandled;
   private _ownsPress;
   private _releasePress;
   /**
    * Take the press for a new contact. A press of the same kind whose release
-   * was lost is replaced when its contact goes down again, or when a contact
-   * starts while no other contact of that kind is down (a primary pointer, or
-   * a touchstart whose new touches are all the active touches). So drag and
-   * drop keep working, while a second finger still cannot take the press.
+   * was lost is replaced when its contact goes down again, or when a first
+   * contact of that kind starts (a primary pointer, or a touchstart whose new
+   * touches are all the active touches). A pointer press that lost its
+   * pointer capture may see no release, so a first contact of any kind
+   * replaces it. So drag and drop keep working, while a second finger still
+   * cannot take the press, nor a palm take a pen's.
    */
   private _beginPress;
   /**
-   * End a press whose release can no longer arrive, and drop tracked draggers
-   * still dragging, without sending actions to players.
+   * End a press whose release can no longer arrive. Players, and the UIs
+   * they forward actions to, see it end as a cancelled pointer's does: "out",
+   * then "drop" if the press dragged, at the last pointer position.
    */
   private _abandonPress;
   /**
@@ -2211,6 +2221,7 @@ declare class CanvasSpace extends MultiTouchSpace {
   protected _autoResize: boolean;
   protected _initialResize: boolean;
   private _hasPlayed;
+  private _frameTime;
   private _readyObserver;
   private _readyTimer;
   private _disposed;
@@ -2318,10 +2329,10 @@ declare class CanvasSpace extends MultiTouchSpace {
    */
   protected playItems(time: number): void;
   /**
-   * Redraw a stopped space after a resize cleared its canvas. Unlike
+   * Redraw a stopped or paused space after a resize cleared its canvas. Unlike
    * `playOnce()`, this neither restarts the animation loop nor advances time:
    * players animate once at the last frame's time with no elapsed time, and
-   * input stays suspended.
+   * the play state and input are left as they are.
    */
   protected _repaint(): void;
   private _beginDraw;
@@ -5532,11 +5543,18 @@ type SVGRun = {
 /**
  * **`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that
  * [`CanvasForm`](#link) draws through, and renders it as SVG. Consecutive shapes with the
- * same paint state share one `<path>` element (a "style run") when that renders the same as
- * separate elements: shapes with one opaque paint (fills only when their subpaths are
- * circles, rectangles or convex polygons winding the same way), or shapes that do not
- * overlap. Classed shapes, and overlapping translucent, blended, or differently filled and
- * stroked shapes, keep separate elements, so they composite like canvas.
+ * same paint state share one `<path>` element (a "style run") when they do not overlap, or
+ * when they have one opaque paint (fills only when their subpaths are circles, rectangles or
+ * convex polygons winding the same way). Classed shapes (see [`SVGForm.cls`](#link)), and
+ * overlapping translucent, blended, or differently filled and stroked shapes, keep separate
+ * elements, so they composite like canvas.
+ *
+ * Merged opaque shapes look the same as separate ones except at antialiased pixels that the
+ * edges of two shapes share. One path covers such a pixel once, whereas canvas draws each
+ * shape on its own and blends the pixel twice, so coincident or nearly parallel edges come
+ * out lighter than on canvas, and crossing edges can differ slightly. Separate elements for
+ * every overlapping shape would make such scenes up to three times slower to render; give
+ * the shapes a class when their edges must blend like canvas.
  *
  * Capability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,
  * `clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so
@@ -5685,13 +5703,14 @@ declare class SVGContext2D {
   protected _flushShape(): void;
   /**
    * Whether the current shape can join the previous path run, which has the
-   * same attributes, without changing the rendered pixels: 1 when it is order
-   * independent, 2 when it does not overlap the run's shapes, 0 otherwise.
-   * One opaque paint gives the same pixels in any order, and same-oriented
-   * simple fills do not cancel under the nonzero rule. Translucent paint,
-   * group opacity, blends, distinct fill and stroke paints, and fills of
-   * unknown winding composite per element, so they join only shapes they do
-   * not overlap.
+   * same attributes: 1 when it is order independent, 2 when it does not
+   * overlap the run's shapes, 0 otherwise. One opaque paint looks the same in
+   * any order, apart from edge pixels the shapes share (see the class notes),
+   * and same-oriented simple fills do not cancel under the nonzero rule.
+   * Translucent paint, group opacity, blends, distinct fill and stroke paints,
+   * and fills of unknown winding composite per element, so they join only
+   * shapes they do not overlap, by bounds grown a pixel past their
+   * antialiased edges.
    */
   protected _joinable(run: SVGRun): number;
   protected _resetShape(): void;
@@ -5850,8 +5869,9 @@ declare class SVGForm extends CanvasForm<SVGSpace> {
    */
   get svgContext(): SVGContext2D;
   /**
-   * Add custom class to the created element(s). In batched rendering the class applies to
-   * the current style run.
+   * Add custom class to the created element(s). Classed shapes are never merged into a
+   * shared element, so each shape's element gets the class, and overlapping shapes blend
+   * their edges like canvas (see [`SVGContext2D`](#link)).
    * @param c custom class name or `false` to reset it
    * @example `form.fill("#f00").cls("myClass").rects(r)` `form.cls(false).circles(c)`
    */

@@ -138,7 +138,7 @@ Complete API reference for [Pts 1.0.2](https://ptsjs.org), generated from the sa
 <a id="canvas-canvasform"></a>
 ### `CanvasForm`
 
-**Kind:** Class · **Source:** [`src/Canvas.ts:733`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L733)
+**Kind:** Class · **Source:** [`src/Canvas.ts:785`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L785)
 
 **Extends:** `VisualForm`
 
@@ -10756,7 +10756,8 @@ Convert an Array/Iterable of Pt into a Group.
 
 **Implements:** `IPt`, `Iterable`
 
-Typescript interface: IPt is an interface that represents an object with x, y, z, w properties.
+Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.
+See [Pt guide](https://ptsjs.org/guide/Pt-0200.html) for details.
 
 #### Constructors
 
@@ -11980,15 +11981,22 @@ players: ISpacePlayers
 <a id="svg-svgcontext2d"></a>
 ### `SVGContext2D`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:253`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L253)
+**Kind:** Class · **Source:** [`src/Svg.ts:263`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L263)
 
 **`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that
 [`CanvasForm`](#canvas-canvasform) draws through, and renders it as SVG. Consecutive shapes with the
-same paint state share one `<path>` element (a "style run") when that renders the same as
-separate elements: shapes with one opaque paint (fills only when their subpaths are
-circles, rectangles or convex polygons winding the same way), or shapes that do not
-overlap. Classed shapes, and overlapping translucent, blended, or differently filled and
-stroked shapes, keep separate elements, so they composite like canvas.
+same paint state share one `<path>` element (a "style run") when they do not overlap, or
+when they have one opaque paint (fills only when their subpaths are circles, rectangles or
+convex polygons winding the same way). Classed shapes (see [`SVGForm.cls`](#svg-svgform-cls)), and
+overlapping translucent, blended, or differently filled and stroked shapes, keep separate
+elements, so they composite like canvas.
+
+Merged opaque shapes look the same as separate ones except at antialiased pixels that the
+edges of two shapes share. One path covers such a pixel once, whereas canvas draws each
+shape on its own and blends the pixel twice, so coincident or nearly parallel edges come
+out lighter than on canvas, and crossing edges can differ slightly. Separate elements for
+every overlapping shape would make such scenes up to three times slower to render; give
+the shapes a class when their edges must blend like canvas.
 
 Capability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,
 `clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so
@@ -12475,7 +12483,7 @@ textBaseline: string
 <a id="svg-svgform"></a>
 ### `SVGForm`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:1363`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L1363)
+**Kind:** Class · **Source:** [`src/Svg.ts:1374`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L1374)
 
 **Extends:** `CanvasForm`
 
@@ -12577,8 +12585,9 @@ set groupID(n: number): void
 cls(c: string | boolean): SVGForm
 ```
 
-Add custom class to the created element(s). In batched rendering the class applies to
-the current style run.
+Add custom class to the created element(s). Classed shapes are never merged into a
+shared element, so each shape's element gets the class, and overlapping shapes blend
+their edges like canvas (see [`SVGContext2D`](#svg-svgcontext2d)).
 
 **Parameters**
 
@@ -13244,7 +13253,7 @@ A static function to draw a text element.
 <a id="svg-svgspace"></a>
 ### `SVGSpace`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:1097`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L1097)
+**Kind:** Class · **Source:** [`src/Svg.ts:1108`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L1108)
 
 **Extends:** `DOMSpace`
 
