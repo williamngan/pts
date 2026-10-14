@@ -108,6 +108,40 @@ describe("canvas-svg rendering parity", () => {
         expect(Math.abs(actual[i] - expected[i])).toBeLessThanOrEqual(1);
     }
   });
+  it("composites overlapping shapes that inherit a translucent paint", async () => {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("width", `${W}`);
+    svg.setAttribute("height", `${H}`);
+    svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    svg.setAttribute("fill", "rgba(0,0,0,0.5)");
+    const ctx = new SVGContext2D(svg);
+    const form = new CanvasForm(ctx as any);
+    // a CSS-wide keyword, and a name that is not a color, take the parent's paint
+    for (const paint of ["unset", "notacolor"]) {
+      ctx.beginFrame();
+      form.fillOnly(paint).rect([
+        [10, 10],
+        [60, 60],
+      ]);
+      form.rect([
+        [40, 40],
+        [90, 90],
+      ]);
+      ctx.commitFrame();
+      expect(ctx.runs).toHaveLength(2);
+      const raster = await rasterize(svg.outerHTML);
+      const g = raster.getContext("2d")!;
+      // two half-transparent black layers over transparent: alpha 191
+      expect(g.getImageData(50, 50, 1, 1).data[3]).toBeCloseTo(191, -1);
+      expect(g.getImageData(20, 20, 1, 1).data[3]).toBeCloseTo(128, -1);
+    }
+    // a known color name still shares one path
+    ctx.beginFrame();
+    form.fillOnly("navy").point([20, 20], 10).point([25, 20], 10);
+    ctx.commitFrame();
+    expect(ctx.runs).toHaveLength(1);
+  });
+
   it("revalidates form styles after direct writes and context restore", () => {
     const canvas = document.createElement("canvas").getContext("2d")!;
     const svg = new SVGContext2D(

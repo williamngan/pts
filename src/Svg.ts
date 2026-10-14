@@ -160,13 +160,15 @@ function _parseOpaque(paint: string): boolean {
       a === "1" || a === "100%" || parseFloat(a) >= (a.endsWith("%") ? 100 : 1)
     );
   }
-  // named colors are opaque, apart from these keywords
+  // Named colors are opaque. These keywords are not colors, and an SVG
+  // element given a CSS-wide keyword, or a name that is not a color, takes
+  // its parent's paint, which may be translucent.
   return (
     /^[a-z]+$/.test(p) &&
-    p !== "transparent" &&
-    p !== "currentcolor" &&
-    p !== "none" &&
-    p !== "inherit"
+    !/^(?:transparent|currentcolor|none|inherit|initial|unset|revert)$/.test(
+      p,
+    ) &&
+    (typeof CSS === "undefined" || !CSS.supports || CSS.supports("color", p))
   );
 }
 

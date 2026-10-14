@@ -55,6 +55,12 @@ describe("SVGContext2D surface", () => {
       (f: CanvasForm) => f.strokeOnly("#123").composite("multiply"),
       (f: CanvasForm) => f.fill("#123").stroke("#456"),
       (f: CanvasForm) => f.fillOnly("rgba(0,0,0,0.5)"),
+      // keywords that take the parent's paint, which may be translucent
+      (f: CanvasForm) => f.fillOnly("unset"),
+      (f: CanvasForm) => f.fillOnly("Inherit"),
+      (f: CanvasForm) => f.strokeOnly("initial"),
+      (f: CanvasForm) => f.strokeOnly("revert"),
+      (f: CanvasForm) => f.fillOnly("currentColor"),
       (f: CanvasForm) => {
         f.fillOnly("#123");
         (f.ctx as unknown as SVGContext2D).className = "custom";
