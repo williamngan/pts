@@ -491,12 +491,9 @@ export class CanvasSpace extends MultiTouchSpace {
   }
 
   private _endDraw(): void {
+    // the forms' style cache observes these restores
     this._ctx.restore();
     if (this._offscreen) this._offCtx.restore();
-    // a context the forms cannot observe was reverted by restore() without
-    // going through their style cache, so forget the cached values
-    CanvasForm.resetStyleCache(this._ctx);
-    if (this._offscreen) CanvasForm.resetStyleCache(this._offCtx);
     this.render(this._ctx);
   }
 
