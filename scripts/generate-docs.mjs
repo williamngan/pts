@@ -448,6 +448,17 @@ function classDocument(reflection, pageKey, addSearch) {
     return result;
   }
 
+  // TypeDoc drops a class comment separated from its class by other code,
+  // and shows an implemented interface's comment in its place.
+  for (const type of reflection.implementedTypes ?? []) {
+    const target = type.reflection;
+    if (result.comment && target && result.comment === commentOf(target)) {
+      throw new Error(
+        `${reflection.name} shows the comment of ${target.name}: keep its doc comment directly above the class.`,
+      );
+    }
+  }
+
   const objectLiteral = declarationKind(reflection) === "Objectliteral";
   const children = objectLiteral
     ? typeChildren(reflection.type, reflection)

@@ -11,10 +11,6 @@ import {
   type PtLikeIterable,
 } from "./Types";
 
-/**
- * Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.
- * See [Pt guide](../guide/Pt-0200.html) for details.
- */
 // Whether a constructor argument is a buffer to view.
 function _isBuffer(a: unknown): boolean {
   return (
@@ -23,6 +19,10 @@ function _isBuffer(a: unknown): boolean {
   );
 }
 
+/**
+ * Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.
+ * See [Pt guide](../guide/Pt-0200.html) for details.
+ */
 export class Pt extends Float32Array implements IPt, Iterable<number> {
   protected _id!: string;
 
