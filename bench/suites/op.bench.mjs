@@ -646,7 +646,7 @@ export default defineSuite("op", (b, { Pts, fx }) => {
       run: (shapes) => sink(ringsValue(Path.unite(shapes))),
     });
   }
-  // Layouts where pruning by y cannot help: the sweep must stay a plain scan.
+  // Edges tied in x in shuffled y order: the sweep orders them by y to prune.
   b.case("Path.unite (2000 full-width bars, shuffled)", {
     batch: 1,
     setup: () => {
@@ -657,6 +657,23 @@ export default defineSuite("op", (b, { Pts, fx }) => {
         [1000, i * 3 + 1],
         [0, i * 3 + 1],
       ]).sort(() => random() - 0.5);
+    },
+    run: (shapes) => sink(ringsValue(Path.unite(shapes))),
+  });
+  // Layouts where pruning by y cannot help: the sweep must stay a plain scan.
+  b.case("Path.unite (2000 full-width bars, staggered and shuffled)", {
+    batch: 1,
+    setup: () => {
+      const random = randomFor("op:path:staggered-bars");
+      return Array.from({ length: 2000 }, (_, i) => {
+        const x = random() * 4;
+        return [
+          [x, i * 3],
+          [1000 + x, i * 3],
+          [1000 + x, i * 3 + 1],
+          [x, i * 3 + 1],
+        ];
+      }).sort(() => random() - 0.5);
     },
     run: (shapes) => sink(ringsValue(Path.unite(shapes))),
   });
