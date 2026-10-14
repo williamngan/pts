@@ -39,6 +39,7 @@ export class CanvasSpace extends MultiTouchSpace {
   protected _autoResize = true;
   protected _initialResize = false;
   private _hasPlayed = false;
+  private _frameTime = 0; // the time of the last frame drawn
 
   private _readyObserver: MutationObserver | undefined;
   private _readyTimer: number | undefined;
@@ -282,9 +283,13 @@ export class CanvasSpace extends MultiTouchSpace {
 
     this.render(this._ctx);
 
-    // Resizing clears the canvas, so redraw a stopped scene. Observer resizes
-    // have no event; before the first play() there is no scene to redraw.
-    if (this._isReady && !this.isPlaying && (evt || this._hasPlayed))
+    // Resizing clears the canvas, so redraw a stopped or paused scene. Observer
+    // resizes have no event; before the first play() there is no scene to redraw.
+    if (
+      this._isReady &&
+      (!this.isPlaying || this._pause) &&
+      (evt || this._hasPlayed)
+    )
       this._repaint();
 
     return this;
@@ -461,6 +466,7 @@ export class CanvasSpace extends MultiTouchSpace {
   protected playItems(time: number) {
     if (this._isReady) {
       this._hasPlayed = true;
+      this._frameTime = time;
       this._beginDraw();
       super.playItems(time);
       this._endDraw();
@@ -468,14 +474,14 @@ export class CanvasSpace extends MultiTouchSpace {
   }
 
   /**
-   * Redraw a stopped space after a resize cleared its canvas. Unlike
+   * Redraw a stopped or paused space after a resize cleared its canvas. Unlike
    * `playOnce()`, this neither restarts the animation loop nor advances time:
    * players animate once at the last frame's time with no elapsed time, and
-   * input stays suspended.
+   * the play state and input are left as they are.
    */
   protected _repaint(): void {
     this._beginDraw();
-    this._animatePlayers(this._time.prev, 0);
+    this._animatePlayers(this._frameTime, 0);
     this._endDraw();
   }
 

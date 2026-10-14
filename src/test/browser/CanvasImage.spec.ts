@@ -847,6 +847,57 @@ describe("style cache survives context resets", () => {
     expect(action).not.toHaveBeenCalled();
     space.dispose();
   });
+  it("repaints paused spaces on observer resize at the paused frame", async () => {
+    let resized!: () => void;
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        constructor(callback: () => void) {
+          resized = callback;
+        }
+        observe() {}
+        disconnect() {}
+      },
+    );
+    const container = host();
+    const space = new CanvasSpace(container).setup({
+      retina: false,
+      resize: true,
+      bgcolor: "#ffffff",
+    });
+    await ready(space);
+    const form = space.getForm();
+    const frames: [number, number][] = [];
+    space.add((time: number, ftime: number) => {
+      frames.push([time, ftime]);
+      form.fillOnly("#ff0000").rect([
+        [0, 0],
+        [10, 10],
+      ]);
+    });
+    space.play();
+    space.play(10);
+    space.pause();
+    // a paused loop keeps running frames without drawing them
+    space.play(30);
+    expect(space.isPlaying).toBe(true);
+    frames.length = 0;
+    container.style.width = "250px";
+    resized();
+    expect(Array.from(space.ctx.getImageData(5, 5, 1, 1).data)).toEqual([
+      255, 0, 0, 255,
+    ]);
+    // the frame drawn before the pause, with no elapsed time
+    expect(frames).toEqual([[10, 0]]);
+    expect(space.isPlaying).toBe(true);
+    space.resume();
+    space.play(40);
+    expect(frames).toEqual([
+      [10, 0],
+      [40, 10],
+    ]);
+    space.dispose();
+  });
   it("re-applies styles after a space resize resets the canvas context", async () => {
     const space = new CanvasSpace(host()).setup({ retina: false });
     await ready(space);

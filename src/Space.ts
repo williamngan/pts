@@ -29,7 +29,7 @@ export abstract class Space {
   private _animID: number = -1;
   private _fromFrame = false;
 
-  private _pause: boolean = false;
+  protected _pause: boolean = false;
   private _refresh: boolean | undefined = undefined;
   private _renderFunc!: (context: any, self: Space) => null;
 
