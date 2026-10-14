@@ -365,6 +365,7 @@ export abstract class MultiTouchSpace extends Space {
   private _pressId: number | null = null;
   private _pressIsTouch = false;
   private _pressType = "";
+  private _pressCapture: Element | null = null; // holds the press's pointer capture
 
   protected _hasMouse = false;
   protected _hasTouch = false;
@@ -746,6 +747,16 @@ export abstract class MultiTouchSpace extends Space {
       }
     }
 
+    this._sendAction(type, px, py, evt);
+  }
+
+  /** Record the pointer and send an action to the players. */
+  private _sendAction(
+    type: string,
+    px: number,
+    py: number,
+    evt: UIActionEvent,
+  ): void {
     if (type) {
       this._pointer.to(px, py);
       this._pointer.id = type;
@@ -783,14 +794,17 @@ export abstract class MultiTouchSpace extends Space {
   private _releasePress(): void {
     this._pressed = this._dragged = false;
     this._pressId = null;
+    this._pressCapture = null;
   }
 
   /**
    * Take the press for a new contact. A press of the same kind whose release
-   * was lost is replaced when its contact goes down again, or when a contact
-   * starts while no other contact of that kind is down (a primary pointer, or
-   * a touchstart whose new touches are all the active touches). So drag and
-   * drop keep working, while a second finger still cannot take the press.
+   * was lost is replaced when its contact goes down again, or when a first
+   * contact of that kind starts (a primary pointer, or a touchstart whose new
+   * touches are all the active touches). A pointer press that lost its
+   * pointer capture may see no release, so a first contact of any kind
+   * replaces it. So drag and drop keep working, while a second finger still
+   * cannot take the press, nor a palm take a pen's.
    */
   private _beginPress(
     evt: PointerEvent | TouchEvent,
@@ -798,15 +812,19 @@ export abstract class MultiTouchSpace extends Space {
     touch: boolean,
     type: string,
   ): void {
-    if (
-      this._pressed &&
-      this._pressType === type &&
-      (id === this._pressId ||
-        ("changedTouches" in evt
+    if (this._pressed) {
+      const first =
+        "changedTouches" in evt
           ? evt.touches.length === evt.changedTouches.length
-          : evt.isPrimary !== false))
-    )
-      this._abandonPress();
+          : evt.isPrimary !== false;
+      const capture = this._pressCapture;
+      if (
+        this._pressType === type
+          ? id === this._pressId || first
+          : first && !!capture && !capture.hasPointerCapture(this._pressId!)
+      )
+        this._abandonPress();
+    }
     if (!this._pressed) {
       this._pressId = id;
       this._pressIsTouch = touch;
@@ -816,19 +834,18 @@ export abstract class MultiTouchSpace extends Space {
   }
 
   /**
-   * End a press whose release can no longer arrive, and drop tracked draggers
-   * still dragging, without sending actions to players.
+   * End a press whose release can no longer arrive. Players, and the UIs
+   * they forward actions to, see it end as a cancelled pointer's does: "out",
+   * then "drop" if the press dragged, at the last pointer position.
    */
   private _abandonPress(): void {
+    const dragged = this._dragged;
     this._releasePress();
-    for (const ui of this._trackedUIs.slice()) {
-      if (ui.state("dragging"))
-        ui.listen(
-          UIA.drop,
-          this._pointer,
-          new Event("pointercancel") as unknown as UIActionEvent,
-        );
-    }
+    if (!this.isPlaying) return;
+    const evt = new Event("pointercancel") as unknown as UIActionEvent;
+    this._sendAction(UIA.out, this._pointer.x, this._pointer.y, evt);
+    if (dragged)
+      this._sendAction(UIA.drop, this._pointer.x, this._pointer.y, evt);
   }
 
   /**
@@ -843,6 +860,8 @@ export abstract class MultiTouchSpace extends Space {
     if (typeof Element !== "undefined" && evt.target instanceof Element) {
       try {
         evt.target.setPointerCapture(evt.pointerId);
+        if (!this._pressIsTouch && this._pressId === evt.pointerId)
+          this._pressCapture = evt.target;
       } catch {
         // a synthetic or re-dispatched event has no active pointer to capture;
         // dragging still works through the element's own move/up listeners

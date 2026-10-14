@@ -2,7 +2,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { CanvasSpace } from "../../Canvas";
 import { SVGSpace } from "../../Svg";
-import { UIButton, UIDragger } from "../../UI";
+import { Pt } from "../../Pt";
+import { type UIActionEvent } from "../../Types";
+import { UI, UIButton, UIDragger } from "../../UI";
 
 function host() {
   const element = document.createElement("div");
@@ -180,6 +182,86 @@ describe("Space animation loop", () => {
     touch("touchend", 5, []);
     expect(seen).toContain("drag");
     expect(seen).toContain("drop");
+    space.dispose();
+  });
+
+  it("recovers lost presses for UIs that players forward actions to", async () => {
+    const space = new CanvasSpace(host()).setup({ retina: false });
+    await ready(space);
+    space.bindMouse();
+    space.play(10);
+    const dragger = UIDragger.fromRectangle(
+      [
+        [0, 0],
+        [200, 100],
+      ],
+      {},
+    ) as UIDragger;
+    const drag = vi.fn(),
+      drop = vi.fn();
+    dragger.onDrag(drag);
+    dragger.onDrop(drop);
+    // forwarded by hand rather than through space.track(dragger)
+    space.add({
+      animate() {},
+      action: (type: string, x: number, y: number, evt: UIActionEvent) =>
+        UI.track([dragger], type, new Pt(x, y), evt),
+    });
+    const pointer = (
+      type: string,
+      pointerId: number,
+      pointerType: string,
+      x = 40,
+    ) =>
+      space.element.dispatchEvent(
+        new PointerEvent(type, {
+          pointerId,
+          pointerType,
+          isPrimary: true,
+          clientX: x,
+          clientY: 50,
+        }),
+      );
+
+    // mouse input is rebound while a press is down: its pointerup never arrives
+    pointer("pointerdown", 7, "mouse", 40);
+    pointer("pointermove", 7, "mouse", 50);
+    space.bindMouse(false).bindMouse();
+    expect(dragger.state("dragging")).toBe(false);
+    expect(drop).toHaveBeenCalledTimes(1);
+    pointer("pointerdown", 8, "mouse", 50);
+    pointer("pointermove", 8, "mouse", 60);
+    pointer("pointerup", 8, "mouse", 60);
+    expect(drag).toHaveBeenCalledTimes(2);
+    expect(drop).toHaveBeenCalledTimes(2);
+    expect(dragger.state("dragging")).toBe(false);
+
+    // synthetic events cannot hold pointer capture, so stand in for it
+    const captured = new Set<number>();
+    const canvas = space.element;
+    vi.spyOn(canvas, "setPointerCapture").mockImplementation((id) => {
+      captured.add(id);
+    });
+    vi.spyOn(canvas, "hasPointerCapture").mockImplementation((id) =>
+      captured.has(id),
+    );
+    vi.spyOn(canvas, "releasePointerCapture").mockImplementation((id) => {
+      captured.delete(id);
+    });
+    // a palm cannot take a pen press that holds its capture...
+    pointer("pointerdown", 9, "pen");
+    pointer("pointerdown", 10, "touch");
+    pointer("pointermove", 9, "pen", 45);
+    expect(drag).toHaveBeenCalledTimes(3);
+    // ...but once the capture is lost, any first contact takes the press
+    canvas.releasePointerCapture(9);
+    pointer("pointerdown", 1, "mouse");
+    expect(dragger.state("dragging")).toBe(true);
+    pointer("pointermove", 1, "mouse", 50);
+    pointer("pointerup", 1, "mouse", 50);
+    expect(drag).toHaveBeenCalledTimes(4);
+    expect(drop).toHaveBeenCalledTimes(4);
+    expect(dragger.state("dragging")).toBe(false);
     space.dispose();
   });
 
