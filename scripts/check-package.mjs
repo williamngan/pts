@@ -131,9 +131,9 @@ try {
     "published file allowlist changed",
   );
   assert.ok(
-    // Approximately 2% above the archive after the 1.x fixes (1,662,892 bytes),
-    // including source maps and documented declarations.
-    dryRun.size < 1_697_000,
+    // Approximately 2% above the archive after the 1.x follow-up fixes
+    // (1,678,626 bytes), including source maps and documented declarations.
+    dryRun.size < 1_713_000,
     `packed tarball is unexpectedly large: ${dryRun.size} bytes`,
   );
   assert.equal(
@@ -284,10 +284,11 @@ try {
     bundleSizes.small < bundleSizes.full * 0.75,
     `tree-shaking regression: small=${bundleSizes.small}, full=${bundleSizes.full}`,
   );
-  // Absolute ceilings about 2% above the Vite 8.2.1 bundles after the 1.x fixes: a
-  // single class keeps only what it references (a Pt-only bundle was 116 KB
-  // before the tree-shaking repair). Re-baseline after a Vite upgrade.
-  const bundleCeilings = { small: 26100, canvas: 87800, full: 204900 };
+  // Absolute ceilings about 2% above the Vite 8.2.1 bundles after the 1.x
+  // follow-up fixes: a single class keeps only what it references (a Pt-only
+  // bundle was 116 KB before the tree-shaking repair). Re-baseline after a Vite
+  // upgrade.
+  const bundleCeilings = { small: 26100, canvas: 89600, full: 207100 };
   for (const [name, ceiling] of Object.entries(bundleCeilings)) {
     assert.ok(
       bundleSizes[name] <= ceiling,

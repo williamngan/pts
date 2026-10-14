@@ -84,14 +84,14 @@ const expectedExports = [
 ];
 const sizeLimits = {
   // Measured after the 1.x correctness fixes, D50 adaptation, exact SVG run
-  // merging and the sweep block search, including documented declarations.
-  // Keep approximately 2% headroom above this build.
-  "index.d.mts": 326100,
-  "index.d.ts": 326100,
-  "index.js": 342900,
-  "index.mjs": 341900,
-  "pts.js": 357400,
-  "pts.min.js": 206100,
+  // merging, the sweep block search and the follow-up fixes, including
+  // documented declarations. Keep approximately 2% headroom above this build.
+  "index.d.mts": 326800,
+  "index.d.ts": 326800,
+  "index.js": 347000,
+  "index.mjs": 346000,
+  "pts.js": 361600,
+  "pts.min.js": 208300,
 };
 const banner = "Copyright © 2017-present William Ngan and contributors.";
 

@@ -13,16 +13,18 @@ These fixes change what some existing sketches draw or compute.
 - Return a deterministic shared endpoint for collinear overlapping line segments (and for a zero-length segment lying on the other), independent of argument order and endpoint direction. Polygon intersections that use it, such as `Polygon.intersectPolygon2D` on shapes sharing an edge, can return additional points.
 - Fade Sound stops, playback seeks, restarts, and volume changes over 10 ms to avoid clicks; stop marks playing false immediately and releases sources after the fade.
 - Keep drag/drop owned by the contact that began the press, including tracked UIDraggers; other contacts continue to send ordinary actions. Touch now emits matching pointerdown/pointerup actions, and a click no longer ends a press. Synthetic pointer events end a press only with the pressing pointer's `pointerId`.
-- Draw stopped CanvasSpaces once after a resize clears them (on window and ResizeObserver resizes), at the last frame's time with no elapsed time, instead of replaying a frame at time 0 and the next animation frame.
+- Draw stopped and paused CanvasSpaces once after a resize clears them (on window and ResizeObserver resizes), at the last drawn frame's time with no elapsed time, instead of replaying a frame at time 0 and the next animation frame. A paused space used to stay blank until it resumed.
+- When a press is abandoned because its release can no longer arrive (its input was unbound, or a new contact replaced it), players receive "out", then "drop" if the press dragged, at the last pointer position, as they do for a cancelled pointer. UIs that players forward actions to with UI.track recover like those tracked by space.track().
 - Render overlapping SVG shapes as separate elements when merging them would change compositing; see Fixes.
 
 ### Fixes
 
 - Warn and leave playing false when restarting a stopped microphone stream; acquire a new input instead of silently playing dead tracks.
 - Release Sound sources and microphone tracks at once when stopped while the AudioContext is not running: a suspended context's clock does not advance, so the fade would never end.
-- Merge consecutive same-styled SVG shapes only when the result is the same as drawing them separately: shapes with one opaque paint (fills only when their subpaths are circles, rectangles or convex polygons winding the same way), or shapes that do not overlap. Classed shapes, and overlapping translucent, blended, or differently filled and stroked shapes, keep separate elements, so overlaps match canvas. SVGForm benchmarks now include frame reconciliation.
+- Merge consecutive same-styled SVG shapes only when their overlaps composite the same as drawing them separately: shapes with one opaque paint (fills only when their subpaths are circles, rectangles or convex polygons winding the same way), or shapes that do not overlap. Classed shapes, and overlapping translucent, blended, or differently filled and stroked shapes, keep separate elements, so overlaps match canvas. Merged opaque shapes differ only at antialiased pixels their edges share, which one path covers once where canvas blends them twice; give shapes a class with `form.cls()` to keep them separate. CSS-wide keywords such as `unset`, and names that are not colors, count as translucent paint, since an SVG element given one takes its parent's paint. SVGForm benchmarks now include frame reconciliation.
 - Keep cached form styles accurate when a sketch changes styles on the context directly, through any reference to it. CanvasForm observes the style setters, setLineDash/lineDashOffset, save()/restore() and reset() of canvas contexts (browser, OffscreenCanvas, skia-canvas, node-canvas) and SVGContext2D, so a repeated style call still costs one comparison. A context it cannot observe (frozen, or with plain style fields) is not cached: every style call writes.
-- Recover drag and drop after a press whose release was lost: unbinding mouse or touch input releases its press, and a new first contact of the same kind (a primary pointer, or a touch sequence) replaces a stale one.
+- Recover drag and drop after a press whose release was lost: unbinding mouse or touch input releases its press, and a new first contact of the same kind (a primary pointer, or a touch sequence) replaces a stale one. A pointer press that lost its pointer capture can be replaced by a first contact of any kind.
+- Restore the Pt class description in the API documentation, which showed the IPt interface's description instead.
 - Guard DOM globals and support keyboard/pointer dispatch on non-DOM MultiTouchSpace event targets.
 - Correct soft-link stiffness for multiple solver iterations by removing accumulated multipliers; default one-iteration behavior is unchanged.
 - Remove consecutive and closing duplicate Voronoi vertices for cocircular sites, preventing zero-length edges and biased vertex means.
@@ -35,7 +37,8 @@ These fixes change what some existing sketches draw or compute.
 
 ### Performance
 
-- Search long Path sweep windows block by block when a sample of the edges shows that most candidates can be skipped, as for full-width bars listed in order (2000 bars unite about seven times faster). Other layouts keep the plain x-order scan; pair order and results are unchanged.
+- Search long Path sweep windows block by block when a sample of the edges shows that most candidates can be skipped, as for full-width bars (2000 bars unite about seven times faster in order, and about 13 times faster shuffled). Edges with the same left side are ordered by y for the search when their input order scatters them. Other layouts keep the plain x-order scan; pair order and results are unchanged.
+- Write changed styles through the context observers at the speed of a plain context write, and compare repeated style calls by property name: in Chromium, style calls that repeat the current style are about 3.5 times faster than in 1.0.2, and on skia-canvas style calls take about two thirds of the time.
 - Convert HSB to RGB without allocating, and compare SVG style runs without allocating key arrays.
 
 ### Documentation
