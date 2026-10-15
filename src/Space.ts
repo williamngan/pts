@@ -366,6 +366,10 @@ export abstract class MultiTouchSpace extends Space {
   private _pressIsTouch = false;
   private _pressType = "";
   private _pressCapture: Element | null = null; // holds the press's pointer capture
+  private _pressSeen = false; // players were sent the press's start
+  // the end of a seen press that players missed while the space was stopped,
+  // sent when it plays again: 0 none, 1 "out", 2 "out" then "drop"
+  private _unsentEnd = 0;
 
   protected _hasMouse = false;
   protected _hasTouch = false;
@@ -792,7 +796,9 @@ export abstract class MultiTouchSpace extends Space {
   }
 
   private _releasePress(): void {
-    this._pressed = this._dragged = false;
+    if (this._pressSeen && !this.isPlaying)
+      this._unsentEnd = this._dragged ? 2 : 1;
+    this._pressed = this._dragged = this._pressSeen = false;
     this._pressId = null;
     this._pressCapture = null;
   }
@@ -830,22 +836,42 @@ export abstract class MultiTouchSpace extends Space {
       this._pressIsTouch = touch;
       this._pressType = type;
       this._pressed = true;
+      this._pressSeen = this.isPlaying;
     }
   }
 
   /**
    * End a press whose release can no longer arrive. Players, and the UIs
    * they forward actions to, see it end as a cancelled pointer's does: "out",
-   * then "drop" if the press dragged, at the last pointer position.
+   * then "drop" if the press dragged, at the last pointer position. If the
+   * space is stopped, they see this when it plays again.
    */
   private _abandonPress(): void {
     const dragged = this._dragged;
+    const playing = this.isPlaying;
     this._releasePress();
-    if (!this.isPlaying) return;
+    if (playing) this._sendEnd(dragged);
+  }
+
+  private _sendEnd(dragged: boolean): void {
     const evt = new Event("pointercancel") as unknown as UIActionEvent;
     this._sendAction(UIA.out, this._pointer.x, this._pointer.y, evt);
     if (dragged)
       this._sendAction(UIA.drop, this._pointer.x, this._pointer.y, evt);
+  }
+
+  /**
+   * Players get no actions while the space is stopped. A press they saw start
+   * that ended meanwhile (released, cancelled or abandoned) is ended for them
+   * before they play again, so the UIs they drive let go of its contact.
+   */
+  protected playItems(time: number) {
+    if (this._unsentEnd) {
+      const dragged = this._unsentEnd === 2;
+      this._unsentEnd = 0;
+      this._sendEnd(dragged);
+    }
+    super.playItems(time);
   }
 
   /**
