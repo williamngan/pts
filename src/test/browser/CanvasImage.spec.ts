@@ -982,4 +982,46 @@ describe("style cache survives context resets", () => {
     expect(setter(ctx)).toBeTypeOf("function");
     expect(setter(other.getContext("2d")!)).toBe(setter(ctx));
   });
+
+  it("re-applies styles that resolve against the canvas's CSS", async () => {
+    const space = new CanvasSpace(host()).setup({ retina: false });
+    await ready(space);
+    const canvas = space.element as HTMLCanvasElement;
+    const pixel = () => Array.from(space.ctx.getImageData(20, 10, 1, 1).data);
+    canvas.style.color = "red";
+    canvas.style.colorScheme = "light";
+    // each color is also set outside the frames, so frames save and restore it
+    let color = "currentColor";
+    const form = space.getForm().strokeOnly(color, 10);
+    space.add(() =>
+      form.strokeOnly(color, 10).line([
+        [10, 10],
+        [90, 10],
+      ]),
+    );
+    space.play(10);
+    expect(pixel()).toEqual([255, 0, 0, 255]);
+    canvas.style.color = "blue";
+    space.play(20);
+    expect(pixel()).toEqual([0, 0, 255, 255]);
+
+    // a system color follows the color scheme
+    color = "Canvas";
+    form.strokeOnly(color, 10);
+    space.play(30);
+    expect(pixel()).toEqual([255, 255, 255, 255]);
+    canvas.style.colorScheme = "dark";
+    getComputedStyle(canvas).colorScheme; // system colors read computed style
+    space.play(40);
+    expect(pixel()).not.toEqual([255, 255, 255, 255]);
+
+    // a relative weight follows the canvas's own
+    canvas.style.fontWeight = "100";
+    form.font(new Font(12, "sans-serif", "bolder"));
+    const lighter = space.ctx.font;
+    canvas.style.fontWeight = "900";
+    form.font(new Font(12, "sans-serif", "bolder"));
+    expect(space.ctx.font).not.toBe(lighter);
+    space.dispose();
+  });
 });

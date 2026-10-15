@@ -606,6 +606,39 @@ const _observedStyles = [
   "font",
 ];
 
+// Strings that browsers resolve against the canvas element's CSS each time
+// they are assigned, so equal strings need not give equal styles: colors that
+// name currentColor, light-dark() or a system color (such as Canvas or
+// ButtonText, which follow the color scheme), and fonts with relative weights
+// or sizes. A cache hit on one is not trusted, and the style is written again.
+const _cssColor =
+  /currentcolor|light-dark|accent|background|border|button|canvas|caption|field|highlight|mark|menu|scrollbar|selecteditem|text|threed|window|workspace/i;
+const _cssFont = /bolder|lighter|larger|smaller|\d(?!px)[a-z%]/i;
+
+// The fill color, stroke color and font last found not to depend on CSS, so
+// repeated cache hits skip the test. Only hits test strings: reading a short
+// string in the observers slowed direct writes in Chromium by a fifth.
+const _plain: unknown[] = [undefined, undefined, undefined];
+
+// Whether a cache hit must still write its value (slot 2 is the font). This
+// is kept tiny so that _set stays small enough to inline into style methods.
+function _cssHit(v: unknown, slot: number): boolean {
+  return v !== _plain[slot] && _cssTest(v, slot);
+}
+
+// Test a value against CSS, and remember it in its slot if it is plain.
+function _cssTest(v: unknown, slot: number): boolean {
+  if (typeof v !== "string") return false; // a gradient or pattern
+  if (
+    slot === 2
+      ? _cssFont.test(v)
+      : v.charCodeAt(0) !== 35 /* # */ && _cssColor.test(v)
+  )
+    return true;
+  _plain[slot] = v;
+  return false;
+}
+
 // Forget cached values by assigning undefined, not by deleting keys: deleting
 // would switch the cache object to a slower dictionary representation.
 function _forgetStyles(cache: Record<string, unknown>): void {
@@ -826,7 +859,8 @@ export class CanvasForm<
 
   /**
    * Write a context style property only when it differs from the last value
-   * written to this context. The context's observers record the write (see
+   * written to this context, or when the value resolves against CSS (such as
+   * `currentColor`). The context's observers record the write (see
    * [`CanvasForm.ctx`](#link)).
    */
   protected _set(key: string, value: unknown): void {
@@ -837,10 +871,12 @@ export class CanvasForm<
     // faster than a write through a variable key.
     switch (key) {
       case "fillStyle":
-        if (cache.fillStyle !== value) ctx.fillStyle = value;
+        if (cache.fillStyle !== value || _cssHit(value, 0))
+          ctx.fillStyle = value;
         return;
       case "strokeStyle":
-        if (cache.strokeStyle !== value) ctx.strokeStyle = value;
+        if (cache.strokeStyle !== value || _cssHit(value, 1))
+          ctx.strokeStyle = value;
         return;
       case "lineWidth":
         if (cache.lineWidth !== value) ctx.lineWidth = value;
@@ -859,7 +895,7 @@ export class CanvasForm<
           ctx.globalCompositeOperation = value;
         return;
       case "font":
-        if (cache.font !== value) ctx.font = value;
+        if (cache.font !== value || _cssHit(value, 2)) ctx.font = value;
         return;
       default:
         if (cache[key] !== value) ctx[key] = value;
@@ -928,7 +964,8 @@ export class CanvasForm<
    * Get the rendering context of canvas to perform other canvas functions.
    * You may set styles on the context directly, through this or any other
    * reference to it: the form skips a style write only when it is sure the
-   * context already has that value. It observes canvas contexts' style
+   * context already has that value, and always writes values that resolve
+   * against CSS, such as `currentColor`. It observes canvas contexts' style
    * setters, `setLineDash()`, `save()`, `restore()` and `reset()`; a context
    * it cannot observe (such as a renderer with plain style fields) gets every
    * style write.
