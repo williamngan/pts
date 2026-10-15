@@ -1015,13 +1015,15 @@ describe("style cache survives context resets", () => {
     space.play(40);
     expect(pixel()).not.toEqual([255, 255, 255, 255]);
 
-    // a relative weight follows the canvas's own
-    canvas.style.fontWeight = "100";
-    form.font(new Font(12, "sans-serif", "bolder"));
-    const lighter = space.ctx.font;
-    canvas.style.fontWeight = "900";
-    form.font(new Font(12, "sans-serif", "bolder"));
-    expect(space.ctx.font).not.toBe(lighter);
+    // a relative weight follows the canvas's own, also when escaped
+    for (const weight of ["bolder", String.raw`bold\65 r`]) {
+      canvas.style.fontWeight = "100";
+      form.font(new Font(12, "sans-serif", weight));
+      const lighter = space.ctx.font;
+      canvas.style.fontWeight = "900";
+      form.font(new Font(12, "sans-serif", weight));
+      expect(space.ctx.font).not.toBe(lighter);
+    }
     space.dispose();
   });
 });

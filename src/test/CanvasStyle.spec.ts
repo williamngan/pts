@@ -76,6 +76,23 @@ describe("CanvasForm style write dedup", () => {
     expect(writes.lineWidth).toBe(1);
   });
 
+  it("writes styles that resolve against CSS on every call", () => {
+    // equal strings can resolve differently once the canvas's CSS changes
+    const { ctx, writes } = spyCtx();
+    const form = makeForm(ctx);
+    const escaped = String.raw`current\43 olor`; // currentColor
+    for (const color of ["currentColor", "ButtonText", escaped])
+      for (let i = 0; i < 3; i++) form.fill(color);
+    expect(writes.fillStyle).toBe(9);
+    for (let i = 0; i < 3; i++) form.fill("teal");
+    expect(writes.fillStyle).toBe(10);
+    for (const weight of ["bolder", String.raw`bold\65 r`])
+      for (let i = 0; i < 3; i++) form.font(12, weight);
+    expect(writes.font).toBe(6);
+    for (let i = 0; i < 3; i++) form.font(12, "bold");
+    expect(writes.font).toBe(7);
+  });
+
   it("dedupes dash state via its compact key", () => {
     const { ctx, writes } = spyCtx();
     const form = makeForm(ctx);

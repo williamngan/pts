@@ -611,6 +611,7 @@ const _observedStyles = [
 // name currentColor, light-dark() or a system color (such as Canvas or
 // ButtonText, which follow the color scheme), and fonts with relative weights
 // or sizes. A cache hit on one is not trusted, and the style is written again.
+// So is one with a CSS escape (a backslash), which can spell any of these.
 const _cssColor =
   /currentcolor|light-dark|accent|background|border|button|canvas|caption|field|highlight|mark|menu|scrollbar|selecteditem|text|threed|window|workspace/i;
 const _cssFont = /bolder|lighter|larger|smaller|\d(?!px)[a-z%]/i;
@@ -631,8 +632,9 @@ function _cssTest(v: unknown, slot: number): boolean {
   if (typeof v !== "string") return false; // a gradient or pattern
   if (
     slot === 2
-      ? _cssFont.test(v)
-      : v.charCodeAt(0) !== 35 /* # */ && _cssColor.test(v)
+      ? _cssFont.test(v) || v.includes("\\")
+      : v.charCodeAt(0) !== 35 /* # */ &&
+        (_cssColor.test(v) || v.includes("\\"))
   )
     return true;
   _plain[slot] = v;
