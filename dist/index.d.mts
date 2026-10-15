@@ -1698,7 +1698,8 @@ declare abstract class MultiTouchSpace extends Space {
   /**
    * Players get no actions while the space is stopped. A press they saw start
    * that ended meanwhile (released, cancelled or abandoned) is ended for them
-   * before they play again, so the UIs they drive let go of its contact.
+   * as the space plays again: `isPlaying` is already true, and no player has
+   * animated yet. So the UIs they drive let go of its contact.
    */
   protected playItems(time: number): void;
   /**

@@ -138,7 +138,7 @@ Complete API reference for [Pts 1.0.2](https://ptsjs.org), generated from the sa
 <a id="canvas-canvasform"></a>
 ### `CanvasForm`
 
-**Kind:** Class · **Source:** [`src/Canvas.ts:818`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L818)
+**Kind:** Class · **Source:** [`src/Canvas.ts:829`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L829)
 
 **Extends:** `VisualForm`
 
@@ -11567,7 +11567,8 @@ playItems(time: number): void
 
 Players get no actions while the space is stopped. A press they saw start
 that ended meanwhile (released, cancelled or abandoned) is ended for them
-before they play again, so the UIs they drive let go of its contact.
+as the space plays again: `isPlaying` is already true, and no player has
+animated yet. So the UIs they drive let go of its contact.
 
 **Parameters**
 

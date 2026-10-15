@@ -752,7 +752,7 @@
       "source": [
         [
           "src/Space.ts",
-          868,
+          869,
           12
         ]
       ],
@@ -763,7 +763,7 @@
       "inherits": "MultiTouchSpace.playItems",
       "signatures": [
         {
-          "comment": "Players get no actions while the space is stopped. A press they saw start\nthat ended meanwhile (released, cancelled or abandoned) is ended for them\nbefore they play again, so the UIs they drive let go of its contact.",
+          "comment": "Players get no actions while the space is stopped. A press they saw start\nthat ended meanwhile (released, cancelled or abandoned) is ended for them\nas the space plays again: `isPlaying` is already true, and no player has\nanimated yet. So the UIs they drive let go of its contact.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [

@@ -5483,6 +5483,7 @@ var MultiTouchSpace = class extends Space {
 		if (this._unsentEnd) {
 			const dragged = this._unsentEnd === 2;
 			this._unsentEnd = 0;
+			this._playing = true;
 			this._sendEnd(dragged);
 		}
 		super.playItems(time);
@@ -6457,12 +6458,22 @@ const _plain = [
 	void 0,
 	void 0
 ];
+const _plainColors = /* @__PURE__ */ new Set();
+const _plainFonts = /* @__PURE__ */ new Set();
 function _cssHit(v, slot) {
 	return v !== _plain[slot] && _cssTest(v, slot);
 }
 function _cssTest(v, slot) {
 	if (typeof v !== "string") return false;
-	if (slot === 2 ? _cssFont.test(v) : v.charCodeAt(0) !== 35 && _cssColor.test(v)) return true;
+	const font = slot === 2;
+	if (font || v.charCodeAt(0) !== 35) {
+		const known = font ? _plainFonts : _plainColors;
+		if (!known.has(v)) {
+			if ((font ? _cssFont : _cssColor).test(v) || v.includes("\\")) return true;
+			if (known.size === 256) known.clear();
+			known.add(v);
+		}
+	}
 	_plain[slot] = v;
 	return false;
 }
