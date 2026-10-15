@@ -93,6 +93,19 @@ describe("CanvasForm style write dedup", () => {
     expect(writes.font).toBe(7);
   });
 
+  it("skips repeated plain styles however many there are", () => {
+    // its record of plain strings is bounded, and refills once cleared
+    const { ctx, writes } = spyCtx();
+    const form = makeForm(ctx);
+    for (let i = 0; i < 300; i++) {
+      form.fill(`rgb(${i}, 0, 0)`);
+      form.fill(`rgb(${i}, 0, 0)`);
+    }
+    expect(writes.fillStyle).toBe(300);
+    for (let i = 0; i < 3; i++) form.fill("currentColor").fill("currentColor");
+    expect(writes.fillStyle).toBe(306);
+  });
+
   it("dedupes dash state via its compact key", () => {
     const { ctx, writes } = spyCtx();
     const form = makeForm(ctx);

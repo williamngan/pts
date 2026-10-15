@@ -621,6 +621,12 @@ const _cssFont = /bolder|lighter|larger|smaller|\d(?!px)[a-z%]/i;
 // string in the observers slowed direct writes in Chromium by a fifth.
 const _plain: unknown[] = [undefined, undefined, undefined];
 
+// Colors and fonts found not to depend on CSS, so that hits alternating among
+// a few values (two forms, or a color set twice per shape) skip the test too.
+// Each is cleared when full, so generated strings cannot grow it unbounded.
+const _plainColors = new Set<string>();
+const _plainFonts = new Set<string>();
+
 // Whether a cache hit must still write its value (slot 2 is the font). This
 // is kept tiny so that _set stays small enough to inline into style methods.
 function _cssHit(v: unknown, slot: number): boolean {
@@ -630,13 +636,16 @@ function _cssHit(v: unknown, slot: number): boolean {
 // Test a value against CSS, and remember it in its slot if it is plain.
 function _cssTest(v: unknown, slot: number): boolean {
   if (typeof v !== "string") return false; // a gradient or pattern
-  if (
-    slot === 2
-      ? _cssFont.test(v) || v.includes("\\")
-      : v.charCodeAt(0) !== 35 /* # */ &&
-        (_cssColor.test(v) || v.includes("\\"))
-  )
-    return true;
+  const font = slot === 2;
+  if (font || v.charCodeAt(0) !== 35 /* # */) {
+    const known = font ? _plainFonts : _plainColors;
+    if (!known.has(v)) {
+      if ((font ? _cssFont : _cssColor).test(v) || v.includes("\\"))
+        return true;
+      if (known.size === 256) known.clear();
+      known.add(v);
+    }
+  }
   _plain[slot] = v;
   return false;
 }
