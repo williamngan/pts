@@ -1336,13 +1336,26 @@ export class Polygon {
     if (_pts.length < 3) return _errorLength(new Group(), 3);
 
     const compare = (a: PtLike, b: PtLike) => a[0] - b[0] || a[1] - b[1];
-    // verify a presorted input and look for duplicates in one pass
+    // verify a presorted input and look for duplicates in one pass, holding
+    // the previous point's coordinates
     let unsorted = !sorted;
     let duplicates = unsorted;
-    for (let i = 1, len = _pts.length; !unsorted && i < len; i++) {
-      const c = compare(_pts[i - 1], _pts[i]);
-      if (c > 0) unsorted = duplicates = true;
-      else if (c === 0) duplicates = true;
+    if (sorted) {
+      let px = _pts[0][0];
+      let py = _pts[0][1];
+      for (let i = 1, len = _pts.length; i < len; i++) {
+        const x = _pts[i][0];
+        const y = _pts[i][1];
+        if (x < px || (x === px && y <= py)) {
+          duplicates = true;
+          if (x < px || y < py) {
+            unsorted = true;
+            break;
+          }
+        }
+        px = x;
+        py = y;
+      }
     }
     if (unsorted) _pts = _pts.slice().sort(compare);
     else if (duplicates) _pts = _pts.slice();
@@ -1397,13 +1410,17 @@ export class Polygon {
     dq[bot] = _pts[seed];
     dq[top] = _pts[seed];
 
-    // first 3 pt as counter-clockwise triangle
-    if (left(_pts[0], _pts[seed - 1], _pts[seed])) {
-      dq[bot + 1] = _pts[0];
-      dq[bot + 2] = _pts[seed - 1];
+    // first 3 pt as counter-clockwise triangle, tested exactly here so that
+    // `left` is called only in the loop, where V8 then inlines every call
+    const p0 = _pts[0];
+    const p1 = _pts[seed - 1];
+    const p2 = _pts[seed];
+    if (orient2d(p0[0], p0[1], p1[0], p1[1], p2[0], p2[1]) > 0) {
+      dq[bot + 1] = p0;
+      dq[bot + 2] = p1;
     } else {
-      dq[bot + 1] = _pts[seed - 1];
-      dq[bot + 2] = _pts[0];
+      dq[bot + 1] = p1;
+      dq[bot + 2] = p0;
     }
 
     // remaining pts
