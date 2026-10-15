@@ -3953,10 +3953,22 @@ var Polygon = class Polygon {
 		const compare = (a, b) => a[0] - b[0] || a[1] - b[1];
 		let unsorted = !sorted;
 		let duplicates = unsorted;
-		for (let i = 1, len = _pts.length; !unsorted && i < len; i++) {
-			const c = compare(_pts[i - 1], _pts[i]);
-			if (c > 0) unsorted = duplicates = true;
-			else if (c === 0) duplicates = true;
+		if (sorted) {
+			let px = _pts[0][0];
+			let py = _pts[0][1];
+			for (let i = 1, len = _pts.length; i < len; i++) {
+				const x = _pts[i][0];
+				const y = _pts[i][1];
+				if (x < px || x === px && y <= py) {
+					duplicates = true;
+					if (x < px || y < py) {
+						unsorted = true;
+						break;
+					}
+				}
+				px = x;
+				py = y;
+			}
 		}
 		if (unsorted) _pts = _pts.slice().sort(compare);
 		else if (duplicates) _pts = _pts.slice();
@@ -3986,12 +3998,15 @@ var Polygon = class Polygon {
 		let top = bot + 3;
 		dq[bot] = _pts[seed];
 		dq[top] = _pts[seed];
-		if (left(_pts[0], _pts[seed - 1], _pts[seed])) {
-			dq[bot + 1] = _pts[0];
-			dq[bot + 2] = _pts[seed - 1];
+		const p0 = _pts[0];
+		const p1 = _pts[seed - 1];
+		const p2 = _pts[seed];
+		if (orient2dFiltered(p0[0], p0[1], p1[0], p1[1], p2[0], p2[1]) > 0) {
+			dq[bot + 1] = p0;
+			dq[bot + 2] = p1;
 		} else {
-			dq[bot + 1] = _pts[seed - 1];
-			dq[bot + 2] = _pts[0];
+			dq[bot + 1] = p1;
+			dq[bot + 2] = p0;
 		}
 		for (let i = seed + 1, len = _pts.length; i < len; i++) {
 			let pt = _pts[i];
@@ -5224,6 +5239,8 @@ var MultiTouchSpace = class extends Space {
 		this._pressIsTouch = false;
 		this._pressType = "";
 		this._pressCapture = null;
+		this._pressSeen = false;
+		this._unsentEnd = 0;
 		this._hasMouse = false;
 		this._hasTouch = false;
 		this._hasKeyboard = false;
@@ -5432,7 +5449,8 @@ var MultiTouchSpace = class extends Space {
 		return "changedTouches" in evt ? this._pressIsTouch && Array.from(evt.changedTouches).some((t) => t.identifier === this._pressId) : !this._pressIsTouch && evt.pointerId === this._pressId;
 	}
 	_releasePress() {
-		this._pressed = this._dragged = false;
+		if (this._pressSeen && !this.isPlaying) this._unsentEnd = this._dragged ? 2 : 1;
+		this._pressed = this._dragged = this._pressSeen = false;
 		this._pressId = null;
 		this._pressCapture = null;
 	}
@@ -5447,15 +5465,27 @@ var MultiTouchSpace = class extends Space {
 			this._pressIsTouch = touch;
 			this._pressType = type;
 			this._pressed = true;
+			this._pressSeen = this.isPlaying;
 		}
 	}
 	_abandonPress() {
 		const dragged = this._dragged;
+		const playing = this.isPlaying;
 		this._releasePress();
-		if (!this.isPlaying) return;
+		if (playing) this._sendEnd(dragged);
+	}
+	_sendEnd(dragged) {
 		const evt = new Event("pointercancel");
 		this._sendAction(UIPointerActions.out, this._pointer.x, this._pointer.y, evt);
 		if (dragged) this._sendAction(UIPointerActions.drop, this._pointer.x, this._pointer.y, evt);
+	}
+	playItems(time) {
+		if (this._unsentEnd) {
+			const dragged = this._unsentEnd === 2;
+			this._unsentEnd = 0;
+			this._sendEnd(dragged);
+		}
+		super.playItems(time);
 	}
 	_mouseDown(evt) {
 		if (this._isTouchHandled(evt)) return false;
@@ -6420,6 +6450,22 @@ const _observedStyles = [
 	"globalCompositeOperation",
 	"font"
 ];
+const _cssColor = /currentcolor|light-dark|accent|background|border|button|canvas|caption|field|highlight|mark|menu|scrollbar|selecteditem|text|threed|window|workspace/i;
+const _cssFont = /bolder|lighter|larger|smaller|\d(?!px)[a-z%]/i;
+const _plain = [
+	void 0,
+	void 0,
+	void 0
+];
+function _cssHit(v, slot) {
+	return v !== _plain[slot] && _cssTest(v, slot);
+}
+function _cssTest(v, slot) {
+	if (typeof v !== "string") return false;
+	if (slot === 2 ? _cssFont.test(v) : v.charCodeAt(0) !== 35 && _cssColor.test(v)) return true;
+	_plain[slot] = v;
+	return false;
+}
 function _forgetStyles(cache) {
 	for (const k in cache) cache[k] = void 0;
 }
@@ -6583,10 +6629,10 @@ var CanvasForm = class CanvasForm extends VisualForm {
 		const ctx = this._ctx;
 		switch (key) {
 			case "fillStyle":
-				if (cache.fillStyle !== value) ctx.fillStyle = value;
+				if (cache.fillStyle !== value || _cssHit(value, 0)) ctx.fillStyle = value;
 				return;
 			case "strokeStyle":
-				if (cache.strokeStyle !== value) ctx.strokeStyle = value;
+				if (cache.strokeStyle !== value || _cssHit(value, 1)) ctx.strokeStyle = value;
 				return;
 			case "lineWidth":
 				if (cache.lineWidth !== value) ctx.lineWidth = value;
@@ -6604,7 +6650,7 @@ var CanvasForm = class CanvasForm extends VisualForm {
 				if (cache.globalCompositeOperation !== value) ctx.globalCompositeOperation = value;
 				return;
 			case "font":
-				if (cache.font !== value) ctx.font = value;
+				if (cache.font !== value || _cssHit(value, 2)) ctx.font = value;
 				return;
 			default: if (cache[key] !== value) ctx[key] = value;
 		}

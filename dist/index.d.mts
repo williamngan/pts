@@ -1570,6 +1570,8 @@ declare abstract class MultiTouchSpace extends Space {
   private _pressIsTouch;
   private _pressType;
   private _pressCapture;
+  private _pressSeen;
+  private _unsentEnd;
   protected _hasMouse: boolean;
   protected _hasTouch: boolean;
   protected _hasKeyboard: boolean;
@@ -1688,9 +1690,17 @@ declare abstract class MultiTouchSpace extends Space {
   /**
    * End a press whose release can no longer arrive. Players, and the UIs
    * they forward actions to, see it end as a cancelled pointer's does: "out",
-   * then "drop" if the press dragged, at the last pointer position.
+   * then "drop" if the press dragged, at the last pointer position. If the
+   * space is stopped, they see this when it plays again.
    */
   private _abandonPress;
+  private _sendEnd;
+  /**
+   * Players get no actions while the space is stopped. A press they saw start
+   * that ended meanwhile (released, cancelled or abandoned) is ended for them
+   * before they play again, so the UIs they drive let go of its contact.
+   */
+  protected playItems(time: number): void;
   /**
    * MouseDown handler.
    * @param evt
@@ -2369,7 +2379,8 @@ declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends Visual
   static resetStyleCache(ctx: RenderingContext2D | object): void;
   /**
    * Write a context style property only when it differs from the last value
-   * written to this context. The context's observers record the write (see
+   * written to this context, or when the value resolves against CSS (such as
+   * `currentColor`). The context's observers record the write (see
    * [`CanvasForm.ctx`](#link)).
    */
   protected _set(key: string, value: unknown): void;
@@ -2393,7 +2404,8 @@ declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends Visual
    * Get the rendering context of canvas to perform other canvas functions.
    * You may set styles on the context directly, through this or any other
    * reference to it: the form skips a style write only when it is sure the
-   * context already has that value. It observes canvas contexts' style
+   * context already has that value, and always writes values that resolve
+   * against CSS, such as `currentColor`. It observes canvas contexts' style
    * setters, `setLineDash()`, `save()`, `restore()` and `reset()`; a context
    * it cannot observe (such as a renderer with plain style fields) gets every
    * style write.

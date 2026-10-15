@@ -138,7 +138,7 @@ Complete API reference for [Pts 1.0.2](https://ptsjs.org), generated from the sa
 <a id="canvas-canvasform"></a>
 ### `CanvasForm`
 
-**Kind:** Class · **Source:** [`src/Canvas.ts:785`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L785)
+**Kind:** Class · **Source:** [`src/Canvas.ts:818`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L818)
 
 **Extends:** `VisualForm`
 
@@ -172,7 +172,8 @@ get ctx(): RenderingContext2D
 Get the rendering context of canvas to perform other canvas functions.
 You may set styles on the context directly, through this or any other
 reference to it: the form skips a style write only when it is sure the
-context already has that value. It observes canvas contexts' style
+context already has that value, and always writes values that resolve
+against CSS, such as `currentColor`. It observes canvas contexts' style
 setters, `setLineDash()`, `save()`, `restore()` and `reset()`; a context
 it cannot observe (such as a renderer with plain style fields) gets every
 style write.
@@ -3254,8 +3255,8 @@ id: string
 
 #### Inherited API
 
-- From [`Space`](#space-space): [`center`](#space-space-center), [`customRendering`](#space-space-custom-rendering), [`height`](#space-space-height), [`innerBound`](#space-space-inner-bound), [`isPlaying`](#space-space-is-playing), [`outerBound`](#space-space-outer-bound), [`size`](#space-space-size), [`width`](#space-space-width), [`add`](#space-space-add), [`minFrameTime`](#space-space-min-frame-time), [`pause`](#space-space-pause), [`play`](#space-space-play), [`playItems`](#space-space-play-items), [`playOnce`](#space-space-play-once), [`refresh`](#space-space-refresh), [`remove`](#space-space-remove), [`render`](#space-space-render), [`replay`](#space-space-replay), [`resume`](#space-space-resume), [`stop`](#space-space-stop), [`bound`](#space-space-bound), [`playerCount`](#space-space-player-count), [`players`](#space-space-players).
-- From [`MultiTouchSpace`](#space-multitouchspace): [`pointer`](#space-multitouchspace-pointer), [`bindCanvas`](#space-multitouchspace-bind-canvas), [`bindDoc`](#space-multitouchspace-bind-doc), [`bindKeyboard`](#space-multitouchspace-bind-keyboard), [`bindMouse`](#space-multitouchspace-bind-mouse), [`bindTouch`](#space-multitouchspace-bind-touch), [`removeAll`](#space-multitouchspace-remove-all), [`touchesToPoints`](#space-multitouchspace-touches-to-points), [`track`](#space-multitouchspace-track), [`unbindCanvas`](#space-multitouchspace-unbind-canvas), [`unbindDoc`](#space-multitouchspace-unbind-doc), [`untrack`](#space-multitouchspace-untrack).
+- From [`Space`](#space-space): [`center`](#space-space-center), [`customRendering`](#space-space-custom-rendering), [`height`](#space-space-height), [`innerBound`](#space-space-inner-bound), [`isPlaying`](#space-space-is-playing), [`outerBound`](#space-space-outer-bound), [`size`](#space-space-size), [`width`](#space-space-width), [`add`](#space-space-add), [`minFrameTime`](#space-space-min-frame-time), [`pause`](#space-space-pause), [`play`](#space-space-play), [`playOnce`](#space-space-play-once), [`refresh`](#space-space-refresh), [`remove`](#space-space-remove), [`render`](#space-space-render), [`replay`](#space-space-replay), [`resume`](#space-space-resume), [`stop`](#space-space-stop), [`bound`](#space-space-bound), [`playerCount`](#space-space-player-count), [`players`](#space-space-players).
+- From [`MultiTouchSpace`](#space-multitouchspace): [`pointer`](#space-multitouchspace-pointer), [`bindCanvas`](#space-multitouchspace-bind-canvas), [`bindDoc`](#space-multitouchspace-bind-doc), [`bindKeyboard`](#space-multitouchspace-bind-keyboard), [`bindMouse`](#space-multitouchspace-bind-mouse), [`bindTouch`](#space-multitouchspace-bind-touch), [`playItems`](#space-multitouchspace-play-items), [`removeAll`](#space-multitouchspace-remove-all), [`touchesToPoints`](#space-multitouchspace-touches-to-points), [`track`](#space-multitouchspace-track), [`unbindCanvas`](#space-multitouchspace-unbind-canvas), [`unbindDoc`](#space-multitouchspace-unbind-doc), [`untrack`](#space-multitouchspace-untrack).
 
 <a id="dom-htmlform"></a>
 ### `HTMLForm`
@@ -3911,8 +3912,8 @@ A static function to add a DOM element inside a node. Usually you don't need to 
 #### Inherited API
 
 - From [`DOMSpace`](#dom-domspace): [`constructor`](#dom-domspace-constructor), [`autoResize`](#dom-domspace-auto-resize), [`background`](#dom-domspace-background), [`element`](#dom-domspace-element), [`parent`](#dom-domspace-parent), [`ready`](#dom-domspace-ready), [`clear`](#dom-domspace-clear), [`dispose`](#dom-domspace-dispose), [`resize`](#dom-domspace-resize), [`setup`](#dom-domspace-setup), [`style`](#dom-domspace-style), [`styles`](#dom-domspace-styles), [`createElement`](#dom-domspace-static-create-element), [`getInlineStyles`](#dom-domspace-static-get-inline-styles), [`setAttr`](#dom-domspace-static-set-attr), [`id`](#dom-domspace-id).
-- From [`Space`](#space-space): [`center`](#space-space-center), [`customRendering`](#space-space-custom-rendering), [`height`](#space-space-height), [`innerBound`](#space-space-inner-bound), [`isPlaying`](#space-space-is-playing), [`outerBound`](#space-space-outer-bound), [`size`](#space-space-size), [`width`](#space-space-width), [`add`](#space-space-add), [`minFrameTime`](#space-space-min-frame-time), [`pause`](#space-space-pause), [`play`](#space-space-play), [`playItems`](#space-space-play-items), [`playOnce`](#space-space-play-once), [`refresh`](#space-space-refresh), [`render`](#space-space-render), [`replay`](#space-space-replay), [`resume`](#space-space-resume), [`stop`](#space-space-stop), [`bound`](#space-space-bound), [`playerCount`](#space-space-player-count), [`players`](#space-space-players).
-- From [`MultiTouchSpace`](#space-multitouchspace): [`pointer`](#space-multitouchspace-pointer), [`bindCanvas`](#space-multitouchspace-bind-canvas), [`bindDoc`](#space-multitouchspace-bind-doc), [`bindKeyboard`](#space-multitouchspace-bind-keyboard), [`bindMouse`](#space-multitouchspace-bind-mouse), [`bindTouch`](#space-multitouchspace-bind-touch), [`touchesToPoints`](#space-multitouchspace-touches-to-points), [`track`](#space-multitouchspace-track), [`unbindCanvas`](#space-multitouchspace-unbind-canvas), [`unbindDoc`](#space-multitouchspace-unbind-doc), [`untrack`](#space-multitouchspace-untrack).
+- From [`Space`](#space-space): [`center`](#space-space-center), [`customRendering`](#space-space-custom-rendering), [`height`](#space-space-height), [`innerBound`](#space-space-inner-bound), [`isPlaying`](#space-space-is-playing), [`outerBound`](#space-space-outer-bound), [`size`](#space-space-size), [`width`](#space-space-width), [`add`](#space-space-add), [`minFrameTime`](#space-space-min-frame-time), [`pause`](#space-space-pause), [`play`](#space-space-play), [`playOnce`](#space-space-play-once), [`refresh`](#space-space-refresh), [`render`](#space-space-render), [`replay`](#space-space-replay), [`resume`](#space-space-resume), [`stop`](#space-space-stop), [`bound`](#space-space-bound), [`playerCount`](#space-space-player-count), [`players`](#space-space-players).
+- From [`MultiTouchSpace`](#space-multitouchspace): [`pointer`](#space-multitouchspace-pointer), [`bindCanvas`](#space-multitouchspace-bind-canvas), [`bindDoc`](#space-multitouchspace-bind-doc), [`bindKeyboard`](#space-multitouchspace-bind-keyboard), [`bindMouse`](#space-multitouchspace-bind-mouse), [`bindTouch`](#space-multitouchspace-bind-touch), [`playItems`](#space-multitouchspace-play-items), [`touchesToPoints`](#space-multitouchspace-touches-to-points), [`track`](#space-multitouchspace-track), [`unbindCanvas`](#space-multitouchspace-unbind-canvas), [`unbindDoc`](#space-multitouchspace-unbind-doc), [`untrack`](#space-multitouchspace-untrack).
 
 <a id="module-form"></a>
 ## Module: `Form`
@@ -6909,7 +6910,7 @@ Check if a point is within a circle.
 <a id="op-curve"></a>
 ### `Curve`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1934`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1934)
+**Kind:** Class · **Source:** [`src/Op.ts:1951`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1951)
 
 Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -7616,7 +7617,7 @@ Convert this line to a new rectangle representation.
 <a id="op-path"></a>
 ### `Path`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1854`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1854)
+**Kind:** Class · **Source:** [`src/Op.ts:1871`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1871)
 
 Path class provides static functions to combine polygons with boolean operations:
 unite, intersect, exclude, subtract the shapes in front or behind, divide into faces, or crop by the top shape.
@@ -11555,6 +11556,23 @@ Touch action names are defined by [`UIPointerActions`](#ui-uipointeractions), in
 
 **See also:** [`Space.add`](#space-space-add)
 
+<a id="space-multitouchspace-play-items"></a>
+##### `playItems`
+
+*protected · overrides `Space.playItems`*
+
+```ts
+playItems(time: number): void
+```
+
+Players get no actions while the space is stopped. A press they saw start
+that ended meanwhile (released, cancelled or abandoned) is ended for them
+before they play again, so the UIs they drive let go of its contact.
+
+**Parameters**
+
+- `time` (`number`)
+
 <a id="space-multitouchspace-remove-all"></a>
 ##### `removeAll`
 
@@ -11643,7 +11661,7 @@ Stop tracking one or more [`UI`](#ui-ui) elements added via [`MultiTouchSpace.tr
 
 #### Inherited API
 
-- From [`Space`](#space-space): [`center`](#space-space-center), [`customRendering`](#space-space-custom-rendering), [`height`](#space-space-height), [`innerBound`](#space-space-inner-bound), [`isPlaying`](#space-space-is-playing), [`outerBound`](#space-space-outer-bound), [`size`](#space-space-size), [`width`](#space-space-width), [`add`](#space-space-add), [`clear`](#space-space-clear), [`getForm`](#space-space-get-form), [`minFrameTime`](#space-space-min-frame-time), [`pause`](#space-space-pause), [`play`](#space-space-play), [`playItems`](#space-space-play-items), [`playOnce`](#space-space-play-once), [`refresh`](#space-space-refresh), [`remove`](#space-space-remove), [`render`](#space-space-render), [`replay`](#space-space-replay), [`resize`](#space-space-resize), [`resume`](#space-space-resume), [`stop`](#space-space-stop), [`bound`](#space-space-bound), [`id`](#space-space-id), [`playerCount`](#space-space-player-count), [`players`](#space-space-players).
+- From [`Space`](#space-space): [`center`](#space-space-center), [`customRendering`](#space-space-custom-rendering), [`height`](#space-space-height), [`innerBound`](#space-space-inner-bound), [`isPlaying`](#space-space-is-playing), [`outerBound`](#space-space-outer-bound), [`size`](#space-space-size), [`width`](#space-space-width), [`add`](#space-space-add), [`clear`](#space-space-clear), [`getForm`](#space-space-get-form), [`minFrameTime`](#space-space-min-frame-time), [`pause`](#space-space-pause), [`play`](#space-space-play), [`playOnce`](#space-space-play-once), [`refresh`](#space-space-refresh), [`remove`](#space-space-remove), [`render`](#space-space-render), [`replay`](#space-space-replay), [`resize`](#space-space-resize), [`resume`](#space-space-resume), [`stop`](#space-space-stop), [`bound`](#space-space-bound), [`id`](#space-space-id), [`playerCount`](#space-space-player-count), [`players`](#space-space-players).
 
 <a id="space-space"></a>
 ### `Space`
