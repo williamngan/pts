@@ -272,8 +272,13 @@ describe("Space animation loop", () => {
       await ready(space);
       space.bindMouse();
       space.play(10);
+      // players are only ever called while the space plays
       const seen: string[] = [];
-      space.add({ animate() {}, action: (type: string) => seen.push(type) });
+      space.add({
+        animate() {},
+        action: (type: string) =>
+          seen.push(space.isPlaying ? type : `${type} while stopped`),
+      });
       const dragger = UIDragger.fromRectangle(
         [
           [0, 0],
@@ -289,8 +294,9 @@ describe("Space animation loop", () => {
       else
         space.add({
           animate() {},
-          action: (type: string, x: number, y: number, evt: UIActionEvent) =>
-            UI.track([dragger], type, new Pt(x, y), evt),
+          action: (type: string, x: number, y: number, evt: UIActionEvent) => {
+            if (space.isPlaying) UI.track([dragger], type, new Pt(x, y), evt);
+          },
         });
       const pointer = (type: string, pointerId: number, x = 40) =>
         space.element.dispatchEvent(
