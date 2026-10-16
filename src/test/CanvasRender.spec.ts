@@ -7,7 +7,9 @@ import { Util } from "../Util";
 // context surface as a renderer, which makes the drawing logic testable here.
 function recordingCtx() {
   const calls: [string, ...unknown[]][] = [];
+  let dash: number[] = [];
   const target: Record<string, unknown> = {
+    getLineDash: () => dash.slice(),
     measureText: (t: string) => ({ width: t.length * 10 }),
     createLinearGradient: () => ({
       addColorStop: (...a: unknown[]) => calls.push(["addColorStop", ...a]),
@@ -27,7 +29,10 @@ function recordingCtx() {
     "closePath",
     "arc",
   ]) {
-    target[fn] = (...a: unknown[]) => calls.push([fn, ...a]);
+    target[fn] = (...a: unknown[]) => {
+      if (fn === "setLineDash") dash = Array.from(a[0] as number[]);
+      calls.push([fn, ...a]);
+    };
   }
   const ctx = new Proxy(target, {
     get(t, k: string) {
@@ -90,15 +95,16 @@ describe("CanvasForm rendering pins", () => {
     form.dash(true);
     expect(calls.pop()).toEqual(["setLineDash", [5, 5]]);
 
-    // repeated identical pattern is deduped
+    // this mock's members are plain fields, which the form cannot observe, so
+    // repeats write again (CanvasStyle.spec covers deduping)
     form.dash(true);
-    expect(calls.filter((c) => c[0] === "setLineDash")).toHaveLength(0);
+    expect(calls.pop()).toEqual(["setLineDash", [5, 5]]);
 
     form.dash([]);
     expect(calls.pop()).toEqual(["setLineDash", []]);
 
     form.dash(false);
-    expect(calls.filter((c) => c[0] === "setLineDash")).toHaveLength(0);
+    expect(calls.pop()).toEqual(["setLineDash", []]);
   });
 
   it("keeps chaining through points() with empty input", () => {

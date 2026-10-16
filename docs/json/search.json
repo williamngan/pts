@@ -10002,60 +10002,6 @@
     0
   ],
   [
-    "Svg_SVGContext2D#property_fillStyle",
-    "SVGContext2D.fillStyle",
-    "Variable",
-    0
-  ],
-  [
-    "Svg_SVGContext2D#property_font",
-    "SVGContext2D.font",
-    "Variable",
-    0
-  ],
-  [
-    "Svg_SVGContext2D#property_globalAlpha",
-    "SVGContext2D.globalAlpha",
-    "Variable",
-    0
-  ],
-  [
-    "Svg_SVGContext2D#property_globalCompositeOperation",
-    "SVGContext2D.globalCompositeOperation",
-    "Variable",
-    0
-  ],
-  [
-    "Svg_SVGContext2D#property_lineCap",
-    "SVGContext2D.lineCap",
-    "Variable",
-    0
-  ],
-  [
-    "Svg_SVGContext2D#property_lineDashOffset",
-    "SVGContext2D.lineDashOffset",
-    "Variable",
-    0
-  ],
-  [
-    "Svg_SVGContext2D#property_lineJoin",
-    "SVGContext2D.lineJoin",
-    "Variable",
-    0
-  ],
-  [
-    "Svg_SVGContext2D#property_lineWidth",
-    "SVGContext2D.lineWidth",
-    "Variable",
-    0
-  ],
-  [
-    "Svg_SVGContext2D#property_strokeStyle",
-    "SVGContext2D.strokeStyle",
-    "Variable",
-    0
-  ],
-  [
     "Svg_SVGContext2D#property_textAlign",
     "SVGContext2D.textAlign",
     "Variable",
@@ -10074,14 +10020,68 @@
     6
   ],
   [
+    "Svg_SVGContext2D#accessor_fillStyle",
+    "SVGContext2D.fillStyle",
+    "Accessor",
+    6
+  ],
+  [
+    "Svg_SVGContext2D#accessor_font",
+    "SVGContext2D.font",
+    "Accessor",
+    6
+  ],
+  [
+    "Svg_SVGContext2D#accessor_globalAlpha",
+    "SVGContext2D.globalAlpha",
+    "Accessor",
+    6
+  ],
+  [
+    "Svg_SVGContext2D#accessor_globalCompositeOperation",
+    "SVGContext2D.globalCompositeOperation",
+    "Accessor",
+    6
+  ],
+  [
     "Svg_SVGContext2D#accessor_group",
     "SVGContext2D.group",
     "Accessor",
     6
   ],
   [
+    "Svg_SVGContext2D#accessor_lineCap",
+    "SVGContext2D.lineCap",
+    "Accessor",
+    6
+  ],
+  [
+    "Svg_SVGContext2D#accessor_lineDashOffset",
+    "SVGContext2D.lineDashOffset",
+    "Accessor",
+    6
+  ],
+  [
+    "Svg_SVGContext2D#accessor_lineJoin",
+    "SVGContext2D.lineJoin",
+    "Accessor",
+    6
+  ],
+  [
+    "Svg_SVGContext2D#accessor_lineWidth",
+    "SVGContext2D.lineWidth",
+    "Accessor",
+    6
+  ],
+  [
     "Svg_SVGContext2D#accessor_runs",
     "SVGContext2D.runs",
+    "Accessor",
+    6
+  ],
+  [
+    "Svg_SVGContext2D#accessor_strokeStyle",
+    "SVGContext2D.strokeStyle",
     "Accessor",
     6
   ],

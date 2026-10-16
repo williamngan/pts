@@ -12,6 +12,24 @@ function groupValues(value: ArrayLike<ArrayLike<number>>) {
   return Array.from(value, values);
 }
 
+it("handles empty and singleton geometry collections", () => {
+  expect(Geom.boundingBox([])).toEqual(new Group());
+  expect(new Group().boundingBox()).toEqual(new Group());
+  expect(Geom.sortEdges([])).toHaveLength(0);
+  const point = new Pt(1, 2);
+  expect(Geom.sortEdges(new Set([point]))).toEqual([point]);
+});
+
+it("wraps reversed and degenerate ranges without returning the excluded endpoint", () => {
+  expect(Num.boundValue(5, 10, 0)).toBe(5);
+  expect(Num.boundValue(15, 10, 0)).toBe(5);
+  expect(Num.boundValue(5, 2, 2)).toBe(2);
+  expect(Num.boundValue(-Number.EPSILON, 10, 0)).toBe(0);
+  expect(Num.boundValue(1 - Number.EPSILON, 1, 11)).toBe(1);
+  expect(Geom.boundAngle(-1e-14)).toBe(0);
+  expect(Geom.boundRadian(-1e-17)).toBe(0);
+});
+
 afterEach(() => {
   Num.generator = undefined;
 });

@@ -10,6 +10,7 @@
  */
 
 import { SIZES } from "../lib/fixtures.mjs";
+import { randomFor } from "../lib/random.mjs";
 import { sink } from "../lib/sink.mjs";
 import { defineSuite } from "../lib/suite.mjs";
 
@@ -630,6 +631,66 @@ export default defineSuite("op", (b, { Pts, fx }) => {
       Array.from({ length: 2000 }, (_, i) =>
         square(3 * (i % 50), 3 * Math.floor(i / 50)),
       ),
+    run: (shapes) => sink(ringsValue(Path.unite(shapes))),
+  });
+  for (const count of [1000, 2000, 4000]) {
+    b.case(`Path.unite (${count} full-width bars)`, {
+      batch: 1,
+      setup: () =>
+        Array.from({ length: count }, (_, i) => [
+          [0, i * 3],
+          [1000, i * 3],
+          [1000, i * 3 + 1],
+          [0, i * 3 + 1],
+        ]),
+      run: (shapes) => sink(ringsValue(Path.unite(shapes))),
+    });
+  }
+  // Edges tied in x in shuffled y order: the sweep orders them by y to prune.
+  b.case("Path.unite (2000 full-width bars, shuffled)", {
+    batch: 1,
+    setup: () => {
+      const random = randomFor("op:path:shuffled-bars");
+      return Array.from({ length: 2000 }, (_, i) => [
+        [0, i * 3],
+        [1000, i * 3],
+        [1000, i * 3 + 1],
+        [0, i * 3 + 1],
+      ]).sort(() => random() - 0.5);
+    },
+    run: (shapes) => sink(ringsValue(Path.unite(shapes))),
+  });
+  // Layouts where pruning by y cannot help: the sweep must stay a plain scan.
+  b.case("Path.unite (2000 full-width bars, staggered and shuffled)", {
+    batch: 1,
+    setup: () => {
+      const random = randomFor("op:path:staggered-bars");
+      return Array.from({ length: 2000 }, (_, i) => {
+        const x = random() * 4;
+        return [
+          [x, i * 3],
+          [1000 + x, i * 3],
+          [1000 + x, i * 3 + 1],
+          [x, i * 3 + 1],
+        ];
+      }).sort(() => random() - 0.5);
+    },
+    run: (shapes) => sink(ringsValue(Path.unite(shapes))),
+  });
+  b.case("Path.unite (4000 tall bars, jittered)", {
+    batch: 1,
+    setup: () => {
+      const random = randomFor("op:path:tall-bars");
+      return Array.from({ length: 4000 }, (_, i) => {
+        const y = random() * 500;
+        return [
+          [i * 3, y],
+          [i * 3 + 1, y],
+          [i * 3 + 1, y + 1000],
+          [i * 3, y + 1000],
+        ];
+      });
+    },
     run: (shapes) => sink(ringsValue(Path.unite(shapes))),
   });
   b.case("Path.unite (1000 holes)", {

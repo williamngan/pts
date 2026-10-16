@@ -784,6 +784,120 @@ describe("Img correctness fixes", () => {
 });
 
 describe("style cache survives context resets", () => {
+  it("repaints stopped spaces on observer resize without stopping initial playback", async () => {
+    let resized!: () => void;
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        constructor(callback: () => void) {
+          resized = callback;
+        }
+        observe() {}
+        disconnect() {}
+      },
+    );
+    const container = host();
+    const space = new CanvasSpace(container).setup({
+      retina: false,
+      resize: true,
+      bgcolor: "#ffffff",
+    });
+    await ready(space);
+    const form = space.getForm();
+    const frames: [number, number][] = [];
+    const action = vi.fn();
+    space.add({
+      animate: (time: number, ftime: number) => {
+        frames.push([time, ftime]);
+        form.fillOnly("#ff0000").rect([
+          [0, 0],
+          [10, 10],
+        ]);
+      },
+      action,
+    });
+    space.bindMouse();
+    resized();
+    expect(space.isPlaying).toBe(false);
+    expect(frames).toEqual([]);
+    space.play();
+    space.play(10);
+    expect(space.isPlaying).toBe(true);
+    space.stop();
+    space.play(20);
+    expect(space.isPlaying).toBe(false);
+    frames.length = 0;
+    const raf = vi.spyOn(globalThis, "requestAnimationFrame");
+    container.style.width = "250px";
+    resized();
+    expect(Array.from(space.ctx.getImageData(5, 5, 1, 1).data)).toEqual([
+      255, 0, 0, 255,
+    ]);
+    expect(Array.from(space.ctx.getImageData(20, 20, 1, 1).data)).toEqual([
+      255, 255, 255, 255,
+    ]);
+    // one redraw at the last frame's time, without restarting the loop, so
+    // time does not jump and input stays suspended while stopped
+    expect(frames).toEqual([[20, 0]]);
+    expect(raf).not.toHaveBeenCalled();
+    expect(space.isPlaying).toBe(false);
+    space.element.dispatchEvent(
+      new PointerEvent("pointermove", { clientX: 30, clientY: 40 }),
+    );
+    expect(action).not.toHaveBeenCalled();
+    space.dispose();
+  });
+  it("repaints paused spaces on observer resize at the paused frame", async () => {
+    let resized!: () => void;
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        constructor(callback: () => void) {
+          resized = callback;
+        }
+        observe() {}
+        disconnect() {}
+      },
+    );
+    const container = host();
+    const space = new CanvasSpace(container).setup({
+      retina: false,
+      resize: true,
+      bgcolor: "#ffffff",
+    });
+    await ready(space);
+    const form = space.getForm();
+    const frames: [number, number][] = [];
+    space.add((time: number, ftime: number) => {
+      frames.push([time, ftime]);
+      form.fillOnly("#ff0000").rect([
+        [0, 0],
+        [10, 10],
+      ]);
+    });
+    space.play();
+    space.play(10);
+    space.pause();
+    // a paused loop keeps running frames without drawing them
+    space.play(30);
+    expect(space.isPlaying).toBe(true);
+    frames.length = 0;
+    container.style.width = "250px";
+    resized();
+    expect(Array.from(space.ctx.getImageData(5, 5, 1, 1).data)).toEqual([
+      255, 0, 0, 255,
+    ]);
+    // the frame drawn before the pause, with no elapsed time
+    expect(frames).toEqual([[10, 0]]);
+    expect(space.isPlaying).toBe(true);
+    space.resume();
+    space.play(40);
+    expect(frames).toEqual([
+      [10, 0],
+      [40, 10],
+    ]);
+    space.dispose();
+  });
   it("re-applies styles after a space resize resets the canvas context", async () => {
     const space = new CanvasSpace(host()).setup({ retina: false });
     await ready(space);
@@ -842,5 +956,74 @@ describe("style cache survives context resets", () => {
     form.fillOnly("#0c9"); // same value must re-apply
     expect((img.ctx as CanvasRenderingContext2D).fillStyle).toBe("#00cc99");
     img.dispose();
+  });
+
+  it("sees style changes made through a stored context reference", () => {
+    const canvas = document.createElement("canvas");
+    const other = document.createElement("canvas");
+    const ctx = canvas.getContext("2d")!;
+    const form = new CanvasForm(ctx);
+    form.fillOnly("#ff0000");
+    ctx.save();
+    ctx.fillStyle = "#0000ff";
+    ctx.restore();
+    ctx.fillStyle = "#00ff00";
+    form.fillOnly("#ff0000").rect([
+      [0, 0],
+      [4, 4],
+    ]);
+    expect(Array.from(ctx.getImageData(1, 1, 1, 1).data)).toEqual([
+      255, 0, 0, 255,
+    ]);
+    // contexts of one kind share their observers, and so a hidden class
+    new CanvasForm(other.getContext("2d")!).fillOnly("#ff0000");
+    const setter = (c: object) =>
+      Object.getOwnPropertyDescriptor(c, "fillStyle")?.set;
+    expect(setter(ctx)).toBeTypeOf("function");
+    expect(setter(other.getContext("2d")!)).toBe(setter(ctx));
+  });
+
+  it("re-applies styles that resolve against the canvas's CSS", async () => {
+    const space = new CanvasSpace(host()).setup({ retina: false });
+    await ready(space);
+    const canvas = space.element as HTMLCanvasElement;
+    const pixel = () => Array.from(space.ctx.getImageData(20, 10, 1, 1).data);
+    canvas.style.color = "red";
+    canvas.style.colorScheme = "light";
+    // each color is also set outside the frames, so frames save and restore it
+    let color = "currentColor";
+    const form = space.getForm().strokeOnly(color, 10);
+    space.add(() =>
+      form.strokeOnly(color, 10).line([
+        [10, 10],
+        [90, 10],
+      ]),
+    );
+    space.play(10);
+    expect(pixel()).toEqual([255, 0, 0, 255]);
+    canvas.style.color = "blue";
+    space.play(20);
+    expect(pixel()).toEqual([0, 0, 255, 255]);
+
+    // a system color follows the color scheme
+    color = "Canvas";
+    form.strokeOnly(color, 10);
+    space.play(30);
+    expect(pixel()).toEqual([255, 255, 255, 255]);
+    canvas.style.colorScheme = "dark";
+    getComputedStyle(canvas).colorScheme; // system colors read computed style
+    space.play(40);
+    expect(pixel()).not.toEqual([255, 255, 255, 255]);
+
+    // a relative weight follows the canvas's own, also when escaped
+    for (const weight of ["bolder", String.raw`bold\65 r`]) {
+      canvas.style.fontWeight = "100";
+      form.font(new Font(12, "sans-serif", weight));
+      const lighter = space.ctx.font;
+      canvas.style.fontWeight = "900";
+      form.font(new Font(12, "sans-serif", weight));
+      expect(space.ctx.font).not.toBe(lighter);
+    }
+    space.dispose();
   });
 });

@@ -11,6 +11,14 @@ import {
   type PtLikeIterable,
 } from "./Types";
 
+// Whether a constructor argument is a buffer to view.
+function _isBuffer(a: unknown): boolean {
+  return (
+    a instanceof ArrayBuffer ||
+    (typeof SharedArrayBuffer !== "undefined" && a instanceof SharedArrayBuffer)
+  );
+}
+
 /**
  * Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.
  * See [Pt guide](../guide/Pt-0200.html) for details.
@@ -22,11 +30,15 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].
    * Note that `new Pt(3)` will only instantiate Pt with length of 3 (ie, same as `new Float32Array(3)` ). If you need a Pt with 1 dimension of value 3, use `new Pt([3])`.
    * @example `new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`
-   * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
+   * @param args a list of numeric parameters, an array of numbers, an object with {x,y,z,w} properties, or a buffer with optional byte offset and length (a shared view)
    */
-  constructor(...args: Array<number | number[] | IPt | Float32Array>) {
+  constructor(
+    ...args: Array<number | number[] | IPt | Float32Array | ArrayBufferLike>
+  ) {
     // each branch below produces a valid Float32Array constructor argument
     let params: any;
+    let offset: number | undefined;
+    let length: number | undefined;
     const a0 = args[0];
     if (args.length === 1 && typeof a0 == "number") {
       params = a0; // init with the TypedArray's length. Needed this in order to make ".map", ".slice" etc work.
@@ -39,10 +51,15 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
       params = a0; // the Float32Array constructor copies array-likes natively
     } else if (typeof a0 === "number") {
       params = args; // a list of numbers; rest args are already a fresh array
+    } else if (_isBuffer(a0)) {
+      // a view on a buffer, as typed-array methods like `subarray` construct
+      params = a0;
+      offset = args[1] as number | undefined;
+      length = args[2] as number | undefined;
     } else {
       params = Util.getArgs(args);
     }
-    super(params);
+    super(params, offset, length);
   }
 
   /**

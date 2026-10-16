@@ -83,15 +83,15 @@ const expectedExports = [
   "World",
 ];
 const sizeLimits = {
-  // The declarations keep their doc comments since 1.0; the triangulation and
-  // the flock are full implementations. Keep approximately 2% headroom above the
-  // measured build.
-  "index.d.mts": 318300,
-  "index.d.ts": 318300,
-  "index.js": 315700,
-  "index.mjs": 314800,
-  "pts.js": 329400,
-  "pts.min.js": 189700,
+  // Measured after the 1.x correctness fixes, D50 adaptation, exact SVG run
+  // merging, the sweep block search and the follow-up fixes, including
+  // documented declarations. Keep approximately 2% headroom above this build.
+  "index.d.mts": 326800,
+  "index.d.ts": 326800,
+  "index.js": 347000,
+  "index.mjs": 346000,
+  "pts.js": 361600,
+  "pts.min.js": 208300,
 };
 const banner = "Copyright © 2017-present William Ngan and contributors.";
 

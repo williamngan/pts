@@ -3,6 +3,7 @@ import { Circle, Curve, Line, Polygon, Rectangle, Triangle } from "../Op";
 import { Num } from "../Num";
 import { Group, Pt } from "../Pt";
 import { Util } from "../Util";
+import { orient2d } from "../_triangulate";
 
 function values(value: ArrayLike<number>) {
   return Array.from(value);
@@ -17,6 +18,35 @@ const rect = (a = [0, 0], b = [10, 10]) =>
   Rectangle.fromTopLeft(a, new Pt(b).subtract(a));
 
 describe("Line", () => {
+  it("returns a deterministic endpoint of collinear segment overlaps", () => {
+    for (const coords of [
+      [
+        [0, 0],
+        [4, 4],
+        [1, 1],
+        [5, 5],
+      ],
+      [
+        [2, 0],
+        [2, 4],
+        [2, 1],
+        [2, 5],
+      ],
+    ]) {
+      const [a, b, c, d] = coords;
+      for (const first of [line(a, b), line(b, a)])
+        for (const second of [line(c, d), line(d, c)]) {
+          expect(values(Line.intersectLine2D(first, second)!)).toEqual(c);
+          expect(values(Line.intersectLine2D(second, first)!)).toEqual(c);
+        }
+    }
+    expect(
+      Line.intersectLine2D(line([0, 0], [1, 1]), line([2, 2], [3, 3])),
+    ).toBeUndefined();
+    expect(
+      Line.intersectLine2D(line([1, 0], [1, 0]), line([0, 0], [2, 2])),
+    ).toBeUndefined();
+  });
   it("constructs lines and calculates scalar properties", () => {
     const angled = Line.fromAngle([1, 2], 0, 5);
     expect(groupValues(angled)).toEqual([
@@ -330,7 +360,10 @@ describe("Circle", () => {
     ).toHaveLength(2);
     expect(
       Circle.intersectCircle2D(circle, Circle.fromCenter([1, 0], 1)),
-    ).toHaveLength(1);
+    ).toHaveLength(0);
+    expect(
+      Circle.intersectCircle2D(Circle.fromCenter([1, 0], 1), circle),
+    ).toHaveLength(0);
     // coincident circles have no discrete intersection points
     expect(
       Circle.intersectCircle2D(circle, Circle.fromCenter([0, 0], 5)),
@@ -381,6 +414,61 @@ describe("Triangle", () => {
 
 describe("Polygon", () => {
   const square = () => Rectangle.corners(rect());
+
+  it("handles repeated, collinear, tied-x and nearly collinear hull points", () => {
+    for (const sorted of [false, true]) {
+      const pts = [
+        [0, 10],
+        [0, 0],
+        [0, 5],
+        [10, 5],
+      ];
+      expect(Polygon.area(Polygon.convexHull(pts, sorted))).toBe(50);
+      expect(pts[0]).toEqual([0, 10]);
+    }
+    expect(
+      groupValues(
+        Polygon.convexHull([
+          [0, 0],
+          [1, 1],
+          [2, 2],
+          [3, 3],
+        ]),
+      ),
+    ).toEqual([
+      [0, 0],
+      [3, 3],
+    ]);
+    expect(
+      groupValues(
+        Polygon.convexHull([
+          [1, 1],
+          [1, 1],
+          [1, 1],
+        ]),
+      ),
+    ).toEqual([[1, 1]]);
+    let seed = 42;
+    const random = () =>
+      (seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 2 ** 32;
+    for (let trial = 0; trial < 300; trial++) {
+      const pts = Array.from({ length: 25 }, () => {
+        const x = Math.floor(random() * 5);
+        return trial % 2
+          ? [x, x + (random() - 0.5) * 1e-14]
+          : [x, Math.floor(random() * 5)];
+      });
+      const hull = Polygon.convexHull(pts);
+      for (let i = 0; i < hull.length; i++) {
+        const a = hull[i],
+          b = hull[(i + 1) % hull.length];
+        for (const p of pts)
+          expect(
+            orient2d(a[0], a[1], b[0], b[1], p[0], p[1]),
+          ).toBeGreaterThanOrEqual(0);
+      }
+    }
+  });
 
   it("constructs polygons and derives lines, sides, midpoints, and bisectors", () => {
     expect(values(Polygon.centroid(square()))).toEqual([5, 5]);
@@ -447,6 +535,22 @@ describe("Polygon", () => {
   });
 
   it("checks points, circle SAT, and polygon SAT", () => {
+    const enclosed = Group.fromArray([
+      [50, 0],
+      [60, 0],
+      [55, 10],
+    ]);
+    for (const polygon of [enclosed, enclosed.slice().reverse()]) {
+      const hit = Polygon.hasIntersectCircle(
+        polygon,
+        Circle.fromCenter([0, 0], 100),
+      );
+      expect(hit).toBeTruthy();
+      expect(Number.isFinite(hit!.dist)).toBe(true);
+    }
+    expect(
+      Polygon.hasIntersectCircle(square(), Circle.fromCenter([5, 5], 1)),
+    ).toBeTruthy();
     expect(Polygon.hasIntersectPoint(square(), [5, 5])).toBe(true);
     expect(Polygon.hasIntersectPoint(square(), [15, 5])).toBe(false);
     expect(
@@ -723,7 +827,7 @@ describe("Geometry correctness pins", () => {
       Circle.intersectCircle2D(c, Circle.fromCenter([0, 0], 5)),
     ).toHaveLength(0);
     const enclosed = Circle.intersectCircle2D(c, Circle.fromCenter([1, 0], 1));
-    expect(enclosed).toHaveLength(1); // legacy enclosed-marker behavior kept
+    expect(enclosed).toHaveLength(0); // boundaries of enclosed circles do not intersect
     expect(Circle.intersectRay2D(c, line([1, 1], [1, 1]))).toHaveLength(0);
   });
 

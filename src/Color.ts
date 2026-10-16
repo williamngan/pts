@@ -14,8 +14,25 @@ import { type PtLike, type ColorType } from "./Types";
 
 // XYZ property for Standard Observer 2deg, Daylight/sRGB illuminant D65
 const D65 = /* @__PURE__ */ new Pt(95.047, 100, 108.883, 1);
+// CSS Lab's D50 white (CIE x=0.3457, y=0.3585), on Pts' XYZ 0–100 scale.
+const D50 = /* @__PURE__ */ new Pt(
+  (100 * 0.3457) / 0.3585,
+  100,
+  (100 * (1 - 0.3457 - 0.3585)) / 0.3585,
+  1,
+);
 
 let _colorRanges: { [name: string]: Group } = /* @__PURE__ */ colorRanges();
+
+// One RGB channel (0...1) of an HSL color, given hue t and the HSL
+// conversion's p and q.
+function _hslChannel(p: number, q: number, t: number): number {
+  t = t < 0 ? t + 1 : t > 1 ? t - 1 : t;
+  if (t * 6 < 1) return p + (q - p) * t * 6;
+  if (t * 2 < 1) return q;
+  if (t * 3 < 2) return p + (q - p) * (2 / 3 - t) * 6;
+  return p;
+}
 
 function colorRanges(): { [name: string]: Group } {
   return {
@@ -34,6 +51,8 @@ function colorRanges(): { [name: string]: Group } {
 /**
  * Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.
  * Convert non-RGB colors to RGB before using `.hex`, `.rgb`, or `.rgba` for rendering. These getters format the channels; they don't convert between color spaces.
+ * LAB and LCH use the D50 reference white, as in CSS `lab()` and `lch()`.
+ * XYZ and LUV use D65; conversions between XYZ and LAB apply Bradford chromatic adaptation.
  * @example
  * ```
  * const color = Color.hsl(268, 0.37, 0.51);
@@ -132,7 +151,7 @@ export class Color extends Pt {
   }
 
   /**
-   * Create LAB Color. LAB color ranges are (0...100, -128...127, -128...127) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
+   * Create D50 LAB Color, using the same reference white as CSS `lab()`. LAB color ranges are (0...100, -128...127, -128...127) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static lab(...args: any[]): Color {
@@ -140,7 +159,7 @@ export class Color extends Pt {
   }
 
   /**
-   * Create LCH Color. LCH color ranges are (0...100, 0...100, 0...360) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
+   * Create D50 LCH Color, using the same reference white as CSS `lch()`. LCH color ranges are (0...100, 0...100, 0...360) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static lch(...args: any[]): Color {
@@ -406,6 +425,8 @@ export class Color extends Pt {
 
   /**
    * Normalize the color values to between 0 to 1, or revert it back to the min/max values in current color mode.
+   * Uses the nominal `Color.ranges` without clamping. In particular LCH chroma uses
+   * 0–100 for compatibility, although valid colors can exceed 100 (and normalize above 1).
    * @param toNorm a boolean value specifying whether to normalize (`true`) or revert (`false`)
    */
   normalize(toNorm: boolean = true): Color {
@@ -444,7 +465,10 @@ export class Color extends Pt {
       this._isNorm && format !== "mode" ? Color._denorm(this) : this;
     if (format == "hex") {
       const _hex = (n: number) => {
-        const s = Math.floor(n).toString(16);
+        // clamp to a CSS byte; NaN fails the range test and becomes 0
+        let b = Math.floor(n);
+        if (!(b >= 0 && b <= 255)) b = b > 255 ? 255 : 0;
+        const s = b.toString(16);
         return s.length < 2 ? "0" + s : s;
       };
       return `#${_hex(v[0])}${_hex(v[1])}${_hex(v[2])}`;
@@ -501,6 +525,7 @@ export class Color extends Pt {
 
   /**
    * A static function to convert HSL to RGB.
+   * Full-range output is rounded to integer RGB channels; normalized output retains fractions.
    * @param hsl a HSL Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -511,41 +536,34 @@ export class Color extends Pt {
     normalizedInput: boolean = false,
     normalizedOutput: boolean = false,
   ): Color {
-    let [h, s, l] = hsl;
+    // indexed reads: destructuring a typed array goes through its iterator
+    let h = hsl[0];
+    const s = hsl[1];
+    const l = hsl[2];
     if (!normalizedInput) h = h / 360;
     h = h - Math.floor(h); // wrap hue into [0, 1)
 
-    const sc = normalizedOutput ? 1 : 255;
-    if (s == 0) {
-      const gray = Color.rgb(sc * l, sc * l, sc * l, hsl.alpha);
-      if (normalizedOutput) gray.normalized = true;
-      return gray;
+    let r = l;
+    let g = l;
+    let b = l;
+    if (s != 0) {
+      const q = l <= 0.5 ? l * (1 + s) : l + s - l * s;
+      const p = 2 * l - q;
+      r = _hslChannel(p, q, h + 1 / 3);
+      g = _hslChannel(p, q, h);
+      b = _hslChannel(p, q, h - 1 / 3);
     }
-
-    const q = l <= 0.5 ? l * (1 + s) : l + s - l * s;
-    const p = 2 * l - q;
-
-    const convert = (t: number) => {
-      t = t < 0 ? t + 1 : t > 1 ? t - 1 : t;
-      if (t * 6 < 1) {
-        return p + (q - p) * t * 6;
-      } else if (t * 2 < 1) {
-        return q;
-      } else if (t * 3 < 2) {
-        return p + (q - p) * (2 / 3 - t) * 6;
-      } else {
-        return p;
-      }
-    };
-
-    const cc = Color.rgb(
-      sc * convert(h + 1 / 3),
-      sc * convert(h),
-      sc * convert(h - 1 / 3),
+    if (normalizedOutput) {
+      const cc = Color.rgb(r, g, b, hsl.alpha);
+      cc.normalized = true;
+      return cc;
+    }
+    return Color.rgb(
+      Math.round(255 * r),
+      Math.round(255 * g),
+      Math.round(255 * b),
       hsl.alpha,
     );
-    if (normalizedOutput) cc.normalized = true;
-    return cc;
   }
 
   /**
@@ -586,6 +604,7 @@ export class Color extends Pt {
 
   /**
    * A static function to convert HSB to RGB.
+   * Full-range output is rounded to integer RGB channels; normalized output retains fractions.
    * @param hsb a HSB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -596,7 +615,10 @@ export class Color extends Pt {
     normalizedInput: boolean = false,
     normalizedOutput: boolean = false,
   ): Color {
-    let [h, s, v] = hsb;
+    // indexed reads: destructuring a typed array goes through its iterator
+    let h = hsb[0];
+    const s = hsb[1];
+    const v = hsb[2];
     if (!normalizedInput) h = h / 360;
     h = h - Math.floor(h); // wrap hue into [0, 1)
 
@@ -606,21 +628,51 @@ export class Color extends Pt {
     const q = v * (1 - f * s);
     const t = v * (1 - (1 - f) * s);
 
-    const pick = [
-      [v, t, p],
-      [q, v, p],
-      [p, v, t],
-      [p, q, v],
-      [t, p, v],
-      [v, p, q],
-    ];
-    const c = pick[i % 6];
+    // the sextant of the hue picks the order of v, t, p and q
+    let r: number, g: number, b: number;
+    switch (i % 6) {
+      case 0:
+        r = v;
+        g = t;
+        b = p;
+        break;
+      case 1:
+        r = q;
+        g = v;
+        b = p;
+        break;
+      case 2:
+        r = p;
+        g = v;
+        b = t;
+        break;
+      case 3:
+        r = p;
+        g = q;
+        b = v;
+        break;
+      case 4:
+        r = t;
+        g = p;
+        b = v;
+        break;
+      default:
+        r = v;
+        g = p;
+        b = q;
+    }
 
-    const sc = normalizedOutput ? 1 : 255;
-
-    const cc = Color.rgb(sc * c[0], sc * c[1], sc * c[2], hsb.alpha);
-    if (normalizedOutput) cc.normalized = true;
-    return cc;
+    if (normalizedOutput) {
+      const cc = Color.rgb(r, g, b, hsb.alpha);
+      cc.normalized = true;
+      return cc;
+    }
+    return Color.rgb(
+      Math.round(255 * r),
+      Math.round(255 * g),
+      Math.round(255 * b),
+      hsb.alpha,
+    );
   }
 
   /**
@@ -791,7 +843,7 @@ export class Color extends Pt {
   }
 
   /**
-   * A static function to convert XYZ to LAB.
+   * Convert D65 XYZ to D50 LAB (CSS Lab), with Bradford chromatic adaptation.
    * @param xyz a XYZ Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -806,23 +858,40 @@ export class Color extends Pt {
     const eps = 216 / 24389;
     const kap = 24389 / 27;
 
-    // adjust for D65
-    c.divide(D65);
+    // Bradford matrix from this library's D65 (95.047,100,108.883) to CSS D50.
+    // B^-1 diag((B D50)/(B D65)) B, with the standard Bradford cone matrix B.
+    // See https://www.w3.org/TR/css-color-4/#color-conversion-code.
+    const [x, y, z] = c;
+    const adaptedX =
+      (1.047883741175648 * x +
+        0.022926020580292167 * y -
+        0.050156960798235464 * z) /
+      D50[0];
+    const adaptedY =
+      (0.029599712470291525 * x +
+        0.9904433289480559 * y -
+        0.01706140321234148 * z) /
+      D50[1];
+    const adaptedZ =
+      (-0.009237076612309065 * x +
+        0.015045841479768444 * y +
+        0.7520350516043767 * z) /
+      D50[2];
 
     const fn = (n: number) => (n > eps ? Math.cbrt(n) : (kap * n + 16) / 116);
-    const cy = fn(c[1]);
+    const cy = fn(adaptedY);
 
     const cc = Color.lab(
       116 * cy - 16,
-      500 * (fn(c[0]) - cy),
-      200 * (cy - fn(c[2])),
+      500 * (fn(adaptedX) - cy),
+      200 * (cy - fn(adaptedZ)),
       xyz.alpha,
     );
     return normalizedOutput ? Color._normOut(cc) : cc;
   }
 
   /**
-   * A static function to convert LAB to XYZ.
+   * Convert D50 LAB (CSS Lab) to D65 XYZ, with inverse Bradford chromatic adaptation.
    * @param lab a LAB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -840,15 +909,25 @@ export class Color extends Pt {
     const eps = 216 / 24389;
     const kap = 24389 / 27;
 
-    const d = D65;
+    const d = D50;
     const xxx = Math.pow(x, 3);
     const zzz = Math.pow(z, 3);
 
-    // adjusted
+    const ax = d[0] * (xxx > eps ? xxx : (116 * x - 16) / kap);
+    const ay =
+      d[1] * (c[0] > kap * eps ? Math.pow((c[0] + 16) / 116, 3) : c[0] / kap);
+    const az = d[2] * (zzz > eps ? zzz : (116 * z - 16) / kap);
+    // Inverse of the D65-to-D50 Bradford adaptation above.
     const cc = Color.xyz(
-      d[0] * (xxx > eps ? xxx : (116 * x - 16) / kap),
-      d[1] * (c[0] > kap * eps ? Math.pow((c[0] + 16) / 116, 3) : c[0] / kap),
-      d[2] * (zzz > eps ? zzz : (116 * z - 16) / kap),
+      0.9555133603984794 * ax -
+        0.023077627346345685 * ay +
+        0.06320438037157042 * az,
+      -0.028343880155626656 * ax +
+        1.0099856019019258 * ay +
+        0.02102312741027628 * az,
+      0.012303426046551184 * ax -
+        0.020490072958726607 * ay +
+        1.3300809728580483 * az,
       lab.alpha,
     );
 

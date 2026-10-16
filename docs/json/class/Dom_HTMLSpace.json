@@ -119,7 +119,7 @@
       "source": [
         [
           "src/Space.ts",
-          313,
+          321,
           6
         ]
       ],
@@ -137,12 +137,12 @@
       "source": [
         [
           "src/Space.ts",
-          275,
+          283,
           6
         ],
         [
           "src/Space.ts",
-          278,
+          286,
           6
         ]
       ],
@@ -186,7 +186,7 @@
       "source": [
         [
           "src/Space.ts",
-          327,
+          335,
           6
         ]
       ],
@@ -204,7 +204,7 @@
       "source": [
         [
           "src/Space.ts",
-          299,
+          307,
           13
         ]
       ],
@@ -224,7 +224,7 @@
       "source": [
         [
           "src/Space.ts",
-          285,
+          293,
           6
         ]
       ],
@@ -242,7 +242,7 @@
       "source": [
         [
           "src/Space.ts",
-          292,
+          300,
           6
         ]
       ],
@@ -278,7 +278,7 @@
       "source": [
         [
           "src/Space.ts",
-          407,
+          423,
           13
         ]
       ],
@@ -316,7 +316,7 @@
       "source": [
         [
           "src/Space.ts",
-          306,
+          314,
           6
         ]
       ],
@@ -334,7 +334,7 @@
       "source": [
         [
           "src/Space.ts",
-          320,
+          328,
           6
         ]
       ],
@@ -383,7 +383,7 @@
       "source": [
         [
           "src/Space.ts",
-          420,
+          436,
           2
         ]
       ],
@@ -430,7 +430,7 @@
       "source": [
         [
           "src/Space.ts",
-          447,
+          463,
           2
         ]
       ],
@@ -471,7 +471,7 @@
       "source": [
         [
           "src/Space.ts",
-          558,
+          578,
           2
         ]
       ],
@@ -506,7 +506,7 @@
       "source": [
         [
           "src/Space.ts",
-          467,
+          483,
           2
         ]
       ],
@@ -546,7 +546,7 @@
       "source": [
         [
           "src/Space.ts",
-          509,
+          527,
           2
         ]
       ],
@@ -699,7 +699,7 @@
       "source": [
         [
           "src/Space.ts",
-          214,
+          222,
           2
         ]
       ],
@@ -757,7 +757,7 @@
       "source": [
         [
           "src/Space.ts",
-          181,
+          869,
           12
         ]
       ],
@@ -765,16 +765,16 @@
         "isProtected": true
       },
       "overrides": false,
-      "inherits": "Space.playItems",
+      "inherits": "MultiTouchSpace.playItems",
       "signatures": [
         {
-          "comment": "Main animate function. This calls all the items to perform.",
+          "comment": "Players get no actions while the space is stopped. A press they saw start\nthat ended meanwhile (released, cancelled or abandoned) is ended for them\nas the space plays again: `isPlaying` is already true, and no player has\nanimated yet. So the UIs they drive let go of its contact.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
             {
               "name": "time",
-              "comment": "current time",
+              "comment": "",
               "type": "number",
               "default": false
             }
@@ -788,7 +788,7 @@
       "source": [
         [
           "src/Space.ts",
-          257,
+          265,
           2
         ]
       ],
@@ -897,7 +897,7 @@
       "source": [
         [
           "src/Space.ts",
-          267,
+          275,
           12
         ]
       ],
@@ -985,7 +985,7 @@
       "source": [
         [
           "src/Space.ts",
-          222,
+          230,
           2
         ]
       ],
@@ -1041,7 +1041,7 @@
       "source": [
         [
           "src/Space.ts",
-          232,
+          240,
           2
         ]
       ],
@@ -1146,7 +1146,7 @@
       "source": [
         [
           "src/Space.ts",
-          683,
+          705,
           2
         ]
       ],
@@ -1181,7 +1181,7 @@
       "source": [
         [
           "src/Space.ts",
-          609,
+          631,
           2
         ]
       ],
@@ -1210,7 +1210,7 @@
       "source": [
         [
           "src/Space.ts",
-          437,
+          453,
           2
         ]
       ],
@@ -1257,7 +1257,7 @@
       "source": [
         [
           "src/Space.ts",
-          453,
+          469,
           2
         ]
       ],
@@ -1298,7 +1298,7 @@
       "source": [
         [
           "src/Space.ts",
-          630,
+          652,
           2
         ]
       ],

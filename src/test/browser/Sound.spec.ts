@@ -18,10 +18,22 @@ class FakeNode {
 }
 
 class FakeGain extends FakeNode {
-  gain = { value: 1 };
+  gain = {
+    value: 1,
+    ramps: [] as [number, number][],
+    cancelAndHoldAtTime(_time: number) {},
+    setValueAtTime(value: number, _time: number) {
+      this.value = value;
+    },
+    linearRampToValueAtTime(value: number, time: number) {
+      this.ramps.push([value, time]);
+      this.value = value;
+    },
+  };
 }
 
 class FakeOscillator extends FakeNode {
+  onended: (() => void) | null = null;
   frequency = { value: 0 };
   type: OscillatorType = "sine";
   started = 0;
@@ -86,7 +98,15 @@ class FakeAnalyser extends FakeNode {
 
 class FakeAudioContext {
   state = "running";
-  currentTime = 5;
+  private _time = 5;
+  private _clock = Date.now();
+  get currentTime() {
+    return this._time + (Date.now() - this._clock) / 1000;
+  }
+  set currentTime(value: number) {
+    this._time = value;
+    this._clock = Date.now();
+  }
   sampleRate = 48_000;
   destination = new FakeNode();
   createdOscillators: FakeOscillator[] = [];
@@ -196,12 +216,15 @@ const okFetch = () =>
   });
 
 beforeEach(() => {
+  vi.useFakeTimers();
   vi.stubGlobal("AudioContext", FakeAudioContext);
   (Sound as any)._sharedContext = undefined; // never reuse a stale fake context
   FakeAudio.created.length = 0;
 });
 
 afterEach(() => {
+  vi.clearAllTimers();
+  vi.useRealTimers();
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
 });
@@ -276,7 +299,10 @@ describe("Sound construction and generated audio", () => {
     sound.volume = -1; // negative clamps to 0
     expect(sound.volume).toBe(0);
     sound.stop();
-    expect((sound.node as unknown as FakeNode).disconnects).toContain(gain);
+    (sound.node as unknown as FakeOscillator).onended!();
+    expect((sound.node as unknown as FakeNode).disconnects).toContain(
+      undefined,
+    );
   });
 
   it("restores custom waves and connected chains when restarting", () => {
@@ -417,6 +443,7 @@ describe("Sound construction and generated audio", () => {
     expect(node.connections).toContain(context.createdGains[0]);
     sound.stop();
     expect(sound.playing).toBe(false);
+    vi.advanceTimersByTime(10);
     expect(node.disconnects).toContain(context.createdGains[0]);
   });
 
@@ -472,6 +499,54 @@ describe("Sound construction and generated audio", () => {
 });
 
 describe("Sound file and buffer sources", () => {
+  it("fades media seeks and cancels a pending pause on restart", async () => {
+    const media = new FakeMedia();
+    const sound = await Sound.load(media as unknown as HTMLMediaElement);
+    sound.start().start(4);
+    expect(media.currentTime).toBe(2);
+    vi.advanceTimersByTime(10);
+    expect(media.currentTime).toBe(4);
+    sound.stop().start();
+    vi.advanceTimersByTime(20);
+    expect(media.pauseCalls).toBe(0);
+    expect(sound.playing).toBe(true);
+    sound.dispose();
+  });
+
+  it("waits for the audio clock before disconnecting a faded source", async () => {
+    const media = new FakeMedia();
+    const sound = await Sound.load(media as unknown as HTMLMediaElement);
+    const ctx = sound.ctx as unknown as FakeAudioContext;
+    let time = 5;
+    Object.defineProperty(ctx, "currentTime", { get: () => time });
+    sound.start().stop();
+    vi.advanceTimersByTime(20);
+    expect(media.pauseCalls).toBe(0);
+    time += 0.02;
+    vi.advanceTimersByTime(10);
+    expect(media.pauseCalls).toBe(1);
+    sound.dispose();
+  });
+
+  it("schedules fades with older AudioParam implementations", () => {
+    const sound = Sound.generate("sine", 440).start();
+    const ctx = sound.ctx as unknown as FakeAudioContext;
+    const gain = ctx.createdGains[0].gain;
+    const cancel = vi.fn();
+    Object.assign(gain, {
+      cancelAndHoldAtTime: undefined,
+      cancelScheduledValues: cancel,
+    });
+    sound.stop().start();
+    sound.volume = 0.5;
+    expect(cancel).toHaveBeenCalled();
+    expect(gain.ramps[gain.ramps.length - 1]).toEqual([
+      0.5,
+      ctx.currentTime + 0.02,
+    ]);
+    sound.dispose();
+  });
+
   it("resolves immediately for an already-buffered element", async () => {
     const media = new FakeMedia();
     const sound = await Sound.load(
@@ -490,6 +565,7 @@ describe("Sound file and buffer sources", () => {
     expect(media.played).toBe(1);
     expect(media.currentTime).toBe(3);
     sound.stop();
+    vi.advanceTimersByTime(10);
     expect(media.pauseCalls).toBe(1);
     media.dispatchEvent(new Event("ended"));
     expect(sound.playing).toBe(false);
@@ -552,12 +628,12 @@ describe("Sound file and buffer sources", () => {
     const sound = await Sound.load(media as unknown as HTMLMediaElement);
     sound.start();
     expect(sound.playing).toBe(true); // optimistic until the rejection lands
-    await new Promise((r) => setTimeout(r, 0));
+    await vi.advanceTimersByTimeAsync(0);
     expect(sound.playing).toBe(false); // rejection observed, still paused
 
     sound.start();
     media.paused = false; // as if a later trusted start succeeded
-    await new Promise((r) => setTimeout(r, 0));
+    await vi.advanceTimersByTimeAsync(0);
     expect(sound.playing).toBe(true); // stale rejection must not flip it back
 
     const legacy = new LegacyMedia();
@@ -607,7 +683,7 @@ describe("Sound file and buffer sources", () => {
     expect(first.stopped).toBe(1); // old node stopped before replacement
     expect(ctx.createdBuffers).toHaveLength(2);
     const second = sound.node as unknown as FakeBufferSource;
-    expect(second.starts).toEqual([[0, 5]]);
+    expect(second.starts).toEqual([[ctx.currentTime + 0.01, 5]]);
     expect(second.connections).toContain(filter); // chain survives re-creation
     expect(sound.playing).toBe(true);
 
@@ -722,7 +798,33 @@ describe("Sound input", () => {
     expect(sound.playable).toBe(true);
     expect(sound.progress).toBe(0);
     sound.start().stop();
+    vi.advanceTimersByTime(10);
     expect(track.stop).toHaveBeenCalledOnce();
+    sound.start();
+    expect(sound.playing).toBe(false);
+    sound.toggle();
+    expect(sound.playing).toBe(false);
+  });
+
+  it("releases the microphone at once when stopped while the context is suspended", async () => {
+    const track = { stop: vi.fn() };
+    const stream = {
+      getAudioTracks: () => [track],
+    } as unknown as MediaStream;
+    vi.stubGlobal("navigator", {
+      mediaDevices: { getUserMedia: vi.fn().mockResolvedValue(stream) },
+    });
+    const sound = await Sound.input();
+    const ctx = sound.ctx as unknown as FakeAudioContext;
+    sound.start();
+    // a suspended context's clock is frozen, so a fade would never complete
+    ctx.state = "suspended";
+    const timeout = vi.spyOn(globalThis, "setTimeout");
+    sound.stop();
+    expect(track.stop).toHaveBeenCalledOnce();
+    expect(timeout).not.toHaveBeenCalled();
+    ctx.state = "running";
+    sound.dispose();
   });
 
   it("rejects when microphone access fails", async () => {

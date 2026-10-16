@@ -2,7 +2,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { CanvasSpace } from "../../Canvas";
 import { SVGSpace } from "../../Svg";
-import { UIButton, UIDragger } from "../../UI";
+import { Pt } from "../../Pt";
+import { type UIActionEvent } from "../../Types";
+import { UI, UIButton, UIDragger } from "../../UI";
 
 function host() {
   const element = document.createElement("div");
@@ -28,6 +30,337 @@ afterEach(() => {
 });
 
 describe("Space animation loop", () => {
+  it.each([false, true])(
+    "keeps a drag owned by the first contact (touch=%s)",
+    async (touch) => {
+      const space = new CanvasSpace(host()).setup({ retina: false });
+      await ready(space);
+      space.bindMouse();
+      if (touch) space.bindTouch();
+      space.play(10);
+      const action = vi.fn();
+      space.add({ animate() {}, action });
+      const dragger = UIDragger.fromRectangle(
+        [
+          [0, 0],
+          [100, 80],
+        ],
+        {},
+      ) as UIDragger;
+      const drag = vi.fn(),
+        drop = vi.fn();
+      dragger.onDrag(drag);
+      dragger.onDrop(drop);
+      space.track(dragger);
+      const send = (type: string, id: number, x: number, ids: number[]) => {
+        if (touch) {
+          const contact = (n: number) =>
+            new Touch({
+              identifier: n,
+              target: space.element,
+              clientX: n === id ? x : 40,
+              clientY: 50,
+            });
+          space.element.dispatchEvent(
+            new TouchEvent(type, {
+              changedTouches: [contact(id)],
+              touches: ids.map(contact),
+            }),
+          );
+        } else
+          space.element.dispatchEvent(
+            new PointerEvent(type, { pointerId: id, clientX: x, clientY: 50 }),
+          );
+      };
+      const types = touch
+        ? ["touchstart", "touchmove", "touchend"]
+        : ["pointerdown", "pointermove", "pointerup"];
+      send(types[0], 1, 40, [1]);
+      send(types[1], 1, 45, [1]);
+      expect(drag).toHaveBeenCalledTimes(1);
+      send(types[0], 2, 80, [1, 2]);
+      send(types[1], 2, 85, [1, 2]);
+      send(types[2], 2, 85, [1]);
+      expect(drag).toHaveBeenCalledTimes(1);
+      expect(drop).not.toHaveBeenCalled();
+      expect(dragger.state("dragging")).toBe(true);
+      expect(action.mock.calls.map((c) => c[0])).toContain("up");
+      send(types[1], 1, 50, [1]);
+      expect(drag).toHaveBeenCalledTimes(2);
+      send(types[2], 1, 50, []);
+      expect(drop).toHaveBeenCalledOnce();
+      expect(dragger.state("dragging")).toBe(false);
+      space.dispose();
+    },
+  );
+  it("recovers a press whose release was lost", async () => {
+    const space = new CanvasSpace(host()).setup({ retina: false });
+    await ready(space);
+    space.bindMouse();
+    space.bindTouch();
+    space.play(10);
+    const seen: string[] = [];
+    space.add({ animate() {}, action: (type: string) => seen.push(type) });
+    const dragger = UIDragger.fromRectangle(
+      [
+        [0, 0],
+        [100, 80],
+      ],
+      {},
+    ) as UIDragger;
+    space.track(dragger);
+    const pointer = (
+      type: string,
+      pointerId: number,
+      pointerType: string,
+      isPrimary = true,
+    ) =>
+      space.element.dispatchEvent(
+        new PointerEvent(type, {
+          pointerId,
+          pointerType,
+          isPrimary,
+          clientX: 40,
+          clientY: 50,
+        }),
+      );
+    const touch = (type: string, id: number, active: number[]) => {
+      const contact = (n: number) =>
+        new Touch({
+          identifier: n,
+          target: space.element,
+          clientX: 40,
+          clientY: 50,
+        });
+      space.element.dispatchEvent(
+        new TouchEvent(type, {
+          changedTouches: [contact(id)],
+          touches: active.map(contact),
+        }),
+      );
+    };
+    const mouseDrag = () => {
+      seen.length = 0;
+      pointer("pointerdown", 1, "mouse");
+      pointer("pointermove", 1, "mouse");
+      pointer("pointerup", 1, "mouse");
+      return seen.filter((t) => t === "drag" || t === "drop").join(",");
+    };
+
+    // touch input is unbound while a touch is down: its touchend never arrives
+    touch("touchstart", 3, [3]);
+    expect(dragger.state("dragging")).toBe(true);
+    space.bindTouch(false);
+    expect(dragger.state("dragging")).toBe(false);
+    expect(mouseDrag()).toBe("drag,drop");
+
+    // a pen's pointerup is lost; its next primary press takes over
+    pointer("pointerdown", 7, "pen");
+    pointer("pointerdown", 8, "pen");
+    seen.length = 0;
+    pointer("pointermove", 8, "pen");
+    pointer("pointerup", 8, "pen");
+    expect(seen).toContain("drag");
+    expect(seen).toContain("drop");
+
+    // a palm's primary touch cannot take a pen press
+    pointer("pointerdown", 9, "pen");
+    pointer("pointerdown", 10, "touch");
+    seen.length = 0;
+    pointer("pointermove", 9, "pen");
+    expect(seen).toContain("drag");
+    pointer("pointerup", 10, "touch");
+    pointer("pointerup", 9, "pen");
+    expect(mouseDrag()).toBe("drag,drop");
+
+    // a lost touchend: the next touch sequence starts with only its touch
+    space.bindTouch();
+    touch("touchstart", 4, [4]);
+    touch("touchstart", 5, [5]);
+    seen.length = 0;
+    touch("touchmove", 5, [5]);
+    touch("touchend", 5, []);
+    expect(seen).toContain("drag");
+    expect(seen).toContain("drop");
+    space.dispose();
+  });
+
+  it("recovers lost presses for UIs that players forward actions to", async () => {
+    const space = new CanvasSpace(host()).setup({ retina: false });
+    await ready(space);
+    space.bindMouse();
+    space.play(10);
+    const dragger = UIDragger.fromRectangle(
+      [
+        [0, 0],
+        [200, 100],
+      ],
+      {},
+    ) as UIDragger;
+    const drag = vi.fn(),
+      drop = vi.fn();
+    dragger.onDrag(drag);
+    dragger.onDrop(drop);
+    // forwarded by hand rather than through space.track(dragger)
+    space.add({
+      animate() {},
+      action: (type: string, x: number, y: number, evt: UIActionEvent) =>
+        UI.track([dragger], type, new Pt(x, y), evt),
+    });
+    const pointer = (
+      type: string,
+      pointerId: number,
+      pointerType: string,
+      x = 40,
+    ) =>
+      space.element.dispatchEvent(
+        new PointerEvent(type, {
+          pointerId,
+          pointerType,
+          isPrimary: true,
+          clientX: x,
+          clientY: 50,
+        }),
+      );
+
+    // mouse input is rebound while a press is down: its pointerup never arrives
+    pointer("pointerdown", 7, "mouse", 40);
+    pointer("pointermove", 7, "mouse", 50);
+    space.bindMouse(false).bindMouse();
+    expect(dragger.state("dragging")).toBe(false);
+    expect(drop).toHaveBeenCalledTimes(1);
+    pointer("pointerdown", 8, "mouse", 50);
+    pointer("pointermove", 8, "mouse", 60);
+    pointer("pointerup", 8, "mouse", 60);
+    expect(drag).toHaveBeenCalledTimes(2);
+    expect(drop).toHaveBeenCalledTimes(2);
+    expect(dragger.state("dragging")).toBe(false);
+
+    // synthetic events cannot hold pointer capture, so stand in for it
+    const captured = new Set<number>();
+    const canvas = space.element;
+    vi.spyOn(canvas, "setPointerCapture").mockImplementation((id) => {
+      captured.add(id);
+    });
+    vi.spyOn(canvas, "hasPointerCapture").mockImplementation((id) =>
+      captured.has(id),
+    );
+    vi.spyOn(canvas, "releasePointerCapture").mockImplementation((id) => {
+      captured.delete(id);
+    });
+    // a palm cannot take a pen press that holds its capture...
+    pointer("pointerdown", 9, "pen");
+    pointer("pointerdown", 10, "touch");
+    pointer("pointermove", 9, "pen", 45);
+    expect(drag).toHaveBeenCalledTimes(3);
+    // ...but once the capture is lost, any first contact takes the press
+    canvas.releasePointerCapture(9);
+    pointer("pointerdown", 1, "mouse");
+    expect(dragger.state("dragging")).toBe(true);
+    pointer("pointermove", 1, "mouse", 50);
+    pointer("pointerup", 1, "mouse", 50);
+    expect(drag).toHaveBeenCalledTimes(4);
+    expect(drop).toHaveBeenCalledTimes(4);
+    expect(dragger.state("dragging")).toBe(false);
+    space.dispose();
+  });
+
+  it.each(["tracked", "forwarded"])(
+    "ends presses that end while stopped once the space plays again (%s UIs)",
+    async (wiring) => {
+      const space = new CanvasSpace(host()).setup({ retina: false });
+      await ready(space);
+      space.bindMouse();
+      space.play(10);
+      // players are only ever called while the space plays
+      const seen: string[] = [];
+      space.add({
+        animate() {},
+        action: (type: string) =>
+          seen.push(space.isPlaying ? type : `${type} while stopped`),
+      });
+      const dragger = UIDragger.fromRectangle(
+        [
+          [0, 0],
+          [200, 100],
+        ],
+        {},
+      ) as UIDragger;
+      const drag = vi.fn(),
+        drop = vi.fn();
+      dragger.onDrag(drag);
+      dragger.onDrop(drop);
+      if (wiring === "tracked") space.track(dragger);
+      else
+        space.add({
+          animate() {},
+          action: (type: string, x: number, y: number, evt: UIActionEvent) => {
+            if (space.isPlaying) UI.track([dragger], type, new Pt(x, y), evt);
+          },
+        });
+      const pointer = (type: string, pointerId: number, x = 40) =>
+        space.element.dispatchEvent(
+          new PointerEvent(type, {
+            pointerId,
+            pointerType: "touch",
+            isPrimary: true,
+            clientX: x,
+            clientY: 50,
+          }),
+        );
+      const stop = async () => {
+        space.stop();
+        while (space.isPlaying) await raf();
+      };
+      const newDrag = (id: number) => {
+        pointer("pointerdown", id, 50);
+        pointer("pointermove", id, 60);
+        pointer("pointerup", id, 60);
+      };
+
+      // a press released while stopped
+      pointer("pointerdown", 2, 40);
+      pointer("pointermove", 2, 50);
+      await stop();
+      seen.length = 0;
+      pointer("pointerup", 2, 50);
+      expect(seen).toEqual([]);
+      expect(dragger.state("dragging")).toBe(true);
+      space.replay();
+      expect(seen).toEqual(["out", "drop"]);
+      expect(dragger.state("dragging")).toBe(false);
+      expect(drop).toHaveBeenCalledTimes(1);
+      newDrag(3);
+      expect(drag).toHaveBeenCalledTimes(2);
+      expect(drop).toHaveBeenCalledTimes(2);
+
+      // a press abandoned while stopped: input unbound, released, rebound
+      pointer("pointerdown", 4, 40);
+      pointer("pointermove", 4, 50);
+      await stop();
+      space.bindMouse(false);
+      pointer("pointerup", 4, 50);
+      space.bindMouse();
+      space.replay();
+      expect(dragger.state("dragging")).toBe(false);
+      expect(drop).toHaveBeenCalledTimes(3);
+      newDrag(5);
+      expect(drag).toHaveBeenCalledTimes(4);
+      expect(drop).toHaveBeenCalledTimes(4);
+      expect(dragger.state("dragging")).toBe(false);
+
+      // a press that starts and ends while stopped is never seen
+      await stop();
+      pointer("pointerdown", 6, 40);
+      pointer("pointermove", 6, 50);
+      pointer("pointerup", 6, 50);
+      seen.length = 0;
+      space.replay();
+      expect(seen).toEqual([]);
+      space.dispose();
+    },
+  );
+
   it("keeps scheduling when the first real RAF timestamp is zero", async () => {
     const space = new CanvasSpace(host()).setup({ retina: false });
     await ready(space);

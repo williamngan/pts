@@ -31,9 +31,9 @@ describe("SVGContext2D surface", () => {
     }
   });
 
-  it("merges consecutive same-styled shapes into one path run", () => {
+  it("merges consecutive opaque stroke-only shapes into one path run", () => {
     const { ctx, form } = makeForm();
-    form.fill("#123").stroke("#456");
+    form.strokeOnly("#456");
     form
       .point([10, 10], 2)
       .point([30, 10], 2)
@@ -45,6 +45,109 @@ describe("SVGContext2D surface", () => {
     const paths = ctx._runs.filter((r: any) => r.tag === "path");
     expect(paths).toHaveLength(1);
     expect(paths[0].shapeEnds).toHaveLength(2); // three shapes, two boundaries
+  });
+
+  it("keeps overlapping shapes separate when compositing differs", () => {
+    for (const setup of [
+      (f: CanvasForm) => f.strokeOnly("rgba(0,0,0,0.5)"),
+      (f: CanvasForm) => f.strokeOnly("rgb(0 0 0 / 50%)"),
+      (f: CanvasForm) => f.strokeOnly("#123").alpha(0.5),
+      (f: CanvasForm) => f.strokeOnly("#123").composite("multiply"),
+      (f: CanvasForm) => f.fill("#123").stroke("#456"),
+      (f: CanvasForm) => f.fillOnly("rgba(0,0,0,0.5)"),
+      // keywords that take the parent's paint, which may be translucent
+      (f: CanvasForm) => f.fillOnly("unset"),
+      (f: CanvasForm) => f.fillOnly("Inherit"),
+      (f: CanvasForm) => f.strokeOnly("initial"),
+      (f: CanvasForm) => f.strokeOnly("revert"),
+      (f: CanvasForm) => f.fillOnly("currentColor"),
+      (f: CanvasForm) => {
+        f.fillOnly("#123");
+        (f.ctx as unknown as SVGContext2D).className = "custom";
+      },
+    ]) {
+      const { ctx, form } = makeForm();
+      setup(form);
+      form.point([10, 10], 5).point([12, 10], 5);
+      ctx._flushShape();
+      expect(ctx.runs).toHaveLength(2);
+    }
+  });
+
+  it("merges shapes whose compositing does not depend on separate elements", () => {
+    for (const setup of [
+      // one opaque paint, in any color syntax
+      (f: CanvasForm) => f.strokeOnly("rgb(0, 0, 0)"),
+      (f: CanvasForm) => f.strokeOnly("rgba(0,0,0,1)"),
+      (f: CanvasForm) => f.strokeOnly("navy"),
+      // opaque fills of the same orientation cannot cancel
+      (f: CanvasForm) => f.fillOnly("#123"),
+      (f: CanvasForm) => f.fill("#123").stroke("#123"),
+    ]) {
+      for (const shape of ["square", "circle"]) {
+        const { ctx, form } = makeForm();
+        setup(form);
+        form.point([10, 10], 5, shape).point([12, 10], 5, shape);
+        ctx._flushShape();
+        expect(ctx.runs).toHaveLength(1);
+        expect(ctx.runs[0].shapeEnds).toHaveLength(1);
+      }
+    }
+  });
+
+  it("merges any same-styled shapes that do not overlap", () => {
+    for (const setup of [
+      (f: CanvasForm) => f.strokeOnly("rgba(0,0,0,0.5)", 2),
+      (f: CanvasForm) => f.fill("#123").stroke("#456"),
+      (f: CanvasForm) => f.fillOnly("#123").alpha(0.5),
+    ]) {
+      const { ctx, form } = makeForm();
+      setup(form);
+      for (let i = 0; i < 40; i++) form.point([i * 20, 10], 5);
+      ctx._flushShape();
+      // the overlap test covers a bounded number of shapes per run
+      expect(ctx.runs.map((r: any) => r.shapeEnds.length + 1)).toEqual([33, 7]);
+    }
+    // within the stroke's reach plus a pixel, shapes count as overlapping
+    const { ctx, form } = makeForm();
+    form.strokeOnly("rgba(0,0,0,0.5)", 4);
+    form.point([10, 10], 5).point([26, 10], 5).point([60, 10], 5);
+    ctx._flushShape();
+    expect(ctx.runs.map((r: any) => r.shapeEnds.length + 1)).toEqual([1, 2]);
+  });
+
+  it("separates overlapping fills that wind in opposite directions", () => {
+    const { ctx, form } = makeForm();
+    const square: [number, number][] = [
+      [0, 0],
+      [20, 0],
+      [20, 20],
+      [0, 20],
+    ];
+    const shifted = square.map(([x, y]) => [x + 10, y + 10]);
+    form.fillOnly("#123").polygon(square).polygon(shifted.slice().reverse());
+    // a concave polygon's winding is not tracked: it joins only when apart
+    form.polygon([
+      [0, 0],
+      [20, 0],
+      [10, 5],
+      [20, 20],
+      [0, 20],
+    ]);
+    form.polygon(shifted.map(([x, y]) => [x + 100, y]));
+    // a polygon that winds twice
+    form.polygon([
+      [0, 0],
+      [20, 10],
+      [0, 20],
+      [-20, 10],
+      [0, 0],
+      [10, -10],
+    ]);
+    ctx._flushShape();
+    expect(ctx.runs.map((r: any) => r.shapeEnds.length + 1)).toEqual([
+      1, 1, 2, 1,
+    ]);
   });
 
   it("splits runs on any paint state change", () => {

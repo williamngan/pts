@@ -370,10 +370,17 @@ See https://github.com/williamngan/pts for details. */
 			return Math.max(min, Math.min(max, val));
 		}
 		static boundValue(val, min, max) {
-			const len = Math.abs(max - min);
+			if (min > max) {
+				const t = min;
+				min = max;
+				max = t;
+			}
+			const len = max - min;
+			if (len === 0) return min;
 			let a = (val - min) % len;
 			if (a < 0) a += len;
-			return a + min;
+			const result = a + min;
+			return result >= max ? min : result;
 		}
 		static within(p, a, b) {
 			return p >= Math.min(a, b) && p <= Math.max(a, b);
@@ -440,7 +447,7 @@ See https://github.com/williamngan/pts for details. */
 				minPt[i] = Math.min(minPt[i], p[i]);
 				maxPt[i] = Math.max(maxPt[i], p[i]);
 			}
-			return new Group(minPt, maxPt);
+			return minPt ? new Group(minPt, maxPt) : new Group();
 		}
 		static centroid(pts) {
 			return Num.average(pts);
@@ -490,6 +497,7 @@ See https://github.com/williamngan/pts for details. */
 		}
 		static sortEdges(pts) {
 			const _pts = Util.iterToArray(pts);
+			if (_pts.length < 2) return _pts;
 			const bounds = Geom.boundingBox(_pts);
 			const center = bounds[1].add(bounds[0]).divide(2);
 			const cx = center[0];
@@ -998,16 +1006,25 @@ See https://github.com/williamngan/pts for details. */
 		Group: () => Group,
 		Pt: () => Pt
 	});
+	function _isBuffer(a) {
+		return a instanceof ArrayBuffer || typeof SharedArrayBuffer !== "undefined" && a instanceof SharedArrayBuffer;
+	}
 	var Pt = class Pt extends Float32Array {
 		constructor(...args) {
 			let params;
+			let offset;
+			let length;
 			const a0 = args[0];
 			if (args.length === 1 && typeof a0 == "number") params = a0;
 			else if (args.length === 0) params = 2;
 			else if (args.length === 1 && (Array.isArray(a0) || ArrayBuffer.isView(a0))) params = a0;
 			else if (typeof a0 === "number") params = args;
-			else params = Util.getArgs(args);
-			super(params);
+			else if (_isBuffer(a0)) {
+				params = a0;
+				offset = args[1];
+				length = args[2];
+			} else params = Util.getArgs(args);
+			super(params, offset, length);
 		}
 		static make(dimensions, defaultValue = 0, randomize = false) {
 			const p = new Pt(dimensions);
@@ -1799,6 +1816,15 @@ See https://github.com/williamngan/pts for details. */
 		}
 		return Number(numerator >> shift) / Number(scaled);
 	}
+	function orient2dFiltered(ax, ay, bx, by, cx, cy) {
+		const left = (ax - cx) * (by - cy);
+		const right = (ay - cy) * (bx - cx);
+		const det = left - right;
+		const bound = ORIENT_BOUND * (Math.abs(left) + Math.abs(right));
+		if (det > bound) return 1;
+		if (-det > bound) return -1;
+		return orient2dExact(ax, ay, bx, by, cx, cy);
+	}
 	function orient2dExact(ax, ay, bx, by, cx, cy) {
 		_input[0] = ax;
 		_input[1] = ay;
@@ -2264,6 +2290,102 @@ See https://github.com/williamngan/pts for details. */
 		}
 		return area / 2;
 	}
+	const SWEEP_SCAN = 256;
+	const SWEEP_SAMPLES = 64;
+	const SWEEP_TRIAL = 32;
+	const SWEEP_BLOCK_BITS = 4;
+	const SWEEP_BLOCK = 16;
+	function windowEnd(minX, order, from, limit) {
+		let end = order.length;
+		for (let a = from; a < end;) {
+			const mid = a + end >> 1;
+			if (minX[order[mid]] > limit) end = mid;
+			else a = mid + 1;
+		}
+		return end;
+	}
+	function runStart(minX, order, i) {
+		const x = minX[order[i]];
+		let a = 0;
+		for (let b = i; a < b;) {
+			const mid = a + b >> 1;
+			if (minX[order[mid]] < x) a = mid + 1;
+			else b = mid;
+		}
+		return a;
+	}
+	function scattered(boxes, r0, r1) {
+		const { minY, maxY, order } = boxes;
+		let lo = Infinity;
+		let hi = -Infinity;
+		let blockLo = Infinity;
+		let blockHi = -Infinity;
+		let spans = 0;
+		for (let j = r0; j < r1; j++) {
+			const e = order[j];
+			if (minY[e] < blockLo) blockLo = minY[e];
+			if (maxY[e] > blockHi) blockHi = maxY[e];
+			if ((j + 1 & 15) === 0 || j + 1 === r1) {
+				spans += blockHi - blockLo;
+				if (blockLo < lo) lo = blockLo;
+				if (blockHi > hi) hi = blockHi;
+				blockLo = Infinity;
+				blockHi = -Infinity;
+			}
+		}
+		return spans > 2 * (hi - lo);
+	}
+	function blockSpan(from, to) {
+		return (to - 1 >> SWEEP_BLOCK_BITS) - (from >> SWEEP_BLOCK_BITS) + 1;
+	}
+	function sweepTree(boxes) {
+		const { minX, minY, maxY, order } = boxes;
+		const E = order.length;
+		let edges = order;
+		for (let r0 = 0, r1 = 1; r0 < E; r0 = r1++) {
+			while (r1 < E && minX[order[r1]] === minX[order[r0]]) r1++;
+			if (r1 - r0 > SWEEP_BLOCK && scattered(boxes, r0, r1)) {
+				if (edges === order) edges = order.slice();
+				edges.subarray(r0, r1).sort((p, q) => minY[p] - minY[q]);
+			}
+		}
+		let ties;
+		if (edges !== order) {
+			ties = {
+				rank: new Uint32Array(E),
+				found: new Uint32Array(E)
+			};
+			for (let j = 0; j < E; j++) ties.rank[order[j]] = j;
+		}
+		const blocks = E + SWEEP_BLOCK - 1 >> SWEEP_BLOCK_BITS;
+		let size = 1;
+		let depth = 0;
+		while (size < blocks) {
+			size *= 2;
+			depth++;
+		}
+		const low = new Float64Array(2 * size).fill(Infinity);
+		const high = new Float64Array(2 * size).fill(-Infinity);
+		for (let j = 0; j < E; j++) {
+			const e = edges[j];
+			const leaf = size + (j >> SWEEP_BLOCK_BITS);
+			if (minY[e] < low[leaf]) low[leaf] = minY[e];
+			if (maxY[e] > high[leaf]) high[leaf] = maxY[e];
+		}
+		for (let n = size - 1; n > 0; n--) {
+			low[n] = Math.min(low[2 * n], low[2 * n + 1]);
+			high[n] = Math.max(high[2 * n], high[2 * n + 1]);
+		}
+		return {
+			low,
+			high,
+			size,
+			edges,
+			ties,
+			stack: new Int32Array(3 * (depth + 2)),
+			scanned: 0
+		};
+	}
 	var Overlay = class {
 		constructor() {
 			this.tol = 0;
@@ -2283,6 +2405,8 @@ See https://github.com/williamngan/pts for details. */
 			this.deltas = [];
 			this.cycleArea = [];
 			this.cycleStart = [];
+			this.touching = false;
+			this.dryRun = false;
 		}
 		origin(h) {
 			return h & 1 ? this.gv[h >> 1] : this.gu[h >> 1];
@@ -2421,6 +2545,8 @@ See https://github.com/williamngan/pts for details. */
 			};
 		}
 		sweep(boxes, margin, touching) {
+			const tree = this.searchTree(boxes, margin);
+			if (tree) return this.searchSweep(boxes, margin, touching, tree);
 			const { minX, maxX, minY, maxY, order } = boxes;
 			let pairs = touching ? [] : void 0;
 			for (let i = 0, E = order.length; i < E; i++) {
@@ -2442,6 +2568,117 @@ See https://github.com/williamngan/pts for details. */
 				}
 			}
 			return pairs;
+		}
+		searchTree(boxes, margin) {
+			const { minX, maxX, minY, maxY, order } = boxes;
+			const E = order.length;
+			if (E <= 2 * SWEEP_SCAN) return void 0;
+			let tree;
+			let long = 0;
+			let windowBlocks = 0;
+			for (let k = 0; k < SWEEP_SAMPLES; k++) {
+				var _tree;
+				const i = Math.floor(k * E / SWEEP_SAMPLES);
+				const e1 = order[i];
+				const end = windowEnd(minX, order, i + 1, maxX[e1] + margin);
+				if (end - i - 1 <= SWEEP_SCAN) continue;
+				long++;
+				(_tree = tree) !== null && _tree !== void 0 || (tree = sweepTree(boxes));
+				this.dryRun = true;
+				windowBlocks += this.searchPairs(e1, i, end, minY[e1] - margin, maxY[e1] + margin, boxes, tree);
+				this.dryRun = false;
+			}
+			if (!tree || long * 8 < SWEEP_SAMPLES || tree.scanned * 2 > windowBlocks) return void 0;
+			tree.scanned = 0;
+			return tree;
+		}
+		searchSweep(boxes, margin, touching, tree) {
+			const { minX, maxX, minY, maxY, order } = boxes;
+			this.pairs = touching ? [] : void 0;
+			this.touching = touching;
+			let searchable = true;
+			let searches = 0;
+			let windowBlocks = 0;
+			for (let i = 0, E = order.length; i < E; i++) {
+				const e1 = order[i];
+				const limit = maxX[e1] + margin;
+				const lo = minY[e1] - margin;
+				const hi = maxY[e1] + margin;
+				const end = windowEnd(minX, order, i + 1, limit);
+				if (!searchable || end - i - 1 <= SWEEP_SCAN) {
+					for (let j = i + 1; j < end; j++) {
+						const e2 = order[j];
+						if (minY[e2] > hi || maxY[e2] < lo) continue;
+						this.visitPair(e1, e2, boxes);
+					}
+					continue;
+				}
+				windowBlocks += this.searchPairs(e1, i, end, lo, hi, boxes, tree);
+				if (++searches === SWEEP_TRIAL) searchable = tree.scanned * 2 <= windowBlocks;
+			}
+			const pairs = this.pairs;
+			this.pairs = void 0;
+			return pairs;
+		}
+		visitPair(e1, e2, boxes) {
+			if (this.touching) {
+				this.touchPair(e1, e2, boxes);
+				const pairs = this.pairs;
+				if (pairs) {
+					if (pairs.length < 2 * PAIR_BUFFER) pairs.push(e1, e2);
+					else this.pairs = void 0;
+				}
+			} else this.crossPair(e1, e2);
+		}
+		searchPairs(e1, i, to, lo, hi, boxes, tree) {
+			const { minX, minY, maxY, order } = boxes;
+			const { low, high, size, edges, ties } = tree;
+			let from = i + 1;
+			if (ties && from < to && minX[order[from]] === minX[e1]) from = runStart(minX, order, i);
+			const first = from >> SWEEP_BLOCK_BITS;
+			const last = to - 1 >> SWEEP_BLOCK_BITS;
+			let count = 0;
+			let sorted = true;
+			const stack = tree.stack;
+			let top = 0;
+			stack[top++] = 1;
+			stack[top++] = 0;
+			stack[top++] = size - 1;
+			while (top > 0) {
+				const b1 = stack[--top];
+				const b0 = stack[--top];
+				const n = stack[--top];
+				if (b1 < first || b0 > last || low[n] > hi || high[n] < lo) continue;
+				if (n >= size) {
+					tree.scanned++;
+					const start = b0 << SWEEP_BLOCK_BITS;
+					const stopAt = start + SWEEP_BLOCK < to ? start + SWEEP_BLOCK : to;
+					for (let j = start > from ? start : from; j < stopAt; j++) {
+						const e2 = edges[j];
+						if (minY[e2] > hi || maxY[e2] < lo) continue;
+						if (ties) {
+							const r = ties.rank[e2];
+							if (r <= i) continue;
+							if (count > 0 && r < ties.found[count - 1]) sorted = false;
+							ties.found[count++] = r;
+						} else if (!this.dryRun) this.visitPair(e1, e2, boxes);
+					}
+				} else {
+					const mid = b0 + b1 >> 1;
+					stack[top++] = 2 * n + 1;
+					stack[top++] = mid + 1;
+					stack[top++] = b1;
+					stack[top++] = 2 * n;
+					stack[top++] = b0;
+					stack[top++] = mid;
+				}
+			}
+			if (ties && !this.dryRun) {
+				const found = ties.found;
+				if (!sorted) found.subarray(0, count).sort();
+				for (let k = 0; k < count; k++) this.visitPair(e1, order[found[k]], boxes);
+			}
+			return blockSpan(from, to);
 		}
 		touchPair(e1, e2, boxes) {
 			const a = this.ea[e1];
@@ -3266,7 +3503,29 @@ See https://github.com/williamngan/pts for details. */
 		static intersectLine2D(la, lb) {
 			let _la = Util.iterToArray(la);
 			let _lb = Util.iterToArray(lb);
-			let pt = Line.intersectRay2D(_la, _lb);
+			const rx = _la[1][0] - _la[0][0];
+			const ry = _la[1][1] - _la[0][1];
+			const sx = _lb[1][0] - _lb[0][0];
+			const sy = _lb[1][1] - _lb[0][1];
+			const m = rx * sy;
+			const cross = m - ry * sx;
+			if (Math.abs(cross) <= 1e-12 * Math.abs(m) && orient2dFiltered(_la[0][0], _la[0][1], _la[1][0], _la[1][1], _lb[0][0], _lb[0][1]) === 0 && orient2dFiltered(_la[0][0], _la[0][1], _la[1][0], _la[1][1], _lb[1][0], _lb[1][1]) === 0 && orient2dFiltered(_lb[0][0], _lb[0][1], _lb[1][0], _lb[1][1], _la[0][0], _la[0][1]) === 0) {
+				const shared = [..._la, ..._lb].filter((p) => Geom.withinBound(p, _la[0], _la[1]) && Geom.withinBound(p, _lb[0], _lb[1]));
+				shared.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+				return shared.length ? new Pt(shared[0]) : void 0;
+			}
+			const pa = _la[0];
+			const pb = _lb[0];
+			if (rx === 0 && ry === 0 || sx === 0 && sy === 0) return void 0;
+			let pt;
+			if (cross === 0) {
+				const qpx = pb[0] - pa[0];
+				const qpy = pb[1] - pa[1];
+				if (qpx * ry - qpy * rx === 0) pt = new Pt(pa[0], pa[1]);
+			} else {
+				const t = ((pb[0] - pa[0]) * sy - (pb[1] - pa[1]) * sx) / cross;
+				pt = new Pt(pa[0] + t * rx, pa[1] + t * ry);
+			}
 			return pt && Geom.withinBound(pt, _la[0], _la[1]) && Geom.withinBound(pt, _lb[0], _lb[1]) ? pt : void 0;
 		}
 		static intersectLineWithRay2D(line, ray) {
@@ -3526,7 +3785,7 @@ See https://github.com/williamngan/pts for details. */
 			let ar2 = ar * ar;
 			let br2 = br * br;
 			if (dr > ar + br) return new Group();
-			else if (dr < Math.abs(ar - br)) return new Group(_pts[0].clone());
+			else if (dr < Math.abs(ar - br)) return new Group();
 			else if (dr === 0) return new Group();
 			else {
 				let a = (ar2 - br2 + dr2) / (2 * dr);
@@ -3738,32 +3997,71 @@ See https://github.com/williamngan/pts for details. */
 		static convexHull(pts, sorted = false) {
 			let _pts = Util.iterToArray(pts);
 			if (_pts.length < 3) return _errorLength(new Group(), 3);
-			if (!sorted) {
-				_pts = _pts.slice();
-				_pts.sort((a, b) => a[0] - b[0]);
+			const compare = (a, b) => a[0] - b[0] || a[1] - b[1];
+			let unsorted = !sorted;
+			let duplicates = unsorted;
+			if (sorted) {
+				let px = _pts[0][0];
+				let py = _pts[0][1];
+				for (let i = 1, len = _pts.length; i < len; i++) {
+					const x = _pts[i][0];
+					const y = _pts[i][1];
+					if (x < px || x === px && y <= py) {
+						duplicates = true;
+						if (x < px || y < py) {
+							unsorted = true;
+							break;
+						}
+					}
+					px = x;
+					py = y;
+				}
+			}
+			if (unsorted) _pts = _pts.slice().sort(compare);
+			else if (duplicates) _pts = _pts.slice();
+			if (duplicates) {
+				let n = 1;
+				const len = _pts.length;
+				while (n < len && compare(_pts[n - 1], _pts[n]) !== 0) n++;
+				for (let i = n + 1; i < len; i++) if (compare(_pts[n - 1], _pts[i]) !== 0) _pts[n++] = _pts[i];
+				if (n < len) _pts.length = n;
 			}
 			let left = (a, b, c) => {
-				return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]) > 0;
+				const l = (b[0] - a[0]) * (c[1] - a[1]);
+				const r = (c[0] - a[0]) * (b[1] - a[1]);
+				const bound = 33306690738754716e-32 * (Math.abs(l) + Math.abs(r));
+				return l - r > bound ? true : r - l > bound ? false : orient2dFiltered(a[0], a[1], b[0], b[1], c[0], c[1]) > 0;
 			};
+			let seed = 2;
+			while (seed < _pts.length && orient2dFiltered(_pts[0][0], _pts[0][1], _pts[1][0], _pts[1][1], _pts[seed][0], _pts[seed][1]) === 0) seed++;
+			if (seed >= _pts.length) {
+				const hull = new Group();
+				hull.push(_pts[0]);
+				if (_pts.length > 1) hull.push(_pts[_pts.length - 1]);
+				return hull;
+			}
 			let dq = [];
 			let bot = _pts.length - 2;
 			let top = bot + 3;
-			dq[bot] = _pts[2];
-			dq[top] = _pts[2];
-			if (left(_pts[0], _pts[1], _pts[2])) {
-				dq[bot + 1] = _pts[0];
-				dq[bot + 2] = _pts[1];
+			dq[bot] = _pts[seed];
+			dq[top] = _pts[seed];
+			const p0 = _pts[0];
+			const p1 = _pts[seed - 1];
+			const p2 = _pts[seed];
+			if (orient2dFiltered(p0[0], p0[1], p1[0], p1[1], p2[0], p2[1]) > 0) {
+				dq[bot + 1] = p0;
+				dq[bot + 2] = p1;
 			} else {
-				dq[bot + 1] = _pts[1];
-				dq[bot + 2] = _pts[0];
+				dq[bot + 1] = p1;
+				dq[bot + 2] = p0;
 			}
-			for (let i = 3, len = _pts.length; i < len; i++) {
+			for (let i = seed + 1, len = _pts.length; i < len; i++) {
 				let pt = _pts[i];
 				if (left(dq[bot], dq[bot + 1], pt) && left(dq[top - 1], dq[top], pt)) continue;
-				while (!left(dq[bot], dq[bot + 1], pt)) bot += 1;
+				while (bot + 1 < top && !left(dq[bot], dq[bot + 1], pt)) bot += 1;
 				bot -= 1;
 				dq[bot] = pt;
-				while (!left(dq[top - 1], dq[top], pt)) top -= 1;
+				while (top - 1 > bot && !left(dq[top - 1], dq[top], pt)) top -= 1;
 				top += 1;
 				dq[top] = pt;
 			}
@@ -3861,6 +4159,7 @@ See https://github.com/williamngan/pts for details. */
 			let minAx = 0;
 			let minAy = 0;
 			let which = -1;
+			const contained = _poly.some((p) => Math.pow(p[0] - c[0], 2) + Math.pow(p[1] - c[1], 2) <= r * r) || Polygon.hasIntersectPoint(_poly, c);
 			for (let i = 0, len = _poly.length; i < len; i++) {
 				const ea = _poly[i];
 				const eb = _poly[i === len - 1 ? 0 : i + 1];
@@ -3882,7 +4181,7 @@ See https://github.com/williamngan/pts for details. */
 				if (dist > 0) return null;
 				else if (Math.abs(dist) < minDist) {
 					const edge = Polygon.lineAt(_poly, i);
-					if (Rectangle.withinBound(edge, Line.perpendicularFromPt(edge, c)) || Circle.intersectLine2D(_circle, edge).length > 0) {
+					if (contained || Rectangle.withinBound(edge, Line.perpendicularFromPt(edge, c)) || Circle.intersectLine2D(_circle, edge).length > 0) {
 						minEdge = edge;
 						minAx = ax;
 						minAy = ay;
@@ -4723,6 +5022,12 @@ See https://github.com/williamngan/pts for details. */
 		}
 	};
 	var UIDragger = class extends UIButton {
+		_ownsDrag(evt) {
+			if (!this._dragPointer) return true;
+			if ("pointerId" in evt) return !this._dragPointer.touch && evt.pointerId === this._dragPointer.id;
+			if ("changedTouches" in evt) return this._dragPointer.touch && Array.from(evt.changedTouches).some((t) => t.identifier === this._dragPointer.id);
+			return true;
+		}
 		constructor(group, shape, states = {}, id) {
 			super(group, shape, states, id);
 			this._draggingID = -1;
@@ -4738,6 +5043,13 @@ See https://github.com/williamngan/pts for details. */
 			const UA = UIPointerActions;
 			this._sysOn(UA.down, (target, pt, type, evt) => {
 				if (this._moveHoldID === -1) {
+					this._dragPointer = "pointerId" in evt ? {
+						id: evt.pointerId,
+						touch: false
+					} : "changedTouches" in evt && evt.changedTouches.length ? {
+						id: evt.changedTouches.item(0).identifier,
+						touch: true
+					} : void 0;
 					this.state("dragging", true);
 					this.state("offset", new Pt(pt).subtract(target.group[0]));
 					this._moveHoldID = this.hold(UA.move);
@@ -4748,6 +5060,7 @@ See https://github.com/williamngan/pts for details. */
 				if (this._upHoldID === -1) this._upHoldID = this.hold(UA.up);
 				if (this._draggingID === -1) {
 					const drag = (t, p, ty, e) => {
+						if (!this._ownsDrag(e)) return;
 						const paired = ty === UA.drag && e === this._lastMoveEvent;
 						this._lastMoveEvent = ty === UA.move ? e : void 0;
 						if (paired) return;
@@ -4761,6 +5074,8 @@ See https://github.com/williamngan/pts for details. */
 				}
 			});
 			const endDrag = (target, pt, type, evt) => {
+				if (!this._ownsDrag(evt)) return;
+				this._dragPointer = void 0;
 				this.state("dragging", false);
 				this._sysOff(UA.move, this._draggingID);
 				this._sysOff(UA.drag, this._dragID);
@@ -4898,10 +5213,7 @@ See https://github.com/williamngan/pts for details. */
 		}
 		playItems(time) {
 			this._playing = true;
-			if (this._refresh) this.clear();
-			if (this._isReady) {
-				for (const k in this.players) if (this.players[k].animate) this.players[k].animate(time, this._time.diff, this);
-			}
+			this._animatePlayers(time, this._time.diff);
 			if (this._stopAfter >= 0) {
 				this._time.end = time + this._stopAfter;
 				this._stopAfter = -1;
@@ -4911,6 +5223,12 @@ See https://github.com/williamngan/pts for details. */
 				this._animID = -1;
 				this._playing = false;
 				this._firstFrame = true;
+			}
+		}
+		_animatePlayers(time, ftime) {
+			if (this._refresh) this.clear();
+			if (this._isReady) {
+				for (const k in this.players) if (this.players[k].animate) this.players[k].animate(time, ftime, this);
 			}
 		}
 		pause(toggle = false) {
@@ -4975,6 +5293,12 @@ See https://github.com/williamngan/pts for details. */
 			super(..._args);
 			this._pressed = false;
 			this._dragged = false;
+			this._pressId = null;
+			this._pressIsTouch = false;
+			this._pressType = "";
+			this._pressCapture = null;
+			this._pressSeen = false;
+			this._unsentEnd = 0;
 			this._hasMouse = false;
 			this._hasTouch = false;
 			this._hasKeyboard = false;
@@ -5027,6 +5351,7 @@ See https://github.com/williamngan/pts for details. */
 				this.bindCanvas("contextmenu", this._contextMenuBind, {}, customTarget);
 				this._hasMouse = true;
 			} else if (this._hasMouse) {
+				if (this._pressed && !this._pressIsTouch) this._abandonPress();
 				const target = this._mouseTarget;
 				this.unbindCanvas("pointerdown", this._mouseDownBind, {}, target);
 				this.unbindCanvas("pointerup", this._mouseUpBind, {}, target);
@@ -5055,6 +5380,7 @@ See https://github.com/williamngan/pts for details. */
 				this.bindCanvas("touchcancel", this._mouseOutBind, {}, customTarget);
 				this._hasTouch = true;
 			} else if (this._hasTouch) {
+				if (this._pressed && this._pressIsTouch) this._abandonPress();
 				const target = this._touchTarget;
 				const options = { passive: this._touchPassive };
 				this.unbindCanvas("touchstart", this._touchStartBind, options, target);
@@ -5068,7 +5394,7 @@ See https://github.com/williamngan/pts for details. */
 		}
 		bindKeyboard(bind = true, customTarget) {
 			if (bind) {
-				const target = customTarget || document;
+				const target = customTarget || (typeof document !== "undefined" ? document : this._canvas);
 				if (this._hasKeyboard) {
 					if (this._keyboardTarget === target) return this;
 					this.bindKeyboard(false);
@@ -5147,20 +5473,23 @@ See https://github.com/williamngan/pts for details. */
 			}
 			return ts;
 		}
-		_mouseAction(type, evt) {
+		_mouseAction(type, evt, touchId) {
 			if (!this.isPlaying) return;
 			const [left, top, scaleX, scaleY] = this._inputTransform();
 			let px = 0, py = 0;
-			if (evt instanceof MouseEvent) {
+			if (typeof MouseEvent !== "undefined" && evt instanceof MouseEvent || "clientX" in evt) {
 				px = (evt.clientX - left) * scaleX;
 				py = (evt.clientY - top) * scaleY;
 			} else {
-				const touch = evt.changedTouches && evt.changedTouches.length > 0 ? evt.changedTouches.item(0) : null;
+				const touch = touchId != null ? Array.from(evt.changedTouches).find((t) => t.identifier === touchId) : evt.changedTouches && evt.changedTouches.length > 0 ? evt.changedTouches.item(0) : null;
 				if (touch) {
 					px = (touch.clientX - left) * scaleX;
 					py = (touch.clientY - top) * scaleY;
 				}
 			}
+			this._sendAction(type, px, py, evt);
+		}
+		_sendAction(type, px, py, evt) {
 			if (type) {
 				this._pointer.to(px, py);
 				this._pointer.id = type;
@@ -5173,29 +5502,75 @@ See https://github.com/williamngan/pts for details. */
 		_isTouchHandled(evt) {
 			return "pointerType" in evt && evt.pointerType === "touch" && this._hasTouch && evt.composedPath().includes(this._touchTarget || this._canvas);
 		}
+		_ownsPress(evt) {
+			if (!this._pressed) return false;
+			return "changedTouches" in evt ? this._pressIsTouch && Array.from(evt.changedTouches).some((t) => t.identifier === this._pressId) : !this._pressIsTouch && evt.pointerId === this._pressId;
+		}
+		_releasePress() {
+			if (this._pressSeen && !this.isPlaying) this._unsentEnd = this._dragged ? 2 : 1;
+			this._pressed = this._dragged = this._pressSeen = false;
+			this._pressId = null;
+			this._pressCapture = null;
+		}
+		_beginPress(evt, id, touch, type) {
+			if (this._pressed) {
+				const first = "changedTouches" in evt ? evt.touches.length === evt.changedTouches.length : evt.isPrimary !== false;
+				const capture = this._pressCapture;
+				if (this._pressType === type ? id === this._pressId || first : first && !!capture && !capture.hasPointerCapture(this._pressId)) this._abandonPress();
+			}
+			if (!this._pressed) {
+				this._pressId = id;
+				this._pressIsTouch = touch;
+				this._pressType = type;
+				this._pressed = true;
+				this._pressSeen = this.isPlaying;
+			}
+		}
+		_abandonPress() {
+			const dragged = this._dragged;
+			const playing = this.isPlaying;
+			this._releasePress();
+			if (playing) this._sendEnd(dragged);
+		}
+		_sendEnd(dragged) {
+			const evt = new Event("pointercancel");
+			this._sendAction(UIPointerActions.out, this._pointer.x, this._pointer.y, evt);
+			if (dragged) this._sendAction(UIPointerActions.drop, this._pointer.x, this._pointer.y, evt);
+		}
+		playItems(time) {
+			if (this._unsentEnd) {
+				const dragged = this._unsentEnd === 2;
+				this._unsentEnd = 0;
+				this._playing = true;
+				this._sendEnd(dragged);
+			}
+			super.playItems(time);
+		}
 		_mouseDown(evt) {
 			if (this._isTouchHandled(evt)) return false;
+			this._beginPress(evt, evt.pointerId, false, evt.pointerType || "mouse");
 			this._mouseAction(UIPointerActions.down, evt);
 			this._mouseAction(UIPointerActions.pointerdown, evt);
-			this._pressed = true;
-			if (evt.target instanceof Element) try {
+			if (typeof Element !== "undefined" && evt.target instanceof Element) try {
 				evt.target.setPointerCapture(evt.pointerId);
+				if (!this._pressIsTouch && this._pressId === evt.pointerId) this._pressCapture = evt.target;
 			} catch (_unused) {}
 			return false;
 		}
 		_mouseUp(evt) {
 			if (this._isTouchHandled(evt)) return false;
-			this._mouseAction(UIPointerActions.pointerup, evt);
-			if (this._dragged) this._mouseAction(UIPointerActions.drop, evt);
-			else this._mouseAction(UIPointerActions.up, evt);
-			this._pressed = false;
-			this._dragged = false;
-			if (evt instanceof PointerEvent && evt.target instanceof Element && evt.target.hasPointerCapture(evt.pointerId)) evt.target.releasePointerCapture(evt.pointerId);
+			const owns = this._ownsPress(evt);
+			const touchId = owns && this._pressIsTouch ? this._pressId : void 0;
+			this._mouseAction(UIPointerActions.pointerup, evt, touchId);
+			if (owns && this._dragged) this._mouseAction(UIPointerActions.drop, evt, touchId);
+			else this._mouseAction(UIPointerActions.up, evt, touchId);
+			if (owns || "touches" in evt && evt.touches.length === 0 && this._pressIsTouch) this._releasePress();
+			if (typeof PointerEvent !== "undefined" && evt instanceof PointerEvent && typeof Element !== "undefined" && evt.target instanceof Element && evt.target.hasPointerCapture(evt.pointerId)) evt.target.releasePointerCapture(evt.pointerId);
 			return false;
 		}
 		_mouseMove(evt) {
 			if (this._isTouchHandled(evt)) return false;
-			if (this._pressed) {
+			if (this._ownsPress(evt)) {
 				this._dragged = true;
 				this._mouseAction(UIPointerActions.drag, evt);
 			} else this._mouseAction(UIPointerActions.move, evt);
@@ -5208,16 +5583,15 @@ See https://github.com/williamngan/pts for details. */
 		}
 		_mouseOut(evt) {
 			if (this._isTouchHandled(evt)) return false;
-			this._mouseAction(UIPointerActions.out, evt);
-			if (this._dragged) this._mouseAction(UIPointerActions.drop, evt);
-			this._pressed = false;
-			this._dragged = false;
+			this._mouseAction(UIPointerActions.out, evt, this._ownsPress(evt) && this._pressIsTouch ? this._pressId : void 0);
+			if (this._ownsPress(evt)) {
+				if (this._dragged) this._mouseAction(UIPointerActions.drop, evt, this._pressIsTouch ? this._pressId : void 0);
+				this._releasePress();
+			} else if ("touches" in evt && evt.touches.length === 0 && this._pressIsTouch) this._releasePress();
 			return false;
 		}
 		_mouseClick(evt) {
 			this._mouseAction(UIPointerActions.click, evt);
-			this._pressed = false;
-			this._dragged = false;
 			return false;
 		}
 		_contextMenu(evt) {
@@ -5225,17 +5599,19 @@ See https://github.com/williamngan/pts for details. */
 			return false;
 		}
 		_touchMove(evt) {
-			this._mouseAction(UIPointerActions.move, evt);
-			if (this._pressed) {
+			const owns = this._ownsPress(evt);
+			this._mouseAction(UIPointerActions.move, evt, owns ? this._pressId : void 0);
+			if (owns) {
 				this._dragged = true;
-				this._mouseAction(UIPointerActions.drag, evt);
+				this._mouseAction(UIPointerActions.drag, evt, this._pressId);
 			}
 			if (!this._touchPassive) evt.preventDefault();
 			return false;
 		}
 		_touchStart(evt) {
+			if (evt.changedTouches.length) this._beginPress(evt, evt.changedTouches.item(0).identifier, true, "touchevent");
 			this._mouseAction(UIPointerActions.down, evt);
-			this._pressed = true;
+			this._mouseAction(UIPointerActions.pointerdown, evt);
 			if (!this._touchPassive) evt.preventDefault();
 			return false;
 		}
@@ -5871,6 +6247,8 @@ See https://github.com/williamngan/pts for details. */
 			this._offscreen = false;
 			this._autoResize = true;
 			this._initialResize = false;
+			this._hasPlayed = false;
+			this._frameTime = 0;
 			this._disposed = false;
 			this._ownsCanvas = false;
 			this._ownsContainer = false;
@@ -5994,7 +6372,7 @@ See https://github.com/williamngan/pts for details. */
 				if (p.resize) p.resize(this.bound, evt);
 			}
 			this.render(this._ctx);
-			if (evt && !this.isPlaying) this.playOnce(0);
+			if (this._isReady && (!this.isPlaying || this._pause) && (evt || this._hasPlayed)) this._repaint();
 			return this;
 		}
 		_resizeHandler(evt) {
@@ -6064,15 +6442,26 @@ See https://github.com/williamngan/pts for details. */
 		}
 		playItems(time) {
 			if (this._isReady) {
-				this._ctx.save();
-				if (this._offscreen) this._offCtx.save();
+				this._hasPlayed = true;
+				this._frameTime = time;
+				this._beginDraw();
 				super.playItems(time);
-				this._ctx.restore();
-				if (this._offscreen) this._offCtx.restore();
-				CanvasForm.resetStyleCache(this._ctx);
-				if (this._offscreen) CanvasForm.resetStyleCache(this._offCtx);
-				this.render(this._ctx);
+				this._endDraw();
 			}
+		}
+		_repaint() {
+			this._beginDraw();
+			this._animatePlayers(this._frameTime, 0);
+			this._endDraw();
+		}
+		_beginDraw() {
+			this._ctx.save();
+			if (this._offscreen) this._offCtx.save();
+		}
+		_endDraw() {
+			this._ctx.restore();
+			if (this._offscreen) this._offCtx.restore();
+			this.render(this._ctx);
 		}
 		dispose() {
 			if (this._disposed) return this;
@@ -6118,29 +6507,232 @@ See https://github.com/williamngan/pts for details. */
 			return recorder;
 		}
 	};
-	const _ctxStyleCache = /* @__PURE__ */ new WeakMap();
+	const _STATE = Symbol("pts.styleState");
+	const _uncached = /* @__PURE__ */ Object.freeze({});
+	const _observers = /* @__PURE__ */ new WeakMap();
+	const _observedStyles = [
+		"fillStyle",
+		"strokeStyle",
+		"lineWidth",
+		"lineJoin",
+		"lineCap",
+		"globalAlpha",
+		"globalCompositeOperation",
+		"font"
+	];
+	const _cssColor = /currentcolor|light-dark|accent|background|border|button|canvas|caption|field|highlight|mark|menu|scrollbar|selecteditem|text|threed|window|workspace/i;
+	const _cssFont = /bolder|lighter|larger|smaller|\d(?!px)[a-z%]/i;
+	const _plain = [
+		void 0,
+		void 0,
+		void 0
+	];
+	const _plainColors = /* @__PURE__ */ new Set();
+	const _plainFonts = /* @__PURE__ */ new Set();
+	function _cssHit(v, slot) {
+		return v !== _plain[slot] && _cssTest(v, slot);
+	}
+	function _cssTest(v, slot) {
+		if (typeof v !== "string") return false;
+		const font = slot === 2;
+		if (font || v.charCodeAt(0) !== 35) {
+			const known = font ? _plainFonts : _plainColors;
+			if (!known.has(v)) {
+				if ((font ? _cssFont : _cssColor).test(v) || v.includes("\\")) return true;
+				if (known.size === 256) known.clear();
+				known.add(v);
+			}
+		}
+		_plain[slot] = v;
+		return false;
+	}
+	function _forgetStyles(cache) {
+		for (const k in cache) cache[k] = void 0;
+	}
+	function _findDescriptor(obj, key) {
+		for (let o = obj; o; o = Object.getPrototypeOf(o)) {
+			const d = Object.getOwnPropertyDescriptor(o, key);
+			if (d) return d;
+		}
+	}
+	function _method(value) {
+		return {
+			value,
+			configurable: true,
+			writable: true,
+			enumerable: false
+		};
+	}
+	function _makeObservers(proto) {
+		const natives = {};
+		for (const key of _observedStyles.concat("lineDashOffset")) {
+			const d = _findDescriptor(proto, key);
+			if (!d || !d.get || !d.set) return null;
+			natives[key] = d;
+		}
+		const fill = natives.fillStyle.set;
+		const stroke = natives.strokeStyle.set;
+		const width = natives.lineWidth.set;
+		const join = natives.lineJoin.set;
+		const cap = natives.lineCap.set;
+		const alpha = natives.globalAlpha.set;
+		const composite = natives.globalCompositeOperation.set;
+		const font = natives.font.set;
+		const offset = natives.lineDashOffset.set;
+		const setters = {
+			fillStyle(v) {
+				fill.call(this, v);
+				const state = this[_STATE];
+				if (state) state.styles.fillStyle = v;
+			},
+			strokeStyle(v) {
+				stroke.call(this, v);
+				const state = this[_STATE];
+				if (state) state.styles.strokeStyle = v;
+			},
+			lineWidth(v) {
+				width.call(this, v);
+				const state = this[_STATE];
+				if (state) state.styles.lineWidth = v;
+			},
+			lineJoin(v) {
+				join.call(this, v);
+				const state = this[_STATE];
+				if (state) state.styles.lineJoin = v;
+			},
+			lineCap(v) {
+				cap.call(this, v);
+				const state = this[_STATE];
+				if (state) state.styles.lineCap = v;
+			},
+			globalAlpha(v) {
+				alpha.call(this, v);
+				const state = this[_STATE];
+				if (state) state.styles.globalAlpha = v;
+			},
+			globalCompositeOperation(v) {
+				composite.call(this, v);
+				const state = this[_STATE];
+				if (state) state.styles.globalCompositeOperation = v;
+			},
+			font(v) {
+				font.call(this, v);
+				const state = this[_STATE];
+				if (state) state.styles.font = v;
+			},
+			lineDashOffset(v) {
+				offset.call(this, v);
+				const state = this[_STATE];
+				if (state) state.styles.dash = void 0;
+			}
+		};
+		const observers = {};
+		for (const key in setters) observers[key] = {
+			get: natives[key].get,
+			set: setters[key],
+			configurable: true,
+			enumerable: natives[key].enumerable
+		};
+		const { setLineDash, save, restore, reset } = proto;
+		if (typeof setLineDash !== "function" || typeof save !== "function" || typeof restore !== "function") return null;
+		observers.setLineDash = _method(function(segments) {
+			setLineDash.call(this, segments);
+			const state = this[_STATE];
+			if (state) state.styles.dash = void 0;
+		});
+		observers.save = _method(function() {
+			save.call(this);
+			const state = this[_STATE];
+			if (state) state.saved.push(Object.assign({}, state.styles));
+		});
+		observers.restore = _method(function() {
+			restore.call(this);
+			const state = this[_STATE];
+			if (!state) return;
+			const saved = state.saved.pop();
+			if (saved) for (const k in state.styles) state.styles[k] = saved[k];
+			else _forgetStyles(state.styles);
+		});
+		if (typeof reset === "function") observers.reset = _method(function() {
+			reset.call(this);
+			const state = this[_STATE];
+			if (!state) return;
+			state.saved.length = 0;
+			_forgetStyles(state.styles);
+		});
+		return observers;
+	}
+	function _styleState(ctx) {
+		if (Object.prototype.hasOwnProperty.call(ctx, _STATE)) return ctx[_STATE];
+		const proto = Object.getPrototypeOf(ctx);
+		if (!proto || !Object.isExtensible(ctx)) return null;
+		let observers = _observers.get(proto);
+		if (observers === void 0) {
+			try {
+				observers = _makeObservers(proto);
+			} catch (_unused) {
+				observers = null;
+			}
+			_observers.set(proto, observers);
+		}
+		if (!observers || Object.keys(observers).some((k) => Object.prototype.hasOwnProperty.call(ctx, k))) return null;
+		const state = {
+			styles: {},
+			saved: []
+		};
+		try {
+			Object.defineProperties(ctx, observers);
+			Object.defineProperty(ctx, _STATE, { value: state });
+		} catch (_unused2) {
+			return null;
+		}
+		return state;
+	}
 	var CanvasForm = class CanvasForm extends VisualForm {
 		_cacheForCtx() {
 			if (this._styleCacheCtx !== this._ctx) {
-				let cache = _ctxStyleCache.get(this._ctx);
-				if (!cache) {
-					cache = {};
-					_ctxStyleCache.set(this._ctx, cache);
-				}
-				this._styleCache = cache;
+				const state = _styleState(this._ctx);
+				this._styleCache = state ? state.styles : _uncached;
 				this._styleCacheCtx = this._ctx;
 			}
 			return this._styleCache;
 		}
 		static resetStyleCache(ctx) {
-			const cache = _ctxStyleCache.get(ctx);
-			if (cache) for (const k in cache) delete cache[k];
+			const state = Object.prototype.hasOwnProperty.call(ctx, _STATE) ? ctx[_STATE] : null;
+			if (state) {
+				_forgetStyles(state.styles);
+				state.saved.length = 0;
+			}
 		}
 		_set(key, value) {
 			const cache = this._cacheForCtx();
-			if (cache[key] !== value) {
-				cache[key] = value;
-				this._ctx[key] = value;
+			const ctx = this._ctx;
+			switch (key) {
+				case "fillStyle":
+					if (cache.fillStyle !== value || _cssHit(value, 0)) ctx.fillStyle = value;
+					return;
+				case "strokeStyle":
+					if (cache.strokeStyle !== value || _cssHit(value, 1)) ctx.strokeStyle = value;
+					return;
+				case "lineWidth":
+					if (cache.lineWidth !== value) ctx.lineWidth = value;
+					return;
+				case "lineJoin":
+					if (cache.lineJoin !== value) ctx.lineJoin = value;
+					return;
+				case "lineCap":
+					if (cache.lineCap !== value) ctx.lineCap = value;
+					return;
+				case "globalAlpha":
+					if (cache.globalAlpha !== value) ctx.globalAlpha = value;
+					return;
+				case "globalCompositeOperation":
+					if (cache.globalCompositeOperation !== value) ctx.globalCompositeOperation = value;
+					return;
+				case "font":
+					if (cache.font !== value || _cssHit(value, 2)) ctx.font = value;
+					return;
+				default: if (cache[key] !== value) ctx[key] = value;
 			}
 		}
 		constructor(space) {
@@ -6270,17 +6862,17 @@ See https://github.com/williamngan/pts for details. */
 			const cache = this._cacheForCtx();
 			if (segments === false || segments !== true && segments.length === 0) {
 				if (cache.dash !== "/0") {
-					cache.dash = "/0";
 					this._ctx.setLineDash([]);
 					this._ctx.lineDashOffset = 0;
+					if (cache !== _uncached) cache.dash = "/0";
 				}
 			} else {
 				const seg = segments === true ? [5, 5] : segments;
 				const key = `${Array.prototype.join.call(seg, ",")}/${offset}`;
 				if (cache.dash !== key) {
-					cache.dash = key;
 					this._ctx.setLineDash(seg);
 					this._ctx.lineDashOffset = offset;
+					if (cache !== _uncached) cache.dash = key;
 				}
 			}
 			return this;
@@ -6327,14 +6919,10 @@ See https://github.com/williamngan/pts for details. */
 			return offset ? new Pt(px + offset[0], py + offset[1]) : new Pt(px, py);
 		}
 		reset() {
-			const cache = this._cacheForCtx();
-			for (const k in this._style) if (this._style.hasOwnProperty(k)) {
-				this._ctx[k] = this._style[k];
-				cache[k] = this._style[k];
-			}
+			this._cacheForCtx();
+			for (const k in this._style) if (this._style.hasOwnProperty(k)) this._ctx[k] = this._style[k];
 			this._font = new Font(14, "sans-serif");
 			this._ctx.font = this._font.value;
-			cache.font = this._font.value;
 			return this;
 		}
 		_paint() {
@@ -7291,12 +7879,14 @@ See https://github.com/williamngan/pts for details. */
 					const first = h / 3 | 0;
 					for (;;) {
 						const t = h / 3 | 0;
-						cell.push(shapes[t].circle[0]);
+						const center = shapes[t].circle[0];
+						if (!cell.length || !center.equals(cell[cell.length - 1], 0)) cell.push(center);
 						const twin = neighbors[3 * t + (h + 2) % 3];
 						if (twin === -1 || (twin / 3 | 0) === first) break;
 						h = twin;
 					}
 				}
+				if (cell.length > 1 && cell[0].equals(cell[cell.length - 1], 0)) cell.pop();
 				vs.push(cell);
 			}
 			return vs;
@@ -7979,7 +8569,15 @@ See https://github.com/williamngan/pts for details. */
 //#region src/Color.ts
 	var Color_exports = /* @__PURE__ */ __exportAll({ Color: () => Color });
 	const D65 = /* @__PURE__ */ new Pt(95.047, 100, 108.883, 1);
+	const D50 = /* @__PURE__ */ new Pt(34.57 / .3585, 100, 100 * .2958 / .3585, 1);
 	let _colorRanges = /* @__PURE__ */ colorRanges();
+	function _hslChannel(p, q, t) {
+		t = t < 0 ? t + 1 : t > 1 ? t - 1 : t;
+		if (t * 6 < 1) return p + (q - p) * t * 6;
+		if (t * 2 < 1) return q;
+		if (t * 3 < 2) return p + (q - p) * (2 / 3 - t) * 6;
+		return p;
+	}
 	function colorRanges() {
 		return {
 			rgb: new Group(new Pt(0, 255), new Pt(0, 255), new Pt(0, 255)),
@@ -8205,7 +8803,9 @@ See https://github.com/williamngan/pts for details. */
 			const v = this._isNorm && format !== "mode" ? Color._denorm(this) : this;
 			if (format == "hex") {
 				const _hex = (n) => {
-					const s = Math.floor(n).toString(16);
+					let b = Math.floor(n);
+					if (!(b >= 0 && b <= 255)) b = b > 255 ? 255 : 0;
+					const s = b.toString(16);
 					return s.length < 2 ? "0" + s : s;
 				};
 				return `#${_hex(v[0])}${_hex(v[1])}${_hex(v[2])}`;
@@ -8236,27 +8836,27 @@ See https://github.com/williamngan/pts for details. */
 			return cc;
 		}
 		static HSLtoRGB(hsl, normalizedInput = false, normalizedOutput = false) {
-			let [h, s, l] = hsl;
+			let h = hsl[0];
+			const s = hsl[1];
+			const l = hsl[2];
 			if (!normalizedInput) h = h / 360;
 			h = h - Math.floor(h);
-			const sc = normalizedOutput ? 1 : 255;
-			if (s == 0) {
-				const gray = Color.rgb(sc * l, sc * l, sc * l, hsl.alpha);
-				if (normalizedOutput) gray.normalized = true;
-				return gray;
+			let r = l;
+			let g = l;
+			let b = l;
+			if (s != 0) {
+				const q = l <= .5 ? l * (1 + s) : l + s - l * s;
+				const p = 2 * l - q;
+				r = _hslChannel(p, q, h + 1 / 3);
+				g = _hslChannel(p, q, h);
+				b = _hslChannel(p, q, h - 1 / 3);
 			}
-			const q = l <= .5 ? l * (1 + s) : l + s - l * s;
-			const p = 2 * l - q;
-			const convert = (t) => {
-				t = t < 0 ? t + 1 : t > 1 ? t - 1 : t;
-				if (t * 6 < 1) return p + (q - p) * t * 6;
-				else if (t * 2 < 1) return q;
-				else if (t * 3 < 2) return p + (q - p) * (2 / 3 - t) * 6;
-				else return p;
-			};
-			const cc = Color.rgb(sc * convert(h + 1 / 3), sc * convert(h), sc * convert(h - 1 / 3), hsl.alpha);
-			if (normalizedOutput) cc.normalized = true;
-			return cc;
+			if (normalizedOutput) {
+				const cc = Color.rgb(r, g, b, hsl.alpha);
+				cc.normalized = true;
+				return cc;
+			}
+			return Color.rgb(Math.round(255 * r), Math.round(255 * g), Math.round(255 * b), hsl.alpha);
 		}
 		static RGBtoHSB(rgb, normalizedInput = false, normalizedOutput = false) {
 			const [r, g, b] = !normalizedInput ? rgb.$normalize() : rgb;
@@ -8276,7 +8876,9 @@ See https://github.com/williamngan/pts for details. */
 			return cc;
 		}
 		static HSBtoRGB(hsb, normalizedInput = false, normalizedOutput = false) {
-			let [h, s, v] = hsb;
+			let h = hsb[0];
+			const s = hsb[1];
+			const v = hsb[2];
 			if (!normalizedInput) h = h / 360;
 			h = h - Math.floor(h);
 			const i = Math.floor(h * 6);
@@ -8284,42 +8886,44 @@ See https://github.com/williamngan/pts for details. */
 			const p = v * (1 - s);
 			const q = v * (1 - f * s);
 			const t = v * (1 - (1 - f) * s);
-			const c = [
-				[
-					v,
-					t,
-					p
-				],
-				[
-					q,
-					v,
-					p
-				],
-				[
-					p,
-					v,
-					t
-				],
-				[
-					p,
-					q,
-					v
-				],
-				[
-					t,
-					p,
-					v
-				],
-				[
-					v,
-					p,
-					q
-				]
-			][i % 6];
-			const sc = normalizedOutput ? 1 : 255;
-			const cc = Color.rgb(sc * c[0], sc * c[1], sc * c[2], hsb.alpha);
-			if (normalizedOutput) cc.normalized = true;
-			return cc;
+			let r, g, b;
+			switch (i % 6) {
+				case 0:
+					r = v;
+					g = t;
+					b = p;
+					break;
+				case 1:
+					r = q;
+					g = v;
+					b = p;
+					break;
+				case 2:
+					r = p;
+					g = v;
+					b = t;
+					break;
+				case 3:
+					r = p;
+					g = q;
+					b = v;
+					break;
+				case 4:
+					r = t;
+					g = p;
+					b = v;
+					break;
+				default:
+					r = v;
+					g = p;
+					b = q;
+			}
+			if (normalizedOutput) {
+				const cc = Color.rgb(r, g, b, hsb.alpha);
+				cc.normalized = true;
+				return cc;
+			}
+			return Color.rgb(Math.round(255 * r), Math.round(255 * g), Math.round(255 * b), hsb.alpha);
 		}
 		static RGBtoLAB(rgb, normalizedInput = false, normalizedOutput = false) {
 			const c = normalizedInput ? Color._denorm(rgb) : rgb;
@@ -8374,10 +8978,13 @@ See https://github.com/williamngan/pts for details. */
 			const c = normalizedInput ? Color._denorm(xyz) : xyz.clone();
 			const eps = 216 / 24389;
 			const kap = 24389 / 27;
-			c.divide(D65);
+			const [x, y, z] = c;
+			const adaptedX = (1.047883741175648 * x + .022926020580292167 * y - .050156960798235464 * z) / D50[0];
+			const adaptedY = (.029599712470291525 * x + .9904433289480559 * y - .01706140321234148 * z) / D50[1];
+			const adaptedZ = (-.009237076612309065 * x + .015045841479768444 * y + .7520350516043767 * z) / D50[2];
 			const fn = (n) => n > eps ? Math.cbrt(n) : (kap * n + 16) / 116;
-			const cy = fn(c[1]);
-			const cc = Color.lab(116 * cy - 16, 500 * (fn(c[0]) - cy), 200 * (cy - fn(c[2])), xyz.alpha);
+			const cy = fn(adaptedY);
+			const cc = Color.lab(116 * cy - 16, 500 * (fn(adaptedX) - cy), 200 * (cy - fn(adaptedZ)), xyz.alpha);
 			return normalizedOutput ? Color._normOut(cc) : cc;
 		}
 		static LABtoXYZ(lab, normalizedInput = false, normalizedOutput = false) {
@@ -8387,10 +8994,13 @@ See https://github.com/williamngan/pts for details. */
 			const z = y - c[2] / 200;
 			const eps = 216 / 24389;
 			const kap = 24389 / 27;
-			const d = D65;
+			const d = D50;
 			const xxx = Math.pow(x, 3);
 			const zzz = Math.pow(z, 3);
-			const cc = Color.xyz(d[0] * (xxx > eps ? xxx : (116 * x - 16) / kap), d[1] * (c[0] > kap * eps ? Math.pow((c[0] + 16) / 116, 3) : c[0] / kap), d[2] * (zzz > eps ? zzz : (116 * z - 16) / kap), lab.alpha);
+			const ax = d[0] * (xxx > eps ? xxx : (116 * x - 16) / kap);
+			const ay = d[1] * (c[0] > kap * eps ? Math.pow((c[0] + 16) / 116, 3) : c[0] / kap);
+			const az = d[2] * (zzz > eps ? zzz : (116 * z - 16) / kap);
+			const cc = Color.xyz(.9555133603984794 * ax - .023077627346345685 * ay + .06320438037157042 * az, -.028343880155626656 * ax + 1.0099856019019258 * ay + .02102312741027628 * az, .012303426046551184 * ax - .020490072958726607 * ay + 1.3300809728580483 * az, lab.alpha);
 			return normalizedOutput ? Color._normOut(cc) : cc;
 		}
 		static XYZtoLUV(xyz, normalizedInput = false, normalizedOutput = false) {
@@ -9001,21 +9611,145 @@ See https://github.com/williamngan/pts for details. */
 			}
 		}
 	};
+	const RUN_BOXES = 32;
+	const _opaquePaint = /* @__PURE__ */ new Map();
+	let _lastPaint = "";
+	let _lastOpaque = false;
+	function isOpaquePaint(paint) {
+		if (paint === _lastPaint) return _lastOpaque;
+		let known = _opaquePaint.get(paint);
+		if (known === void 0) {
+			known = _parseOpaque(paint);
+			if (_opaquePaint.size < 512) _opaquePaint.set(paint, known);
+		}
+		_lastPaint = paint;
+		_lastOpaque = known;
+		return known;
+	}
+	function _parseOpaque(paint) {
+		const p = paint.trim().toLowerCase();
+		if (p[0] === "#") {
+			if (p.length === 4 || p.length === 7) return true;
+			if (p.length === 5) return p[4] === "f";
+			if (p.length === 9) return p.slice(7) === "ff";
+			return false;
+		}
+		const fn = /^(rgba?|hsla?|hwb|lab|lch|oklab|oklch)\((.*)\)$/.exec(p);
+		if (fn) {
+			const args = fn[2];
+			if (/var\(|calc\(|from /.test(args)) return false;
+			const slash = args.indexOf("/");
+			let alpha;
+			if (slash >= 0) alpha = args.slice(slash + 1);
+			else {
+				const parts = args.split(",");
+				if (parts.length === 4) alpha = parts[3];
+				else if (parts.length !== 1 && parts.length !== 3) return false;
+			}
+			if (alpha === void 0) return true;
+			const a = alpha.trim();
+			return a === "1" || a === "100%" || parseFloat(a) >= (a.endsWith("%") ? 100 : 1);
+		}
+		return /^[a-z]+$/.test(p) && !/^(?:transparent|currentcolor|none|inherit|initial|unset|revert)$/.test(p) && (typeof CSS === "undefined" || !CSS.supports || CSS.supports("color", p));
+	}
+	function convexOrientation(p, start, end) {
+		let ex0 = p[start] - p[end - 2];
+		let ey0 = p[start + 1] - p[end - 1];
+		let sign = 0;
+		let flips = 0;
+		let lastDx = ex0 > 0 ? 1 : ex0 < 0 ? -1 : 0;
+		let firstDx = lastDx;
+		for (let i = start; i < end; i += 2) {
+			const j = i + 2 < end ? i + 2 : start;
+			const ex = p[j] - p[i];
+			const ey = p[j + 1] - p[i + 1];
+			const cross = ex0 * ey - ey0 * ex;
+			if (cross !== 0) {
+				const s = cross > 0 ? 1 : -1;
+				if (!sign) sign = s;
+				else if (s !== sign) return NaN;
+			}
+			if (ex !== 0) {
+				const d = ex > 0 ? 1 : -1;
+				if (!firstDx) firstDx = d;
+				else if (d !== lastDx) flips++;
+				lastDx = d;
+			}
+			ex0 = ex;
+			ey0 = ey;
+		}
+		if (firstDx && lastDx !== firstDx) flips++;
+		return sign && flips === 2 ? sign : NaN;
+	}
 	let _svgMeasurer = null;
 	const _svgWarned = {};
 	var SVGContext2D = class SVGContext2D {
+		get fillStyle() {
+			return this._fillStyle;
+		}
+		set fillStyle(v) {
+			this._fillStyle = v;
+		}
+		get strokeStyle() {
+			return this._strokeStyle;
+		}
+		set strokeStyle(v) {
+			this._strokeStyle = v;
+		}
+		get lineWidth() {
+			return this._lineWidth;
+		}
+		set lineWidth(v) {
+			this._lineWidth = v;
+		}
+		get lineJoin() {
+			return this._lineJoin;
+		}
+		set lineJoin(v) {
+			this._lineJoin = v;
+		}
+		get lineCap() {
+			return this._lineCap;
+		}
+		set lineCap(v) {
+			this._lineCap = v;
+		}
+		get globalAlpha() {
+			return this._globalAlpha;
+		}
+		set globalAlpha(v) {
+			this._globalAlpha = v;
+		}
+		get globalCompositeOperation() {
+			return this._globalCompositeOperation;
+		}
+		set globalCompositeOperation(v) {
+			this._globalCompositeOperation = v;
+		}
+		get font() {
+			return this._font;
+		}
+		set font(v) {
+			this._font = v;
+		}
+		get lineDashOffset() {
+			return this._lineDashOffset;
+		}
+		set lineDashOffset(v) {
+			this._lineDashOffset = v;
+		}
 		constructor(host) {
-			this.fillStyle = "#f03";
-			this.strokeStyle = "#fff";
-			this.lineWidth = 1;
-			this.lineJoin = "bevel";
-			this.lineCap = "butt";
-			this.globalAlpha = 1;
-			this.globalCompositeOperation = "source-over";
-			this.font = "10px sans-serif";
+			this._fillStyle = "#f03";
+			this._strokeStyle = "#fff";
+			this._lineWidth = 1;
+			this._lineJoin = "bevel";
+			this._lineCap = "butt";
+			this._globalAlpha = 1;
+			this._globalCompositeOperation = "source-over";
+			this._font = "10px sans-serif";
+			this._lineDashOffset = 0;
 			this.textAlign = "start";
 			this.textBaseline = "alphabetic";
-			this.lineDashOffset = 0;
 			this._dash = [];
 			this._stateStack = [];
 			this.className = "";
@@ -9027,6 +9761,18 @@ See https://github.com/williamngan/pts for details. */
 			this._shapeClass = "";
 			this._shapeAlpha = 1;
 			this._shapeBlend = "source-over";
+			this._pts = [];
+			this._ptsLength = 0;
+			this._rings = [];
+			this._ringsLength = 0;
+			this._ringStart = -1;
+			this._wind = 0;
+			this._windDone = false;
+			this._x0 = 0;
+			this._y0 = 0;
+			this._x1 = 0;
+			this._y1 = 0;
+			this._boxDone = false;
 			this._runs = [];
 			this._drawCount = 0;
 			this._group = null;
@@ -9044,6 +9790,7 @@ See https://github.com/williamngan/pts for details. */
 		beginFrame() {
 			this._runs = [];
 			this._d = "";
+			this._resetShape();
 			this._shapeFill = null;
 			this._shapeStroke = null;
 			this._shapePainted = false;
@@ -9121,21 +9868,38 @@ See https://github.com/williamngan/pts for details. */
 			this._d = "";
 		}
 		closePath() {
+			this._endRing();
 			this._d += "Z";
 		}
 		moveTo(x, y) {
+			this._endRing();
+			this._ringStart = this._ptsLength;
+			this._point(x, y);
 			this._d += `M${round2(x)} ${round2(y)}`;
 		}
 		lineTo(x, y) {
+			if (this._ringStart < 0) this._wind = NaN;
+			this._point(x, y);
 			this._d += `L${round2(x)} ${round2(y)}`;
 		}
 		quadraticCurveTo(cpx, cpy, x, y) {
+			this._curve();
+			this._point(cpx, cpy);
+			this._point(x, y);
 			this._d += `Q${round2(cpx)} ${round2(cpy)} ${round2(x)} ${round2(y)}`;
 		}
 		bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y) {
+			this._curve();
+			this._point(cp1x, cp1y);
+			this._point(cp2x, cp2y);
+			this._point(x, y);
 			this._d += `C${round2(cp1x)} ${round2(cp1y)} ${round2(cp2x)} ${round2(cp2y)} ${round2(x)} ${round2(y)}`;
 		}
 		rect(x, y, w, h) {
+			this._endRing();
+			this._orient(w * h > 0 ? 1 : w * h < 0 ? -1 : NaN);
+			this._point(x, y);
+			this._point(x + w, y + h);
 			this._d += `M${round2(x)} ${round2(y)}h${round2(w)}v${round2(h)}h${round2(-w)}Z`;
 		}
 		arc(x, y, radius, startAngle, endAngle, ccw = false) {
@@ -9156,6 +9920,11 @@ See https://github.com/williamngan/pts for details. */
 			const sweepFlag = ccw ? 0 : 1;
 			const rotDeg = round2(rotation * 180 / Math.PI);
 			const [sx, sy] = ptAt(startAngle);
+			const r = Math.max(Math.abs(rx), Math.abs(ry));
+			if (full && this._d.length === 0) this._orient(rx && ry ? ccw ? -1 : 1 : NaN);
+			else this._curve();
+			this._point(x - r, y - r);
+			this._point(x + r, y + r);
 			this._d += this._d.length > 0 ? `L${round2(sx)} ${round2(sy)}` : `M${round2(sx)} ${round2(sy)}`;
 			const sweep = full ? Const.two_pi : delta;
 			const segments = Math.max(1, Math.ceil(sweep / Const.pi - 1e-6));
@@ -9169,27 +9938,27 @@ See https://github.com/williamngan/pts for details. */
 			if (full) this._d += "Z";
 		}
 		fill() {
-			this._shapeFill = this._resolvePaint(this.fillStyle);
+			this._shapeFill = this._resolvePaint(this._fillStyle);
 			this._capturePaintState();
 		}
 		stroke() {
-			this._shapeStroke = this._resolvePaint(this.strokeStyle);
+			this._shapeStroke = this._resolvePaint(this._strokeStyle);
 			this._shapeStrokeStyle = {
-				"stroke-width": this.lineWidth,
-				"stroke-linejoin": this.lineJoin,
-				"stroke-linecap": this.lineCap
+				"stroke-width": this._lineWidth,
+				"stroke-linejoin": this._lineJoin,
+				"stroke-linecap": this._lineCap
 			};
 			if (this._dash.length > 0) {
 				this._shapeStrokeStyle["stroke-dasharray"] = this._dash.join(" ");
-				if (this.lineDashOffset) this._shapeStrokeStyle["stroke-dashoffset"] = this.lineDashOffset;
+				if (this._lineDashOffset) this._shapeStrokeStyle["stroke-dashoffset"] = this._lineDashOffset;
 			}
 			this._capturePaintState();
 		}
 		_capturePaintState() {
 			this._shapePainted = true;
 			this._shapeClass = this.className;
-			this._shapeAlpha = this.globalAlpha;
-			this._shapeBlend = this.globalCompositeOperation;
+			this._shapeAlpha = this._globalAlpha;
+			this._shapeBlend = this._globalCompositeOperation;
 			this._drawCount++;
 		}
 		fillRect(x, y, w, h) {
@@ -9205,10 +9974,10 @@ See https://github.com/williamngan/pts for details. */
 			const attrs = {
 				x: round2(x),
 				y: round2(y),
-				fill: this._resolvePaint(this.fillStyle),
+				fill: this._resolvePaint(this._fillStyle),
 				"text-anchor": anchor,
 				"dominant-baseline": baseline,
-				style: `font: ${this.font}`,
+				style: `font: ${this._font}`,
 				"pointer-events": "none"
 			};
 			if (maxWidth > 0 && this.measureText(txt).width > maxWidth) {
@@ -9225,7 +9994,7 @@ See https://github.com/williamngan/pts for details. */
 		}
 		measureText(txt) {
 			if (!_svgMeasurer) _svgMeasurer = document.createElement("canvas").getContext("2d");
-			_svgMeasurer.font = this.font;
+			_svgMeasurer.font = this._font;
 			return _svgMeasurer.measureText(txt);
 		}
 		drawImage(img, x, y, w, h, ...rest) {
@@ -9261,17 +10030,17 @@ See https://github.com/williamngan/pts for details. */
 		}
 		save() {
 			this._stateStack.push({
-				fillStyle: this.fillStyle,
-				strokeStyle: this.strokeStyle,
-				lineWidth: this.lineWidth,
-				lineJoin: this.lineJoin,
-				lineCap: this.lineCap,
-				globalAlpha: this.globalAlpha,
-				globalCompositeOperation: this.globalCompositeOperation,
-				font: this.font,
+				fillStyle: this._fillStyle,
+				strokeStyle: this._strokeStyle,
+				lineWidth: this._lineWidth,
+				lineJoin: this._lineJoin,
+				lineCap: this._lineCap,
+				globalAlpha: this._globalAlpha,
+				globalCompositeOperation: this._globalCompositeOperation,
+				font: this._font,
 				textAlign: this.textAlign,
 				textBaseline: this.textBaseline,
-				lineDashOffset: this.lineDashOffset,
+				lineDashOffset: this._lineDashOffset,
 				_dash: this._dash.slice()
 			});
 		}
@@ -9323,9 +10092,9 @@ See https://github.com/williamngan/pts for details. */
 		}
 		_applyCommon(attrs) {
 			attrs.class = this.className ? `pts-svgform ${this.className}` : "pts-svgform";
-			if (this.globalAlpha !== 1) attrs.opacity = this.globalAlpha;
+			if (this._globalAlpha !== 1) attrs.opacity = this._globalAlpha;
 			else attrs.opacity = 1;
-			const op = this.globalCompositeOperation;
+			const op = this._globalCompositeOperation;
 			if (op !== "source-over") {
 				if (BLEND_MODES.has(op)) {
 					const blend = `mix-blend-mode: ${op}`;
@@ -9337,8 +10106,10 @@ See https://github.com/williamngan/pts for details. */
 			var _this$_shapeFill, _this$_shapeStroke;
 			if (!this._shapePainted || this._d.length === 0) {
 				this._shapePainted = false;
+				this._resetShape();
 				return;
 			}
+			this._endRing();
 			const attrs = {
 				d: this._d,
 				fill: (_this$_shapeFill = this._shapeFill) !== null && _this$_shapeFill !== void 0 ? _this$_shapeFill : "none",
@@ -9352,32 +10123,119 @@ See https://github.com/williamngan/pts for details. */
 				else SVGContext2D._warnOnce(`composite-${this._shapeBlend}`, `composite operation "${this._shapeBlend}" has no SVG equivalent`);
 			}
 			const prev = this._runs[this._runs.length - 1];
-			if (prev && prev.tag === "path" && sameRunStyle(prev.attrs, attrs)) {
-				prev.shapeEnds.push(prev.attrs.d.length);
+			const join = prev && prev.tag === "path" && !this._shapeClass && sameRunStyle(prev.attrs, attrs) ? this._joinable(prev) : 0;
+			if (join) {
+				const ends = prev.shapeEnds;
+				ends.push(prev.attrs.d.length);
 				prev.attrs.d = prev.attrs.d + this._d;
-			} else this._runs.push({
-				tag: "path",
-				attrs,
-				shapeEnds: []
-			});
+				if (join === 2 && this._shapeFill !== null && this._shapeWind() !== prev.wind) prev.wind = NaN;
+				if (ends.length < RUN_BOXES) {
+					this._shapeBox();
+					prev.boxes.push(this._x0, this._y0, this._x1, this._y1);
+				}
+			} else {
+				this._shapeBox();
+				const fill = this._shapeFill;
+				const stroke = this._shapeStroke;
+				this._runs.push({
+					tag: "path",
+					attrs,
+					shapeEnds: [],
+					free: this._shapeAlpha === 1 && this._shapeBlend === "source-over" && (fill === null || isOpaquePaint(fill)) && (stroke === null || isOpaquePaint(stroke)) && (fill === null || stroke === null || fill === stroke),
+					wind: this._shapeFill !== null ? this._shapeWind() : NaN,
+					boxes: [
+						this._x0,
+						this._y0,
+						this._x1,
+						this._y1
+					]
+				});
+			}
 			this._d = "";
 			this._shapeFill = null;
 			this._shapeStroke = null;
 			this._shapePainted = false;
+			this._resetShape();
+		}
+		_joinable(run) {
+			if (run.free && (this._shapeFill === null || (run.wind === 1 || run.wind === -1) && this._shapeWind() === run.wind)) return 1;
+			const stroke = this._shapeStroke;
+			const boxes = run.boxes;
+			if (run.shapeEnds.length >= RUN_BOXES) return 0;
+			this._shapeBox();
+			const gap = 2 * (1 + (stroke ? Number(this._shapeStrokeStyle["stroke-width"]) : 0) * (this._shapeStrokeStyle["stroke-linejoin"] === "miter" ? 5 : 1));
+			for (let i = 0; i < boxes.length; i += 4) if (this._x0 <= boxes[i + 2] + gap && boxes[i] <= this._x1 + gap && this._y0 <= boxes[i + 3] + gap && boxes[i + 1] <= this._y1 + gap) return 0;
+			return 2;
+		}
+		_resetShape() {
+			this._ptsLength = 0;
+			this._ringsLength = 0;
+			this._ringStart = -1;
+			this._wind = 0;
+			this._windDone = false;
+			this._boxDone = false;
+		}
+		_point(x, y) {
+			this._pts[this._ptsLength++] = x;
+			this._pts[this._ptsLength++] = y;
+		}
+		_orient(o) {
+			if (this._wind === 0) this._wind = o;
+			else if (this._wind !== o) this._wind = NaN;
+		}
+		_endRing() {
+			const start = this._ringStart;
+			if (start < 0) return;
+			this._ringStart = -1;
+			if (this._ptsLength - start >= 6) {
+				this._rings[this._ringsLength++] = start;
+				this._rings[this._ringsLength++] = this._ptsLength;
+			}
+		}
+		_shapeWind() {
+			if (!this._windDone) {
+				this._windDone = true;
+				for (let i = 0; i < this._ringsLength; i += 2) this._orient(convexOrientation(this._pts, this._rings[i], this._rings[i + 1]));
+			}
+			return this._wind;
+		}
+		_shapeBox() {
+			if (this._boxDone) return;
+			this._boxDone = true;
+			const p = this._pts;
+			let x0 = Infinity;
+			let y0 = Infinity;
+			let x1 = -Infinity;
+			let y1 = -Infinity;
+			for (let i = 0, n = this._ptsLength; i < n; i += 2) {
+				const x = p[i];
+				const y = p[i + 1];
+				if (x < x0) x0 = x;
+				if (x > x1) x1 = x;
+				if (y < y0) y0 = y;
+				if (y > y1) y1 = y;
+			}
+			this._x0 = x0;
+			this._y0 = y0;
+			this._x1 = x1;
+			this._y1 = y1;
+		}
+		_curve() {
+			this._ringStart = -1;
+			this._wind = NaN;
 		}
 	};
 	function round2(n) {
 		return Math.round(n * 100) / 100;
 	}
 	function sameRunStyle(a, b) {
-		const keysA = Object.keys(a);
-		const keysB = Object.keys(b);
-		if (keysA.length !== keysB.length) return false;
-		for (const k of keysA) {
-			if (k === "d") continue;
-			if (a[k] !== b[k]) return false;
+		let count = 0;
+		for (const k in a) {
+			if (k !== "d" && a[k] !== b[k]) return false;
+			count++;
 		}
-		return true;
+		for (const k in b) count--;
+		return count === 0;
 	}
 	var SVGSpace = class SVGSpace extends DOMSpace {
 		constructor(elem = "pt", callback) {
@@ -10322,7 +11180,6 @@ See https://github.com/williamngan/pts for details. */
 			this._stiff = 1;
 			this._locks = {};
 			this._mass = 1;
-			this._lambdas = /* @__PURE__ */ new Float32Array(0);
 		}
 		static fromGroup(body, stiff = 1, autoLink = true, autoMass = true) {
 			let b = new Body().init(body);
@@ -10402,9 +11259,6 @@ See https://github.com/williamngan/pts for details. */
 			const cs = this._cs;
 			const clen = cs.length;
 			if (clen === 0) return this;
-			if (this._lambdas.length < clen) this._lambdas = new Float32Array(clen);
-			const lambdas = this._lambdas;
-			lambdas.fill(0, 0, clen);
 			const invPasses = 1 / Math.max(1, iterations * substeps);
 			for (let iter = 0; iter < iterations; iter++) for (let ci = 0; ci < clen; ci++) {
 				const c = cs[ci];
@@ -10424,9 +11278,7 @@ See https://github.com/williamngan/pts for details. */
 					const sEff = 1 - Math.pow(1 - stiff, invPasses);
 					alpha = sEff > 1e-6 ? w * (1 - sEff) / sEff : w * 1e6;
 				}
-				const dl = (-(dist - c[2]) - alpha * lambdas[ci]) / (w + alpha);
-				lambdas[ci] += dl;
-				const s = dl / dist;
+				const s = -(dist - c[2]) / (w + alpha) / dist;
 				const fx = dx * s;
 				const fy = dy * s;
 				p1[0] -= fx * w1;
@@ -10551,19 +11403,30 @@ See https://github.com/williamngan/pts for details. */
 			for (const k in this._listeners) if (this._listeners.hasOwnProperty(k)) {
 				const li = this._listeners[k];
 				const _t = li.offset ? time + li.offset : time;
-				const ms = li.period * this._ms;
+				let ms = li.period * this._ms;
 				let isStart = false;
 				if (li.duration < 0) {
 					li.duration = _t - _t % this._ms;
 					li.count = li.count || 0;
 					isStart = true;
-				} else if (_t > li.duration + ms) {
-					li.duration = _t - _t % this._ms;
+				} else if (ms > 0 && _t > li.duration + ms) {
 					if (Array.isArray(li.beats)) {
-						li.index = (li.index + 1) % li.beats.length;
-						li.period = li.beats[li.index];
+						const cycle = li.beats.reduce((sum, beat) => sum + beat, 0) * this._ms;
+						const cycles = cycle > 0 ? Math.max(0, Math.ceil((_t - li.duration) / cycle) - 1) : 0;
+						li.duration += cycles * cycle;
+						li.count = (li.count || 0) + cycles * li.beats.length;
+						while (ms > 0 && _t > li.duration + ms) {
+							li.duration += ms;
+							li.index = ((li.index || 0) + 1) % li.beats.length;
+							li.period = li.beats[li.index];
+							ms = li.period * this._ms;
+							li.count++;
+						}
+					} else {
+						const passed = Math.ceil((_t - li.duration) / ms) - 1;
+						li.duration += passed * ms;
+						li.count = (li.count || 0) + passed;
 					}
-					li.count = (li.count || 0) + 1;
 					isStart = true;
 				}
 				let done;
@@ -10590,6 +11453,9 @@ See https://github.com/williamngan/pts for details. */
 			this._connected = [];
 			this._bufferPlayed = false;
 			this._generated = false;
+			this._inputStopped = false;
+			this._fadeEnd = 0;
+			this._retiring = /* @__PURE__ */ new Set();
 			this._type = type;
 			this._ctx = ctx || Sound._getContext();
 		}
@@ -10653,7 +11519,7 @@ See https://github.com/williamngan/pts for details. */
 			})();
 		}
 		createBuffer(buf) {
-			if (this._node) {
+			if (this._node && !this._retiring.has(this._node)) {
 				this._node.onended = null;
 				this._node.disconnect();
 			}
@@ -10672,7 +11538,7 @@ See https://github.com/williamngan/pts for details. */
 			return new Sound("gen")._gen(type, val);
 		}
 		_gen(type, val) {
-			if (this._node) this._node.disconnect();
+			if (this._node && !this._retiring.has(this._node)) this._node.disconnect();
 			this._node = this._ctx.createOscillator();
 			this._generated = true;
 			const osc = this._node;
@@ -10759,7 +11625,7 @@ See https://github.com/williamngan/pts for details. */
 		}
 		set volume(v) {
 			this._volume = Math.max(0, v || 0);
-			if (this._gain) this._gain.gain.value = this._volume;
+			if (this._gain && this._playing) this._rampVolume(this._volume, Math.max(this._ctx.currentTime, this._fadeEnd));
 		}
 		connect(node) {
 			this._connected.push(node);
@@ -10830,6 +11696,16 @@ See https://github.com/williamngan/pts for details. */
 		}
 		reset() {
 			this.stop();
+			this._cancelAudioTimer(true);
+			for (const node of this._retiring) {
+				node.onended = null;
+				try {
+					node.stop();
+				} catch (_unused2) {}
+				node.disconnect();
+			}
+			this._retiring.clear();
+			this._fadeEnd = 0;
 			if (this._node) this._node.disconnect();
 			if (this._outputNode) this._outputNode.disconnect();
 			return this;
@@ -10842,18 +11718,78 @@ See https://github.com/williamngan/pts for details. */
 			}
 			return this._gain;
 		}
+		_rampVolume(value, when = this._ctx.currentTime) {
+			const gain = this._getGain().gain;
+			const current = when > this._ctx.currentTime ? 0 : gain.value;
+			if (typeof gain.cancelAndHoldAtTime === "function") gain.cancelAndHoldAtTime(when);
+			else {
+				gain.cancelScheduledValues(when);
+				if (when > this._ctx.currentTime) gain.linearRampToValueAtTime(0, when);
+			}
+			gain.setValueAtTime(current, when);
+			gain.linearRampToValueAtTime(value, when + .01);
+		}
+		_cancelAudioTimer(finish = false) {
+			if (this._audioTimer !== void 0) clearTimeout(this._audioTimer);
+			this._audioTimer = void 0;
+			const callback = this._finishAudio;
+			this._finishAudio = void 0;
+			if (finish) callback === null || callback === void 0 || callback();
+		}
+		_afterFade(callback) {
+			this._cancelAudioTimer();
+			if (this._ctx.state !== "running") {
+				callback();
+				return;
+			}
+			this._finishAudio = callback;
+			const end = this._ctx.currentTime + .01;
+			const finish = () => {
+				const remaining = end - this._ctx.currentTime;
+				if (remaining > 0 && this._ctx.state === "running") this._audioTimer = setTimeout(finish, Math.max(10, remaining * 1e3));
+				else this._cancelAudioTimer(true);
+			};
+			this._audioTimer = setTimeout(finish, 10);
+		}
+		_retireSource(when) {
+			const node = this._node;
+			this._retiring.add(node);
+			node.onended = () => {
+				node.disconnect();
+				this._retiring.delete(node);
+				if (this._node === node) this._playing = false;
+			};
+			node.stop(when);
+		}
 		start(timeAt = 0) {
-			if (this._ctx.state === "suspended") this._ctx.resume();
+			if (this._type === "input" && this._stream && (this._inputStopped || this._stream.getAudioTracks().every((track) => track.readyState === "ended"))) {
+				this._playing = false;
+				Util.warn("Cannot restart a stopped input stream; use Sound.input() to acquire a new stream");
+				return this;
+			}
+			if (this._ctx.state === "suspended" && !("startRendering" in this._ctx)) this._ctx.resume();
+			this._cancelAudioTimer();
+			let when = 0;
 			if (this._type === "file") {
 				if (this._buffer) {
 					if (this._playing || this._bufferPlayed || !this._node) {
-						if (this._playing && this.progress < 1) this._node.stop();
+						if (this._playing && this.progress < 1) this.stop();
+						if (this._retiring.has(this._node)) when = Math.max(this._ctx.currentTime, this._fadeEnd);
 						this.createBuffer();
 					}
-					this._node.start(0, timeAt);
+					this._node.start(when, timeAt);
 					this._bufferPlayed = true;
-					this._timestamp = this._ctx.currentTime - timeAt;
+					this._timestamp = (when || this._ctx.currentTime) - timeAt;
 				} else {
+					if (this._playing && timeAt > 0) {
+						this._rampVolume(0);
+						this._fadeEnd = this._ctx.currentTime + .01;
+						this._afterFade(() => {
+							this._source.currentTime = timeAt;
+							this._rampVolume(this._volume);
+						});
+						return this;
+					}
 					if (timeAt > 0) this._source.currentTime = timeAt;
 					const played = this._source.play();
 					if (played && played.catch) played.catch(() => {
@@ -10863,25 +11799,40 @@ See https://github.com/williamngan/pts for details. */
 			} else if (this._type === "gen" && this._generated) {
 				if (this._playing) return this;
 				const osc = this._node;
+				if (this._retiring.has(osc)) when = Math.max(this._ctx.currentTime, this._fadeEnd);
 				this._gen(osc.type, osc.type === "custom" ? this._wave : osc.frequency.value);
-				this._node.start();
+				this._node.start(when);
 			}
 			if (this.analyzer) this._node.connect(this.analyzer.node);
 			for (const n of this._connected) this._node.connect(n);
 			(this._outputNode || this._node).connect(this._getGain());
+			if (when) this._rampVolume(this._volume, when);
+			else this._rampVolume(this._volume);
 			this._playing = true;
 			return this;
 		}
 		stop() {
 			if (!this._playing) return this;
-			(this._outputNode || this._node).disconnect(this._gain);
+			this._cancelAudioTimer();
+			this._rampVolume(0);
+			this._fadeEnd = this._ctx.currentTime + .01;
 			if (this._type === "file") {
 				if (this._buffer) {
-					if (this.progress < 1) this._node.stop();
-				} else this._source.pause();
+					if (this.progress < 1) this._retireSource(this._fadeEnd);
+				} else this._afterFade(() => {
+					this._source.pause();
+					(this._outputNode || this._node).disconnect(this._gain);
+				});
 			} else if (this._type === "gen") {
-				if (this._generated) this._node.stop();
-			} else if (this._type === "input" && this._stream) this._stream.getAudioTracks().forEach((track) => track.stop());
+				if (this._generated) this._retireSource(this._fadeEnd);
+				else this._afterFade(() => (this._outputNode || this._node).disconnect(this._gain));
+			} else if (this._type === "input" && this._stream) {
+				this._inputStopped = true;
+				this._afterFade(() => {
+					this._stream.getAudioTracks().forEach((track) => track.stop());
+					(this._outputNode || this._node).disconnect(this._gain);
+				});
+			} else this._afterFade(() => (this._outputNode || this._node).disconnect(this._gain));
 			this._playing = false;
 			return this;
 		}

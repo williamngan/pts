@@ -14,13 +14,29 @@ function expectColor(
 }
 
 describe("Color construction and representation", () => {
+  it("formats out-of-range hex channels as valid CSS", () => {
+    expect(Color.rgb(300, -5, 0).hex).toBe("#ff0000");
+    expect((Color.rgb(250, 250, 250).$add(10) as Color).hex).toBe("#ffffff");
+    expect(Color.rgb(NaN, Infinity, -Infinity).hex).toBe("#00ff00");
+    expect(Color.rgb(12.9, 15.9, 16.9).hex).toBe("#0c0f10");
+  });
+  it("preserves integer RGB channels through HSL and HSB round trips", () => {
+    for (let r = 0; r <= 255; r += 51)
+      for (let g = 0; g <= 255; g += 51)
+        for (let b = 0; b <= 255; b += 51) {
+          const rgb = Color.rgb(r, g, b, 0.5);
+          expect(Color.HSLtoRGB(Color.RGBtoHSL(rgb)).hex).toBe(rgb.hex);
+          expect(Color.HSBtoRGB(Color.RGBtoHSB(rgb)).hex).toBe(rgb.hex);
+        }
+  });
+
   it("converts HSL before formatting the documented rendering example", () => {
     const color = Color.hsl(268, 0.37, 0.51);
     const original = Array.from(color);
     const rgb = Color.HSLtoRGB(color);
-    expect(rgb.rgb).toBe("rgb(126,83,176)");
-    expect(rgb.hex).toBe("#7e53b0");
-    expect(rgb.rgba).toBe("rgba(126,83,176,1)");
+    expect(rgb.rgb).toBe("rgb(127,84,176)");
+    expect(rgb.hex).toBe("#7f54b0");
+    expect(rgb.rgba).toBe("rgba(127,84,176,1)");
     expect(color.mode).toBe("hsl");
     expect(Array.from(color)).toEqual(original);
   });
@@ -157,10 +173,7 @@ describe("Color-space conversions", () => {
       expectColor(Color.HSLtoRGB(hsl), sample, 3);
     }
 
-    expectColor(
-      Color.HSLtoRGB(Color.hsl(0, 0, 0.25)),
-      [63.75, 63.75, 63.75, 1],
-    );
+    expectColor(Color.HSLtoRGB(Color.hsl(0, 0, 0.25)), [64, 64, 64, 1]);
     expectColor(Color.RGBtoHSL(Color.rgb(1, 0, 0), true, true), [0, 1, 0.5, 1]);
     expectColor(
       Color.HSLtoRGB(Color.hsl(0.5, 1, 0.5), true, true),
@@ -253,15 +266,51 @@ describe("Color-space conversions", () => {
 });
 
 describe("Color-space reference values", () => {
-  // Independently computed via CIE 15 / IEC 61966-2-1 (sRGB, D65, 2° observer)
+  it("adapts the D65 white to neutral D50 Lab and back without changing alpha", () => {
+    const xyz = Color.xyz(95.047, 100, 108.883, 0.4);
+    const original = xyz.clone();
+    const lab = Color.XYZtoLAB(xyz);
+    expectColor(lab, [100, 0, 0, 0.4], 3);
+    expectColor(Color.LABtoXYZ(lab), original, 3);
+    expectColor(xyz, original);
+  });
+
+  it("round trips RGB grids through D50 Lab and LCH, including normalized colors", () => {
+    for (const r of [0, 5, 51, 102, 204, 255])
+      for (const g of [0, 5, 51, 102, 204, 255])
+        for (const b of [0, 5, 51, 102, 204, 255]) {
+          const rgb = Color.rgb(r, g, b, 0.4);
+          for (const mode of ["lab", "lch"] as const) {
+            expectColor(
+              rgb.clone().toMode(mode, true).toMode("rgb", true),
+              rgb,
+              3,
+            );
+            const normalized = rgb
+              .$normalize()
+              .toMode(mode, true)
+              .toMode("rgb", true);
+            // The existing XYZ matrices retain sub-byte conversion error.
+            rgb
+              .$normalize()
+              .forEach((channel, i) =>
+                expect(Math.abs(normalized[i] - channel)).toBeLessThan(
+                  0.5 / 255,
+                ),
+              );
+          }
+        }
+  });
+
+  // XYZ/LUV use D65. Lab/LCH references use CSS Color 4 D50 with Bradford adaptation.
   const references: [string, number[], Record<string, number[]>][] = [
     [
       "red",
       [255, 0, 0],
       {
         xyz: [41.2456, 21.2673, 1.9334],
-        lab: [53.2408, 80.0925, 67.2032],
-        lch: [53.2408, 104.5518, 39.999],
+        lab: [54.29054, 80.80493, 69.89096],
+        lch: [54.29054, 106.83718, 40.85766],
         luv: [53.2408, 175.015, 37.7564],
       },
     ],
@@ -270,8 +319,8 @@ describe("Color-space reference values", () => {
       [0, 0, 255],
       {
         xyz: [18.0437, 7.2175, 95.0304],
-        lab: [32.297, 79.1875, -107.8602],
-        lch: [32.297, 133.8076, 306.2849],
+        lab: [29.5683, 68.28736, -112.02971],
+        lch: [29.5683, 131.20145, 301.36427],
         luv: [32.297, -9.4054, -130.3423],
       },
     ],
@@ -280,8 +329,8 @@ describe("Color-space reference values", () => {
       [64, 156, 180],
       {
         xyz: [22.2377, 28.1599, 47.4346],
-        lab: [60.0329, -19.6313, -20.5237],
-        lch: [60.0329, 28.4008, 226.2732],
+        lab: [59.65355, -22.574, -21.10127],
+        lch: [59.65355, 30.90063, 223.06872],
         luv: [60.0329, -36.1258, -28.5162],
       },
     ],
@@ -306,7 +355,13 @@ describe("Color-space reference values", () => {
   it.each(references)("matches CIE values for %s", (_, rgb, expected) => {
     for (const mode in expected) {
       const result = forwards[mode as keyof typeof forwards](Color.rgb(rgb));
-      expectColor(result, [...expected[mode], 1], 2);
+      // Pts retains its historical rounded D65 XYZ matrix; CSS uses a
+      // more precise D65 chromaticity. Both adapt to the same D50 white.
+      const tolerance = mode === "lab" || mode === "lch" ? 0.02 : 0.005;
+      expected[mode].forEach((value, i) =>
+        expect(Math.abs(result[i] - value)).toBeLessThan(tolerance),
+      );
+      expect(result.alpha).toBe(1);
     }
   });
 
@@ -439,7 +494,7 @@ describe("Color conversion flags", () => {
     expect(norm.normalized).toBe(true);
     expectColor(
       norm,
-      [53.2408 / 100, (80.0925 + 128) / 255, (67.2032 + 128) / 255, 1],
+      [54.29054 / 100, (80.80493 + 128) / 255, (69.89096 + 128) / 255, 1],
       2,
     );
 

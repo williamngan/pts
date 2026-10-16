@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { CanvasSpace } from "../../Canvas";
-import { SVGSpace } from "../../Svg";
+import { CanvasForm, CanvasSpace } from "../../Canvas";
+import { SVGContext2D, SVGSpace } from "../../Svg";
 import { Bound, Pt } from "../../Pt";
 
 // The swap-promise test: the identical drawing code runs on CanvasForm and
@@ -66,6 +66,151 @@ async function ready(space: {
 }
 
 describe("canvas-svg rendering parity", () => {
+  it("composites overlapping fills independently, including reversed winding", async () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = W;
+    canvas.height = H;
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("width", `${W}`);
+    svg.setAttribute("height", `${H}`);
+    svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    const ctx = new SVGContext2D(svg);
+    for (const style of ["rgba(0,0,0,0.5)", "#000000"]) {
+      ctx.beginFrame();
+      for (const f of [
+        new CanvasForm(canvas.getContext("2d")!),
+        new CanvasForm(ctx as any),
+      ]) {
+        f.alpha(1)
+          .fillOnly("#ffffff")
+          .rect([
+            [0, 0],
+            [W, H],
+          ]);
+        f.fillOnly(style).polygon([
+          [10, 10],
+          [70, 10],
+          [70, 70],
+          [10, 70],
+        ]);
+        f.polygon([
+          [40, 40],
+          [40, 100],
+          [100, 100],
+          [100, 40],
+        ]);
+      }
+      ctx.commitFrame();
+      const raster = await rasterize(svg.outerHTML);
+      const actual = raster.getContext("2d")!.getImageData(50, 50, 1, 1).data;
+      const expected = canvas.getContext("2d")!.getImageData(50, 50, 1, 1).data;
+      for (let i = 0; i < 4; i++)
+        expect(Math.abs(actual[i] - expected[i])).toBeLessThanOrEqual(1);
+    }
+  });
+  it("composites overlapping shapes that inherit a translucent paint", async () => {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("width", `${W}`);
+    svg.setAttribute("height", `${H}`);
+    svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    svg.setAttribute("fill", "rgba(0,0,0,0.5)");
+    const ctx = new SVGContext2D(svg);
+    const form = new CanvasForm(ctx as any);
+    // a CSS-wide keyword, and a name that is not a color, take the parent's paint
+    for (const paint of ["unset", "notacolor"]) {
+      ctx.beginFrame();
+      form.fillOnly(paint).rect([
+        [10, 10],
+        [60, 60],
+      ]);
+      form.rect([
+        [40, 40],
+        [90, 90],
+      ]);
+      ctx.commitFrame();
+      expect(ctx.runs).toHaveLength(2);
+      const raster = await rasterize(svg.outerHTML);
+      const g = raster.getContext("2d")!;
+      // two half-transparent black layers over transparent: alpha 191
+      expect(g.getImageData(50, 50, 1, 1).data[3]).toBeCloseTo(191, -1);
+      expect(g.getImageData(20, 20, 1, 1).data[3]).toBeCloseTo(128, -1);
+    }
+    // a known color name still shares one path
+    ctx.beginFrame();
+    form.fillOnly("navy").point([20, 20], 10).point([25, 20], 10);
+    ctx.commitFrame();
+    expect(ctx.runs).toHaveLength(1);
+  });
+
+  it("covers shared edges of merged opaque shapes once, and of classed shapes twice", async () => {
+    const draw = (form: CanvasForm, times: number) => {
+      form.fillOnly("#000");
+      for (let i = 0; i < times; i++) form.point([50.25, 50.25], 30, "circle");
+    };
+    // total coverage: the alpha channel's sum
+    const ink = (data: Uint8ClampedArray) => {
+      let sum = 0;
+      for (let i = 3; i < data.length; i += 4) sum += data[i];
+      return sum / 255;
+    };
+    const canvasInk = (times: number) => {
+      const canvas = document.createElement("canvas");
+      canvas.width = W;
+      canvas.height = H;
+      const g = canvas.getContext("2d")!;
+      draw(new CanvasForm(g), times);
+      return ink(g.getImageData(0, 0, W, H).data);
+    };
+    const svgInk = async (className: string) => {
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("width", `${W}`);
+      svg.setAttribute("height", `${H}`);
+      svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+      const ctx = new SVGContext2D(svg);
+      ctx.className = className;
+      ctx.beginFrame();
+      draw(new CanvasForm(ctx as any), 2);
+      ctx.commitFrame();
+      const raster = await rasterize(svg.outerHTML);
+      return {
+        elements: ctx.runs.length,
+        ink: ink(raster.getContext("2d")!.getImageData(0, 0, W, H).data),
+      };
+    };
+    // one path covers the shared edge once, like a single canvas draw...
+    const merged = await svgInk("");
+    expect(merged.elements).toBe(1);
+    expect(Math.abs(merged.ink - canvasInk(1))).toBeLessThan(3);
+    // ...while classed shapes keep separate elements and blend it twice
+    const classed = await svgInk("circle");
+    expect(classed.elements).toBe(2);
+    expect(Math.abs(classed.ink - canvasInk(2))).toBeLessThan(3);
+    expect(classed.ink - merged.ink).toBeGreaterThan(15);
+  });
+
+  it("revalidates form styles after direct writes and context restore", () => {
+    const canvas = document.createElement("canvas").getContext("2d")!;
+    const svg = new SVGContext2D(
+      document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+    );
+    for (const ctx of [canvas, svg]) {
+      const form = new CanvasForm(ctx as any);
+      form.fillOnly("#ff0000");
+      ctx.fillStyle = "#0000ff";
+      form.fillOnly("#ff0000");
+      expect(ctx.fillStyle).toBe("#ff0000");
+      ctx.save();
+      form.fillOnly("#00ff00").dash([3], 2);
+      ctx.restore();
+      form.fillOnly("#00ff00").dash([3], 2);
+      expect(ctx.fillStyle).toBe("#00ff00");
+      expect(ctx.getLineDash().every((n) => n === 3)).toBe(true);
+      expect(ctx.lineDashOffset).toBe(2);
+      ctx.setLineDash([7, 2]);
+      form.dash([3], 2);
+      expect(ctx.getLineDash().every((n) => n === 3)).toBe(true);
+    }
+  });
   it("renders the same scene within an antialiasing tolerance", async () => {
     // canvas side
     const canvasElem = document.createElement("canvas");
@@ -144,7 +289,7 @@ describe("canvas-svg rendering parity", () => {
     const space = new SVGSpace(host);
     space.resize(Bound.fromGroup([new Pt(0, 0), new Pt(W, H)]));
     const form = space.getForm();
-    form.fillOnly("#f03");
+    form.strokeOnly("#f03");
     form.point([10, 10], 2).point([30, 10], 2).point([50, 10], 2);
     form.svgContext.commitFrame();
 

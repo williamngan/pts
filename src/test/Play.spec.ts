@@ -8,6 +8,26 @@ describe("Sound in a non-browser environment", () => {
 });
 
 describe("Tempo", () => {
+  it("skips missed periods without shifting fixed or alternating rhythms", () => {
+    const tempo = new Tempo(60);
+    const one = vi.fn(),
+      two = vi.fn(),
+      sequence = vi.fn();
+    tempo.every(1).start(one);
+    tempo.every(2).progress(two);
+    tempo.every([1, 2]).progress(sequence);
+    tempo.track(0);
+    tempo.track(3500);
+    expect(one).toHaveBeenLastCalledWith(3);
+    expect(two).toHaveBeenLastCalledWith(1, 0.75, 3500, true);
+    expect(sequence).toHaveBeenLastCalledWith(2, 0.5, 3500, true);
+    tempo.track(4500);
+    expect(two).toHaveBeenLastCalledWith(2, 0.25, 4500, true);
+    expect(sequence).toHaveBeenLastCalledWith(3, 0.25, 4500, true);
+    tempo.track(3000500);
+    expect(sequence).toHaveBeenLastCalledWith(2000, 0.5, 3000500, true);
+    expect(one).toHaveBeenCalledTimes(4);
+  });
   it("converts between beats per minute and milliseconds", () => {
     const tempo = new Tempo(120);
     expect(tempo.bpm).toBe(120);
@@ -53,11 +73,11 @@ describe("Tempo", () => {
     tempo.track(0);
     expect(progress).toHaveBeenLastCalledWith(0, 0.1, 100, true);
     tempo.track(901);
-    expect(progress).toHaveBeenLastCalledWith(1, 0.001, 1001, true);
+    expect(progress).toHaveBeenLastCalledWith(1, 0.0005, 1001, true);
     tempo.track(1900);
     expect(progress).toHaveBeenLastCalledWith(1, 0.5, 2000, false);
     tempo.track(2901);
-    expect(progress).toHaveBeenLastCalledWith(2, 0.0005, 3001, true);
+    expect(progress).toHaveBeenLastCalledWith(2, 0.001, 3001, true);
   });
 
   it("assigns generated listener names", () => {

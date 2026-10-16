@@ -58,7 +58,11 @@ export default defineSuite("form", (b, { Pts, fx }) => {
         ...makeState(),
       }),
       teardown: (state) => state?.element?.remove(),
-      run,
+      run: (state) => {
+        state.form.svgContext.beginFrame();
+        run(state);
+        state.form.svgContext.commitFrame();
+      },
     });
 
   svgCase(

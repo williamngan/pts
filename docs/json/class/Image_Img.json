@@ -63,7 +63,7 @@
       "source": [
         [
           "src/Image.ts",
-          662,
+          666,
           6
         ]
       ],
@@ -81,7 +81,7 @@
       "source": [
         [
           "src/Image.ts",
-          709,
+          713,
           6
         ]
       ],
@@ -99,7 +99,7 @@
       "source": [
         [
           "src/Image.ts",
-          677,
+          681,
           6
         ]
       ],
@@ -117,7 +117,7 @@
       "source": [
         [
           "src/Image.ts",
-          648,
+          652,
           6
         ]
       ],
@@ -135,7 +135,7 @@
       "source": [
         [
           "src/Image.ts",
-          669,
+          673,
           6
         ]
       ],
@@ -153,7 +153,7 @@
       "source": [
         [
           "src/Image.ts",
-          655,
+          659,
           6
         ]
       ],
@@ -171,7 +171,7 @@
       "source": [
         [
           "src/Image.ts",
-          698,
+          702,
           6
         ]
       ],
@@ -189,7 +189,7 @@
       "source": [
         [
           "src/Image.ts",
-          684,
+          688,
           6
         ]
       ],
@@ -207,7 +207,7 @@
       "source": [
         [
           "src/Image.ts",
-          691,
+          695,
           6
         ]
       ],
@@ -225,7 +225,7 @@
       "source": [
         [
           "src/Image.ts",
-          718,
+          722,
           6
         ]
       ],
@@ -274,7 +274,7 @@
       "source": [
         [
           "src/Image.ts",
-          561,
+          563,
           2
         ]
       ],
@@ -301,7 +301,7 @@
       "source": [
         [
           "src/Image.ts",
-          502,
+          504,
           2
         ]
       ],
@@ -330,7 +330,7 @@
       "source": [
         [
           "src/Image.ts",
-          533,
+          535,
           2
         ]
       ],
@@ -352,7 +352,7 @@
       "source": [
         [
           "src/Image.ts",
-          516,
+          518,
           2
         ]
       ],
@@ -381,7 +381,7 @@
       "source": [
         [
           "src/Image.ts",
-          638,
+          642,
           2
         ]
       ],
@@ -390,7 +390,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Get a CanvasForm for drawing on the internal canvas if this Img is editable",
+          "comment": "Get a CanvasForm for drawing on the internal canvas if this Img is editable\nDrawing through this form does not refresh the pixel cache. Call `loadPixels()`\nafterwards before reading the updated image through `pixel()`.",
           "returns": "CanvasForm | undefined",
           "returns_comment": false,
           "parameters": [],
@@ -473,7 +473,7 @@
       "source": [
         [
           "src/Image.ts",
-          413,
+          415,
           2
         ]
       ],
@@ -530,7 +530,7 @@
       "source": [
         [
           "src/Image.ts",
-          370,
+          372,
           2
         ]
       ],
@@ -539,7 +539,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Get the RGBA values of a pixel in the image",
+          "comment": "Get the RGBA values of a pixel in the image\nAfter drawing through `getForm()` or directly on the canvas, call `loadPixels()`\nto refresh the pixel cache before reading the updated pixels.",
           "returns": "Pt",
           "returns_comment": "[R,G,B,A] values of the pixel at the specific position",
           "parameters": [
@@ -565,7 +565,7 @@
       "source": [
         [
           "src/Image.ts",
-          471,
+          473,
           2
         ]
       ],
@@ -600,7 +600,7 @@
       "source": [
         [
           "src/Image.ts",
-          389,
+          391,
           2
         ]
       ],
@@ -663,7 +663,7 @@
       "source": [
         [
           "src/Image.ts",
-          622,
+          624,
           2
         ]
       ],
@@ -685,7 +685,7 @@
       "source": [
         [
           "src/Image.ts",
-          629,
+          631,
           2
         ]
       ],
@@ -707,7 +707,7 @@
       "source": [
         [
           "src/Image.ts",
-          426,
+          428,
           2
         ]
       ],
@@ -772,7 +772,7 @@
       "source": [
         [
           "src/Image.ts",
-          570,
+          572,
           9
         ]
       ],
@@ -815,7 +815,7 @@
       "source": [
         [
           "src/Image.ts",
-          442,
+          444,
           9
         ]
       ],
@@ -852,7 +852,7 @@
       "source": [
         [
           "src/Image.ts",
-          600,
+          602,
           9
         ]
       ],

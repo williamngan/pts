@@ -1204,6 +1204,60 @@ describe("Path pinched rings, input forms and resource bounds", () => {
     expect(Path.unite([union]).length).toBe(union.length);
   });
 
+  it("searches long sweep windows block by block, visiting the same pairs in the same order", () => {
+    // full-width bars: every edge's x range overlaps every other's
+    const bars = Array.from({ length: 200 }, (_, i) => [
+      [0, i * 3],
+      [1000, i * 3],
+      [1000, i * 3 + 1],
+      [0, i * 3 + 1],
+    ]);
+    const diagonal = [
+      [100, -10],
+      [140, -10],
+      [940, 610],
+      [900, 610],
+    ];
+    let seed = 5;
+    const random = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const shuffled = bars.slice().sort(() => random() - 0.5);
+    // shifted apart in x, bars have no ties to order by y
+    const staggered = shuffled.map((bar) => {
+      const dx = random() * 4;
+      return bar.map(([x, y]) => [x + dx, y]);
+    });
+    // ordered bars prune well, and so do shuffled ones once the tree orders
+    // their edges tied in x by y; staggered shuffled ones do not, so they scan
+    for (const [shapes, search, reordered] of [
+      [[...bars, diagonal], true, false],
+      [[...shuffled, diagonal], true, true],
+      [[...staggered, diagonal], false, false],
+    ] as const) {
+      const pairsOf = (search: boolean) => {
+        const ov = new Overlay() as any;
+        ov.read(shapes);
+        if (!search) ov.searchTree = () => undefined;
+        const boxes = ov.boxes();
+        return {
+          tree: ov.searchTree(boxes, ov.tol),
+          pairs: ov.sweep(boxes, ov.tol, true),
+          splits: ov.spE.slice(),
+        };
+      };
+      const plain = pairsOf(false);
+      const searched = pairsOf(true);
+      expect(searched.pairs).toEqual(plain.pairs);
+      expect(searched.splits).toEqual(plain.splits);
+      expect(Boolean(searched.tree)).toBe(search);
+      expect(Boolean(searched.tree?.ties)).toBe(reordered);
+    }
+    // input order changes where rings start, not the region
+    expect(polygonArea(Path.unite([...bars, diagonal]))).toBeCloseTo(
+      polygonArea(Path.unite([...shuffled, diagonal])),
+      6,
+    );
+  });
+
   it("stays bounded on deep overlap and on a fan sharing a vertex", () => {
     const bars = Array.from({ length: 80 }, (_, i) => {
       const a = (Math.PI * i) / 80;

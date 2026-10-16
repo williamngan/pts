@@ -38,6 +38,8 @@ export class CanvasSpace extends MultiTouchSpace {
   protected _resizeObserver: ResizeObserver | undefined;
   protected _autoResize = true;
   protected _initialResize = false;
+  private _hasPlayed = false;
+  private _frameTime = 0; // the time of the last frame drawn
 
   private _readyObserver: MutationObserver | undefined;
   private _readyTimer: number | undefined;
@@ -281,8 +283,14 @@ export class CanvasSpace extends MultiTouchSpace {
 
     this.render(this._ctx);
 
-    // if it's a valid resize event and space is not playing, repaint the canvas once
-    if (evt && !this.isPlaying) this.playOnce(0);
+    // Resizing clears the canvas, so redraw a stopped or paused scene. Observer
+    // resizes have no event; before the first play() there is no scene to redraw.
+    if (
+      this._isReady &&
+      (!this.isPlaying || this._pause) &&
+      (evt || this._hasPlayed)
+    )
+      this._repaint();
 
     return this;
   }
@@ -457,17 +465,36 @@ export class CanvasSpace extends MultiTouchSpace {
    */
   protected playItems(time: number) {
     if (this._isReady) {
-      this._ctx.save();
-      if (this._offscreen) this._offCtx.save();
+      this._hasPlayed = true;
+      this._frameTime = time;
+      this._beginDraw();
       super.playItems(time);
-      this._ctx.restore();
-      if (this._offscreen) this._offCtx.restore();
-      // restore() reverted the context's style state without going through the
-      // forms' style cache, so the cached values no longer describe the context
-      CanvasForm.resetStyleCache(this._ctx);
-      if (this._offscreen) CanvasForm.resetStyleCache(this._offCtx);
-      this.render(this._ctx);
+      this._endDraw();
     }
+  }
+
+  /**
+   * Redraw a stopped or paused space after a resize cleared its canvas. Unlike
+   * `playOnce()`, this neither restarts the animation loop nor advances time:
+   * players animate once at the last frame's time with no elapsed time, and
+   * the play state and input are left as they are.
+   */
+  protected _repaint(): void {
+    this._beginDraw();
+    this._animatePlayers(this._frameTime, 0);
+    this._endDraw();
+  }
+
+  private _beginDraw(): void {
+    this._ctx.save();
+    if (this._offscreen) this._offCtx.save();
+  }
+
+  private _endDraw(): void {
+    // the forms' style cache observes these restores
+    this._ctx.restore();
+    if (this._offscreen) this._offCtx.restore();
+    this.render(this._ctx);
   }
 
   /**
@@ -546,11 +573,258 @@ export class CanvasSpace extends MultiTouchSpace {
  * CanvasForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`CanvasSpace`](#link).
  * You may extend CanvasForm to implement your own expressions for CanvasSpace.
  */
-// Last-written style values per rendering context, so identical values are
-// not re-applied (color parsing in particular is costly). Keyed by context —
-// not by form — because multiple forms can share one context (see `reset()`),
-// and a per-form cache would skip writes another form made stale.
-const _ctxStyleCache = new WeakMap<object, Record<string, unknown>>();
+// Style state per observed rendering context, shared by all forms drawing on
+// it (see `reset()`): the values last written to the cached styles, so
+// identical values are not re-applied (color parsing in particular is costly),
+// and the snapshots that save() pushes. Stored on the context under a symbol,
+// which its observers read.
+interface StyleState {
+  styles: Record<string, unknown>;
+  saved: Record<string, unknown>[];
+}
+const _STATE = Symbol("pts.styleState");
+
+// The cache of a context that cannot be observed: always empty, so every style
+// call writes.
+const _uncached: Record<string, unknown> = /* @__PURE__ */ Object.freeze({});
+
+// Observers per context prototype, or null when its contexts cannot be
+// observed. All contexts of a kind share one set: functions made per context
+// would give each context its own hidden class, and every call on a context
+// (from Pts or inside the renderer) would slow down once a page has several.
+const _observers = new WeakMap<object, PropertyDescriptorMap | null>();
+
+// The style keys CanvasForm caches; writes to these are observed.
+const _observedStyles = [
+  "fillStyle",
+  "strokeStyle",
+  "lineWidth",
+  "lineJoin",
+  "lineCap",
+  "globalAlpha",
+  "globalCompositeOperation",
+  "font",
+];
+
+// Strings that browsers resolve against the canvas element's CSS each time
+// they are assigned, so equal strings need not give equal styles: colors that
+// name currentColor, light-dark() or a system color (such as Canvas or
+// ButtonText, which follow the color scheme), and fonts with relative weights
+// or sizes. A cache hit on one is not trusted, and the style is written again.
+// So is one with a CSS escape (a backslash), which can spell any of these.
+const _cssColor =
+  /currentcolor|light-dark|accent|background|border|button|canvas|caption|field|highlight|mark|menu|scrollbar|selecteditem|text|threed|window|workspace/i;
+const _cssFont = /bolder|lighter|larger|smaller|\d(?!px)[a-z%]/i;
+
+// The fill color, stroke color and font last found not to depend on CSS, so
+// repeated cache hits skip the test. Only hits test strings: reading a short
+// string in the observers slowed direct writes in Chromium by a fifth.
+const _plain: unknown[] = [undefined, undefined, undefined];
+
+// Colors and fonts found not to depend on CSS, so that hits alternating among
+// a few values (two forms, or a color set twice per shape) skip the test too.
+// Each is cleared when full, so generated strings cannot grow it unbounded.
+const _plainColors = new Set<string>();
+const _plainFonts = new Set<string>();
+
+// Whether a cache hit must still write its value (slot 2 is the font). This
+// is kept tiny so that _set stays small enough to inline into style methods.
+function _cssHit(v: unknown, slot: number): boolean {
+  return v !== _plain[slot] && _cssTest(v, slot);
+}
+
+// Test a value against CSS, and remember it in its slot if it is plain.
+function _cssTest(v: unknown, slot: number): boolean {
+  if (typeof v !== "string") return false; // a gradient or pattern
+  const font = slot === 2;
+  if (font || v.charCodeAt(0) !== 35 /* # */) {
+    const known = font ? _plainFonts : _plainColors;
+    if (!known.has(v)) {
+      if ((font ? _cssFont : _cssColor).test(v) || v.includes("\\"))
+        return true;
+      if (known.size === 256) known.clear();
+      known.add(v);
+    }
+  }
+  _plain[slot] = v;
+  return false;
+}
+
+// Forget cached values by assigning undefined, not by deleting keys: deleting
+// would switch the cache object to a slower dictionary representation.
+function _forgetStyles(cache: Record<string, unknown>): void {
+  for (const k in cache) cache[k] = undefined;
+}
+
+function _findDescriptor(
+  obj: object,
+  key: string,
+): PropertyDescriptor | undefined {
+  for (let o: object | null = obj; o; o = Object.getPrototypeOf(o)) {
+    const d = Object.getOwnPropertyDescriptor(o, key);
+    if (d) return d;
+  }
+  return undefined;
+}
+
+function _method(value: (...args: never[]) => unknown): PropertyDescriptor {
+  return { value, configurable: true, writable: true, enumerable: false };
+}
+
+// Accessors over a prototype's style setters and wrappers over its state
+// methods, which keep a context's style state accurate whatever reference the
+// change is made through. A prototype without setters for every cached style
+// (such as a renderer with plain style fields) gets null.
+function _makeObservers(proto: any): PropertyDescriptorMap | null {
+  const natives: Record<string, PropertyDescriptor> = {};
+  for (const key of _observedStyles.concat("lineDashOffset")) {
+    const d = _findDescriptor(proto, key);
+    if (!d || !d.get || !d.set) return null;
+    natives[key] = d;
+  }
+  const fill = natives.fillStyle.set!;
+  const stroke = natives.strokeStyle.set!;
+  const width = natives.lineWidth.set!;
+  const join = natives.lineJoin.set!;
+  const cap = natives.lineCap.set!;
+  const alpha = natives.globalAlpha.set!;
+  const composite = natives.globalCompositeOperation.set!;
+  const font = natives.font.set!;
+  const offset = natives.lineDashOffset.set!;
+  // One function per style: setters made from one function share V8's call
+  // feedback, so none of them could call its native setter directly.
+  const setters: Record<string, (this: any, v: any) => void> = {
+    fillStyle(v) {
+      fill.call(this, v);
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.fillStyle = v;
+    },
+    strokeStyle(v) {
+      stroke.call(this, v);
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.strokeStyle = v;
+    },
+    lineWidth(v) {
+      width.call(this, v);
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.lineWidth = v;
+    },
+    lineJoin(v) {
+      join.call(this, v);
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.lineJoin = v;
+    },
+    lineCap(v) {
+      cap.call(this, v);
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.lineCap = v;
+    },
+    globalAlpha(v) {
+      alpha.call(this, v);
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.globalAlpha = v;
+    },
+    globalCompositeOperation(v) {
+      composite.call(this, v);
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.globalCompositeOperation = v;
+    },
+    font(v) {
+      font.call(this, v);
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.font = v;
+    },
+    lineDashOffset(v) {
+      offset.call(this, v);
+      // the dash key covers the offset
+      const state: StyleState | undefined = this[_STATE];
+      if (state) state.styles.dash = undefined;
+    },
+  };
+  const observers: PropertyDescriptorMap = {};
+  for (const key in setters)
+    observers[key] = {
+      get: natives[key].get,
+      set: setters[key],
+      configurable: true,
+      enumerable: natives[key].enumerable,
+    };
+
+  const { setLineDash, save, restore, reset } = proto;
+  if (
+    typeof setLineDash !== "function" ||
+    typeof save !== "function" ||
+    typeof restore !== "function"
+  )
+    return null;
+  observers.setLineDash = _method(function (this: any, segments: number[]) {
+    setLineDash.call(this, segments);
+    const state: StyleState | undefined = this[_STATE];
+    if (state) state.styles.dash = undefined;
+  });
+  observers.save = _method(function (this: any) {
+    save.call(this);
+    const state: StyleState | undefined = this[_STATE];
+    if (state) state.saved.push(Object.assign({}, state.styles));
+  });
+  observers.restore = _method(function (this: any) {
+    restore.call(this);
+    const state: StyleState | undefined = this[_STATE];
+    if (!state) return;
+    // an unmatched restore reveals a state the cache never saw: forget it
+    const saved = state.saved.pop();
+    if (saved) for (const k in state.styles) state.styles[k] = saved[k];
+    else _forgetStyles(state.styles);
+  });
+  // reset() is recent, and older contexts lack it
+  if (typeof reset === "function")
+    observers.reset = _method(function (this: any) {
+      reset.call(this);
+      const state: StyleState | undefined = this[_STATE];
+      if (!state) return;
+      state.saved.length = 0;
+      _forgetStyles(state.styles);
+    });
+  return observers;
+}
+
+// Get a context's style state, observing the context the first time. A
+// context that cannot be observed (frozen, with style members of its own, or
+// not built on style setters) gets null and is not cached, since a write that
+// bypasses observers could leave the cache stale.
+function _styleState(ctx: any): StyleState | null {
+  if (Object.prototype.hasOwnProperty.call(ctx, _STATE)) return ctx[_STATE];
+  const proto = Object.getPrototypeOf(ctx);
+  if (!proto || !Object.isExtensible(ctx)) return null;
+  let observers = _observers.get(proto);
+  if (observers === undefined) {
+    try {
+      observers = _makeObservers(proto);
+    } catch {
+      observers = null; // eg, native members that throw on the prototype
+    }
+    _observers.set(proto, observers);
+  }
+  // Own members are left alone: they are not inherited setters, and
+  // redefining them would switch the context to a slower dictionary
+  // representation.
+  if (
+    !observers ||
+    Object.keys(observers).some((k) =>
+      Object.prototype.hasOwnProperty.call(ctx, k),
+    )
+  )
+    return null;
+  const state: StyleState = { styles: {}, saved: [] };
+  try {
+    Object.defineProperties(ctx, observers);
+    // linked last: a context observed only in part stays uncached
+    Object.defineProperty(ctx, _STATE, { value: state });
+  } catch {
+    return null;
+  }
+  return state;
+}
 
 export class CanvasForm<
   S extends MultiTouchSpace = CanvasSpace,
@@ -560,20 +834,16 @@ export class CanvasForm<
   protected _estimateTextWidth: TextMeasure | undefined;
   protected _estimateMode: "sample" | "char" | undefined;
 
-  // the shared cache object for this._ctx, revalidated only when the context
-  // changes so the hot path avoids a WeakMap lookup per style write
+  // the style values last written to this._ctx, resolved only when the
+  // context changes so the hot path avoids a WeakMap lookup per style write
   private _styleCache: Record<string, unknown> | null = null;
   private _styleCacheCtx: RenderingContext2D | null = null;
 
   /** Get the style cache shared by all forms drawing on this context. */
   protected _cacheForCtx(): Record<string, unknown> {
     if (this._styleCacheCtx !== this._ctx) {
-      let cache = _ctxStyleCache.get(this._ctx);
-      if (!cache) {
-        cache = {};
-        _ctxStyleCache.set(this._ctx, cache);
-      }
-      this._styleCache = cache;
+      const state = _styleState(this._ctx);
+      this._styleCache = state ? state.styles : _uncached;
       this._styleCacheCtx = this._ctx;
     }
     return this._styleCache!;
@@ -581,31 +851,65 @@ export class CanvasForm<
 
   /**
    * Forget the cached style values for a rendering context, so every
-   * subsequent style write applies. Call this after anything that resets or
-   * desyncs a context's state outside a form — most commonly assigning a
-   * canvas's `width` or `height`, which resets the context to its defaults.
-   * (Within a form, [`CanvasForm.reset`](#link) is the equivalent recovery.)
+   * subsequent style write applies. Call this after resetting a context
+   * without its own methods: assigning a canvas's `width` or `height` resets
+   * the context to its defaults. (CanvasSpace does this when it resizes.)
    * @param ctx the rendering context to forget
    */
   static resetStyleCache(ctx: RenderingContext2D | object): void {
-    // clear the shared object in place: forms cache a reference to it, so
-    // deleting the WeakMap entry would leave them holding stale values
-    const cache = _ctxStyleCache.get(ctx);
-    if (cache) {
-      for (const k in cache) delete cache[k];
+    // clear in place: forms hold a reference to the styles object
+    const state = Object.prototype.hasOwnProperty.call(ctx, _STATE)
+      ? ((ctx as any)[_STATE] as StyleState)
+      : null;
+    if (state) {
+      _forgetStyles(state.styles);
+      // the reset also discards the context's saved states
+      state.saved.length = 0;
     }
   }
 
   /**
    * Write a context style property only when it differs from the last value
-   * written to this context. After setting style properties directly on
-   * [`CanvasForm.ctx`](#link), call [`CanvasForm.reset`](#link) to resync.
+   * written to this context, or when the value resolves against CSS (such as
+   * `currentColor`). The context's observers record the write (see
+   * [`CanvasForm.ctx`](#link)).
    */
   protected _set(key: string, value: unknown): void {
     const cache = this._cacheForCtx();
-    if (cache[key] !== value) {
-      cache[key] = value;
-      (this._ctx as any)[key] = value;
+    const ctx = this._ctx as any;
+    // Each style is compared and written by name: a site that writes one
+    // property reaches the context's observer, and its native setter, much
+    // faster than a write through a variable key.
+    switch (key) {
+      case "fillStyle":
+        if (cache.fillStyle !== value || _cssHit(value, 0))
+          ctx.fillStyle = value;
+        return;
+      case "strokeStyle":
+        if (cache.strokeStyle !== value || _cssHit(value, 1))
+          ctx.strokeStyle = value;
+        return;
+      case "lineWidth":
+        if (cache.lineWidth !== value) ctx.lineWidth = value;
+        return;
+      case "lineJoin":
+        if (cache.lineJoin !== value) ctx.lineJoin = value;
+        return;
+      case "lineCap":
+        if (cache.lineCap !== value) ctx.lineCap = value;
+        return;
+      case "globalAlpha":
+        if (cache.globalAlpha !== value) ctx.globalAlpha = value;
+        return;
+      case "globalCompositeOperation":
+        if (cache.globalCompositeOperation !== value)
+          ctx.globalCompositeOperation = value;
+        return;
+      case "font":
+        if (cache.font !== value || _cssHit(value, 2)) ctx.font = value;
+        return;
+      default:
+        if (cache[key] !== value) ctx[key] = value;
     }
   }
 
@@ -669,6 +973,13 @@ export class CanvasForm<
 
   /**
    * Get the rendering context of canvas to perform other canvas functions.
+   * You may set styles on the context directly, through this or any other
+   * reference to it: the form skips a style write only when it is sure the
+   * context already has that value, and always writes values that resolve
+   * against CSS, such as `currentColor`. It observes canvas contexts' style
+   * setters, `setLineDash()`, `save()`, `restore()` and `reset()`; a context
+   * it cannot observe (such as a renderer with plain style fields) gets every
+   * style write.
    * @example `form.ctx.clip()`
    */
   get ctx(): RenderingContext2D {
@@ -898,22 +1209,24 @@ export class CanvasForm<
    * @param offset Dash offset. Defaults to 0. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineDashOffset)
    */
   dash(segments: PtLike | boolean = true, offset: number = 0): this {
-    // dedupe via a compact key since getLineDash() allocates
+    // dedupe via a compact key since getLineDash() allocates. The observers
+    // clear the key on setLineDash/lineDashOffset writes, so it is stored
+    // after this form's own writes.
     const cache = this._cacheForCtx();
     if (segments === false || (segments !== true && segments.length === 0)) {
       // false or [], deactivate dashed strokes
       if (cache.dash !== "/0") {
-        cache.dash = "/0";
         this._ctx.setLineDash([]);
         this._ctx.lineDashOffset = 0;
+        if (cache !== _uncached) cache.dash = "/0";
       }
     } else {
       const seg: PtLike = segments === true ? [5, 5] : segments;
       const key = `${Array.prototype.join.call(seg, ",")}/${offset}`;
       if (cache.dash !== key) {
-        cache.dash = key;
         this._ctx.setLineDash(seg as number[]);
         this._ctx.lineDashOffset = offset;
+        if (cache !== _uncached) cache.dash = key;
       }
     }
     return this;
@@ -1041,19 +1354,16 @@ export class CanvasForm<
    * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
    */
   reset(): this {
-    // force-write and resync the cache — this is the documented recovery
-    // point after styles were set directly on the context
-    const cache = this._cacheForCtx();
+    // force-write; observing the context first lets the cache record it
+    this._cacheForCtx();
     for (const k in this._style) {
       if (this._style.hasOwnProperty(k)) {
         (this._ctx as any)[k] = (this._style as any)[k];
-        cache[k] = (this._style as any)[k];
       }
     }
     // same default as a fresh VisualForm (14px sans-serif)
     this._font = new Font(14, "sans-serif");
     this._ctx.font = this._font.value;
-    cache.font = this._font.value;
     return this;
   }
 

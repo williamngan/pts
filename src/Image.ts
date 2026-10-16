@@ -363,6 +363,8 @@ export class Img {
 
   /**
    * Get the RGBA values of a pixel in the image
+   * After drawing through `getForm()` or directly on the canvas, call `loadPixels()`
+   * to refresh the pixel cache before reading the updated pixels.
    * @param p position of the pixel
    * @param rescale Specify if the pixel position should be scaled. Usually use rescale when tracking image and don't rescale when tracking canvas. You may also set a custom scale value.
    * @returns [R,G,B,A] values of the pixel at the specific position
@@ -634,6 +636,8 @@ export class Img {
 
   /**
    * Get a CanvasForm for drawing on the internal canvas if this Img is editable
+   * Drawing through this form does not refresh the pixel cache. Call `loadPixels()`
+   * afterwards before reading the updated image through `pixel()`.
    */
   getForm(): CanvasForm | undefined {
     if (!this._editable) {

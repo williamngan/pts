@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Create.ts",
-      906,
+      910,
       13
     ]
   ],
@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Pt.ts",
-          27,
+          35,
           2
         ]
       ],
@@ -30,8 +30,8 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties",
-              "type": "(number | number[] | Float32Array | IPt)[]",
+              "comment": "a list of numeric parameters, an array of numbers, an object with {x,y,z,w} properties, or a buffer with optional byte offset and length (a shared view)",
+              "type": "(number | ArrayBufferLike | number[] | IPt | Float32Array)[]",
               "default": false
             }
           ],
@@ -51,7 +51,7 @@
       "source": [
         [
           "src/Create.ts",
-          931,
+          935,
           6
         ]
       ],
@@ -69,12 +69,12 @@
       "source": [
         [
           "src/Pt.ts",
-          72,
+          89,
           6
         ],
         [
           "src/Pt.ts",
-          75,
+          92,
           6
         ]
       ],
@@ -100,7 +100,7 @@
       "source": [
         [
           "src/Create.ts",
-          922,
+          926,
           6
         ]
       ],
@@ -118,12 +118,12 @@
       "source": [
         [
           "src/Create.ts",
-          912,
+          916,
           6
         ],
         [
           "src/Create.ts",
-          915,
+          919,
           6
         ]
       ],
@@ -149,12 +149,12 @@
       "source": [
         [
           "src/Pt.ts",
-          112,
+          129,
           6
         ],
         [
           "src/Pt.ts",
-          115,
+          132,
           6
         ]
       ],
@@ -180,12 +180,12 @@
       "source": [
         [
           "src/Pt.ts",
-          82,
+          99,
           6
         ],
         [
           "src/Pt.ts",
-          85,
+          102,
           6
         ]
       ],
@@ -211,12 +211,12 @@
       "source": [
         [
           "src/Pt.ts",
-          92,
+          109,
           6
         ],
         [
           "src/Pt.ts",
-          95,
+          112,
           6
         ]
       ],
@@ -242,12 +242,12 @@
       "source": [
         [
           "src/Pt.ts",
-          102,
+          119,
           6
         ],
         [
           "src/Pt.ts",
-          105,
+          122,
           6
         ]
       ],
@@ -275,7 +275,7 @@
       "source": [
         [
           "src/Pt.ts",
-          382,
+          399,
           2
         ]
       ],
@@ -297,7 +297,7 @@
       "source": [
         [
           "src/Pt.ts",
-          239,
+          256,
           2
         ]
       ],
@@ -326,7 +326,7 @@
       "source": [
         [
           "src/Pt.ts",
-          412,
+          429,
           2
         ]
       ],
@@ -348,7 +348,7 @@
       "source": [
         [
           "src/Pt.ts",
-          220,
+          237,
           2
         ]
       ],
@@ -377,7 +377,7 @@
       "source": [
         [
           "src/Pt.ts",
-          350,
+          367,
           2
         ]
       ],
@@ -406,7 +406,7 @@
       "source": [
         [
           "src/Pt.ts",
-          342,
+          359,
           2
         ]
       ],
@@ -435,7 +435,7 @@
       "source": [
         [
           "src/Pt.ts",
-          296,
+          313,
           2
         ]
       ],
@@ -464,7 +464,7 @@
       "source": [
         [
           "src/Pt.ts",
-          397,
+          414,
           2
         ]
       ],
@@ -486,7 +486,7 @@
       "source": [
         [
           "src/Pt.ts",
-          464,
+          481,
           2
         ]
       ],
@@ -515,7 +515,7 @@
       "source": [
         [
           "src/Pt.ts",
-          451,
+          468,
           2
         ]
       ],
@@ -544,7 +544,7 @@
       "source": [
         [
           "src/Pt.ts",
-          277,
+          294,
           2
         ]
       ],
@@ -573,7 +573,7 @@
       "source": [
         [
           "src/Pt.ts",
-          359,
+          376,
           2
         ]
       ],
@@ -602,7 +602,7 @@
       "source": [
         [
           "src/Pt.ts",
-          427,
+          444,
           2
         ]
       ],
@@ -624,7 +624,7 @@
       "source": [
         [
           "src/Pt.ts",
-          258,
+          275,
           2
         ]
       ],
@@ -653,7 +653,7 @@
       "source": [
         [
           "src/Pt.ts",
-          208,
+          225,
           2
         ]
       ],
@@ -682,7 +682,7 @@
       "source": [
         [
           "src/Pt.ts",
-          155,
+          172,
           2
         ]
       ],
@@ -711,7 +711,7 @@
       "source": [
         [
           "src/Pt.ts",
-          326,
+          343,
           2
         ]
       ],
@@ -740,7 +740,7 @@
       "source": [
         [
           "src/Pt.ts",
-          374,
+          391,
           2
         ]
       ],
@@ -762,7 +762,7 @@
       "source": [
         [
           "src/Pt.ts",
-          228,
+          245,
           2
         ]
       ],
@@ -791,7 +791,7 @@
       "source": [
         [
           "src/Pt.ts",
-          477,
+          494,
           2
         ]
       ],
@@ -820,7 +820,7 @@
       "source": [
         [
           "src/Pt.ts",
-          486,
+          503,
           2
         ]
       ],
@@ -855,7 +855,7 @@
       "source": [
         [
           "src/Pt.ts",
-          404,
+          421,
           2
         ]
       ],
@@ -877,7 +877,7 @@
       "source": [
         [
           "src/Pt.ts",
-          122,
+          139,
           2
         ]
       ],
@@ -940,7 +940,7 @@
       "source": [
         [
           "src/Pt.ts",
-          285,
+          302,
           2
         ]
       ],
@@ -969,7 +969,7 @@
       "source": [
         [
           "src/Pt.ts",
-          334,
+          351,
           2
         ]
       ],
@@ -998,7 +998,7 @@
       "source": [
         [
           "src/Pt.ts",
-          131,
+          148,
           2
         ]
       ],
@@ -1214,7 +1214,7 @@
       "source": [
         [
           "src/Pt.ts",
-          389,
+          406,
           2
         ]
       ],
@@ -1370,7 +1370,7 @@
       "source": [
         [
           "src/Pt.ts",
-          310,
+          327,
           2
         ]
       ],
@@ -1392,7 +1392,7 @@
       "source": [
         [
           "src/Pt.ts",
-          303,
+          320,
           2
         ]
       ],
@@ -1449,7 +1449,7 @@
       "source": [
         [
           "src/Pt.ts",
-          443,
+          460,
           2
         ]
       ],
@@ -1471,7 +1471,7 @@
       "source": [
         [
           "src/Pt.ts",
-          435,
+          452,
           2
         ]
       ],
@@ -1493,7 +1493,7 @@
       "source": [
         [
           "src/Pt.ts",
-          266,
+          283,
           2
         ]
       ],
@@ -1522,7 +1522,7 @@
       "source": [
         [
           "src/Pt.ts",
-          181,
+          198,
           2
         ]
       ],
@@ -1556,7 +1556,7 @@
       "source": [
         [
           "src/Pt.ts",
-          194,
+          211,
           2
         ]
       ],
@@ -1590,7 +1590,7 @@
       "source": [
         [
           "src/Pt.ts",
-          367,
+          384,
           2
         ]
       ],
@@ -1777,7 +1777,7 @@
       "source": [
         [
           "src/Pt.ts",
-          530,
+          547,
           2
         ]
       ],
@@ -1834,7 +1834,7 @@
       "source": [
         [
           "src/Pt.ts",
-          509,
+          526,
           2
         ]
       ],
@@ -1875,7 +1875,7 @@
       "source": [
         [
           "src/Pt.ts",
-          419,
+          436,
           2
         ]
       ],
@@ -1897,7 +1897,7 @@
       "source": [
         [
           "src/Pt.ts",
-          498,
+          515,
           2
         ]
       ],
@@ -1967,7 +1967,7 @@
       "source": [
         [
           "src/Pt.ts",
-          520,
+          537,
           2
         ]
       ],
@@ -2142,7 +2142,7 @@
       "source": [
         [
           "src/Pt.ts",
-          247,
+          264,
           2
         ]
       ],
@@ -2171,7 +2171,7 @@
       "source": [
         [
           "src/Pt.ts",
-          143,
+          160,
           2
         ]
       ],
@@ -2200,7 +2200,7 @@
       "source": [
         [
           "src/Pt.ts",
-          165,
+          182,
           2
         ]
       ],
@@ -2241,7 +2241,7 @@
       "source": [
         [
           "src/Pt.ts",
-          545,
+          562,
           2
         ]
       ],
@@ -2263,7 +2263,7 @@
       "source": [
         [
           "src/Pt.ts",
-          561,
+          578,
           2
         ]
       ],
@@ -2285,7 +2285,7 @@
       "source": [
         [
           "src/Pt.ts",
-          554,
+          571,
           2
         ]
       ],
@@ -2354,7 +2354,7 @@
       "source": [
         [
           "src/Pt.ts",
-          538,
+          555,
           2
         ]
       ],
@@ -2376,7 +2376,7 @@
       "source": [
         [
           "src/Pt.ts",
-          318,
+          335,
           2
         ]
       ],
@@ -2427,7 +2427,7 @@
       "source": [
         [
           "src/Pt.ts",
-          54,
+          71,
           9
         ]
       ],

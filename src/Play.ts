@@ -1,5 +1,6 @@
 import { Pt, Group, type Bound } from "./Pt";
 import { Num } from "./Num";
+import { Util } from "./Util";
 import {
   type ITempoListener,
   type ITempoStartFn,
@@ -126,6 +127,8 @@ export class Tempo implements IPlayer {
   /**
    * Usually you can add a tempo instance to a space via [`Space.add`](#link) and it will track time automatically.
    * But if necessary, you can track time manually via this function.
+   * After a stall, skips missed periods and invokes each listener once at its
+   * current count and phase, preserving the rhythm's original period boundaries.
    * @param time current time in milliseconds
    */
   track(time: number) {
@@ -133,7 +136,7 @@ export class Tempo implements IPlayer {
       if (this._listeners.hasOwnProperty(k)) {
         const li = this._listeners[k];
         const _t = li.offset ? time + li.offset : time;
-        const ms = li.period! * this._ms; // time per period
+        let ms = li.period! * this._ms; // time per period
         let isStart = false;
 
         if (li.duration! < 0) {
@@ -141,14 +144,29 @@ export class Tempo implements IPlayer {
           li.duration = _t - (_t % this._ms);
           li.count = li.count || 0; // a hand-built listener may omit count
           isStart = true;
-        } else if (_t > li.duration! + ms) {
-          li.duration = _t - (_t % this._ms); // update
+        } else if (ms > 0 && _t > li.duration! + ms) {
           if (Array.isArray(li.beats)) {
-            // find next period from array
-            li.index = (li.index! + 1) % li.beats.length;
-            li.period = li.beats[li.index];
+            // Skip whole cycles in O(1), then at most one cycle's periods.
+            const cycle =
+              li.beats.reduce((sum, beat) => sum + beat, 0) * this._ms;
+            const cycles =
+              cycle > 0
+                ? Math.max(0, Math.ceil((_t - li.duration!) / cycle) - 1)
+                : 0;
+            li.duration! += cycles * cycle;
+            li.count = (li.count || 0) + cycles * li.beats.length;
+            while (ms > 0 && _t > li.duration! + ms) {
+              li.duration! += ms;
+              li.index = ((li.index || 0) + 1) % li.beats.length;
+              li.period = li.beats[li.index];
+              ms = li.period * this._ms;
+              li.count!++;
+            }
+          } else {
+            const passed = Math.ceil((_t - li.duration!) / ms) - 1;
+            li.duration! += passed * ms;
+            li.count = (li.count || 0) + passed;
           }
-          li.count = (li.count || 0) + 1;
           isStart = true;
         }
 
@@ -246,6 +264,11 @@ export class Sound {
   protected _bufferPlayed: boolean = false; // An AudioBufferSourceNode can only start once
 
   protected _generated: boolean = false; // Whether _node is an oscillator created by _gen
+  private _inputStopped = false;
+  private _fadeEnd = 0;
+  private _retiring = new Set<AudioScheduledSourceNode>();
+  private _audioTimer: ReturnType<typeof setTimeout> | undefined;
+  private _finishAudio: (() => void) | undefined;
 
   // A single AudioContext shared by all Sound instances that don't provide their own
   protected static _sharedContext: AudioContext;
@@ -373,7 +396,10 @@ export class Sound {
    * @param buf an AudioBuffer. Optionally, you can call this without parameters to re-use existing buffer.
    */
   createBuffer(buf?: AudioBuffer): this {
-    if (this._node) {
+    if (
+      this._node &&
+      !this._retiring.has(this._node as AudioScheduledSourceNode)
+    ) {
       // the replaced node's late "ended" event must not clobber the new playback state
       (this._node as AudioBufferSourceNode).onended = null;
       this._node.disconnect();
@@ -405,7 +431,11 @@ export class Sound {
 
   // Create the oscillator
   protected _gen(type: OscillatorType, val: number | PeriodicWave): Sound {
-    if (this._node) this._node.disconnect(); // tidy the replaced node's edges
+    if (
+      this._node &&
+      !this._retiring.has(this._node as AudioScheduledSourceNode)
+    )
+      this._node.disconnect();
     this._node = this._ctx.createOscillator();
     this._generated = true;
     const osc = this._node as OscillatorNode;
@@ -554,14 +584,18 @@ export class Sound {
   }
 
   /**
-   * Get and set the volume of this sound. Default is 1. Values above 1 amplify the sound. Can be set before or during playback.
+   * Get and set the volume of this sound. Default is 1. Values above 1 amplify the sound. Can be set before or during playback. Changes during playback ramp over 10 ms to avoid clicks.
    */
   get volume(): number {
     return this._volume;
   }
   set volume(v: number) {
     this._volume = Math.max(0, v || 0); // `|| 0` also converts NaN
-    if (this._gain) this._gain.gain.value = this._volume;
+    if (this._gain && this._playing)
+      this._rampVolume(
+        this._volume,
+        Math.max(this._ctx.currentTime, this._fadeEnd),
+      );
   }
 
   /**
@@ -731,6 +765,18 @@ export class Sound {
    */
   reset(): this {
     this.stop();
+    this._cancelAudioTimer(true);
+    for (const node of this._retiring) {
+      node.onended = null;
+      try {
+        node.stop();
+      } catch {
+        // Safari throws InvalidStateError when the source already ended
+      }
+      node.disconnect();
+    }
+    this._retiring.clear();
+    this._fadeEnd = 0;
     if (this._node) this._node.disconnect();
     if (this._outputNode) this._outputNode.disconnect();
     return this;
@@ -746,13 +792,84 @@ export class Sound {
     return this._gain;
   }
 
+  private _rampVolume(value: number, when = this._ctx.currentTime): void {
+    const gain = this._getGain().gain;
+    const current = when > this._ctx.currentTime ? 0 : gain.value;
+    if (typeof gain.cancelAndHoldAtTime === "function")
+      gain.cancelAndHoldAtTime(when);
+    else {
+      gain.cancelScheduledValues(when);
+      if (when > this._ctx.currentTime) gain.linearRampToValueAtTime(0, when);
+    }
+    gain.setValueAtTime(current, when);
+    gain.linearRampToValueAtTime(value, when + 0.01);
+  }
+
+  private _cancelAudioTimer(finish = false): void {
+    if (this._audioTimer !== undefined) clearTimeout(this._audioTimer);
+    this._audioTimer = undefined;
+    const callback = this._finishAudio;
+    this._finishAudio = undefined;
+    if (finish) callback?.();
+  }
+
+  private _afterFade(callback: () => void): void {
+    this._cancelAudioTimer();
+    // A context that is not running renders nothing to fade, and its clock is
+    // frozen: finish now, so a stopped input releases its microphone at once.
+    if (this._ctx.state !== "running") {
+      callback();
+      return;
+    }
+    this._finishAudio = callback;
+    const end = this._ctx.currentTime + 0.01;
+    const finish = () => {
+      // Wall-clock timers can run before the audio clock reaches the fade end.
+      const remaining = end - this._ctx.currentTime;
+      if (remaining > 0 && this._ctx.state === "running")
+        this._audioTimer = setTimeout(finish, Math.max(10, remaining * 1000));
+      else this._cancelAudioTimer(true);
+    };
+    this._audioTimer = setTimeout(finish, 10);
+  }
+
+  private _retireSource(when: number): void {
+    const node = this._node as AudioScheduledSourceNode;
+    this._retiring.add(node);
+    node.onended = () => {
+      node.disconnect();
+      this._retiring.delete(node);
+      if (this._node === node) this._playing = false;
+    };
+    node.stop(when);
+  }
+
   /**
    * Start playing. Internally this connects the `AudioNode` to `AudioContext`'s destination.
    * Calling `start( timeAt )` while a file or buffer sound is playing seeks to that time; a generated sound that is already playing is unaffected.
+   * An input whose microphone tracks were stopped cannot restart. This warns and
+   * leaves `playing` false; acquire a new stream with `Sound.input()` instead.
    * @param timeAt optional parameter to play from a specific time, in seconds
    */
   start(timeAt: number = 0): this {
-    if (this._ctx.state === "suspended") this._ctx.resume();
+    if (
+      this._type === "input" &&
+      this._stream &&
+      (this._inputStopped ||
+        this._stream
+          .getAudioTracks()
+          .every((track) => track.readyState === "ended"))
+    ) {
+      this._playing = false;
+      Util.warn(
+        "Cannot restart a stopped input stream; use Sound.input() to acquire a new stream",
+      );
+      return this;
+    }
+    if (this._ctx.state === "suspended" && !("startRendering" in this._ctx))
+      this._ctx.resume();
+    this._cancelAudioTimer();
+    let when = 0;
 
     if (this._type === "file") {
       if (this._buffer) {
@@ -760,14 +877,25 @@ export class Sound {
         // replay, seek-while-playing, or when only the buffer was assigned
         if (this._playing || this._bufferPlayed || !this._node) {
           if (this._playing && this.progress < 1) {
-            (this._node as AudioBufferSourceNode).stop();
+            this.stop();
           }
+          if (this._retiring.has(this._node as AudioScheduledSourceNode))
+            when = Math.max(this._ctx.currentTime, this._fadeEnd);
           this.createBuffer();
         }
-        (this._node as AudioBufferSourceNode).start(0, timeAt);
+        (this._node as AudioBufferSourceNode).start(when, timeAt);
         this._bufferPlayed = true;
-        this._timestamp = this._ctx.currentTime - timeAt;
+        this._timestamp = (when || this._ctx.currentTime) - timeAt;
       } else {
+        if (this._playing && timeAt > 0) {
+          this._rampVolume(0);
+          this._fadeEnd = this._ctx.currentTime + 0.01;
+          this._afterFade(() => {
+            this._source.currentTime = timeAt;
+            this._rampVolume(this._volume);
+          });
+          return this;
+        }
         if (timeAt > 0) this._source.currentTime = timeAt;
         const played = this._source.play();
         if (played && played.catch) {
@@ -781,11 +909,13 @@ export class Sound {
       // restarting while playing would orphan the old oscillator, which keeps sounding
       if (this._playing) return this;
       const osc = this._node as OscillatorNode;
+      if (this._retiring.has(osc))
+        when = Math.max(this._ctx.currentTime, this._fadeEnd);
       this._gen(
         osc.type,
         osc.type === "custom" ? this._wave : osc.frequency.value,
       );
-      (this._node as OscillatorNode).start();
+      (this._node as OscillatorNode).start(when);
     }
 
     // restore analysis and filter chains; duplicate connects are no-ops
@@ -793,29 +923,52 @@ export class Sound {
     for (const n of this._connected) this._node.connect(n);
 
     (this._outputNode || this._node).connect(this._getGain());
+    // One-shot sources cannot cancel a scheduled stop. Their replacements start
+    // at the fade boundary and ramp back up, also preserving shared filter chains.
+    if (when) this._rampVolume(this._volume, when);
+    else this._rampVolume(this._volume);
     this._playing = true;
     return this;
   }
 
   /**
-   * Stop playing. Internally this also disconnects the `AudioNode` from `AudioContext`'s destination. Calling `stop` when the sound is not playing has no effect.
+   * Stop playing with a 10 ms fade, then stop/disconnect the source. `playing` becomes
+   * false immediately. Restarting during the fade restores volume; replacement one-shot
+   * sources start at the fade boundary. Calling `stop` while idle has no effect.
    */
   stop(): this {
     if (!this._playing) return this;
-    (this._outputNode || this._node).disconnect(this._gain);
+    this._cancelAudioTimer();
+    this._rampVolume(0);
+    this._fadeEnd = this._ctx.currentTime + 0.01;
 
     if (this._type === "file") {
       if (this._buffer) {
         // Safari throws InvalidState error if stop() is called after finished playing
-        if (this.progress < 1) (this._node as AudioBufferSourceNode).stop();
+        if (this.progress < 1) this._retireSource(this._fadeEnd);
       } else {
-        this._source.pause();
+        this._afterFade(() => {
+          this._source.pause();
+          (this._outputNode || this._node).disconnect(this._gain);
+        });
       }
     } else if (this._type === "gen") {
-      if (this._generated) (this._node as OscillatorNode).stop();
+      if (this._generated) this._retireSource(this._fadeEnd);
+      else
+        this._afterFade(() =>
+          (this._outputNode || this._node).disconnect(this._gain),
+        );
     } else if (this._type === "input" && this._stream) {
       // an input created from a node without its MediaStream has no tracks to stop
-      this._stream.getAudioTracks().forEach((track) => track.stop());
+      this._inputStopped = true;
+      this._afterFade(() => {
+        this._stream.getAudioTracks().forEach((track) => track.stop());
+        (this._outputNode || this._node).disconnect(this._gain);
+      });
+    } else {
+      this._afterFade(() =>
+        (this._outputNode || this._node).disconnect(this._gain),
+      );
     }
 
     this._playing = false;

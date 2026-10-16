@@ -104,7 +104,113 @@ type SVGRun = {
   attrs: Record<string, string | number>;
   text?: string;
   shapeEnds?: number[]; // per-shape boundaries in the d string, for expanded export
+  // whether the run's paint is one opaque color, which looks the same in any
+  // drawing order (apart from shared edge pixels, see SVGContext2D)
+  free?: boolean;
+  // fill orientation shared by every shape in a path run (see `_wind`)
+  wind?: number;
+  // bounds of the run's first shapes (x0, y0, x1, y1 each), for overlap tests
+  boxes?: number[];
 };
+
+// Shapes that may only join a run they do not overlap are checked against at
+// most this many shapes' bounds.
+const RUN_BOXES = 32;
+
+// Whether a resolved paint is known to be opaque, cached per paint string.
+const _opaquePaint = new Map<string, boolean>();
+
+let _lastPaint = "";
+let _lastOpaque = false;
+
+function isOpaquePaint(paint: string): boolean {
+  if (paint === _lastPaint) return _lastOpaque;
+  let known = _opaquePaint.get(paint);
+  if (known === undefined) {
+    known = _parseOpaque(paint);
+    if (_opaquePaint.size < 512) _opaquePaint.set(paint, known);
+  }
+  _lastPaint = paint;
+  _lastOpaque = known;
+  return known;
+}
+
+function _parseOpaque(paint: string): boolean {
+  const p = paint.trim().toLowerCase();
+  if (p[0] === "#") {
+    if (p.length === 4 || p.length === 7) return true;
+    if (p.length === 5) return p[4] === "f";
+    if (p.length === 9) return p.slice(7) === "ff";
+    return false;
+  }
+  const fn = /^(rgba?|hsla?|hwb|lab|lch|oklab|oklch)\((.*)\)$/.exec(p);
+  if (fn) {
+    const args = fn[2];
+    if (/var\(|calc\(|from /.test(args)) return false;
+    const slash = args.indexOf("/");
+    let alpha: string | undefined;
+    if (slash >= 0) alpha = args.slice(slash + 1);
+    else {
+      const parts = args.split(",");
+      if (parts.length === 4) alpha = parts[3];
+      else if (parts.length !== 1 && parts.length !== 3) return false;
+    }
+    if (alpha === undefined) return true;
+    const a = alpha.trim();
+    return (
+      a === "1" || a === "100%" || parseFloat(a) >= (a.endsWith("%") ? 100 : 1)
+    );
+  }
+  // Named colors are opaque. These keywords are not colors, and an SVG
+  // element given a CSS-wide keyword, or a name that is not a color, takes
+  // its parent's paint, which may be translucent.
+  return (
+    /^[a-z]+$/.test(p) &&
+    !/^(?:transparent|currentcolor|none|inherit|initial|unset|revert)$/.test(
+      p,
+    ) &&
+    (typeof CSS === "undefined" || !CSS.supports || CSS.supports("color", p))
+  );
+}
+
+// Orientation of a closed polygon given as flat x/y pairs in p[start, end):
+// 1 or -1 (the sign of its signed area) when it is convex and winds once,
+// otherwise NaN. Such a polygon has winding number 0 or its orientation
+// everywhere, so same-oriented fills can share one path without cancelling
+// under the nonzero rule.
+function convexOrientation(p: number[], start: number, end: number): number {
+  // the closing edge, from the last vertex to the first
+  let ex0 = p[start] - p[end - 2];
+  let ey0 = p[start + 1] - p[end - 1];
+  let sign = 0;
+  let flips = 0;
+  let lastDx = ex0 > 0 ? 1 : ex0 < 0 ? -1 : 0;
+  let firstDx = lastDx;
+  for (let i = start; i < end; i += 2) {
+    const j = i + 2 < end ? i + 2 : start;
+    const ex = p[j] - p[i];
+    const ey = p[j + 1] - p[i + 1];
+    // the turn at vertex i
+    const cross = ex0 * ey - ey0 * ex;
+    if (cross !== 0) {
+      const s = cross > 0 ? 1 : -1;
+      if (!sign) sign = s;
+      else if (s !== sign) return NaN;
+    }
+    // a convex polygon that winds once reverses its x direction twice
+    if (ex !== 0) {
+      const d = ex > 0 ? 1 : -1;
+      if (!firstDx) firstDx = d;
+      else if (d !== lastDx) flips++;
+      lastDx = d;
+    }
+    ex0 = ex;
+    ey0 = ey;
+  }
+  // a vertical closing edge leaves the turn back to the first direction
+  if (firstDx && lastDx !== firstDx) flips++;
+  return sign && flips === 2 ? sign : NaN;
+}
 
 // module-level state for the same tree-shaking reason as _gradientCount above
 let _svgMeasurer: CanvasRenderingContext2D | null = null;
@@ -112,16 +218,26 @@ const _svgWarned: { [k: string]: boolean } = {};
 
 /**
  * **`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that
- * [`CanvasForm`](#link) draws through, and renders it as SVG. Consecutive shapes that share
- * paint state are merged into single `<path>` elements ("style runs"), so the DOM cost per
- * frame is proportional to the number of style changes, not the number of shapes. This is
- * what lets sketches using the supported subset run unchanged on canvas and SVG.
+ * [`CanvasForm`](#link) draws through, and renders it as SVG. Consecutive shapes with the
+ * same paint state share one `<path>` element (a "style run") when they do not overlap, or
+ * when they have one opaque paint (fills only when their subpaths are circles, rectangles or
+ * convex polygons winding the same way). Classed shapes (see [`SVGForm.cls`](#link)), and
+ * overlapping translucent, blended, or differently filled and stroked shapes, keep separate
+ * elements, so they composite like canvas.
+ *
+ * Merged opaque shapes look the same as separate ones except at antialiased pixels that the
+ * edges of two shapes share. One path covers such a pixel once, whereas canvas draws each
+ * shape on its own and blends the pixel twice, so coincident or nearly parallel edges come
+ * out lighter than on canvas, and crossing edges can differ slightly. Separate elements for
+ * every overlapping shape would make such scenes up to three times slower to render; give
+ * the shapes a class when their edges must blend like canvas.
  *
  * Capability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,
  * `clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so
- * `textBox` layout matches canvas exactly. When shapes with both fill and stroke are merged,
- * all fills in a run paint before its strokes — visible only for overlapping same-styled
- * shapes.
+ * `textBox` layout matches canvas exactly.
+ * Drawing must occur in an animate callback (or be committed explicitly on this context).
+ * `SVGSpace.refresh(false)` preserves the last nonempty frame; it does not accumulate
+ * trails. Draws in action handlers are discarded at the next frame's start.
  *
  * **Writing your own renderer**: this class is the reference implementation of the rendering
  * contract — any object implementing the same context surface can be handed to
@@ -146,20 +262,85 @@ const _svgWarned: { [k: string]: boolean } = {};
  */
 export class SVGContext2D {
   // ---- canvas-compatible state ----
-  fillStyle: string | SVGGradient = "#f03";
-  strokeStyle: string | SVGGradient = "#fff";
-  lineWidth: number = 1;
-  lineJoin: string = "bevel";
-  lineCap: string = "butt";
-  globalAlpha: number = 1;
-  globalCompositeOperation: string = "source-over";
-  font: string = "10px sans-serif";
+  // Like a canvas context's, the styles a CanvasForm caches are accessors, so
+  // the form can observe writes to them and skip repeated values.
+  protected _fillStyle: string | SVGGradient = "#f03";
+  protected _strokeStyle: string | SVGGradient = "#fff";
+  protected _lineWidth: number = 1;
+  protected _lineJoin: string = "bevel";
+  protected _lineCap: string = "butt";
+  protected _globalAlpha: number = 1;
+  protected _globalCompositeOperation: string = "source-over";
+  protected _font: string = "10px sans-serif";
+  protected _lineDashOffset: number = 0;
   textAlign: string = "start";
   textBaseline: string = "alphabetic";
-  lineDashOffset: number = 0;
 
   protected _dash: number[] = [];
   protected _stateStack: object[] = [];
+
+  get fillStyle(): string | SVGGradient {
+    return this._fillStyle;
+  }
+  set fillStyle(v: string | SVGGradient) {
+    this._fillStyle = v;
+  }
+
+  get strokeStyle(): string | SVGGradient {
+    return this._strokeStyle;
+  }
+  set strokeStyle(v: string | SVGGradient) {
+    this._strokeStyle = v;
+  }
+
+  get lineWidth(): number {
+    return this._lineWidth;
+  }
+  set lineWidth(v: number) {
+    this._lineWidth = v;
+  }
+
+  get lineJoin(): string {
+    return this._lineJoin;
+  }
+  set lineJoin(v: string) {
+    this._lineJoin = v;
+  }
+
+  get lineCap(): string {
+    return this._lineCap;
+  }
+  set lineCap(v: string) {
+    this._lineCap = v;
+  }
+
+  get globalAlpha(): number {
+    return this._globalAlpha;
+  }
+  set globalAlpha(v: number) {
+    this._globalAlpha = v;
+  }
+
+  get globalCompositeOperation(): string {
+    return this._globalCompositeOperation;
+  }
+  set globalCompositeOperation(v: string) {
+    this._globalCompositeOperation = v;
+  }
+
+  get font(): string {
+    return this._font;
+  }
+  set font(v: string) {
+    this._font = v;
+  }
+
+  get lineDashOffset(): number {
+    return this._lineDashOffset;
+  }
+  set lineDashOffset(v: number) {
+    this._lineDashOffset = v;
+  }
 
   /** Optional CSS class applied to emitted elements (see `SVGForm.cls`). */
   className: string = "";
@@ -175,6 +356,24 @@ export class SVGContext2D {
   protected _shapeClass: string = "";
   protected _shapeAlpha: number = 1;
   protected _shapeBlend: string = "source-over";
+  // Geometry of the current shape, for batching, evaluated only when a merge
+  // needs it. `_pts` holds flat x/y pairs of every vertex, control point and
+  // arc extent (for the bounds); `_rings` holds the [start, end) ranges of
+  // `_pts` for closed moveTo/lineTo subpaths, whose orientation is checked
+  // later; `_ringStart` marks the open one (or -1). `_wind` folds subpath
+  // orientations: 1 or -1, 0 before any, NaN when a winding is unknown.
+  protected _pts: number[] = [];
+  protected _ptsLength: number = 0;
+  protected _rings: number[] = [];
+  protected _ringsLength: number = 0;
+  protected _ringStart: number = -1;
+  protected _wind: number = 0;
+  protected _windDone: boolean = false;
+  protected _x0: number = 0;
+  protected _y0: number = 0;
+  protected _x1: number = 0;
+  protected _y1: number = 0;
+  protected _boxDone: boolean = false;
 
   // ---- frame state ----
   protected _runs: SVGRun[] = [];
@@ -204,6 +403,7 @@ export class SVGContext2D {
   beginFrame(): void {
     this._runs = [];
     this._d = "";
+    this._resetShape();
     this._shapeFill = null;
     this._shapeStroke = null;
     this._shapePainted = false;
@@ -319,23 +519,33 @@ export class SVGContext2D {
   // ------------------------------------------------------------ path verbs
 
   beginPath(): void {
-    this._flushShape();
+    this._flushShape(); // also resets the shape geometry
     this._d = "";
   }
 
   closePath(): void {
+    this._endRing();
     this._d += "Z";
   }
 
   moveTo(x: number, y: number): void {
+    this._endRing();
+    this._ringStart = this._ptsLength;
+    this._point(x, y);
     this._d += `M${round2(x)} ${round2(y)}`;
   }
 
   lineTo(x: number, y: number): void {
+    // a line after closePath (or without moveTo) starts an untracked subpath
+    if (this._ringStart < 0) this._wind = NaN;
+    this._point(x, y);
     this._d += `L${round2(x)} ${round2(y)}`;
   }
 
   quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void {
+    this._curve();
+    this._point(cpx, cpy);
+    this._point(x, y);
     this._d += `Q${round2(cpx)} ${round2(cpy)} ${round2(x)} ${round2(y)}`;
   }
 
@@ -347,10 +557,18 @@ export class SVGContext2D {
     x: number,
     y: number,
   ): void {
+    this._curve();
+    this._point(cp1x, cp1y);
+    this._point(cp2x, cp2y);
+    this._point(x, y);
     this._d += `C${round2(cp1x)} ${round2(cp1y)} ${round2(cp2x)} ${round2(cp2y)} ${round2(x)} ${round2(y)}`;
   }
 
   rect(x: number, y: number, w: number, h: number): void {
+    this._endRing();
+    this._orient(w * h > 0 ? 1 : w * h < 0 ? -1 : NaN);
+    this._point(x, y);
+    this._point(x + w, y + h);
     this._d += `M${round2(x)} ${round2(y)}h${round2(w)}v${round2(h)}h${round2(-w)}Z`;
   }
 
@@ -394,6 +612,15 @@ export class SVGContext2D {
     const rotDeg = round2((rotation * 180) / Math.PI);
     const [sx, sy] = ptAt(startAngle);
 
+    // a full ellipse that starts its own subpath is a simple closed curve;
+    // an arc joined to other segments is untracked
+    const r = Math.max(Math.abs(rx), Math.abs(ry));
+    if (full && this._d.length === 0) {
+      this._orient(rx && ry ? (ccw ? -1 : 1) : NaN);
+    } else this._curve();
+    this._point(x - r, y - r);
+    this._point(x + r, y + r);
+
     // connect from the current point like canvas does
     this._d +=
       this._d.length > 0
@@ -417,21 +644,21 @@ export class SVGContext2D {
   // ----------------------------------------------------------------- paint
 
   fill(): void {
-    this._shapeFill = this._resolvePaint(this.fillStyle);
+    this._shapeFill = this._resolvePaint(this._fillStyle);
     this._capturePaintState();
   }
 
   stroke(): void {
-    this._shapeStroke = this._resolvePaint(this.strokeStyle);
+    this._shapeStroke = this._resolvePaint(this._strokeStyle);
     this._shapeStrokeStyle = {
-      "stroke-width": this.lineWidth,
-      "stroke-linejoin": this.lineJoin,
-      "stroke-linecap": this.lineCap,
+      "stroke-width": this._lineWidth,
+      "stroke-linejoin": this._lineJoin,
+      "stroke-linecap": this._lineCap,
     };
     if (this._dash.length > 0) {
       this._shapeStrokeStyle["stroke-dasharray"] = this._dash.join(" ");
-      if (this.lineDashOffset)
-        this._shapeStrokeStyle["stroke-dashoffset"] = this.lineDashOffset;
+      if (this._lineDashOffset)
+        this._shapeStrokeStyle["stroke-dashoffset"] = this._lineDashOffset;
     }
     this._capturePaintState();
   }
@@ -439,8 +666,8 @@ export class SVGContext2D {
   protected _capturePaintState(): void {
     this._shapePainted = true;
     this._shapeClass = this.className;
-    this._shapeAlpha = this.globalAlpha;
-    this._shapeBlend = this.globalCompositeOperation;
+    this._shapeAlpha = this._globalAlpha;
+    this._shapeBlend = this._globalCompositeOperation;
     this._drawCount++;
   }
 
@@ -473,10 +700,10 @@ export class SVGContext2D {
     const attrs: Record<string, string | number> = {
       x: round2(x),
       y: round2(y),
-      fill: this._resolvePaint(this.fillStyle),
+      fill: this._resolvePaint(this._fillStyle),
       "text-anchor": anchor,
       "dominant-baseline": baseline,
-      style: `font: ${this.font}`,
+      style: `font: ${this._font}`,
       "pointer-events": "none",
     };
     // canvas maxWidth semantics: compress to fit only when text is wider
@@ -493,7 +720,7 @@ export class SVGContext2D {
     if (!_svgMeasurer) {
       _svgMeasurer = document.createElement("canvas").getContext("2d")!;
     }
-    _svgMeasurer!.font = this.font;
+    _svgMeasurer!.font = this._font;
     return _svgMeasurer!.measureText(txt);
   }
 
@@ -550,17 +777,17 @@ export class SVGContext2D {
 
   save(): void {
     this._stateStack.push({
-      fillStyle: this.fillStyle,
-      strokeStyle: this.strokeStyle,
-      lineWidth: this.lineWidth,
-      lineJoin: this.lineJoin,
-      lineCap: this.lineCap,
-      globalAlpha: this.globalAlpha,
-      globalCompositeOperation: this.globalCompositeOperation,
-      font: this.font,
+      fillStyle: this._fillStyle,
+      strokeStyle: this._strokeStyle,
+      lineWidth: this._lineWidth,
+      lineJoin: this._lineJoin,
+      lineCap: this._lineCap,
+      globalAlpha: this._globalAlpha,
+      globalCompositeOperation: this._globalCompositeOperation,
+      font: this._font,
       textAlign: this.textAlign,
       textBaseline: this.textBaseline,
-      lineDashOffset: this.lineDashOffset,
+      lineDashOffset: this._lineDashOffset,
       _dash: this._dash.slice(),
     });
   }
@@ -633,9 +860,9 @@ export class SVGContext2D {
     attrs.class = this.className
       ? `pts-svgform ${this.className}`
       : "pts-svgform";
-    if (this.globalAlpha !== 1) attrs.opacity = this.globalAlpha;
+    if (this._globalAlpha !== 1) attrs.opacity = this._globalAlpha;
     else attrs.opacity = 1;
-    const op = this.globalCompositeOperation;
+    const op = this._globalCompositeOperation;
     if (op !== "source-over") {
       if (BLEND_MODES.has(op)) {
         // text runs already carry their font in `style`; append, never replace
@@ -657,8 +884,10 @@ export class SVGContext2D {
   protected _flushShape(): void {
     if (!this._shapePainted || this._d.length === 0) {
       this._shapePainted = false;
+      this._resetShape();
       return;
     }
+    this._endRing();
 
     const attrs: Record<string, string | number> = {
       d: this._d,
@@ -684,17 +913,171 @@ export class SVGContext2D {
     }
 
     const prev = this._runs[this._runs.length - 1];
-    if (prev && prev.tag === "path" && sameRunStyle(prev.attrs, attrs)) {
-      prev.shapeEnds!.push((prev.attrs.d as string).length);
+    // CSS classes can style each element, so classed shapes stay separate
+    const join =
+      prev &&
+      prev.tag === "path" &&
+      !this._shapeClass &&
+      sameRunStyle(prev.attrs, attrs)
+        ? this._joinable(prev)
+        : 0;
+    if (join) {
+      const ends = prev.shapeEnds!;
+      ends.push((prev.attrs.d as string).length);
       prev.attrs.d = (prev.attrs.d as string) + this._d;
+      if (
+        join === 2 &&
+        this._shapeFill !== null &&
+        this._shapeWind() !== prev.wind
+      )
+        prev.wind = NaN;
+      if (ends.length < RUN_BOXES) {
+        this._shapeBox();
+        prev.boxes!.push(this._x0, this._y0, this._x1, this._y1);
+      }
     } else {
-      this._runs.push({ tag: "path", attrs, shapeEnds: [] });
+      this._shapeBox();
+      const fill = this._shapeFill;
+      const stroke = this._shapeStroke;
+      this._runs.push({
+        tag: "path",
+        attrs,
+        shapeEnds: [],
+        // one opaque paint, composited normally; same-styled shapes share it
+        free:
+          this._shapeAlpha === 1 &&
+          this._shapeBlend === "source-over" &&
+          (fill === null || isOpaquePaint(fill)) &&
+          (stroke === null || isOpaquePaint(stroke)) &&
+          (fill === null || stroke === null || fill === stroke),
+        // only fills depend on winding
+        wind: this._shapeFill !== null ? this._shapeWind() : NaN,
+        boxes: [this._x0, this._y0, this._x1, this._y1],
+      });
     }
 
     this._d = "";
     this._shapeFill = null;
     this._shapeStroke = null;
     this._shapePainted = false;
+    this._resetShape();
+  }
+
+  /**
+   * Whether the current shape can join the previous path run, which has the
+   * same attributes: 1 when it is order independent, 2 when it does not
+   * overlap the run's shapes, 0 otherwise. One opaque paint looks the same in
+   * any order, apart from edge pixels the shapes share (see the class notes),
+   * and same-oriented simple fills do not cancel under the nonzero rule.
+   * Translucent paint, group opacity, blends, distinct fill and stroke paints,
+   * and fills of unknown winding composite per element, so they join only
+   * shapes they do not overlap, by bounds grown a pixel past their
+   * antialiased edges.
+   */
+  protected _joinable(run: SVGRun): number {
+    // the shape has the run's paint, so the run's paint verdict applies
+    if (
+      run.free &&
+      (this._shapeFill === null ||
+        ((run.wind === 1 || run.wind === -1) && this._shapeWind() === run.wind))
+    )
+      return 1;
+    const stroke = this._shapeStroke;
+    const boxes = run.boxes!;
+    // the run's shapes beyond the stored bounds cannot be checked
+    if (run.shapeEnds!.length >= RUN_BOXES) return 0;
+    // keep apart by the stroke's reach (miter joins reach furthest) plus a
+    // pixel, so antialiased edges do not share pixels either
+    this._shapeBox();
+    const width = stroke ? Number(this._shapeStrokeStyle["stroke-width"]) : 0;
+    const gap =
+      2 *
+      (1 +
+        width *
+          (this._shapeStrokeStyle["stroke-linejoin"] === "miter" ? 5 : 1));
+    for (let i = 0; i < boxes.length; i += 4) {
+      if (
+        this._x0 <= boxes[i + 2] + gap &&
+        boxes[i] <= this._x1 + gap &&
+        this._y0 <= boxes[i + 3] + gap &&
+        boxes[i + 1] <= this._y1 + gap
+      )
+        return 0;
+    }
+    return 2;
+  }
+
+  protected _resetShape(): void {
+    this._ptsLength = 0;
+    this._ringsLength = 0;
+    this._ringStart = -1;
+    this._wind = 0;
+    this._windDone = false;
+    this._boxDone = false;
+  }
+
+  protected _point(x: number, y: number): void {
+    this._pts[this._ptsLength++] = x;
+    this._pts[this._ptsLength++] = y;
+  }
+
+  /** Fold a subpath's orientation into the shape's. */
+  protected _orient(o: number): void {
+    if (this._wind === 0) this._wind = o;
+    else if (this._wind !== o) this._wind = NaN;
+  }
+
+  /** Record the open moveTo/lineTo subpath, implicitly closed by a fill. */
+  protected _endRing(): void {
+    const start = this._ringStart;
+    if (start < 0) return;
+    this._ringStart = -1;
+    // fewer than three vertices enclose nothing to fill
+    if (this._ptsLength - start >= 6) {
+      this._rings[this._ringsLength++] = start;
+      this._rings[this._ringsLength++] = this._ptsLength;
+    }
+  }
+
+  /** The current shape's fill orientation, evaluating its polygon subpaths. */
+  protected _shapeWind(): number {
+    if (!this._windDone) {
+      this._windDone = true;
+      for (let i = 0; i < this._ringsLength; i += 2)
+        this._orient(
+          convexOrientation(this._pts, this._rings[i], this._rings[i + 1]),
+        );
+    }
+    return this._wind;
+  }
+
+  /** Compute the current shape's bounds into `_x0`, `_y0`, `_x1`, `_y1`. */
+  protected _shapeBox(): void {
+    if (this._boxDone) return;
+    this._boxDone = true;
+    const p = this._pts;
+    let x0 = Infinity;
+    let y0 = Infinity;
+    let x1 = -Infinity;
+    let y1 = -Infinity;
+    for (let i = 0, n = this._ptsLength; i < n; i += 2) {
+      const x = p[i];
+      const y = p[i + 1];
+      if (x < x0) x0 = x;
+      if (x > x1) x1 = x;
+      if (y < y0) y0 = y;
+      if (y > y1) y1 = y;
+    }
+    this._x0 = x0;
+    this._y0 = y0;
+    this._x1 = x1;
+    this._y1 = y1;
+  }
+
+  /** The current subpath has curves: its winding is not tracked. */
+  protected _curve(): void {
+    this._ringStart = -1;
+    this._wind = NaN;
   }
 }
 
@@ -707,14 +1090,14 @@ function sameRunStyle(
   a: Record<string, string | number>,
   b: Record<string, string | number>,
 ): boolean {
-  const keysA = Object.keys(a);
-  const keysB = Object.keys(b);
-  if (keysA.length !== keysB.length) return false;
-  for (const k of keysA) {
-    if (k === "d") continue;
-    if (a[k] !== b[k]) return false;
+  // count keys instead of allocating key arrays: this runs for every shape
+  let count = 0;
+  for (const k in a) {
+    if (k !== "d" && a[k] !== b[k]) return false;
+    count++;
   }
-  return true;
+  for (const k in b) count--;
+  return count === 0;
 }
 
 /**
@@ -843,6 +1226,9 @@ export class SVGSpace extends DOMSpace {
 
   /**
    * Set whether the rendering should be repainted on each frame.
+   * With `false`, empty frames preserve the last nonempty frame. New nonempty frames
+   * replace it: canvas-style accumulation and drawing from action handlers are unsupported.
+   * Store input in action handlers and redraw it in an animate callback, or use CanvasSpace.
    * @param b a boolean value to set whether to repaint each frame
    */
   refresh(b: boolean): this {
@@ -935,6 +1321,8 @@ export class SVGSpace extends DOMSpace {
    * Remove all items from this Space. This clears the contents of the space's
    * `<svg>` element but never touches its container, so the space keeps
    * rendering after items are re-added.
+   * This includes user-supplied SVG children. Use `dispose()` to remove only
+   * elements managed by this space while preserving other SVG content.
    */
   removeAll(): this {
     this._canvas.innerHTML = "";
@@ -1105,8 +1493,9 @@ export class SVGForm extends CanvasForm<SVGSpace> {
   }
 
   /**
-   * Add custom class to the created element(s). In batched rendering the class applies to
-   * the current style run.
+   * Add custom class to the created element(s). Classed shapes are never merged into a
+   * shared element, so each shape's element gets the class, and overlapping shapes blend
+   * their edges like canvas (see [`SVGContext2D`](#link)).
    * @param c custom class name or `false` to reset it
    * @example `form.fill("#f00").cls("myClass").rects(r)` `form.cls(false).circles(c)`
    */

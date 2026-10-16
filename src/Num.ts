@@ -52,16 +52,26 @@ export class Num {
 
   /**
    * Different from [`Num.clamp`](#link) in that the value out-of-bound will be "looped back" to the other end.
+   * Endpoints may be reversed. The lower endpoint is included and the upper is excluded;
+   * equal endpoints return that endpoint.
    * @param val value to bound
    * @param min min value
    * @param max max value
    * @example `boundValue(361, 0, 360)` will return 1
    */
   static boundValue(val: number, min: number, max: number): number {
-    const len = Math.abs(max - min);
+    if (min > max) {
+      const t = min;
+      min = max;
+      max = t;
+    }
+    const len = max - min;
+    if (len === 0) return min;
     let a = (val - min) % len;
     if (a < 0) a += len;
-    return a + min;
+    const result = a + min;
+    // rounding can reach the excluded upper endpoint (eg, a tiny negative a)
+    return result >= max ? min : result;
   }
 
   /**
@@ -101,6 +111,8 @@ export class Num {
 
   /**
    * Normalize a value within a range.
+   * Reversed endpoints are reordered from low to high, unlike `mapToRange`, which
+   * preserves the direction of its source and target ranges.
    * @param n the value to normalize
    * @param a range value 1
    * @param b range value 1
@@ -236,7 +248,7 @@ export class Geom {
   /**
    * Get a bounding box for a set of Pts.
    * @param pts a Group or an Iterable<Pt>
-   * @return a Group of two Pts, representing the top-left and bottom-right corners
+   * @return a Group of two Pts, representing the top-left and bottom-right corners, or an empty Group for empty input
    */
   static boundingBox(pts: PtIterable): Group {
     let minPt: Pt | undefined, maxPt: Pt | undefined;
@@ -252,7 +264,7 @@ export class Geom {
         }
       }
     }
-    return new Group(minPt!, maxPt!);
+    return minPt ? new Group(minPt, maxPt!) : new Group();
   }
 
   /**
@@ -362,6 +374,7 @@ export class Geom {
    */
   static sortEdges(pts: PtIterable): GroupLike {
     const _pts = Util.iterToArray(pts);
+    if (_pts.length < 2) return _pts;
     const bounds = Geom.boundingBox(_pts);
     const center = bounds[1].add(bounds[0]).divide(2);
     const cx = center[0];

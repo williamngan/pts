@@ -667,6 +667,19 @@ describe("Edge stiffness semantics", () => {
     expect(lightLen).toBeLessThan(40);
   });
 
+  it("preserves soft-link stiffness across iteration and substep counts", () => {
+    for (const iterations of [1, 2, 4, 8]) {
+      for (const substeps of [1, 2, 4]) {
+        for (const mass of [1, 100]) {
+          const body = stretchedPair(mass, 0.5);
+          for (let s = 0; s < substeps; s++)
+            body.solveEdges(0.016 / substeps, iterations, substeps);
+          expect(body[1].x - body[0].x).toBeCloseTo(35, 3);
+        }
+      }
+    }
+  });
+
   it("treats stiff as the fraction resolved per update, independent of substeps", () => {
     // violation is 10; stiff 0.5 should leave ~5 after one update's worth of passes
     const single = stretchedPair(4, 0.5);

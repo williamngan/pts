@@ -448,6 +448,17 @@ function classDocument(reflection, pageKey, addSearch) {
     return result;
   }
 
+  // TypeDoc drops a class comment separated from its class by other code,
+  // and shows an implemented interface's comment in its place.
+  for (const type of reflection.implementedTypes ?? []) {
+    const target = type.reflection;
+    if (result.comment && target && result.comment === commentOf(target)) {
+      throw new Error(
+        `${reflection.name} shows the comment of ${target.name}: keep its doc comment directly above the class.`,
+      );
+    }
+  }
+
   const objectLiteral = declarationKind(reflection) === "Objectliteral";
   const children = objectLiteral
     ? typeChildren(reflection.type, reflection)
@@ -684,7 +695,13 @@ async function buildOutput() {
     // BigInt library only types the exact-arithmetic fallback of the
     // triangulation, which is internal and not documented.
     compilerOptions: {
-      lib: ["es2016", "es2020.bigint", "dom", "dom.iterable"],
+      lib: [
+        "es2016",
+        "es2017.sharedmemory",
+        "es2020.bigint",
+        "dom",
+        "dom.iterable",
+      ],
     },
     entryPoints: await sourceEntryPoints(),
     entryPointStrategy: EntryPointStrategy.Resolve,

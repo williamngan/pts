@@ -174,6 +174,144 @@ function outputArea(ring: Group): number {
 }
 
 /** Edge bounding boxes and the edges ordered by their left side, for a sweep. */
+// Windows longer than SWEEP_SCAN candidates are searched block by block when
+// at least one in eight of SWEEP_SAMPLES sampled edges has one and the block
+// search skips at least half of their blocks; it keeps searching only if its
+// first SWEEP_TRIAL searches skip as much.
+const SWEEP_SCAN = 256;
+const SWEEP_SAMPLES = 64;
+const SWEEP_TRIAL = 32;
+const SWEEP_BLOCK_BITS = 4;
+const SWEEP_BLOCK = 1 << SWEEP_BLOCK_BITS;
+
+/**
+ * A complete binary tree over blocks of SWEEP_BLOCK consecutive edges in x
+ * order: each node holds the lowest minY and highest maxY of its blocks.
+ * Edges with the same left side may come in any order, so runs of them
+ * longer than a block whose order scatters y are ordered by y instead,
+ * keeping the blocks' y ranges narrow.
+ */
+type SweepTree = {
+  low: Float64Array;
+  high: Float64Array;
+  size: number; // leaf count, a power of two; node n has children 2n and 2n + 1
+  edges: Uint32Array; // the x order, with scattered runs of ties ordered by y
+  ties?: SweepTies; // when edges differs from the x order
+  stack: Int32Array; // traversal scratch
+  scanned: number; // blocks scanned by searches so far
+};
+
+type SweepTies = {
+  rank: Uint32Array; // each edge's position in the x order
+  found: Uint32Array; // search scratch: the x positions of an edge's candidates
+};
+
+/** The first position from `from` in x order whose edge starts right of `limit`. */
+function windowEnd(
+  minX: Float64Array,
+  order: Uint32Array,
+  from: number,
+  limit: number,
+): number {
+  let end = order.length;
+  for (let a = from; a < end;) {
+    const mid = (a + end) >> 1;
+    if (minX[order[mid]] > limit) end = mid;
+    else a = mid + 1;
+  }
+  return end;
+}
+
+/** The first position in x order whose edge's left side is that of position i. */
+function runStart(minX: Float64Array, order: Uint32Array, i: number): number {
+  const x = minX[order[i]];
+  let a = 0;
+  for (let b = i; a < b;) {
+    const mid = (a + b) >> 1;
+    if (minX[order[mid]] < x) a = mid + 1;
+    else b = mid;
+  }
+  return a;
+}
+
+/**
+ * Whether the blocks over positions r0..r1-1 together span more than twice
+ * the y range of their edges, so ordering the edges by y would narrow them.
+ */
+function scattered(boxes: SweepBoxes, r0: number, r1: number): boolean {
+  const { minY, maxY, order } = boxes;
+  let lo = Infinity;
+  let hi = -Infinity;
+  let blockLo = Infinity;
+  let blockHi = -Infinity;
+  let spans = 0;
+  for (let j = r0; j < r1; j++) {
+    const e = order[j];
+    if (minY[e] < blockLo) blockLo = minY[e];
+    if (maxY[e] > blockHi) blockHi = maxY[e];
+    if (((j + 1) & (SWEEP_BLOCK - 1)) === 0 || j + 1 === r1) {
+      spans += blockHi - blockLo;
+      if (blockLo < lo) lo = blockLo;
+      if (blockHi > hi) hi = blockHi;
+      blockLo = Infinity;
+      blockHi = -Infinity;
+    }
+  }
+  return spans > 2 * (hi - lo);
+}
+
+/** The number of blocks that positions from..to-1 touch. */
+function blockSpan(from: number, to: number): number {
+  return ((to - 1) >> SWEEP_BLOCK_BITS) - (from >> SWEEP_BLOCK_BITS) + 1;
+}
+
+function sweepTree(boxes: SweepBoxes): SweepTree {
+  const { minX, minY, maxY, order } = boxes;
+  const E = order.length;
+  let edges = order;
+  for (let r0 = 0, r1 = 1; r0 < E; r0 = r1++) {
+    while (r1 < E && minX[order[r1]] === minX[order[r0]]) r1++;
+    if (r1 - r0 > SWEEP_BLOCK && scattered(boxes, r0, r1)) {
+      if (edges === order) edges = order.slice();
+      edges.subarray(r0, r1).sort((p, q) => minY[p] - minY[q]);
+    }
+  }
+  let ties: SweepTies | undefined;
+  if (edges !== order) {
+    ties = { rank: new Uint32Array(E), found: new Uint32Array(E) };
+    for (let j = 0; j < E; j++) ties.rank[order[j]] = j;
+  }
+  const blocks = (E + SWEEP_BLOCK - 1) >> SWEEP_BLOCK_BITS;
+  let size = 1;
+  let depth = 0;
+  while (size < blocks) {
+    size *= 2;
+    depth++;
+  }
+  const low = new Float64Array(2 * size).fill(Infinity);
+  const high = new Float64Array(2 * size).fill(-Infinity);
+  for (let j = 0; j < E; j++) {
+    const e = edges[j];
+    const leaf = size + (j >> SWEEP_BLOCK_BITS);
+    if (minY[e] < low[leaf]) low[leaf] = minY[e];
+    if (maxY[e] > high[leaf]) high[leaf] = maxY[e];
+  }
+  for (let n = size - 1; n > 0; n--) {
+    low[n] = Math.min(low[2 * n], low[2 * n + 1]);
+    high[n] = Math.max(high[2 * n], high[2 * n + 1]);
+  }
+  // a depth-first walk holds at most one pending sibling per level
+  return {
+    low,
+    high,
+    size,
+    edges,
+    ties,
+    stack: new Int32Array(3 * (depth + 2)),
+    scanned: 0,
+  };
+}
+
 type SweepBoxes = {
   minX: Float64Array;
   maxX: Float64Array;
@@ -429,12 +567,20 @@ export class Overlay {
    * the buffer holds) or the crossing phase. Pairs are visited as they are
    * found rather than listed first: shapes that all share a vertex have
    * quadratically many candidate pairs, more than an array can hold.
+   *
+   * Each edge scans the edges after it in x order while their x ranges
+   * overlap. When the edges' windows are long and a block search would skip
+   * most of them (eg, full-width bars, whose x ranges all overlap), the
+   * phase runs as `searchSweep` instead. Pairs are visited in the same order
+   * either way, so results do not depend on the choice.
    */
   private sweep(
     boxes: SweepBoxes,
     margin: number,
     touching: boolean,
   ): number[] | undefined {
+    const tree = this.searchTree(boxes, margin);
+    if (tree) return this.searchSweep(boxes, margin, touching, tree);
     const { minX, maxX, minY, maxY, order } = boxes;
     let pairs: number[] | undefined = touching ? [] : undefined;
     for (let i = 0, E = order.length; i < E; i++) {
@@ -458,6 +604,171 @@ export class Overlay {
       }
     }
     return pairs;
+  }
+
+  /**
+   * A block tree for `searchSweep`, when a sample of the edges shows long
+   * windows of which a block search would skip most; otherwise undefined.
+   */
+  private searchTree(boxes: SweepBoxes, margin: number): SweepTree | undefined {
+    const { minX, maxX, minY, maxY, order } = boxes;
+    const E = order.length;
+    if (E <= 2 * SWEEP_SCAN) return undefined;
+    let tree: SweepTree | undefined;
+    let long = 0;
+    let windowBlocks = 0;
+    for (let k = 0; k < SWEEP_SAMPLES; k++) {
+      const i = Math.floor((k * E) / SWEEP_SAMPLES);
+      const e1 = order[i];
+      const end = windowEnd(minX, order, i + 1, maxX[e1] + margin);
+      if (end - i - 1 <= SWEEP_SCAN) continue;
+      long++;
+      tree ??= sweepTree(boxes);
+      this.dryRun = true;
+      windowBlocks += this.searchPairs(
+        e1,
+        i,
+        end,
+        minY[e1] - margin,
+        maxY[e1] + margin,
+        boxes,
+        tree,
+      );
+      this.dryRun = false;
+    }
+    if (!tree || long * 8 < SWEEP_SAMPLES || tree.scanned * 2 > windowBlocks)
+      return undefined;
+    tree.scanned = 0;
+    return tree;
+  }
+
+  /**
+   * `sweep` with each long window searched block by block, skipping blocks
+   * whose y range misses the edge's. It stops searching if its first
+   * SWEEP_TRIAL searches skip less than half of their windows' blocks.
+   */
+  private searchSweep(
+    boxes: SweepBoxes,
+    margin: number,
+    touching: boolean,
+    tree: SweepTree,
+  ): number[] | undefined {
+    const { minX, maxX, minY, maxY, order } = boxes;
+    this.pairs = touching ? [] : undefined;
+    this.touching = touching;
+    let searchable = true;
+    let searches = 0;
+    let windowBlocks = 0;
+    for (let i = 0, E = order.length; i < E; i++) {
+      const e1 = order[i];
+      const limit = maxX[e1] + margin;
+      const lo = minY[e1] - margin;
+      const hi = maxY[e1] + margin;
+      const end = windowEnd(minX, order, i + 1, limit);
+      if (!searchable || end - i - 1 <= SWEEP_SCAN) {
+        for (let j = i + 1; j < end; j++) {
+          const e2 = order[j];
+          if (minY[e2] > hi || maxY[e2] < lo) continue;
+          this.visitPair(e1, e2, boxes);
+        }
+        continue;
+      }
+      windowBlocks += this.searchPairs(e1, i, end, lo, hi, boxes, tree);
+      if (++searches === SWEEP_TRIAL)
+        searchable = tree.scanned * 2 <= windowBlocks;
+    }
+    const pairs = this.pairs;
+    this.pairs = undefined;
+    return pairs;
+  }
+
+  private pairs: number[] | undefined;
+  private touching = false;
+  private dryRun = false;
+
+  /** Run the phase on two edges whose boxes overlap. */
+  private visitPair(e1: number, e2: number, boxes: SweepBoxes): void {
+    if (this.touching) {
+      this.touchPair(e1, e2, boxes);
+      const pairs = this.pairs;
+      if (pairs) {
+        if (pairs.length < 2 * PAIR_BUFFER) pairs.push(e1, e2);
+        else this.pairs = undefined;
+      }
+    } else {
+      this.crossPair(e1, e2);
+    }
+  }
+
+  /**
+   * Visit e1's candidates, the edges after its position i in x order up to
+   * position to - 1, in that order, skipping blocks whose y range misses
+   * lo..hi. Returns the number of blocks the search spans.
+   */
+  private searchPairs(
+    e1: number,
+    i: number,
+    to: number,
+    lo: number,
+    hi: number,
+    boxes: SweepBoxes,
+    tree: SweepTree,
+  ): number {
+    const { minX, minY, maxY, order } = boxes;
+    const { low, high, size, edges, ties } = tree;
+    // the tree may order the edges tied with e1 in x by y, so search all of
+    // them, keep those after e1, and visit them in x order
+    let from = i + 1;
+    if (ties && from < to && minX[order[from]] === minX[e1])
+      from = runStart(minX, order, i);
+    const first = from >> SWEEP_BLOCK_BITS;
+    const last = (to - 1) >> SWEEP_BLOCK_BITS;
+    let count = 0;
+    let sorted = true;
+    // depth-first, left to right: node, and the first and last block it covers
+    const stack = tree.stack;
+    let top = 0;
+    stack[top++] = 1;
+    stack[top++] = 0;
+    stack[top++] = size - 1;
+    while (top > 0) {
+      const b1 = stack[--top];
+      const b0 = stack[--top];
+      const n = stack[--top];
+      if (b1 < first || b0 > last || low[n] > hi || high[n] < lo) continue;
+      if (n >= size) {
+        tree.scanned++;
+        const start = b0 << SWEEP_BLOCK_BITS;
+        const stopAt = start + SWEEP_BLOCK < to ? start + SWEEP_BLOCK : to;
+        for (let j = start > from ? start : from; j < stopAt; j++) {
+          const e2 = edges[j];
+          if (minY[e2] > hi || maxY[e2] < lo) continue;
+          if (ties) {
+            const r = ties.rank[e2];
+            if (r <= i) continue;
+            if (count > 0 && r < ties.found[count - 1]) sorted = false;
+            ties.found[count++] = r;
+          } else if (!this.dryRun) {
+            this.visitPair(e1, e2, boxes);
+          }
+        }
+      } else {
+        const mid = (b0 + b1) >> 1;
+        stack[top++] = 2 * n + 1;
+        stack[top++] = mid + 1;
+        stack[top++] = b1;
+        stack[top++] = 2 * n;
+        stack[top++] = b0;
+        stack[top++] = mid;
+      }
+    }
+    if (ties && !this.dryRun) {
+      const found = ties.found;
+      if (!sorted) found.subarray(0, count).sort();
+      for (let k = 0; k < count; k++)
+        this.visitPair(e1, order[found[k]], boxes);
+    }
+    return blockSpan(from, to);
   }
 
   /** Phase one: each endpoint of one edge within tol of the other edge's interior splits it. */

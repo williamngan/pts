@@ -5,6 +5,7 @@ import { Geom, Num } from "./Num";
 import { Pt, Group } from "./Pt";
 import { Mat } from "./LinearAlgebra";
 import { overlay } from "./_path";
+import { orient2dFiltered as orient2d } from "./_triangulate";
 import {
   type PtLike,
   type GroupLike,
@@ -195,6 +196,8 @@ export class Line {
 
   /**
    * Given two line segemnts, find their intersection point if any.
+   * Collinear overlaps return the lexicographically smallest shared endpoint,
+   * independent of argument order and segment direction.
    * @param la a Group or an Iterable<Pt> with 2 Pt representing a line segment
    * @param lb a Group or an Iterable<Pt> with 2 Pt representing a line segment
    * @returns an intersection Pt or undefined if no intersection
@@ -203,7 +206,64 @@ export class Line {
     let _la = Util.iterToArray(la);
     let _lb = Util.iterToArray(lb);
 
-    let pt = Line.intersectRay2D(_la, _lb);
+    // Exactly collinear segments have a cross product within a few ulps of
+    // its first term (both are zero when that term is), so this cheap test
+    // passes all of them; only those nearly parallel get the exact test.
+    const rx = _la[1][0] - _la[0][0];
+    const ry = _la[1][1] - _la[0][1];
+    const sx = _lb[1][0] - _lb[0][0];
+    const sy = _lb[1][1] - _lb[0][1];
+    const m = rx * sy;
+    const cross = m - ry * sx;
+    if (
+      Math.abs(cross) <= 1e-12 * Math.abs(m) &&
+      orient2d(
+        _la[0][0],
+        _la[0][1],
+        _la[1][0],
+        _la[1][1],
+        _lb[0][0],
+        _lb[0][1],
+      ) === 0 &&
+      orient2d(
+        _la[0][0],
+        _la[0][1],
+        _la[1][0],
+        _la[1][1],
+        _lb[1][0],
+        _lb[1][1],
+      ) === 0 &&
+      orient2d(
+        _lb[0][0],
+        _lb[0][1],
+        _lb[1][0],
+        _lb[1][1],
+        _la[0][0],
+        _la[0][1],
+      ) === 0
+    ) {
+      const shared = [..._la, ..._lb].filter(
+        (p) =>
+          Geom.withinBound(p, _la[0], _la[1]) &&
+          Geom.withinBound(p, _lb[0], _lb[1]),
+      );
+      shared.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+      return shared.length ? new Pt(shared[0]) : undefined;
+    }
+
+    // the ray intersection, as `intersectRay2D` computes it
+    const pa = _la[0];
+    const pb = _lb[0];
+    if ((rx === 0 && ry === 0) || (sx === 0 && sy === 0)) return undefined;
+    let pt: Pt | undefined;
+    if (cross === 0) {
+      const qpx = pb[0] - pa[0];
+      const qpy = pb[1] - pa[1];
+      if (qpx * ry - qpy * rx === 0) pt = new Pt(pa[0], pa[1]);
+    } else {
+      const t = ((pb[0] - pa[0]) * sy - (pb[1] - pa[1]) * sx) / cross;
+      pt = new Pt(pa[0] + t * rx, pa[1] + t * ry);
+    }
     return pt &&
       Geom.withinBound(pt, _la[0], _la[1]) &&
       Geom.withinBound(pt, _lb[0], _lb[1])
@@ -824,7 +884,7 @@ export class Circle {
       return new Group();
     } else if (dr < Math.abs(ar - br)) {
       // completely enclosed
-      return new Group(_pts[0].clone());
+      return new Group();
     } else if (dr === 0) {
       // coincident circles: no discrete intersection points
       return new Group();
@@ -1267,40 +1327,104 @@ export class Polygon {
    * Get a convex hull of a set of points, using Melkman's algorithm. ([Reference](http://geomalgorithms.com/a12-_hull-3.html)).
    * @param pts a Group or an Iterable<PtLike>
    * @param sorted a boolean value to indicate if the group is pre-sorted by x position. Default is false.
+   * Exact duplicates and collinear interior points are omitted. For collinear input
+   * with at least three points, returns the distinct endpoints (one point if all coincide).
    * @returns a group of Pt that defines the convex hull polygon
    */
   static convexHull(pts: PtLikeIterable, sorted: boolean = false): Group {
     let _pts = Util.iterToArray(pts);
     if (_pts.length < 3) return _errorLength(new Group(), 3);
 
-    if (!sorted) {
-      _pts = _pts.slice();
-      _pts.sort((a, b) => a[0] - b[0]);
+    const compare = (a: PtLike, b: PtLike) => a[0] - b[0] || a[1] - b[1];
+    // verify a presorted input and look for duplicates in one pass, holding
+    // the previous point's coordinates
+    let unsorted = !sorted;
+    let duplicates = unsorted;
+    if (sorted) {
+      let px = _pts[0][0];
+      let py = _pts[0][1];
+      for (let i = 1, len = _pts.length; i < len; i++) {
+        const x = _pts[i][0];
+        const y = _pts[i][1];
+        if (x < px || (x === px && y <= py)) {
+          duplicates = true;
+          if (x < px || y < py) {
+            unsorted = true;
+            break;
+          }
+        }
+        px = x;
+        py = y;
+      }
+    }
+    if (unsorted) _pts = _pts.slice().sort(compare);
+    else if (duplicates) _pts = _pts.slice();
+    if (duplicates) {
+      // compact the sorted copy in place from its first repeated point
+      let n = 1;
+      const len = _pts.length;
+      while (n < len && compare(_pts[n - 1], _pts[n]) !== 0) n++;
+      for (let i = n + 1; i < len; i++) {
+        if (compare(_pts[n - 1], _pts[i]) !== 0) _pts[n++] = _pts[i];
+      }
+      if (n < len) _pts.length = n;
     }
 
-    // check if is on left of ray a-b
+    // check if is on left of ray a-b, exactly: the floating-point estimate
+    // decides unless it is within its rounding error of zero
     let left = (a: PtLike, b: PtLike, c: PtLike) => {
-      return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]) > 0;
+      const l = (b[0] - a[0]) * (c[1] - a[1]);
+      const r = (c[0] - a[0]) * (b[1] - a[1]);
+      const bound = 3.3306690738754716e-16 * (Math.abs(l) + Math.abs(r));
+      return l - r > bound
+        ? true
+        : r - l > bound
+          ? false
+          : orient2d(a[0], a[1], b[0], b[1], c[0], c[1]) > 0;
     };
+
+    let seed = 2;
+    while (
+      seed < _pts.length &&
+      orient2d(
+        _pts[0][0],
+        _pts[0][1],
+        _pts[1][0],
+        _pts[1][1],
+        _pts[seed][0],
+        _pts[seed][1],
+      ) === 0
+    )
+      seed++;
+    if (seed >= _pts.length) {
+      const hull = new Group();
+      hull.push(_pts[0] as Pt);
+      if (_pts.length > 1) hull.push(_pts[_pts.length - 1] as Pt);
+      return hull;
+    }
 
     // double end queue
     let dq = [];
     let bot = _pts.length - 2;
     let top = bot + 3;
-    dq[bot] = _pts[2];
-    dq[top] = _pts[2];
+    dq[bot] = _pts[seed];
+    dq[top] = _pts[seed];
 
-    // first 3 pt as counter-clockwise triangle
-    if (left(_pts[0], _pts[1], _pts[2])) {
-      dq[bot + 1] = _pts[0];
-      dq[bot + 2] = _pts[1];
+    // first 3 pt as counter-clockwise triangle, tested exactly here so that
+    // `left` is called only in the loop, where V8 then inlines every call
+    const p0 = _pts[0];
+    const p1 = _pts[seed - 1];
+    const p2 = _pts[seed];
+    if (orient2d(p0[0], p0[1], p1[0], p1[1], p2[0], p2[1]) > 0) {
+      dq[bot + 1] = p0;
+      dq[bot + 2] = p1;
     } else {
-      dq[bot + 1] = _pts[1];
-      dq[bot + 2] = _pts[0];
+      dq[bot + 1] = p1;
+      dq[bot + 2] = p0;
     }
 
     // remaining pts
-    for (let i = 3, len = _pts.length; i < len; i++) {
+    for (let i = seed + 1, len = _pts.length; i < len; i++) {
       let pt = _pts[i];
 
       // if inside the hull
@@ -1309,14 +1433,14 @@ export class Polygon {
       }
 
       // rightmost tangent
-      while (!left(dq[bot], dq[bot + 1], pt)) {
+      while (bot + 1 < top && !left(dq[bot], dq[bot + 1], pt)) {
         bot += 1;
       }
       bot -= 1;
       dq[bot] = pt;
 
       // leftmost tangent
-      while (!left(dq[top - 1], dq[top], pt)) {
+      while (top - 1 > bot && !left(dq[top - 1], dq[top], pt)) {
         top -= 1;
       }
       top += 1;
@@ -1492,6 +1616,9 @@ export class Polygon {
     let minAx = 0;
     let minAy = 0;
     let which = -1;
+    const contained =
+      _poly.some((p) => (p[0] - c[0]) ** 2 + (p[1] - c[1]) ** 2 <= r * r) ||
+      Polygon.hasIntersectPoint(_poly, c);
 
     for (let i = 0, len = _poly.length; i < len; i++) {
       const ea = _poly[i];
@@ -1520,6 +1647,7 @@ export class Polygon {
         // Fix edge case and make sure the circle is intersecting. To be improved.
         const edge = Polygon.lineAt(_poly, i);
         const check =
+          contained ||
           Rectangle.withinBound(edge, Line.perpendicularFromPt(edge, c)!) ||
           Circle.intersectLine2D(_circle, edge).length > 0;
 

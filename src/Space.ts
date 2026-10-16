@@ -29,7 +29,7 @@ export abstract class Space {
   private _animID: number = -1;
   private _fromFrame = false;
 
-  private _pause: boolean = false;
+  protected _pause: boolean = false;
   private _refresh: boolean | undefined = undefined;
   private _renderFunc!: (context: any, self: Space) => null;
 
@@ -180,17 +180,7 @@ export abstract class Space {
    */
   protected playItems(time: number) {
     this._playing = true;
-
-    // clear before draw if refresh is true
-    if (this._refresh) this.clear();
-
-    // animate all players
-    if (this._isReady) {
-      for (const k in this.players) {
-        if (this.players[k].animate)
-          this.players[k].animate(time, this._time.diff, this);
-      }
-    }
+    this._animatePlayers(time, this._time.diff);
 
     // resolve a stop period against the frame clock
     if (this._stopAfter >= 0) {
@@ -204,6 +194,24 @@ export abstract class Space {
       this._animID = -1;
       this._playing = false;
       this._firstFrame = true;
+    }
+  }
+
+  /**
+   * Clear the space if it refreshes on each frame, then call every player's
+   * `animate` callback. This draws one frame without changing the play state.
+   * @param time current time
+   * @param ftime time elapsed since the previous frame
+   */
+  protected _animatePlayers(time: number, ftime: number): void {
+    // clear before draw if refresh is true
+    if (this._refresh) this.clear();
+
+    // animate all players
+    if (this._isReady) {
+      for (const k in this.players) {
+        if (this.players[k].animate) this.players[k].animate(time, ftime, this);
+      }
     }
   }
 
@@ -354,6 +362,14 @@ export abstract class MultiTouchSpace extends Space {
   // track mouse dragging
   protected _pressed = false;
   protected _dragged = false;
+  private _pressId: number | null = null;
+  private _pressIsTouch = false;
+  private _pressType = "";
+  private _pressCapture: Element | null = null; // holds the press's pointer capture
+  private _pressSeen = false; // players were sent the press's start
+  // the end of a seen press that players missed while the space was stopped,
+  // sent when it plays again: 0 none, 1 "out", 2 "out" then "drop"
+  private _unsentEnd = 0;
 
   protected _hasMouse = false;
   protected _hasTouch = false;
@@ -482,6 +498,8 @@ export abstract class MultiTouchSpace extends Space {
       this.bindCanvas("contextmenu", this._contextMenuBind, {}, customTarget);
       this._hasMouse = true;
     } else if (this._hasMouse) {
+      // the press can no longer receive its release
+      if (this._pressed && !this._pressIsTouch) this._abandonPress();
       const target = this._mouseTarget;
       this.unbindCanvas("pointerdown", this._mouseDownBind, {}, target);
       this.unbindCanvas("pointerup", this._mouseUpBind, {}, target);
@@ -539,6 +557,8 @@ export abstract class MultiTouchSpace extends Space {
       this.bindCanvas("touchcancel", this._mouseOutBind, {}, customTarget);
       this._hasTouch = true;
     } else if (this._hasTouch) {
+      // the press can no longer receive its release
+      if (this._pressed && this._pressIsTouch) this._abandonPress();
       const target = this._touchTarget;
       const options = { passive: this._touchPassive };
       this.unbindCanvas("touchstart", this._touchStartBind, options, target);
@@ -557,7 +577,9 @@ export abstract class MultiTouchSpace extends Space {
    */
   bindKeyboard(bind: boolean = true, customTarget?: EventTarget): this {
     if (bind) {
-      const target = customTarget || document;
+      const target =
+        customTarget ||
+        (typeof document !== "undefined" ? document : this._canvas);
       if (this._hasKeyboard) {
         if (this._keyboardTarget === target) return this;
         this.bindKeyboard(false);
@@ -700,6 +722,7 @@ export abstract class MultiTouchSpace extends Space {
   protected _mouseAction(
     type: string,
     evt: MouseEvent | TouchEvent | PointerEvent,
+    touchId?: number | null,
   ) {
     if (!this.isPlaying) return;
 
@@ -709,20 +732,35 @@ export abstract class MultiTouchSpace extends Space {
     let px = 0,
       py = 0;
 
-    if (evt instanceof MouseEvent) {
+    if (
+      (typeof MouseEvent !== "undefined" && evt instanceof MouseEvent) ||
+      "clientX" in evt
+    ) {
       px = (evt.clientX - left) * scaleX;
       py = (evt.clientY - top) * scaleY;
     } else {
       const touch =
-        evt.changedTouches && evt.changedTouches.length > 0
-          ? evt.changedTouches.item(0)
-          : null;
+        touchId != null
+          ? Array.from(evt.changedTouches).find((t) => t.identifier === touchId)
+          : evt.changedTouches && evt.changedTouches.length > 0
+            ? evt.changedTouches.item(0)
+            : null;
       if (touch) {
         px = (touch.clientX - left) * scaleX;
         py = (touch.clientY - top) * scaleY;
       }
     }
 
+    this._sendAction(type, px, py, evt);
+  }
+
+  /** Record the pointer and send an action to the players. */
+  private _sendAction(
+    type: string,
+    px: number,
+    py: number,
+    evt: UIActionEvent,
+  ): void {
     if (type) {
       this._pointer.to(px, py);
       this._pointer.id = type;
@@ -747,18 +785,111 @@ export abstract class MultiTouchSpace extends Space {
     );
   }
 
+  private _ownsPress(evt: PointerEvent | TouchEvent): boolean {
+    if (!this._pressed) return false;
+    return "changedTouches" in evt
+      ? this._pressIsTouch &&
+          Array.from(evt.changedTouches).some(
+            (t) => t.identifier === this._pressId,
+          )
+      : !this._pressIsTouch && evt.pointerId === this._pressId;
+  }
+
+  private _releasePress(): void {
+    if (this._pressSeen && !this.isPlaying)
+      this._unsentEnd = this._dragged ? 2 : 1;
+    this._pressed = this._dragged = this._pressSeen = false;
+    this._pressId = null;
+    this._pressCapture = null;
+  }
+
+  /**
+   * Take the press for a new contact. A press of the same kind whose release
+   * was lost is replaced when its contact goes down again, or when a first
+   * contact of that kind starts (a primary pointer, or a touchstart whose new
+   * touches are all the active touches). A pointer press that lost its
+   * pointer capture may see no release, so a first contact of any kind
+   * replaces it. So drag and drop keep working, while a second finger still
+   * cannot take the press, nor a palm take a pen's.
+   */
+  private _beginPress(
+    evt: PointerEvent | TouchEvent,
+    id: number,
+    touch: boolean,
+    type: string,
+  ): void {
+    if (this._pressed) {
+      const first =
+        "changedTouches" in evt
+          ? evt.touches.length === evt.changedTouches.length
+          : evt.isPrimary !== false;
+      const capture = this._pressCapture;
+      if (
+        this._pressType === type
+          ? id === this._pressId || first
+          : first && !!capture && !capture.hasPointerCapture(this._pressId!)
+      )
+        this._abandonPress();
+    }
+    if (!this._pressed) {
+      this._pressId = id;
+      this._pressIsTouch = touch;
+      this._pressType = type;
+      this._pressed = true;
+      this._pressSeen = this.isPlaying;
+    }
+  }
+
+  /**
+   * End a press whose release can no longer arrive. Players, and the UIs
+   * they forward actions to, see it end as a cancelled pointer's does: "out",
+   * then "drop" if the press dragged, at the last pointer position. If the
+   * space is stopped, they see this when it plays again.
+   */
+  private _abandonPress(): void {
+    const dragged = this._dragged;
+    const playing = this.isPlaying;
+    this._releasePress();
+    if (playing) this._sendEnd(dragged);
+  }
+
+  private _sendEnd(dragged: boolean): void {
+    const evt = new Event("pointercancel") as unknown as UIActionEvent;
+    this._sendAction(UIA.out, this._pointer.x, this._pointer.y, evt);
+    if (dragged)
+      this._sendAction(UIA.drop, this._pointer.x, this._pointer.y, evt);
+  }
+
+  /**
+   * Players get no actions while the space is stopped. A press they saw start
+   * that ended meanwhile (released, cancelled or abandoned) is ended for them
+   * as the space plays again: `isPlaying` is already true, and no player has
+   * animated yet. So the UIs they drive let go of its contact.
+   */
+  protected playItems(time: number) {
+    if (this._unsentEnd) {
+      const dragged = this._unsentEnd === 2;
+      this._unsentEnd = 0;
+      this._playing = true;
+      this._sendEnd(dragged);
+    }
+    super.playItems(time);
+  }
+
   /**
    * MouseDown handler.
    * @param evt
    */
   protected _mouseDown(evt: PointerEvent) {
     if (this._isTouchHandled(evt)) return false;
+    this._beginPress(evt, evt.pointerId, false, evt.pointerType || "mouse");
     this._mouseAction(UIA.down, evt);
     this._mouseAction(UIA.pointerdown, evt);
-    this._pressed = true;
-    if (evt.target instanceof Element) {
+    if (typeof Element !== "undefined" && evt.target instanceof Element) {
       try {
         evt.target.setPointerCapture(evt.pointerId);
+        if (!this._pressIsTouch && this._pressId === evt.pointerId)
+          this._pressCapture = evt.target;
       } catch {
         // a synthetic or re-dispatched event has no active pointer to capture;
         // dragging still works through the element's own move/up listeners
@@ -773,16 +904,23 @@ export abstract class MultiTouchSpace extends Space {
    */
   protected _mouseUp(evt: PointerEvent | TouchEvent) {
     if (this._isTouchHandled(evt)) return false;
-    this._mouseAction(UIA.pointerup, evt);
-    if (this._dragged) {
-      this._mouseAction(UIA.drop, evt);
+    const owns = this._ownsPress(evt);
+    const touchId = owns && this._pressIsTouch ? this._pressId : undefined;
+    this._mouseAction(UIA.pointerup, evt, touchId);
+    if (owns && this._dragged) {
+      this._mouseAction(UIA.drop, evt, touchId);
     } else {
-      this._mouseAction(UIA.up, evt);
+      this._mouseAction(UIA.up, evt, touchId);
     }
-    this._pressed = false;
-    this._dragged = false;
     if (
+      owns ||
+      ("touches" in evt && evt.touches.length === 0 && this._pressIsTouch)
+    )
+      this._releasePress();
+    if (
+      typeof PointerEvent !== "undefined" &&
       evt instanceof PointerEvent &&
+      typeof Element !== "undefined" &&
       evt.target instanceof Element &&
       evt.target.hasPointerCapture(evt.pointerId)
     ) {
@@ -797,7 +935,7 @@ export abstract class MultiTouchSpace extends Space {
    */
   protected _mouseMove(evt: PointerEvent) {
     if (this._isTouchHandled(evt)) return false;
-    if (this._pressed) {
+    if (this._ownsPress(evt)) {
       this._dragged = true;
       this._mouseAction(UIA.drag, evt);
     } else {
@@ -822,10 +960,25 @@ export abstract class MultiTouchSpace extends Space {
    */
   protected _mouseOut(evt: PointerEvent | TouchEvent) {
     if (this._isTouchHandled(evt)) return false;
-    this._mouseAction(UIA.out, evt);
-    if (this._dragged) this._mouseAction(UIA.drop, evt);
-    this._pressed = false;
-    this._dragged = false;
+    this._mouseAction(
+      UIA.out,
+      evt,
+      this._ownsPress(evt) && this._pressIsTouch ? this._pressId : undefined,
+    );
+    if (this._ownsPress(evt)) {
+      if (this._dragged)
+        this._mouseAction(
+          UIA.drop,
+          evt,
+          this._pressIsTouch ? this._pressId : undefined,
+        );
+      this._releasePress();
+    } else if (
+      "touches" in evt &&
+      evt.touches.length === 0 &&
+      this._pressIsTouch
+    )
+      this._releasePress();
     return false;
   }
 
@@ -835,8 +988,6 @@ export abstract class MultiTouchSpace extends Space {
    */
   protected _mouseClick(evt: MouseEvent | TouchEvent) {
     this._mouseAction(UIA.click, evt);
-    this._pressed = false;
-    this._dragged = false;
     return false;
   }
 
@@ -854,10 +1005,11 @@ export abstract class MultiTouchSpace extends Space {
    * @param evt
    */
   protected _touchMove(evt: TouchEvent) {
-    this._mouseAction(UIA.move, evt);
-    if (this._pressed) {
+    const owns = this._ownsPress(evt);
+    this._mouseAction(UIA.move, evt, owns ? this._pressId : undefined);
+    if (owns) {
       this._dragged = true;
-      this._mouseAction(UIA.drag, evt);
+      this._mouseAction(UIA.drag, evt, this._pressId);
     }
     // preventDefault is ignored (and logs an error) inside passive listeners
     if (!this._touchPassive) evt.preventDefault();
@@ -869,8 +1021,15 @@ export abstract class MultiTouchSpace extends Space {
    * @param evt
    */
   protected _touchStart(evt: TouchEvent) {
+    if (evt.changedTouches.length)
+      this._beginPress(
+        evt,
+        evt.changedTouches.item(0)!.identifier,
+        true,
+        "touchevent",
+      );
     this._mouseAction(UIA.down, evt);
-    this._pressed = true;
+    this._mouseAction(UIA.pointerdown, evt);
     if (!this._touchPassive) evt.preventDefault();
     return false;
   }
