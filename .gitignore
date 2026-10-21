@@ -15,6 +15,7 @@ dogfood-output/
 .wt/
 test/visual/**/*.png
 !test/visual/baselines/*.png
+plans/
 
 *.mp4
 !assets/v1_changelog_pts.mp4
